@@ -49,17 +49,59 @@ Só funciona com o PC ligado e o script rodando. Se o roteador trocar o IP do PC
 o endereço muda — e, como o endereço é a "identidade" do armazenamento, os dados
 somem. Para uso diário, prefira a opção 1 ou 3.
 
-### Opção 3 — hospedar de graça (melhor para uso diário)
+### Opção 3 — hospedar no Vercel (melhor para uso diário)
 
-Um endereço fixo em HTTPS, funciona em qualquer lugar, sem o PC ligado:
-
-- **Netlify Drop** — acesse [app.netlify.com/drop](https://app.netlify.com/drop) e
-  arraste a **pasta inteira**. Sai um endereço em segundos.
-- **GitHub Pages** — suba a pasta num repositório e ative Pages nas configurações.
+Um endereço fixo em HTTPS, funciona em qualquer lugar, sem o PC ligado. O projeto já
+vem configurado — veja **[Publicar no Vercel](#publicar-no-vercel)** abaixo.
 
 Só o *código* do app fica público; **seus dados financeiros nunca saem do celular**,
 continuam no `localStorage` do Safari. Ainda assim, se preferir não deixar nada
 público, fique na opção 1.
+
+## Publicar no Vercel
+
+O repositório já traz tudo pronto: é um site estático, **sem build e sem back-end**.
+
+1. Em [vercel.com/new](https://vercel.com/new), importe o repositório do GitHub.
+2. Em **Framework Preset**, escolha **Other**.
+3. Deixe **Build Command** e **Output Directory** em branco — não há build.
+4. **Deploy**.
+
+O `vercel.json` cuida do resto. Cada `git push` para a `main` republica sozinho.
+
+**Arquivos de configuração:**
+
+| Arquivo | Para que serve |
+|---|---|
+| `vercel.json` | Cabeçalhos de segurança, CSP e cache |
+| `.vercelignore` | Mantém `.ps1`, `tools/` e o README fora do site |
+| `robots.txt` | Pede aos buscadores que não indexem — é um painel pessoal |
+
+**Endereços depois do deploy:** `/` abre o `index.html` (versão multiarquivo, a de
+uso normal) e `/financas` abre o arquivo único — útil para baixar direto no iPhone
+sem precisar do PC.
+
+### Content-Security-Policy
+
+O `vercel.json` publica uma CSP que trava para onde o app pode **enviar** dados
+(`connect-src`). Isso importa num painel que guarda uma chave de API no navegador:
+mesmo que algo malicioso rodasse na página, não conseguiria mandar seus dados para
+um domínio qualquer. Os destinos liberados são exatamente os que o app usa:
+
+- `api.anthropic.com` — sugestões com IA
+- `*.googleapis.com` — autenticação do Firebase
+- `*.firebaseio.com` e `*.firebasedatabase.app` (mais `wss://`) — Realtime Database
+- `cdn.jsdelivr.net` e `www.gstatic.com` — Chart.js e o SDK do Firebase
+
+> `script-src` precisa de `'unsafe-inline'` porque o `financas.html` é inteiramente
+> inline por construção — é o que permite abrir pelo app Arquivos no iPhone. Ou seja,
+> a CSP aqui **não** protege contra injeção de script; ela limita a exfiltração.
+> Se você adicionar uma integração nova e ela não conectar, o motivo provável é a
+> `connect-src` — inclua o domínio novo na lista.
+
+**Ao publicar, o app começa vazio.** O `localStorage` é por endereço: os dados que
+estão no `file://` ou no `http://192.168.x.x` **não** vão junto. Use **↓ Backup** no
+lugar antigo e **↑ Restaurar** no endereço do Vercel.
 
 ### Adicionar à Tela de Início
 

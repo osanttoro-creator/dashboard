@@ -1,0 +1,4 @@
+# Painel financeiro pessoal — não faz sentido aparecer em busca.
+# (Os dados nunca saem do navegador, mas o endereço em si é privado.)
+User-agent: *
+Disallow: /
