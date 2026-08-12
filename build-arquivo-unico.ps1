@@ -41,7 +41,7 @@ $html = [regex]::Replace($html,
 
 # ---- 3 · scripts do app, na mesma ordem ----
 $arquivos = @(
-  'assets/vendor/icons.js',
+  'assets/vendor/icons.js', 'assets/js/firebase-config.js',
   'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
   'assets/js/sync.js', 'assets/js/ai.js',

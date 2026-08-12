@@ -628,8 +628,37 @@ select.input { cursor: pointer; }
 .cat-stat small { display: block; color: var(--muted); font-size: 11px; }
 
 /* ============================================================
-   SINCRONIZAÇÃO — chip de status na sidebar
+   SINCRONIZAÇÃO — conta Google e status na sidebar
    ============================================================ */
+#syncBox { display: grid; gap: 7px; }
+
+.btn-google {
+  width: 100%; justify-content: center; gap: 8px;
+  background: var(--surface); border-color: var(--border-strong);
+}
+.btn-google:hover { background: var(--plane-2); filter: none; }
+.btn-google svg { flex: none; }
+
+.account-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.account-avatar {
+  width: 30px; height: 30px; border-radius: 50%; flex: none;
+  object-fit: cover; background: var(--plane-2);
+}
+.account-avatar.is-generic {
+  display: grid; place-items: center;
+  background: var(--surface-accent); color: #fff;
+  font-weight: 700; font-size: 13px;
+}
+.account-id { min-width: 0; flex: 1; display: grid; }
+.account-name {
+  font-size: 12.5px; font-weight: 600; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.account-mail {
+  font-size: 11px; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
 .sync-chip {
   display: flex; align-items: center; gap: 8px; width: 100%;
   padding: 7px 9px; border: 1px solid var(--border);
@@ -637,6 +666,9 @@ select.input { cursor: pointer; }
   cursor: pointer; font-size: 11.5px; color: var(--ink-2); text-align: left;
 }
 .sync-chip:hover { border-color: var(--border-strong); color: var(--ink); }
+.sync-chip span:last-child {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .sync-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
 .sync-dot.is-ok { background: var(--good); }
 .sync-dot.is-error { background: var(--critical); }

@@ -89,9 +89,19 @@ mesmo que algo malicioso rodasse na página, não conseguiria mandar seus dados 
 um domínio qualquer. Os destinos liberados são exatamente os que o app usa:
 
 - `api.anthropic.com` — sugestões com IA
-- `*.googleapis.com` — autenticação do Firebase
+- `*.googleapis.com` e `apis.google.com` — autenticação do Firebase
 - `*.firebaseio.com` e `*.firebasedatabase.app` (mais `wss://`) — Realtime Database
 - `cdn.jsdelivr.net` e `www.gstatic.com` — Chart.js e o SDK do Firebase
+- `*.googleusercontent.com` em `img-src` — foto do perfil da conta Google
+
+Duas regras existem por causa do **login com Google por popup**, e quebram o login se
+forem apertadas demais:
+
+- `Cross-Origin-Opener-Policy: same-origin-allow-popups`. Com `same-origin` (o valor
+  mais restritivo) o navegador corta o `window.opener`, o popup não consegue devolver
+  o resultado do login, e o `signInWithPopup` **trava sem erro visível**.
+- `frame-src` precisa liberar `*.firebaseapp.com`, `accounts.google.com` e
+  `apis.google.com` — o Firebase Auth usa um iframe no domínio do seu projeto.
 
 > `script-src` precisa de `'unsafe-inline'` porque o `financas.html` é inteiramente
 > inline por construção — é o que permite abrir pelo app Arquivos no iPhone. Ou seja,
@@ -122,6 +132,7 @@ assets/vendor/chart.umd.min.js   cópia local do Chart.js (usada offline)
 assets/vendor/icons.js           SVGs de bancos + Lucide, vendorizados (GERADO)
 assets/css/style.css
 assets/js/
+  firebase-config.js  COLE AQUI as credenciais do seu Firebase (opcional)
   utils.js       formatação BRL, datas (sem armadilha de fuso), helpers de DOM
   icons.js       resolve banco/categoria → ícone; selos de débito e crédito
   cards.js       cartão de crédito desenhado, leque e painel de fatura
@@ -131,7 +142,7 @@ assets/js/
   ui.js          modal, toasts, KPIs, selects, seletor de cor
   forms.js       formulários de lançamento, conta, cartão, categoria, investimento
   importer.js    CSV / OFX / texto colado / Registrato
-  sync.js        sincronização opcional via Firebase (Realtime Database)
+  sync.js        login Google + sincronização opcional (Realtime Database)
   ai.js          sugestões via API da Anthropic (chave do próprio usuário)
   pages/*.js     uma página por arquivo
   app.js         estado da interface, roteamento, eventos
@@ -257,24 +268,26 @@ arquivo — pede confirmação antes e recusa arquivos que não sejam backup des
 
 ## Sincronização entre dispositivos (opcional)
 
-Por padrão os dados ficam isolados por navegador. Para sincronizar PC e celular,
-o app pode usar **o seu próprio** projeto Firebase gratuito — nenhuma credencial
-vem embutida no código. Sem configurar nada, tudo funciona como antes.
+**O app funciona sem login.** Sem configurar nada, os dados ficam no `localStorage`,
+isolados por aparelho — exatamente como sempre foi. O login com Google existe só para
+quem quer ver os mesmos dados no PC e no celular.
 
-Clique no indicador de sincronização na barra lateral e preencha. Antes disso,
-no [console.firebase.google.com](https://console.firebase.google.com):
+A sincronização usa **o seu próprio** projeto Firebase gratuito: Authentication com o
+provedor Google, mais o Realtime Database.
+
+### Configurar (uma vez)
+
+No [console.firebase.google.com](https://console.firebase.google.com):
 
 1. Crie um projeto (plano **Spark**, gratuito).
-2. **Build → Realtime Database** → criar banco, "iniciar no modo bloqueado".
-3. **Build → Authentication → Sign-in method** → ative **E-mail/senha**.
-4. **Configurações do projeto → Seus apps → Web** → registre um app e copie
-   `apiKey` e `databaseURL`.
-5. Na aba **Regras** do Realtime Database, publique:
+2. **Build → Authentication → Sign-in method** → ative **Google**.
+3. **Build → Realtime Database** → criar banco, "iniciar no modo bloqueado".
+4. Na aba **Regras** do Realtime Database, publique isto:
 
 ```json
 {
   "rules": {
-    "financas": {
+    "usuarios": {
       "$uid": {
         ".read":  "$uid === auth.uid",
         ".write": "$uid === auth.uid"
@@ -284,19 +297,57 @@ no [console.firebase.google.com](https://console.firebase.google.com):
 }
 ```
 
-Use **o mesmo e-mail e senha** nos dois aparelhos. A senha não é guardada pelo app:
-o Firebase mantém a sessão iniciada em cada dispositivo.
+5. **⚙ Configurações do projeto → Seus apps → Web** (`</>`) → registre um app e copie
+   o objeto `firebaseConfig` para **`assets/js/firebase-config.js`**.
+6. **Authentication → Settings → Authorized domains** → adicione o endereço onde o app
+   está publicado (o domínio do Vercel). Sem isso o popup de login recusa com
+   `auth/unauthorized-domain`.
+7. Rode `build-arquivo-unico.ps1` de novo, para o `financas.html` levar a configuração.
+
+Depois disso, clique em **Entrar com Google** na barra lateral. A sessão fica salva em
+cada aparelho — você entra uma vez por dispositivo.
+
+> As credenciais do `firebase-config.js` **podem ficar públicas**. Não são segredo: o
+> Firebase as embute no front-end de qualquer app web. Quem protege os dados são as
+> regras acima. O que **não** pode é publicar regras abertas (`".read": true`) — aí
+> qualquer pessoa com a `databaseURL` lê as suas finanças.
+>
+> Como reforço, dá para restringir a chave em *console.cloud.google.com → APIs e
+> serviços → Credenciais → sua chave → Restrições de aplicativo → Sites*, listando só
+> o seu domínio. Isso impede que outra pessoa consuma a sua cota.
+
+### Como funciona
+
+Os dados vão para `/usuarios/{uid}/dados`, onde `uid` é o identificador da sua conta
+Google. As regras garantem que só essa conta lê e escreve ali.
 
 **O que sincroniza:** só os perfis — contas, cartões, categorias, lançamentos,
-investimentos e faturas. Tema e perfil ativo são preferências de cada aparelho e
-ficam de fora. **Conflito:** cada perfil carrega um carimbo de última alteração;
-vence o mais recente, perfil a perfil. O indicador na barra lateral mostra
-*sincronizado*, *sincronizando* ou *offline / erro* — nesse último caso o app segue
-funcionando normalmente com o localStorage. Backup/Restaurar em JSON continuam
-disponíveis como alternativa manual.
+investimentos e faturas. Tema e perfil ativo são preferências de cada aparelho e ficam
+de fora. Toda alteração local grava no `localStorage` na hora e sobe para o Firebase
+com um atraso de 1,5 s (debounce), para não gravar a cada tecla.
 
-> ⚠️ Não use regras abertas (`".read": true`). Qualquer pessoa com a `databaseURL`
-> conseguiria ler suas finanças.
+**Conflito:** cada perfil carrega um carimbo de última alteração; vence o mais recente,
+**perfil a perfil**. Ou seja, editar o perfil Pessoal no celular não desfaz o que você
+mudou no perfil PJ no PC.
+
+**Estados do indicador**, na barra lateral:
+
+| Estado | O que significa |
+|---|---|
+| *Sincronização não configurada* | `firebase-config.js` está vazio — nada além do localStorage |
+| *Não logado — só neste aparelho* | Configurado, mas sem login. O app funciona normal |
+| *Sincronizando…* | Há alterações locais indo para a nuvem |
+| *Sincronizado* | Tudo enviado |
+| *Sem conexão — usando dados locais* | Rede caiu ou as regras recusaram. O app continua funcionando |
+
+> ⚠️ **No primeiro login, os dois lados se somam.** Se este aparelho já tem perfis e a
+> sua conta na nuvem também, você fica com todos — nada é apagado, mas pode aparecer
+> duplicata (dois "Pessoal", por exemplo), porque os perfis criados separadamente em
+> cada aparelho têm identificadores diferentes. Apague os que sobrarem em **⚙ Perfis**.
+> Daí em diante cada perfil é reconhecido pelo mesmo identificador nos dois lugares.
+
+**Backup/Restaurar em JSON continuam funcionando** com ou sem login — inclusive para
+trazer dados de antes de você ter conta, ou para migrar entre endereços.
 
 ## Sugestões com IA (opcional)
 
