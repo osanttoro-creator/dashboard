@@ -1,0 +1,11 @@
+# Normaliza as quebras de linha: LF no repositório, independente de quem clona.
+* text=auto eol=lf
+
+# Scripts do PowerShell ficam melhor com CRLF no Windows.
+*.ps1 text eol=crlf
+
+# Arquivos GERADOS: o GitHub colapsa o diff deles por padrão e eles não
+# contam nas estatísticas de linguagem do repositório.
+financas.html               linguist-generated=true
+assets/vendor/icons.js      linguist-generated=true
+assets/vendor/*.min.js      linguist-generated=true vendored=true

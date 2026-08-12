@@ -1,0 +1,22 @@
+# Configuração local do Claude Code (permissões desta máquina)
+.claude/settings.local.json
+
+# Backups exportados pelo próprio app — são dados financeiros pessoais,
+# não pertencem ao repositório.
+financas-backup-*.json
+
+# Lixo de sistema
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*~
+
+# Editores
+.vscode/
+.idea/
+
+# Nada de dependências instaladas: as bibliotecas usadas estão
+# vendorizadas de propósito em assets/vendor/ e DEVEM ser versionadas.
+node_modules/
