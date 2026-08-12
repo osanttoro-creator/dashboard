@@ -304,6 +304,12 @@ No [console.firebase.google.com](https://console.firebase.google.com):
    `auth/unauthorized-domain`.
 7. Rode `build-arquivo-unico.ps1` de novo, para o `financas.html` levar a configuração.
 
+> ⚠️ **O passo 7 é fácil de esquecer.** O `financas.html` é um retrato do código no
+> momento em que foi gerado. Se você preencher o `firebase-config.js` e não rodar o
+> build, o PC (que usa `index.html`) sincroniza e o iPhone (que usa o arquivo único)
+> continua isolado — sem erro nenhum, só não sincroniza. Por isso o script agora
+> imprime, no fim, se a sincronização ficou ligada ou desligada naquele arquivo.
+
 Depois disso, clique em **Entrar com Google** na barra lateral. A sessão fica salva em
 cada aparelho — você entra uma vez por dispositivo.
 

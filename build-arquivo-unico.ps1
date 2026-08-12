@@ -68,4 +68,17 @@ $kb = [math]::Round((Get-Item $saida).Length / 1KB, 0)
 Write-Host ""
 Write-Host "  OK - gerado: financas.html  ($kb KB)" -ForegroundColor Green
 Write-Host "  Esse e o arquivo para mandar para o iPhone." -ForegroundColor Green
+
+# O financas.html e um retrato do codigo no momento da geracao. Se voce
+# preencher o firebase-config.js e esquecer de rodar este script, o PC
+# sincroniza e o iPhone nao - falha silenciosa. Por isso o aviso abaixo.
+if ($html -match "apiKey:\s*''") {
+  Write-Host ""
+  Write-Host "  Sincronizacao: DESLIGADA neste arquivo." -ForegroundColor Yellow
+  Write-Host "  O app funciona normal, so nao sincroniza entre aparelhos." -ForegroundColor DarkGray
+  Write-Host "  Para ligar: preencha assets/js/firebase-config.js e rode este script de novo." -ForegroundColor DarkGray
+} else {
+  Write-Host ""
+  Write-Host "  Sincronizacao: configurada neste arquivo (login com Google)." -ForegroundColor Green
+}
 Write-Host ""
