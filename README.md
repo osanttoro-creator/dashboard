@@ -130,6 +130,7 @@ tools/                    scripts que regeram os ícones vendorizados
 
 assets/vendor/chart.umd.min.js   cópia local do Chart.js (usada offline)
 assets/vendor/bancos.js          41 bancos brasileiros, vendorizado (GERADO)
+assets/vendor/fonte.css          Inter embutida em base64, vendorizada (GERADO)
 assets/vendor/icons.js           76 ícones Lucide, vendorizado (GERADO)
 assets/css/style.css
 assets/js/
@@ -170,8 +171,18 @@ módulos ES são bloqueados por CORS quando abertos direto do disco.
 
 ## Cabeçalho e período
 
-A navegação fica em uma **barra fixa no topo**, sempre visível, com ícone e nome de
-cada seção — não há menu lateral nem aba escondida. Acima dela, o painel de
+No desktop a navegação fica em uma **barra fixa no topo**, sempre visível, com ícone
+e nome de cada seção — não há menu lateral nem aba escondida. **No celular a mesma
+`<nav>` desce e vira uma barra inferior flutuante**, com os rótulos curtos
+(Início · Lançamentos · Investir · Carteira · Categorias) e o ícone acima de cada um.
+Não é o desktop comprimido: no celular o polegar alcança a base da tela, não o topo,
+e é lá que a navegação precisa estar. A barra continua sendo uma ilha — recuada das
+bordas, cantos arredondados — e o botão "+" sobe para não brigar com ela.
+
+> As colunas da barra inferior seguem o **tamanho do conteúdo**, não cinco quintos
+> iguais: com largura forçada, "Lançamentos" não cabe em tela de 320px, e cortar o
+> rótulo é pior do que uma coluna ligeiramente mais larga que a outra. Abaixo de
+> 360px o corpo do texto e o respiro apertam mais um passo. Acima dela, o painel de
 boas-vindas traz a saudação (`Bem-vindo ao OAZE, {nome}` — clique no nome para
 trocá-lo), o perfil ativo, o estado da sincronização e a data de hoje por extenso.
 Logo abaixo do cabeçalho fica a barra de **sugestões com IA**, disponível em
@@ -451,14 +462,47 @@ npm --prefix tools install
 node tools/gen-bancos.js
 ```
 
-Isso reconstrói `assets/vendor/bancos.js` a partir do pacote npm. Para os ícones de
-categoria, `tools/get-lucide.ps1` baixa os SVGs e `tools/gen-icons.ps1` monta o
-`assets/vendor/icons.js`. Precisa de internet só na hora de regenerar; o app em si
+```bash
+node tools/gen-fonte.js
+```
+
+O primeiro reconstrói `assets/vendor/bancos.js` a partir do pacote npm; o segundo,
+`assets/vendor/fonte.css`. Para os ícones de categoria, `tools/get-lucide.ps1` baixa
+os SVGs e `tools/gen-icons.ps1` monta o `assets/vendor/icons.js`. Precisa de internet só na hora de regenerar; o app em si
 roda offline.
 
 > O app **não usa npm em runtime** e não tem bundler: o `npm install` acima serve só
 > para o script de geração ler o pacote e cuspir um script clássico. Por isso
 > `tools/node_modules/` fica fora do Git.
+
+## Tipografia
+
+**Inter Variable**, vendorizada em `assets/vendor/fonte.css` — subconjunto latin,
+eixo de peso 100–900, **embutida em base64**.
+
+Por que base64 e não um `.woff2` ao lado: o app roda em `file://` e como arquivo
+único no iPhone, e fonte em arquivo separado é bloqueada por CORS em `file://` na
+maioria dos navegadores — o texto cairia para a fonte do sistema justamente no
+cenário offline. Embutida, ela também entra sozinha no `financas.html`. Custo: 47 KB
+de woff2, 64 KB depois do base64.
+
+A fonte do sistema segue na fila de fallback de propósito: setas e símbolos
+(▲ ▼ ⇄ ✎ ⚙ 🗑) estão fora do subconjunto latin e a Inter não os tem.
+
+```css
+font-feature-settings: 'cv05' 1, 'ss03' 1;
+```
+
+Essas duas variantes trazem o `l` com cauda e o `1` com base. Em coluna de valores
+isso não é enfeite — sem elas, `1` e `l` ficam quase idênticos.
+
+O **tracking é por tamanho**, nunca um valor só: rótulos em caixa alta e texto miúdo
+levam `+0,05em`; o número do destaque leva `−0,035em`. Um `letter-spacing` único
+está errado em algum tamanho.
+
+> A CSP do `vercel.json` precisa de `font-src 'self' data:`. Com o `data:` de fora,
+> a fonte é bloqueada **só em produção** — em `file://` e no servidor local não há
+> CSP, então a falha não aparece durante o desenvolvimento.
 
 ## Materiais — três níveis, três funções
 

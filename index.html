@@ -14,6 +14,8 @@
 <meta name="theme-color" content="#17100A" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
 
+<!-- fonte vendorizada (Inter, embutida em base64): sem CDN, funciona em file:// -->
+<link rel="stylesheet" href="assets/vendor/fonte.css">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -68,21 +70,28 @@
       <span class="brand-name">Oaze</span>
     </span>
 
+    <!-- No celular esta mesma lista vira a barra inferior: o rótulo longo
+         sai e entra o curto, que é o que cabe em cinco colunas. -->
     <nav class="nav" id="nav" aria-label="Seções do painel">
       <button class="nav-item is-active" data-page="home">
-        <span class="nav-ico" data-ico="layout-dashboard"></span><span>Início</span>
+        <span class="nav-ico" data-ico="layout-dashboard"></span>
+        <span class="nav-long">Início</span><span class="nav-short">Início</span>
       </button>
       <button class="nav-item" data-page="transactions">
-        <span class="nav-ico" data-ico="arrow-left-right"></span><span>Receitas e Despesas</span>
+        <span class="nav-ico" data-ico="arrow-left-right"></span>
+        <span class="nav-long">Receitas e Despesas</span><span class="nav-short">Lançamentos</span>
       </button>
       <button class="nav-item" data-page="investments">
-        <span class="nav-ico" data-ico="trending-up"></span><span>Investimentos</span>
+        <span class="nav-ico" data-ico="trending-up"></span>
+        <span class="nav-long">Investimentos</span><span class="nav-short">Investir</span>
       </button>
       <button class="nav-item" data-page="accounts">
-        <span class="nav-ico" data-ico="wallet"></span><span>Cartões e Contas</span>
+        <span class="nav-ico" data-ico="wallet"></span>
+        <span class="nav-long">Cartões e Contas</span><span class="nav-short">Carteira</span>
       </button>
       <button class="nav-item" data-page="categories">
-        <span class="nav-ico" data-ico="tag"></span><span>Categorias</span>
+        <span class="nav-ico" data-ico="tag"></span>
+        <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
       </button>
     </nav>
   </header>

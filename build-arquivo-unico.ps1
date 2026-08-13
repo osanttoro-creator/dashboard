@@ -25,7 +25,13 @@ function Proteger([string]$js) { return $js -replace '</script', '<\/script' }
 
 $html = Ler 'index.html'
 
-# ---- 1 · CSS embutido ----
+# ---- 1 · CSS embutido (a fonte vem primeiro: o @font-face precisa
+#         existir antes das regras que a usam) ----
+$fonte = Ler 'assets/vendor/fonte.css'
+$html = $html.Replace(
+  '<link rel="stylesheet" href="assets/vendor/fonte.css">',
+  "<style>`r`n$fonte`r`n</style>")
+
 $css = Ler 'assets/css/style.css'
 $html = $html.Replace(
   '<link rel="stylesheet" href="assets/css/style.css">',

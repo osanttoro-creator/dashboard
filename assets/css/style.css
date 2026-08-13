@@ -94,7 +94,9 @@
   --radius:     16px;
   --radius-sm:  10px;
   --radius-lg:  22px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Inter para o texto; a fonte do sistema segue na fila para as setas
+     e símbolos (▲ ▼ ⇄ ✎ ⚙) que estão fora do subconjunto latin. */
+  --font: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   /* molas: crítico-amortecidas por padrão (ver skill apple-design) */
   --ease-out: cubic-bezier(.22, 1, .36, 1);
@@ -178,7 +180,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  /* A Inter tem o "1" sem serifa e o "l" reto por padrão, o que confunde
+     em coluna de valores. `cv05`/`ss03` trazem a variante com cauda no
+     "l" e o "1" com base — em fonte financeira isso não é enfeite. */
+  font-feature-settings: 'cv05' 1, 'ss03' 1;
+  font-optical-sizing: auto;
+  font-synthesis-weight: none;   /* a variável cobre 100-900; não invente peso */
 }
+/* Texto miúdo pede tracking positivo; texto grande, negativo. Um valor
+   único de letter-spacing está errado em algum tamanho — daí os passos. */
+.kpi-label, .field-label, .cc-holder .k, .cc-invoice .k, .hero-label,
+.table thead th, .icon-group-label { letter-spacing: .05em; }
+.badge, .cat-tile-pct, .hint, .card-note, .tx-meta { letter-spacing: .005em; }
 h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 button { font: inherit; color: inherit; }
@@ -433,6 +446,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 .nav-ico { display: grid; place-items: center; flex: none; color: var(--muted); }
 .nav-item.is-active .nav-ico { color: var(--accent); }
+.nav-short { display: none; }        /* só na barra inferior do celular */
 .topnav-tools { display: flex; align-items: center; gap: 4px; flex: none; }
 
 /* --- 6.3 assistente, logo abaixo do cabeçalho --- */
@@ -1349,12 +1363,71 @@ select.input { cursor: pointer; }
   .welcome-date { justify-content: flex-start; }
   .today-note { text-align: left; }
 }
+/* ------------------------------------------------------------
+   BARRA INFERIOR (celular)
+   ------------------------------------------------------------
+   A mesma <nav> do cabeçalho passa a flutuar embaixo. Não é uma
+   versão comprimida do desktop: no celular o polegar alcança a
+   base da tela, não o topo — e é lá que a navegação tem de estar.
+
+   Continua sendo uma ilha (recuada das bordas, cantos redondos),
+   não uma faixa colada na borda inferior.
+   ------------------------------------------------------------ */
 @media (max-width: 820px) {
   .app { padding: 0 14px; }
   .welcome { padding: 14px 16px; }
-  .brand-name { display: none; }        /* o nome sai, a marca fica */
   .form-grid { grid-template-columns: 1fr; }
-  .nav-item span:not(.nav-ico) { font-size: 12.5px; }
+
+  /* o cabeçalho colapsa: sobra só a <nav>, que sai do fluxo */
+  .topnav {
+    position: static; padding: 0; margin: 0; border: 0;
+    background: none; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .brand { display: none; }   /* a marca já está no painel de boas-vindas */
+
+  .nav {
+    position: fixed; z-index: 80;
+    left: 12px; right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    display: flex; justify-content: space-between; gap: 1px; overflow: visible;
+    padding: 5px 6px; border-radius: 22px;
+    background: var(--n3);
+    -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+    backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+    border: 1px solid var(--glass-line);
+    box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  }
+  /* colunas do tamanho do conteudo, nao cinco quintos iguais: com
+     largura forcada "Lancamentos" nao cabe em tela de 320px, e cortar
+     o rotulo e pior do que uma coluna um pouco mais larga que a outra */
+  .nav-item {
+    flex: 0 1 auto; min-width: 0;
+    flex-direction: column; gap: 3px;
+    padding: 8px 7px; border-radius: 16px;
+  }
+  .nav-long { display: none; }
+  .nav-short {
+    /* 10px e sem tracking: e o que faz "Lancamentos" caber sem reticencias */
+    display: block; font-size: 10px; letter-spacing: 0;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .nav-ico svg { width: 21px; height: 21px; }
+
+  /* espaço para o conteúdo não terminar embaixo da barra */
+  .app-foot { padding-bottom: 104px; }
+}
+
+/* Telas de 320px (iPhone SE e similares): com o passo anterior o flex
+   encolhe os rótulos e quatro deles ganham reticências. Aperta o
+   respiro e o corpo do texto — o rótulo inteiro vale mais. */
+@media (max-width: 360px) {
+  .nav { left: 8px; right: 8px; padding: 5px 4px; }
+  .nav-item { padding: 8px 4px; }
+  .nav-short { font-size: 9.5px; }
+  .nav-ico svg { width: 20px; height: 20px; }
+  /* e o "+" sobe para não brigar com ela */
+  .fab-wrap { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (max-width: 560px) {
   .kpi-row, .kpi-row-3, .kpi-row-4 { grid-template-columns: 1fr; }
@@ -1375,6 +1448,11 @@ select.input { cursor: pointer; }
   .tx-actions .icon-btn { width: 32px; height: 32px; }
   .btn { padding: 10px 15px; }
   .btn-sm { padding: 9px 13px; }
+}
+/* Alvo maior no cabeçalho só onde ele ainda é horizontal: na barra
+   inferior a <nav> já divide a largura em cinco, e mais padding aqui
+   estouraria as colunas. */
+@media (hover: none) and (min-width: 821px) {
   .nav-item { padding: 11px 14px; }
 }
 
@@ -1389,6 +1467,11 @@ select.input { cursor: pointer; }
 @supports (padding: max(0px)) {
   .welcome { margin-top: max(18px, calc(env(safe-area-inset-top) + 8px)); }
   .app-foot { padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px)); }
+  /* no celular a barra inferior flutua por cima: o conteudo precisa
+     terminar acima dela, senao a ultima linha fica inalcancavel */
+  @media (max-width: 820px) {
+    .app-foot { padding-bottom: max(112px, calc(env(safe-area-inset-bottom) + 100px)); }
+  }
   .toasts { bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px)); }
   .modal { max-height: calc(88vh - env(safe-area-inset-bottom)); }
   @media (max-width: 820px) {
