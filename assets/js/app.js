@@ -6,11 +6,13 @@
 
   const App = {
     page: 'home',
+    refDate: U.todayISO(),  // dia de referência; App.ym é o mês dele
     ym: U.todayYM(),
     txSearch: '',
     txOnlyPending: false,
     txMethod: 'all',        // all | account (débito) | card (crédito)
     cardFocusId: null,      // cartão em foco no leque
+    accFocusId: null,       // conta em foco na carteira
     invType: '',
     catRange: 'all',
     accTab: 'accounts',
@@ -23,9 +25,8 @@
     home: { title: 'Início', sub: () => 'Visão geral de ' + U.monthLabel(App.ym), render: () => Home.render() },
     transactions: { title: 'Receitas e Despesas', sub: () => 'Lançamentos de ' + U.monthLabel(App.ym), render: () => Tx.render() },
     investments: { title: 'Investimentos', sub: () => 'Carteira e projeções', render: () => Inv.render() },
-    accounts: { title: 'Cartões e Contas', sub: () => 'Contas, faturas e importação', render: () => Acc.render() },
-    categories: { title: 'Categorias', sub: () => 'Organização e peso histórico', render: () => Cat.render() },
-    annual: { title: 'Resumo Anual', sub: () => 'Consolidado de ' + U.ymParts(App.ym).y, render: () => Annual.render() }
+    accounts: { title: 'Cartões e Contas', sub: () => 'Sua carteira, faturas e importação', render: () => Acc.render() },
+    categories: { title: 'Categorias', sub: () => 'Organização e peso histórico', render: () => Cat.render() }
   };
 
   /* ---------------- navegação ---------------- */
@@ -41,28 +42,51 @@
     U.$$('.nav-item').forEach((b) => b.classList.toggle('is-active', b.dataset.page === page));
     U.$$('.page').forEach((s) => s.classList.toggle('is-active', s.dataset.page === page));
     document.getElementById('pageTitle').textContent = PAGES[page].title;
-    closeSidebar();
     App.render();
-    document.querySelector('.content').scrollTop = 0;
     global.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  App.setYM = function (ym) {
+  /**
+   * Muda o período. O dia acompanha: se o dia de referência não existe no
+   * mês de destino (31 → fevereiro), encosta no último dia do mês.
+   */
+  App.setYM = function (ym, dia) {
+    const p = U.ymParts(ym);
+    const d = U.clampDay(p.y, p.m, dia != null ? dia : (+String(App.refDate).slice(8, 10) || 1));
     App.ym = ym;
+    App.refDate = U.isoOf(p.y, p.m, d);
     App.invoiceRef = null;
-    syncMonthPicker();
+    syncPeriodPicker();
     App.render();
   };
 
-  /** Data padrão dos formulários: hoje, se hoje estiver no mês selecionado. */
+  /** Volta o painel para hoje — dia, mês e ano. */
+  App.goToday = function () {
+    App.refDate = U.todayISO();
+    App.ym = U.todayYM();
+    App.invoiceRef = null;
+    syncPeriodPicker();
+    App.render();
+  };
+
+  /** Data padrão dos formulários: o dia de referência escolhido no topo. */
   App.selectedDateOrToday = function () {
-    const today = U.todayISO();
-    return U.ymOf(today) === App.ym ? today : U.monthStart(App.ym);
+    return U.isValidISO(App.refDate) ? App.refDate : U.monthStart(App.ym);
+  };
+
+  /**
+   * Data de corte dos saldos: o dia escolhido, mas nunca além do fim do
+   * mês exibido — o cartão de uma conta diz "saldo em" exatamente isto.
+   */
+  App.balanceDate = function () {
+    const fim = U.monthEnd(App.ym);
+    return App.refDate && App.refDate <= fim && App.refDate >= U.monthStart(App.ym) ? App.refDate : fim;
   };
 
   App.render = function () {
     const p = PAGES[App.page];
     document.getElementById('pageSub').textContent = p.sub();
+    renderWelcome();
     try {
       p.render();
     } catch (err) {
@@ -75,12 +99,50 @@
   function renderFooter() {
     const prof = Store.profile();
     document.getElementById('footInfo').textContent =
-      `Perfil "${prof.name}" · ${prof.transactions.length} lançamentos · ${prof.accounts.length} contas · ${prof.cards.length} cartões · atualizado ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+      `Perfil "${prof.name}" · ${prof.transactions.length} lançamentos · ${prof.accounts.length} contas · ${prof.cards.length} cartões`;
+  }
+
+  /* ---------------- painel de boas-vindas ---------------- */
+
+  function renderWelcome() {
+    const nome = Store.ownerName();
+    const alvo = document.getElementById('ownerName');
+    alvo.textContent = nome || 'visitante';
+    alvo.title = 'Clique para trocar o nome';
+
+    const hoje = new Date();
+    document.getElementById('todayNote').textContent =
+      'Hoje é ' + hoje.toLocaleDateString('pt-BR', {
+        weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+      });
+  }
+
+  /** Troca o nome da saudação. Fica salvo com o resto do painel. */
+  function askOwnerName() {
+    const campo = U.el('input', {
+      class: 'input', type: 'text', maxlength: '40',
+      placeholder: 'Como você quer ser chamado?', value: Store.ownerName()
+    });
+    UI.openModal({
+      title: 'Nome na saudação',
+      body: U.el('div', { class: 'field' }, [
+        campo,
+        U.el('p', { class: 'hint', text: 'Aparece no topo do painel. Deixe em branco para voltar a "visitante".' })
+      ]),
+      buttons: [
+        { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Salvar', class: 'btn-primary',
+          onClick: () => { Store.setOwnerName(campo.value); UI.closeModal(); }
+        }
+      ]
+    });
   }
 
   /* ---------------- seletores de período e perfil ---------------- */
 
-  function syncMonthPicker() {
+  function syncPeriodPicker() {
+    const daySel = document.getElementById('daySelect');
     const monthSel = document.getElementById('monthSelect');
     const yearSel = document.getElementById('yearSelect');
     const p = U.ymParts(App.ym);
@@ -95,6 +157,11 @@
     for (let y = min; y <= max; y++) opts.push({ value: String(y), label: String(y) });
     UI.fillSelect(yearSel, opts, String(p.y));
     monthSel.value = String(p.m);
+
+    // o dia acompanha o mês: fevereiro não oferece 30 nem 31
+    const dias = [];
+    for (let d = 1; d <= U.daysInMonth(p.y, p.m); d++) dias.push({ value: String(d), label: String(d) });
+    UI.fillSelect(daySel, dias, String(+String(App.refDate).slice(8, 10) || 1));
   }
 
   function syncProfileSelect() {
@@ -103,13 +170,12 @@
       st.profiles.map((p) => ({ value: p.id, label: p.name })), st.activeProfileId);
   }
 
-  function openSidebar() {
-    document.getElementById('sidebar').classList.add('is-open');
-    document.getElementById('scrim').classList.add('is-open');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('is-open');
-    document.getElementById('scrim').classList.remove('is-open');
+  /** Preenche os ícones declarados no HTML com data-ico. */
+  function paintIcons() {
+    U.$$('[data-ico]').forEach((n) => {
+      if (n.firstElementChild) return;
+      n.appendChild(Icons.lucide(n.dataset.ico, +n.dataset.icoSize || 17));
+    });
   }
 
   /* ---------------- ligação de eventos ---------------- */
@@ -117,18 +183,20 @@
   function wire() {
     // navegação
     U.$$('.nav-item').forEach((b) => b.addEventListener('click', () => App.goTo(b.dataset.page)));
-    document.getElementById('btnOpenSidebar').addEventListener('click', openSidebar);
-    document.getElementById('btnCloseSidebar').addEventListener('click', closeSidebar);
-    document.getElementById('scrim').addEventListener('click', closeSidebar);
 
-    // período
+    // saudação
+    document.getElementById('ownerName').addEventListener('click', askOwnerName);
+
+    // período — dia, mês e ano são editáveis
+    document.getElementById('daySelect').addEventListener('change', (e) =>
+      App.setYM(App.ym, +e.target.value));
     document.getElementById('monthSelect').addEventListener('change', (e) =>
       App.setYM(U.ymKey(U.ymParts(App.ym).y, +e.target.value)));
     document.getElementById('yearSelect').addEventListener('change', (e) =>
       App.setYM(U.ymKey(+e.target.value, U.ymParts(App.ym).m)));
     document.getElementById('btnPrevMonth').addEventListener('click', () => App.setYM(U.addMonths(App.ym, -1)));
     document.getElementById('btnNextMonth').addEventListener('click', () => App.setYM(U.addMonths(App.ym, 1)));
-    document.getElementById('btnToday').addEventListener('click', () => App.setYM(U.todayYM()));
+    document.getElementById('btnToday').addEventListener('click', () => App.goToday());
 
     // perfil
     document.getElementById('profileSelect').addEventListener('change', (e) => {
@@ -163,8 +231,9 @@
       reader.onload = () => {
         try {
           Store.importJSON(String(reader.result));
+          App.refDate = U.todayISO();
           App.ym = U.todayYM();
-          syncProfileSelect(); syncMonthPicker();
+          syncProfileSelect(); syncPeriodPicker();
           UI.toast('Backup restaurado.', 'success');
         } catch (err) {
           console.error(err);
@@ -243,9 +312,8 @@
     Store.onChange((reason) => {
       if (reason === 'profile' || reason === 'import' || reason === 'reset' || reason === 'seed') {
         syncProfileSelect();
-        syncMonthPicker();
+        syncPeriodPicker();
       }
-      if (reason === 'theme') { App.render(); return; }
       App.render();
     });
   }
@@ -268,8 +336,9 @@
         'error', 12000), 800);
     }
 
+    paintIcons();
     syncProfileSelect();
-    syncMonthPicker();
+    syncPeriodPicker();
     wire();
     Sync.init();
     AI.init();
@@ -283,9 +352,9 @@
       try { localStorage.setItem('financas.welcomed', '1'); } catch (e) { /* segue sem marcar */ }
       setTimeout(() => {
         UI.openModal({
-          title: 'Bem-vindo(a) ao seu painel financeiro',
+          title: 'Bem-vindo ao OAZE',
           body: U.el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-            U.el('p', { text: 'Tudo fica salvo apenas neste navegador — nenhum dado sai do seu computador. Use "↓ Backup" na barra lateral para guardar uma cópia.' }),
+            U.el('p', { text: 'Tudo fica salvo apenas neste navegador — nenhum dado sai do seu computador. Use "↓ Backup" no topo da tela para guardar uma cópia.' }),
             U.el('p', { style: { marginTop: '10px' }, text: 'Duas formas de começar:' }),
             U.el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } }, [
               U.el('li', { text: 'Cadastre suas contas e cartões em "Cartões e Contas" e comece a lançar.' }),

@@ -1,0 +1,8 @@
+{
+  "name": "oaze-tools",
+  "private": true,
+  "description": "So para vendorizar icones. O app em si nao usa npm nem build.",
+  "dependencies": {
+    "@edusites/bancos-brasil": "^1.2.0"
+  }
+}

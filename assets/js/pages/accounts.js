@@ -23,10 +23,14 @@
      CONTAS
      ============================================================ */
 
+  /**
+   * As contas de débito usam o MESMO cartão de carteira dos cartões de
+   * crédito. Clicar em um traz o extrato dele abaixo.
+   */
   function renderAccounts() {
     const prof = Store.profile();
     const grid = U.clear(document.getElementById('accountGrid'));
-    const upto = U.monthEnd(App.ym);
+    const upto = App.balanceDate();
 
     if (!prof.accounts.length) {
       grid.appendChild(el('div', { class: 'card' }, [
@@ -37,28 +41,26 @@
       return;
     }
 
+    if (!prof.accounts.some((a) => a.id === App.accHistoryId)) App.accHistoryId = prof.accounts[0].id;
+
     prof.accounts.forEach((a) => {
-      const bal = Calc.accountBalance(a.id, upto);
-      grid.appendChild(el('div', { class: 'acc-card', style: { '--accent': a.color } }, [
-        el('div', { class: 'acc-top' }, [
-          bankChip(a.bank || a.name, a.color),
-          el('div', {}, [
-            el('div', { class: 'acc-name', text: a.name }),
-            el('div', { class: 'acc-type', text: `${a.bank || '—'} · ${a.type}` })
-          ])
-        ]),
-        el('div', { class: 'acc-balance ' + U.signClass(bal), text: U.fmtBRL(bal) }),
-        el('div', { class: 'acc-foot' }, [
-          el('span', { text: `Saldo em ${U.fmtDateBR(upto)}` }),
-          el('div', { class: 'row-actions' }, [
-            el('button', {
-              class: 'icon-btn', title: 'Ver extrato', text: '☰',
-              onclick: () => { App.accHistoryId = a.id; renderHistory(); document.getElementById('tableAccHistory').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-            }),
-            el('button', { class: 'icon-btn', title: 'Editar', text: '✎', onclick: () => Forms.openAccount(a.id) })
-          ])
+      const wrap = el('div', { style: { display: 'grid', gap: '6px' } }, [
+        Cards.account(a, upto, {
+          focused: a.id === App.accHistoryId,
+          onClick: () => { App.accHistoryId = a.id; Acc.render(); }
+        }),
+        el('div', { class: 'row gap-6' }, [
+          el('button', {
+            class: 'btn btn-ghost btn-sm', text: 'Ver extrato',
+            onclick: () => {
+              App.accHistoryId = a.id; Acc.render();
+              document.getElementById('tableAccHistory').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }),
+          el('button', { class: 'btn btn-ghost btn-sm', text: '✎ Editar', onclick: () => Forms.openAccount(a.id) })
         ])
-      ]));
+      ]);
+      grid.appendChild(wrap);
     });
 
     const total = Calc.totalAccountsBalance(upto);
@@ -66,13 +68,9 @@
       `Saldo somado em contas: <strong class="${U.signClass(total)}">${U.fmtBRL(total)}</strong>`;
   }
 
-  /** Logo do banco em caixa branca; sem logo conhecido, ícone genérico na cor da conta. */
+  /** Ladrilho do banco na cor da marca. */
   function bankChip(name, color, small) {
-    const known = Icons.hasBank(name);
-    return el('span', {
-      class: 'bank-chip' + (known ? '' : ' is-generic') + (small ? ' bank-chip-sm' : ''),
-      title: name || 'Instituição'
-    }, Icons.bank(name, small ? 15 : 22, color));
+    return Icons.bankTile(name, small ? 22 : 32, color);
   }
   Acc.bankChip = bankChip;
 
@@ -88,7 +86,7 @@
       return;
     }
     const from = U.monthStart(U.addMonths(App.ym, -2));
-    const to = U.monthEnd(App.ym);
+    const to = App.balanceDate();
     const rows = Calc.accountStatement(App.accHistoryId, from, to);
 
     if (!rows.length) {

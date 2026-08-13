@@ -27,10 +27,13 @@
       expense: v('--expense', '#F0554D'),
       invest: v('--invest', '#6C6CE0'),
       accent: v('--accent', '#7C6CF0'),
-      good: v('--good', '#3DD68C'),
-      warning: v('--warning', '#F2B84B'),
-      series: [v('--s1', '#3DD68C'), v('--s2', '#6C6CE0'), v('--s3', '#F0554D'),
-        v('--s4', '#F2B84B'), v('--s5', '#4EC5D4'), v('--s6', '#9AA0AC')]
+      good: v('--good', '#A8C088'),
+      warning: v('--warning', '#E0AC55'),
+      salvia: v('--salvia', '#7A846A'),
+      terracota: v('--terracota', '#C9794A'),
+      series: [v('--s1', '#D9A441'), v('--s2', '#527A72'), v('--s3', '#A68B6B'),
+        v('--s4', '#A0553F'), v('--s5', '#C2A46E'), v('--s6', '#7A846A'),
+        v('--s7', '#7F588C'), v('--s8', '#C9794A'), v('--s9', '#8A6A4F'), v('--s10', '#8C8F4E')]
     };
   };
 
@@ -113,29 +116,122 @@
      Fábricas por forma
      ============================================================ */
 
-  /** Rosca com centro vazio para o total. */
-  Charts.doughnut = function (canvasId, rows, opts) {
+  /* ============================================================
+     Pizza em 3D
+     ------------------------------------------------------------
+     Chart.js não tem 3D. O plugin abaixo inclina o plano do disco
+     (escala em Y em torno do centro) e extruda a lateral, então a
+     própria Chart.js desenha a face de cima já no plano inclinado.
+
+     Preço de honestidade: inclinar um disco distorce a leitura —
+     as fatias da frente parecem maiores do que são, porque ganham
+     área de parede. Por isso a lista ranqueada ao lado carrega
+     valor e percentual de cada categoria: o número é a fonte da
+     verdade, a pizza é a ilustração.
+
+     Como a Chart.js testa o mouse no plano NÃO inclinado, o evento
+     é convertido de volta antes de chegar nela — sem isso a fatia
+     destacada não bate com a fatia sob o cursor.
+     ============================================================ */
+  const TILT = 0.62;    // 1 = disco de frente (sem 3D); menor = mais deitado
+  const DEPTH = 22;     // espessura em px
+
+  function darken(hex, k) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex).trim());
+    if (!m) return hex;
+    const v = [1, 2, 3].map((i) => Math.round(parseInt(m[i], 16) * k));
+    return `rgb(${v[0]},${v[1]},${v[2]})`;
+  }
+
+  const pie3dPlugin = {
+    id: 'pie3d',
+    beforeEvent(chart, args) {
+      const e = args.event;
+      const arc = chart.getDatasetMeta(0).data[0];
+      if (!arc || e.y == null || e.x == null) return;
+      // tela -> plano do gráfico: desfaz a inclinação só no eixo Y
+      e.y = arc.y + (e.y - arc.y) / TILT;
+    },
+    beforeDatasetsDraw(chart) {
+      const arcs = chart.getDatasetMeta(0).data;
+      if (!arcs.length) return;
+      const ctx = chart.ctx;
+      const cores = chart.data.datasets[0].backgroundColor || [];
+
+      // paredes laterais, de baixo para cima. As fatias do fundo ficam
+      // escondidas atrás da face de cima — não precisam de ordenação.
+      for (let d = DEPTH; d >= 1; d--) {
+        arcs.forEach((arc, i) => {
+          if (arc.startAngle === arc.endAngle) return;
+          ctx.save();
+          ctx.translate(arc.x, arc.y + d);
+          ctx.scale(1, TILT);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.arc(0, 0, arc.outerRadius, arc.startAngle, arc.endAngle);
+          ctx.closePath();
+          ctx.fillStyle = darken(cores[i] || '#A68B6B', 0.55);
+          ctx.fill();
+          ctx.restore();
+        });
+      }
+
+      // deixa o plano inclinado montado: a face de cima é desenhada
+      // pela própria Chart.js logo em seguida. O restore vem no after.
+      const c = arcs[0];
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.scale(1, TILT);
+      ctx.translate(-c.x, -c.y);
+    },
+    afterDatasetsDraw(chart) {
+      if (chart.getDatasetMeta(0).data.length) chart.ctx.restore();
+    }
+  };
+
+  /** A dica precisa sair na fatia que o usuário vê, não na do plano deitado. */
+  function registerPositioner() {
+    if (!Charts.available()) return;
+    const T = global.Chart.Tooltip;
+    if (!T || !T.positioners || T.positioners.pie3d) return;
+    T.positioners.pie3d = function (items) {
+      const pos = T.positioners.average.call(this, items);
+      if (!pos || !items.length) return pos;
+      const cy = items[0].element.y;
+      return { x: pos.x, y: cy + (pos.y - cy) * TILT };
+    };
+  }
+
+  /** Pizza cheia (sem furo) desenhada em 3D. */
+  Charts.pie3d = function (canvasId, rows, opts) {
     const t = Charts.theme();
     const o = opts || {};
     const total = U.sum(rows, (r) => r.total);
     const base = baseOptions(t);
+    registerPositioner();
     return Charts.render(canvasId, {
-      type: 'doughnut',
+      type: 'pie',
+      plugins: [pie3dPlugin],
       data: {
         labels: rows.map((r) => r.name),
         datasets: [{
           data: rows.map((r) => r.total),
           backgroundColor: rows.map((r) => r.color),
-          borderColor: t.surface,
-          borderWidth: 2,          // o "gap de superfície" entre fatias
-          hoverOffset: 6
+          borderColor: 'rgba(255,255,255,.22)',
+          borderWidth: 1,
+          hoverOffset: 0        // deslocar a fatia quebraria a extrusão
         }]
       },
       options: Object.assign({}, base, {
-        cutout: '62%',
+        // espaço embaixo para a espessura não ser cortada
+        layout: { padding: { top: 6, right: 6, bottom: DEPTH + 6, left: 6 } },
+        interaction: { mode: 'nearest', intersect: true },
         plugins: Object.assign({}, base.plugins, {
-          legend: Object.assign({}, base.plugins.legend, { position: o.legendPosition || 'right', align: 'center' }),
+          legend: Object.assign({}, base.plugins.legend, {
+            position: o.legendPosition || 'bottom', align: 'start'
+          }),
           tooltip: Object.assign({}, base.plugins.tooltip, {
+            position: 'pie3d',
             callbacks: {
               label: (ctx) => {
                 const v = ctx.parsed;
@@ -256,11 +352,20 @@
     });
   };
 
-  /** Linhas com marcador de ponta e wash de área opcional. */
+  /**
+   * Linhas com wash de área opcional.
+   * `opts.markers` põe um ponto em CADA mês — é a forma "linha com
+   * marcadores": dá para bater o olho e ver o valor de cada período,
+   * não só a tendência. Sem ela, só a ponta recebe marcador.
+   */
   Charts.lines = function (canvasId, labels, datasets, opts) {
     const t = Charts.theme();
     const o = opts || {};
     const base = baseOptions(t);
+    const raioPonto = o.markers
+      ? (ctx) => (ctx.parsed && ctx.parsed.y == null ? 0 : 3.6)
+      : (ctx) => (ctx.dataIndex === ctx.dataset.data.length - 1 ? 4.5 : 0);
+
     return Charts.render(canvasId, {
       type: 'line',
       data: {
@@ -269,13 +374,14 @@
           label: d.label,
           data: d.data,
           borderColor: d.color,
-          backgroundColor: d.fill ? hexA(d.color, 0.1) : d.color,
+          backgroundColor: d.fill ? hexA(d.color, 0.12) : d.color,
           fill: !!d.fill,
-          borderWidth: 2,
+          borderWidth: 2.2,
           borderDash: d.dashed ? [5, 4] : undefined,
-          tension: 0.28,
-          pointRadius: (ctx) => (ctx.dataIndex === ctx.dataset.data.length - 1 ? 4.5 : 0),
-          pointHoverRadius: 5,
+          tension: o.markers ? 0.18 : 0.28,   // marcador pede curva mais contida
+          pointStyle: d.pointStyle || 'circle',
+          pointRadius: raioPonto,
+          pointHoverRadius: 6,
           pointBackgroundColor: d.color,
           pointBorderColor: t.surface,
           pointBorderWidth: 2,          // o "anel de superfície"
@@ -288,7 +394,7 @@
           y: moneyScale(t, { beginAtZero: o.beginAtZero !== false })
         },
         plugins: Object.assign({}, base.plugins, {
-          legend: Object.assign({}, base.plugins.legend, { display: datasets.length > 1 })
+          legend: Object.assign({}, base.plugins.legend, { display: o.legend !== false && datasets.length > 1 })
         })
       })
     });

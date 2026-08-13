@@ -3,440 +3,402 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Finanças — Dashboard Pessoal</title>
+<title>OAZE — Painel Financeiro</title>
 
 <!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Finanças">
-<meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0A0B0F" media="(prefers-color-scheme: dark)">
-<link rel="apple-touch-icon" href="data:image/png;base64,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">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+<meta name="apple-mobile-web-app-title" content="OAZE">
+<meta name="theme-color" content="#EFE2CB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17100A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
 
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
+<!-- tempestade de areia atravessando o fundo -->
+<div class="sandstorm" aria-hidden="true">
+  <div class="sand-layer l1"></div>
+  <div class="sand-layer l2"></div>
+  <div class="sand-layer l3"></div>
+</div>
+
 <div class="app">
 
-  <!-- ══════════════════ SIDEBAR ══════════════════ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <span class="brand-mark">R$</span>
-      <span class="brand-name">Minhas Finanças</span>
-      <button class="icon-btn sidebar-close" id="btnCloseSidebar" aria-label="Fechar menu">✕</button>
+  <!-- ══════ PAINEL DE BOAS-VINDAS — acima do cabeçalho ══════ -->
+  <section class="welcome glass" aria-label="Resumo do perfil e período">
+    <div class="welcome-main">
+      <p class="welcome-hi">
+        Bem-vindo ao <span class="oaze">OAZE</span>, <span id="ownerName">visitante</span>
+      </p>
+      <div class="welcome-meta">
+        <span class="profile-chip">
+          <select id="profileSelect" aria-label="Perfil ativo"></select>
+          <button class="icon-btn" id="btnProfiles" title="Gerenciar perfis" aria-label="Gerenciar perfis">⚙</button>
+        </span>
+        <span id="syncBox"></span>
+      </div>
     </div>
 
-    <nav class="nav" id="nav">
-      <button class="nav-item is-active" data-page="home">
-        <span class="nav-ico">◧</span><span>Início</span>
-      </button>
-      <button class="nav-item" data-page="transactions">
-        <span class="nav-ico">⇅</span><span>Receitas e Despesas</span>
-      </button>
-      <button class="nav-item" data-page="investments">
-        <span class="nav-ico">▲</span><span>Investimentos</span>
-      </button>
-      <button class="nav-item" data-page="accounts">
-        <span class="nav-ico">▤</span><span>Cartões e Contas</span>
-      </button>
-      <button class="nav-item" data-page="categories">
-        <span class="nav-ico">◈</span><span>Categorias</span>
-      </button>
-      <button class="nav-item" data-page="annual">
-        <span class="nav-ico">≣</span><span>Resumo Anual</span>
-      </button>
-    </nav>
-
-    <div class="sidebar-foot">
-      <div class="sb-block">
-        <label class="field-label" for="profileSelect">Perfil</label>
-        <div class="row gap-6">
-          <select id="profileSelect" class="input"></select>
-          <button class="icon-btn" id="btnProfiles" title="Gerenciar perfis" aria-label="Gerenciar perfis">⚙</button>
-        </div>
+    <div class="welcome-date">
+      <p class="today-note" id="todayNote"></p>
+      <div class="period-picker" id="periodPicker">
+        <button class="icon-btn" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
+        <select id="daySelect" class="input input-sm" aria-label="Dia"></select>
+        <select id="monthSelect" class="input input-sm" aria-label="Mês"></select>
+        <select id="yearSelect" class="input input-sm" aria-label="Ano"></select>
+        <button class="icon-btn" id="btnNextMonth" aria-label="Próximo mês">›</button>
+        <button class="btn btn-ghost btn-sm" id="btnToday">Hoje</button>
       </div>
-      <div class="sb-block" id="syncBox"></div>
-      <div class="sb-actions">
+      <div class="welcome-tools">
+        <button class="icon-btn" id="btnTheme" title="Alternar tema claro/escuro" aria-label="Alternar tema">◐</button>
         <button class="btn btn-ghost btn-sm" id="btnExport" title="Baixar backup em JSON">↓ Backup</button>
         <button class="btn btn-ghost btn-sm" id="btnImport" title="Restaurar backup JSON">↑ Restaurar</button>
+        <input type="file" id="fileRestore" accept="application/json,.json" hidden>
       </div>
-      <input type="file" id="fileRestore" accept="application/json,.json" hidden>
     </div>
-  </aside>
+  </section>
 
-  <div class="scrim" id="scrim"></div>
+  <!-- ══════ CABEÇALHO — navegação sempre visível ══════ -->
+  <header class="topnav">
+    <span class="brand">
+      <span class="brand-mark" aria-hidden="true" data-ico="palmtree"></span>
+      <span class="brand-name">Oaze</span>
+    </span>
 
-  <!-- ══════════════════ MAIN ══════════════════ -->
-  <div class="main">
+    <nav class="nav" id="nav" aria-label="Seções do painel">
+      <button class="nav-item is-active" data-page="home">
+        <span class="nav-ico" data-ico="layout-dashboard"></span><span>Início</span>
+      </button>
+      <button class="nav-item" data-page="transactions">
+        <span class="nav-ico" data-ico="arrow-left-right"></span><span>Receitas e Despesas</span>
+      </button>
+      <button class="nav-item" data-page="investments">
+        <span class="nav-ico" data-ico="trending-up"></span><span>Investimentos</span>
+      </button>
+      <button class="nav-item" data-page="accounts">
+        <span class="nav-ico" data-ico="wallet"></span><span>Cartões e Contas</span>
+      </button>
+      <button class="nav-item" data-page="categories">
+        <span class="nav-ico" data-ico="tag"></span><span>Categorias</span>
+      </button>
+    </nav>
+  </header>
 
-    <header class="topbar">
-      <button class="icon-btn menu-btn" id="btnOpenSidebar" aria-label="Abrir menu">☰</button>
+  <!-- ══════ AÇÃO DA IA — logo abaixo do cabeçalho ══════ -->
+  <section class="ai-bar glass" aria-label="Sugestões com IA">
+    <div class="ai-bar-row">
+      <span class="ai-bar-ico" aria-hidden="true" data-ico="sparkles"></span>
+      <div class="ai-bar-field">
+        <textarea class="input textarea-plain" id="aiQuestion" rows="1"
+          placeholder="Pergunte sobre este mês — ex.: onde posso cortar gastos?"></textarea>
+      </div>
+      <button class="btn btn-ai" id="btnAiAsk">Pedir sugestão</button>
+      <button class="icon-btn" id="btnAiConfig" title="Configurar chave da API" aria-label="Configurar chave da API">⚙</button>
+    </div>
+    <div class="ai-examples">
+      <button class="ai-chip" data-ai-q="Onde posso cortar gastos esse mês?">Onde cortar gastos?</button>
+      <button class="ai-chip" data-ai-q="Como estão minhas categorias de despesa comparado ao mês passado?">Comparar com o mês passado</button>
+      <button class="ai-chip" data-ai-q="Me dê uma sugestão de organização financeira para o próximo mês.">Organizar o próximo mês</button>
+    </div>
+    <div class="ai-answer" id="aiAnswer" hidden></div>
+  </section>
 
-      <div class="topbar-title">
-        <h1 id="pageTitle">Início</h1>
-        <p class="page-sub" id="pageSub">Visão geral do mês</p>
+  <main class="content" id="content">
+
+    <div class="page-head">
+      <h1 id="pageTitle">Início</h1>
+      <p class="page-sub" id="pageSub">Visão geral do mês</p>
+    </div>
+
+    <!-- ─────────── PÁGINA 1 · INÍCIO ─────────── -->
+    <section class="page is-active" data-page="home">
+      <div class="kpi-row" id="homeKpis"></div>
+
+      <div class="quick-actions">
+        <button class="btn btn-danger" data-quick="expense">− Nova despesa</button>
+        <button class="btn btn-income" data-quick="income">+ Nova receita</button>
+        <button class="btn btn-outline" data-quick="transfer">⇄ Transação entre contas</button>
+        <button class="btn btn-outline" data-quick="investment">▲ Novo investimento</button>
       </div>
 
-      <div class="topbar-tools">
-        <div class="month-picker" id="monthPicker">
-          <button class="icon-btn" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-          <select id="monthSelect" class="input input-sm" aria-label="Mês"></select>
-          <select id="yearSelect" class="input input-sm" aria-label="Ano"></select>
-          <button class="icon-btn" id="btnNextMonth" aria-label="Próximo mês">›</button>
-          <button class="btn btn-ghost btn-sm" id="btnToday">Hoje</button>
-        </div>
-        <button class="icon-btn" id="btnTheme" title="Alternar tema claro/escuro" aria-label="Alternar tema">◐</button>
-      </div>
-    </header>
-
-    <main class="content" id="content">
-
-      <!-- ─────────── PÁGINA 1 · INÍCIO ─────────── -->
-      <section class="page is-active" data-page="home">
-        <div class="kpi-row" id="homeKpis"></div>
-
-        <div class="quick-actions">
-          <button class="btn btn-danger" data-quick="expense">− Nova despesa</button>
-          <button class="btn btn-income" data-quick="income">+ Nova receita</button>
-          <button class="btn btn-outline" data-quick="transfer">⇄ Transação entre contas</button>
-          <button class="btn btn-outline" data-quick="investment">▲ Novo investimento</button>
-        </div>
-
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-head">
-              <h2 id="homePieTitle">Gastos por categoria</h2>
-              <span class="card-note" id="homePieNote"></span>
-            </div>
-            <div class="chart-box chart-box-pie">
-              <canvas id="chartCatPie"></canvas>
-              <div class="empty-overlay" id="catPieEmpty" hidden>Sem despesas confirmadas neste mês.</div>
-            </div>
-            <ul class="rank-list" id="catRankList"></ul>
-          </div>
-
-          <div class="card">
-            <div class="card-head">
-              <h2 id="home12mTitle">Receitas × Despesas — últimos 12 meses</h2>
-            </div>
-            <div class="table-wrap table-scroll">
-              <table class="table table-compact" id="table12m">
-                <thead>
-                  <tr><th>Mês</th><th class="num">Receitas</th><th class="num">Despesas</th><th class="num">Saldo</th></tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2>Cartões de crédito — fatura atual</h2>
-            <button class="btn btn-ghost btn-sm" data-goto="accounts">Gerenciar cartões →</button>
-          </div>
-          <div id="homeCards"></div>
-        </div>
-
+      <!-- o ano à esquerda, ocupando a área maior; a pizza acompanha -->
+      <div class="grid grid-wide-left">
         <div class="card">
           <div class="card-head">
             <h2 id="homeYearTitle">Evolução do saldo no ano</h2>
             <span class="card-note">Saldo acumulado ao fim de cada mês</span>
           </div>
-          <div class="chart-box chart-box-lg">
+          <div class="chart-box chart-box-xl">
             <canvas id="chartYearBalance"></canvas>
           </div>
         </div>
 
-        <div class="card ai-card">
-          <div class="card-head">
-            <h2>Sugestões com IA</h2>
-            <span class="card-note">Opcional — usa a sua própria chave da API da Anthropic (cobrada por uso)</span>
-            <button class="btn btn-ghost btn-sm" id="btnAiConfig">⚙ Configurar chave</button>
-          </div>
-          <p class="hint" style="margin-bottom:10px">
-            Ao pedir uma sugestão, um resumo do perfil e mês selecionados (saldos, totais por categoria,
-            faturas e investimentos) é enviado direto do seu navegador para a API da Anthropic — nada
-            passa por outro servidor e nenhum outro perfil é incluído.
-          </p>
-          <div class="ai-ask">
-            <textarea class="input textarea-plain" id="aiQuestion" rows="2"
-              placeholder="Ex.: onde posso cortar gastos este mês?"></textarea>
-            <button class="btn btn-ai" id="btnAiAsk">Pedir sugestão</button>
-          </div>
-          <div class="ai-examples">
-            <button class="ai-chip" data-ai-q="Onde posso cortar gastos esse mês?">Onde cortar gastos?</button>
-            <button class="ai-chip" data-ai-q="Como estão minhas categorias de despesa comparado ao mês passado?">Comparar com o mês passado</button>
-            <button class="ai-chip" data-ai-q="Me dê uma sugestão de organização financeira para o próximo mês.">Organizar o próximo mês</button>
-          </div>
-          <div class="ai-answer" id="aiAnswer" hidden></div>
-        </div>
-      </section>
-
-      <!-- ─────────── PÁGINA 2 · RECEITAS E DESPESAS ─────────── -->
-      <section class="page" data-page="transactions">
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-income btn-sm" data-quick="income">+ Receita</button>
-            <button class="btn btn-danger btn-sm" data-quick="expense">− Despesa</button>
-            <button class="btn btn-outline btn-sm" data-quick="transfer">⇄ Transferência</button>
-          </div>
-          <div class="toolbar-right">
-            <div class="seg seg-sm" id="txMethodFilter" role="group" aria-label="Filtrar despesas por forma de pagamento">
-              <button type="button" class="is-active" data-method="all">Todos</button>
-              <button type="button" data-method="account">Débito</button>
-              <button type="button" data-method="card">Crédito</button>
-            </div>
-            <input type="search" class="input input-sm" id="txSearch" placeholder="Buscar por descrição…">
-            <label class="check check-inline"><input type="checkbox" id="txOnlyPending"><span>Só pendentes</span></label>
-          </div>
-        </div>
-
-        <div class="kpi-row kpi-row-3" id="txKpis"></div>
-
-        <div class="grid grid-2">
-          <div class="col-stack" id="colIncome"></div>
-          <div class="col-stack" id="colExpense"></div>
-        </div>
-
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-head">
-              <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
-              <span class="card-note">Cada barra dividida em débito e crédito</span>
-            </div>
-            <div class="chart-box"><canvas id="chartTxExpenseCat"></canvas>
-              <div class="empty-overlay" id="txExpCatEmpty" hidden>Nada confirmado ainda.</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-head"><h2>Previsto × Realizado no mês</h2>
-              <span class="card-note">Previsto = tudo lançado · Realizado = só confirmado</span>
-            </div>
-            <div class="chart-box"><canvas id="chartPlannedVsReal"></canvas></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
-          <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas>
-            <div class="empty-overlay" id="txIncCatEmpty" hidden>Nada confirmado ainda.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─────────── PÁGINA 3 · INVESTIMENTOS ─────────── -->
-      <section class="page" data-page="investments">
-        <div class="kpi-row kpi-row-4" id="invKpis"></div>
-
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
-          </div>
-          <div class="toolbar-right">
-            <select class="input input-sm" id="invTypeFilter"><option value="">Todos os tipos</option></select>
-          </div>
-        </div>
-
         <div class="card">
           <div class="card-head">
-            <h2>Carteira de investimentos</h2>
-            <span class="card-note">Valor atual estimado por juros compostos sobre o aporte</span>
+            <h2 id="homePieTitle">Gastos por categoria</h2>
+            <span class="card-note" id="homePieNote"></span>
           </div>
-          <div class="table-wrap">
-            <table class="table" id="tableInvestments">
-              <thead>
-                <tr>
-                  <th>Nome</th><th>Tipo</th><th>Aporte</th>
-                  <th class="num">Valor aportado</th><th class="num">Taxa a.a.</th>
-                  <th class="num">Valor atual</th><th class="num">Rendimento</th><th></th>
-                </tr>
-              </thead>
+          <div class="chart-box chart-box-pie">
+            <canvas id="chartCatPie"></canvas>
+            <div class="empty-overlay" id="catPieEmpty" hidden>Sem despesas confirmadas neste mês.</div>
+          </div>
+          <ul class="rank-list" id="catRankList"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Sua carteira</h2>
+          <span class="card-note">Contas e cartões deste perfil</span>
+          <button class="btn btn-ghost btn-sm" data-goto="accounts">Gerenciar →</button>
+        </div>
+        <div id="homeCards"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2 id="home12mTitle">Receitas × Despesas no ano</h2>
+          <span class="card-note">Linha com marcadores em cada mês</span>
+        </div>
+        <div class="chart-box chart-box-lg">
+          <canvas id="chartYearIncomeExpense"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 2 · RECEITAS E DESPESAS ─────────── -->
+    <section class="page" data-page="transactions">
+      <div class="kpi-row kpi-row-3" id="txKpis"></div>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-income btn-sm" data-quick="income">+ Receita</button>
+          <button class="btn btn-danger btn-sm" data-quick="expense">− Despesa</button>
+          <button class="btn btn-outline btn-sm" data-quick="transfer">⇄ Transferência</button>
+        </div>
+        <div class="toolbar-right">
+          <div class="seg seg-sm" id="txMethodFilter" role="group" aria-label="Filtrar despesas por forma de pagamento">
+            <button type="button" class="is-active" data-method="all">Tudo</button>
+            <button type="button" data-method="account">Débito</button>
+            <button type="button" data-method="card">Crédito</button>
+          </div>
+          <input type="search" class="input input-sm" id="txSearch" placeholder="Buscar por descrição…">
+          <label class="check check-inline"><input type="checkbox" id="txOnlyPending"><span>Só pendentes</span></label>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="col-stack" id="colIncome"></div>
+        <div class="col-stack" id="colExpense"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
+        </div>
+        <div class="chart-box chart-box-lg"><canvas id="chartTxExpenseCat"></canvas>
+          <div class="empty-overlay" id="txExpCatEmpty" hidden>Nada confirmado ainda.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
+          <div class="chart-box chart-box-lg"><canvas id="chartMethodTrend"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
+          <div class="chart-box chart-box-lg"><canvas id="chartPlannedVsReal"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
+        <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas>
+          <div class="empty-overlay" id="txIncCatEmpty" hidden>Nada confirmado ainda.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 3 · INVESTIMENTOS ─────────── -->
+    <section class="page" data-page="investments">
+      <div class="kpi-row kpi-row-4" id="invKpis"></div>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
+        </div>
+        <div class="toolbar-right">
+          <select class="input input-sm" id="invTypeFilter"><option value="">Todos os tipos</option></select>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Carteira de investimentos</h2>
+          <span class="card-note">Valor atual estimado por juros compostos sobre o aporte</span>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="tableInvestments">
+            <thead>
+              <tr>
+                <th>Nome</th><th>Tipo</th><th>Aporte</th>
+                <th class="num">Valor aportado</th><th class="num">Taxa a.a.</th>
+                <th class="num">Valor atual</th><th class="num">Rendimento</th><th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
+          <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
+        </div>
+        <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Calculadora de projeção — juros compostos</h2></div>
+        <div class="proj-layout">
+          <form class="proj-form" id="projForm">
+            <label class="field"><span class="field-label">Valor inicial (R$)</span>
+              <input class="input" type="text" inputmode="decimal" id="projInitial" value="10.000,00"></label>
+            <label class="field"><span class="field-label">Aporte mensal (R$)</span>
+              <input class="input" type="text" inputmode="decimal" id="projMonthly" value="1.000,00"></label>
+            <label class="field"><span class="field-label">Taxa de juros</span>
+              <div class="row gap-6">
+                <input class="input" type="text" inputmode="decimal" id="projRate" value="10,00">
+                <select class="input input-sm" id="projRatePeriod" style="max-width:110px">
+                  <option value="year">% ao ano</option>
+                  <option value="month">% ao mês</option>
+                </select>
+              </div></label>
+            <label class="field"><span class="field-label">Período (meses)</span>
+              <input class="input" type="number" min="1" max="960" id="projMonths" value="120"></label>
+            <button class="btn btn-primary" type="submit">Calcular projeção</button>
+          </form>
+          <div class="proj-result">
+            <div class="proj-figures" id="projFigures"></div>
+            <div class="chart-box chart-box-lg"><canvas id="chartProjection"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 4 · CARTÕES E CONTAS ─────────── -->
+    <section class="page" data-page="accounts">
+      <div class="tabs" id="accTabs">
+        <button class="tab is-active" data-tab="accounts">Contas de débito</button>
+        <button class="tab" data-tab="cards">Cartões de crédito</button>
+        <button class="tab" data-tab="import">Importar extratos / Registrato</button>
+      </div>
+
+      <!-- Aba contas -->
+      <div class="tabpane is-active" data-tab="accounts">
+        <div class="toolbar">
+          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewAccount">+ Nova conta</button></div>
+          <div class="toolbar-right"><span class="muted" id="accTotalLabel"></span></div>
+        </div>
+        <div class="wallet-grid" id="accountGrid"></div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Extrato da conta</h2>
+            <select class="input input-sm" id="accHistorySelect" style="max-width:240px"></select>
+          </div>
+          <div class="table-wrap table-scroll-lg">
+            <table class="table table-compact" id="tableAccHistory">
+              <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th><th class="num">Saldo</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-head">
-            <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
-            <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
-          </div>
-          <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><h2>Calculadora de projeção — juros compostos</h2></div>
-          <div class="proj-layout">
-            <form class="proj-form" id="projForm">
-              <label class="field"><span class="field-label">Valor inicial (R$)</span>
-                <input class="input" type="text" inputmode="decimal" id="projInitial" value="10.000,00"></label>
-              <label class="field"><span class="field-label">Aporte mensal (R$)</span>
-                <input class="input" type="text" inputmode="decimal" id="projMonthly" value="1.000,00"></label>
-              <label class="field"><span class="field-label">Taxa de juros</span>
-                <div class="row gap-6">
-                  <input class="input" type="text" inputmode="decimal" id="projRate" value="10,00">
-                  <select class="input input-sm" id="projRatePeriod" style="max-width:110px">
-                    <option value="year">% ao ano</option>
-                    <option value="month">% ao mês</option>
-                  </select>
-                </div></label>
-              <label class="field"><span class="field-label">Período (meses)</span>
-                <input class="input" type="number" min="1" max="960" id="projMonths" value="120"></label>
-              <button class="btn btn-primary" type="submit">Calcular projeção</button>
-            </form>
-            <div class="proj-result">
-              <div class="proj-figures" id="projFigures"></div>
-              <div class="chart-box chart-box-lg"><canvas id="chartProjection"></canvas></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─────────── PÁGINA 4 · CARTÕES E CONTAS ─────────── -->
-      <section class="page" data-page="accounts">
-        <div class="tabs" id="accTabs">
-          <button class="tab is-active" data-tab="accounts">Contas bancárias</button>
-          <button class="tab" data-tab="cards">Cartões de crédito</button>
-          <button class="tab" data-tab="import">Importar extratos / Registrato</button>
-        </div>
-
-        <!-- Aba contas -->
-        <div class="tabpane is-active" data-tab="accounts">
-          <div class="toolbar">
-            <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewAccount">+ Nova conta</button></div>
-            <div class="toolbar-right"><span class="muted" id="accTotalLabel"></span></div>
-          </div>
-          <div class="acc-grid" id="accountGrid"></div>
-          <div class="card">
-            <div class="card-head">
-              <h2>Histórico de movimentações</h2>
-              <select class="input input-sm" id="accHistorySelect" style="max-width:240px"></select>
-            </div>
-            <div class="table-wrap table-scroll-lg">
-              <table class="table table-compact" id="tableAccHistory">
-                <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th><th class="num">Saldo</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Aba cartões -->
-        <div class="tabpane" data-tab="cards">
-          <div class="toolbar">
-            <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewCard">+ Novo cartão</button></div>
-            <div class="toolbar-right"><span class="muted" id="cardTotalLabel"></span></div>
-          </div>
-          <div class="card" id="cardDeckCard">
-            <div id="cardDeck"></div>
-            <div id="cardDetail"></div>
-          </div>
-        </div>
-
-        <!-- Aba importação -->
-        <div class="tabpane" data-tab="import">
-          <div class="card">
-            <div class="card-head">
-              <h2>Importar lançamentos</h2>
-              <span class="card-note">CSV · OFX · texto colado de extrato, fatura ou Registrato</span>
-            </div>
-            <div class="import-grid">
-              <div class="field">
-                <span class="field-label">1 · Envie um arquivo</span>
-                <input type="file" class="input" id="importFile" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
-                <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
-              </div>
-              <div class="field">
-                <span class="field-label">ou cole o conteúdo aqui</span>
-                <textarea class="input textarea" id="importText" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
-              </div>
-            </div>
-            <div class="import-opts">
-              <label class="field"><span class="field-label">Destino</span>
-                <select class="input" id="importTarget"></select></label>
-              <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
-            </div>
-          </div>
-          <div id="importResult"></div>
-        </div>
-      </section>
-
-      <!-- ─────────── PÁGINA 5 · CATEGORIAS ─────────── -->
-      <section class="page" data-page="categories">
+      <!-- Aba cartões -->
+      <div class="tabpane" data-tab="cards">
         <div class="toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-danger btn-sm" data-newcat="expense">+ Categoria de despesa</button>
-            <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
-          </div>
-          <div class="toolbar-right">
-            <select class="input input-sm" id="catRangeSelect">
-              <option value="all">Histórico completo</option>
-              <option value="year">Ano selecionado</option>
-              <option value="12m">Últimos 12 meses</option>
-              <option value="month">Mês selecionado</option>
-            </select>
-          </div>
+          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewCard">+ Novo cartão</button></div>
+          <div class="toolbar-right"><span class="muted" id="cardTotalLabel"></span></div>
         </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-head"><h2>Categorias de despesa</h2></div>
-            <div id="catListExpense" class="cat-list"></div>
-          </div>
-          <div class="card">
-            <div class="card-head"><h2>Categorias de receita</h2></div>
-            <div id="catListIncome" class="cat-list"></div>
-          </div>
+        <div class="card" id="cardDeckCard">
+          <div id="cardDeck"></div>
+          <div id="cardDetail"></div>
         </div>
-        <div class="card">
-          <div class="card-head"><h2 id="catHistTitle">Peso histórico de cada categoria de despesa</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartCatHistory"></canvas></div>
-        </div>
-      </section>
+      </div>
 
-      <!-- ─────────── PÁGINA 6 · RESUMO ANUAL ─────────── -->
-      <section class="page" data-page="annual">
-        <div class="kpi-row kpi-row-4" id="annualKpis"></div>
+      <!-- Aba importação -->
+      <div class="tabpane" data-tab="import">
         <div class="card">
           <div class="card-head">
-            <h2 id="annualTableTitle">Consolidado mensal</h2>
-            <span class="card-note">Somente lançamentos confirmados</span>
+            <h2>Importar lançamentos</h2>
+            <span class="card-note">CSV · OFX · texto colado de extrato, fatura ou Registrato</span>
           </div>
-          <div class="table-wrap">
-            <table class="table" id="tableAnnual">
-              <thead><tr>
-                <th>Mês</th><th class="num">Receitas</th><th class="num">Despesas</th>
-                <th class="num">Saldo do mês</th><th class="num">Saldo acumulado</th><th class="num">Investido</th>
-              </tr></thead>
-              <tbody></tbody><tfoot></tfoot>
-            </table>
-          </div>
-        </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-head"><h2>Evolução do saldo acumulado</h2></div>
-            <div class="chart-box chart-box-lg"><canvas id="chartAnnualBalance"></canvas></div>
-          </div>
-          <div class="card">
-            <div class="card-head"><h2 id="yoyTitle">Comparação ano a ano</h2></div>
-            <div class="chart-box chart-box-lg"><canvas id="chartYoY"></canvas>
-              <div class="empty-overlay" id="yoyEmpty" hidden>Ainda não há dados de outros anos para comparar.</div>
+          <div class="import-grid">
+            <div class="field">
+              <span class="field-label">1 · Envie um arquivo</span>
+              <input type="file" class="input" id="importFile" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
+              <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
+            </div>
+            <div class="field">
+              <span class="field-label">ou cole o conteúdo aqui</span>
+              <textarea class="input textarea" id="importText" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
             </div>
           </div>
+          <div class="import-opts">
+            <label class="field"><span class="field-label">Destino</span>
+              <select class="input" id="importTarget"></select></label>
+            <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
+          </div>
         </div>
-      </section>
+        <div id="importResult"></div>
+      </div>
+    </section>
 
-    </main>
+    <!-- ─────────── PÁGINA 5 · CATEGORIAS ─────────── -->
+    <section class="page" data-page="categories">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-danger btn-sm" data-newcat="expense">+ Categoria de despesa</button>
+          <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
+        </div>
+        <div class="toolbar-right">
+          <select class="input input-sm" id="catRangeSelect">
+            <option value="all">Histórico completo</option>
+            <option value="year">Ano selecionado</option>
+            <option value="12m">Últimos 12 meses</option>
+            <option value="month">Mês selecionado</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head"><h2>Categorias de despesa</h2></div>
+          <div id="catListExpense" class="cat-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Categorias de receita</h2></div>
+          <div id="catListIncome" class="cat-list"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 id="catHistTitle">Peso histórico de cada categoria de despesa</h2></div>
+        <div class="chart-box chart-box-lg"><canvas id="chartCatHistory"></canvas></div>
+      </div>
+    </section>
 
-    <footer class="app-foot">
-      <span id="footInfo"></span>
-      <span class="dot-sep">·</span>
-      <span>Dados salvos apenas neste navegador (localStorage)</span>
-    </footer>
-  </div>
+  </main>
+
+  <footer class="app-foot">
+    <span id="footInfo"></span>
+    <span class="dot-sep">·</span>
+    <span>Dados salvos apenas neste navegador (localStorage)</span>
+  </footer>
 </div>
 
 <!-- modal / toast -->
@@ -460,6 +422,7 @@
 <!-- sem internet (avião, celular offline), cai para a cópia local -->
 <script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>
 <!-- ícones vendorizados (bancos + Lucide): sem CDN em runtime -->
+<script src="assets/vendor/bancos.js"></script>
 <script src="assets/vendor/icons.js"></script>
 <script src="assets/js/firebase-config.js"></script>
 <script src="assets/js/utils.js"></script>
@@ -478,7 +441,6 @@
 <script src="assets/js/pages/investments.js"></script>
 <script src="assets/js/pages/accounts.js"></script>
 <script src="assets/js/pages/categories.js"></script>
-<script src="assets/js/pages/annual.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

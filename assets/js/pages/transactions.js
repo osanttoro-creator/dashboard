@@ -30,8 +30,8 @@
 
   function renderKpis(ym, t) {
     const splitHtml = t.expense > 0
-      ? `<span class="split-pill" title="Débito — sai da conta">⌂ ${U.fmtBRL(t.expenseDebit)}</span>` +
-        `<span class="split-pill is-credit" title="Crédito — entra na fatura">▭ ${U.fmtBRL(t.expenseCredit)}</span>`
+      ? `<span class="split-pill" title="Débito — sai direto da conta">Débito ${U.fmtBRL(t.expenseDebit)}</span>` +
+        `<span class="split-pill is-credit" title="Crédito — entra na fatura do cartão">Crédito ${U.fmtBRL(t.expenseCredit)}</span>`
       : '<span class="muted">Nada confirmado ainda</span>';
 
     UI.renderKpis('txKpis', [
@@ -88,10 +88,9 @@
     if (!all.length) card.appendChild(UI.empty('Nenhuma receita lançada neste mês.'));
     else if (!list.length) card.appendChild(UI.empty('Nenhum item corresponde ao filtro atual.'));
     else {
-      section(card, 'Fixas', confirmed.filter((e) => e.recurring), ym, 'income', 'Recorrem automaticamente todo mês.');
+      section(card, 'Fixas', confirmed.filter((e) => e.recurring), ym, 'income');
       section(card, 'Variáveis', confirmed.filter((e) => !e.recurring), ym, 'income');
-      section(card, 'Previstas — aguardando confirmação', list.filter((e) => !e.confirmed), ym, 'income',
-        'Aparecem na lista, mas não entram no saldo até serem marcadas.');
+      section(card, 'Previstas', list.filter((e) => !e.confirmed), ym, 'income');
     }
     box.appendChild(card);
   }
@@ -124,42 +123,38 @@
     } else if (!list.length) {
       card.appendChild(UI.empty('Nenhum item corresponde ao filtro atual.'));
     } else {
-      if (App.txMethod !== 'card') {
-        methodSection(card, 'account', debito, ym,
-          'Saiu direto da conta bancária e já reduziu o saldo dela.');
-      }
-      if (App.txMethod !== 'account') {
-        methodSection(card, 'card', credito, ym,
-          'Entrou na fatura do cartão. Conta como despesa na data da compra; o saldo da conta só muda quando a fatura é paga.');
-      }
-      section(card, 'Previstos — aguardando confirmação', pendentes, ym, 'expense',
-        'Aparecem na lista, mas não entram no saldo até serem marcados.');
+      if (App.txMethod !== 'card') methodSection(card, 'account', debito, ym);
+      if (App.txMethod !== 'account') methodSection(card, 'card', credito, ym);
+      section(card, 'Previstos', pendentes, ym, 'expense');
     }
     box.appendChild(card);
   }
 
-  /** Seção de método, com o recorte fixas × variáveis no cabeçalho. */
-  function methodSection(parent, method, items, ym, hint) {
-    const m = Icons.METHOD[method === 'card' ? 'card' : 'account'];
+  /**
+   * Seção de método. O cabeçalho ganha faixa colorida com o ícone, a
+   * contagem e o total — a explicação de "o que é débito" mora no selo
+   * de cada linha (title), não em um parágrafo repetido todo mês.
+   */
+  function methodSection(parent, method, items, ym) {
+    const isCard = method === 'card';
+    const m = Icons.METHOD[isCard ? 'card' : 'account'];
     const total = U.sum(items, (e) => e.amount);
-    const fixas = U.sum(items.filter((e) => e.recurring), (e) => e.amount);
-    const variaveis = U.round2(total - fixas);
 
-    const head = el('div', { class: 'tx-section-head is-method' }, [
+    parent.appendChild(el('div', {
+      class: 'tx-section-head is-method ' + (isCard ? 'is-credit' : 'is-debit'),
+      title: m.full
+    }, [
       Icons.lucide(m.icon, 15),
-      el('h3', { text: method === 'card' ? 'Crédito — cartão' : 'Débito — conta' }),
+      el('h3', { text: isCard ? 'Crédito — cartão' : 'Débito — conta' }),
+      el('span', { class: 'count', text: String(items.length) }),
       el('span', { class: 'sum val-neg', text: U.fmtBRL(total) })
-    ]);
-    parent.appendChild(head);
-
-    const sub = items.length
-      ? `${hint} · fixas ${U.fmtBRL(fixas)} · variáveis ${U.fmtBRL(variaveis)}`
-      : hint;
-    parent.appendChild(el('p', { class: 'hint', style: { marginTop: '-2px', marginBottom: '6px' }, text: sub }));
+    ]));
 
     if (!items.length) {
-      parent.appendChild(el('p', { class: 'empty-note', style: { padding: '4px' },
-        text: method === 'card' ? 'Nada confirmado no cartão neste mês.' : 'Nada confirmado em débito neste mês.' }));
+      parent.appendChild(el('p', {
+        class: 'empty-note', style: { padding: '4px 4px 8px' },
+        text: isCard ? 'Nada no cartão neste mês.' : 'Nada em débito neste mês.'
+      }));
       return;
     }
     const ul = el('ul', { class: 'tx-list' });
@@ -167,14 +162,14 @@
     parent.appendChild(ul);
   }
 
-  function section(parent, title, items, ym, kind, hint) {
+  function section(parent, title, items, ym, kind) {
     if (!items.length) return;
     const total = U.sum(items, (e) => e.amount);
     parent.appendChild(el('div', { class: 'tx-section-head' }, [
       el('h3', { text: title }),
+      el('span', { class: 'count', text: String(items.length) }),
       el('span', { class: 'sum ' + (kind === 'income' ? 'val-pos' : ''), text: U.fmtBRL(total) })
     ]));
-    if (hint) parent.appendChild(el('p', { class: 'hint', style: { marginTop: '-2px', marginBottom: '6px' }, text: hint }));
     const list = el('ul', { class: 'tx-list' });
     items.forEach((e) => list.appendChild(row(e, ym)));
     parent.appendChild(list);
@@ -255,6 +250,10 @@
   function renderCharts(ym, t) {
     const from = U.monthStart(ym), to = U.monthEnd(ym);
     const th = Charts.theme();
+    // sálvia = débito (sai da conta) · terracota = crédito (vai para a fatura).
+    // O mesmo par vale nos selos, nas pílulas e nos dois gráficos abaixo.
+    const corDebito = th.salvia;
+    const corCredito = th.terracota;
 
     /* despesas por categoria, empilhadas por forma de pagamento */
     const exp = Calc.expenseTotalsByMethod(from, to).slice(0, 10);
@@ -267,24 +266,38 @@
         : soCredito ? 'Despesas por categoria — tudo no cartão'
           : `Despesas por categoria — ${U.fmtPct(t.expense > 0 ? t.expenseCredit / t.expense * 100 : 0, 0)} no cartão`;
       Charts.stackedRankedBars('chartTxExpenseCat', exp.map((r) => r.name), [
-        { label: 'Débito (conta)', color: th.accent, data: exp.map((r) => r.debit) },
-        { label: 'Crédito (cartão)', color: th.expense, data: exp.map((r) => r.credit) }
+        { label: 'Débito (conta)', color: corDebito, data: exp.map((r) => r.debit) },
+        { label: 'Crédito (cartão)', color: corCredito, data: exp.map((r) => r.credit) }
       ]);
     } else {
       title.textContent = 'Despesas por categoria no mês';
       Charts.destroy('chartTxExpenseCat');
     }
 
+    /* débito × crédito mês a mês no ano — mostra se o cartão está ganhando peso */
+    const ano = U.ymParts(ym).y;
+    const serie = Calc.monthlySeries(`${ano}-01`, `${ano}-12`);
+    const totCred = U.sum(serie, (r) => r.expenseCredit);
+    const totDeb = U.sum(serie, (r) => r.expenseDebit);
+    const soma = U.round2(totCred + totDeb);
+    document.getElementById('txSplitTitle').textContent = soma > 0
+      ? `Débito × Crédito em ${ano} — ${U.fmtPct((totCred / soma) * 100, 0)} no cartão`
+      : `Débito × Crédito em ${ano}`;
+    Charts.lines('chartMethodTrend', serie.map((r) => r.label), [
+      { label: 'Débito (conta)', color: corDebito, data: serie.map((r) => r.expenseDebit) },
+      { label: 'Crédito (cartão)', color: corCredito, data: serie.map((r) => r.expenseCredit), pointStyle: 'rectRot' }
+    ], { markers: true });
+
     const inc = Calc.categoryTotals('income', from, to);
     UI.toggleEmptyOverlay('txIncCatEmpty', inc.length === 0);
     if (inc.length) Charts.rankedBars('chartTxIncomeCat', inc.slice(0, 10));
     else Charts.destroy('chartTxIncomeCat');
 
-    // Previsto em cinza (contexto) · Realizado colorido por natureza
+    // Previsto em tom neutro (contexto) · Realizado colorido por natureza
     Charts.groupedBars('chartPlannedVsReal',
       ['Receitas', 'Despesas'],
       [
-        { label: 'Previsto (tudo lançado)', color: Charts.hexA(th.muted, 0.5), data: [t.plannedIncome, t.plannedExpense] },
+        { label: 'Previsto (tudo lançado)', color: Charts.hexA(th.muted, 0.45), data: [t.plannedIncome, t.plannedExpense] },
         { label: 'Realizado (confirmado)', color: [th.income, th.expense], data: [t.income, t.expense] }
       ]);
   }

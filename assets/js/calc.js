@@ -180,6 +180,10 @@
         label: U.monthLabel(ym, true),
         income: t.income,
         expense: t.expense,
+        // a quebra débito × crédito acompanha a série: qualquer gráfico
+        // mensal do app pode separar as duas naturezas sem recalcular
+        expenseDebit: t.expenseDebit,
+        expenseCredit: t.expenseCredit,
         balance: t.balance,
         plannedIncome: t.plannedIncome,
         plannedExpense: t.plannedExpense,

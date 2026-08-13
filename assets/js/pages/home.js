@@ -10,10 +10,10 @@
   Home.render = function () {
     const ym = App.ym;
     renderKpis(ym);
+    renderYearLine(ym);        // o ano ocupa a área maior, à esquerda
     renderCategoryPie(ym);
-    render12Months(ym);
-    renderCards(ym);
-    renderYearLine(ym);
+    renderWallet(ym);
+    renderYearIncomeExpense(ym);
   };
 
   /* ---------------- 1 · KPIs ---------------- */
@@ -98,7 +98,8 @@
     title.textContent = `${top.name} concentra ${U.fmtPct(top.pct, 0)} dos gastos`;
     note.textContent = `${U.monthLabel(ym)} · ${U.fmtBRL(total)} confirmados`;
 
-    Charts.doughnut('chartCatPie', Calc.topCategories(rows, 6), { legendPosition: 'right' });
+    // pizza cheia em 3D (ver charts.js): a lista abaixo carrega os números
+    Charts.pie3d('chartCatPie', Calc.topCategories(rows, 6), { legendPosition: 'bottom' });
 
     // Lista ranqueada — carrega os valores que a pizza não rotula, com o
     // ícone da categoria e a quebra débito × crédito na própria barra.
@@ -137,77 +138,50 @@
     }
   }
 
-  /* ---------------- 3 · tabela 12 meses ---------------- */
-
-  function render12Months(ym) {
-    const series = Calc.monthlySeries(U.addMonths(ym, -11), ym);
-    const tbody = U.clear(document.querySelector('#table12m tbody'));
-
-    series.slice().reverse().forEach((r) => {
-      const tr = el('tr', { class: r.ym === ym ? 'is-current' : '' }, [
-        el('td', { text: U.monthLabel(r.ym) }),
-        el('td', { class: 'num', text: U.fmtBRL(r.income) }),
-        el('td', { class: 'num', text: U.fmtBRL(r.expense) }),
-        el('td', { class: 'num ' + U.signClass(r.balance), text: U.fmtBRL(r.balance) })
-      ]);
-      tbody.appendChild(tr);
-    });
-
-    const income = U.sum(series, (r) => r.income);
-    const expense = U.sum(series, (r) => r.expense);
-    const bal = U.round2(income - expense);
-    const positives = series.filter((r) => r.balance > 0).length;
-    document.getElementById('home12mTitle').textContent =
-      bal >= 0
-        ? `12 meses no azul: ${U.fmtBRL(bal)} acumulados`
-        : `12 meses no vermelho: ${U.fmtBRL(bal)} acumulados`;
-    void positives;
-  }
-
-  /* ---------------- 4 · cartões ---------------- */
+  /* ---------------- 3 · carteira (débito + crédito) ---------------- */
 
   /**
-   * Visão rápida: leque compacto (até 2 cartões) e, ao lado, o resumo da
-   * fatura do que estiver em foco. Mesmos dados de Calc.invoice().
+   * A carteira do Início mostra os dois lados: contas de débito e cartões
+   * de crédito, no mesmo formato. Ao lado, o detalhe do que está em foco.
    */
-  function renderCards(ym) {
+  function renderWallet(ym) {
     const box = U.clear(document.getElementById('homeCards'));
-    const cards = Store.profile().cards;
+    const prof = Store.profile();
+    const upto = App.balanceDate();
 
-    if (!cards.length) {
+    if (!prof.accounts.length && !prof.cards.length) {
       box.appendChild(el('div', { class: 'empty-note' }, [
-        document.createTextNode('Nenhum cartão cadastrado. '),
+        document.createTextNode('Sua carteira está vazia. '),
+        el('button', { class: 'btn btn-outline btn-sm', text: 'Cadastrar conta', onclick: () => Forms.openAccount() }),
+        document.createTextNode(' '),
         el('button', { class: 'btn btn-outline btn-sm', text: 'Cadastrar cartão', onclick: () => Forms.openCard() })
       ]));
       return;
     }
 
-    if (!cards.some((c) => c.id === App.cardFocusId)) App.cardFocusId = cards[0].id;
-    const card = Store.cards.get(App.cardFocusId);
-    const ref = Calc.currentInvoiceRef(card, ym);
-    const inv = Calc.invoice(card.id, ref);
-    const used = Calc.cardUsed(card.id);
-    const pctUsed = card.limit > 0 ? Math.min(100, (used / card.limit) * 100) : 0;
+    if (prof.accounts.length) {
+      box.appendChild(walletBlock('Contas — débito', 'landmark',
+        Cards.accountDeck(prof.accounts, upto, { limit: 3 }),
+        `Saldo somado ${U.fmtBRL(Calc.totalAccountsBalance(upto))} em ${U.fmtDateBR(upto)}`,
+        prof.accounts.length - 3));
+    }
 
-    const layout = el('div', { class: 'home-cards' });
-    layout.appendChild(Cards.deck(cards, ym, {
-      limit: 2,
-      focusedId: App.cardFocusId,
-      onClick: (c) => { App.cardFocusId = c.id; renderCards(ym); }
-    }));
+    if (prof.cards.length) {
+      if (!prof.cards.some((c) => c.id === App.cardFocusId)) App.cardFocusId = prof.cards[0].id;
+      const card = Store.cards.get(App.cardFocusId);
+      const ref = Calc.currentInvoiceRef(card, ym);
+      const inv = Calc.invoice(card.id, ref);
 
-    const side = el('div', { class: 'home-card-side' }, [
-      el('div', { class: 'muted', text: `${card.name} · fatura de ${U.monthLabel(ref)}` }),
-      el('div', { class: 'cc-amount', text: U.fmtBRL(inv.planned) }),
-      el('div', { class: 'cc-dates' }, [
-        el('span', { html: `Fecha <b>${U.fmtDateBR(inv.closeDate)}</b>` }),
-        el('span', { html: `Vence <b>${U.fmtDateBR(inv.dueDate)}</b>` })
-      ]),
-      el('div', { class: 'cc-limit' }, [
-        el('span', { text: card.limit > 0 ? `${U.fmtPct(pctUsed, 0)} do limite` : 'Sem limite definido' }),
-        el('span', { text: card.limit > 0 ? `${U.fmtBRL(Math.max(0, card.limit - used))} disponíveis` : '' })
-      ]),
-      el('div', { class: 'row gap-6', style: { flexWrap: 'wrap' } }, [
+      const deck = Cards.deck(prof.cards, ym, {
+        limit: 3,
+        focusedId: App.cardFocusId,
+        onClick: (c) => { App.cardFocusId = c.id; renderWallet(ym); }
+      });
+      const bloco = walletBlock('Cartões — crédito', 'credit-card', deck,
+        `${card.name} · fatura de ${U.monthLabel(ref)}: ${U.fmtBRL(inv.planned)} · vence ${U.fmtDateBR(inv.dueDate)}`,
+        prof.cards.length - 3);
+
+      bloco.appendChild(el('div', { class: 'row gap-6', style: { flexWrap: 'wrap', marginTop: '4px' } }, [
         !inv.paid && inv.planned > 0
           ? el('button', {
             class: 'btn btn-outline btn-sm', text: 'Pagar fatura',
@@ -215,33 +189,67 @@
           })
           : null,
         el('button', {
-          class: 'btn btn-ghost btn-sm', text: 'Ver itens →',
+          class: 'btn btn-ghost btn-sm', text: 'Ver itens da fatura →',
           onclick: () => App.goTo('accounts', { tab: 'cards', cardId: card.id, invoiceRef: ref })
         })
-      ].filter(Boolean))
-    ]);
-    if (cards.length > 2) {
-      side.appendChild(el('p', { class: 'hint', text: `+${cards.length - 2} cartão(ões) em "Cartões e Contas".` }));
+      ].filter(Boolean)));
+      box.appendChild(bloco);
     }
-    layout.appendChild(side);
-    box.appendChild(layout);
   }
 
-  /* ---------------- 5 · linha anual ---------------- */
+  function walletBlock(titulo, icone, deck, resumo, sobrando) {
+    const bloco = el('div', { style: { display: 'grid', gap: '2px', marginBottom: '4px' } }, [
+      el('div', { class: 'tx-section-head' }, [
+        Icons.lucide(icone, 15),
+        el('h3', { text: titulo }),
+        el('span', { class: 'sum muted', text: resumo })
+      ]),
+      deck
+    ]);
+    if (sobrando > 0) {
+      bloco.appendChild(el('p', { class: 'deck-hint', text: `+${sobrando} em "Cartões e Contas".` }));
+    }
+    return bloco;
+  }
+
+  /* ---------------- 4 · saldo acumulado no ano ---------------- */
 
   function renderYearLine(ym) {
     const year = U.ymParts(ym).y;
     const series = Calc.monthlySeries(`${year}-01`, `${year}-12`);
     const t = Charts.theme();
 
-    document.getElementById('homeYearTitle').textContent =
-      `Evolução do saldo em ${year}`;
+    document.getElementById('homeYearTitle').textContent = `Evolução do saldo em ${year}`;
 
-    // saldo não é receita nem despesa — linha usa o roxo de acento
+    // saldo não é receita nem despesa — a linha usa a terracota de acento
     Charts.lines('chartYearBalance',
       series.map((r) => r.label),
       [{ label: 'Saldo acumulado', color: t.accent, data: series.map((r) => r.cumulative), fill: true }],
-      { beginAtZero: false });
+      { beginAtZero: false, markers: true });
+  }
+
+  /* ---------------- 5 · receitas × despesas no ano ---------------- */
+
+  function renderYearIncomeExpense(ym) {
+    const year = U.ymParts(ym).y;
+    const series = Calc.monthlySeries(`${year}-01`, `${year}-12`);
+    const t = Charts.theme();
+
+    const income = U.sum(series, (r) => r.income);
+    const expense = U.sum(series, (r) => r.expense);
+    const bal = U.round2(income - expense);
+    document.getElementById('home12mTitle').textContent = bal >= 0
+      ? `${year} no azul: ${U.fmtBRL(bal)} acumulados`
+      : `${year} no vermelho: ${U.fmtBRL(bal)} acumulados`;
+
+    // linha com marcadores: dá para ler o valor de cada mês, não só a curva
+    Charts.lines('chartYearIncomeExpense',
+      series.map((r) => r.label),
+      [
+        { label: 'Receitas', color: t.income, data: series.map((r) => r.income) },
+        { label: 'Despesas', color: t.expense, data: series.map((r) => r.expense), pointStyle: 'rectRot' }
+      ],
+      { markers: true });
   }
 
   global.Home = Home;

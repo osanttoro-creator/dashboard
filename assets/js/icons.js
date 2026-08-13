@@ -1,33 +1,37 @@
 /* =============================================================
    icons.js — camada de ícones do app
    ------------------------------------------------------------
-   Fontes (vendorizadas em assets/vendor/icons.js, sem CDN em
-   runtime — funciona offline e em file://):
-   · logos-bancos-br (MIT) — logos oficiais de bancos brasileiros
-   · Lucide (ISC) — subconjunto curado de ícones de categoria
+   Fontes, ambas vendorizadas (sem CDN em runtime — funciona
+   offline e em file://):
+   · assets/vendor/bancos.js  — @edusites/bancos-brasil (MIT):
+       41 bancos e carteiras brasileiras, silhueta monocromática
+       + a cor de marca de cada um.
+   · assets/vendor/icons.js   — Lucide (ISC): subconjunto curado
+       de ícones de categoria.
 
-   Se o arquivo vendorizado não estiver presente, tudo cai para
-   um ícone genérico: nada quebra.
+   Se um arquivo vendorizado faltar, tudo cai para um ícone
+   genérico: nada quebra.
    ============================================================= */
 (function (global) {
   'use strict';
 
   const Icons = {};
   const DATA = global.IconData || { banks: {}, lucide: {} };
+  const BR = global.BancosBR || { ICONES: {}, PRESETS: {} };
   const NS = 'http://www.w3.org/2000/svg';
 
   /* ============================================================
      1 · BANCOS
      ============================================================ */
 
-  /** nome digitado/escolhido -> chave do logo. Ordem importa. */
+  /** nome digitado/escolhido -> chave do pacote. Ordem importa. */
   const BANK_MATCH = [
     [/\bitau|ita[uú]\b|unibanco/, 'itau'],
     [/nubank|\bnu\b|nu pagamentos/, 'nubank'],
     [/bradesco/, 'bradesco'],
     [/santander/, 'santander'],
     [/caixa/, 'caixa'],
-    [/banco do brasil|\bbb\b|^bb$/, 'bb'],
+    [/banco do brasil|\bbb\b/, 'bancodobrasil'],
     [/\binter\b/, 'inter'],
     [/\bc6\b/, 'c6'],
     [/btg/, 'btg'],
@@ -37,12 +41,32 @@
     [/mercado ?pago/, 'mercadopago'],
     [/\bxp\b/, 'xp'],
     [/safra/, 'safra'],
-    [/banrisul|rio grande do sul/, 'banrisul'],
     [/\bneon\b/, 'neon'],
     [/pagbank|pagseguro/, 'pagbank'],
     [/\bstone\b/, 'stone'],
     [/votorantim|\bbv\b/, 'bv'],
-    [/mercantil/, 'mercantil']
+    [/mercantil/, 'mercantil'],
+    [/\bcora\b/, 'cora'],
+    [/infinite ?pay/, 'infinitepay'],
+    [/\bdigio\b/, 'digio'],
+    [/banco pan|\bpan\b/, 'pan'],
+    [/\bwise\b/, 'wise'],
+    [/paypal/, 'paypal'],
+    [/stripe/, 'stripe'],
+    [/\bnext\b/, 'next'],
+    [/original/, 'original'],
+    [/\brico\b/, 'rico'],
+    [/revolut/, 'revolut'],
+    [/\bbs2\b/, 'bs2'],
+    [/efi ?bank|gerencianet/, 'efibank'],
+    [/\bton\b/, 'ton'],
+    [/\biugu\b/, 'iugu'],
+    [/\basaas\b/, 'asaas'],
+    [/ng ?cash/, 'ngcash'],
+    [/avenue/, 'avenue'],
+    [/nomad/, 'nomad'],
+    [/\bbmg\b/, 'bmg'],
+    [/agibank/, 'agibank']
   ];
 
   /** Resolve um nome livre ("Banco Itaú", "itau", "ITAÚ S.A.") para uma chave. */
@@ -50,19 +74,41 @@
     const n = U.norm(name);
     if (!n) return null;
     for (const [re, key] of BANK_MATCH) if (re.test(n)) return key;
-    return null;
+    return BR.ICONES[n] ? n : null;
   };
 
-  Icons.hasBank = (name) => !!DATA.banks[Icons.bankKey(name)];
+  Icons.hasBank = (name) => !!BR.ICONES[Icons.bankKey(name)];
+
+  /** Cores oficiais da marca: { fundo, cor }. Null quando o banco é desconhecido. */
+  Icons.bankBrand = function (name) {
+    const key = Icons.bankKey(name);
+    const p = key && BR.PRESETS[key];
+    return p ? { bg: p.fundo, fg: p.cor } : null;
+  };
+
+  /** Só os nomes que o app conhece — alimenta o autocompletar do cadastro. */
+  Icons.bankKeys = () => Object.keys(BR.ICONES);
+
+  /* O pacote entrega o miolo do <svg> sem fill próprio: a cor vem de fora.
+     Guardamos viewBox e conteúdo já limpos, uma vez por banco. */
+  const cache = {};
+  function bankParts(key) {
+    if (cache[key] !== undefined) return cache[key];
+    const raw = BR.ICONES[key];
+    if (!raw) return (cache[key] = null);
+    const vb = (/viewBox=["']([^"']+)["']/.exec(raw) || [, '0 0 108 108'])[1];
+    const body = (/<svg[^>]*>([\s\S]*)<\/svg>/.exec(raw) || [, ''])[1]
+      .replace(/\s*fill="[^"]*"/g, '').trim();
+    return (cache[key] = { vb, body });
+  }
 
   /**
-   * <svg> com o logo do banco. Sem correspondência, devolve o ícone
-   * genérico de instituição (Lucide `landmark`) na cor informada.
+   * <svg> com a silhueta do banco, na cor pedida (padrão: currentColor).
+   * Sem correspondência, devolve o ícone genérico de instituição.
    */
-  Icons.bank = function (name, size, fallbackColor) {
+  Icons.bank = function (name, size, color) {
     const px = size || 22;
-    const key = Icons.bankKey(name);
-    const entry = key && DATA.banks[key];
+    const parts = bankParts(Icons.bankKey(name));
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('width', px);
     svg.setAttribute('height', px);
@@ -70,13 +116,14 @@
     svg.setAttribute('focusable', 'false');
     svg.classList.add('bank-icon');
 
-    if (entry) {
-      svg.setAttribute('viewBox', entry.vb);
-      svg.innerHTML = entry.body;
+    if (parts) {
+      svg.setAttribute('viewBox', parts.vb);
+      svg.setAttribute('fill', color || 'currentColor');
+      svg.innerHTML = parts.body;
     } else {
       svg.setAttribute('viewBox', '0 0 24 24');
       svg.setAttribute('fill', 'none');
-      svg.setAttribute('stroke', fallbackColor || 'currentColor');
+      svg.setAttribute('stroke', color || 'currentColor');
       svg.setAttribute('stroke-width', '2');
       svg.setAttribute('stroke-linecap', 'round');
       svg.setAttribute('stroke-linejoin', 'round');
@@ -84,6 +131,24 @@
       svg.classList.add('is-generic');
     }
     return svg;
+  };
+
+  /**
+   * Ladrilho arredondado no estilo carteira: silhueta na cor de contraste
+   * sobre a cor da marca. É o que aparece nos cartões e nas contas.
+   */
+  Icons.bankTile = function (name, size, fallbackColor) {
+    const px = size || 34;
+    const brand = Icons.bankBrand(name);
+    const bg = brand ? brand.bg : (fallbackColor || 'var(--plane-2)');
+    const fg = brand ? brand.fg : U.inkFor(fallbackColor || '#A68B6B');
+    const tile = U.el('span', {
+      class: 'bank-tile' + (brand ? '' : ' is-generic'),
+      style: { width: px + 'px', height: px + 'px', background: bg, color: fg },
+      title: name || 'Instituição'
+    });
+    tile.appendChild(Icons.bank(name, Math.round(px * 0.62), fg));
+    return tile;
   };
 
   /* ============================================================

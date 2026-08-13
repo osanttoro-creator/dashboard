@@ -26,8 +26,8 @@ $sb = New-Object Text.StringBuilder
 [void]$sb.AppendLine("   icons.js — GERADO AUTOMATICAMENTE, não edite à mão.")
 [void]$sb.AppendLine("   Regenerar: scripts em scratchpad/gen-icons.ps1")
 [void]$sb.AppendLine("")
-[void]$sb.AppendLine("   · Logos de bancos: projeto logos-bancos-br (MIT), SVGs")
-[void]$sb.AppendLine("     vendorizados aqui para o app funcionar offline e em file://.")
+[void]$sb.AppendLine("   · Logos de bancos: ver assets/vendor/bancos.js (gen-bancos.js).")
+
 [void]$sb.AppendLine("   · Ícones de categoria: Lucide (ISC), subconjunto curado.")
 [void]$sb.AppendLine("   ============================================================= */")
 [void]$sb.AppendLine("(function (global) {")
@@ -35,16 +35,8 @@ $sb = New-Object Text.StringBuilder
 [void]$sb.AppendLine("  var RAW = { banks: {}, lucide: {} };")
 [void]$sb.AppendLine("")
 
-# ---- bancos ----
-[void]$sb.AppendLine("  /* ---- logos de bancos (coloridos, viewBox próprio) ---- */")
-Get-ChildItem "$scratch\svgs" -Filter *.svg | Sort-Object Name | ForEach-Object {
-  $key = $_.BaseName
-  $txt = [IO.File]::ReadAllText($_.FullName, [Text.Encoding]::UTF8)
-  $vb  = Get-ViewBox $txt '0 0 512 512'
-  $inner = Get-Inner $txt
-  [void]$sb.AppendLine("  RAW.banks['$key'] = { vb: '$vb', body: '$(Esc $inner)' };")
-}
-[void]$sb.AppendLine("")
+# Logos de banco nao saem daqui: vem de tools/gen-bancos.js
+# (@edusites/bancos-brasil), que gera assets/vendor/bancos.js.
 
 # ---- lucide ----
 [void]$sb.AppendLine("  /* ---- ícones Lucide (traço, herdam currentColor) ---- */")

@@ -3,12 +3,12 @@
    ------------------------------------------------------------
    Formato salvo em localStorage['financas.v1']:
    {
-     version, theme, activeProfileId,
+     version, theme, ownerName, activeProfileId,
      profiles: [{
        id, name, createdAt,
-       accounts:    [{id,name,bank,type,color,openingBalance,openedAt,archived}]
-       cards:       [{id,name,bank,color,limit,closingDay,dueDay,accountId}]
-       categories:  [{id,name,kind:'income'|'expense',color}]
+       accounts:    [{id,name,bank,type,color,gradient,last4,openingBalance,openedAt,archived}]
+       cards:       [{id,name,bank,color,gradient,last4,limit,closingDay,dueDay,accountId}]
+       categories:  [{id,name,kind:'income'|'expense',color,icon}]
        transactions:[{...}]  // ver normalizeTx()
        investments: [{id,name,type,amount,date,rate,currentValue,notes}]
        invoices:    {'cardId|YYYY-MM': {paid,paidAt,accountId,amount}}
@@ -21,36 +21,52 @@
   const KEY = 'financas.v1';
   const VERSION = 1;
 
-  /* ---- paleta categórica "Ethereal" (ordem fixa, nunca ciclada) ---- */
-  const PALETTE = ['#3DD68C', '#6C6CE0', '#F0554D', '#F2B84B', '#4EC5D4', '#9AA0AC'];
-  /* passos escuros das mesmas famílias — extras do seletor de cor */
-  const PALETTE_EXTRA = ['#2BA86C', '#4F4FC9', '#C93E38', '#D69A33', '#3A9DAA', '#5A4FCF'];
+  /* ------------------------------------------------------------
+     Paleta OAZE — tons do oásis. Ordem fixa, nunca ciclada.
+     Estes hexes são a "matiz de referência" da categoria; cada tema
+     ajusta a luminância nos tokens --s1..--s10 do CSS, porque uma
+     série só não sobrevive a um fundo areia E a um fundo noite.
+     ------------------------------------------------------------ */
+  const PALETTE = ['#C9794A', '#7A846A', '#D9A441', '#6B4A76', '#A0553F', '#3F5D57'];
+  /* extras do seletor de cor — mesma família, outros passos */
+  const PALETTE_EXTRA = ['#C2A46E', '#8A6A4F', '#A68B6B', '#8C8F4E', '#5A3E2B', '#E7D4B5',
+    '#8E4E2A', '#4A5C39', '#B8846B', '#527A72'];
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
 
-  /* Migração: dados salvos com a paleta antiga ganham o equivalente novo.
-     Cores fora deste mapa (escolhas manuais) ficam como estão. */
+  /* Migração: dados salvos com paletas anteriores ganham o equivalente
+     no deserto. Cores fora deste mapa (escolhas manuais) ficam como estão. */
   const OLD_TO_NEW = {
-    '#2a78d6': '#6C6CE0', '#eb6834': '#F2B84B', '#1baf7a': '#4EC5D4', '#eda100': '#D69A33',
-    '#e87ba4': '#F0554D', '#008300': '#3DD68C', '#4a3aa7': '#4F4FC9', '#e34948': '#C93E38',
-    '#256abf': '#5A4FCF', '#c9541f': '#D69A33', '#12805a': '#2BA86C', '#b87c00': '#D69A33',
-    '#c95f85': '#C93E38', '#006300': '#2BA86C', '#6f60c9': '#6C6CE0', '#b53434': '#C93E38',
-    '#898781': '#9AA0AC', '#0b0b0b': '#9AA0AC', '#0b3a6b': '#4F4FC9', '#d03b3b': '#F0554D',
-    '#3987e5': '#6C6CE0', '#d95926': '#F2B84B', '#199e70': '#4EC5D4', '#c98500': '#D69A33',
-    '#d55181': '#F0554D', '#9085e9': '#6C6CE0', '#e66767': '#F0554D'
+    /* ---- paleta anterior, "Ethereal" (v1.1) ---- */
+    '#3dd68c': '#7A846A', '#6c6ce0': '#6B4A76', '#f0554d': '#C9794A',
+    '#f2b84b': '#D9A441', '#4ec5d4': '#3F5D57', '#9aa0ac': '#A68B6B',
+    '#2ba86c': '#4A5C39', '#4f4fc9': '#6B4A76', '#c93e38': '#A0553F',
+    '#d69a33': '#C2A46E', '#3a9daa': '#527A72', '#5a4fcf': '#8E4E2A',
+    '#7c6cf0': '#C9794A',
+    /* ---- paleta original (v1.0), caso alguém pule uma versão ---- */
+    '#2a78d6': '#6B4A76', '#eb6834': '#D9A441', '#1baf7a': '#3F5D57', '#eda100': '#C2A46E',
+    '#e87ba4': '#C9794A', '#008300': '#7A846A', '#4a3aa7': '#6B4A76', '#e34948': '#A0553F',
+    '#256abf': '#8E4E2A', '#c9541f': '#C2A46E', '#12805a': '#4A5C39', '#b87c00': '#C2A46E',
+    '#c95f85': '#A0553F', '#006300': '#4A5C39', '#6f60c9': '#6B4A76', '#b53434': '#A0553F',
+    '#898781': '#A68B6B', '#0b0b0b': '#5A3E2B', '#0b3a6b': '#6B4A76', '#d03b3b': '#C9794A',
+    '#3987e5': '#6B4A76', '#d95926': '#D9A441', '#199e70': '#3F5D57', '#c98500': '#C2A46E',
+    '#d55181': '#C9794A', '#9085e9': '#6B4A76', '#e66767': '#C9794A'
   };
-  const migrateColor = (c) => OLD_TO_NEW[String(c || '').toLowerCase()] || c || '#9AA0AC';
+  const migrateColor = (c) => OLD_TO_NEW[String(c || '').toLowerCase()] || c || '#A68B6B';
 
+  /* A cor aqui é só o acento da conta na interface; o logo e a cor de
+     marca do banco vêm do pacote vendorizado (ver icons.js). */
   const BANK_PRESETS = [
-    { name: 'Itaú', color: '#F2B84B' }, { name: 'Nubank', color: '#7C6CF0' },
-    { name: 'Bradesco', color: '#C93E38' }, { name: 'Santander', color: '#F0554D' },
-    { name: 'Caixa', color: '#6C6CE0' }, { name: 'Banco do Brasil', color: '#D69A33' },
-    { name: 'Inter', color: '#F2B84B' }, { name: 'C6 Bank', color: '#9AA0AC' },
-    { name: 'BTG Pactual', color: '#4F4FC9' }, { name: 'Sicredi', color: '#3DD68C' },
-    { name: 'Sicoob', color: '#2BA86C' }, { name: 'Original', color: '#3DD68C' },
-    { name: 'PicPay', color: '#2BA86C' }, { name: 'Mercado Pago', color: '#4EC5D4' },
-    { name: 'XP', color: '#9AA0AC' }, { name: 'Safra', color: '#4F4FC9' },
-    { name: 'Banrisul', color: '#6C6CE0' }, { name: 'Neon', color: '#4EC5D4' },
-    { name: 'Outro', color: '#9AA0AC' }
+    { name: 'Itaú', color: '#D9A441' }, { name: 'Nubank', color: '#6B4A76' },
+    { name: 'Bradesco', color: '#A0553F' }, { name: 'Santander', color: '#C9794A' },
+    { name: 'Caixa', color: '#3F5D57' }, { name: 'Banco do Brasil', color: '#C2A46E' },
+    { name: 'Inter', color: '#C9794A' }, { name: 'C6 Bank', color: '#5A3E2B' },
+    { name: 'BTG Pactual', color: '#6B4A76' }, { name: 'Sicredi', color: '#7A846A' },
+    { name: 'Sicoob', color: '#4A5C39' }, { name: 'Original', color: '#7A846A' },
+    { name: 'PicPay', color: '#4A5C39' }, { name: 'Mercado Pago', color: '#527A72' },
+    { name: 'XP', color: '#5A3E2B' }, { name: 'Safra', color: '#6B4A76' },
+    { name: 'Neon', color: '#3F5D57' }, { name: 'Nomad', color: '#527A72' },
+    { name: 'Wise', color: '#8C8F4E' }, { name: 'PagBank', color: '#4A5C39' },
+    { name: 'Outro', color: '#A68B6B' }
   ];
 
   const ACCOUNT_TYPES = ['Conta corrente', 'Conta poupança', 'Conta de pagamento', 'Carteira / dinheiro', 'Conta investimento'];
@@ -58,14 +74,14 @@
 
   /* mesmos hexes que a migração produz — perfil novo e migrado ficam iguais */
   const DEFAULT_EXPENSE_CATS = [
-    ['Moradia', '#6C6CE0', 'house'], ['Alimentação', '#F2B84B', 'utensils'], ['Transporte', '#4EC5D4', 'car'],
-    ['Saúde', '#D69A33', 'heart-pulse'], ['Educação', '#F0554D', 'graduation-cap'], ['Lazer', '#3DD68C', 'gamepad-2'],
-    ['Compras', '#4F4FC9', 'shopping-bag'], ['Assinaturas', '#C93E38', 'repeat'], ['Impostos e taxas', '#5A4FCF', 'receipt'],
-    ['Outros', '#9AA0AC', 'circle-ellipsis']
+    ['Moradia', '#6B4A76', 'house'], ['Alimentação', '#D9A441', 'utensils'], ['Transporte', '#3F5D57', 'car'],
+    ['Saúde', '#C2A46E', 'heart-pulse'], ['Educação', '#C9794A', 'graduation-cap'], ['Lazer', '#7A846A', 'gamepad-2'],
+    ['Compras', '#8C8F4E', 'shopping-bag'], ['Assinaturas', '#A0553F', 'repeat'], ['Impostos e taxas', '#8E4E2A', 'receipt'],
+    ['Outros', '#A68B6B', 'circle-ellipsis']
   ];
   const DEFAULT_INCOME_CATS = [
-    ['Salário', '#6C6CE0', 'banknote'], ['Freelance / PJ', '#4EC5D4', 'briefcase'], ['Rendimentos', '#4F4FC9', 'trending-up'],
-    ['Reembolso', '#D69A33', 'arrow-left-right'], ['Vendas', '#F2B84B', 'tag'], ['Outros', '#9AA0AC', 'circle-ellipsis']
+    ['Salário', '#6B4A76', 'banknote'], ['Freelance / PJ', '#3F5D57', 'briefcase'], ['Rendimentos', '#8C8F4E', 'trending-up'],
+    ['Reembolso', '#C2A46E', 'arrow-left-right'], ['Vendas', '#D9A441', 'tag'], ['Outros', '#A68B6B', 'circle-ellipsis']
   ];
 
   /* ============================================================ */
@@ -108,11 +124,12 @@
     const pj = makeProfile('PJ / Autônomo');
     pessoal.accounts.push({
       id: U.uid('acc'), name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente',
-      color: '#F2B84B', openingBalance: 0, openedAt: U.todayISO(), archived: false
+      color: '#D9A441', openingBalance: 0, openedAt: U.todayISO(), archived: false
     });
     return {
       version: VERSION,
-      theme: 'dark',            // Ethereal: escuro é o tema principal
+      theme: 'dark',            // noite no deserto é o tema principal
+      ownerName: '',            // quem é o dono do painel (saudação)
       activeProfileId: pessoal.id,
       profiles: [pessoal, pj]
     };
@@ -154,7 +171,9 @@
       name: String(a.name || 'Conta'),
       bank: String(a.bank || ''),
       type: String(a.type || 'Conta corrente'),
-      color: migrateColor(a.color || '#6C6CE0'),
+      color: migrateColor(a.color || '#A68B6B'),
+      gradient: a.gradient ? String(a.gradient) : null,          // null = deduzido da cor
+      last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
       openingBalance: U.round2(+a.openingBalance || 0),
       openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
       archived: !!a.archived
@@ -202,6 +221,7 @@
     const st = {
       version: VERSION,
       theme: raw.theme === 'dark' ? 'dark' : 'light',
+      ownerName: String(raw.ownerName || '').trim().slice(0, 40),
       profiles: raw.profiles.map(normalizeProfile),
       activeProfileId: raw.activeProfileId
     };
@@ -258,7 +278,7 @@
     // carimbo de última alteração — a sincronização decide conflitos por ele.
     // 'theme' é preferência do aparelho; 'sync-apply' vem do remoto (o carimbo
     // remoto já foi aplicado e re-carimbar criaria loop de push).
-    if (reason !== 'theme' && reason !== 'sync-apply') {
+    if (reason !== 'theme' && reason !== 'owner' && reason !== 'sync-apply') {
       const now = Date.now();
       if (reason === 'import' || reason === 'reset' || reason === 'seed') {
         state.profiles.forEach((p) => { p.updatedAt = now; });
@@ -269,6 +289,20 @@
     }
     Store.save();
     listeners.forEach((fn) => { try { fn(reason); } catch (e) { console.error(e); } });
+  };
+
+  /* ---------------- dono do painel ---------------- */
+
+  /** Nome da saudação. Vazio = "visitante". Não é dado financeiro: sincroniza junto. */
+  Store.ownerName = () => (state && state.ownerName) || '';
+  Store.setOwnerName = function (nome) {
+    state.ownerName = String(nome || '').trim().slice(0, 40);
+    Store.commit('owner');
+  };
+  /** Só preenche se ainda estiver vazio — a escolha manual sempre vence. */
+  Store.suggestOwnerName = function (nome) {
+    const n = String(nome || '').trim().split(/\s+/)[0] || '';
+    if (n && !state.ownerName) { state.ownerName = n.slice(0, 40); Store.commit('owner'); }
   };
 
   /* ---------------- perfis ---------------- */
@@ -459,7 +493,8 @@
     let acc = p.accounts[0];
     if (!acc) {
       acc = Store.accounts.add({
-        name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente', color: '#F2B84B',
+        name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente', color: '#D9A441',
+        gradient: 'ocre', last4: '2210',
         openingBalance: 3500, openedAt, archived: false
       });
     } else {
@@ -467,15 +502,16 @@
       acc.openedAt = openedAt;
     }
     const acc2 = Store.accounts.add({
-      name: 'Reserva', bank: 'Nubank', type: 'Conta de pagamento', color: '#7C6CF0',
+      name: 'Reserva', bank: 'Nubank', type: 'Conta de pagamento', color: '#6B4A76',
+      gradient: 'ametista', last4: '9034',
       openingBalance: 22000, openedAt, archived: false
     });
     const card = Store.cards.add({
-      name: 'Cartão principal', bank: 'Nubank', color: '#7C6CF0', gradient: 'roxo', last4: '4352',
+      name: 'Cartão principal', bank: 'Nubank', color: '#6B4A76', gradient: 'ametista', last4: '4352',
       limit: 8000, closingDay: 28, dueDay: 8, accountId: acc.id
     });
     Store.cards.add({
-      name: 'Cartão da viagem', bank: 'Itaú', color: '#F2B84B', gradient: 'ambar', last4: '8871',
+      name: 'Cartão da viagem', bank: 'Itaú', color: '#D9A441', gradient: 'ocre', last4: '8871',
       limit: 4000, closingDay: 15, dueDay: 25, accountId: acc.id
     });
 

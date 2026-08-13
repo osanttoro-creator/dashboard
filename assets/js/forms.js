@@ -56,11 +56,41 @@
       U.clear(box);
       const nome = getName();
       const known = Icons.hasBank(nome);
-      box.appendChild(el('span', { class: 'bank-chip' + (known ? '' : ' is-generic') }, Icons.bank(nome, 22)));
-      box.appendChild(el('span', { text: known ? 'Logo encontrado' : 'Sem logo — usando ícone genérico' }));
+      box.appendChild(Icons.bankTile(nome, 32));
+      box.appendChild(el('span', { text: known ? 'Logo e cor da marca encontrados' : 'Sem logo — usando ícone genérico' }));
     };
     box.update();
     return box;
+  }
+
+  /**
+   * Seletor de cor do cartão de carteira. Serve ao cartão de crédito e à
+   * conta de débito — as duas coisas são desenhadas com o mesmo material.
+   * "auto" deixa a cor ser deduzida do banco escolhido.
+   */
+  function gradPicker(initialKey, onChange) {
+    const wrap = el('div', { class: 'grad-picker' });
+    let atual = initialKey || null;
+
+    function paint() {
+      U.clear(wrap);
+      wrap.appendChild(el('button', {
+        type: 'button', class: 'grad-opt is-auto' + (atual ? '' : ' is-active'),
+        title: 'Automático — deriva do banco escolhido',
+        onclick: () => { atual = null; paint(); if (onChange) onChange(null); }
+      }, el('span', { text: 'auto' })));
+      Cards.GRADIENTS.forEach((g) => {
+        wrap.appendChild(el('button', {
+          type: 'button', class: 'grad-opt' + (atual === g.key ? ' is-active' : ''),
+          title: g.name, 'aria-label': 'Cor ' + g.name,
+          style: { background: `linear-gradient(140deg, ${g.a}, ${g.b})` },
+          onclick: () => { atual = g.key; paint(); if (onChange) onChange(g.key); }
+        }));
+      });
+    }
+    paint();
+    wrap.getValue = () => atual;
+    return wrap;
   }
 
   /** Grade de ícones Lucide para escolher o da categoria. */
@@ -360,13 +390,41 @@
     const fBalance = field('Saldo inicial (R$)', moneyInput(editing ? editing.openingBalance : 0),
       { hint: 'Saldo que a conta tinha na data de abertura abaixo.' });
     const fDate = field('Considerar a partir de', input({ type: 'date', value: editing ? editing.openedAt : U.todayISO() }));
+    const fLast4 = field('4 últimos dígitos', input({
+      inputmode: 'numeric', maxlength: 4, placeholder: '4352',
+      value: editing ? editing.last4 : ''
+    }), { hint: 'Só para reconhecer a conta na carteira. Opcional.' });
 
-    const picker = UI.colorPicker(editing ? editing.color : '#6C6CE0');
+    const picker = UI.colorPicker(editing ? editing.color : '#A68B6B');
     const fColor = field('Cor identificadora', picker, { span2: true });
 
     const nomeBanco = () => (bankSel.value === 'Outro' ? fCustomBank._control.value : bankSel.value);
-    const preview = bankPreview(nomeBanco);
-    const fPreview = field('Logo do banco', preview, { span2: true });
+
+    /* cor do cartão + prévia ao vivo — a conta é desenhada como carteira */
+    const grads = gradPicker(editing ? editing.gradient : null, () => paintPreview());
+    const fGrad = field('Cor do cartão na carteira', grads, { span2: true });
+    const cardPreview = el('div', { class: 'card-preview' });
+    const fPreview = field('Prévia', cardPreview, { span2: true });
+
+    function currentAccount() {
+      return {
+        id: editing ? editing.id : 'preview',
+        name: fName._control.value.trim() || 'Conta',
+        bank: nomeBanco(),
+        type: fType._control.value,
+        color: picker.getValue(),
+        gradient: grads.getValue(),
+        last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
+        openingBalance: U.parseMoney(fBalance._control.value) || 0
+      };
+    }
+    function paintPreview() {
+      U.clear(cardPreview);
+      const node = Cards.account(currentAccount(), App.balanceDate(), {});
+      node.disabled = true;
+      node.style.cursor = 'default';
+      cardPreview.appendChild(node);
+    }
 
     if (!editing) {
       bankSel.addEventListener('change', () => {
@@ -377,12 +435,16 @@
         }
       });
     }
-    function syncBank() { fCustomBank.hidden = bankSel.value !== 'Outro'; preview.update(); }
+    function syncBank() { fCustomBank.hidden = bankSel.value !== 'Outro'; paintPreview(); }
     bankSel.addEventListener('change', syncBank);
-    fCustomBank._control.addEventListener('input', U.debounce(() => preview.update(), 250));
+    const repaint = U.debounce(paintPreview, 200);
+    [fName, fCustomBank, fLast4, fBalance].forEach((f) => f._control.addEventListener('input', repaint));
+    fType._control.addEventListener('change', paintPreview);
+    U.$$('.color-opt', picker).forEach((b) => b.addEventListener('click', paintPreview));
     syncBank();
 
-    const grid = el('div', { class: 'form-grid' }, [fName, fBank, fCustomBank, fPreview, fType, fBalance, fDate, fColor]);
+    const grid = el('div', { class: 'form-grid' },
+      [fName, fBank, fCustomBank, fType, fLast4, fBalance, fDate, fColor, fGrad, fPreview]);
 
     function submit() {
       clearErrors([fName, fDate]);
@@ -395,6 +457,8 @@
         bank: bankSel.value === 'Outro' ? (fCustomBank._control.value.trim() || 'Outro') : bankSel.value,
         type: fType._control.value,
         color: picker.getValue(),
+        gradient: grads.getValue(),
+        last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         openedAt: fDate._control.value,
         archived: editing ? editing.archived : false
@@ -456,9 +520,8 @@
       { hint: 'Se for menor que o fechamento, vence no mês seguinte.' });
     const fAccount = field('Conta de débito da fatura', select(accounts, editing ? editing.accountId : null, 'Nenhuma'));
 
-    /* gradiente do cartão + prévia ao vivo */
-    let gradKey = editing ? editing.gradient : null;
-    const gradWrap = el('div', { class: 'grad-picker' });
+    /* cor do cartão + prévia ao vivo */
+    const gradWrap = gradPicker(editing ? editing.gradient : null, () => paintPreview());
     const cardPreview = el('div', { class: 'card-preview' });
 
     function currentCard() {
@@ -466,32 +529,14 @@
         id: editing ? editing.id : 'preview',
         name: fName._control.value.trim() || 'Cartão',
         bank: bankSel.value,
-        color: '#7C6CF0',
-        gradient: gradKey,
+        color: '#C9794A',
+        gradient: gradWrap.getValue(),
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: Math.min(31, Math.max(1, parseInt(fClosing._control.value, 10) || 1)),
         dueDay: Math.min(31, Math.max(1, parseInt(fDue._control.value, 10) || 10)),
         accountId: null
       };
-    }
-
-    function paintGrads() {
-      U.clear(gradWrap);
-      const auto = el('button', {
-        type: 'button', class: 'grad-opt is-auto' + (gradKey ? '' : ' is-active'),
-        title: 'Automático — deriva do banco escolhido',
-        onclick: () => { gradKey = null; paintGrads(); paintPreview(); }
-      }, el('span', { text: 'auto' }));
-      gradWrap.appendChild(auto);
-      Cards.GRADIENTS.forEach((g) => {
-        gradWrap.appendChild(el('button', {
-          type: 'button', class: 'grad-opt' + (gradKey === g.key ? ' is-active' : ''),
-          title: g.name, 'aria-label': 'Gradiente ' + g.name,
-          style: { background: `linear-gradient(135deg, ${g.a}, ${g.b})` },
-          onclick: () => { gradKey = g.key; paintGrads(); paintPreview(); }
-        }));
-      });
     }
 
     function paintPreview() {
@@ -512,7 +557,6 @@
     const repaint = U.debounce(paintPreview, 200);
     [fName, fLast4, fLimit, fClosing, fDue].forEach((f) => f._control.addEventListener('input', repaint));
     bankSel.addEventListener('change', paintPreview);
-    paintGrads();
     paintPreview();
 
     const fGrad = field('Cor do cartão', gradWrap, { span2: true });
@@ -538,8 +582,8 @@
       const preset = Store.BANK_PRESETS.find((b) => b.name === bankSel.value);
       const data = {
         name, bank: bankSel.value,
-        color: preset ? preset.color : '#7C6CF0',
-        gradient: gradKey,
+        color: preset ? preset.color : '#C9794A',
+        gradient: gradWrap.getValue(),
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: closing, dueDay: due,

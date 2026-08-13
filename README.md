@@ -1,4 +1,4 @@
-# Minhas Finanças — dashboard financeiro pessoal
+# OAZE — dashboard financeiro pessoal
 
 Aplicação de página única, **sem backend**. Todos os dados ficam em `localStorage`,
 no próprio navegador. Nada é enviado para nenhum servidor.
@@ -129,13 +129,14 @@ servir-no-wifi.ps1        publica a pasta na rede local para acessar do celular
 tools/                    scripts que regeram os ícones vendorizados
 
 assets/vendor/chart.umd.min.js   cópia local do Chart.js (usada offline)
-assets/vendor/icons.js           SVGs de bancos + Lucide, vendorizados (GERADO)
+assets/vendor/bancos.js          41 bancos brasileiros, vendorizado (GERADO)
+assets/vendor/icons.js           76 ícones Lucide, vendorizado (GERADO)
 assets/css/style.css
 assets/js/
   firebase-config.js  COLE AQUI as credenciais do seu Firebase (opcional)
   utils.js       formatação BRL, datas (sem armadilha de fuso), helpers de DOM
   icons.js       resolve banco/categoria → ícone; selos de débito e crédito
-  cards.js       cartão de crédito desenhado, leque e painel de fatura
+  cards.js       a carteira: contas e cartões desenhados no mesmo material
   store.js       modelo de dados, persistência, perfis, backup, dados de exemplo
   calc.js        motor de cálculo: ocorrências, saldos, faturas, investimentos
   charts.js      camada fina sobre o Chart.js, com os tokens de cor do tema
@@ -151,21 +152,35 @@ assets/js/
 Os scripts são clássicos (sem `type="module"`), justamente para funcionar em `file://` —
 módulos ES são bloqueados por CORS quando abertos direto do disco.
 
-## As sete páginas
+## As cinco páginas
 
 | Página | O que faz |
 |---|---|
-| **Início** | 5 cards de KPI, lançamento rápido, pizza de categorias, tabela de 12 meses, faturas dos cartões, linha do saldo anual, sugestões com IA |
+| **Início** | 5 cards de KPI, lançamento rápido, linha do saldo anual (área maior, à esquerda), pizza 3D de categorias com ranking, carteira com contas e cartões, e receitas × despesas do ano em linha com marcadores |
 | **Receitas e Despesas** | Receitas em fixas/variáveis/previstas; despesas separadas em **débito** e **crédito**, com filtro Todos / Débito / Crédito; checkbox de confirmação em cada item; gráficos por categoria e previsto × realizado |
 | **Investimentos** | Cadastro de aportes, tabela com valor atual estimado, evolução do patrimônio, calculadora de juros compostos |
-| **Cartões e Contas** | Contas com saldo e extrato; cartões desenhados como cartões físicos empilhados, com a fatura do cartão em foco abaixo; importação de extratos |
+| **Cartões e Contas** | Contas de débito e cartões de crédito desenhados no mesmo formato de carteira; extrato da conta e fatura do cartão em foco; importação de extratos |
 | **Categorias** | CRUD com cor e ícone, peso de cada categoria por período |
-| **Resumo Anual** | Consolidado dos 12 meses, saldo acumulado, investido no ano, comparação ano a ano |
 
-> A página **Calendário** foi removida. As informações que só ela mostrava continuam
-> acessíveis: fechamento e vencimento de fatura aparecem nos cartões (Início e
-> Cartões e Contas) e no painel de faturas; datas de receitas e despesas aparecem
-> em cada item na página Receitas e Despesas e no extrato de cada conta.
+> As páginas **Calendário** e **Resumo Anual** foram removidas. O que elas mostravam
+> continua acessível: fechamento e vencimento de fatura aparecem nos cartões e no
+> painel de faturas; datas de lançamento aparecem em cada item e no extrato da conta;
+> e o consolidado do ano virou os dois gráficos anuais do Início (saldo acumulado e
+> receitas × despesas mês a mês).
+
+## Cabeçalho e período
+
+A navegação fica em uma **barra fixa no topo**, sempre visível, com ícone e nome de
+cada seção — não há menu lateral nem aba escondida. Acima dela, o painel de
+boas-vindas traz a saudação (`Bem-vindo ao OAZE, {nome}` — clique no nome para
+trocá-lo), o perfil ativo, o estado da sincronização e a data de hoje por extenso.
+Logo abaixo do cabeçalho fica a barra de **sugestões com IA**, disponível em
+qualquer página.
+
+**Dia, mês e ano são editáveis** no seletor de período. O mês e o ano definem o
+recorte de toda a interface; o dia define a data de corte dos saldos ("saldo em") e
+a data que já vem preenchida ao abrir um lançamento novo. Trocar de mês preserva o
+dia — e se ele não existir no mês de destino (31 → fevereiro), encosta no último dia.
 
 ## Convenções contábeis
 
@@ -208,14 +223,13 @@ o segmento sólido é débito, o hachurado é crédito.
 
 | Número | Onde aparece | O que é |
 |---|---|---|
-| **Saldo do mês** | Início, Resumo Anual | receitas − despesas confirmadas. Fluxo operacional. |
-| **Saldo final / acumulado** | Início, Resumo Anual | saldo inicial + saldo do mês, encadeado mês a mês. |
+| **Saldo do mês** | Início | receitas − despesas confirmadas. Fluxo operacional. |
+| **Saldo final / acumulado** | Início | saldo inicial + saldo do mês, encadeado mês a mês. |
 | **Saldo em contas** | Cartões e Contas | caixa real: inclui pagamento de fatura e aportes debitados da conta. |
 
 Aporte em investimento **não é despesa** — é dinheiro que muda de lugar. Ele reduz o
 saldo da conta (quando você indica de qual conta sai) e aparece em "Total de
-investimentos". O **patrimônio** mostrado no Resumo Anual é saldo em contas +
-investimentos.
+investimentos". O **patrimônio** é saldo em contas + investimentos.
 
 **5 · Ciclo da fatura.**
 Uma compra entra na fatura cujo fechamento é o primeiro depois da data da compra.
@@ -379,38 +393,48 @@ qualquer chamada.
 > na internet, use uma chave com limite de gasto baixo e revogue-a se desconfiar de
 > vazamento.
 
-## Cartões de crédito
+## A carteira — contas e cartões
 
-Cada cartão cadastrado é desenhado como um cartão físico: retângulo arredondado com
-gradiente próprio, chip, número mascarado (`•••• •••• •••• 4352`), nome e o logo do
-banco emissor. Na página **Cartões e Contas** eles ficam empilhados em leque, com
-sobreposição; o cartão em foco sobe, ganha sombra e mostra a fatura logo abaixo —
-itens, total, período, vencimento e limite disponível, navegável mês a mês. Na página
-**Início** os mesmos cartões aparecem em versão compacta (até 2), com a fatura ao lado.
+**Contas de débito e cartões de crédito usam o mesmo desenho de cartão**: retângulo
+arredondado com gradiente próprio, ladrilho do banco na cor da marca, número
+mascarado, e uma faixa que diz em uma palavra o que aquilo é — `DÉBITO` ou
+`CRÉDITO`. É o que faz a página inteira ler como uma carteira, e não como duas
+listas diferentes.
 
-**Cor:** o cadastro oferece 8 gradientes (Roxo, Verde, Coral, Âmbar, Ciano, Grafite,
-Índigo, Rosa) ou **auto**, que deriva do banco escolhido. A prévia no formulário
-atualiza enquanto você digita.
+O que muda entre os dois é só o conteúdo: o cartão de crédito mostra barra de limite,
+limite livre e o total da fatura; a conta mostra a data de corte e o saldo. Na aba
+**Cartões de crédito** eles ficam empilhados em leque — o cartão em foco sobe, ganha
+sombra e abre a fatura abaixo (itens, total, período, vencimento, limite), navegável
+mês a mês. Na aba **Contas de débito** ficam em grade, e clicar em um traz o extrato.
+No **Início**, os dois blocos aparecem lado a lado, até 3 de cada.
 
-> Os 4 últimos dígitos são opcionais e servem só para você distinguir os cartões na
-> tela. **Nunca guarde o número completo** — o app não tem campo para isso.
+**Cor:** o cadastro — de conta *e* de cartão — oferece 12 gradientes do deserto
+(Terracota, Sálvia, Argila, Terra, Ocre, Adobe, Oliva, Oásis, Duna, Ferrugem, Bronze,
+Ametista) ou **auto**, que deriva do banco escolhido. A prévia no formulário atualiza
+enquanto você digita.
 
-Cada ponta clara de gradiente foi escurecida até o texto branco do cartão passar
-**WCAG AA (≥ 4,5:1)**, já contando a camada de 18% que o CSS aplica por cima.
-Mexer nesses hexes exige refazer a conta.
+> Os 4 últimos dígitos são opcionais e servem só para você distinguir os cartões e
+> contas na tela. **Nunca guarde o número completo** — o app não tem campo para isso.
+
+Cada ponta clara de gradiente foi verificada até o texto branco do cartão passar
+**WCAG AA (≥ 4,5:1)**, já contando a camada de 18% que o CSS aplica por cima. O pior
+caso da lista é 4,62:1 (Terracota). Mexer nesses hexes exige refazer a conta.
 
 ## Ícones
 
-Tudo vem **vendorizado** em `assets/vendor/icons.js` — nenhum CDN em runtime, então
-funciona offline e no fluxo `file://` do iPhone.
+Tudo vem **vendorizado** em `assets/vendor/` — nenhum CDN em runtime, então funciona
+offline e no fluxo `file://` do iPhone.
 
-- **Bancos** — 21 logos oficiais do projeto [`logos-bancos-br`](https://github.com/rzmt/logos-bancos-br) (MIT):
+- **Bancos** — 41 instituições de [`@edusites/bancos-brasil`](https://lecdt.com/libs/bancos-brasil) (MIT):
   Itaú, Bradesco, Santander, Caixa, Banco do Brasil, Nubank, Inter, C6, BTG, Sicredi,
-  Sicoob, PicPay, Mercado Pago, XP, Safra, Banrisul, Neon, PagBank, Stone, BV e
-  Mercantil. O nome digitado é reconhecido por padrão ("ITAÚ UNIBANCO S.A." → Itaú);
-  sem correspondência, cai num ícone genérico de instituição. Aparecem nos cards de
-  conta, nos cartões e na prévia do formulário.
-- **Categorias** — subconjunto curado de 74 ícones [Lucide](https://lucide.dev) (ISC).
+  Sicoob, PicPay, Mercado Pago, PagBank, XP, Safra, Neon, Stone, BV, Mercantil, Cora,
+  InfinitePay, Digio, Pan, Wise, PayPal, Stripe, Next, Original, Rico, Revolut, BS2,
+  Efí, Ton, Iugu, Asaas, NG.CASH, Avenue, Nomad, BMG e Agibank. O pacote traz a
+  silhueta monocromática **e a cor oficial da marca**, que é o que dá o ladrilho
+  colorido da carteira. O nome digitado é reconhecido por padrão ("ITAÚ UNIBANCO
+  S.A." → Itaú, "PagSeguro" → PagBank); sem correspondência, cai num ícone genérico
+  de instituição.
+- **Categorias** — subconjunto curado de 76 ícones [Lucide](https://lucide.dev) (ISC).
   Cada categoria pode escolher o seu; em **auto**, o ícone é deduzido pelo nome
   ("Farmácia" → `heart-pulse`, "Uber" → `car`). O padrão segue o mapeamento usual:
   Alimentação `utensils`, Transporte `car`, Moradia `house`, Saúde `heart-pulse`,
@@ -419,31 +443,85 @@ funciona offline e no fluxo `file://` do iPhone.
   Rendimentos `trending-up`, Outros `circle-ellipsis`. Os ícones aparecem na lista de
   lançamentos, na página Categorias, no ranking do Início e na legenda dos gráficos.
 
-**Regenerar** (ao acrescentar bancos ou ícones) — os scripts ficam em `tools/`,
-nesta ordem: `find-banks.ps1` (acha o ISPB de um banco novo), `get-svgs.ps1` (baixa os
-logos), `get-lucide.ps1` (baixa os ícones) e `gen-icons.ps1` (monta o
-`assets/vendor/icons.js`). O `icons.js` é gerado — **não edite à mão**. Precisa de
-internet só na hora de regenerar; o app em si roda offline.
+**Regenerar** — os dois arquivos de `assets/vendor/` são **gerados; não edite à mão**.
 
-## Cores
-
-Tema **escuro por padrão** ("Ethereal"): fundo `#0A0B0F`, cards `#15171E` com borda
-`#22252E`, texto `#F2F3F5` e `#9AA0AC`. Dois cards usam gradiente — o KPI de saldo
-final (verde-menta, com tinta escura por cima) e os cartões de crédito
-(roxo-azulado, com texto claro). Todo texto sobre gradiente foi medido contra o
-ponto mais desfavorável do gradiente e passa **WCAG AA (≥ 4,5:1)**.
-
-**Papéis semânticos:** verde = receita e positivo, vermelho = despesa e negativo.
-A cor nunca carrega o significado sozinha: variações trazem seta (▲▼→), valores
-trazem sinal (+/−) e status vêm com texto no selo.
-
-**Paleta categórica**, sempre nesta ordem fixa em todos os gráficos e páginas:
-
-```
-#3DD68C  #6C6CE0  #F0554D  #F2B84B  #4EC5D4  #9AA0AC
+```bash
+npm --prefix tools install
+node tools/gen-bancos.js
 ```
 
-O **tema claro** tem tons próprios (não é inversão do escuro) e usa os mesmos
-papéis semânticos e a mesma paleta categórica; verde e vermelho ganham passos mais
-escuros ali para manter 4,5:1 sobre fundo branco. Dados salvos com a paleta antiga
-são convertidos automaticamente ao abrir.
+Isso reconstrói `assets/vendor/bancos.js` a partir do pacote npm. Para os ícones de
+categoria, `tools/get-lucide.ps1` baixa os SVGs e `tools/gen-icons.ps1` monta o
+`assets/vendor/icons.js`. Precisa de internet só na hora de regenerar; o app em si
+roda offline.
+
+> O app **não usa npm em runtime** e não tem bundler: o `npm install` acima serve só
+> para o script de geração ler o pacote e cuspir um script clássico. Por isso
+> `tools/node_modules/` fica fora do Git.
+
+## Cores — a paleta do oásis
+
+O nome **OAZE** vem de *oásis*, e a paleta é a do deserto, nos dois temas:
+
+| | | |
+|---|---|---|
+| `#E7D4B5` | Areia | fundo claro, KPI de destaque |
+| `#C9794A` | Terracota | acento, despesa, crédito |
+| `#A68B6B` | Argila | neutro de série |
+| `#7A846A` | Sálvia | receita, débito |
+| `#5A3E2B` | Terra | o vidro dos painéis |
+
+**Painéis de vidro.** Todo painel é uma camada translúcida com `backdrop-filter:
+blur()` — no escuro, um marrom-terra a 42% sobre o fundo; no claro, uma areia
+clara a 72%. A aresta superior recebe uma linha clara, que é a luz batendo na quina
+do material. Superfícies maiores (modal, cabeçalho) usam mais blur e sombra mais
+funda, para lerem como mais espessas.
+
+**Tempestade de areia.** Três camadas de poeira atravessam o fundo em velocidades
+diferentes (64s, 97s e 143s), animando só `transform` — o compositor dá conta sem
+repintar. O contraste é propositalmente baixo: é ambiente, não conteúdo.
+
+**Papéis semânticos:** sálvia = receita, positivo e débito; terracota = despesa,
+negativo e crédito. A cor nunca carrega o significado sozinha: variações trazem
+seta (▲▼→), valores trazem sinal (+/−), débito e crédito trazem ícone e palavra, e
+status vêm com texto no selo.
+
+**Paleta categórica** — dez matizes, sempre nesta ordem fixa. Cada tema tem o seu
+passo de luminância, porque uma série só não sobrevive a um fundo areia *e* a um
+fundo noite sem alguma cor sumir:
+
+```
+claro   #C58E27  #3F5C56  #A68B6B  #A0553F  #B79454  #7A846A  #6B4A76  #C9794A  #8A6A4F  #8C8F4E
+escuro  #D9A441  #527A72  #A68B6B  #A0553F  #C2A46E  #7A846A  #7F588C  #C9794A  #8A6A4F  #8C8F4E
+```
+
+A ordem foi escolhida por busca, maximizando o contraste entre vizinhos nos **dois**
+temas ao mesmo tempo: cada cor fica em pelo menos 2,6:1 contra o próprio painel, e
+vizinhas em pelo menos 1,38:1 entre si.
+
+> **Limite honesto:** uma paleta de terra ocupa uma faixa estreita de matiz. Dez
+> categorias não ficam tão distinguíveis quanto ficariam com cores livres. Por isso
+> nada no app depende de cor sozinha — categoria sempre vem com **ícone e nome**, a
+> pizza vem com **ranking de valores e percentuais** ao lado, e débito × crédito vem
+> com **hachura** além da cor.
+
+**Contraste.** Os tokens de texto foram medidos compondo o alfa sobre o fundo real
+do painel — não confie no hex isolado ao mexer. A auditoria roda no navegador sobre
+os pixels que a folha realmente produz, nas duas temáticas e em quatro páginas:
+**64 verificações, pior caso 4,54:1 no claro e 5,56:1 no escuro.**
+
+Dados salvos com as paletas anteriores são convertidos automaticamente ao abrir
+(veja `OLD_TO_NEW` em `store.js`). Cores escolhidas à mão ficam como estão.
+
+### Acessibilidade do material
+
+- `prefers-reduced-motion` — a tempestade assenta, o deslocamento sai, opacidade e
+  cor ficam. Movimento de tela cheia é justamente o que incomoda quem pediu isso.
+- `prefers-reduced-transparency` — painéis viram sólidos e o blur sai; manter o blur
+  ali só custaria bateria sem entregar o efeito.
+- `prefers-contrast: more` — painéis sólidos com borda definida, sem tempestade.
+
+> **Nota de implementação:** `.nav-item` e `.ai-chip` fazem transição de `background`,
+> **não** de `color`. Quando o valor de `color` vem de uma custom property que muda na
+> troca de tema, o Chrome deixa a cor presa no valor antigo. O retorno do hover mora
+> no fundo; a cor acompanha o tema na hora.

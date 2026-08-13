@@ -41,12 +41,12 @@ $html = [regex]::Replace($html,
 
 # ---- 3 · scripts do app, na mesma ordem ----
 $arquivos = @(
-  'assets/vendor/icons.js', 'assets/js/firebase-config.js',
+  'assets/vendor/bancos.js', 'assets/vendor/icons.js', 'assets/js/firebase-config.js',
   'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
   'assets/js/sync.js', 'assets/js/ai.js',
   'assets/js/pages/home.js', 'assets/js/pages/transactions.js', 'assets/js/pages/investments.js',
-  'assets/js/pages/accounts.js', 'assets/js/pages/categories.js', 'assets/js/pages/annual.js',
+  'assets/js/pages/accounts.js', 'assets/js/pages/categories.js',
   'assets/js/app.js'
 )
 foreach ($f in $arquivos) {
