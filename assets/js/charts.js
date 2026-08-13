@@ -31,6 +31,10 @@
       warning: v('--warning', '#E0AC55'),
       salvia: v('--salvia', '#7A846A'),
       terracota: v('--terracota', '#C9794A'),
+      /* a dica precisa ser opaca: Chart.js pinta no canvas, onde não
+         existe backdrop-filter para atravessar */
+      tipBg: v('--tip-bg', '#2C1F15'),
+      tipLine: v('--tip-line', 'rgba(231,212,181,.18)'),
       series: [v('--s1', '#D9A441'), v('--s2', '#527A72'), v('--s3', '#A68B6B'),
         v('--s4', '#A0553F'), v('--s5', '#C2A46E'), v('--s6', '#7A846A'),
         v('--s7', '#7F588C'), v('--s8', '#C9794A'), v('--s9', '#8A6A4F'), v('--s10', '#8C8F4E')]
@@ -55,16 +59,22 @@
             font: { family: 'system-ui, -apple-system, "Segoe UI", sans-serif', size: 11.5 }
           }
         },
+        /* dica como pequeno popover: fundo do próprio painel, borda fina,
+           cantos generosos — não uma caixa preta colada no gráfico */
         tooltip: {
-          backgroundColor: t.ink,
-          titleColor: t.surface,
-          bodyColor: t.surface,
-          padding: 10,
-          cornerRadius: 8,
+          backgroundColor: t.tipBg,
+          titleColor: t.ink,
+          bodyColor: t.ink2,
+          borderColor: t.tipLine,
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 12,
+          caretSize: 5,
           displayColors: true,
-          boxWidth: 8, boxHeight: 8, boxPadding: 4, usePointStyle: true,
-          titleFont: { size: 12, weight: '600' },
-          bodyFont: { size: 12 },
+          boxWidth: 8, boxHeight: 8, boxPadding: 5, usePointStyle: true,
+          titleFont: { size: 12, weight: '650' },
+          bodyFont: { size: 12.5 },
+          titleMarginBottom: 6,
           callbacks: {
             label: (ctx) => ` ${ctx.dataset.label || ''}: ${U.fmtBRL(ctx.parsed.y != null ? ctx.parsed.y : ctx.parsed)}`
           }
@@ -376,7 +386,7 @@
           borderColor: d.color,
           backgroundColor: d.fill ? hexA(d.color, 0.12) : d.color,
           fill: !!d.fill,
-          borderWidth: 2.2,
+          borderWidth: 1.8,          /* linha fina: a curva conduz, nao pesa */
           borderDash: d.dashed ? [5, 4] : undefined,
           tension: o.markers ? 0.18 : 0.28,   // marcador pede curva mais contida
           pointStyle: d.pointStyle || 'circle',
@@ -397,6 +407,48 @@
           legend: Object.assign({}, base.plugins.legend, { display: o.legend !== false && datasets.length > 1 })
         })
       })
+    });
+  };
+
+  /**
+   * Curva mínima para viver atrás de um número: sem eixo, sem grade,
+   * sem legenda, sem dica. Só a forma da tendência.
+   */
+  Charts.spark = function (canvasId, data, opts) {
+    const t = Charts.theme();
+    const o = opts || {};
+    const cor = o.color || t.accent;
+    return Charts.render(canvasId, {
+      type: 'line',
+      data: {
+        labels: data.map((_, i) => i),
+        datasets: [{
+          data,
+          borderColor: cor,
+          borderWidth: 2,
+          backgroundColor: (ctx) => {
+            const { chartArea, ctx: c } = ctx.chart;
+            if (!chartArea) return hexA(cor, .16);
+            const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            g.addColorStop(0, hexA(cor, .26));
+            g.addColorStop(1, hexA(cor, 0));
+            return g;
+          },
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          spanGaps: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 700, easing: 'easeOutQuart' },
+        layout: { padding: 0 },
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { x: { display: false }, y: { display: false } },
+        elements: { line: { capBezierPoints: true } }
+      }
     });
   };
 

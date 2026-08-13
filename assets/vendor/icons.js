@@ -87,5 +87,12 @@
   RAW.lucide['palmtree'] = '<path d="M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4" /><path d="M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3" /><path d="M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35" /><path d="M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14" />';
   RAW.lucide['layout-dashboard'] = '<rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" />';
 
+  RAW.lucide['arrow-down-right'] = '<path d="m7 7 10 10" /><path d="M17 7v10H7" />';
+  RAW.lucide['arrow-up-right'] = '<path d="M7 7h10v10" /><path d="M7 17 17 7" />';
+  RAW.lucide['plus'] = '<path d="M5 12h14" /><path d="M12 5v14" />';
+  RAW.lucide['chevron-right'] = '<path d="m9 18 6-6-6-6" />';
+  RAW.lucide['circle-alert'] = '<circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" />';
+  RAW.lucide['info'] = '<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />';
+
   global.IconData = RAW;
 })(window);

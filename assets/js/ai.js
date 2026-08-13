@@ -404,6 +404,85 @@
     });
   };
 
+  /* ============================================================
+     LEITURA PROATIVA — calculada aqui, sem rede
+     ------------------------------------------------------------
+     A frase do topo sai do próprio Calc: é aritmética sobre os
+     dados locais, não uma resposta de modelo. Isso importa por
+     dois motivos — aparece para quem nunca configurou chave
+     nenhuma, e nada sai do navegador para produzi-la.
+
+     Só a caixa "Pedir sugestão" chama a API da Anthropic.
+     ============================================================ */
+
+  AI.insight = function (ym) {
+    const t = Calc.monthTotals(ym);
+    const anterior = U.addMonths(ym, -1);
+    const prev = Calc.monthTotals(anterior);
+
+    if (!t.entries.length) {
+      return { linha: 'Nada lançado ainda neste mês.', sub: 'Assim que houver movimentação, o resumo aparece aqui.' };
+    }
+    if (t.expense === 0 && t.income === 0) {
+      return {
+        linha: `${t.pendingCount} lançamento(s) esperando confirmação.`,
+        sub: 'Marque a caixinha de cada um para eles entrarem no saldo.'
+      };
+    }
+
+    /* categoria que mais variou contra o mês anterior */
+    const agora = Calc.categoryTotals('expense', U.monthStart(ym), U.monthEnd(ym));
+    const antes = Calc.categoryTotals('expense', U.monthStart(anterior), U.monthEnd(anterior));
+    const antesPor = {};
+    antes.forEach((c) => { antesPor[c.id] = c.total; });
+
+    let maior = null;
+    agora.forEach((c) => {
+      const base = antesPor[c.id];
+      if (!base || base <= 0) return;
+      const pct = ((c.total - base) / base) * 100;
+      // variação irrelevante não vira manchete
+      if (Math.abs(pct) < 10 || Math.abs(c.total - base) < 20) return;
+      if (!maior || Math.abs(pct) > Math.abs(maior.pct)) maior = { nome: c.name, pct, atual: c.total };
+    });
+
+    const sobra = U.round2(t.income - t.expense);
+    const sub = sobra >= 0
+      ? `Neste ritmo, sobram ${U.fmtBRL(sobra)} no mês — ${U.fmtBRL(U.round2(sobra * 12))} em um ano.`
+      : `Neste ritmo, faltam ${U.fmtBRL(Math.abs(sobra))} no mês. Vale olhar as maiores categorias.`;
+
+    if (maior) {
+      const verbo = maior.pct > 0 ? 'a mais' : 'a menos';
+      return {
+        linha: `Você gastou ${U.fmtPct(Math.abs(maior.pct), 0)} ${verbo} com ${maior.nome} que em ${U.monthLabel(anterior, true)}.`,
+        sub
+      };
+    }
+    const topo = agora[0];
+    return {
+      linha: topo
+        ? `${topo.name} lidera os gastos do mês, com ${U.fmtBRL(topo.total)}.`
+        : `Você confirmou ${U.fmtBRL(t.expense)} em despesas neste mês.`,
+      sub
+    };
+  };
+
+  /** Escreve a leitura no topo do assistente. Chamado a cada render. */
+  AI.renderInsight = function (ym) {
+    const linha = document.getElementById('aiInsight');
+    const sub = document.getElementById('aiInsightSub');
+    if (!linha || !sub) return;
+    let r;
+    try {
+      r = AI.insight(ym);
+    } catch (e) {
+      console.error('Falha ao montar a leitura do assistente:', e);
+      r = { linha: 'Resumo indisponível para este mês.', sub: '' };
+    }
+    linha.textContent = r.linha;
+    sub.textContent = r.sub || '';
+  };
+
   /* ---------------- ligação com a página ---------------- */
 
   AI.init = function () {
@@ -412,6 +491,17 @@
 
     const btnAsk = document.getElementById('btnAiAsk');
     const field = document.getElementById('aiQuestion');
+    const caixa = document.getElementById('aiAskBox');
+    const abrir = document.getElementById('btnAiOpen');
+
+    if (abrir && caixa) {
+      abrir.addEventListener('click', () => {
+        const aberto = abrir.getAttribute('aria-expanded') === 'true';
+        abrir.setAttribute('aria-expanded', aberto ? 'false' : 'true');
+        caixa.hidden = aberto;
+        if (!aberto && field) field.focus();
+      });
+    }
     if (btnAsk && field) {
       btnAsk.addEventListener('click', () => AI.ask(field.value));
       field.addEventListener('keydown', (ev) => {

@@ -156,9 +156,9 @@ módulos ES são bloqueados por CORS quando abertos direto do disco.
 
 | Página | O que faz |
 |---|---|
-| **Início** | 5 cards de KPI, lançamento rápido, linha do saldo anual (área maior, à esquerda), pizza 3D de categorias com ranking, carteira com contas e cartões, e receitas × despesas do ano em linha com marcadores |
+| **Início** | Destaque com o saldo total e a curva de 12 meses ao fundo; três cards (receitas, despesas com a quebra débito/crédito, investido); linha do saldo anual em área maior à esquerda; pizza 3D de categorias com as peças de detalhe; carteira com contas e cartões; receitas × despesas do ano em linha com marcadores |
 | **Receitas e Despesas** | Receitas em fixas/variáveis/previstas; despesas separadas em **débito** e **crédito**, com filtro Todos / Débito / Crédito; checkbox de confirmação em cada item; gráficos por categoria e previsto × realizado |
-| **Investimentos** | Cadastro de aportes, tabela com valor atual estimado, evolução do patrimônio, calculadora de juros compostos |
+| **Investimentos** | Cadastro de aportes, tabela com valor atual estimado, evolução do patrimônio, distribuição da carteira por tipo, calculadora de juros compostos |
 | **Cartões e Contas** | Contas de débito e cartões de crédito desenhados no mesmo formato de carteira; extrato da conta e fatura do cartão em foco; importação de extratos |
 | **Categorias** | CRUD com cor e ícone, peso de cada categoria por período |
 
@@ -275,10 +275,11 @@ arquivo — pede confirmação antes e recusa arquivos que não sejam backup des
 
 | Tecla | Ação |
 |---|---|
+| `N` | abre o menu de novo lançamento (setas percorrem) |
 | `D` | nova despesa |
 | `R` | nova receita |
 | `Alt` + `←` / `→` | mês anterior / próximo |
-| `Esc` | fecha o modal |
+| `Esc` | fecha o modal ou o menu do "+" |
 
 ## Sincronização entre dispositivos (opcional)
 
@@ -459,6 +460,55 @@ roda offline.
 > para o script de geração ler o pacote e cuspir um script clássico. Por isso
 > `tools/node_modules/` fica fora do Git.
 
+## Materiais — três níveis, três funções
+
+Aplicar o mesmo vidro em tudo achata a hierarquia e cobra legibilidade sem
+devolver nada. Aqui o material diz o que a coisa **é**:
+
+| Nível | Onde | Como |
+|---|---|---|
+| **N1 · conteúdo** | cards, KPIs, destaque, modais | quase sólido (95% claro / 93% escuro), blur de 10px |
+| **N2 · apoio** | painel de boas-vindas, superfícies de contexto | translúcido (76% / 62%), blur de 20px |
+| **N3 · controle** | cabeçalho, assistente, menu do botão "+" | vidro evidente (58% / 40%), blur de 34px, sombra mais funda |
+
+A regra que sustenta isso: **onde há número, o material é quase sólido.** O vidro
+de verdade fica só na camada que flutua — navegação e ações. Um valor financeiro
+ilegível não tem estética que compense.
+
+Todos os três recebem uma linha clara na aresta superior — é a luz batendo na
+quina do material — e a sombra cresce com a altura em que a peça flutua.
+
+### O ambiente
+
+O fundo são três manchas luminosas muito grandes e muito desfocadas (blur de
+90px), à deriva em ciclos longos e dessincronizados (68s, 103s, 149s). Não é
+textura: é a iluminação da sala em que os painéis flutuam, e é o que o vidro tem
+para refratar. Só `transform` anima, então o compositor resolve sem repintar.
+
+## Destaque, assistente e ação principal
+
+**Destaque.** O topo do Início é um único número grande: o **saldo total** —
+dinheiro em contas mais valor investido, com a variação contra o fim do mês
+anterior e a curva de 12 meses vivendo no fundo do próprio card, sem eixo nem
+grade. A quebra ("X em contas · Y investidos") fica logo abaixo, para o número
+não ficar ambíguo.
+
+**Assistente.** A leitura do topo — *"Você gastou 15% a menos com Alimentação que
+em jul/26"* — é **aritmética local sobre o `Calc`, não uma resposta de modelo**.
+Isso importa por dois motivos: ela aparece para quem nunca configurou chave
+nenhuma, e nada sai do navegador para produzi-la. Só a caixa "Pedir sugestão"
+chama a API da Anthropic.
+
+**Ação principal.** Os quatro lançamentos (despesa, receita, transferência,
+aporte) saem de um botão "+" flutuante, disponível em qualquer página. O menu
+nasce no canto do botão que o abriu e some pelo mesmo caminho. Funciona no
+teclado: `N` abre, setas percorrem, `Esc` fecha.
+
+**Categorias como peças.** No ranking do Início e na distribuição da carteira,
+cada categoria é um objeto que responde ao ponteiro: no repouso mostra ícone,
+nome, valor e peso; no hover sobe 2px e revela a quebra débito × crédito. Em
+telas de toque — onde `:hover` não existe — o detalhe fica sempre visível.
+
 ## Cores — a paleta do oásis
 
 O nome **OAZE** vem de *oásis*, e a paleta é a do deserto, nos dois temas:
@@ -507,8 +557,14 @@ vizinhas em pelo menos 1,38:1 entre si.
 
 **Contraste.** Os tokens de texto foram medidos compondo o alfa sobre o fundo real
 do painel — não confie no hex isolado ao mexer. A auditoria roda no navegador sobre
-os pixels que a folha realmente produz, nas duas temáticas e em quatro páginas:
-**64 verificações, pior caso 4,54:1 no claro e 5,56:1 no escuro.**
+os pixels que a folha realmente produz, nos dois temas e nas cinco páginas:
+**88 verificações, pior caso 5,11:1 no claro e 4,71:1 no escuro.**
+
+> Duas armadilhas de medição que já custaram um falso positivo cada, caso você
+> refaça essa conta: `color-mix()` é serializado como `oklab(...)` e
+> `color-mix` sobre variáveis vira `color(srgb …)` com floats de 0 a 1 — ler
+> qualquer um dos dois como se fosse `rgb()` dá um número sem sentido. E medir
+> logo depois de trocar o tema pega o elemento no meio da transição de `color`.
 
 Dados salvos com as paletas anteriores são convertidos automaticamente ao abrir
 (veja `OLD_TO_NEW` em `store.js`). Cores escolhidas à mão ficam como estão.

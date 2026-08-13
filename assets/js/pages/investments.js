@@ -15,9 +15,69 @@
     renderTypeFilter();
     renderTable(at);
     renderEvolution(ym);
+    renderMix(at);
     if (!projectionDrawn) { Inv.runProjection(); projectionDrawn = true; }
     else Inv.runProjection();
   };
+
+  /* ---------------- distribuição da carteira ---------------- */
+
+  /**
+   * Concentração por tipo. O valor de cada fatia é o valor ATUAL
+   * estimado (mesmo cálculo da tabela), não o aportado — é a
+   * distribuição real do patrimônio hoje.
+   */
+  function renderMix(at) {
+    const t = Charts.theme();
+    const prof = Store.profile();
+    const porTipo = {};
+
+    prof.investments
+      .filter((i) => i.date <= at)
+      .forEach((i) => {
+        const tipo = i.type || 'Outro';
+        porTipo[tipo] = U.round2((porTipo[tipo] || 0) + Calc.investmentValueAt(i, at));
+      });
+
+    const linhas = Object.keys(porTipo)
+      .map((nome) => ({ name: nome, total: porTipo[nome] }))
+      .filter((r) => r.total > 0)
+      .sort((a, b) => b.total - a.total);
+
+    const total = U.sum(linhas, (r) => r.total);
+    const lista = U.clear(document.getElementById('invMixList'));
+    UI.toggleEmptyOverlay('invMixEmpty', linhas.length === 0);
+    document.getElementById('invMixTitle').textContent = linhas.length
+      ? (linhas[0].total / total >= 0.6
+        ? `${linhas[0].name} concentra ${U.fmtPct((linhas[0].total / total) * 100, 0)} da carteira`
+        : 'Distribuição da carteira')
+      : 'Distribuição da carteira';
+
+    if (!linhas.length) { Charts.destroy('chartInvMix'); return; }
+
+    linhas.forEach((r, i) => { r.pct = (r.total / total) * 100; r.color = t.series[i % t.series.length]; });
+    Charts.pie3d('chartInvMix', linhas.slice(0, 8), { legendPosition: 'bottom' });
+
+    const max = linhas[0].total || 1;
+    linhas.slice(0, 8).forEach((r) => {
+      lista.appendChild(el('li', {
+        class: 'cat-tile', tabindex: '0',
+        title: `${r.name}: ${U.fmtBRL(r.total)} (${U.fmtPct(r.pct, 0)})`
+      }, [
+        el('span', { class: 'cat-badge', style: { background: 'color-mix(in srgb, ' + r.color + ' 20%, transparent)', color: r.color, width: '30px', height: '30px' } },
+          Icons.lucide('trending-up', 16)),
+        el('span', { class: 'cat-tile-id' }, [
+          el('span', { class: 'cat-tile-name', text: r.name }),
+          el('span', { class: 'cat-tile-bar' },
+            el('i', { style: { width: ((r.total / max) * 100) + '%', background: r.color } }))
+        ]),
+        el('span', { class: 'cat-tile-num' }, [
+          el('span', { class: 'cat-tile-val', text: U.fmtBRL(r.total) }),
+          el('span', { class: 'cat-tile-pct', text: U.fmtPct(r.pct, 0) })
+        ])
+      ]));
+    });
+  }
 
   /* ---------------- KPIs ---------------- */
 

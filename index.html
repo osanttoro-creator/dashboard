@@ -87,21 +87,26 @@
     </nav>
   </header>
 
-  <!-- ══════ AÇÃO DA IA — logo abaixo do cabeçalho ══════ -->
-  <section class="ai-bar glass" aria-label="Sugestões com IA">
-    <div class="ai-bar-row">
-      <span class="ai-bar-ico" aria-hidden="true" data-ico="sparkles"></span>
-      <div class="ai-bar-field">
-        <textarea class="input textarea-plain" id="aiQuestion" rows="1"
-          placeholder="Pergunte sobre este mês — ex.: onde posso cortar gastos?"></textarea>
+  <!-- ══════ ASSISTENTE — logo abaixo do cabeçalho ══════ -->
+  <section class="ai-bar n3" aria-label="Assistente financeiro">
+    <div class="ai-head">
+      <span class="ai-orb" aria-hidden="true"><span class="ai-orb-core" data-ico="sparkles"></span></span>
+      <div class="ai-read" id="aiRead">
+        <p class="ai-read-line" id="aiInsight">Analisando o mês…</p>
+        <p class="ai-read-sub" id="aiInsightSub"></p>
       </div>
-      <button class="btn btn-ai" id="btnAiAsk">Pedir sugestão</button>
       <button class="icon-btn" id="btnAiConfig" title="Configurar chave da API" aria-label="Configurar chave da API">⚙</button>
     </div>
     <div class="ai-examples">
-      <button class="ai-chip" data-ai-q="Onde posso cortar gastos esse mês?">Onde cortar gastos?</button>
-      <button class="ai-chip" data-ai-q="Como estão minhas categorias de despesa comparado ao mês passado?">Comparar com o mês passado</button>
-      <button class="ai-chip" data-ai-q="Me dê uma sugestão de organização financeira para o próximo mês.">Organizar o próximo mês</button>
+      <button class="ai-chip" data-ai-q="Onde posso cortar gastos esse mês?">Onde posso economizar?</button>
+      <button class="ai-chip" data-ai-q="Como estão minhas categorias de despesa comparado ao mês passado?">Comparar com o mês anterior</button>
+      <button class="ai-chip" data-ai-q="Me dê uma sugestão de organização financeira para o próximo mês.">Planejar próximo mês</button>
+      <button class="ai-chip is-toggle" id="btnAiOpen" aria-expanded="false">Perguntar outra coisa…</button>
+    </div>
+    <div class="ai-ask" id="aiAskBox" hidden>
+      <textarea class="input textarea-plain" id="aiQuestion" rows="2"
+        placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
+      <button class="btn btn-ai" id="btnAiAsk">Pedir sugestão</button>
     </div>
     <div class="ai-answer" id="aiAnswer" hidden></div>
   </section>
@@ -115,14 +120,21 @@
 
     <!-- ─────────── PÁGINA 1 · INÍCIO ─────────── -->
     <section class="page is-active" data-page="home">
-      <div class="kpi-row" id="homeKpis"></div>
 
-      <div class="quick-actions">
-        <button class="btn btn-danger" data-quick="expense">− Nova despesa</button>
-        <button class="btn btn-income" data-quick="income">+ Nova receita</button>
-        <button class="btn btn-outline" data-quick="transfer">⇄ Transação entre contas</button>
-        <button class="btn btn-outline" data-quick="investment">▲ Novo investimento</button>
-      </div>
+      <!-- destaque: o número que importa, com muito espaço em volta -->
+      <section class="hero" aria-labelledby="heroLabel">
+        <div class="hero-face">
+          <p class="hero-label" id="heroLabel">Saldo total</p>
+          <p class="hero-value" id="heroValue">—</p>
+          <p class="hero-sub" id="heroSub"></p>
+          <p class="hero-delta" id="heroDelta"></p>
+        </div>
+        <div class="hero-spark" aria-hidden="true">
+          <canvas id="chartHeroSpark"></canvas>
+        </div>
+      </section>
+
+      <div class="kpi-row kpi-row-3" id="homeKpis"></div>
 
       <!-- o ano à esquerda, ocupando a área maior; a pizza acompanha -->
       <div class="grid grid-wide-left">
@@ -255,12 +267,25 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
-          <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
+      <div class="grid grid-wide-left">
+        <div class="card">
+          <div class="card-head">
+            <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
+            <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
+          </div>
+          <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
         </div>
-        <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 id="invMixTitle">Distribuição da carteira</h2>
+            <span class="card-note">Por tipo de investimento</span>
+          </div>
+          <div class="chart-box chart-box-pie"><canvas id="chartInvMix"></canvas>
+            <div class="empty-overlay" id="invMixEmpty" hidden>Nenhum aporte registrado até aqui.</div>
+          </div>
+          <ul class="cat-tiles" id="invMixList"></ul>
+        </div>
       </div>
 
       <div class="card">
@@ -399,6 +424,27 @@
     <span class="dot-sep">·</span>
     <span>Dados salvos apenas neste navegador (localStorage)</span>
   </footer>
+</div>
+
+<!-- ação principal flutuante: os quatro lançamentos, em qualquer página -->
+<div class="fab-wrap" id="fabWrap">
+  <div class="fab-menu" id="fabMenu" hidden role="menu" aria-label="Novo lançamento">
+    <button class="fab-item" role="menuitem" data-quick="expense">
+      <span class="fab-item-ico is-expense" data-ico="arrow-down-right"></span><span>Nova despesa</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="income">
+      <span class="fab-item-ico is-income" data-ico="arrow-up-right"></span><span>Nova receita</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="transfer">
+      <span class="fab-item-ico" data-ico="arrow-left-right"></span><span>Transferência</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="investment">
+      <span class="fab-item-ico is-invest" data-ico="trending-up"></span><span>Novo investimento</span>
+    </button>
+  </div>
+  <button class="fab" id="fabBtn" aria-expanded="false" aria-haspopup="menu" aria-label="Novo lançamento" title="Novo lançamento (N)">
+    <span class="fab-plus" aria-hidden="true"></span>
+  </button>
 </div>
 
 <!-- modal / toast -->

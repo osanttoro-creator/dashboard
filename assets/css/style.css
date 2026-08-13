@@ -25,12 +25,28 @@
   --text-primary:  #2A1D12;
   --text-muted:    #6E5A45;
 
-  /* Vidro: é sempre cor + alfa, nunca opaco. O blur mora em .glass. */
-  --glass:         rgba(255, 251, 243, .72);
-  --glass-2:       rgba(255, 255, 255, .86);
+  /* ----------------------------------------------------------
+     TRÊS NÍVEIS DE MATERIAL — cada um com uma função visual.
+     Aplicar o mesmo vidro em tudo achata a hierarquia e cobra
+     legibilidade sem devolver nada.
+
+     N1 · conteúdo  — quase sólido. Onde moram os números.
+     N2 · apoio     — translúcido. Contexto, painéis secundários.
+     N3 · controle  — vidro evidente. Navegação e ações; é a
+                      única camada que "flutua" sobre o resto.
+     ---------------------------------------------------------- */
+  --n1:            rgba(255, 253, 249, .95);
+  --n1-blur:       10px;
+  --n2:            rgba(255, 251, 243, .76);
+  --n2-blur:       20px;
+  --n3:            rgba(255, 255, 255, .58);
+  --n3-blur:       34px;
+
+  --glass:         var(--n2);
+  --glass-2:       var(--n1);
   --glass-edge:    rgba(255, 255, 255, .92);
-  --glass-line:    rgba(90, 62, 43, .14);
-  --glass-blur:    22px;
+  --glass-line:    rgba(90, 62, 43, .13);
+  --glass-blur:    var(--n2-blur);
 
   --surface:       var(--glass);
   --surface-2:     var(--glass-2);
@@ -69,6 +85,10 @@
      os dois tingimentos somam e derrubam o texto. Dai um passo proprio. */
   --warning-text: #63450D;
   --serious:   #A85A2B;
+  /* dica de grafico: opaca de proposito — Chart.js pinta no canvas,
+     onde nao existe backdrop-filter para atravessar */
+  --tip-bg:    #FFFDF9;
+  --tip-line:  rgba(90, 62, 43, .16);
   --critical:  #A3392A;
 
   --radius:     16px;
@@ -94,11 +114,18 @@
   --text-primary:  #F5E9D6;
   --text-muted:    #AD9B80;
 
-  --glass:         rgba(90, 62, 43, .42);
-  --glass-2:       rgba(90, 62, 43, .58);
-  --glass-edge:    rgba(231, 212, 181, .20);
-  --glass-line:    rgba(231, 212, 181, .13);
-  --glass-blur:    24px;
+  --n1:            rgba(44, 31, 21, .93);
+  --n1-blur:       10px;
+  --n2:            rgba(70, 49, 34, .62);
+  --n2-blur:       22px;
+  --n3:            rgba(90, 62, 43, .40);
+  --n3-blur:       36px;
+
+  --glass:         var(--n2);
+  --glass-2:       var(--n1);
+  --glass-edge:    rgba(231, 212, 181, .18);
+  --glass-line:    rgba(231, 212, 181, .12);
+  --glass-blur:    var(--n2-blur);
 
   --plane-2:       rgba(231, 212, 181, .10);
   --ink-2:         #DCC9AC;
@@ -127,6 +154,8 @@
   --warning:   #E0AC55;
   --warning-text: #E0AC55;
   --serious:   #DE9155;
+  --tip-bg:    #2C1F15;
+  --tip-line:  rgba(231, 212, 181, .18);
   --critical:  #E8735A;
 }
 
@@ -156,91 +185,144 @@ button { font: inherit; color: inherit; }
 table { border-collapse: collapse; width: 100%; }
 
 /* ------------------------------------------------------------
-   4 · TEMPESTADE DE AREIA
+   4 · AMBIENTE — luz, não textura
    ------------------------------------------------------------
-   Três camadas de poeira atravessando o céu, em velocidades
-   diferentes. Só `transform` e `opacity` animam — o compositor
-   dá conta sem repintar. Contraste propositalmente baixo: é
-   ambiente, não conteúdo.
+   Três manchas luminosas muito grandes e muito desfocadas, à
+   deriva em velocidades diferentes. Não é uma imagem de fundo:
+   é a iluminação da sala em que os painéis flutuam, e é ela que
+   dá o que o vidro tem para refratar.
+
+   Regras que valem aqui:
+   · o fundo nunca compete com o dado — opacidade baixa, sem
+     borda dura em lugar nenhum;
+   · só `transform` anima, então o compositor resolve sem
+     repintar nada;
+   · ciclos longos e dessincronizados (68s / 103s / 149s), longe
+     da faixa de ~0,2 Hz que incomoda a vista.
    ------------------------------------------------------------ */
 .sandstorm {
   position: fixed; inset: 0; z-index: -1;
   overflow: hidden; pointer-events: none;
-  background:
-    radial-gradient(120% 80% at 70% 0%, color-mix(in srgb, var(--areia) 22%, transparent), transparent 60%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+  background: linear-gradient(178deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
-[data-theme="dark"] .sandstorm {
-  background:
-    radial-gradient(120% 80% at 70% 0%, color-mix(in srgb, var(--terracota) 16%, transparent), transparent 62%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+/* halo alto e frio, que faz o topo da tela "abrir" */
+.sandstorm::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(140% 90% at 62% -10%,
+    color-mix(in srgb, var(--areia) 26%, transparent), transparent 62%);
 }
+[data-theme="dark"] .sandstorm::after {
+  background: radial-gradient(140% 90% at 62% -10%,
+    color-mix(in srgb, var(--terracota) 15%, transparent), transparent 64%);
+}
+
 .sand-layer {
-  position: absolute; top: -20%; left: -60%;
-  width: 220%; height: 140%;
+  position: absolute;
+  width: 78vmax; height: 78vmax;
+  border-radius: 50%;
+  filter: blur(90px);          /* a mancha nunca pode ter contorno */
   will-change: transform;
-  animation: sand-drift linear infinite;
+  animation: drift ease-in-out infinite alternate;
 }
-/* véus de poeira: elipses largas e macias, nunca pontos duros */
 .sand-layer.l1 {
-  background:
-    radial-gradient(38% 22% at 20% 30%, color-mix(in srgb, var(--areia) 30%, transparent), transparent 70%),
-    radial-gradient(30% 16% at 62% 62%, color-mix(in srgb, var(--areia) 22%, transparent), transparent 72%);
-  animation-duration: 64s; opacity: .55;
+  top: -26vmax; left: -14vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--areia) 52%, transparent) 0%, transparent 68%);
+  opacity: .5; animation-duration: 68s;
 }
 .sand-layer.l2 {
-  background:
-    radial-gradient(46% 18% at 45% 18%, color-mix(in srgb, var(--argila) 26%, transparent), transparent 74%),
-    radial-gradient(34% 22% at 80% 74%, color-mix(in srgb, var(--areia) 20%, transparent), transparent 72%);
-  animation-duration: 97s; animation-direction: reverse; opacity: .42;
+  top: 8vmax; right: -22vmax; left: auto;
+  background: radial-gradient(circle, color-mix(in srgb, var(--terracota) 34%, transparent) 0%, transparent 66%);
+  opacity: .32; animation-duration: 103s; animation-delay: -20s;
 }
 .sand-layer.l3 {
-  background:
-    radial-gradient(60% 26% at 30% 84%, color-mix(in srgb, var(--terracota) 16%, transparent), transparent 76%);
-  animation-duration: 143s; opacity: .3;
+  bottom: -30vmax; left: 18vmax; top: auto;
+  background: radial-gradient(circle, color-mix(in srgb, var(--salvia) 34%, transparent) 0%, transparent 68%);
+  opacity: .26; animation-duration: 149s; animation-delay: -50s;
 }
-@keyframes sand-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(28%, -6%, 0); }
+[data-theme="dark"] .sand-layer.l1 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--terracota) 30%, transparent) 0%, transparent 68%);
+  opacity: .34;
+}
+[data-theme="dark"] .sand-layer.l2 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--argila) 24%, transparent) 0%, transparent 66%);
+  opacity: .26;
+}
+[data-theme="dark"] .sand-layer.l3 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--salvia) 26%, transparent) 0%, transparent 68%);
+  opacity: .2;
+}
+/* deriva curta: a luz respira, não desfila */
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(9vmax, 5vmax, 0) scale(1.14); }
 }
 
 /* Movimento de tela cheia é justamente o que incomoda quem pediu
-   menos animação: aqui a tempestade simplesmente assenta. */
+   menos animação: aqui a luz simplesmente assenta. */
 @media (prefers-reduced-motion: reduce) {
-  .sand-layer { animation: none; opacity: .28; }
+  .sand-layer { animation: none; }
 }
 
 /* ------------------------------------------------------------
-   5 · VIDRO — o material dos painéis
+   5 · OS TRÊS MATERIAIS
+   ------------------------------------------------------------
+   A aresta superior clara em todos é a luz batendo na quina.
+   O que muda entre os níveis é quanto do fundo atravessa —
+   e isso é o que diz ao olho o que é conteúdo e o que é
+   controle flutuando por cima.
    ------------------------------------------------------------ */
-.glass {
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+.n1, .n2, .n3 {
   border: 1px solid var(--glass-line);
-  /* a aresta superior clara é a luz batendo na quina do material */
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
 }
-/* Superfícies grandes leem como mais espessas: mais blur, sombra mais funda. */
-.glass-thick {
-  --glass-blur: 34px;
-  background: var(--glass-2);
+
+/* N1 · conteúdo. Quase sólido: aqui moram os números, e número
+   ilegível não tem estética que salve. */
+.n1 {
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+}
+
+/* N2 · apoio. Deixa o ambiente atravessar sem disputar com o dado. */
+.n2 {
+  background: var(--n2);
+  -webkit-backdrop-filter: blur(var(--n2-blur)) saturate(140%);
+  backdrop-filter: blur(var(--n2-blur)) saturate(140%);
+}
+
+/* N3 · controle. O vidro de verdade — só navegação e ações.
+   Sombra mais funda porque flutua mais alto. */
+.n3 {
+  background: var(--n3);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+}
+
+/* `.glass` continua valendo como apelido de N2 (marcação antiga) */
+.glass {
+  background: var(--n2);
+  -webkit-backdrop-filter: blur(var(--n2-blur)) saturate(140%);
+  backdrop-filter: blur(var(--n2-blur)) saturate(140%);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
 }
 
 /* Sem translucidez pedida pelo sistema: vira sólido e o blur sai —
    manter o blur aqui só custaria bateria sem entregar o efeito. */
 @media (prefers-reduced-transparency: reduce) {
-  .glass, .glass-thick, .topnav, .modal, .toast {
+  .n1, .n2, .n3, .glass, .topnav, .modal, .toast, .card, .kpi, .ai-bar, .welcome {
     -webkit-backdrop-filter: none; backdrop-filter: none;
     background: var(--bg);
   }
-  [data-theme="dark"] .glass,
-  [data-theme="dark"] .glass-thick { background: #2A1D12; }
+  [data-theme="dark"] .n1, [data-theme="dark"] .n2, [data-theme="dark"] .n3,
+  [data-theme="dark"] .glass, [data-theme="dark"] .card,
+  [data-theme="dark"] .kpi { background: #2A1D12; }
   .sand-layer { display: none; }
 }
 @media (prefers-contrast: more) {
-  .glass, .glass-thick { border-color: var(--ink-2); background: var(--bg); }
+  .n1, .n2, .n3, .glass, .card, .kpi { border-color: var(--ink-2); background: var(--bg); }
   .sand-layer { display: none; }
 }
 
@@ -309,9 +391,10 @@ table { border-collapse: collapse; width: 100%; }
   display: flex; align-items: center; gap: 12px;
   padding: 8px 12px; margin-bottom: 12px;
   border-radius: var(--radius-lg);
-  background: var(--glass-2);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
+  /* N3 — camada de controle: o conteudo passa por tras */
+  background: var(--n3);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   border: 1px solid var(--glass-line);
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
 }
@@ -352,20 +435,156 @@ table { border-collapse: collapse; width: 100%; }
 .nav-item.is-active .nav-ico { color: var(--accent); }
 .topnav-tools { display: flex; align-items: center; gap: 4px; flex: none; }
 
-/* --- 6.3 barra da IA, logo abaixo do cabeçalho --- */
+/* --- 6.3 assistente, logo abaixo do cabeçalho --- */
 .ai-bar {
   border-radius: var(--radius-lg);
-  padding: 12px 16px; margin-bottom: 14px;
-  display: grid; gap: 10px;
+  padding: 14px 16px; margin-bottom: 16px;
+  display: grid; gap: 12px;
 }
-.ai-bar-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.ai-bar-ico {
-  width: 32px; height: 32px; flex: none; border-radius: 10px;
+.ai-head { display: flex; align-items: center; gap: 12px; }
+.ai-read { min-width: 0; flex: 1; display: grid; gap: 2px; }
+.ai-read-line { font-size: 14px; font-weight: 580; letter-spacing: -.01em; }
+.ai-read-sub { font-size: 12.5px; color: var(--muted); }
+
+/* a esfera: o assistente como objeto, não como caixa de chat */
+.ai-orb {
+  width: 38px; height: 38px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; position: relative;
+  background: var(--surface-accent); color: #fff;
+  box-shadow: 0 2px 10px -2px color-mix(in srgb, var(--accent) 60%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+/* halo pulsando devagar — sinal de "vivo", não de "carregando" */
+.ai-orb::before {
+  content: ''; position: absolute; inset: -5px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  animation: orb-breathe 4.5s ease-in-out infinite;
+}
+.ai-orb-core { display: grid; place-items: center; }
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); opacity: .7; }
+  50%      { transform: scale(1.13); opacity: .15; }
+}
+.ai-bar .ai-examples { margin-top: 0; }
+.ai-chip.is-toggle { border-style: dashed; }
+
+/* ------------------------------------------------------------
+   6.4 · DESTAQUE — o número que manda na página
+   ------------------------------------------------------------ */
+.hero {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: 30px 30px 26px;
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  min-height: 190px;
+  display: grid; align-content: center;
+}
+.hero-face { position: relative; z-index: 1; display: grid; gap: 6px; max-width: 62%; }
+.hero-label {
+  font-size: 11.5px; font-weight: 640; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted);
+}
+/* leading apertado e tracking negativo: texto grande pede os dois */
+.hero-value {
+  font-size: clamp(2.4rem, 6.2vw, 4.1rem);
+  font-weight: 660; line-height: 1.02; letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.hero-sub { font-size: 13px; color: var(--muted); }
+.hero-delta { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-top: 4px; flex-wrap: wrap; }
+.hero-trend {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px; font-weight: 640; font-size: 12.5px;
+}
+.hero-trend.is-up   { background: color-mix(in srgb, var(--salvia) 16%, transparent); color: var(--good-text); }
+.hero-trend.is-down { background: color-mix(in srgb, var(--terracota) 12%, transparent); color: var(--critical); }
+.hero-trend.is-flat { background: var(--plane-2); color: var(--muted); }
+
+/* a curva vive no fundo do card, não em uma moldura própria */
+.hero-spark {
+  position: absolute; right: 0; bottom: 0;
+  width: 62%; height: 72%;
+  opacity: .5; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%);
+  mask-image: linear-gradient(to right, transparent, #000 22%);
+}
+@media (max-width: 820px) {
+  .hero { padding: 22px 20px; min-height: 0; }
+  .hero-face { max-width: 100%; }
+  .hero-spark { width: 100%; height: 48%; opacity: .32; }
+}
+
+/* ------------------------------------------------------------
+   6.5 · AÇÃO PRINCIPAL FLUTUANTE
+   ------------------------------------------------------------ */
+.fab-wrap {
+  position: fixed; right: 22px; bottom: 22px; z-index: 90;
+  display: grid; justify-items: end; gap: 10px;
+}
+.fab {
+  width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
   display: grid; place-items: center;
   background: var(--surface-accent); color: #fff;
+  box-shadow: 0 6px 20px -6px color-mix(in srgb, var(--accent) 70%, transparent),
+              0 2px 6px rgba(20, 12, 6, .3),
+              inset 0 1px 0 rgba(255, 255, 255, .3);
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
 }
-.ai-bar-field { flex: 1; min-width: 200px; }
-.ai-bar .ai-examples { margin-top: 0; }
+.fab:hover { transform: translateY(-2px) scale(1.04); }
+.fab:active { transform: scale(.94); }
+.fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* o "+" gira para "×": o próprio botão diz que fechou */
+.fab-plus, .fab-plus::before {
+  content: ''; display: block; background: currentColor; border-radius: 2px;
+}
+.fab-plus { width: 20px; height: 2.5px; position: relative; transition: transform .34s var(--ease-out); }
+.fab-plus::before { position: absolute; inset: 0; transform: rotate(90deg); }
+.fab[aria-expanded="true"] .fab-plus { transform: rotate(135deg); }
+
+.fab-menu {
+  display: grid; gap: 6px; justify-items: stretch;
+  padding: 7px; border-radius: 18px;
+  background: var(--n3);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  transform-origin: bottom right;      /* nasce no botão que o abriu */
+  animation: fab-in .34s var(--ease-out);
+}
+/* mola discreta: o menu cresce a partir do canto e assenta */
+@keyframes fab-in {
+  from { opacity: 0; transform: scale(.82) translateY(10px); filter: blur(5px); }
+  60%  { opacity: 1; transform: scale(1.02) translateY(0); filter: blur(0); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.fab-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px 9px 10px; border: 0; border-radius: 12px;
+  background: transparent; color: var(--ink); cursor: pointer;
+  font-size: 13.5px; font-weight: 550; white-space: nowrap; text-align: left;
+  transition: background .16s var(--ease-out), transform .12s var(--ease-out);
+}
+.fab-item:hover { background: var(--plane-2); }
+.fab-item:active { transform: scale(.97); }
+.fab-item-ico {
+  width: 28px; height: 28px; flex: none; border-radius: 9px;
+  display: grid; place-items: center;
+  background: var(--plane-2); color: var(--ink-2);
+}
+.fab-item-ico.is-income  { background: color-mix(in srgb, var(--salvia) 22%, transparent); color: var(--income); }
+.fab-item-ico.is-expense { background: color-mix(in srgb, var(--terracota) 16%, transparent); color: var(--expense); }
+.fab-item-ico.is-invest  { background: color-mix(in srgb, var(--invest) 16%, transparent); color: var(--invest); }
+
+@media (max-width: 560px) { .fab-wrap { right: 16px; bottom: 16px; } }
+@supports (padding: max(0px)) {
+  .fab-wrap { bottom: max(22px, calc(env(safe-area-inset-bottom) + 12px)); }
+}
 
 .page-head { margin-bottom: 4px; }
 .page-head h1 { font-size: 19px; font-weight: 660; letter-spacing: -.02em; }
@@ -385,9 +604,10 @@ table { border-collapse: collapse; width: 100%; }
    7 · COMPONENTES BASE
    ------------------------------------------------------------ */
 .card {
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  /* N1 — conteudo. Ver secao 5. */
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
   border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   padding: 16px;
@@ -524,9 +744,10 @@ select.input { cursor: pointer; }
 .kpi-row-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .kpi-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .kpi {
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  /* N1 — o valor precisa ganhar do fundo, sempre */
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
   border: 1px solid var(--glass-line);
   border-radius: var(--radius); padding: 14px 15px;
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
@@ -589,10 +810,64 @@ select.input { cursor: pointer; }
 }
 .offline-note {
   position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
-  background: var(--glass-2); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  background: var(--n1); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius); padding: 10px 16px; font-size: 12.5px;
   box-shadow: var(--shadow); z-index: 60; max-width: min(560px, 92vw);
+}
+
+/* ------------------------------------------------------------
+   Categorias como objetos — cada uma é uma peça que responde
+   ------------------------------------------------------------
+   No repouso mostra ícone, nome, valor e peso. No hover ganha
+   profundidade e revela a quebra débito × crédito, que só
+   interessa quando você está olhando para aquela categoria.
+   ------------------------------------------------------------ */
+.cat-tiles { display: grid; gap: 8px; margin-top: 16px; }
+.cat-tile {
+  display: grid; grid-template-columns: 30px 1fr auto; gap: 11px; align-items: center;
+  padding: 10px 12px; border-radius: 14px;
+  border: 1px solid transparent; background: var(--plane-2);
+  cursor: default; position: relative;
+  transition: transform .22s var(--ease-out), box-shadow .22s var(--ease-out),
+              border-color .22s var(--ease-out), background .22s var(--ease-out);
+}
+.cat-tile:hover, .cat-tile:focus-visible {
+  transform: translateY(-2px);
+  background: var(--n1);
+  border-color: var(--glass-line);
+  box-shadow: var(--shadow);
+}
+.cat-tile-id { min-width: 0; display: grid; gap: 3px; }
+.cat-tile-name {
+  font-size: 13px; font-weight: 560;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cat-tile-bar {
+  height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 8%, transparent);
+  overflow: hidden; display: flex; gap: 2px;
+}
+.cat-tile-bar > i { display: block; height: 100%; border-radius: 3px; }
+/* crédito recebe hachura: a diferença não fica só na cor */
+.cat-tile-bar > i.is-credit {
+  background-image: repeating-linear-gradient(135deg,
+    rgba(255, 255, 255, .55) 0 2px, rgba(255, 255, 255, 0) 2px 5px);
+}
+.cat-tile-num { text-align: right; display: grid; gap: 1px; }
+.cat-tile-val { font-size: 13px; font-weight: 640; font-variant-numeric: tabular-nums; }
+.cat-tile-pct { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* o detalhe só aparece quando o olho já está ali */
+.cat-tile-split {
+  grid-column: 2 / -1; font-size: 11.5px; color: var(--muted);
+  display: flex; gap: 10px; flex-wrap: wrap;
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height .24s var(--ease-out), opacity .18s var(--ease-out);
+}
+.cat-tile:hover .cat-tile-split,
+.cat-tile:focus-within .cat-tile-split { max-height: 24px; opacity: 1; }
+@media (hover: none) {
+  /* sem mouse não existe hover: o detalhe fica sempre visível */
+  .cat-tile-split { max-height: 24px; opacity: 1; }
 }
 
 /* lista ranqueada ao lado/abaixo da pizza */
@@ -623,22 +898,33 @@ select.input { cursor: pointer; }
 /* ------------------------------------------------------------
    10 · TABELAS
    ------------------------------------------------------------ */
+/* A tabela é uma superfície contínua, não uma grade de linhas.
+   O que separa as linhas é espaço; a divisória é quase invisível
+   e existe só para o olho não perder a horizontal em telas largas. */
 .table-wrap { overflow-x: auto; }
 .table-scroll { max-height: 340px; overflow-y: auto; }
 .table-scroll-lg { max-height: 420px; overflow-y: auto; }
-.table th, .table td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--grid); white-space: nowrap; }
-.table-compact th, .table-compact td { padding: 7px 9px; font-size: 12.5px; }
+.table th, .table td {
+  padding: 13px 14px; text-align: left; white-space: nowrap;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.table tbody tr:last-child td { border-bottom: 0; }
+.table-compact th, .table-compact td { padding: 10px 12px; font-size: 12.5px; }
 .table thead th {
   position: sticky; top: 0; z-index: 1;
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  font-size: 11.5px; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .04em;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-size: 11px; font-weight: 640; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+  border-bottom-color: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.table tbody tr {
+  transition: background .16s var(--ease-out);
 }
 .table tbody tr:hover { background: var(--plane-2); }
 .table tfoot td {
-  font-weight: 660; border-top: 2px solid var(--axis); border-bottom: 0;
-  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  font-weight: 660; border-top: 1px solid var(--axis); border-bottom: 0;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
 }
 .table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .table .is-current { background: color-mix(in srgb, var(--accent) 14%, transparent); }
@@ -963,8 +1249,9 @@ select.input { cursor: pointer; }
 .modal-backdrop { position: absolute; inset: 0; background: rgba(20, 12, 6, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .modal {
   position: relative; width: min(620px, 100%); max-height: 88vh;
-  background: var(--glass-2);
-  -webkit-backdrop-filter: blur(34px) saturate(160%); backdrop-filter: blur(34px) saturate(160%);
+  /* fundo de N1 (tem formulario dentro) com o blur espesso de N3 */
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(150%); backdrop-filter: blur(var(--n3-blur)) saturate(150%);
   border: 1px solid var(--glass-line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
@@ -1035,7 +1322,7 @@ select.input { cursor: pointer; }
 
 .toasts { position: fixed; bottom: 18px; right: 18px; z-index: 200; display: grid; gap: 8px; justify-items: end; }
 .toast {
-  background: var(--glass-2);
+  background: var(--n1);
   -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
   border: 1px solid var(--border-strong);
   border-left: 3px solid var(--accent);
@@ -1127,4 +1414,47 @@ select.input { cursor: pointer; }
   .wallet-card:hover, .wallet-card:focus-visible,
   .wallet-card.is-focused { transform: none; }
   .btn:active, .icon-btn:active, .nav-item:active { transform: none; }
+  .cat-tile:hover, .card:hover, .fab:hover, .fab:active { transform: none; }
+  .ai-orb::before { animation: none; opacity: .4; }
+  /* o detalhe da categoria continua aparecendo — o que sai é o deslocamento */
+  .cat-tile-split { transition: opacity .12s; }
+}
+
+/* ------------------------------------------------------------
+   20 · MICROINTERAÇÕES
+   ------------------------------------------------------------
+   Deslocamentos de 1–3px e sombra um passo acima. O suficiente
+   para o elemento responder ao ponteiro sem nada saltar na tela.
+   ------------------------------------------------------------ */
+.card {
+  transition: transform .26s var(--ease-out), box-shadow .26s var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+}
+/* card de gráfico não sobe: mover a área de plotagem embaixo do
+   cursor atrapalha a leitura do próprio gráfico */
+.card:has(.chart-box):hover { transform: none; }
+
+.kpi {
+  transition: transform .26s var(--ease-out), box-shadow .26s var(--ease-out);
+}
+.kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+}
+
+/* números entram deslizando de baixo quando o valor muda */
+@keyframes num-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+.num-anim { animation: num-in .34s var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  .num-anim { animation: none; }
+}
+
+/* foco visível e consistente em tudo que é operável */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
 }

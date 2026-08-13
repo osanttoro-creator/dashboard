@@ -112,6 +112,21 @@
     items.forEach((i) => box.appendChild(UI.kpi(i)));
   };
 
+  /**
+   * Escreve um valor e, se ele mudou, anima a entrada.
+   * Reescrever o mesmo texto não anima — piscar sem motivo é ruído,
+   * e o objetivo aqui é justamente marcar a mudança.
+   */
+  UI.setValue = function (id, texto) {
+    const n = typeof id === 'string' ? document.getElementById(id) : id;
+    if (!n) return;
+    if (n.textContent === texto) return;
+    n.textContent = texto;
+    n.classList.remove('num-anim');
+    void n.offsetWidth;          // reinicia a animação
+    n.classList.add('num-anim');
+  };
+
   UI.empty = function (message) {
     return el('p', { class: 'empty-note', text: message });
   };

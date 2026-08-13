@@ -87,6 +87,7 @@
     const p = PAGES[App.page];
     document.getElementById('pageSub').textContent = p.sub();
     renderWelcome();
+    if (global.AI && AI.renderInsight) AI.renderInsight(App.ym);
     try {
       p.render();
     } catch (err) {
@@ -170,6 +171,54 @@
       st.profiles.map((p) => ({ value: p.id, label: p.name })), st.activeProfileId);
   }
 
+  /* ---------------- ação principal flutuante ---------------- */
+
+  /**
+   * O "+" abre os quatro lançamentos. O menu nasce no canto do botão
+   * (transform-origin no CSS), então fica claro de onde ele veio — e
+   * some pelo mesmo caminho.
+   */
+  function fabOpen(abrir) {
+    const btn = document.getElementById('fabBtn');
+    const menu = document.getElementById('fabMenu');
+    const estaAberto = btn.getAttribute('aria-expanded') === 'true';
+    const alvo = abrir === undefined ? !estaAberto : abrir;
+    if (alvo === estaAberto) return;
+    btn.setAttribute('aria-expanded', alvo ? 'true' : 'false');
+    menu.hidden = !alvo;
+    if (alvo) {
+      paintIcons();
+      const primeiro = menu.querySelector('.fab-item');
+      if (primeiro) primeiro.focus();
+    }
+  }
+
+  function wireFab() {
+    const btn = document.getElementById('fabBtn');
+    const menu = document.getElementById('fabMenu');
+    btn.addEventListener('click', () => fabOpen());
+
+    // fecha ao escolher, ao clicar fora e no Escape
+    menu.addEventListener('click', () => fabOpen(false));
+    document.addEventListener('click', (ev) => {
+      if (!document.getElementById('fabWrap').contains(ev.target)) fabOpen(false);
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        fabOpen(false); btn.focus();
+      }
+    });
+    // setas percorrem o menu — é um menu, então precisa andar pelo teclado
+    menu.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
+      ev.preventDefault();
+      const itens = U.$$('.fab-item', menu);
+      const i = itens.indexOf(document.activeElement);
+      const passo = ev.key === 'ArrowDown' ? 1 : -1;
+      itens[(i + passo + itens.length) % itens.length].focus();
+    });
+  }
+
   /** Preenche os ícones declarados no HTML com data-ico. */
   function paintIcons() {
     U.$$('[data-ico]').forEach((n) => {
@@ -184,8 +233,9 @@
     // navegação
     U.$$('.nav-item').forEach((b) => b.addEventListener('click', () => App.goTo(b.dataset.page)));
 
-    // saudação
+    // saudação e ação principal
     document.getElementById('ownerName').addEventListener('click', askOwnerName);
+    wireFab();
 
     // período — dia, mês e ano são editáveis
     document.getElementById('daySelect').addEventListener('change', (e) =>
@@ -304,6 +354,7 @@
       if (!document.getElementById('modalRoot').hidden) return;
       if (ev.key === 'd' || ev.key === 'D') { ev.preventDefault(); Forms.openTransaction('expense'); }
       else if (ev.key === 'r' || ev.key === 'R') { ev.preventDefault(); Forms.openTransaction('income'); }
+      else if (ev.key === 'n' || ev.key === 'N') { ev.preventDefault(); fabOpen(true); }
       else if (ev.key === 'ArrowLeft' && ev.altKey) App.setYM(U.addMonths(App.ym, -1));
       else if (ev.key === 'ArrowRight' && ev.altKey) App.setYM(U.addMonths(App.ym, 1));
     });
