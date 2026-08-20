@@ -16,17 +16,26 @@
     invType: '',
     catRange: 'all',
     accTab: 'accounts',
+    recTab: 'all',          // all | subs (recorrências × assinaturas)
+    calDay: null,           // dia selecionado no calendário
     accHistoryId: null,
     invoiceRef: null,
     importTarget: null
   };
 
   const PAGES = {
-    home: { title: 'Início', sub: () => 'Visão geral de ' + U.monthLabel(App.ym), render: () => Home.render() },
-    transactions: { title: 'Receitas e Despesas', sub: () => 'Lançamentos de ' + U.monthLabel(App.ym), render: () => Tx.render() },
-    investments: { title: 'Investimentos', sub: () => 'Carteira e projeções', render: () => Inv.render() },
-    accounts: { title: 'Cartões e Contas', sub: () => 'Sua carteira, faturas e importação', render: () => Acc.render() },
-    categories: { title: 'Categorias', sub: () => 'Organização e peso histórico', render: () => Cat.render() }
+    home:         { title: 'Visão geral',   sub: () => U.smartCase(U.monthLabel(App.ym)),                    render: () => Home.render() },
+    transactions: { title: 'Financeiro',    sub: () => 'Receitas, despesas e transferências de ' + U.monthLabel(App.ym), render: () => Tx.render() },
+    accounts:     { title: 'Contas e cartões', sub: () => 'Carteira, faturas e importação de extratos',      render: () => Acc.render() },
+    budget:       { title: 'Orçamento',     sub: () => 'Limites de ' + U.monthLabel(App.ym),                 render: () => Bud.render() },
+    goals:        { title: 'Metas',         sub: () => 'Onde você quer chegar',                              render: () => Goals.render() },
+    recurring:    { title: 'Recorrências',  sub: () => 'O que se repete todo mês',                           render: () => Rec.render() },
+    calendar:     { title: 'Calendário',    sub: () => 'A agenda do seu dinheiro',                           render: () => Cal.render() },
+    investments:  { title: 'Investimentos', sub: () => 'Carteira, evolução e projeções',                     render: () => Inv.render() },
+    reports:      { title: 'Análises',      sub: () => 'Consolidado de ' + U.ymParts(App.ym).y,              render: () => Rep.render() },
+    uglez:        { title: 'UGLEZ',         sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
+    categories:   { title: 'Categorias',    sub: () => 'Organização e peso histórico',                       render: () => Cat.render() },
+    settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() }
   };
 
   /* ---------------- navegação ---------------- */
@@ -56,6 +65,7 @@
     App.ym = ym;
     App.refDate = U.isoOf(p.y, p.m, d);
     App.invoiceRef = null;
+    App.calDay = null;      // o dia selecionado não existe no mês novo
     syncPeriodPicker();
     App.render();
   };
@@ -87,13 +97,14 @@
     const p = PAGES[App.page];
     document.getElementById('pageSub').textContent = p.sub();
     renderWelcome();
-    if (global.AI && AI.renderInsight) AI.renderInsight(App.ym);
+    if (global.Ug && Ug.renderHome && App.page === 'home') { /* desenhado por Home.render */ }
     try {
       p.render();
     } catch (err) {
       console.error('Erro ao desenhar a página "' + App.page + '":', err);
       UI.toast('Algo deu errado ao desenhar esta página. Veja o console.', 'error');
     }
+    if (global.Shell && Shell.renderNotifCount) Shell.renderNotifCount();
     renderFooter();
   };
 
@@ -106,19 +117,32 @@
   /* ---------------- painel de boas-vindas ---------------- */
 
   function renderWelcome() {
-    const nome = Store.ownerName();
     const alvo = document.getElementById('ownerName');
-    alvo.textContent = nome || 'visitante';
-    alvo.title = 'Clique para trocar o nome';
+    if (alvo) {
+      alvo.textContent = Store.ownerName() || 'visitante';
+      alvo.title = 'Clique para trocar o nome';
+    }
 
-    const hoje = new Date();
-    document.getElementById('todayNote').textContent =
-      'Hoje é ' + hoje.toLocaleDateString('pt-BR', {
+    /* Inicial do perfil no avatar da top bar. A foto do Google, quando
+       existe, é escrita por cima pelo sync.js — daí só preencher se o
+       avatar ainda não tiver imagem. */
+    const av = document.getElementById('profileAvatar');
+    if (av && !av.querySelector('img')) {
+      av.textContent = (Store.profile().name || '?').trim().charAt(0).toUpperCase();
+    }
+
+    /* A data por extenso vira o título do seletor de período: a
+       informação continua acessível sem gastar uma linha de tela. */
+    const pp = document.getElementById('periodPicker');
+    if (pp) {
+      pp.title = 'Hoje é ' + new Date().toLocaleDateString('pt-BR', {
         weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
       });
+    }
   }
 
   /** Troca o nome da saudação. Fica salvo com o resto do painel. */
+  App.askOwnerName = function () { askOwnerName(); };
   function askOwnerName() {
     const campo = U.el('input', {
       class: 'input', type: 'text', maxlength: '40',
@@ -348,6 +372,24 @@
       App.catRange = e.target.value; if (App.page === 'categories') Cat.render();
     });
 
+    // orçamento e metas
+    document.getElementById('btnNewBudget').addEventListener('click', () => Bud.open());
+    document.getElementById('btnNewGoal').addEventListener('click', () => Goals.open());
+
+    // recorrências: abas
+    U.$$('#recTabs .tab').forEach((b) => b.addEventListener('click', () => {
+      App.recTab = b.dataset.rectab; if (App.page === 'recurring') Rec.render();
+    }));
+
+    // análises
+    document.getElementById('btnExportCsv').addEventListener('click', () => Rep.exportCsv());
+
+    // como o score é calculado
+    document.getElementById('btnScoreHelp').addEventListener('click', () => Home.explainScore());
+
+    // a marca leva para a visão geral
+    document.getElementById('brandHome').addEventListener('click', () => App.goTo('home'));
+
     // atalhos
     document.addEventListener('keydown', (ev) => {
       if (ev.target.matches('input, textarea, select')) return;
@@ -387,12 +429,24 @@
         'error', 12000), 800);
     }
 
-    paintIcons();
-    syncProfileSelect();
-    syncPeriodPicker();
-    wire();
-    Sync.init();
-    AI.init();
+    /* Cada peça do boot é isolada: se a sincronização (que depende de
+       rede) ou o UGLEZ falharem, o painel ainda abre. Antes, uma
+       exceção em qualquer uma delas abortava o boot inteiro e a tela
+       ficava vazia sem nenhuma mensagem — falha silenciosa, a pior. */
+    const passo = (nome, fn) => {
+      try { fn(); } catch (e) {
+        console.error('Falha ao iniciar "' + nome + '":', e);
+        UI.toast('Parte do app não iniciou (' + nome + '). Veja o console.', 'error', 8000);
+      }
+    };
+
+    passo('ícones', paintIcons);
+    passo('perfis', syncProfileSelect);
+    passo('período', syncPeriodPicker);
+    passo('eventos', wire);
+    passo('sincronização', () => Sync.init());
+    passo('UGLEZ', () => AI.init());
+    passo('controles', () => Shell.init());
     App.goTo('home');
 
     // primeira visita: oferece dados de exemplo

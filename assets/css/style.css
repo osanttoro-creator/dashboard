@@ -8,157 +8,167 @@
    ============================================================ */
 
 /* ------------------------------------------------------------
-   1 · TOKENS — tema claro (dia no deserto)
+   1 · TOKENS — OAZE 1.0
+   ------------------------------------------------------------
+   Sete cores, e só elas:
+
+     Midnight   #0F2C3D   o céu, e o painel no escuro
+     Deep Teal  #2D4F56   apoio e controle
+     Oasis      #547A6E   crescimento, positivo
+     Sage       #A6B7A1   verde de leitura no escuro
+     Sand       #D4C8B5   tinta secundária, superfície no claro
+     Terracotta #C4936A   UGLEZ, acento, atenção
+     Earth      #6E4E3D   profundidade, sombra quente
+
+   A sensação a entregar é calma + controle + patrimônio. Por isso
+   o fundo é fundo, a cor mora no dado, e o único brilho do sistema
+   é o âmbar do UGLEZ — sutil, nunca neon.
    ------------------------------------------------------------ */
 :root {
   color-scheme: light;
 
-  /* as cinco cores da paleta, cruas — referência para tudo abaixo */
-  --areia:     #E7D4B5;
-  --terracota: #C9794A;
-  --argila:    #A68B6B;
-  --salvia:    #7A846A;
-  --terra:     #5A3E2B;
+  /* a paleta crua — referência de tudo abaixo */
+  --midnight:  #0F2C3D;
+  --teal:      #2D4F56;
+  --oasis:     #547A6E;
+  --sage:      #A6B7A1;
+  --sand:      #D4C8B5;
+  --terracotta:#C4936A;
+  --earth:     #6E4E3D;
 
-  --bg:            #EFE2CB;
-  --bg-deep:       #E3D2B4;   /* fim do degradê do céu */
-  --text-primary:  #2A1D12;
-  --text-muted:    #6E5A45;
+  --bg:            #F2EDE4;   /* Sand lavado */
+  --bg-deep:       #E8E1D4;
+  --text-primary:  #12222B;
+  --text-muted:    #5E6E6B;
 
   /* ----------------------------------------------------------
-     TRÊS NÍVEIS DE MATERIAL — cada um com uma função visual.
-     Aplicar o mesmo vidro em tudo achata a hierarquia e cobra
-     legibilidade sem devolver nada.
-
-     N1 · conteúdo  — quase sólido. Onde moram os números.
-     N2 · apoio     — translúcido. Contexto, painéis secundários.
-     N3 · controle  — vidro evidente. Navegação e ações; é a
-                      única camada que "flutua" sobre o resto.
+     TRÊS NÍVEIS DE MATERIAL
+     N1 conteúdo — quase sólido. Onde moram os números.
+     N2 apoio    — translúcido. Contexto.
+     N3 controle — vidro. Sidebar, top bar, menus: a camada que
+                   flutua. Nunca sobre conteúdo, sempre acima.
      ---------------------------------------------------------- */
-  --n1:            rgba(255, 253, 249, .95);
-  --n1-blur:       10px;
-  --n2:            rgba(255, 251, 243, .76);
-  --n2-blur:       20px;
-  --n3:            rgba(255, 255, 255, .58);
-  --n3-blur:       34px;
+  --n1:       rgba(255, 255, 255, .96);
+  --n1-blur:  10px;
+  --n2:       rgba(255, 255, 255, .74);
+  --n2-blur:  20px;
+  --n3:       rgba(255, 255, 255, .56);
+  --n3-blur:  34px;
 
-  --glass:         var(--n2);
-  --glass-2:       var(--n1);
-  --glass-edge:    rgba(255, 255, 255, .92);
-  --glass-line:    rgba(90, 62, 43, .13);
-  --glass-blur:    var(--n2-blur);
+  --glass:      var(--n2);
+  --glass-2:    var(--n1);
+  --glass-edge: rgba(255, 255, 255, .95);
+  --glass-line: rgba(15, 44, 61, .12);
+  --glass-blur: var(--n2-blur);
 
   --surface:       var(--glass);
   --surface-2:     var(--glass-2);
   --plane:         var(--bg);
-  --plane-2:       rgba(90, 62, 43, .09);
+  --plane-2:       rgba(15, 44, 61, .06);
   --ink:           var(--text-primary);
-  --ink-2:         #4E3A28;
+  --ink-2:         #33454A;
   --muted:         var(--text-muted);
-  --grid:          rgba(90, 62, 43, .12);
-  --axis:          rgba(90, 62, 43, .28);
+  --grid:          rgba(15, 44, 61, .09);
+  --axis:          rgba(15, 44, 61, .20);
   --border:        var(--glass-line);
-  --border-strong: rgba(90, 62, 43, .30);
-  --shadow:        0 1px 2px rgba(58, 38, 22, .06), 0 10px 30px -14px rgba(58, 38, 22, .30);
-  --shadow-lift:   0 2px 6px rgba(58, 38, 22, .12), 0 26px 50px -24px rgba(58, 38, 22, .45);
+  --border-strong: rgba(15, 44, 61, .22);
+  --shadow:        0 1px 2px rgba(15, 44, 61, .06), 0 10px 30px -14px rgba(15, 44, 61, .26);
+  --shadow-lift:   0 2px 6px rgba(15, 44, 61, .10), 0 26px 50px -22px rgba(15, 44, 61, .38);
 
-  --surface-hero:   linear-gradient(135deg, #E7D4B5, #C9A87E);
-  --surface-accent: linear-gradient(135deg, #C9794A, #8E4E2A);
+  --surface-hero:   linear-gradient(135deg, #17394C, #0F2C3D);
+  --surface-accent: linear-gradient(135deg, #C4936A, #8A5A38);
+  /* o glow do UGLEZ: âmbar, e propositalmente quase invisível */
+  --uglez-glow:     0 0 0 1px rgba(196, 147, 106, .28), 0 8px 30px -8px rgba(196, 147, 106, .35);
 
-  /* série categórica — ordem fixa, ajustada para este fundo */
-  --s1: #C58E27; --s2: #3F5C56; --s3: #A68B6B; --s4: #A0553F; --s5: #B79454;
-  --s6: #7A846A; --s7: #6B4A76; --s8: #C9794A; --s9: #8A6A4F; --s10: #8C8F4E;
+  /* série categórica — é dado, logo pode ter cor */
+  --s1: #2E6E7E; --s2: #A85A32; --s3: #3B6558; --s4: #7B5A8E; --s5: #1F6B4F;
+  --s6: #B07C3E; --s7: #34557A; --s8: #8A5A38; --s9: #4C6B33; --s10: #6E4E3D;
 
-  /* papéis semânticos: sálvia = entra, terracota = sai */
-  --income:         #4A5C39;
-  --expense:        #9E4A26;
-  --income-strong:  #4A5C39;
-  --expense-strong: #9E4A26;
-  --accent:         #A85A2B;
-  --accent-strong:  #8E4E2A;
-  --invest:         #6B563A;
+  /* papéis semânticos */
+  --income:         #1F6B4F;
+  --expense:        #A85A32;
+  --income-strong:  #1F6B4F;
+  --expense-strong: #A85A32;
+  --accent:         #8A5A38;
+  --accent-strong:  #6E4E3D;
+  --invest:         #3B6558;
 
-  --good:      #3F5230;
-  --good-text: #3F5230;
-  --warning:   #8A6318;
-  /* o selo "Previsto" cai sobre a linha pendente, que JA e tingida de ambar:
-     os dois tingimentos somam e derrubam o texto. Dai um passo proprio. */
-  --warning-text: #63450D;
-  --serious:   #A85A2B;
-  /* dica de grafico: opaca de proposito — Chart.js pinta no canvas,
-     onde nao existe backdrop-filter para atravessar */
-  --tip-bg:    #FFFDF9;
-  --tip-line:  rgba(90, 62, 43, .16);
-  --critical:  #A3392A;
+  --good:      #1F6B4F;
+  --good-text: #1F6B4F;
+  --warning:   #7A5518;
+  --warning-text: #5E4111;
+  --serious:   #A85A32;
+  --critical:  #A33A22;
+  --tip-bg:    #FFFFFF;
+  --tip-line:  rgba(15, 44, 61, .14);
 
   --radius:     16px;
   --radius-sm:  10px;
-  --radius-lg:  22px;
-  /* Inter para o texto; a fonte do sistema segue na fila para as setas
-     e símbolos (▲ ▼ ⇄ ✎ ⚙) que estão fora do subconjunto latin. */
+  --radius-lg:  24px;
   --font: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  /* molas: crítico-amortecidas por padrão (ver skill apple-design) */
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --ease-in:  cubic-bezier(.64, 0, .78, 0);
+
+  --sidebar-w: 244px;
 }
 
 /* ------------------------------------------------------------
-   2 · TOKENS — tema escuro (noite no deserto). Mesmas matizes,
-   passos de luminância próprios: uma série só não serve aos dois
-   fundos sem alguma cor sumir.
+   2 · TOKENS — tema escuro (o principal)
+   Midnight como painel, Deep Teal como controle, Sand como tinta.
    ------------------------------------------------------------ */
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg:            #17100A;
-  --bg-deep:       #0E0906;
-  --text-primary:  #F5E9D6;
-  --text-muted:    #AD9B80;
+  --bg:            #081A24;   /* um passo abaixo do Midnight */
+  --bg-deep:       #05121A;
+  --text-primary:  #EFE9DF;
+  --text-muted:    #9DAFA9;
 
-  --n1:            rgba(44, 31, 21, .93);
-  --n1-blur:       10px;
-  --n2:            rgba(70, 49, 34, .62);
-  --n2-blur:       22px;
-  --n3:            rgba(90, 62, 43, .40);
-  --n3-blur:       36px;
+  --n1:       rgba(15, 44, 61, .94);
+  --n1-blur:  10px;
+  --n2:       rgba(45, 79, 86, .55);
+  --n2-blur:  22px;
+  --n3:       rgba(45, 79, 86, .38);
+  --n3-blur:  36px;
 
-  --glass:         var(--n2);
-  --glass-2:       var(--n1);
-  --glass-edge:    rgba(231, 212, 181, .18);
-  --glass-line:    rgba(231, 212, 181, .12);
-  --glass-blur:    var(--n2-blur);
+  --glass:      var(--n2);
+  --glass-2:    var(--n1);
+  --glass-edge: rgba(212, 200, 181, .12);
+  --glass-line: rgba(212, 200, 181, .12);
+  --glass-blur: var(--n2-blur);
 
-  --plane-2:       rgba(231, 212, 181, .10);
-  --ink-2:         #DCC9AC;
-  --grid:          rgba(231, 212, 181, .11);
-  --axis:          rgba(231, 212, 181, .26);
-  --border-strong: rgba(231, 212, 181, .26);
-  --shadow:        0 1px 2px rgba(0, 0, 0, .45), 0 14px 36px -18px rgba(0, 0, 0, .85);
-  --shadow-lift:   0 4px 10px rgba(0, 0, 0, .5), 0 30px 60px -26px rgba(0, 0, 0, .95);
+  --plane-2:       rgba(212, 200, 181, .08);
+  --ink-2:         #D4C8B5;
+  --grid:          rgba(212, 200, 181, .09);
+  --axis:          rgba(212, 200, 181, .20);
+  --border-strong: rgba(212, 200, 181, .22);
+  --shadow:        0 1px 2px rgba(0, 0, 0, .5), 0 14px 36px -18px rgba(0, 0, 0, .9);
+  --shadow-lift:   0 4px 10px rgba(0, 0, 0, .55), 0 30px 60px -24px rgba(0, 0, 0, 1);
 
-  --surface-hero:   linear-gradient(135deg, #C9A87E, #8E6B45);
-  --surface-accent: linear-gradient(135deg, #C9794A, #7A3E1E);
+  --surface-hero:   linear-gradient(135deg, #2D4F56, #0F2C3D);
+  --surface-accent: linear-gradient(135deg, #C4936A, #8A5A38);
+  --uglez-glow:     0 0 0 1px rgba(196, 147, 106, .34), 0 10px 40px -10px rgba(196, 147, 106, .42);
 
-  --s1: #D9A441; --s2: #527A72; --s3: #A68B6B; --s4: #A0553F; --s5: #C2A46E;
-  --s6: #7A846A; --s7: #7F588C; --s8: #C9794A; --s9: #8A6A4F; --s10: #8C8F4E;
+  --s1: #6FB6C6; --s2: #E9A178; --s3: #9FC4B4; --s4: #C0A2D4; --s5: #8FD1A8;
+  --s6: #E4B77C; --s7: #8FB0DC; --s8: #C4936A; --s9: #AFC98C; --s10: #C6A98F;
 
-  --income:         #A8C088;
-  --expense:        #E8996B;
-  --income-strong:  #4A5C39;
-  --expense-strong: #9E4A26;
-  --accent:         #DE9155;
-  --accent-strong:  #A85A2B;
-  --invest:         #CBB088;
+  --income:         #8FD1A8;
+  --expense:        #E9A178;
+  --income-strong:  #1F6B4F;
+  --expense-strong: #A85A32;
+  --accent:         #C4936A;
+  --accent-strong:  #8A5A38;
+  --invest:         #9FC4B4;
 
-  --good:      #A8C088;
-  --good-text: #A8C088;
-  --warning:   #E0AC55;
-  --warning-text: #E0AC55;
-  --serious:   #DE9155;
-  --tip-bg:    #2C1F15;
-  --tip-line:  rgba(231, 212, 181, .18);
-  --critical:  #E8735A;
+  --good:      #8FD1A8;
+  --good-text: #8FD1A8;
+  --warning:   #E4B77C;
+  --warning-text: #E4B77C;
+  --serious:   #E9A178;
+  --critical:  #F09070;
+  --tip-bg:    #102E3F;
+  --tip-line:  rgba(212, 200, 181, .16);
 }
 
 /* ------------------------------------------------------------
@@ -198,122 +208,91 @@ button { font: inherit; color: inherit; }
 table { border-collapse: collapse; width: 100%; }
 
 /* ------------------------------------------------------------
-   4 · AMBIENTE — luz, não textura
+   4 · AMBIENTE — o céu do oásis
    ------------------------------------------------------------
-   Três manchas luminosas muito grandes e muito desfocadas, à
-   deriva em velocidades diferentes. Não é uma imagem de fundo:
-   é a iluminação da sala em que os painéis flutuam, e é ela que
-   dá o que o vidro tem para refratar.
+   Um halo alto (o sol da referência) e duas manchas muito grandes
+   e muito desfocadas. Não é textura: é a luz da sala em que os
+   painéis flutuam, e é o que o vidro tem para refratar.
 
-   Regras que valem aqui:
-   · o fundo nunca compete com o dado — opacidade baixa, sem
-     borda dura em lugar nenhum;
-   · só `transform` anima, então o compositor resolve sem
-     repintar nada;
-   · ciclos longos e dessincronizados (68s / 103s / 149s), longe
-     da faixa de ~0,2 Hz que incomoda a vista.
+   Só transform anima, então o compositor resolve sem repintar.
+   Ciclos longos e dessincronizados, longe da faixa de ~0,2 Hz
+   que cansa a vista.
    ------------------------------------------------------------ */
-.sandstorm {
+.ambient {
   position: fixed; inset: 0; z-index: -1;
   overflow: hidden; pointer-events: none;
   background: linear-gradient(178deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
-/* halo alto e frio, que faz o topo da tela "abrir" */
-.sandstorm::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(140% 90% at 62% -10%,
-    color-mix(in srgb, var(--areia) 26%, transparent), transparent 62%);
-}
-[data-theme="dark"] .sandstorm::after {
-  background: radial-gradient(140% 90% at 62% -10%,
-    color-mix(in srgb, var(--terracota) 15%, transparent), transparent 64%);
-}
-
-.sand-layer {
-  position: absolute;
-  width: 78vmax; height: 78vmax;
+/* o halo: alto, central, quase imperceptível — como o sol da referência */
+.ambient-sun {
+  position: absolute; left: 50%; top: -42vmax;
+  width: 84vmax; height: 84vmax; transform: translateX(-50%);
   border-radius: 50%;
-  filter: blur(90px);          /* a mancha nunca pode ter contorno */
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--terracotta) 26%, transparent) 0%,
+    color-mix(in srgb, var(--terracotta) 8%, transparent) 45%,
+    transparent 68%);
+  filter: blur(40px);
+  opacity: .5;
+}
+[data-theme="dark"] .ambient-sun { opacity: .34; }
+
+.ambient-blob {
+  position: absolute;
+  width: 70vmax; height: 70vmax; border-radius: 50%;
+  filter: blur(100px);
   will-change: transform;
   animation: drift ease-in-out infinite alternate;
 }
-.sand-layer.l1 {
-  top: -26vmax; left: -14vmax;
-  background: radial-gradient(circle, color-mix(in srgb, var(--areia) 52%, transparent) 0%, transparent 68%);
-  opacity: .5; animation-duration: 68s;
+.ambient-blob.b1 {
+  bottom: -34vmax; left: -18vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--oasis) 30%, transparent) 0%, transparent 68%);
+  opacity: .3; animation-duration: 84s;
 }
-.sand-layer.l2 {
-  top: 8vmax; right: -22vmax; left: auto;
-  background: radial-gradient(circle, color-mix(in srgb, var(--terracota) 34%, transparent) 0%, transparent 66%);
-  opacity: .32; animation-duration: 103s; animation-delay: -20s;
+.ambient-blob.b2 {
+  top: 10vmax; right: -26vmax;
+  background: radial-gradient(circle, color-mix(in srgb, var(--teal) 34%, transparent) 0%, transparent 66%);
+  opacity: .26; animation-duration: 127s; animation-delay: -30s;
 }
-.sand-layer.l3 {
-  bottom: -30vmax; left: 18vmax; top: auto;
-  background: radial-gradient(circle, color-mix(in srgb, var(--salvia) 34%, transparent) 0%, transparent 68%);
-  opacity: .26; animation-duration: 149s; animation-delay: -50s;
-}
-[data-theme="dark"] .sand-layer.l1 {
-  background: radial-gradient(circle, color-mix(in srgb, var(--terracota) 30%, transparent) 0%, transparent 68%);
-  opacity: .34;
-}
-[data-theme="dark"] .sand-layer.l2 {
-  background: radial-gradient(circle, color-mix(in srgb, var(--argila) 24%, transparent) 0%, transparent 66%);
-  opacity: .26;
-}
-[data-theme="dark"] .sand-layer.l3 {
-  background: radial-gradient(circle, color-mix(in srgb, var(--salvia) 26%, transparent) 0%, transparent 68%);
-  opacity: .2;
-}
-/* deriva curta: a luz respira, não desfila */
+[data-theme="dark"] .ambient-blob.b1 { opacity: .22; }
+[data-theme="dark"] .ambient-blob.b2 { opacity: .2; }
+
 @keyframes drift {
   from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(9vmax, 5vmax, 0) scale(1.14); }
+  to   { transform: translate3d(7vmax, 4vmax, 0) scale(1.1); }
 }
-
-/* Movimento de tela cheia é justamente o que incomoda quem pediu
-   menos animação: aqui a luz simplesmente assenta. */
 @media (prefers-reduced-motion: reduce) {
-  .sand-layer { animation: none; }
+  .ambient-blob { animation: none; }
 }
 
 /* ------------------------------------------------------------
    5 · OS TRÊS MATERIAIS
    ------------------------------------------------------------
-   A aresta superior clara em todos é a luz batendo na quina.
-   O que muda entre os níveis é quanto do fundo atravessa —
-   e isso é o que diz ao olho o que é conteúdo e o que é
-   controle flutuando por cima.
+   O que muda entre os níveis é quanto do fundo atravessa — e é
+   isso que diz ao olho o que é conteúdo e o que é controle.
+   Onde há número, o material é quase sólido: valor ilegível não
+   tem estética que compense.
    ------------------------------------------------------------ */
 .n1, .n2, .n3 {
   border: 1px solid var(--glass-line);
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
 }
-
-/* N1 · conteúdo. Quase sólido: aqui moram os números, e número
-   ilegível não tem estética que salve. */
 .n1 {
   background: var(--n1);
   -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
   backdrop-filter: blur(var(--n1-blur)) saturate(115%);
 }
-
-/* N2 · apoio. Deixa o ambiente atravessar sem disputar com o dado. */
 .n2 {
   background: var(--n2);
   -webkit-backdrop-filter: blur(var(--n2-blur)) saturate(140%);
   backdrop-filter: blur(var(--n2-blur)) saturate(140%);
 }
-
-/* N3 · controle. O vidro de verdade — só navegação e ações.
-   Sombra mais funda porque flutua mais alto. */
 .n3 {
   background: var(--n3);
   -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
 }
-
-/* `.glass` continua valendo como apelido de N2 (marcação antiga) */
 .glass {
   background: var(--n2);
   -webkit-backdrop-filter: blur(var(--n2-blur)) saturate(140%);
@@ -322,294 +301,216 @@ table { border-collapse: collapse; width: 100%; }
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
 }
 
-/* Sem translucidez pedida pelo sistema: vira sólido e o blur sai —
-   manter o blur aqui só custaria bateria sem entregar o efeito. */
 @media (prefers-reduced-transparency: reduce) {
-  .n1, .n2, .n3, .glass, .topnav, .modal, .toast, .card, .kpi, .ai-bar, .welcome {
+  .n1, .n2, .n3, .glass, .card, .kpi, .sidebar, .pill, .popover, .modal, .toast {
     -webkit-backdrop-filter: none; backdrop-filter: none;
     background: var(--bg);
   }
   [data-theme="dark"] .n1, [data-theme="dark"] .n2, [data-theme="dark"] .n3,
-  [data-theme="dark"] .glass, [data-theme="dark"] .card,
-  [data-theme="dark"] .kpi { background: #2A1D12; }
-  .sand-layer { display: none; }
+  [data-theme="dark"] .glass, [data-theme="dark"] .card, [data-theme="dark"] .kpi,
+  [data-theme="dark"] .sidebar, [data-theme="dark"] .pill { background: #102A38; }
+  .ambient-blob, .ambient-sun { display: none; }
 }
 @media (prefers-contrast: more) {
   .n1, .n2, .n3, .glass, .card, .kpi { border-color: var(--ink-2); background: var(--bg); }
-  .sand-layer { display: none; }
+  .ambient-blob, .ambient-sun { display: none; }
 }
 
 /* ------------------------------------------------------------
    6 · ESQUELETO
    ------------------------------------------------------------ */
-.app {
-  max-width: 1420px; margin: 0 auto;
-  padding: 0 20px;
+.shell { min-height: 100vh; }
+
+/* --- 6.1 sidebar: uma ilha, não uma coluna --- */
+.sidebar {
+  position: fixed; z-index: 60;
+  left: 16px; top: 16px; bottom: 16px;
+  width: var(--sidebar-w);
+  border-radius: var(--radius-lg);
+  padding: 18px 12px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 2px 8px 14px; text-decoration: none; color: inherit;
+}
+.brand-mark {
+  width: 34px; height: 34px; flex: none;
+  display: grid; place-items: center; border-radius: 11px;
+  background: var(--surface-accent); color: #fff;
+  box-shadow: var(--uglez-glow);
+}
+.brand-name { font-weight: 680; letter-spacing: .16em; font-size: 14px; }
+
+.nav { display: flex; flex-direction: column; gap: 2px; flex: 1; min-height: 0; overflow-y: auto; }
+.nav::-webkit-scrollbar { width: 0; }
+.nav-group {
+  font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); padding: 14px 12px 5px;
+}
+.nav-group:first-child { padding-top: 2px; }
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 12px; border: 0; border-radius: 11px;
+  background: transparent; cursor: pointer; text-align: left; width: 100%;
+  color: var(--ink-2); font-size: 13.5px; font-weight: 520;
+  /* a cor NÃO entra na transição: quando vem de custom property que muda
+     na troca de tema, o Chrome deixa o valor antigo preso. */
+  transition: background .18s var(--ease-out), transform .12s var(--ease-out);
+}
+.nav-item:hover { background: var(--plane-2); color: var(--ink); }
+.nav-item:active { transform: scale(.985); }
+.nav-item.is-active {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--ink); font-weight: 640;
+}
+.nav-ico { display: grid; place-items: center; flex: none; color: var(--muted); }
+.nav-item.is-active .nav-ico { color: var(--accent); }
+.nav-short { display: none; }
+.sidebar-foot { padding: 10px 4px 0; border-top: 1px solid var(--glass-line); }
+
+/* --- 6.2 conteúdo: passa por trás da ilha --- */
+.main {
+  margin-left: calc(var(--sidebar-w) + 32px);
+  padding: 16px 24px 0;
+  max-width: 1560px;
   display: flex; flex-direction: column; min-height: 100vh;
 }
 
-/* --- 6.1 painel de boas-vindas, acima do cabeçalho --- */
-.welcome {
-  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
-  margin: 18px 0 12px;
-  padding: 16px 20px;
-  border-radius: var(--radius-lg);
+/* --- 6.3 top bar: objetos independentes, sem faixa --- */
+.topbar {
+  position: sticky; top: 16px; z-index: 50;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 24px;
 }
-.welcome-main { min-width: 0; flex: 1; display: grid; gap: 6px; }
-.welcome-hi {
-  font-size: clamp(19px, 2.4vw, 26px);
-  font-weight: 640;
-  letter-spacing: -.022em;      /* texto grande pede tracking negativo */
-  line-height: 1.12;
-}
-.welcome-hi .oaze {
-  background: var(--surface-accent);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: var(--accent);
-  font-weight: 720;
-}
-.welcome-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.welcome-date {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  justify-content: flex-end;
-}
-.today-note {
-  font-size: 12px; color: var(--muted);
-  width: 100%; text-align: right; letter-spacing: .01em;
-}
-.period-picker {
-  display: flex; align-items: center; gap: 4px;
-  background: var(--plane-2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 3px;
-}
-.welcome-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-
-/* chip de perfil: identidade do que está sendo olhado */
-.profile-chip {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 4px 6px 4px 10px; border-radius: 999px;
-  background: var(--plane-2); border: 1px solid var(--border);
-  font-size: 12.5px; color: var(--ink-2);
-}
-.profile-chip select {
-  border: 0; background: transparent; color: var(--ink);
-  font: inherit; font-weight: 600; cursor: pointer; padding: 2px 4px;
-  max-width: 160px;
-}
-.profile-chip select:focus-visible { outline: 2px solid var(--accent); border-radius: 6px; }
-
-/* --- 6.2 cabeçalho: navegação sempre à vista --- */
-.topnav {
-  position: sticky; top: 0; z-index: 30;
-  display: flex; align-items: center; gap: 12px;
-  padding: 8px 12px; margin-bottom: 12px;
-  border-radius: var(--radius-lg);
-  /* N3 — camada de controle: o conteudo passa por tras */
+.topbar-gap { flex: 1; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 6px; border-radius: 999px;
   background: var(--n3);
   -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   border: 1px solid var(--glass-line);
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
+  font-size: 12.5px; color: var(--ink-2);
 }
-.brand { display: flex; align-items: center; gap: 9px; padding-left: 6px; flex: none; }
-.brand-mark {
-  width: 30px; height: 30px; flex: none;
-  display: grid; place-items: center; border-radius: 10px;
+.pill select {
+  border: 0; background: transparent; color: var(--ink);
+  font: inherit; font-size: 12.5px; font-weight: 560; cursor: pointer;
+  padding: 3px 2px; max-width: 132px;
+}
+.pill select:focus-visible { outline: 2px solid var(--accent); border-radius: 6px; }
+.pill-ico {
+  width: 26px; height: 26px; flex: none; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: transparent; color: var(--ink-2);
+  cursor: pointer; font-size: 13px;
+  transition: background .16s var(--ease-out);
+}
+.pill-ico:hover { background: var(--plane-2); color: var(--ink); }
+.pill-hoje {
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink-2);
+  padding: 4px 10px; font: inherit; font-size: 12px; font-weight: 560; cursor: pointer;
+}
+.pill-hoje:hover { background: var(--plane-2); color: var(--ink); }
+.pill-avatar {
+  width: 26px; height: 26px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; overflow: hidden;
   background: var(--surface-accent); color: #fff;
+  font-size: 11.5px; font-weight: 700;
 }
-.brand-name {
-  font-weight: 720; letter-spacing: .10em; font-size: 14px;
-  text-transform: uppercase;
+.pill-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.pill-btn {
+  cursor: pointer; padding: 7px 12px;
+  transition: transform .16s var(--ease-out), background .16s var(--ease-out);
 }
-.nav {
-  display: flex; gap: 2px; flex: 1; min-width: 0;
-  overflow-x: auto; scrollbar-width: none;
-}
-.nav::-webkit-scrollbar { display: none; }
-.nav-item {
-  display: inline-flex; align-items: center; gap: 8px; flex: none;
-  padding: 9px 13px; border: 0; border-radius: 12px;
-  background: transparent; cursor: pointer; white-space: nowrap;
-  color: var(--ink-2); font-size: 13px; font-weight: 550;
-  /* `color` NÃO entra na transição de propósito: quando o valor vem de uma
-     custom property que muda na troca de tema, o Chrome deixa a cor presa
-     no valor antigo. O retorno do hover mora no fundo; a cor acompanha o
-     tema na hora. */
-  transition: background .18s var(--ease-out), transform .12s var(--ease-out);
-}
-.nav-item:hover { background: var(--plane-2); color: var(--ink); }
-/* resposta no pointer-down, não na soltura */
-.nav-item:active { transform: scale(.97); }
-.nav-item.is-active {
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-  color: var(--ink); font-weight: 640;
-}
-.nav-ico { display: grid; place-items: center; flex: none; color: var(--muted); }
-.nav-item.is-active .nav-ico { color: var(--accent); }
-.nav-short { display: none; }        /* só na barra inferior do celular */
-.topnav-tools { display: flex; align-items: center; gap: 4px; flex: none; }
-
-/* --- 6.3 assistente, logo abaixo do cabeçalho --- */
-.ai-bar {
-  border-radius: var(--radius-lg);
-  padding: 14px 16px; margin-bottom: 16px;
-  display: grid; gap: 12px;
-}
-.ai-head { display: flex; align-items: center; gap: 12px; }
-.ai-read { min-width: 0; flex: 1; display: grid; gap: 2px; }
-.ai-read-line { font-size: 14px; font-weight: 580; letter-spacing: -.01em; }
-.ai-read-sub { font-size: 12.5px; color: var(--muted); }
-
-/* a esfera: o assistente como objeto, não como caixa de chat */
-.ai-orb {
-  width: 38px; height: 38px; flex: none; border-radius: 50%;
-  display: grid; place-items: center; position: relative;
-  background: var(--surface-accent); color: #fff;
-  box-shadow: 0 2px 10px -2px color-mix(in srgb, var(--accent) 60%, transparent),
-              inset 0 1px 0 rgba(255, 255, 255, .35);
-}
-/* halo pulsando devagar — sinal de "vivo", não de "carregando" */
-.ai-orb::before {
-  content: ''; position: absolute; inset: -5px; border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  animation: orb-breathe 4.5s ease-in-out infinite;
-}
-.ai-orb-core { display: grid; place-items: center; }
-@keyframes orb-breathe {
-  0%, 100% { transform: scale(1); opacity: .7; }
-  50%      { transform: scale(1.13); opacity: .15; }
-}
-.ai-bar .ai-examples { margin-top: 0; }
-.ai-chip.is-toggle { border-style: dashed; }
-
-/* ------------------------------------------------------------
-   6.4 · DESTAQUE — o número que manda na página
-   ------------------------------------------------------------ */
-.hero {
-  position: relative; overflow: hidden;
-  border-radius: var(--radius-lg);
-  padding: 30px 30px 26px;
-  background: var(--n1);
-  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
-  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
-  border: 1px solid var(--glass-line);
-  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
-  min-height: 190px;
-  display: grid; align-content: center;
-}
-.hero-face { position: relative; z-index: 1; display: grid; gap: 6px; max-width: 62%; }
-.hero-label {
-  font-size: 11.5px; font-weight: 640; letter-spacing: .09em;
-  text-transform: uppercase; color: var(--muted);
-}
-/* leading apertado e tracking negativo: texto grande pede os dois */
-.hero-value {
-  font-size: clamp(2.4rem, 6.2vw, 4.1rem);
-  font-weight: 660; line-height: 1.02; letter-spacing: -.035em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-.hero-sub { font-size: 13px; color: var(--muted); }
-.hero-delta { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-top: 4px; flex-wrap: wrap; }
-.hero-trend {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 3px 10px; border-radius: 999px; font-weight: 640; font-size: 12.5px;
-}
-.hero-trend.is-up   { background: color-mix(in srgb, var(--salvia) 16%, transparent); color: var(--good-text); }
-.hero-trend.is-down { background: color-mix(in srgb, var(--terracota) 12%, transparent); color: var(--critical); }
-.hero-trend.is-flat { background: var(--plane-2); color: var(--muted); }
-
-/* a curva vive no fundo do card, não em uma moldura própria */
-.hero-spark {
-  position: absolute; right: 0; bottom: 0;
-  width: 62%; height: 72%;
-  opacity: .5; pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%);
-  mask-image: linear-gradient(to right, transparent, #000 22%);
-}
-@media (max-width: 820px) {
-  .hero { padding: 22px 20px; min-height: 0; }
-  .hero-face { max-width: 100%; }
-  .hero-spark { width: 100%; height: 48%; opacity: .32; }
-}
-
-/* ------------------------------------------------------------
-   6.5 · AÇÃO PRINCIPAL FLUTUANTE
-   ------------------------------------------------------------ */
-.fab-wrap {
-  position: fixed; right: 22px; bottom: 22px; z-index: 90;
-  display: grid; justify-items: end; gap: 10px;
-}
-.fab {
-  width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+.pill-btn:hover { transform: translateY(-1px); }
+.pill-btn:active { transform: scale(.96); }
+.pill-btn[aria-expanded="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--n3)); color: var(--ink); }
+.pill-label { font-weight: 540; }
+.notif-count {
+  min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px;
   display: grid; place-items: center;
-  background: var(--surface-accent); color: #fff;
-  box-shadow: 0 6px 20px -6px color-mix(in srgb, var(--accent) 70%, transparent),
-              0 2px 6px rgba(20, 12, 6, .3),
-              inset 0 1px 0 rgba(255, 255, 255, .3);
-  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+  background: var(--critical); color: #fff;
+  font-size: 10.5px; font-weight: 700; line-height: 1;
 }
-.fab:hover { transform: translateY(-2px) scale(1.04); }
-.fab:active { transform: scale(.94); }
-.fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-/* o "+" gira para "×": o próprio botão diz que fechou */
-.fab-plus, .fab-plus::before {
-  content: ''; display: block; background: currentColor; border-radius: 2px;
-}
-.fab-plus { width: 20px; height: 2.5px; position: relative; transition: transform .34s var(--ease-out); }
-.fab-plus::before { position: absolute; inset: 0; transform: rotate(90deg); }
-.fab[aria-expanded="true"] .fab-plus { transform: rotate(135deg); }
 
-.fab-menu {
-  display: grid; gap: 6px; justify-items: stretch;
-  padding: 7px; border-radius: 18px;
-  background: var(--n3);
-  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
-  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+/* --- 6.4 popovers --- */
+.popover {
+  position: fixed; z-index: 95;
+  min-width: 252px; max-width: min(340px, calc(100vw - 32px));
+  max-height: min(62vh, 470px); overflow-y: auto;
+  border-radius: 18px; padding: 7px;
   border: 1px solid var(--glass-line);
   box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
-  transform-origin: bottom right;      /* nasce no botão que o abriu */
-  animation: fab-in .34s var(--ease-out);
+  transform-origin: top right;
+  animation: pop-in .26s var(--ease-out);
 }
-/* mola discreta: o menu cresce a partir do canto e assenta */
-@keyframes fab-in {
-  from { opacity: 0; transform: scale(.82) translateY(10px); filter: blur(5px); }
-  60%  { opacity: 1; transform: scale(1.02) translateY(0); filter: blur(0); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(.94) translateY(-8px); filter: blur(4px); }
 }
-.fab-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 14px 9px 10px; border: 0; border-radius: 12px;
+.popover-head { padding: 8px 10px 6px; }
+.popover-head h3 { font-size: 11px; font-weight: 660; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.pop-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 11px; border: 0; border-radius: 11px;
   background: transparent; color: var(--ink); cursor: pointer;
-  font-size: 13.5px; font-weight: 550; white-space: nowrap; text-align: left;
-  transition: background .16s var(--ease-out), transform .12s var(--ease-out);
+  font-size: 13px; font-weight: 520; text-align: left;
+  transition: background .16s var(--ease-out);
 }
-.fab-item:hover { background: var(--plane-2); }
-.fab-item:active { transform: scale(.97); }
-.fab-item-ico {
-  width: 28px; height: 28px; flex: none; border-radius: 9px;
-  display: grid; place-items: center;
-  background: var(--plane-2); color: var(--ink-2);
+.pop-item:hover { background: var(--plane-2); }
+.pop-ico { width: 24px; height: 24px; flex: none; display: grid; place-items: center; color: var(--muted); }
+.pop-sep { height: 1px; margin: 6px 8px; background: var(--glass-line); }
+.notif-item {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px;
+  padding: 9px 11px; border-radius: 11px; align-items: start;
+  cursor: pointer; border: 0; background: transparent; text-align: left; width: 100%;
+  transition: background .16s var(--ease-out);
 }
-.fab-item-ico.is-income  { background: color-mix(in srgb, var(--salvia) 22%, transparent); color: var(--income); }
-.fab-item-ico.is-expense { background: color-mix(in srgb, var(--terracota) 16%, transparent); color: var(--expense); }
-.fab-item-ico.is-invest  { background: color-mix(in srgb, var(--invest) 16%, transparent); color: var(--invest); }
+.notif-item:hover { background: var(--plane-2); }
+.notif-item .t { font-size: 13px; font-weight: 560; color: var(--ink); display: block; }
+.notif-item .s { font-size: 12px; color: var(--muted); display: block; }
+.notif-item .ico { display: grid; place-items: center; }
+.notif-item.is-alert .ico { color: var(--critical); }
+.notif-item.is-warn .ico  { color: var(--warning-text); }
+.notif-item.is-info .ico  { color: var(--accent); }
 
-@media (max-width: 560px) { .fab-wrap { right: 16px; bottom: 16px; } }
-@supports (padding: max(0px)) {
-  .fab-wrap { bottom: max(22px, calc(env(safe-area-inset-bottom) + 12px)); }
+/* --- 6.5 busca --- */
+.overlay { position: fixed; inset: 0; z-index: 110; display: grid; place-items: start center; padding: 12vh 16px 16px; }
+.overlay-scrim { position: absolute; inset: 0; background: rgba(6, 18, 26, .5); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.search-box {
+  position: relative; width: min(620px, 100%);
+  border-radius: var(--radius-lg); overflow: hidden;
+  animation: materialize .26s var(--ease-out);
 }
+.search-field { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--glass-line); }
+.search-field > [data-ico] { color: var(--muted); display: grid; place-items: center; }
+.search-field input {
+  flex: 1; border: 0; background: transparent; color: var(--ink);
+  font: inherit; font-size: 15px; outline: none; min-width: 0;
+}
+.search-results { max-height: min(52vh, 420px); overflow-y: auto; padding: 6px; }
+.search-group { font-size: 10.5px; font-weight: 660; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding: 10px 10px 4px; }
+.search-item {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%;
+  padding: 9px 10px; border: 0; border-radius: 11px; background: transparent;
+  color: var(--ink); cursor: pointer; text-align: left; font: inherit;
+}
+.search-item:hover { background: var(--plane-2); }
+.search-item .t { font-size: 13.5px; font-weight: 540; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+.search-item .s { font-size: 11.5px; color: var(--muted); display: block; }
+.search-item .v { font-size: 13px; font-weight: 620; font-variant-numeric: tabular-nums; }
 
 .page-head { margin-bottom: 4px; }
-.page-head h1 { font-size: 19px; font-weight: 660; letter-spacing: -.02em; }
-.page-sub { font-size: 12.5px; color: var(--muted); }
+.page-hello { font-size: 13px; color: var(--muted); }
+.page-head h1 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 620; letter-spacing: -.026em; line-height: 1.12; }
+.page-sub { font-size: 13px; color: var(--muted); }
 
-.content { padding: 0 0 8px; display: grid; gap: 16px; align-content: start; flex: 1; }
-.page { display: none; gap: 16px; grid-template-columns: 1fr; }
+.content { padding: 0 0 8px; display: grid; gap: 20px; align-content: start; flex: 1; }
+.page { display: none; gap: 20px; grid-template-columns: 1fr; }
 .page.is-active { display: grid; }
 
 .app-foot {
-  padding: 16px 4px 24px; font-size: 12px; color: var(--muted);
+  padding: 22px 2px 28px; font-size: 12px; color: var(--muted);
   display: flex; gap: 8px; flex-wrap: wrap;
 }
 .dot-sep { opacity: .5; }
@@ -839,7 +740,7 @@ select.input { cursor: pointer; }
    ------------------------------------------------------------ */
 .cat-tiles { display: grid; gap: 8px; margin-top: 16px; }
 .cat-tile {
-  display: grid; grid-template-columns: 30px 1fr auto; gap: 11px; align-items: center;
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 11px; align-items: center;
   padding: 10px 12px; border-radius: 14px;
   border: 1px solid transparent; background: var(--plane-2);
   cursor: default; position: relative;
@@ -872,7 +773,7 @@ select.input { cursor: pointer; }
 .cat-tile-pct { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 /* o detalhe só aparece quando o olho já está ali */
 .cat-tile-split {
-  grid-column: 2 / -1; font-size: 11.5px; color: var(--muted);
+  grid-column: 1 / -1; font-size: 11.5px; color: var(--muted);
   display: flex; gap: 10px; flex-wrap: wrap;
   max-height: 0; opacity: 0; overflow: hidden;
   transition: max-height .24s var(--ease-out), opacity .18s var(--ease-out);
@@ -1350,84 +1251,92 @@ select.input { cursor: pointer; }
 
 /* ------------------------------------------------------------
    18 · RESPONSIVO
+   ------------------------------------------------------------
+   Três formas, não uma encolhendo:
+
+     desktop — ilha lateral com rótulo, painel amplo;
+     tablet  — a ilha vira coluna de ícones, o conteúdo cresce;
+     celular — a ilha desce e vira barra inferior, com cinco
+               destinos. O polegar alcança a base, não o topo.
    ------------------------------------------------------------ */
-@media (max-width: 1180px) {
+
+/* ---- tablet: sidebar reduzida a ícones ---- */
+@media (max-width: 1240px) {
+  :root { --sidebar-w: 76px; }
+  .sidebar { padding: 14px 10px 10px; align-items: center; }
+  .brand { padding: 2px 0 12px; }
+  .brand-name { display: none; }
+  .nav { width: 100%; }
+  .nav-group { display: none; }          /* sem largura para rótulo de grupo */
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .nav-long, .nav-short { display: none; }
+  .sidebar-foot { width: 100%; }
+  .main { padding: 16px 18px 0; }
+
   .kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .proj-layout { grid-template-columns: 1fr; }
-  .grid-wide-left { grid-template-columns: 1fr; }
+  .grid-wide-left, .grid-wide-right, .grid-hero { grid-template-columns: 1fr; }
 }
-@media (max-width: 940px) {
+@media (max-width: 980px) {
   .grid-2 { grid-template-columns: 1fr; }
   .import-grid { grid-template-columns: 1fr; }
   .kpi-row, .kpi-row-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .welcome-date { justify-content: flex-start; }
-  .today-note { text-align: left; }
+  .goal-grid { grid-template-columns: 1fr; }
 }
-/* ------------------------------------------------------------
-   BARRA INFERIOR (celular)
-   ------------------------------------------------------------
-   A mesma <nav> do cabeçalho passa a flutuar embaixo. Não é uma
-   versão comprimida do desktop: no celular o polegar alcança a
-   base da tela, não o topo — e é lá que a navegação tem de estar.
 
-   Continua sendo uma ilha (recuada das bordas, cantos redondos),
-   não uma faixa colada na borda inferior.
-   ------------------------------------------------------------ */
+/* ---- celular: a ilha desce para a base ---- */
 @media (max-width: 820px) {
-  .app { padding: 0 14px; }
-  .welcome { padding: 14px 16px; }
+  :root { --sidebar-w: 0px; }
+  .main { margin-left: 0; padding: 12px 14px 0; }
   .form-grid { grid-template-columns: 1fr; }
+  .topbar { top: 8px; margin-bottom: 16px; }
+  .pill-label { display: none; }
+  .pill select { max-width: 104px; }
 
-  /* o cabeçalho colapsa: sobra só a <nav>, que sai do fluxo */
-  .topnav {
-    position: static; padding: 0; margin: 0; border: 0;
-    background: none; box-shadow: none;
-    -webkit-backdrop-filter: none; backdrop-filter: none;
+  .sidebar {
+    left: 12px; right: 12px; width: auto;
+    top: auto; bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    flex-direction: row; align-items: center; gap: 0;
+    padding: 5px 6px; border-radius: 22px; z-index: 80;
   }
-  .brand { display: none; }   /* a marca já está no painel de boas-vindas */
+  .brand, .sidebar-foot, .nav-group { display: none; }
 
   .nav {
-    position: fixed; z-index: 80;
-    left: 12px; right: 12px;
-    bottom: max(12px, env(safe-area-inset-bottom, 0px));
-    display: flex; justify-content: space-between; gap: 1px; overflow: visible;
-    padding: 5px 6px; border-radius: 22px;
-    background: var(--n3);
-    -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
-    backdrop-filter: blur(var(--n3-blur)) saturate(180%);
-    border: 1px solid var(--glass-line);
-    box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+    flex-direction: row; justify-content: space-between;
+    gap: 1px; width: 100%; overflow: visible;
   }
-  /* colunas do tamanho do conteudo, nao cinco quintos iguais: com
-     largura forcada "Lancamentos" nao cabe em tela de 320px, e cortar
-     o rotulo e pior do que uma coluna um pouco mais larga que a outra */
-  .nav-item {
+  /* Cinco destinos, como pede o brief. Os demais moram em "Mais"
+     (Configurações), que é a porta para o resto do sistema. */
+  .nav-item { display: none; }
+  .nav-item[data-page="home"],
+  .nav-item[data-page="transactions"],
+  .nav-item[data-page="budget"],
+  .nav-item[data-page="uglez"],
+  .nav-item[data-page="settings"] {
+    display: flex;
     flex: 0 1 auto; min-width: 0;
     flex-direction: column; gap: 3px;
-    padding: 8px 7px; border-radius: 16px;
+    padding: 8px 7px; border-radius: 16px; justify-content: center;
   }
   .nav-long { display: none; }
   .nav-short {
-    /* 10px e sem tracking: e o que faz "Lancamentos" caber sem reticencias */
     display: block; font-size: 10px; letter-spacing: 0;
     max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .nav-ico svg { width: 21px; height: 21px; }
 
-  /* espaço para o conteúdo não terminar embaixo da barra */
   .app-foot { padding-bottom: 104px; }
+  .fab-wrap { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+  .cal-grid { gap: 3px; }
+  .score-body { flex-direction: column; align-items: flex-start; }
 }
 
-/* Telas de 320px (iPhone SE e similares): com o passo anterior o flex
-   encolhe os rótulos e quatro deles ganham reticências. Aperta o
-   respiro e o corpo do texto — o rótulo inteiro vale mais. */
+/* iPhone SE e similares: aperta o respiro para o rótulo caber inteiro. */
 @media (max-width: 360px) {
-  .nav { left: 8px; right: 8px; padding: 5px 4px; }
-  .nav-item { padding: 8px 4px; }
+  .sidebar { left: 8px; right: 8px; padding: 5px 4px; }
+  .nav-item[data-page] { padding: 8px 4px; }
   .nav-short { font-size: 9.5px; }
   .nav-ico svg { width: 20px; height: 20px; }
-  /* e o "+" sobe para não brigar com ela */
-  .fab-wrap { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (max-width: 560px) {
   .kpi-row, .kpi-row-3, .kpi-row-4 { grid-template-columns: 1fr; }
@@ -1436,6 +1345,9 @@ select.input { cursor: pointer; }
   .ai-ask { grid-template-columns: 1fr; }
   .modal { width: 100%; max-height: 92vh; }
   .wallet-deck .wallet-card:not(:first-child) { margin-left: -110px; }
+  .overlay { padding: 8vh 12px 12px; }
+  .set-row { grid-template-columns: 1fr; gap: 8px; }
+  .set-ctl { justify-content: flex-start; }
 }
 
 /* ------------------------------------------------------------
@@ -1448,40 +1360,35 @@ select.input { cursor: pointer; }
   .tx-actions .icon-btn { width: 32px; height: 32px; }
   .btn { padding: 10px 15px; }
   .btn-sm { padding: 9px 13px; }
+  .cat-tile-split { max-height: 24px; opacity: 1; }
 }
-/* Alvo maior no cabeçalho só onde ele ainda é horizontal: na barra
-   inferior a <nav> já divide a largura em cinco, e mais padding aqui
-   estouraria as colunas. */
+/* Alvo maior só onde a nav ainda é vertical: na barra inferior o
+   padding extra estouraria as cinco colunas. */
 @media (hover: none) and (min-width: 821px) {
-  .nav-item { padding: 11px 14px; }
+  .nav-item { padding: 11px 12px; }
 }
 
 /* O Safari dá zoom ao focar campos com fonte < 16px. */
 @media (max-width: 820px) {
   .input, .input-sm, select.input, textarea.input, .textarea, .textarea-plain,
-  .profile-chip select { font-size: 16px; }
-  .period-picker .input { padding: 7px 6px; }
+  .pill select, .search-field input { font-size: 16px; }
 }
 
 /* Notch, ilha dinâmica e barra inferior do iPhone */
 @supports (padding: max(0px)) {
-  .welcome { margin-top: max(18px, calc(env(safe-area-inset-top) + 8px)); }
-  .app-foot { padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px)); }
-  /* no celular a barra inferior flutua por cima: o conteudo precisa
-     terminar acima dela, senao a ultima linha fica inalcancavel */
-  @media (max-width: 820px) {
-    .app-foot { padding-bottom: max(112px, calc(env(safe-area-inset-bottom) + 100px)); }
-  }
+  .topbar { padding-top: max(0px, env(safe-area-inset-top)); }
   .toasts { bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px)); }
   .modal { max-height: calc(88vh - env(safe-area-inset-bottom)); }
   @media (max-width: 820px) {
-    .app { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+    .main { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+    .app-foot { padding-bottom: max(112px, calc(env(safe-area-inset-bottom) + 100px)); }
   }
 }
 
 @media print {
-  .sandstorm, .topnav, .ai-bar, .welcome-tools, .welcome-date,
+  .ambient, .sidebar, .topbar, .fab-wrap, .uglez-panel,
   .quick-actions, .toolbar, .tx-actions, .row-actions { display: none !important; }
+  .main { margin-left: 0; }
   .card, .kpi { break-inside: avoid; box-shadow: none; backdrop-filter: none; background: #fff; }
   body { background: #fff; }
 }
@@ -1494,12 +1401,11 @@ select.input { cursor: pointer; }
     animation-iteration-count: 1 !important;
     transition-duration: .12s !important;
   }
-  .wallet-card:hover, .wallet-card:focus-visible,
-  .wallet-card.is-focused { transform: none; }
+  .wallet-card:hover, .wallet-card:focus-visible, .wallet-card.is-focused { transform: none; }
   .btn:active, .icon-btn:active, .nav-item:active { transform: none; }
-  .cat-tile:hover, .card:hover, .fab:hover, .fab:active { transform: none; }
-  .ai-orb::before { animation: none; opacity: .4; }
-  /* o detalhe da categoria continua aparecendo — o que sai é o deslocamento */
+  .cat-tile:hover, .card:hover, .fab:hover, .fab:active,
+  .due-item:hover, .pill-btn:hover { transform: none; }
+  .uglez-orb::before { animation: none; opacity: .4; }
   .cat-tile-split { transition: opacity .12s; }
 }
 
@@ -1541,3 +1447,459 @@ select.input { cursor: pointer; }
 a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
 }
+
+/* ============================================================
+   21 · COMPONENTES OAZE 1.0
+   ============================================================ */
+
+/* --- grade assimétrica: a largura diz o peso da peça --- */
+.grid-hero       { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); }
+.grid-wide-left  { grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); }
+.grid-wide-right { grid-template-columns: minmax(0, 1fr) minmax(0, 1.62fr); }
+
+/* --- destaque: patrimônio líquido --- */
+.hero {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-lg); padding: 30px;
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  backdrop-filter: blur(var(--n1-blur)) saturate(115%);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  min-height: 200px; display: grid; align-content: center;
+}
+.hero-face { position: relative; z-index: 1; display: grid; gap: 6px; max-width: 66%; }
+.hero-label { font-size: 11.5px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+/* texto grande pede leading apertado e tracking negativo */
+.hero-value {
+  font-size: clamp(2.3rem, 5.4vw, 3.9rem);
+  font-weight: 650; line-height: 1.02; letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.hero-sub { font-size: 13px; color: var(--muted); }
+.hero-delta { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-top: 4px; flex-wrap: wrap; }
+.hero-trend {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px; font-weight: 640; font-size: 12.5px;
+}
+.hero-trend.is-up   { background: color-mix(in srgb, var(--oasis) 22%, transparent); color: var(--good-text); }
+.hero-trend.is-down { background: color-mix(in srgb, var(--terracotta) 18%, transparent); color: var(--critical); }
+.hero-trend.is-flat { background: var(--plane-2); color: var(--muted); }
+.hero-spark {
+  position: absolute; right: 0; bottom: 0; width: 58%; height: 70%;
+  opacity: .48; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24%);
+  mask-image: linear-gradient(to right, transparent, #000 24%);
+}
+@media (max-width: 820px) {
+  .hero { padding: 22px 20px; min-height: 0; }
+  .hero-face { max-width: 100%; }
+  .hero-spark { width: 100%; height: 46%; opacity: .3; }
+}
+
+/* --- OAZE Score --- */
+.score-card { display: grid; align-content: start; }
+.score-body { display: flex; align-items: center; gap: 18px; }
+.score-ring { position: relative; flex: none; display: grid; place-items: center; }
+.score-ring svg { transform: rotate(-90deg); }   /* começa no topo, como relógio */
+.ring-bg { fill: none; stroke: var(--plane-2); stroke-width: 7; }
+.ring-fg {
+  fill: none; stroke-width: 7; stroke-linecap: round;
+  transition: stroke-dashoffset .8s var(--ease-out);
+}
+.score-num { position: absolute; display: grid; justify-items: center; gap: 0; }
+.score-num strong { font-size: 27px; font-weight: 680; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.score-faixa { font-size: 10.5px; font-weight: 660; letter-spacing: .05em; text-transform: uppercase; }
+.score-parts { display: grid; gap: 5px; flex: 1; min-width: 0; }
+.score-part { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12px; }
+.score-dot { display: grid; place-items: center; color: var(--warning-text); }
+.score-part.is-ok .score-dot { color: var(--good-text); }
+.score-part-name { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.score-part-pts { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* --- UGLEZ: identidade própria em terracota e âmbar --- */
+.uglez-panel {
+  border-radius: var(--radius-lg); padding: 16px 18px;
+  background: var(--n3);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  border: 1px solid color-mix(in srgb, var(--terracotta) 26%, var(--glass-line));
+  box-shadow: var(--uglez-glow);
+  display: grid; gap: 12px;
+}
+.uglez-head { display: flex; align-items: center; gap: 13px; }
+.uglez-read { min-width: 0; flex: 1; display: grid; gap: 2px; }
+.uglez-name { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.uglez-line { font-size: 14.5px; font-weight: 580; letter-spacing: -.01em; }
+.uglez-sub { font-size: 12.5px; color: var(--muted); }
+.uglez-orb {
+  width: 40px; height: 40px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; position: relative;
+  background: var(--surface-accent); color: #fff;
+  box-shadow: var(--uglez-glow), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.uglez-orb.is-big { width: 56px; height: 56px; }
+/* halo respirando devagar: sinal de "vivo", não de "carregando" */
+.uglez-orb::before {
+  content: ''; position: absolute; inset: -5px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--terracotta) 50%, transparent);
+  animation: orb-breathe 4.5s ease-in-out infinite;
+}
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); opacity: .7; }
+  50%      { transform: scale(1.14); opacity: .12; }
+}
+.uglez-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.uglez-hero { display: flex; align-items: center; gap: 16px; padding: 4px 2px 0; }
+.uglez-hero-name { font-size: 22px; font-weight: 680; letter-spacing: .1em; }
+.uglez-hero-sub { font-size: 13.5px; color: var(--muted); }
+
+.insight-card {
+  border-radius: var(--radius); padding: 16px;
+  background: var(--n1);
+  -webkit-backdrop-filter: blur(var(--n1-blur));
+  backdrop-filter: blur(var(--n1-blur));
+  border: 1px solid var(--glass-line);
+  border-left: 3px solid var(--muted);
+  box-shadow: var(--shadow);
+  display: grid; gap: 5px; align-content: start;
+}
+.insight-card.is-atencao     { border-left-color: var(--warning); }
+.insight-card.is-risco       { border-left-color: var(--critical); }
+.insight-card.is-oportunidade{ border-left-color: var(--good); }
+.insight-card.is-previsao    { border-left-color: var(--accent); }
+.insight-head { display: flex; align-items: center; gap: 7px; }
+.insight-ico { display: grid; place-items: center; color: var(--muted); }
+.insight-card.is-atencao .insight-ico     { color: var(--warning-text); }
+.insight-card.is-risco .insight-ico       { color: var(--critical); }
+.insight-card.is-oportunidade .insight-ico{ color: var(--good-text); }
+.insight-card.is-previsao .insight-ico    { color: var(--accent); }
+.insight-tag { font-size: 10px; font-weight: 680; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.insight-title { font-size: 13px; font-weight: 640; }
+.insight-line { font-size: 16px; font-weight: 620; letter-spacing: -.015em; }
+.insight-detail { font-size: 12.5px; color: var(--muted); }
+.insight-card .btn { justify-self: start; margin-top: 4px; }
+
+/* --- orçamento --- */
+.bud-row {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 13px; align-items: center;
+  padding: 12px; border-radius: 14px; border: 1px solid transparent;
+  transition: background .16s var(--ease-out);
+}
+.bud-row:hover { background: var(--plane-2); }
+.bud-row.is-near { background: color-mix(in srgb, var(--warning) 8%, transparent); }
+.bud-row.is-over { background: color-mix(in srgb, var(--critical) 9%, transparent); }
+.bud-main { min-width: 0; display: grid; gap: 6px; }
+.bud-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.bud-name { font-size: 13.5px; font-weight: 570; }
+.bud-val { margin-left: auto; font-size: 13px; font-variant-numeric: tabular-nums; }
+.bud-bar { display: block; height: 6px; border-radius: 3px; background: var(--plane-2); overflow: hidden; }
+.bud-bar > i { display: block; height: 100%; border-radius: 3px; transition: width .5s var(--ease-out); }
+.bud-foot { display: flex; justify-content: space-between; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+
+/* --- metas --- */
+.goal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.goal-card { display: grid; gap: 13px; align-content: start; }
+.goal-card.is-done { border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.goal-head { display: flex; align-items: center; gap: 11px; }
+.goal-id { min-width: 0; flex: 1; }
+.goal-name { font-size: 14.5px; font-weight: 620; letter-spacing: -.01em; }
+.goal-sub { font-size: 12px; color: var(--muted); }
+.goal-body { display: flex; align-items: center; gap: 16px; }
+.goal-ring { position: relative; flex: none; display: grid; place-items: center; }
+.goal-ring svg { transform: rotate(-90deg); }
+.goal-ring .ring-bg { stroke-width: 5; }
+.goal-ring .ring-fg { stroke-width: 5; }
+.goal-ring-num { position: absolute; font-size: 12px; font-weight: 680; font-variant-numeric: tabular-nums; }
+.goal-figs { min-width: 0; }
+.goal-saved { font-size: 23px; font-weight: 660; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
+.goal-left { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
+.goal-pace {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: var(--muted);
+  padding: 8px 10px; border-radius: 10px; background: var(--plane-2);
+}
+.goal-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+/* --- recorrências --- */
+.rec-list { display: grid; gap: 4px; }
+.rec-item {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; gap: 12px; align-items: center;
+  padding: 11px 12px; border-radius: 13px;
+  transition: background .16s var(--ease-out);
+}
+.rec-item:hover { background: var(--plane-2); }
+.rec-main { min-width: 0; display: grid; gap: 3px; }
+.rec-name { font-size: 13.5px; font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-meta { font-size: 11.5px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.rec-nums { text-align: right; display: grid; gap: 1px; }
+.rec-val { font-size: 13.5px; font-weight: 640; font-variant-numeric: tabular-nums; }
+.rec-year { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rec-total { margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+
+/* --- calendário --- */
+.cal-title { font-size: 16px; font-weight: 640; letter-spacing: -.015em; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal-dow {
+  text-align: center; font-size: 10.5px; font-weight: 660; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--muted); padding-bottom: 5px;
+}
+.cal-cell {
+  min-height: 74px; border: 1px solid var(--glass-line); border-radius: 12px;
+  background: transparent; cursor: pointer; padding: 7px 8px;
+  display: grid; align-content: start; gap: 4px; text-align: left;
+  color: var(--ink); font: inherit;
+  transition: background .16s var(--ease-out), border-color .16s var(--ease-out);
+}
+.cal-cell:hover { background: var(--plane-2); }
+.cal-cell.is-empty { border: 0; cursor: default; background: none; }
+.cal-cell.is-quiet { opacity: .6; }
+.cal-cell.is-today { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.cal-cell.is-sel { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--accent); }
+.cal-num { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cal-cell.is-today .cal-num { color: var(--accent); }
+.cal-dots { display: flex; gap: 3px; }
+.cal-dots i, .legend-icons i.dot-in, .legend-icons i.dot-out, .legend-icons i.dot-due {
+  width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+}
+.dot-in  { background: var(--income); }
+.dot-out { background: var(--expense); }
+.dot-due { background: var(--accent); }
+.cal-sum { font-size: 10.5px; font-variant-numeric: tabular-nums; font-weight: 600; }
+.cal-kind {
+  width: 28px; height: 28px; border-radius: 9px; flex: none;
+  display: grid; place-items: center; background: var(--plane-2); color: var(--ink-2);
+}
+.cal-kind.is-in  { background: color-mix(in srgb, var(--oasis) 20%, transparent); color: var(--income); }
+.cal-kind.is-out { background: color-mix(in srgb, var(--terracotta) 16%, transparent); color: var(--expense); }
+.cal-kind.is-due { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+
+/* --- configurações --- */
+.set-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid var(--glass-line);
+}
+.set-row:last-child { border-bottom: 0; }
+.set-id { min-width: 0; }
+.set-title { font-size: 13.5px; font-weight: 570; }
+.set-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.set-ctl { display: flex; justify-content: flex-end; }
+
+/* --- estado vazio: sempre diz o que fazer, nunca só "nada aqui" --- */
+.empty-state {
+  display: grid; justify-items: center; gap: 7px; text-align: center;
+  padding: 34px 20px;
+}
+.empty-ico {
+  width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center;
+  background: var(--plane-2); color: var(--muted); margin-bottom: 4px;
+}
+.empty-title { font-size: 14.5px; font-weight: 620; }
+.empty-sub { font-size: 12.5px; color: var(--muted); max-width: 380px; }
+.empty-state .btn { margin-top: 8px; }
+
+/* --- pilha de números (resumo do mês, investimentos) --- */
+.fig-stack { display: grid; gap: 16px; }
+.fig-big { display: grid; gap: 2px; }
+.fig-big .k { font-size: 11.5px; font-weight: 630; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.fig-big .v { font-size: 29px; font-weight: 650; letter-spacing: -.028em; font-variant-numeric: tabular-nums; }
+.fig-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 12px; }
+
+/* --- próximos eventos --- */
+.due-list { display: grid; gap: 4px; }
+.due-item {
+  display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  padding: 9px 10px; border-radius: 12px; cursor: pointer; border: 1px solid transparent;
+  transition: background .16s var(--ease-out), transform .16s var(--ease-out);
+}
+.due-item:hover, .due-item:focus-visible { background: var(--plane-2); transform: translateY(-1px); }
+.due-day { display: grid; place-items: center; padding: 5px 0; border-radius: 10px; background: var(--plane-2); }
+.due-day .d { font-size: 15px; font-weight: 660; line-height: 1; font-variant-numeric: tabular-nums; }
+.due-day .m { font-size: 9.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+/* atrasado não fica só vermelho: o bloco do dia inteiro muda */
+.due-item.is-late .due-day { background: color-mix(in srgb, var(--critical) 18%, transparent); }
+.due-item.is-late .due-day .d,
+.due-item.is-late .due-day .m { color: var(--critical); }
+.due-id { min-width: 0; display: grid; gap: 1px; }
+.due-name { font-size: 13.5px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.due-sub { font-size: 11.5px; color: var(--muted); }
+.due-val { font-size: 13.5px; font-weight: 640; font-variant-numeric: tabular-nums; }
+
+/* --- categorias como peças que respondem --- */
+.cat-tiles { display: grid; gap: 8px; margin-top: 16px; }
+.cat-tile {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 11px; align-items: center;
+  padding: 10px 12px; border-radius: 14px;
+  border: 1px solid transparent; background: var(--plane-2);
+  transition: transform .22s var(--ease-out), box-shadow .22s var(--ease-out),
+              border-color .22s var(--ease-out), background .22s var(--ease-out);
+}
+.cat-tile:hover, .cat-tile:focus-visible {
+  transform: translateY(-2px); background: var(--n1);
+  border-color: var(--glass-line); box-shadow: var(--shadow);
+}
+.cat-tile-id { min-width: 0; display: grid; gap: 3px; }
+.cat-tile-name { font-size: 13px; font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cat-tile-bar { height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 8%, transparent); overflow: hidden; display: flex; gap: 2px; }
+.cat-tile-bar > i { display: block; height: 100%; border-radius: 3px; }
+.cat-tile-bar > i.is-credit {
+  background-image: repeating-linear-gradient(135deg,
+    rgba(255, 255, 255, .55) 0 2px, rgba(255, 255, 255, 0) 2px 5px);
+}
+.cat-tile-num { text-align: right; display: grid; gap: 1px; }
+.cat-tile-val { font-size: 13px; font-weight: 640; font-variant-numeric: tabular-nums; }
+.cat-tile-pct { font-size: 11px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.cat-tile-split {
+  grid-column: 1 / -1; font-size: 11.5px; color: var(--muted);
+  display: flex; gap: 10px; flex-wrap: wrap;
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height .24s var(--ease-out), opacity .18s var(--ease-out);
+}
+.cat-tile:hover .cat-tile-split, .cat-tile:focus-within .cat-tile-split { max-height: 24px; opacity: 1; }
+
+/* --- microinterações: 1–3px, nunca mais --- */
+.card { transition: transform .26s var(--ease-out), box-shadow .26s var(--ease-out); }
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge); }
+/* card de gráfico não sobe: mover a plotagem sob o cursor atrapalha a leitura */
+.card:has(.chart-box):hover { transform: none; }
+.kpi { transition: transform .26s var(--ease-out), box-shadow .26s var(--ease-out); }
+.kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge); }
+
+@keyframes num-in { from { opacity: 0; transform: translateY(6px); } }
+.num-anim { animation: num-in .34s var(--ease-out); }
+
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
+}
+
+/* ------------------------------------------------------------
+   22 · AÇÃO PRINCIPAL FLUTUANTE
+   ------------------------------------------------------------
+   Os quatro lançamentos, em qualquer página. O menu nasce no
+   canto do botão que o abriu (transform-origin) e some pelo
+   mesmo caminho — fica claro de onde ele veio.
+   ------------------------------------------------------------ */
+.fab-wrap {
+  position: fixed; right: 22px; bottom: 22px; z-index: 90;
+  display: grid; justify-items: end; gap: 10px;
+}
+.fab {
+  width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: var(--surface-accent); color: #fff;
+  box-shadow: var(--uglez-glow), 0 6px 20px -6px rgba(20, 12, 6, .4),
+              inset 0 1px 0 rgba(255, 255, 255, .3);
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.fab:hover { transform: translateY(-2px) scale(1.04); }
+.fab:active { transform: scale(.94); }
+.fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* o "+" gira para "×": o próprio botão diz que fechou */
+.fab-plus, .fab-plus::before {
+  content: ''; display: block; background: currentColor; border-radius: 2px;
+}
+.fab-plus { width: 20px; height: 2.5px; position: relative; transition: transform .34s var(--ease-out); }
+.fab-plus::before { position: absolute; inset: 0; transform: rotate(90deg); }
+.fab[aria-expanded="true"] .fab-plus { transform: rotate(135deg); }
+
+.fab-menu {
+  display: grid; gap: 6px; justify-items: stretch;
+  padding: 7px; border-radius: 18px;
+  background: var(--n3);
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  transform-origin: bottom right;
+  animation: fab-in .34s var(--ease-out);
+}
+/* mola discreta: o menu cresce a partir do canto e assenta */
+@keyframes fab-in {
+  from { opacity: 0; transform: scale(.82) translateY(10px); filter: blur(5px); }
+  60%  { opacity: 1; transform: scale(1.02) translateY(0); filter: blur(0); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.fab-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px 9px 10px; border: 0; border-radius: 12px;
+  background: transparent; color: var(--ink); cursor: pointer;
+  font-size: 13.5px; font-weight: 550; white-space: nowrap; text-align: left;
+  transition: background .16s var(--ease-out), transform .12s var(--ease-out);
+}
+.fab-item:hover { background: var(--plane-2); }
+.fab-item:active { transform: scale(.97); }
+.fab-item-ico {
+  width: 28px; height: 28px; flex: none; border-radius: 9px;
+  display: grid; place-items: center;
+  background: var(--plane-2); color: var(--ink-2);
+}
+.fab-item-ico.is-income  { background: color-mix(in srgb, var(--oasis) 22%, transparent); color: var(--income); }
+.fab-item-ico.is-expense { background: color-mix(in srgb, var(--terracotta) 18%, transparent); color: var(--expense); }
+.fab-item-ico.is-invest  { background: color-mix(in srgb, var(--invest) 18%, transparent); color: var(--invest); }
+
+@media (max-width: 560px) { .fab-wrap { right: 16px; } }
+
+/* O bloco 22 vem depois do responsivo, então o ajuste do celular
+   precisa ser repetido aqui — senão `bottom: 22px` da regra base
+   ganha por ordem de origem e o botão encosta na barra inferior. */
+@media (max-width: 820px) {
+  .fab-wrap { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Itens de grid só encolhem abaixo do min-content com min-width: 0.
+   Sem isto, o ellipsis nunca entra em ação — o item empurra a track. */
+.cat-tile-id, .cat-tile-num, .due-id, .rec-main, .rec-nums,
+.bud-main, .set-id, .search-item > span, .notif-item > span:last-child { min-width: 0; }
+.cat-tile-num, .due-val, .rec-nums { white-space: nowrap; }
+
+/* ============================================================
+   23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
+   ------------------------------------------------------------
+   As seções 21 e 22 foram acrescentadas depois do bloco 18, e
+   por ordem de origem elas reativavam as grades de duas colunas
+   no celular. Estas regras fecham o arquivo justamente para
+   ganhar essa disputa. Se acrescentar CSS novo, acrescente
+   ANTES daqui.
+   ============================================================ */
+@media (max-width: 1240px) {
+  .grid-hero, .grid-wide-left, .grid-wide-right { grid-template-columns: 1fr; }
+}
+@media (max-width: 980px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .goal-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  .fab-wrap { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+  .score-body { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+@media (max-width: 560px) {
+  .kpi-row, .kpi-row-3, .kpi-row-4 { grid-template-columns: 1fr; }
+  .set-row { grid-template-columns: 1fr; gap: 8px; }
+  .set-ctl { justify-content: flex-start; }
+}
+
+@media (max-width: 560px) {
+  /* Em 375px os dois botões de ação (38px cada, alvo de toque) comem a
+     largura do nome e "Plano de saúde" ganhava reticências. As ações
+     descem para uma linha própria — espaço é de graça na vertical. */
+  .rec-item { grid-template-columns: 34px minmax(0, 1fr) auto; }
+  .rec-item .row-actions { grid-column: 2 / -1; justify-content: flex-start; }
+}
+
+/* Mesmo caso da lista de recorrências: a track flexível precisa poder
+   encolher, e no celular as ações ganham linha própria. */
+.tx-item { grid-template-columns: auto auto minmax(0, 1fr) auto auto; }
+.tx-main { min-width: 0; }
+@media (max-width: 560px) {
+  .tx-item { grid-template-columns: auto auto minmax(0, 1fr) auto; }
+  .tx-item .tx-actions { grid-column: 3 / -1; justify-content: flex-start; }
+}
+
+/* A marca é o nome do produto: merece a tinta principal, e em
+   --ink-2 ela media 4,41:1 sobre o vidro da sidebar no escuro. */
+.brand-name { color: var(--ink); }
+
+/* Branco a 82% sobre a ponta clara do gradiente Terracota dava 4,29:1.
+   O subtítulo do cartão é texto pequeno: precisa dos 4,5. */
+.cc-sub { color: rgba(255, 255, 255, .94); }
+.cc-holder .k, .cc-invoice .k { color: rgba(255, 255, 255, .94); }

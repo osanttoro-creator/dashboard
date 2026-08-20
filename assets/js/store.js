@@ -12,6 +12,8 @@
        transactions:[{...}]  // ver normalizeTx()
        investments: [{id,name,type,amount,date,rate,currentValue,notes}]
        invoices:    {'cardId|YYYY-MM': {paid,paidAt,accountId,amount}}
+       budgets:     {categoriaId: limiteMensal}
+       goals:       [{id,name,target,saved,deadline,color,icon,accountId}]
      }]
    }
    ============================================================= */
@@ -22,51 +24,65 @@
   const VERSION = 1;
 
   /* ------------------------------------------------------------
-     Paleta OAZE — tons do oásis. Ordem fixa, nunca ciclada.
-     Estes hexes são a "matiz de referência" da categoria; cada tema
-     ajusta a luminância nos tokens --s1..--s10 do CSS, porque uma
-     série só não sobrevive a um fundo areia E a um fundo noite.
+     Paleta das categorias — família OAZE
+     ------------------------------------------------------------
+     A interface é neutra e profunda; a cor vive nos DADOS, e é aqui
+     que ela começa. Estes hexes são a matiz de referência de cada
+     categoria: os tokens --s1..--s10 do CSS ajustam a luminância por
+     tema, porque uma série só não sobrevive a um fundo areia E a um
+     fundo Midnight sem alguma cor sumir.
+
+     As vizinhas se distinguem por MATIZ, não por luminância. Onde
+     isso não basta (daltonismo), a categoria nunca aparece só como
+     cor: vem sempre com ícone e nome.
      ------------------------------------------------------------ */
-  const PALETTE = ['#C9794A', '#7A846A', '#D9A441', '#6B4A76', '#A0553F', '#3F5D57'];
-  /* extras do seletor de cor — mesma família, outros passos */
-  const PALETTE_EXTRA = ['#C2A46E', '#8A6A4F', '#A68B6B', '#8C8F4E', '#5A3E2B', '#E7D4B5',
-    '#8E4E2A', '#4A5C39', '#B8846B', '#527A72'];
+  const PALETTE = ['#2E6E7E', '#A85A32', '#3B6558', '#7B5A8E', '#1F6B4F', '#B07C3E'];
+  /* extras do seletor — mesma família, outros passos */
+  const PALETTE_EXTRA = ['#34557A', '#8A5A38', '#4C6B33', '#6E4E3D', '#0F2C3D', '#2D4F56',
+    '#547A6E', '#8A7A62', '#4E3A55', '#9A5F35'];
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
 
   /* Migração: dados salvos com paletas anteriores ganham o equivalente
-     no deserto. Cores fora deste mapa (escolhas manuais) ficam como estão. */
+     nesta. Cores escolhidas à mão ficam como estão. */
   const OLD_TO_NEW = {
-    /* ---- paleta anterior, "Ethereal" (v1.1) ---- */
-    '#3dd68c': '#7A846A', '#6c6ce0': '#6B4A76', '#f0554d': '#C9794A',
-    '#f2b84b': '#D9A441', '#4ec5d4': '#3F5D57', '#9aa0ac': '#A68B6B',
-    '#2ba86c': '#4A5C39', '#4f4fc9': '#6B4A76', '#c93e38': '#A0553F',
-    '#d69a33': '#C2A46E', '#3a9daa': '#527A72', '#5a4fcf': '#8E4E2A',
-    '#7c6cf0': '#C9794A',
-    /* ---- paleta original (v1.0), caso alguém pule uma versão ---- */
-    '#2a78d6': '#6B4A76', '#eb6834': '#D9A441', '#1baf7a': '#3F5D57', '#eda100': '#C2A46E',
-    '#e87ba4': '#C9794A', '#008300': '#7A846A', '#4a3aa7': '#6B4A76', '#e34948': '#A0553F',
-    '#256abf': '#8E4E2A', '#c9541f': '#C2A46E', '#12805a': '#4A5C39', '#b87c00': '#C2A46E',
-    '#c95f85': '#A0553F', '#006300': '#4A5C39', '#6f60c9': '#6B4A76', '#b53434': '#A0553F',
-    '#898781': '#A68B6B', '#0b0b0b': '#5A3E2B', '#0b3a6b': '#6B4A76', '#d03b3b': '#C9794A',
-    '#3987e5': '#6B4A76', '#d95926': '#D9A441', '#199e70': '#3F5D57', '#c98500': '#C2A46E',
-    '#d55181': '#C9794A', '#9085e9': '#6B4A76', '#e66767': '#C9794A'
+    /* ---- paleta do deserto (v1.2) ---- */
+    '#c9794a': '#A85A32', '#7a846a': '#4C6B33', '#d9a441': '#B07C3E',
+    '#6b4a76': '#7B5A8E', '#a0553f': '#8A5A38', '#3f5d57': '#3B6558',
+    '#c2a46e': '#8A7A62', '#8a6a4f': '#6E4E3D', '#a68b6b': '#8A7A62',
+    '#8c8f4e': '#4C6B33', '#5a3e2b': '#0F2C3D', '#e7d4b5': '#8A7A62',
+    '#8e4e2a': '#9A5F35', '#4a5c39': '#1F6B4F', '#b8846b': '#A85A32',
+    '#527a72': '#2E6E7E', '#7f588c': '#7B5A8E', '#d9a442': '#B07C3E',
+    /* ---- paleta "Ethereal" (v1.1) ---- */
+    '#3dd68c': '#1F6B4F', '#6c6ce0': '#34557A', '#f0554d': '#A85A32',
+    '#f2b84b': '#B07C3E', '#4ec5d4': '#2E6E7E', '#9aa0ac': '#8A7A62',
+    '#2ba86c': '#4C6B33', '#4f4fc9': '#34557A', '#c93e38': '#8A5A38',
+    '#d69a33': '#9A5F35', '#3a9daa': '#2E6E7E', '#5a4fcf': '#7B5A8E',
+    '#7c6cf0': '#7B5A8E',
+    /* ---- paleta original (v1.0), caso alguém pule versões ---- */
+    '#2a78d6': '#34557A', '#eb6834': '#9A5F35', '#1baf7a': '#3B6558', '#eda100': '#B07C3E',
+    '#e87ba4': '#7B5A8E', '#008300': '#1F6B4F', '#4a3aa7': '#34557A', '#e34948': '#A85A32',
+    '#256abf': '#34557A', '#c9541f': '#9A5F35', '#12805a': '#4C6B33', '#b87c00': '#B07C3E',
+    '#c95f85': '#7B5A8E', '#006300': '#1F6B4F', '#6f60c9': '#34557A', '#b53434': '#8A5A38',
+    '#898781': '#8A7A62', '#0b0b0b': '#0F2C3D', '#0b3a6b': '#34557A', '#d03b3b': '#A85A32',
+    '#3987e5': '#34557A', '#d95926': '#9A5F35', '#199e70': '#3B6558', '#c98500': '#B07C3E',
+    '#d55181': '#7B5A8E', '#9085e9': '#7B5A8E', '#e66767': '#A85A32'
   };
-  const migrateColor = (c) => OLD_TO_NEW[String(c || '').toLowerCase()] || c || '#A68B6B';
+  const migrateColor = (c) => OLD_TO_NEW[String(c || '').toLowerCase()] || c || '#8A7A62';
 
   /* A cor aqui é só o acento da conta na interface; o logo e a cor de
      marca do banco vêm do pacote vendorizado (ver icons.js). */
   const BANK_PRESETS = [
-    { name: 'Itaú', color: '#D9A441' }, { name: 'Nubank', color: '#6B4A76' },
-    { name: 'Bradesco', color: '#A0553F' }, { name: 'Santander', color: '#C9794A' },
-    { name: 'Caixa', color: '#3F5D57' }, { name: 'Banco do Brasil', color: '#C2A46E' },
-    { name: 'Inter', color: '#C9794A' }, { name: 'C6 Bank', color: '#5A3E2B' },
-    { name: 'BTG Pactual', color: '#6B4A76' }, { name: 'Sicredi', color: '#7A846A' },
-    { name: 'Sicoob', color: '#4A5C39' }, { name: 'Original', color: '#7A846A' },
-    { name: 'PicPay', color: '#4A5C39' }, { name: 'Mercado Pago', color: '#527A72' },
-    { name: 'XP', color: '#5A3E2B' }, { name: 'Safra', color: '#6B4A76' },
-    { name: 'Neon', color: '#3F5D57' }, { name: 'Nomad', color: '#527A72' },
-    { name: 'Wise', color: '#8C8F4E' }, { name: 'PagBank', color: '#4A5C39' },
-    { name: 'Outro', color: '#A68B6B' }
+    { name: 'Itaú', color: '#9A5F35' }, { name: 'Nubank', color: '#7B5A8E' },
+    { name: 'Bradesco', color: '#8A5A38' }, { name: 'Santander', color: '#A85A32' },
+    { name: 'Caixa', color: '#34557A' }, { name: 'Banco do Brasil', color: '#B07C3E' },
+    { name: 'Inter', color: '#9A5F35' }, { name: 'C6 Bank', color: '#0F2C3D' },
+    { name: 'BTG Pactual', color: '#34557A' }, { name: 'Sicredi', color: '#1F6B4F' },
+    { name: 'Sicoob', color: '#4C6B33' }, { name: 'Original', color: '#1F6B4F' },
+    { name: 'PicPay', color: '#4C6B33' }, { name: 'Mercado Pago', color: '#2E6E7E' },
+    { name: 'XP', color: '#0F2C3D' }, { name: 'Safra', color: '#2D4F56' },
+    { name: 'Neon', color: '#2E6E7E' }, { name: 'Nomad', color: '#3B6558' },
+    { name: 'Wise', color: '#B07C3E' }, { name: 'PagBank', color: '#4C6B33' },
+    { name: 'Outro', color: '#8A7A62' }
   ];
 
   const ACCOUNT_TYPES = ['Conta corrente', 'Conta poupança', 'Conta de pagamento', 'Carteira / dinheiro', 'Conta investimento'];
@@ -74,14 +90,14 @@
 
   /* mesmos hexes que a migração produz — perfil novo e migrado ficam iguais */
   const DEFAULT_EXPENSE_CATS = [
-    ['Moradia', '#6B4A76', 'house'], ['Alimentação', '#D9A441', 'utensils'], ['Transporte', '#3F5D57', 'car'],
-    ['Saúde', '#C2A46E', 'heart-pulse'], ['Educação', '#C9794A', 'graduation-cap'], ['Lazer', '#7A846A', 'gamepad-2'],
-    ['Compras', '#8C8F4E', 'shopping-bag'], ['Assinaturas', '#A0553F', 'repeat'], ['Impostos e taxas', '#8E4E2A', 'receipt'],
-    ['Outros', '#A68B6B', 'circle-ellipsis']
+    ['Moradia', '#34557A', 'house'], ['Alimentação', '#B07C3E', 'utensils'], ['Transporte', '#2E6E7E', 'car'],
+    ['Saúde', '#3B6558', 'heart-pulse'], ['Educação', '#7B5A8E', 'graduation-cap'], ['Lazer', '#1F6B4F', 'gamepad-2'],
+    ['Compras', '#9A5F35', 'shopping-bag'], ['Assinaturas', '#A85A32', 'repeat'], ['Impostos e taxas', '#4E3A55', 'receipt'],
+    ['Outros', '#8A7A62', 'circle-ellipsis']
   ];
   const DEFAULT_INCOME_CATS = [
-    ['Salário', '#6B4A76', 'banknote'], ['Freelance / PJ', '#3F5D57', 'briefcase'], ['Rendimentos', '#8C8F4E', 'trending-up'],
-    ['Reembolso', '#C2A46E', 'arrow-left-right'], ['Vendas', '#D9A441', 'tag'], ['Outros', '#A68B6B', 'circle-ellipsis']
+    ['Salário', '#34557A', 'banknote'], ['Freelance / PJ', '#2E6E7E', 'briefcase'], ['Rendimentos', '#1F6B4F', 'trending-up'],
+    ['Reembolso', '#B07C3E', 'arrow-left-right'], ['Vendas', '#7B5A8E', 'tag'], ['Outros', '#8A7A62', 'circle-ellipsis']
   ];
 
   /* ============================================================ */
@@ -112,6 +128,8 @@
       updatedAt: 0,
       accounts: [],
       cards: [],
+      budgets: {},        // { categoriaId: limite mensal }
+      goals: [],          // { id, name, target, saved, deadline, color, icon }
       categories: makeCategories(),
       transactions: [],
       investments: [],
@@ -124,7 +142,7 @@
     const pj = makeProfile('PJ / Autônomo');
     pessoal.accounts.push({
       id: U.uid('acc'), name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente',
-      color: '#D9A441', openingBalance: 0, openedAt: U.todayISO(), archived: false
+      color: '#B07C3E', openingBalance: 0, openedAt: U.todayISO(), archived: false
     });
     return {
       version: VERSION,
@@ -211,6 +229,27 @@
       notes: String(i.notes || '')
     }));
     prof.invoices = (prof.invoices && typeof prof.invoices === 'object') ? prof.invoices : {};
+
+    /* Orçamento: um limite mensal por categoria. Guardado como mapa
+       porque a pergunta é sempre "qual o limite DESTA categoria". */
+    const orc = (prof.budgets && typeof prof.budgets === 'object') ? prof.budgets : {};
+    prof.budgets = {};
+    Object.keys(orc).forEach((k) => {
+      const v = U.round2(+orc[k] || 0);
+      if (v > 0) prof.budgets[k] = v;      // limite zero é o mesmo que não ter limite
+    });
+
+    prof.goals = (Array.isArray(prof.goals) ? prof.goals : []).map((g) => ({
+      id: g.id || U.uid('goal'),
+      name: String(g.name || 'Meta').slice(0, 60),
+      target: U.round2(+g.target || 0),
+      saved: U.round2(+g.saved || 0),
+      deadline: U.isValidISO(g.deadline) ? g.deadline : null,
+      color: migrateColor(g.color || '#2E6E7E'),
+      icon: g.icon ? String(g.icon) : 'target',
+      accountId: g.accountId || null,
+      createdAt: g.createdAt || U.todayISO()
+    }));
     return prof;
   }
 
@@ -433,6 +472,56 @@
   Store.getInvoice = function (cardId, ref) {
     return Store.profile().invoices[Store.invoiceKey(cardId, ref)] || null;
   };
+  /* ---------------- orçamento ---------------- */
+
+  Store.budgets = {
+    all: () => Store.profile().budgets,
+    get: (categoryId) => Store.profile().budgets[categoryId] || 0,
+    set: function (categoryId, limite) {
+      const b = Store.profile().budgets;
+      const v = U.round2(+limite || 0);
+      if (v > 0) b[categoryId] = v; else delete b[categoryId];
+      Store.commit('budget');
+    },
+    remove: function (categoryId) {
+      delete Store.profile().budgets[categoryId];
+      Store.commit('budget');
+    }
+  };
+
+  /* ---------------- metas ---------------- */
+
+  Store.goals = {
+    all: () => Store.profile().goals,
+    get: (id) => Store.profile().goals.find((g) => g.id === id) || null,
+    add: function (data) {
+      const g = Object.assign({ id: U.uid('goal'), createdAt: U.todayISO() }, data);
+      Store.profile().goals.push(g);
+      Store.commit('goal');
+      return g;
+    },
+    update: function (id, data) {
+      const g = Store.goals.get(id);
+      if (!g) return null;
+      Object.assign(g, data);
+      Store.commit('goal');
+      return g;
+    },
+    remove: function (id) {
+      const gs = Store.profile().goals;
+      const i = gs.findIndex((g) => g.id === id);
+      if (i >= 0) { gs.splice(i, 1); Store.commit('goal'); }
+    },
+    /** Guardar dinheiro numa meta não é despesa: é dinheiro mudando de lugar. */
+    deposit: function (id, valor) {
+      const g = Store.goals.get(id);
+      if (!g) return null;
+      g.saved = U.round2(Math.max(0, g.saved + U.round2(+valor || 0)));
+      Store.commit('goal');
+      return g;
+    }
+  };
+
   Store.setInvoicePaid = function (cardId, ref, paid, opts) {
     const p = Store.profile();
     const key = Store.invoiceKey(cardId, ref);
@@ -493,8 +582,8 @@
     let acc = p.accounts[0];
     if (!acc) {
       acc = Store.accounts.add({
-        name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente', color: '#D9A441',
-        gradient: 'ocre', last4: '2210',
+        name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente', color: '#9A5F35',
+        gradient: 'terracotta', last4: '2210',
         openingBalance: 3500, openedAt, archived: false
       });
     } else {
@@ -502,16 +591,16 @@
       acc.openedAt = openedAt;
     }
     const acc2 = Store.accounts.add({
-      name: 'Reserva', bank: 'Nubank', type: 'Conta de pagamento', color: '#6B4A76',
-      gradient: 'ametista', last4: '9034',
+      name: 'Reserva', bank: 'Nubank', type: 'Conta de pagamento', color: '#7B5A8E',
+      gradient: 'midnight', last4: '9034',
       openingBalance: 22000, openedAt, archived: false
     });
     const card = Store.cards.add({
-      name: 'Cartão principal', bank: 'Nubank', color: '#6B4A76', gradient: 'ametista', last4: '4352',
+      name: 'Cartão principal', bank: 'Nubank', color: '#7B5A8E', gradient: 'midnight', last4: '4352',
       limit: 8000, closingDay: 28, dueDay: 8, accountId: acc.id
     });
     Store.cards.add({
-      name: 'Cartão da viagem', bank: 'Itaú', color: '#D9A441', gradient: 'ocre', last4: '8871',
+      name: 'Cartão da viagem', bank: 'Itaú', color: '#9A5F35', gradient: 'terracotta', last4: '8871',
       limit: 4000, closingDay: 15, dueDay: 25, accountId: acc.id
     });
 
@@ -579,6 +668,43 @@
     Store.profile().invoices[Store.invoiceKey(card.id, prevRef)] = {
       paid: true, paidAt: U.monthStart(prevRef), accountId: acc.id, amount: 0
     };
+
+    /* Orçamento e metas de exemplo. Sem eles as páginas nasceriam
+       vazias na demonstração e o recurso pareceria não existir.
+       Os limites saem do gasto médio real que acabamos de criar,
+       um pouco apertados de propósito — orçamento folgado não
+       ensina nada. */
+    const mediaDe = (catId) => {
+      let soma = 0, meses = 0;
+      for (let i = 1; i <= 3; i++) {
+        const ym = U.addMonths(U.todayYM(), -i);
+        const de = U.monthStart(ym), ate = U.monthEnd(ym);
+        soma += p.transactions
+          .filter((t) => t.categoryId === catId && t.kind === 'expense' && t.date >= de && t.date <= ate)
+          .reduce((a, b) => a + b.amount, 0);
+        meses++;
+      }
+      return meses ? U.round2(soma / meses) : 0;
+    };
+    ['Moradia', 'Alimentação', 'Transporte', 'Lazer'].forEach((nome) => {
+      const id = catE(nome);
+      if (!id) return;
+      const m = mediaDe(id);
+      if (m > 0) p.budgets[id] = U.round2(Math.ceil((m * 0.95) / 10) * 10);
+    });
+
+    if (!p.goals.length) {
+      const hoje = new Date();
+      const emMeses = (n) => U.toISO(new Date(hoje.getFullYear(), hoje.getMonth() + n, 15));
+      p.goals.push(
+        { id: U.uid('goal'), name: 'Reserva de emergência', target: 30000, saved: 12400,
+          deadline: emMeses(12), color: '#3B6558', icon: 'shield', accountId: null, createdAt: U.todayISO() },
+        { id: U.uid('goal'), name: 'Viagem', target: 12000, saved: 4200,
+          deadline: emMeses(8), color: '#B07C3E', icon: 'plane', accountId: null, createdAt: U.todayISO() },
+        { id: U.uid('goal'), name: 'Troca do notebook', target: 8000, saved: 8000,
+          deadline: null, color: '#34557A', icon: 'target', accountId: null, createdAt: U.todayISO() }
+      );
+    }
 
     Store.commit('seed');
     return today;

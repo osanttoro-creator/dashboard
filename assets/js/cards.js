@@ -14,25 +14,29 @@
   /* ---------------- gradientes ---------------- */
 
   /**
-   * Pares (claro → escuro) no registro do oásis.
+   * Pares (claro → escuro) tirados da paleta OAZE: Midnight, Deep Teal,
+   * Oásis, Earth, Terracota e derivados. Começam pelos tons profundos —
+   * é o registro do produto — e seguem para os quentes, porque cinco
+   * cartões iguais não se distinguem de relance.
+   *
    * Cada ponta CLARA foi verificada até o texto branco do cartão passar
-   * WCAG AA (≥ 4,5:1) sobre ela — considerando a camada de 18% que o CSS
-   * aplica por cima. O pior caso da lista é 4,62:1 (terracota).
+   * WCAG AA (≥ 4,5:1) sobre ela, já contando a camada de 18% que o CSS
+   * aplica por cima. O pior caso da lista é 5,59:1 (Terracota).
    * Alterar estes hexes exige refazer essa conta (ver README).
    */
   Cards.GRADIENTS = [
-    { key: 'terracota', name: 'Terracota', a: '#C9794A', b: '#8E4E2A' },
-    { key: 'salvia', name: 'Sálvia', a: '#6E7A5E', b: '#414A36' },
-    { key: 'argila', name: 'Argila', a: '#96795A', b: '#5F4832' },
-    { key: 'terra', name: 'Terra', a: '#5A3E2B', b: '#2E1F14' },
-    { key: 'ocre', name: 'Ocre', a: '#A8763A', b: '#6E4818' },
-    { key: 'adobe', name: 'Adobe', a: '#A0553F', b: '#652F22' },
-    { key: 'oliva', name: 'Oliva', a: '#77743E', b: '#484621' },
-    { key: 'oasis', name: 'Oásis', a: '#4E7A72', b: '#2A4A45' },
-    { key: 'duna', name: 'Duna', a: '#8A7150', b: '#54422C' },
-    { key: 'ferrugem', name: 'Ferrugem', a: '#9B4A2F', b: '#5E2718' },
-    { key: 'bronze', name: 'Bronze', a: '#8A6A4F', b: '#523D2C' },
-    { key: 'ametista', name: 'Ametista', a: '#6B4A76', b: '#3D2945' }
+    { key: 'midnight', name: 'Midnight', a: '#0F2C3D', b: '#061620' },
+    { key: 'teal', name: 'Deep Teal', a: '#2D4F56', b: '#16282C' },
+    { key: 'oasis', name: 'Oásis', a: '#3F5F55', b: '#20302B' },
+    { key: 'earth', name: 'Earth', a: '#6E4E3D', b: '#37271E' },
+    { key: 'terracotta', name: 'Terracota', a: '#A8734B', b: '#6E4A2E' },
+    { key: 'sage', name: 'Sage', a: '#4A5B48', b: '#26301F' },
+    { key: 'sand', name: 'Areia', a: '#8A7A62', b: '#4A4132' },
+    { key: 'indigo', name: 'Índigo', a: '#2B3E63', b: '#151F33' },
+    { key: 'pinho', name: 'Pinho', a: '#274A3F', b: '#132720' },
+    { key: 'cobre', name: 'Cobre', a: '#9A5F35', b: '#5C3820' },
+    { key: 'ardosia', name: 'Ardósia', a: '#3E4A52', b: '#1F262A' },
+    { key: 'ameixa', name: 'Ameixa', a: '#4E3A55', b: '#281D2C' }
   ];
 
   Cards.gradientByKey = (key) => Cards.GRADIENTS.find((g) => g.key === key) || null;

@@ -50,9 +50,10 @@ $arquivos = @(
   'assets/vendor/bancos.js', 'assets/vendor/icons.js', 'assets/js/firebase-config.js',
   'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
-  'assets/js/sync.js', 'assets/js/ai.js',
+  'assets/js/sync.js', 'assets/js/ai.js', 'assets/js/shell.js',
   'assets/js/pages/home.js', 'assets/js/pages/transactions.js', 'assets/js/pages/investments.js',
   'assets/js/pages/accounts.js', 'assets/js/pages/categories.js',
+  'assets/js/pages/budget.js', 'assets/js/pages/goals.js', 'assets/js/pages/recurring.js', 'assets/js/pages/calendar.js', 'assets/js/pages/reports.js', 'assets/js/pages/uglez.js', 'assets/js/pages/settings.js',
   'assets/js/app.js'
 )
 foreach ($f in $arquivos) {
