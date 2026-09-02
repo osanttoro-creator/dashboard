@@ -581,5 +581,183 @@
     return Array.from(set).sort((a, b) => a - b);
   };
 
+  /* ============================================================
+     PATRIMÔNIO, SAÚDE FINANCEIRA E AGENDA
+     ------------------------------------------------------------
+     Tudo aqui é derivado do que já existe acima. Nenhuma destas
+     funções guarda estado: some o motivo, some o resultado.
+     ============================================================ */
+
+  /**
+   * Patrimônio líquido numa data: dinheiro em contas + valor
+   * investido − o que está comprometido em faturas ainda não pagas.
+   *
+   * A fatura entra como passivo porque o dinheiro já foi gasto: ele
+   * ainda está na conta, mas não é seu. Ignorar isso infla o número
+   * justamente de quem usa muito o crédito.
+   */
+  Calc.netWorth = function (atISO, profile) {
+    const prof = profile || P();
+    const contas = Calc.totalAccountsBalance(atISO, prof);
+    const investido = Calc.investedTotal(atISO, prof);
+    let faturas = 0;
+    prof.cards.forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
+    return U.round2(contas + investido - U.round2(faturas));
+  };
+
+  /** Saldo disponível: caixa de verdade, sem o que já está comprometido. */
+  Calc.available = function (atISO, profile) {
+    const prof = profile || P();
+    let faturas = 0;
+    prof.cards.forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
+    return U.round2(Calc.totalAccountsBalance(atISO, prof) - U.round2(faturas));
+  };
+
+  /** Quanto de cada real recebido sobrou, em %. Null quando não houve receita. */
+  Calc.savingsRate = function (ym, profile) {
+    const t = Calc.monthTotals(ym, profile);
+    if (t.income <= 0) return null;
+    return ((t.income - t.expense) / t.income) * 100;
+  };
+
+  /* ------------------------------------------------------------
+     OAZE Score — 0 a 100
+     ------------------------------------------------------------
+     Cinco perguntas, cada uma valendo 20 pontos. Todas são
+     verificáveis a partir dos próprios lançamentos; nenhuma
+     depende de opinião ou de dado externo.
+
+       1 · Sobra dinheiro?        taxa de poupança dos 3 meses
+       2 · O crédito está sob controle?  fatura / receita mensal
+       3 · Há reserva?            saldo disponível / gasto mensal
+       4 · O patrimônio cresce?   variação em 6 meses
+       5 · As contas estão em dia? nada vencido, nada no negativo
+
+     Devolve também o porquê de cada parte, porque um número sozinho
+     não ajuda ninguém a agir.
+     ------------------------------------------------------------ */
+  Calc.score = function (ym, profile) {
+    const prof = profile || P();
+    const fim = U.monthEnd(ym);
+    const partes = [];
+    const faixa = (v, min, max) => Math.max(0, Math.min(1, (v - min) / (max - min)));
+
+    /* 1 · poupança média de 3 meses */
+    const taxas = [0, 1, 2]
+      .map((i) => Calc.savingsRate(U.addMonths(ym, -i), prof))
+      .filter((x) => x != null);
+    const media = taxas.length ? taxas.reduce((a, b) => a + b, 0) / taxas.length : null;
+    partes.push({
+      chave: 'poupanca', nome: 'Sobra no fim do mês',
+      pontos: media == null ? 0 : Math.round(faixa(media, -10, 25) * 20),
+      detalhe: media == null ? 'Sem receita registrada nos últimos 3 meses'
+        : 'Você guarda ' + U.fmtPct(media, 0) + ' do que recebe',
+      ok: media != null && media >= 10
+    });
+
+    /* 2 · peso do crédito sobre a receita */
+    const receita = Calc.monthTotals(ym, prof).income;
+    let fatura = 0;
+    prof.cards.forEach((c) => { fatura += Calc.cardUsed(c.id, prof); });
+    fatura = U.round2(fatura);
+    const peso = receita > 0 ? (fatura / receita) * 100 : (fatura > 0 ? 100 : 0);
+    partes.push({
+      chave: 'credito', nome: 'Crédito sob controle',
+      pontos: Math.round(faixa(-peso, -80, -10) * 20),
+      detalhe: fatura <= 0 ? 'Nenhuma fatura em aberto'
+        : 'Faturas em aberto somam ' + U.fmtPct(peso, 0) + ' da sua receita',
+      ok: peso <= 30
+    });
+
+    /* 3 · reserva, em meses de gasto */
+    const gastoMedio = U.round2([0, 1, 2]
+      .map((i) => Calc.monthTotals(U.addMonths(ym, -i), prof).expense)
+      .reduce((a, b) => a + b, 0) / 3);
+    const disponivel = Calc.available(fim, prof);
+    const meses = gastoMedio > 0 ? disponivel / gastoMedio : (disponivel > 0 ? 6 : 0);
+    partes.push({
+      chave: 'reserva', nome: 'Reserva de emergência',
+      pontos: Math.round(faixa(meses, 0, 6) * 20),
+      detalhe: gastoMedio <= 0 ? 'Sem gastos para comparar'
+        : 'Cobre ' + (meses < 0 ? '0' : meses.toFixed(1)) + ' meses do seu gasto',
+      ok: meses >= 3
+    });
+
+    /* 4 · o patrimônio cresce? */
+    const agora = Calc.netWorth(fim, prof);
+    const antes = Calc.netWorth(U.monthEnd(U.addMonths(ym, -6)), prof);
+    const cresceu = antes !== 0 ? ((agora - antes) / Math.abs(antes)) * 100 : (agora > 0 ? 100 : 0);
+    partes.push({
+      chave: 'patrimonio', nome: 'Patrimônio crescendo',
+      pontos: Math.round(faixa(cresceu, -10, 20) * 20),
+      detalhe: (cresceu >= 0 ? 'Subiu ' : 'Caiu ') + U.fmtPct(Math.abs(cresceu), 0) + ' em 6 meses',
+      ok: cresceu > 0
+    });
+
+    /* 5 · contas em dia */
+    const hoje = U.todayISO();
+    let atrasos = 0;
+    prof.cards.forEach((c) => {
+      const inv = Calc.invoice(c.id, Calc.currentInvoiceRef(c, ym), prof);
+      if (inv && !inv.paid && inv.planned > 0 && inv.dueDate < hoje) atrasos++;
+    });
+    let negativas = 0;
+    prof.accounts.forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
+    const problemas = atrasos + negativas;
+    partes.push({
+      chave: 'dia', nome: 'Contas em dia',
+      pontos: problemas === 0 ? 20 : Math.max(0, 20 - problemas * 10),
+      detalhe: problemas === 0 ? 'Nada vencido e nenhuma conta negativa'
+        : (atrasos ? atrasos + ' fatura(s) vencida(s). ' : '') + (negativas ? negativas + ' conta(s) negativa(s).' : ''),
+      ok: problemas === 0
+    });
+
+    const total = partes.reduce((a, b) => a + b.pontos, 0);
+    const faixaNome = total >= 80 ? 'Excelente' : total >= 60 ? 'Saudável'
+      : total >= 40 ? 'Atenção' : 'Frágil';
+    return { total, faixa: faixaNome, partes };
+  };
+
+  /* ------------------------------------------------------------
+     Agenda financeira — o que acontece em cada dia de um mês
+     ------------------------------------------------------------ */
+  Calc.calendarEvents = function (ym, profile) {
+    const prof = profile || P();
+    const porDia = {};
+    const põe = (data, ev) => {
+      if (U.ymOf(data) !== ym) return;
+      const d = +data.slice(8, 10);
+      (porDia[d] = porDia[d] || []).push(ev);
+    };
+
+    Calc.entriesForMonth(ym, prof).forEach((e) => {
+      põe(e.date, {
+        tipo: e.kind === 'income' ? 'in' : e.kind === 'transfer' ? 'tr' : 'out',
+        titulo: e.description,
+        valor: e.amount,
+        confirmado: e.confirmed,
+        categoria: Calc.categoryName(e.categoryId, prof),
+        txId: e.txId
+      });
+    });
+
+    prof.cards.forEach((c) => {
+      [U.addMonths(ym, -1), ym, U.addMonths(ym, 1)].forEach((base) => {
+        const ref = Calc.currentInvoiceRef(c, base);
+        const inv = Calc.invoice(c.id, ref, prof);
+        if (!inv || inv.planned <= 0) return;
+        põe(inv.dueDate, {
+          tipo: 'due', titulo: 'Fatura ' + c.name, valor: inv.planned,
+          confirmado: inv.paid, categoria: 'Cartão de crédito', cardId: c.id, ref
+        });
+      });
+    });
+
+    Object.keys(porDia).forEach((d) => {
+      porDia[d].sort((a, b) => b.valor - a.valor);
+    });
+    return porDia;
+  };
+
   global.Calc = Calc;
 })(window);

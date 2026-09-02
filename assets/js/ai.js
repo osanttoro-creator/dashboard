@@ -18,6 +18,48 @@
 
   const KEY = 'financas.anthropicKey';
   const ENDPOINT = 'https://api.anthropic.com/v1/messages';
+  const BACKEND = '/api/uglez';
+
+  /* ------------------------------------------------------------
+     DOIS CAMINHOS, NESTA ORDEM
+     ------------------------------------------------------------
+     1 · backend (/api/uglez) — a chave fica no servidor, em
+         ANTHROPIC_API_KEY, e nunca chega ao navegador. É o caminho
+         padrão quando o app está publicado.
+     2 · chave do próprio usuário no localStorage — usado quando não
+         há servidor: arquivo aberto do disco (file://) e o arquivo
+         único do iPhone. Não é segredo do produto: é a chave dele,
+         no aparelho dele, indo direto para a Anthropic.
+
+     A sondagem roda uma vez por sessão e é cacheada: perguntar ao
+     servidor a cada pergunta seria latência sem retorno.
+     ------------------------------------------------------------ */
+  let backendCache = null;
+
+  AI.temBackend = async function () {
+    if (backendCache !== null) return backendCache;
+    // file:// não tem origem HTTP: nem tenta
+    if (location.protocol === 'file:') { backendCache = false; return false; }
+    try {
+      const r = await fetch(BACKEND, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ pergunta: 'ping', resumo: 'ping' })
+      });
+      // 501 = função existe mas sem chave configurada → caminho local
+      backendCache = r.status !== 404 && r.status !== 501;
+    } catch (e) {
+      backendCache = false;
+    }
+    return backendCache;
+  };
+
+  /** Como o UGLEZ vai responder agora — mostrado nas Configurações. */
+  AI.modo = function () {
+    if (backendCache === true) return { chave: 'backend', rotulo: 'Servidor (chave protegida)' };
+    if (AI.hasKey()) return { chave: 'local', rotulo: 'Chave neste aparelho' };
+    return { chave: 'nenhum', rotulo: 'Não configurado' };
+  };
   const MODEL = 'claude-opus-5';
 
   let busy = false;
@@ -184,8 +226,11 @@
 
     const q = String(question || '').trim();
     if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
-    if (!AI.hasKey()) { AI.openConfig(); return; }
     if (busy) return;
+
+    // sem backend E sem chave local não há como responder
+    const viaBackend = await AI.temBackend();
+    if (!viaBackend && !AI.hasKey()) { AI.openConfig(); return; }
 
     busy = true;
     const btn = document.getElementById('btnAiAsk');
@@ -195,6 +240,29 @@
     box.textContent = 'Analisando os dados de ' + U.monthLabel(App.ym);
 
     try {
+      const resumo = AI.buildSummary();
+
+      /* Caminho 1 — servidor. O navegador não vê chave nenhuma. */
+      if (viaBackend) {
+        const r = await fetch(BACKEND, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ pergunta: q, resumo })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.erro || friendlyError(r.status, ''));
+        if (!j.texto) {
+          renderError(box, 'A resposta veio vazia. Tente novamente ou reformule a pergunta.');
+          return;
+        }
+        box.className = 'ai-answer';
+        box.innerHTML = renderMarkdown(j.texto);
+        box.appendChild(el('div', { class: 'ai-meta',
+          text: (j.modelo || 'servidor') + ' · resposta gerada no backend, sem chave no navegador' }));
+        return;
+      }
+
+      /* Caminho 2 — chave do próprio usuário, direto para a Anthropic. */
       const resp = await fetch(ENDPOINT, {
         method: 'POST',
         headers: {
@@ -213,7 +281,7 @@
           fallbacks: 'default',
           messages: [{
             role: 'user',
-            content: `${AI.buildSummary()}\n\n---\n\nPERGUNTA: ${q}`
+            content: `${resumo}\n\n---\n\nPERGUNTA: ${q}`
           }]
         })
       });
