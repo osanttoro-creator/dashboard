@@ -207,6 +207,10 @@
           <span class="topnav-caret" aria-hidden="true"></span>
         </button>
         <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
+        </button>
         <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
           <span class="nav-ico" data-ico="tag"></span>
           <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
@@ -744,6 +748,7 @@
         <div class="card">
           <div class="card-head"><h2>Perfil</h2></div>
           <div id="setConta"></div>
+          <div id="setPlano"></div>
           <div id="setProfile"></div>
         </div>
         <div class="card">
@@ -766,6 +771,42 @@
           <span class="card-note">Tudo fica neste navegador. O backup é a sua rede de segurança.</span></div>
         <div id="setData"></div>
       </div>
+    </section>
+
+    <!-- ══════ PLANOS ══════
+         Não é uma página de marketing solta: é a mesma casa. Por
+         isso vive dentro do app, com a mesma navegação e o mesmo
+         material — quem chega aqui vindo de um limite não deveria
+         sentir que saiu do produto. -->
+    <section class="page" data-page="precos" aria-labelledby="precosTitulo">
+
+      <div class="precos-topo">
+        <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
+        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
+
+        <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
+          <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
+          <button class="ciclo-btn" data-ciclo="annual" aria-pressed="false">
+            Anual <span class="ciclo-selo">2 meses grátis</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="precos-cards" id="precosCards"></div>
+
+      <div class="card precos-tabela-wrap">
+        <h3 class="precos-h3">Comparativo completo</h3>
+        <div class="table-wrap">
+          <table class="table precos-tabela" id="precosTabela"></table>
+        </div>
+        <p class="hint" id="precosNota"></p>
+      </div>
+
+      <div class="card precos-faq">
+        <h3 class="precos-h3">Perguntas frequentes</h3>
+        <div id="precosFaq"></div>
+      </div>
+
     </section>
 
       <footer class="app-foot">
@@ -874,7 +915,10 @@
 <script src="assets/js/fila.js"></script>
 <script src="assets/js/migracao.js"></script>
 <script src="assets/js/onboarding.js"></script>
+<script src="assets/js/planos.js"></script>
+<script src="assets/js/limites.js"></script>
 <script src="assets/js/conta.js"></script>
+<script src="assets/js/checkout.js"></script>
 <script src="assets/js/ai.js"></script>
 <script src="assets/js/shell.js"></script>
 <script src="assets/js/pages/home.js"></script>
@@ -888,6 +932,7 @@
 <script src="assets/js/pages/calendar.js"></script>
 <script src="assets/js/pages/reports.js"></script>
 <script src="assets/js/pages/uglez.js"></script>
+<script src="assets/js/pages/precos.js"></script>
 <script src="assets/js/pages/settings.js"></script>
 <script src="assets/js/app.js"></script>
 </body>

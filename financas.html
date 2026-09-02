@@ -2323,6 +2323,126 @@ input[type="checkbox"], input[type="radio"] {
   .aviso-conta .btn { width: 100%; justify-content: center; }
 }
 
+/* ------------------------------------------------------------
+   22.11 · PLANOS
+   ------------------------------------------------------------
+   Três cartões que precisam ser comparáveis num relance. O do
+   meio é o destacado — não por ser o mais caro, mas por ser o que
+   resolve a maioria dos casos.
+   ------------------------------------------------------------ */
+.precos-topo { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 8px 0 4px; }
+.precos-titulo { font-size: clamp(21px, 2.4vw, 28px); font-weight: 680; letter-spacing: -.022em; }
+.precos-sub { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 60ch; }
+.precos-h3 { font-size: 15.5px; font-weight: 660; margin-bottom: 12px; }
+
+/* --- alternância de ciclo --- */
+.precos-ciclo {
+  display: inline-flex; gap: 3px; padding: 3px; margin-top: 4px;
+  border-radius: 999px; background: var(--plane-2); border: 1px solid var(--glass-line);
+}
+.ciclo-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; min-height: 32px; border: 0; border-radius: 999px;
+  background: transparent; cursor: pointer; font-family: inherit;
+  font-size: 13px; font-weight: 580; color: var(--ink-2);
+  transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ciclo-btn.is-active { background: var(--surface-2); color: var(--ink); box-shadow: var(--shadow); }
+.ciclo-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ciclo-selo {
+  padding: 2px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 680;
+  background: color-mix(in srgb, var(--ok, #4C6B33) 24%, transparent);
+  color: var(--ok, #4C6B33);
+}
+
+/* --- os cartões --- */
+.precos-cards {
+  display: grid; gap: 16px; margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+}
+.plano-card { position: relative; display: grid; gap: 10px; padding: 26px 22px; }
+.plano-card.is-destaque {
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  box-shadow: var(--shadow-lift), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.plano-selo {
+  position: absolute; top: -10px; left: 22px;
+  padding: 4px 11px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: #fff;
+}
+.plano-selo.is-atual { background: var(--ok, #4C6B33); left: auto; right: 22px; }
+.plano-nome { font-size: 18px; font-weight: 680; }
+.plano-desc { font-size: 12.5px; line-height: 1.55; color: var(--muted); min-height: 34px; }
+
+.plano-preco { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.plano-valor { font-size: 30px; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.plano-periodo { font-size: 12.5px; color: var(--muted); }
+.plano-cobranca { flex: 1 1 100%; font-size: 12px; color: var(--muted); }
+.plano-economia {
+  flex: 1 1 100%; font-size: 12px; font-weight: 620;
+  color: var(--ok, #4C6B33);
+}
+
+.plano-card > .btn { width: 100%; justify-content: center; margin-top: 4px; }
+.plano-card > .btn:disabled { opacity: .6; cursor: default; }
+
+.plano-itens { display: grid; gap: 7px; margin-top: 6px; padding: 0; list-style: none; }
+.plano-itens li { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; line-height: 1.5; }
+.plano-check { display: grid; place-items: center; flex: none; margin-top: 1px; color: var(--ok, #4C6B33); }
+
+/* --- comparativo --- */
+.precos-tabela th:not(:first-child), .precos-tabela td { text-align: center; }
+.precos-tabela th[scope="row"] { text-align: left; font-weight: 560; }
+.precos-tabela td.is-nao { color: var(--muted); }
+
+/* --- FAQ --- */
+.faq-item { border-top: 1px solid var(--glass-line); }
+.faq-item:first-child { border-top: 0; }
+.faq-p {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 2px; min-height: 44px;
+  border: 0; background: none; cursor: pointer; font-family: inherit;
+  font-size: 13.5px; font-weight: 580; color: var(--ink); text-align: left;
+}
+.faq-p:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.faq-seta {
+  width: 0; height: 0; flex: none;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid currentColor; opacity: .5;
+  transition: transform .18s var(--ease-out);
+}
+.faq-p[aria-expanded="true"] .faq-seta { transform: rotate(180deg); }
+.faq-corpo { padding: 0 2px 14px; font-size: 13px; line-height: 1.65; color: var(--ink-2); max-width: 74ch; }
+
+/* --- barras de consumo --- */
+.uso-caixa { display: grid; gap: 10px; min-width: min(100%, 300px); }
+.uso-linha { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
+.uso-rotulo { font-size: 12.5px; color: var(--ink-2); }
+.uso-num { font-size: 12.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.uso-num.is-cheio { color: var(--terracotta); }
+.uso-barra {
+  grid-column: 1 / -1; height: 5px; border-radius: 999px;
+  background: var(--plane-2); overflow: hidden;
+}
+.uso-barra > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--accent); transition: width .3s var(--ease-out);
+}
+.uso-barra.is-cheio > i { background: var(--terracotta); }
+
+.plano-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.lista-check { display: grid; gap: 6px; padding: 0; list-style: none; }
+.lista-check li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.5; }
+.lista-passos { padding-left: 20px; display: grid; gap: 5px; font-size: 13px; line-height: 1.55; }
+
+@media (max-width: 560px) {
+  .plano-card { padding: 22px 18px; }
+  .plano-valor { font-size: 26px; }
+  .plano-acoes .btn { flex: 1 1 100%; justify-content: center; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
@@ -2621,6 +2741,10 @@ input[type="checkbox"], input[type="radio"] {
           <span class="topnav-caret" aria-hidden="true"></span>
         </button>
         <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
+        </button>
         <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
           <span class="nav-ico" data-ico="tag"></span>
           <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
@@ -3158,6 +3282,7 @@ input[type="checkbox"], input[type="radio"] {
         <div class="card">
           <div class="card-head"><h2>Perfil</h2></div>
           <div id="setConta"></div>
+          <div id="setPlano"></div>
           <div id="setProfile"></div>
         </div>
         <div class="card">
@@ -3180,6 +3305,42 @@ input[type="checkbox"], input[type="radio"] {
           <span class="card-note">Tudo fica neste navegador. O backup é a sua rede de segurança.</span></div>
         <div id="setData"></div>
       </div>
+    </section>
+
+    <!-- ══════ PLANOS ══════
+         Não é uma página de marketing solta: é a mesma casa. Por
+         isso vive dentro do app, com a mesma navegação e o mesmo
+         material — quem chega aqui vindo de um limite não deveria
+         sentir que saiu do produto. -->
+    <section class="page" data-page="precos" aria-labelledby="precosTitulo">
+
+      <div class="precos-topo">
+        <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
+        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
+
+        <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
+          <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
+          <button class="ciclo-btn" data-ciclo="annual" aria-pressed="false">
+            Anual <span class="ciclo-selo">2 meses grátis</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="precos-cards" id="precosCards"></div>
+
+      <div class="card precos-tabela-wrap">
+        <h3 class="precos-h3">Comparativo completo</h3>
+        <div class="table-wrap">
+          <table class="table precos-tabela" id="precosTabela"></table>
+        </div>
+        <p class="hint" id="precosNota"></p>
+      </div>
+
+      <div class="card precos-faq">
+        <h3 class="precos-h3">Perguntas frequentes</h3>
+        <div id="precosFaq"></div>
+      </div>
+
     </section>
 
       <footer class="app-foot">
@@ -4704,8 +4865,15 @@ window.SupabaseConfig = {
 
   /* ============================================================ */
 
+  /* Nomes das categorias que já vêm no app. O limite de
+     "categorias personalizadas" do plano não conta estas — cobrar
+     pelo padrão do produto seria cobrar por nada. */
+  const NOMES_PADRAO = DEFAULT_EXPENSE_CATS.map((c) => c[0])
+    .concat(DEFAULT_INCOME_CATS.map((c) => c[0]));
+
   const Store = {
-    PALETTE, ALL_COLORS, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES
+    PALETTE, ALL_COLORS, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES,
+    CATEGORIAS_PADRAO: NOMES_PADRAO
   };
 
   let state = null;
@@ -7511,6 +7679,7 @@ window.SupabaseConfig = {
      ============================================================ */
 
   Forms.openAccount = function (accountId) {
+    if (!accountId && global.Limites && !Limites.exigirEspaco('accounts')) return;
     const editing = accountId ? Store.accounts.get(accountId) : null;
 
     const fName = field('Nome da conta *', input({ value: editing ? editing.name : '', placeholder: 'Ex.: Conta corrente', maxlength: 50 }));
@@ -7635,6 +7804,7 @@ window.SupabaseConfig = {
      ============================================================ */
 
   Forms.openCard = function (cardId) {
+    if (!cardId && global.Limites && !Limites.exigirEspaco('credit_cards')) return;
     const editing = cardId ? Store.cards.get(cardId) : null;
     const accounts = accountOptions();
 
@@ -7752,6 +7922,7 @@ window.SupabaseConfig = {
      ============================================================ */
 
   Forms.openCategory = function (kind, catId) {
+    if (!catId && global.Limites && !Limites.exigirEspaco('custom_categories')) return;
     const editing = catId ? Store.categories.get(catId) : null;
     const k = editing ? editing.kind : (kind || 'expense');
 
@@ -7965,6 +8136,7 @@ window.SupabaseConfig = {
             onclick: () => {
               const n = nameInput.value.trim();
               if (!n) { UI.toast('Informe um nome.', 'error'); return; }
+              if (global.Limites && !Limites.exigirEspaco('workspaces')) return;
               Store.addProfile(n);
               UI.toast(`Perfil "${n}" criado e selecionado.`, 'success');
               draw();
@@ -8810,6 +8982,7 @@ window.SupabaseConfig = {
 
     if (!user) {
       setState('signed-out');
+      if (global.Limites && Limites.aoSair) Limites.aoSair();
       if (global.Conta && Conta.aoSair) Conta.aoSair();
       return;
     }
@@ -8828,6 +9001,7 @@ window.SupabaseConfig = {
     /* Com o esquema normalizado disponível, a entrada é o momento de
        oferecer a migração — e de drenar o que ficou pendente offline
        na sessão anterior. */
+    if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();
@@ -10889,6 +11063,565 @@ window.SupabaseConfig = {
 
 </script>
 <script>
+/* ===== assets/js/planos.js ===== */
+/* =============================================================
+   planos.js — a fonte central de planos, preços e limites
+   ------------------------------------------------------------
+   Este arquivo é a ÚNICA fonte de preço e limite no front-end.
+   Se um número aparecer em outro lugar do código, é bug: um dia
+   os dois discordam, e o que a pessoa vê deixa de ser o que ela
+   paga.
+
+   ATENÇÃO: ESTE ARQUIVO NÃO DECIDE NADA
+   Ele existe para a interface orientar — mostrar o preço, dizer
+   quantas contas faltam, desenhar a página de planos. Quem decide
+   é o banco, porque é lá que o navegador não alcança. Um usuário
+   que edite este arquivo no DevTools consegue ver botões
+   diferentes e absolutamente nada além disso: a criação passa
+   pelo RLS e a IA passa pela Edge Function.
+
+   Há um teste que compara este arquivo com as tabelas do banco e
+   falha se os dois discordarem.
+
+   DINHEIRO É INTEIRO, EM CENTAVOS
+   14,90 em ponto flutuante é 14.900000000000000355271367880050.
+   Some doze vezes e a economia do plano anual sai errada por
+   centavos — que é exatamente o tipo de erro que ninguém perdoa
+   num produto financeiro. Centavo é int; a divisão só acontece na
+   hora de escrever na tela.
+
+   null = ILIMITADO
+   Não um número grande. Número grande vaza para a interface, e
+   alguém acaba lendo "3 de 999999 contas".
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Planos = {};
+
+  /* ---------------- catálogo ---------------- */
+
+  Planos.LISTA = [
+    {
+      id: 'free',
+      nome: 'Grátis',
+      descricao: 'Para organizar o essencial e entender para onde vai o dinheiro.',
+      moeda: 'BRL',
+      mensalCentavos: 0,
+      anualCentavos: 0,
+      destaque: false,
+      limites: {
+        workspaces: 1,
+        accounts: 2,
+        credit_cards: 1,
+        custom_categories: 10,
+        budgets: 2,
+        goals: 1,
+        recurring_items: 3,
+        ai_queries_per_month: 5,
+        history_months: 6,
+        comparison_months: 3,
+        collaborators: 0
+      },
+      recursos: {
+        import_csv: false, import_ofx: false,
+        export_csv: false, export_pdf: false,
+        colaboracao: false, analises_avancadas: false,
+        ia_simulacoes: false, relatorios_custom: false,
+        suporte_prioritario: false
+      }
+    },
+    {
+      id: 'basic',
+      nome: 'Basic',
+      descricao: 'Para quem já tem mais de uma conta e quer o histórico inteiro.',
+      moeda: 'BRL',
+      mensalCentavos: 1490,
+      anualCentavos: 14990,
+      destaque: true,
+      limites: {
+        workspaces: 2,
+        accounts: 10,
+        credit_cards: 5,
+        custom_categories: null,
+        budgets: null,
+        goals: null,
+        recurring_items: null,
+        ai_queries_per_month: 50,
+        history_months: null,
+        comparison_months: 12,
+        collaborators: 0
+      },
+      recursos: {
+        import_csv: true, import_ofx: false,
+        export_csv: true, export_pdf: false,
+        colaboracao: false, analises_avancadas: false,
+        ia_simulacoes: false, relatorios_custom: false,
+        suporte_prioritario: false
+      }
+    },
+    {
+      id: 'pro',
+      nome: 'Pro',
+      descricao: 'Para quem separa finanças por espaço e quer análise a fundo.',
+      moeda: 'BRL',
+      mensalCentavos: 2990,
+      anualCentavos: 29990,
+      destaque: false,
+      limites: {
+        workspaces: 5,
+        accounts: null,
+        credit_cards: null,
+        custom_categories: null,
+        budgets: null,
+        goals: null,
+        recurring_items: null,
+        ai_queries_per_month: 200,
+        history_months: null,
+        comparison_months: null,
+        collaborators: 3
+      },
+      recursos: {
+        import_csv: true, import_ofx: true,
+        export_csv: true, export_pdf: true,
+        colaboracao: true, analises_avancadas: true,
+        ia_simulacoes: true, relatorios_custom: true,
+        suporte_prioritario: true
+      }
+    }
+  ];
+
+  Planos.get = (id) => Planos.LISTA.find((p) => p.id === id) || Planos.LISTA[0];
+  Planos.IDS = Planos.LISTA.map((p) => p.id);
+
+  /* ---------------- dinheiro ---------------- */
+
+  /** A única função que transforma centavo em texto. */
+  Planos.moeda = function (centavos) {
+    return (centavos / 100).toLocaleString('pt-BR', {
+      style: 'currency', currency: 'BRL',
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
+  };
+
+  /**
+   * O mensal equivalente do plano anual. Arredonda para baixo, ao
+   * centavo: prometer R$ 12,50 quando a conta dá 12,4916 seria
+   * cobrar meio centavo a mais do que o anunciado.
+   */
+  Planos.mensalEquivalente = function (plano) {
+    if (!plano.anualCentavos) return 0;
+    return Math.floor(plano.anualCentavos / 12);
+  };
+
+  /** Quanto o anual economiza frente a doze mensais. */
+  Planos.economiaAnual = function (plano) {
+    if (!plano.anualCentavos || !plano.mensalCentavos) return 0;
+    return (plano.mensalCentavos * 12) - plano.anualCentavos;
+  };
+
+  Planos.preco = function (plano, ciclo) {
+    return ciclo === 'annual' ? plano.anualCentavos : plano.mensalCentavos;
+  };
+
+  /* ---------------- leitura de limites ---------------- */
+
+  const ILIMITADO = 'Ilimitado';
+  Planos.ILIMITADO = ILIMITADO;
+
+  /** Um limite vira texto: número, ou a palavra — nunca 999999. */
+  Planos.textoLimite = function (v) {
+    return v === null || v === undefined ? ILIMITADO : String(v);
+  };
+
+  /** "3 de 10" ou "3 usados · ilimitado". */
+  Planos.textoUso = function (usado, limite, unidade) {
+    const u = unidade ? ' ' + unidade : '';
+    if (limite === null || limite === undefined) return usado + u + ' · ilimitado';
+    return usado + ' de ' + limite + u;
+  };
+
+  /* ---------------- o que cada plano oferece, em português ----
+     Só entra nesta lista o que o produto REALMENTE faz hoje. O
+     brief é explícito: recurso futuro não aparece como disponível.
+     Colaboração, relatórios personalizados, exportação em PDF e
+     simulações da IA existem como direito no banco — o encanamento
+     está pronto — mas não são anunciados enquanto não existirem.
+     ------------------------------------------------------------ */
+
+  Planos.COMPARATIVO = [
+    { chave: 'workspaces',           rotulo: 'Espaços financeiros',        tipo: 'limite' },
+    { chave: 'accounts',             rotulo: 'Contas',                     tipo: 'limite' },
+    { chave: 'credit_cards',         rotulo: 'Cartões de crédito',         tipo: 'limite' },
+    { chave: 'lancamentos',          rotulo: 'Lançamentos manuais',        tipo: 'fixo', valor: ILIMITADO },
+    { chave: 'custom_categories',    rotulo: 'Categorias personalizadas',  tipo: 'limite' },
+    { chave: 'budgets',              rotulo: 'Orçamentos',                 tipo: 'limite' },
+    { chave: 'goals',                rotulo: 'Metas',                      tipo: 'limite' },
+    { chave: 'recurring_items',      rotulo: 'Recorrências',               tipo: 'limite' },
+    { chave: 'history_months',       rotulo: 'Histórico e análises',       tipo: 'meses' },
+    { chave: 'comparison_months',    rotulo: 'Comparação entre períodos',  tipo: 'meses' },
+    { chave: 'ai_queries_per_month', rotulo: 'Consultas ao UGLEZ por mês', tipo: 'limite' },
+    { chave: 'import_csv',           rotulo: 'Importar extrato em CSV',    tipo: 'recurso' },
+    { chave: 'import_ofx',           rotulo: 'Importar extrato em OFX',    tipo: 'recurso' },
+    { chave: 'export_csv',           rotulo: 'Exportar relatório em CSV',  tipo: 'recurso' },
+    { chave: 'backup',               rotulo: 'Backup em JSON',             tipo: 'fixo', valor: 'Sempre' }
+  ];
+
+  /** Destaques do cartão de cada plano, na ordem em que convencem. */
+  Planos.DESTAQUES = {
+    free: [
+      '1 espaço financeiro',
+      '2 contas e 1 cartão',
+      'Lançamentos ilimitados',
+      '10 categorias personalizadas',
+      'Histórico dos últimos 6 meses',
+      '5 consultas ao UGLEZ por mês'
+    ],
+    basic: [
+      '2 espaços financeiros',
+      '10 contas e 5 cartões',
+      'Categorias, orçamentos, metas e recorrências ilimitados',
+      'Histórico financeiro completo',
+      '50 consultas ao UGLEZ por mês',
+      'Importar e exportar em CSV'
+    ],
+    pro: [
+      '5 espaços financeiros',
+      'Contas e cartões ilimitados',
+      'Histórico e comparações sem limite',
+      '200 consultas ao UGLEZ por mês',
+      'Importar CSV e OFX',
+      'Análises avançadas do UGLEZ'
+    ]
+  };
+
+  /* Perguntas que a pessoa faz antes de assinar — e que, sem
+     resposta, viram e-mail de suporte ou desistência. */
+  Planos.FAQ = [
+    {
+      p: 'Posso cancelar quando quiser?',
+      r: 'Sim. O plano continua valendo até o fim do período que você já pagou, e depois volta para o Grátis. Não há multa nem fidelidade.'
+    },
+    {
+      p: 'O que acontece com meus dados se eu voltar para o Grátis?',
+      r: 'Nada é apagado. Se você tiver mais contas ou cartões do que o Grátis permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.'
+    },
+    {
+      p: 'Como funciona a troca de plano?',
+      r: 'O upgrade vale assim que o pagamento é confirmado. O downgrade vale no fim do período já pago, para você não perder dias que já comprou.'
+    },
+    {
+      p: 'A cobrança anual é um pagamento só?',
+      r: 'Sim, um pagamento que cobre doze meses. É por isso que sai mais barato por mês.'
+    },
+    {
+      p: 'Meus dados financeiros são enviados para a inteligência artificial?',
+      r: 'Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. Dá para ver exatamente o que sai, em Configurações.'
+    },
+    {
+      p: 'Preciso de conta para usar o OAZE?',
+      r: 'Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com o UGLEZ.'
+    }
+  ];
+
+  global.Planos = Planos;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/limites.js ===== */
+/* =============================================================
+   limites.js — o serviço de permissões
+   ------------------------------------------------------------
+   Quatro perguntas, um lugar só:
+
+     Limites.direitos()          o que este usuário tem direito
+     Limites.pode(recurso)       este recurso está liberado?
+     Limites.cabe(tipo)          ainda cabe mais um deste tipo?
+     Limites.uso(tipo)           quanto foi usado de quanto
+
+   ONDE ISTO É A PROTEÇÃO, E ONDE NÃO É
+   Aqui é orientação. Botão escondido não é segurança: quem abre o
+   DevTools chama a função direto. A proteção real está em dois
+   lugares que o navegador não alcança —
+
+     criar registro   → RLS por participação no workspace, e o
+                        limite de workspaces está no plano
+     consultar a IA   → Edge Function, que lê o plano do banco e
+                        reserva a cota de forma atômica
+
+   O papel deste arquivo é fazer a pessoa entender o limite ANTES
+   de bater nele, e explicar quando bate. Um erro genérico de
+   permissão vindo do banco é tecnicamente seguro e péssimo de
+   receber.
+
+   AO BATER NO LIMITE, NADA É APAGADO
+   Nem escondido, nem bloqueado. O que para é a criação de itens
+   NOVOS daquele tipo. Quem está acima do limite depois de um
+   downgrade continua vendo e usando tudo — e pode apagar o que
+   quiser para voltar a caber.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Limites = {};
+  const el = U.el;
+
+  /* Direitos do plano Grátis, embutidos. Servem quando não há
+     sessão ou rede — e é a escolha conservadora certa: na dúvida,
+     o menor plano, nunca o maior. */
+  const PADRAO = {
+    plano: 'free',
+    status: 'free',
+    limites: Planos.get('free').limites,
+    recursos: Planos.get('free').recursos
+  };
+
+  let direitos = PADRAO;
+  let consumoIA = { usado: 0, limite: 5 };
+
+  function sb() {
+    try {
+      return (global.SupabaseBackend && SupabaseBackend.cliente && SupabaseBackend.cliente()) || null;
+    } catch (e) { return null; }
+  }
+
+  Limites.direitos = () => direitos;
+  Limites.plano = () => direitos.plano;
+  Limites.consumoIA = () => consumoIA;
+
+  /* ---------------- carga ---------------- */
+
+  /**
+   * Uma chamada só, resolvida no banco: a função meus_direitos()
+   * junta assinatura, plano e direitos. Fazer três consultas aqui
+   * seria três oportunidades de ficar num estado meio carregado.
+   */
+  Limites.carregar = async function () {
+    const c = sb();
+    const u = global.Sync && Sync.currentUser();
+    if (!c || !u) { direitos = PADRAO; return direitos; }
+    try {
+      const { data, error } = await c.rpc('meus_direitos');
+      if (error) throw error;
+      if (data) {
+        direitos = {
+          plano: data.plano || 'free',
+          planoContratado: data.plano_contratado,
+          status: data.status || 'free',
+          ciclo: data.ciclo,
+          fimPeriodo: data.fim_periodo,
+          cancelaNoFim: !!data.cancela_no_fim,
+          limites: data.limites || PADRAO.limites,
+          recursos: data.recursos || PADRAO.recursos
+        };
+      }
+      await Limites.carregarConsumo();
+    } catch (e) {
+      console.warn('Limites: usando o plano Grátis por precaução —', e.message);
+      direitos = PADRAO;
+    }
+    return direitos;
+  };
+
+  Limites.carregarConsumo = async function () {
+    const c = sb();
+    const u = global.Sync && Sync.currentUser();
+    if (!c || !u) return;
+    /* O mês no fuso do OAZE, igual ao que o banco usa. Calcular em
+       UTC faria o contador "virar" às 21h do dia 30. */
+    const mes = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }).slice(0, 7);
+    try {
+      const { data } = await c.from('usage_counters')
+        .select('usado, limite').eq('user_id', u.uid)
+        .eq('tipo', 'ai_query').eq('periodo', mes).maybeSingle();
+      consumoIA = {
+        usado: (data && data.usado) || 0,
+        limite: direitos.limites.ai_queries_per_month
+      };
+    } catch (e) { /* offline */ }
+  };
+
+  /* ---------------- perguntas ---------------- */
+
+  Limites.pode = function (recurso) {
+    return !!(direitos.recursos && direitos.recursos[recurso]);
+  };
+
+  Limites.limite = function (tipo) {
+    const v = direitos.limites ? direitos.limites[tipo] : undefined;
+    return v === undefined ? null : v;
+  };
+
+  /** Quantos itens deste tipo já existem no perfil ativo. */
+  Limites.contar = function (tipo) {
+    const p = Store.profile();
+    if (!p) return 0;
+    switch (tipo) {
+      case 'workspaces': return Store.state().profiles.length;
+      case 'accounts': return (p.accounts || []).length;
+      case 'credit_cards': return (p.cards || []).length;
+      case 'budgets': return Object.keys(p.budgets || {}).length;
+      case 'goals': return (p.goals || []).length;
+      case 'recurring_items': return (p.transactions || []).filter((t) => t.recurring).length;
+      case 'custom_categories': {
+        /* Só as que a pessoa criou contam. As que vêm prontas não
+           deveriam consumir a cota de "personalizadas" — cobrar por
+           elas seria cobrar pelo padrão do produto. */
+        const padrao = new Set(Store.CATEGORIAS_PADRAO || []);
+        return (p.categories || []).filter((c) => !padrao.has(c.name)).length;
+      }
+      default: return 0;
+    }
+  };
+
+  /** Ainda cabe mais um? */
+  Limites.cabe = function (tipo) {
+    const teto = Limites.limite(tipo);
+    if (teto === null) return true;
+    return Limites.contar(tipo) < teto;
+  };
+
+  Limites.uso = function (tipo) {
+    return { usado: Limites.contar(tipo), limite: Limites.limite(tipo) };
+  };
+
+  /* ---------------- explicação ---------------- */
+
+  const NOMES = {
+    workspaces: ['espaço financeiro', 'espaços financeiros'],
+    accounts: ['conta', 'contas'],
+    credit_cards: ['cartão de crédito', 'cartões de crédito'],
+    custom_categories: ['categoria personalizada', 'categorias personalizadas'],
+    budgets: ['orçamento', 'orçamentos'],
+    goals: ['meta', 'metas'],
+    recurring_items: ['recorrência', 'recorrências']
+  };
+
+  /** O próximo plano que resolve este limite — se houver. */
+  function proximoQueResolve(tipo) {
+    const atual = Planos.IDS.indexOf(direitos.plano);
+    for (let i = atual + 1; i < Planos.LISTA.length; i++) {
+      const p = Planos.LISTA[i];
+      const v = p.limites[tipo];
+      if (v === null || v > (Limites.limite(tipo) || 0)) return p;
+    }
+    return null;
+  }
+
+  /**
+   * Barra a criação e EXPLICA. A frase segue a fórmula do brief:
+   * quanto está usando, de quanto, e o que o próximo plano dá.
+   * Um "limite atingido" seco manda a pessoa adivinhar.
+   */
+  Limites.exigirEspaco = function (tipo) {
+    if (Limites.cabe(tipo)) return true;
+
+    const teto = Limites.limite(tipo);
+    const nome = NOMES[tipo] || ['item', 'itens'];
+    const plural = teto === 1 ? nome[0] : nome[1];
+    const prox = proximoQueResolve(tipo);
+    const planoAtual = Planos.get(direitos.plano);
+
+    const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+      el('p', [
+        el('strong', { text: 'Você está usando ' + teto + ' de ' + teto + ' ' + plural }),
+        el('span', { text: ' disponíveis no plano ' + planoAtual.nome + '.' })
+      ]),
+      prox
+        ? el('p', { style: { marginTop: '10px' } }, [
+          el('span', { text: 'No ' + prox.nome + ', você pode cadastrar ' }),
+          el('strong', { text: prox.limites[tipo] === null ? 'quantos quiser' : 'até ' + prox.limites[tipo] }),
+          el('span', { text: '.' })
+        ])
+        : null,
+      el('p', { style: { marginTop: '10px' }, text: 'Nada foi apagado, e o resto do app continua funcionando. Você também pode excluir um dos que já existem para abrir espaço.' })
+    ].filter(Boolean));
+
+    UI.openModal({
+      title: 'Limite do plano ' + planoAtual.nome,
+      body: corpo,
+      buttons: [
+        { label: 'Entendi', class: 'btn-outline', onClick: UI.closeModal },
+        prox
+          ? {
+            label: 'Ver planos', class: 'btn-primary',
+            onClick: () => { UI.closeModal(); App.goTo('precos'); }
+          }
+          : null
+      ].filter(Boolean)
+    });
+    return false;
+  };
+
+  /** Mesma ideia, para recurso que é sim-ou-não. */
+  Limites.exigirRecurso = function (recurso, oQueEra) {
+    if (Limites.pode(recurso)) return true;
+
+    const prox = Planos.LISTA.find((p) =>
+      Planos.IDS.indexOf(p.id) > Planos.IDS.indexOf(direitos.plano) && p.recursos[recurso]);
+    const planoAtual = Planos.get(direitos.plano);
+
+    UI.openModal({
+      title: 'Disponível em outro plano',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: oQueEra + ' não está incluído no plano ' + planoAtual.nome + '.' }),
+        prox ? el('p', { style: { marginTop: '10px' }, text: 'Está disponível a partir do ' + prox.nome + '.' }) : null,
+        el('p', { style: { marginTop: '10px' }, text: 'Seus dados continuam intactos e o resto do app segue funcionando normalmente.' })
+      ].filter(Boolean)),
+      buttons: [
+        { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal },
+        prox ? { label: 'Ver planos', class: 'btn-primary', onClick: () => { UI.closeModal(); App.goTo('precos'); } } : null
+      ].filter(Boolean)
+    });
+    return false;
+  };
+
+  /* ---------------- barra de consumo ---------------- */
+
+  /**
+   * Uma barra que não existe quando o limite é ilimitado: desenhar
+   * uma barra sempre vazia sugere um teto que não há.
+   */
+  Limites.barra = function (rotulo, usado, limite, unidade) {
+    if (limite === null || limite === undefined) {
+      return el('div', { class: 'uso-linha' }, [
+        el('span', { class: 'uso-rotulo', text: rotulo }),
+        el('span', { class: 'uso-num', text: usado + (unidade ? ' ' + unidade : '') + ' · ilimitado' })
+      ]);
+    }
+    const pct = limite > 0 ? Math.min(100, Math.round((usado / limite) * 100)) : 0;
+    const cheio = usado >= limite;
+    return el('div', { class: 'uso-linha' }, [
+      el('span', { class: 'uso-rotulo', text: rotulo }),
+      el('span', { class: 'uso-num' + (cheio ? ' is-cheio' : ''), text: usado + ' de ' + limite }),
+      el('div', {
+        class: 'uso-barra' + (cheio ? ' is-cheio' : ''),
+        role: 'progressbar', 'aria-valuenow': String(usado),
+        'aria-valuemin': '0', 'aria-valuemax': String(limite),
+        'aria-label': rotulo + ': ' + usado + ' de ' + limite
+      }, el('i', { style: { width: pct + '%' } }))
+    ]);
+  };
+
+  /* ---------------- ciclo ---------------- */
+
+  Limites.aoEntrar = async function () {
+    await Limites.carregar();
+    if (App.page === 'settings') Cfg.render();
+    if (App.page === 'precos' && global.Precos) Precos.render();
+  };
+
+  Limites.aoSair = function () {
+    direitos = PADRAO;
+    consumoIA = { usado: 0, limite: 5 };
+  };
+
+  global.Limites = Limites;
+})(window);
+
+</script>
+<script>
 /* ===== assets/js/conta.js ===== */
 /* =============================================================
    conta.js — a conta como objeto de primeira classe
@@ -11335,6 +12068,165 @@ window.SupabaseConfig = {
   };
 
   global.Conta = Conta;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/checkout.js ===== */
+/* =============================================================
+   checkout.js — a jornada de compra, até onde ela pode ir
+   ------------------------------------------------------------
+   O PROVEDOR ESCOLHIDO É O MERCADO PAGO. O que falta não é a
+   decisão: são os identificadores de preço criados lá dentro
+   (external_price_id) e a chave de acesso do vendedor. Sem eles,
+   qualquer "checkout" que este arquivo abrisse seria encenação.
+
+   Por isso o fluxo vai até a borda e PARA, com honestidade na
+   tela: diz o que vai acontecer, o que já está pronto e o que
+   falta. Uma tela de "pagamento aprovado" sem pagamento é a
+   mentira mais cara que um produto financeiro pode contar.
+
+   O QUE O NAVEGADOR MANDA
+   Duas coisas: o id do plano e o ciclo. Nunca o valor. O preço
+   vive em plan_prices, no servidor, e é de lá que o checkout o
+   busca — se o cliente pudesse mandar o valor, o valor seria
+   sugestão.
+
+   O QUE LIBERA O PLANO
+   O webhook assinado, e só ele. O retorno visual do provedor diz
+   apenas que o navegador voltou; quem confirma que o dinheiro
+   entrou é o servidor conversando com o servidor.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Checkout = {};
+  const el = U.el;
+
+  /* Interface independente de provedor. Trocar de provedor é
+     escrever outro objeto com estes três métodos — nada além
+     deste arquivo precisa saber qual é. */
+  const PROVEDORES = {
+    mercadopago: {
+      nome: 'Mercado Pago',
+      /* Precisa do id do preço criado no painel do provedor. */
+      pronto: () => false,
+      faltando: [
+        'Criar os quatro preços no painel do Mercado Pago (Basic e Pro, mensal e anual)',
+        'Preencher external_price_id em plan_prices com os ids gerados lá',
+        'Configurar MERCADOPAGO_ACCESS_TOKEN nos segredos do Supabase',
+        'Publicar a Edge Function de checkout e a de webhook',
+        'Cadastrar a URL do webhook no painel do provedor'
+      ]
+    }
+  };
+
+  const PROVEDOR = 'mercadopago';
+
+  Checkout.provedor = () => PROVEDORES[PROVEDOR];
+  Checkout.pronto = () => PROVEDORES[PROVEDOR].pronto();
+
+  /**
+   * Inicia a assinatura. Enquanto o provedor não está conectado,
+   * mostra exatamente onde o processo para — em vez de um botão
+   * que não faz nada, ou pior, de um que finge.
+   */
+  Checkout.iniciar = async function (planoId, ciclo) {
+    const plano = Planos.get(planoId);
+    const prov = Checkout.provedor();
+    const centavos = Planos.preco(plano, ciclo);
+
+    if (!Checkout.pronto()) {
+      UI.openModal({
+        title: 'Assinatura ainda não disponível',
+        wide: true,
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('div', { class: 'parse-info' }, el('div', {}, [
+            el('strong', { text: 'Plano ' + plano.nome + ' · ' + (ciclo === 'annual' ? 'anual' : 'mensal') }),
+            el('p', { style: { marginTop: '4px' }, text: Planos.moeda(centavos) + (ciclo === 'annual' ? ' por ano' : ' por mês') })
+          ])),
+          el('p', { style: { marginTop: '12px' } }, [
+            el('span', { text: 'A cobrança será pelo ' }),
+            el('strong', { text: prov.nome }),
+            el('span', { text: ', e a conexão final ainda não foi feita. Não vamos abrir uma tela de pagamento que não cobra de verdade.' })
+          ]),
+          el('p', { class: 'ob-sub', style: { marginTop: '14px' }, text: 'O que já está pronto' }),
+          el('ul', { class: 'lista-check' }, [
+            'Planos, preços e limites no banco, com histórico de versão',
+            'Limites aplicados no servidor, não só na tela',
+            'Cota do UGLEZ contada de forma atômica, com estorno em erro',
+            'Assinatura que só o webhook pode alterar'
+          ].map((t) => el('li', {}, [
+            el('span', { class: 'plano-check', 'aria-hidden': 'true' }, Icons.lucide('check', 14)),
+            el('span', { text: t })
+          ]))),
+          el('p', { class: 'ob-sub', style: { marginTop: '14px' }, text: 'O que falta' }),
+          el('ol', { class: 'lista-passos' }, prov.faltando.map((t) => el('li', { text: t }))),
+          el('p', { class: 'hint', style: { marginTop: '12px' }, text: 'Enquanto isso, o plano Grátis continua funcionando por completo — e seus dados são os mesmos em qualquer plano.' })
+        ]),
+        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
+      });
+      return;
+    }
+
+    /* ---- daqui para baixo, só roda quando o provedor estiver
+       conectado. O navegador manda plano e ciclo; o valor é
+       decidido no servidor. ---- */
+    try {
+      const r = await Conta.chamarFuncao('oaze-checkout', { plano: planoId, ciclo });
+      if (r.erro) { UI.toast(r.mensagem || 'Não foi possível iniciar a assinatura.', 'error'); return; }
+      if (r.url) { location.href = r.url; return; }
+      UI.toast('O provedor não devolveu um endereço de pagamento.', 'error');
+    } catch (e) {
+      UI.toast('Falha ao falar com o servidor: ' + e.message, 'error');
+    }
+  };
+
+  /**
+   * Cancelar. Mantém o plano até o fim do período já pago — quem
+   * pagou trinta dias tem direito a trinta dias, e encerrar antes
+   * seria ficar com dinheiro por serviço não prestado.
+   */
+  Checkout.cancelar = function () {
+    const d = Limites.direitos();
+    if (d.plano === 'free') { UI.toast('Você já está no plano Grátis.', 'success'); return; }
+
+    const fim = d.fimPeriodo ? U.fmtDateBR(String(d.fimPeriodo).slice(0, 10)) : null;
+
+    UI.openModal({
+      title: 'Cancelar a assinatura',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: fim
+          ? 'Seu plano continua valendo até ' + fim + '. Depois disso, a conta volta para o Grátis.'
+          : 'Seu plano continua valendo até o fim do período já pago. Depois, a conta volta para o Grátis.' }),
+        el('p', { style: { marginTop: '10px' } }, [
+          el('strong', { text: 'Nenhum dado é apagado. ' }),
+          el('span', { text: 'Se você tiver mais contas ou cartões do que o Grátis permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite.' })
+        ]),
+        el('p', { style: { marginTop: '10px' }, text: 'Baixe um backup antes se quiser guardar uma cópia fora do app.' })
+      ]),
+      buttons: [
+        { label: 'Manter assinatura', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Cancelar mesmo assim', class: 'btn-outline danger',
+          onClick: async () => {
+            if (!Checkout.pronto()) {
+              UI.closeModal();
+              UI.toast('O cancelamento passa pelo provedor, que ainda não está conectado.', 'error', 7000);
+              return;
+            }
+            const r = await Conta.chamarFuncao('oaze-checkout', { acao: 'cancelar' });
+            UI.closeModal();
+            UI.toast(r.erro ? (r.mensagem || 'Falha ao cancelar.') : 'Cancelamento agendado para o fim do período.',
+              r.erro ? 'error' : 'success');
+            if (global.Limites) Limites.carregar().then(() => Cfg.render());
+          }
+        }
+      ]
+    });
+  };
+
+  global.Checkout = Checkout;
 })(window);
 
 </script>
@@ -13765,6 +14657,10 @@ window.SupabaseConfig = {
 
   /** Formulário de limite. Sem categoria escolhida, oferece as de despesa. */
   Bud.open = function (categoryId) {
+    /* Orçamento é por categoria: já existir um para esta
+       categoria é edição, não criação. */
+    const jaTem = categoryId && Store.budgets && Store.budgets.get && Store.budgets.get(categoryId);
+    if (!jaTem && global.Limites && !Limites.exigirEspaco('budgets')) return;
     const cats = Store.profile().categories.filter((c) => c.kind === 'expense');
     if (!cats.length) {
       UI.toast('Crie uma categoria de despesa antes de definir um limite.', 'error');
@@ -13995,6 +14891,11 @@ window.SupabaseConfig = {
   }
 
   Goals.open = function (id) {
+    /* Só na criação: editar o que já existe nunca é barrado —
+       é isso que faz o downgrade não trancar dados que já são
+       da pessoa. */
+    if (!id && global.Limites && !Limites.exigirEspaco('goals')) return;
+
     const g = id ? Store.goals.get(id) : null;
 
     const nome = el('input', { class: 'input', type: 'text', maxlength: '60', value: g ? g.name : '', placeholder: 'Ex.: Reserva de emergência' });
@@ -14756,6 +15657,217 @@ window.SupabaseConfig = {
 
 </script>
 <script>
+/* ===== assets/js/pages/precos.js ===== */
+/* =============================================================
+   pages/precos.js — a página de planos
+   ------------------------------------------------------------
+   Todo número aqui vem de Planos. Nenhum preço é digitado nesta
+   tela: se estivesse, um dia a página diria 14,90 e a cobrança
+   diria outra coisa.
+
+   O QUE ESTA PÁGINA NÃO FAZ
+   Preço riscado que nunca existiu, contador regressivo, "últimas
+   vagas". Nada disso — a economia do plano anual é calculada da
+   diferença real entre doze mensais e um anual, e se um dia essa
+   diferença for zero, a página deixa de anunciá-la sozinha.
+
+   E não lista recurso que o produto ainda não faz. Colaboração,
+   relatórios personalizados e exportação em PDF existem como
+   direito no banco, prontos para quando forem construídos, mas
+   prometer hoje o que só existe depois é vender o que não se tem.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Precos = {};
+  const el = U.el;
+
+  let ciclo = 'monthly';
+
+  Precos.render = function () {
+    wire();
+    cards();
+    tabela();
+    faq();
+  };
+
+  /* ---------------- alternância mensal/anual ---------------- */
+
+  function wire() {
+    U.$$('.ciclo-btn').forEach((b) => {
+      if (b.dataset.ligado) return;
+      b.dataset.ligado = '1';
+      b.addEventListener('click', () => {
+        ciclo = b.dataset.ciclo;
+        U.$$('.ciclo-btn').forEach((x) => {
+          const ativo = x.dataset.ciclo === ciclo;
+          x.classList.toggle('is-active', ativo);
+          x.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+        });
+        cards();
+      });
+    });
+  }
+
+  /* ---------------- os três cartões ---------------- */
+
+  function cards() {
+    const box = U.clear(document.getElementById('precosCards'));
+    if (!box) return;
+
+    const atual = global.Limites ? Limites.plano() : 'free';
+    const logado = !!(global.Sync && Sync.currentUser());
+
+    Planos.LISTA.forEach((p) => {
+      const centavos = Planos.preco(p, ciclo);
+      const eAtual = p.id === atual && logado;
+
+      const preco = el('div', { class: 'plano-preco' });
+      if (centavos === 0) {
+        preco.appendChild(el('span', { class: 'plano-valor', text: 'R$ 0' }));
+        preco.appendChild(el('span', { class: 'plano-periodo', text: 'para sempre' }));
+      } else if (ciclo === 'annual') {
+        /* No anual, o número grande é o mensal equivalente: é ele
+           que a pessoa compara com o plano mensal. O valor cobrado
+           vem logo abaixo, sem letra miúda. */
+        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(Planos.mensalEquivalente(p)) }));
+        preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
+        preco.appendChild(el('p', { class: 'plano-cobranca', text: Planos.moeda(centavos) + ' cobrados uma vez por ano' }));
+        const eco = Planos.economiaAnual(p);
+        if (eco > 0) {
+          preco.appendChild(el('p', { class: 'plano-economia', text: 'Economia de ' + Planos.moeda(eco) + ' por ano' }));
+        }
+      } else {
+        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(centavos) }));
+        preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
+      }
+
+      const botao = el('button', {
+        class: 'btn ' + (eAtual ? 'btn-outline' : p.destaque ? 'btn-primary' : 'btn-outline'),
+        type: 'button',
+        disabled: eAtual ? '' : null,
+        text: eAtual ? 'Seu plano atual'
+          : p.id === 'free' ? 'Começar grátis' : 'Assinar ' + p.nome,
+        onclick: () => Precos.escolher(p, ciclo)
+      });
+      if (eAtual) botao.disabled = true;
+
+      box.appendChild(el('article', {
+        class: 'card plano-card' + (p.destaque ? ' is-destaque' : '') + (eAtual ? ' is-atual' : ''),
+        'aria-labelledby': 'plano-' + p.id
+      }, [
+        p.destaque ? el('span', { class: 'plano-selo', text: 'Mais escolhido' }) : null,
+        eAtual ? el('span', { class: 'plano-selo is-atual', text: 'Plano atual' }) : null,
+        el('h3', { class: 'plano-nome', id: 'plano-' + p.id, text: p.nome }),
+        el('p', { class: 'plano-desc', text: p.descricao }),
+        preco,
+        botao,
+        el('ul', { class: 'plano-itens' },
+          (Planos.DESTAQUES[p.id] || []).map((t) => el('li', {}, [
+            el('span', { class: 'plano-check', 'aria-hidden': 'true' }, Icons.lucide('check', 14)),
+            el('span', { text: t })
+          ])))
+      ].filter(Boolean)));
+    });
+  }
+
+  /* ---------------- comparativo ---------------- */
+
+  function celula(p, linha) {
+    if (linha.tipo === 'fixo') return linha.valor;
+    if (linha.tipo === 'recurso') return p.recursos[linha.chave] ? 'sim' : 'não';
+    const v = p.limites[linha.chave];
+    if (linha.tipo === 'meses') {
+      return v === null ? 'Completo' : v + ' meses';
+    }
+    return Planos.textoLimite(v);
+  }
+
+  function tabela() {
+    const t = U.clear(document.getElementById('precosTabela'));
+    if (!t) return;
+
+    t.appendChild(el('thead', {}, el('tr', {}, [
+      el('th', { scope: 'col', text: 'Recurso' })
+    ].concat(Planos.LISTA.map((p) => el('th', { scope: 'col', text: p.nome }))))));
+
+    const tb = el('tbody', {});
+    Planos.COMPARATIVO.forEach((linha) => {
+      tb.appendChild(el('tr', {}, [
+        el('th', { scope: 'row', text: linha.rotulo })
+      ].concat(Planos.LISTA.map((p) => {
+        const v = celula(p, linha);
+        const negativo = v === 'não';
+        return el('td', { class: negativo ? 'is-nao' : '' },
+          negativo
+            ? el('span', { 'aria-label': 'não incluído' }, '—')
+            : el('span', { text: v === 'sim' ? '✓' : v, 'aria-label': v === 'sim' ? 'incluído' : null }));
+      }))));
+    });
+    t.appendChild(tb);
+
+    const nota = document.getElementById('precosNota');
+    if (nota) {
+      nota.textContent = 'Backup em JSON, lançamentos manuais e o painel completo estão em todos os planos, '
+        + 'inclusive no Grátis. Colaboração, relatórios personalizados e exportação em PDF ainda não existem '
+        + 'no produto e por isso não aparecem aqui.';
+    }
+  }
+
+  /* ---------------- FAQ ---------------- */
+
+  function faq() {
+    const box = U.clear(document.getElementById('precosFaq'));
+    if (!box) return;
+    Planos.FAQ.forEach((f, i) => {
+      const corpo = el('div', { class: 'faq-corpo', id: 'faq-c-' + i, hidden: true },
+        el('p', { text: f.r }));
+      const botao = el('button', {
+        class: 'faq-p', type: 'button',
+        'aria-expanded': 'false', 'aria-controls': 'faq-c-' + i,
+        onclick: () => {
+          const aberto = botao.getAttribute('aria-expanded') === 'true';
+          botao.setAttribute('aria-expanded', aberto ? 'false' : 'true');
+          corpo.hidden = aberto;
+        }
+      }, [el('span', { text: f.p }), el('span', { class: 'faq-seta', 'aria-hidden': 'true' })]);
+      box.appendChild(el('div', { class: 'faq-item' }, [botao, corpo]));
+    });
+  }
+
+  /* ---------------- escolher um plano ---------------- */
+
+  Precos.escolher = function (plano, cicloEscolhido) {
+    if (plano.id === 'free') {
+      if (global.Sync && Sync.currentUser()) {
+        UI.toast('Você já tem uma conta. O Grátis é o plano padrão.', 'success');
+      } else {
+        Sync.signIn();
+      }
+      return;
+    }
+
+    if (!(global.Sync && Sync.currentUser())) {
+      UI.openModal({
+        title: 'Antes de assinar',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } },
+          el('p', { text: 'Crie sua conta primeiro — é ela que vai guardar a assinatura e os seus dados.' })),
+        buttons: [
+          { label: 'Agora não', class: 'btn-outline', onClick: UI.closeModal },
+          { label: 'Criar conta', class: 'btn-primary', onClick: () => { UI.closeModal(); Sync.signIn(); } }
+        ]
+      });
+      return;
+    }
+
+    Checkout.iniciar(plano.id, cicloEscolhido);
+  };
+
+  global.Precos = Precos;
+})(window);
+
+</script>
+<script>
 /* ===== assets/js/pages/settings.js ===== */
 /* =============================================================
    pages/settings.js — Configurações
@@ -14777,6 +15889,7 @@ window.SupabaseConfig = {
     uglez();
     dados();
     conta();
+    plano();
   };
 
   /** Uma linha de configuração: rótulo, explicação e o controle. */
@@ -14882,6 +15995,137 @@ window.SupabaseConfig = {
       'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
       el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
     ));
+  }
+
+  /* ---------------- plano e assinatura ---------------- */
+
+  function plano() {
+    const box = document.getElementById('setPlano');
+    if (!box) return;
+    U.clear(box);
+
+    const u = global.Sync && Sync.currentUser();
+    const d = Limites.direitos();
+    const p = Planos.get(d.plano);
+
+    /* --- o plano, o ciclo e o valor --- */
+    const centavos = d.ciclo === 'annual' ? p.anualCentavos : p.mensalCentavos;
+    const descricaoValor = p.id === 'free'
+      ? 'Sem cobrança.'
+      : Planos.moeda(centavos) + (d.ciclo === 'annual' ? ' por ano' : ' por mês');
+
+    box.appendChild(linha(
+      'Plano atual',
+      descricaoValor + (d.fimPeriodo
+        ? ' · ' + (d.cancelaNoFim ? 'termina em ' : 'renova em ') +
+          U.fmtDateBR(String(d.fimPeriodo).slice(0, 10))
+        : ''),
+      el('span', { class: 'badge ' + (p.id === 'free' ? '' : 'badge-ok'), text: p.nome })
+    ));
+
+    if (!u) {
+      box.appendChild(el('p', { class: 'hint', style: { padding: '0 2px 8px' },
+        text: 'Sem conta, o app usa os limites do plano Grátis neste aparelho.' }));
+      return;
+    }
+
+    /* --- situação do pagamento, quando há o que dizer --- */
+    const pend = Conta.pendencia && Conta.pendencia();
+    if (pend) {
+      box.appendChild(linha('Situação do pagamento', pend.texto,
+        el('span', { class: 'badge badge-late', text: pend.titulo })));
+    }
+
+    /* --- consumo --- */
+    const consumo = Limites.consumoIA();
+    const caixa = el('div', { class: 'uso-caixa' }, [
+      Limites.barra('UGLEZ neste mês', consumo.usado, consumo.limite, 'consultas'),
+      Limites.barra('Espaços financeiros', Limites.contar('workspaces'), Limites.limite('workspaces')),
+      Limites.barra('Contas', Limites.contar('accounts'), Limites.limite('accounts')),
+      Limites.barra('Cartões', Limites.contar('credit_cards'), Limites.limite('credit_cards')),
+      Limites.barra('Categorias personalizadas', Limites.contar('custom_categories'), Limites.limite('custom_categories')),
+      Limites.barra('Orçamentos', Limites.contar('budgets'), Limites.limite('budgets')),
+      Limites.barra('Metas', Limites.contar('goals'), Limites.limite('goals')),
+      Limites.barra('Recorrências', Limites.contar('recurring_items'), Limites.limite('recurring_items'))
+    ]);
+    box.appendChild(linha('Consumo do plano',
+      'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', caixa));
+
+    /* --- mudar de plano --- */
+    const acoes = el('div', { class: 'plano-acoes' }, [
+      el('button', {
+        class: 'btn btn-primary btn-sm', type: 'button',
+        text: p.id === 'pro' ? 'Ver planos' : 'Fazer upgrade',
+        onclick: () => App.goTo('precos')
+      }),
+      p.id !== 'free'
+        ? el('button', {
+          class: 'btn btn-outline btn-sm', type: 'button', text: 'Cancelar assinatura',
+          onclick: () => Checkout.cancelar()
+        })
+        : null
+    ].filter(Boolean));
+
+    box.appendChild(linha(
+      'Mudar de plano',
+      p.id === 'free'
+        ? 'O upgrade vale assim que o pagamento é confirmado.'
+        : 'O downgrade e o cancelamento valem no fim do período já pago — você não perde dias que já comprou, e nenhum dado é apagado.',
+      acoes
+    ));
+
+    /* --- histórico --- */
+    box.appendChild(linha(
+      'Histórico de alterações',
+      'Cada mudança de plano ou status fica registrada.',
+      el('button', {
+        class: 'btn btn-outline btn-sm', text: 'Ver histórico',
+        onclick: () => mostrarHistorico()
+      })
+    ));
+  }
+
+  async function mostrarHistorico() {
+    const corpo = el('div', { style: { fontSize: '13px', lineHeight: '1.6' } },
+      el('p', { class: 'hint', text: 'Carregando…' }));
+    UI.openModal({
+      title: 'Histórico da assinatura', wide: true, body: corpo,
+      buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
+    });
+
+    try {
+      const c = SupabaseBackend.cliente();
+      const u = Sync.currentUser();
+      const { data } = await c.from('subscription_events')
+        .select('tipo, de_plano, para_plano, de_status, para_status, created_at')
+        .eq('user_id', u.uid).order('created_at', { ascending: false }).limit(30);
+
+      U.clear(corpo);
+      if (!data || !data.length) {
+        corpo.appendChild(UI.emptyState({
+          ico: 'clock',
+          titulo: 'Nenhuma alteração ainda',
+          sub: 'Quando você mudar de plano, cada passo aparece aqui com data e hora.'
+        }));
+        return;
+      }
+      const t = el('table', { class: 'table' }, [
+        el('thead', {}, el('tr', {}, [
+          el('th', { scope: 'col', text: 'Quando' }),
+          el('th', { scope: 'col', text: 'O que mudou' })
+        ])),
+        el('tbody', {}, data.map((e) => el('tr', {}, [
+          el('td', { text: U.fmtDateBR(String(e.created_at).slice(0, 10)) }),
+          el('td', { text: (e.de_plano && e.para_plano && e.de_plano !== e.para_plano)
+            ? 'Plano: ' + e.de_plano + ' → ' + e.para_plano
+            : 'Status: ' + (e.de_status || '—') + ' → ' + (e.para_status || '—') })
+        ])))
+      ]);
+      corpo.appendChild(t);
+    } catch (e) {
+      U.clear(corpo);
+      corpo.appendChild(el('p', { class: 'hint', text: 'Não foi possível carregar agora: ' + e.message }));
+    }
   }
 
   /* ---------------- conta ---------------- */
@@ -15010,7 +16254,8 @@ window.SupabaseConfig = {
     reports:      { title: 'Análises',      sub: () => 'Consolidado de ' + U.ymParts(App.ym).y,              render: () => Rep.render() },
     uglez:        { title: 'UGLEZ',         sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
     categories:   { title: 'Categorias',    sub: () => 'Organização e peso histórico',                       render: () => Cat.render() },
-    settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() }
+    settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() },
+    precos:       { title: 'Planos',        sub: () => 'Escolha o tamanho do seu OAZE',                      render: () => Precos.render() }
   };
 
   /* ---------------- navegação ---------------- */
@@ -15425,6 +16670,7 @@ window.SupabaseConfig = {
     passo('eventos', wire);
     passo('navegação superior', () => Shell.wireTopnav());
     passo('conta', () => Conta.init());
+    passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());

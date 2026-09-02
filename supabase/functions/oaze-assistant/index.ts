@@ -34,6 +34,47 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 /* ---------------- configuração ---------------- */
 
 const MODELO_PADRAO = 'gpt-4o-mini';
+
+/* ============================================================
+   O QUE MUDA ENTRE OS PLANOS
+   ------------------------------------------------------------
+   O brief é explícito: a diferença não pode ser só o texto do
+   prompt. Se fosse, bastaria pedir "responda como se eu fosse Pro"
+   para ter o Pro — o modelo não é uma trava, é um colaborador
+   disposto.
+
+   Então o que muda de verdade é o que ENTRA e o que SAI:
+
+     meses          quanto do histórico chega no contexto
+     categorias     quantas linhas de gasto são enviadas
+     tokens         o tamanho máximo da resposta
+     simulacoes     se cenários e projeções são permitidos
+     comparacoes    se comparar períodos é permitido
+
+   Um pedido de simulação no Grátis não é "negado pelo prompt": os
+   dados de comparação nem chegam ao modelo, e a instrução diz o
+   que fazer com a ausência.
+   ============================================================ */
+const PERFIL: Record<string, {
+  meses: number; categorias: number; metas: number; compromissos: number;
+  simulacoes: boolean; comparacoes: boolean; estilo: string;
+}> = {
+  free: {
+    meses: 3, categorias: 6, metas: 3, compromissos: 5,
+    simulacoes: false, comparacoes: false,
+    estilo: 'Responda em no máximo 120 palavras. Traga o resumo do período, a principal descoberta e até duas ações práticas. Não faça projeções nem simulações de cenário: os dados para isso não foram enviados. Se pedirem, diga que a análise de cenários está disponível em outro plano.'
+  },
+  basic: {
+    meses: 12, categorias: 20, metas: 10, compromissos: 20,
+    simulacoes: false, comparacoes: true,
+    estilo: 'Responda em no máximo 220 palavras. Pode comparar períodos, sugerir ajustes de orçamento e analisar metas, recorrências, cartões e categorias. Pode montar um plano de ação em passos. Não faça simulações de cenário nem projeções de longo prazo: os dados para isso não foram enviados.'
+  },
+  pro: {
+    meses: 60, categorias: 40, metas: 20, compromissos: 40,
+    simulacoes: true, comparacoes: true,
+    estilo: 'Responda em no máximo 350 palavras. Pode comparar períodos livremente, montar simulações e cenários, avaliar o impacto de decisões no orçamento e relacionar contas, cartões, metas, recorrências e investimentos. Deixe explícito o que é fato dos dados, o que é cálculo e o que é sugestão.'
+  }
+};
 const TIMEOUT_MS = 30_000;
 const MAX_PERGUNTA = 500;
 const MAX_CATEGORIAS = 20;
@@ -127,6 +168,9 @@ function erro(codigo: string, status: number, origem: string | null, requestId: 
 type Entrada = {
   pergunta: string;
   periodo: string;
+  /* Meses anteriores, quando o plano permite comparação. O cliente
+     pode mandar; a função poda pelo que o plano autoriza. */
+  historico?: Array<{ periodo: string; receitas?: number; despesas?: number; saldo?: number }>;
   resumo: {
     receitas?: number;
     despesas?: number;
@@ -149,7 +193,8 @@ const texto = (v: unknown, max: number): string =>
  * disso chega na OpenAI, porque só reconstruímos os campos que
  * declaramos aqui.
  */
-function validar(bruto: unknown): { ok: true; dados: Entrada } | { ok: false; motivo: string } {
+function validar(bruto: unknown, perfil: typeof PERFIL['free']):
+  { ok: true; dados: Entrada } | { ok: false; motivo: string } {
   if (!bruto || typeof bruto !== 'object') return { ok: false, motivo: 'corpo' };
   const b = bruto as Record<string, unknown>;
 
@@ -163,20 +208,34 @@ function validar(bruto: unknown): { ok: true; dados: Entrada } | { ok: false; mo
   const r = (b.resumo && typeof b.resumo === 'object' ? b.resumo : {}) as Record<string, unknown>;
   const lista = (v: unknown, max: number) => (Array.isArray(v) ? v.slice(0, max) : []);
 
+  /* O histórico só passa se o plano permite comparar — e mesmo
+     assim, cortado no número de meses do plano. Este corte é a
+     diferença entre os planos: o Grátis não recebe os dados para
+     comparar, então não há o que "convencer" o modelo a fazer. */
+  const historico = perfil.comparacoes
+    ? lista(b.historico, perfil.meses).map((h: any) => ({
+      periodo: /^\d{4}-\d{2}$/.test(String(h?.periodo)) ? String(h.periodo) : '',
+      receitas: numero(h?.receitas), despesas: numero(h?.despesas), saldo: numero(h?.saldo)
+    })).filter((h) => h.periodo)
+    : [];
+
   const dados: Entrada = {
     pergunta,
     periodo,
+    historico,
     resumo: {
       receitas: numero(r.receitas),
       despesas: numero(r.despesas),
       saldo: numero(r.saldo),
-      categorias: lista(r.categorias, MAX_CATEGORIAS).map((c: any) => ({
+      /* Os tetos vêm do PLANO, não da constante: é assim que o
+         Grátis recebe 6 categorias e o Pro recebe 40. */
+      categorias: lista(r.categorias, perfil.categorias).map((c: any) => ({
         nome: texto(c?.nome, 40), total: numero(c?.total) ?? 0
       })).filter((c) => c.nome),
-      metas: lista(r.metas, MAX_METAS).map((m: any) => ({
+      metas: lista(r.metas, perfil.metas).map((m: any) => ({
         nome: texto(m?.nome, 40), alvo: numero(m?.alvo) ?? 0, guardado: numero(m?.guardado) ?? 0
       })).filter((m) => m.nome),
-      compromissos: lista(r.compromissos, MAX_COMPROMISSOS).map((c: any) => ({
+      compromissos: lista(r.compromissos, perfil.compromissos).map((c: any) => ({
         titulo: texto(c?.titulo, 60), valor: numero(c?.valor) ?? 0,
         dia: Number.isInteger(c?.dia) ? Math.min(31, Math.max(1, c.dia)) : 1
       })).filter((c) => c.titulo)
@@ -204,6 +263,11 @@ function montarContexto(d: Entrada): string {
   if (d.resumo.compromissos?.length) {
     l.push('Compromissos do período:');
     d.resumo.compromissos.forEach((c) => l.push('  - dia ' + c.dia + ': ' + c.titulo + ' ' + brl(c.valor)));
+  }
+  if (d.historico?.length) {
+    l.push('Meses anteriores autorizados para comparação:');
+    d.historico.forEach((h) => l.push('  - ' + h.periodo +
+      ': receitas ' + brl(h.receitas) + ', despesas ' + brl(h.despesas) + ', saldo ' + brl(h.saldo)));
   }
   return l.join('\n');
 }
@@ -258,55 +322,64 @@ Deno.serve(async (req: Request) => {
   const ativo = assinatura && ['active', 'trialing'].includes(assinatura.status);
   const plano = ativo ? (assinatura!.plan as string) : 'free';
 
-  const { data: limites } = await admin
-    .from('ai_rate_limits').select('*').eq('plan', plano).maybeSingle();
-  const teto = limites ?? {
-    por_minuto: 3, por_dia: 20, por_mes: 100, max_entrada_chars: 4000, max_saida_tokens: 700
-  };
+  /* O teto de consultas vem do direito do plano, no banco. Nunca
+     do corpo da requisição: "sou pro" escrito pelo cliente é uma
+     afirmação, não uma credencial. */
+  const { data: direito } = await admin
+    .from('plan_entitlements').select('limite')
+    .eq('plan_id', plano).eq('chave', 'ai_queries_per_month').maybeSingle();
 
-  /* ---- limites: contados no servidor ---- */
-  const agora = Date.now();
-  const desde = (ms: number) => new Date(agora - ms).toISOString();
+  const perfil = PERFIL[plano] ?? PERFIL.free;
+  const cota = direito?.limite ?? PERFIL.free.meses;   // sem direito, o menor
+  const maxTokens = plano === 'pro' ? 1200 : plano === 'basic' ? 900 : 500;
+  const maxEntrada = plano === 'free' ? 4000 : 8000;
 
-  const [minuto, dia, mes] = await Promise.all([
-    admin.from('ai_usage').select('id', { count: 'exact', head: true })
-      .eq('user_id', userId).gte('created_at', desde(60_000)),
-    admin.from('ai_usage').select('id', { count: 'exact', head: true })
-      .eq('user_id', userId).gte('created_at', desde(86_400_000)),
-    admin.from('ai_usage').select('id', { count: 'exact', head: true })
-      .eq('user_id', userId).gte('created_at', desde(30 * 86_400_000))
-  ]);
+  /* ---- corpo, validado com os tetos do plano ---- */
+  let bruto: unknown;
+  try { bruto = await req.json(); } catch { return erro('corpo', 400, origem, requestId); }
 
-  const estourou =
-    (minuto.count ?? 0) >= teto.por_minuto ||
-    (dia.count ?? 0) >= teto.por_dia ||
-    (mes.count ?? 0) >= teto.por_mes;
+  const v = validar(bruto, perfil);
+  if (!v.ok) return erro(v.motivo, 400, origem, requestId);
 
-  if (estourou) {
-    await admin.from('ai_usage').insert({
-      user_id: userId, operacao: 'assistente', modelo: null,
-      status: 'limite', request_id: requestId
-    });
+  const contexto = montarContexto(v.dados);
+  if (contexto.length > maxEntrada) {
+    return erro('contexto_grande', 413, origem, requestId);
+  }
+
+  /* ---- cota: RESERVAR antes de chamar ----
+     A regra tem duas metades que puxam para lados opostos: o
+     contador precisa ser atômico (senão dois pedidos simultâneos
+     passam do teto) e a cota só pode ser gasta quando a resposta
+     conclui (senão um erro do provedor cobra do usuário).
+
+     Reservar antes garante a primeira; estornar no erro garante a
+     segunda. Escolher só uma seria escolher qual falha aceitar. */
+  const { data: reserva, error: erroReserva } = await admin
+    .rpc('reservar_ia', { p_user: userId, p_limite: cota });
+
+  const r0 = Array.isArray(reserva) ? reserva[0] : reserva;
+  if (erroReserva || !r0) {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'reserva_falhou' }));
+    return erro('indisponivel', 503, origem, requestId);
+  }
+
+  if (!r0.out_permitido) {
     return json({
       erro: 'limite',
-      mensagem: 'Você atingiu o limite de perguntas do seu plano.',
-      limites: { por_minuto: teto.por_minuto, por_dia: teto.por_dia, por_mes: teto.por_mes },
-      usado: { minuto: minuto.count ?? 0, dia: dia.count ?? 0, mes: mes.count ?? 0 },
+      mensagem: 'Você usou as ' + r0.out_teto + ' consultas do seu plano neste mês.',
+      plano,
+      usado: r0.out_usado,
+      limite: r0.out_teto,
+      periodo: r0.out_mes,
       request_id: requestId
     }, 429, origem);
   }
 
-  /* ---- corpo ---- */
-  let bruto: unknown;
-  try { bruto = await req.json(); } catch { return erro('corpo', 400, origem, requestId); }
-
-  const v = validar(bruto);
-  if (!v.ok) return erro(v.motivo, 400, origem, requestId);
-
-  const contexto = montarContexto(v.dados);
-  if (contexto.length > teto.max_entrada_chars) {
-    return erro('contexto_grande', 413, origem, requestId);
-  }
+  /* A partir daqui a vaga está reservada: todo caminho de erro
+     precisa devolvê-la. */
+  const estornar = async () => {
+    try { await admin.rpc('estornar_ia', { p_user: userId }); } catch (e) { /* nada a fazer */ }
+  };
 
   /* ---- OpenAI ---- */
   const controle = new AbortController();
@@ -323,13 +396,17 @@ Deno.serve(async (req: Request) => {
       },
       body: JSON.stringify({
         model: modelo,
-        instructions: SISTEMA,
+        /* O prompt base é igual para todos; o que muda é o
+           parágrafo do plano — e, principalmente, os dados que
+           chegaram (ou não) no contexto. */
+        instructions: SISTEMA + '\n\nRegras deste plano:\n' + perfil.estilo,
         input: contexto + '\n\nPergunta do usuário: ' + v.dados.pergunta,
-        max_output_tokens: teto.max_saida_tokens
+        max_output_tokens: maxTokens
       })
     });
   } catch (e) {
     clearTimeout(relogio);
+    await estornar();   // o provedor falhou: a cota não é do usuário
     /* Uma tentativa. Repetir uma chamada paga por token, em cima de
        um provedor que já falhou, multiplica custo sem multiplicar
        chance. */
@@ -344,6 +421,7 @@ Deno.serve(async (req: Request) => {
   clearTimeout(relogio);
 
   if (!resposta.ok) {
+    await estornar();   // erro do provedor não consome cota
     /* O corpo do provedor NÃO é repassado: em alguns erros ele ecoa
        parte do cabeçalho enviado. Só o status vira decisão nossa. */
     console.error(JSON.stringify({
@@ -370,14 +448,15 @@ Deno.serve(async (req: Request) => {
     request_id: requestId
   });
 
-  if (!texto_saida) return erro('vazio', 502, origem, requestId);
+  if (!texto_saida) { await estornar(); return erro('vazio', 502, origem, requestId); }
 
   return json({
     texto: texto_saida,
     periodo: v.dados.periodo,
     request_id: requestId,
-    /* Devolvido para a interface poder avisar antes de bater no teto. */
-    uso: { dia: (dia.count ?? 0) + 1, limite_dia: teto.por_dia }
+    /* Devolvido para a interface avisar antes de bater no teto. */
+    plano,
+    uso: { usado: r0.out_usado, limite: r0.out_teto, periodo: r0.out_mes }
   }, 200, origem);
 });
 

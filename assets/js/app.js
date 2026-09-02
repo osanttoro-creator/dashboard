@@ -34,7 +34,8 @@
     reports:      { title: 'Análises',      sub: () => 'Consolidado de ' + U.ymParts(App.ym).y,              render: () => Rep.render() },
     uglez:        { title: 'UGLEZ',         sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
     categories:   { title: 'Categorias',    sub: () => 'Organização e peso histórico',                       render: () => Cat.render() },
-    settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() }
+    settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() },
+    precos:       { title: 'Planos',        sub: () => 'Escolha o tamanho do seu OAZE',                      render: () => Precos.render() }
   };
 
   /* ---------------- navegação ---------------- */
@@ -449,6 +450,7 @@
     passo('eventos', wire);
     passo('navegação superior', () => Shell.wireTopnav());
     passo('conta', () => Conta.init());
+    passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());

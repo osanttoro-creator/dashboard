@@ -102,8 +102,15 @@
 
   /* ============================================================ */
 
+  /* Nomes das categorias que já vêm no app. O limite de
+     "categorias personalizadas" do plano não conta estas — cobrar
+     pelo padrão do produto seria cobrar por nada. */
+  const NOMES_PADRAO = DEFAULT_EXPENSE_CATS.map((c) => c[0])
+    .concat(DEFAULT_INCOME_CATS.map((c) => c[0]));
+
   const Store = {
-    PALETTE, ALL_COLORS, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES
+    PALETTE, ALL_COLORS, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES,
+    CATEGORIAS_PADRAO: NOMES_PADRAO
   };
 
   let state = null;

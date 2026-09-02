@@ -245,6 +245,7 @@
 
     if (!user) {
       setState('signed-out');
+      if (global.Limites && Limites.aoSair) Limites.aoSair();
       if (global.Conta && Conta.aoSair) Conta.aoSair();
       return;
     }
@@ -263,6 +264,7 @@
     /* Com o esquema normalizado disponível, a entrada é o momento de
        oferecer a migração — e de drenar o que ficou pendente offline
        na sessão anterior. */
+    if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();

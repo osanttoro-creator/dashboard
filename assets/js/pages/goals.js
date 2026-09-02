@@ -151,6 +151,11 @@
   }
 
   Goals.open = function (id) {
+    /* Só na criação: editar o que já existe nunca é barrado —
+       é isso que faz o downgrade não trancar dados que já são
+       da pessoa. */
+    if (!id && global.Limites && !Limites.exigirEspaco('goals')) return;
+
     const g = id ? Store.goals.get(id) : null;
 
     const nome = el('input', { class: 'input', type: 'text', maxlength: '60', value: g ? g.name : '', placeholder: 'Ex.: Reserva de emergência' });

@@ -2287,6 +2287,126 @@ input[type="checkbox"], input[type="radio"] {
   .aviso-conta .btn { width: 100%; justify-content: center; }
 }
 
+/* ------------------------------------------------------------
+   22.11 · PLANOS
+   ------------------------------------------------------------
+   Três cartões que precisam ser comparáveis num relance. O do
+   meio é o destacado — não por ser o mais caro, mas por ser o que
+   resolve a maioria dos casos.
+   ------------------------------------------------------------ */
+.precos-topo { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 8px 0 4px; }
+.precos-titulo { font-size: clamp(21px, 2.4vw, 28px); font-weight: 680; letter-spacing: -.022em; }
+.precos-sub { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 60ch; }
+.precos-h3 { font-size: 15.5px; font-weight: 660; margin-bottom: 12px; }
+
+/* --- alternância de ciclo --- */
+.precos-ciclo {
+  display: inline-flex; gap: 3px; padding: 3px; margin-top: 4px;
+  border-radius: 999px; background: var(--plane-2); border: 1px solid var(--glass-line);
+}
+.ciclo-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; min-height: 32px; border: 0; border-radius: 999px;
+  background: transparent; cursor: pointer; font-family: inherit;
+  font-size: 13px; font-weight: 580; color: var(--ink-2);
+  transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ciclo-btn.is-active { background: var(--surface-2); color: var(--ink); box-shadow: var(--shadow); }
+.ciclo-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ciclo-selo {
+  padding: 2px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 680;
+  background: color-mix(in srgb, var(--ok, #4C6B33) 24%, transparent);
+  color: var(--ok, #4C6B33);
+}
+
+/* --- os cartões --- */
+.precos-cards {
+  display: grid; gap: 16px; margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+}
+.plano-card { position: relative; display: grid; gap: 10px; padding: 26px 22px; }
+.plano-card.is-destaque {
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  box-shadow: var(--shadow-lift), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.plano-selo {
+  position: absolute; top: -10px; left: 22px;
+  padding: 4px 11px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: #fff;
+}
+.plano-selo.is-atual { background: var(--ok, #4C6B33); left: auto; right: 22px; }
+.plano-nome { font-size: 18px; font-weight: 680; }
+.plano-desc { font-size: 12.5px; line-height: 1.55; color: var(--muted); min-height: 34px; }
+
+.plano-preco { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.plano-valor { font-size: 30px; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.plano-periodo { font-size: 12.5px; color: var(--muted); }
+.plano-cobranca { flex: 1 1 100%; font-size: 12px; color: var(--muted); }
+.plano-economia {
+  flex: 1 1 100%; font-size: 12px; font-weight: 620;
+  color: var(--ok, #4C6B33);
+}
+
+.plano-card > .btn { width: 100%; justify-content: center; margin-top: 4px; }
+.plano-card > .btn:disabled { opacity: .6; cursor: default; }
+
+.plano-itens { display: grid; gap: 7px; margin-top: 6px; padding: 0; list-style: none; }
+.plano-itens li { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; line-height: 1.5; }
+.plano-check { display: grid; place-items: center; flex: none; margin-top: 1px; color: var(--ok, #4C6B33); }
+
+/* --- comparativo --- */
+.precos-tabela th:not(:first-child), .precos-tabela td { text-align: center; }
+.precos-tabela th[scope="row"] { text-align: left; font-weight: 560; }
+.precos-tabela td.is-nao { color: var(--muted); }
+
+/* --- FAQ --- */
+.faq-item { border-top: 1px solid var(--glass-line); }
+.faq-item:first-child { border-top: 0; }
+.faq-p {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 2px; min-height: 44px;
+  border: 0; background: none; cursor: pointer; font-family: inherit;
+  font-size: 13.5px; font-weight: 580; color: var(--ink); text-align: left;
+}
+.faq-p:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.faq-seta {
+  width: 0; height: 0; flex: none;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid currentColor; opacity: .5;
+  transition: transform .18s var(--ease-out);
+}
+.faq-p[aria-expanded="true"] .faq-seta { transform: rotate(180deg); }
+.faq-corpo { padding: 0 2px 14px; font-size: 13px; line-height: 1.65; color: var(--ink-2); max-width: 74ch; }
+
+/* --- barras de consumo --- */
+.uso-caixa { display: grid; gap: 10px; min-width: min(100%, 300px); }
+.uso-linha { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
+.uso-rotulo { font-size: 12.5px; color: var(--ink-2); }
+.uso-num { font-size: 12.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.uso-num.is-cheio { color: var(--terracotta); }
+.uso-barra {
+  grid-column: 1 / -1; height: 5px; border-radius: 999px;
+  background: var(--plane-2); overflow: hidden;
+}
+.uso-barra > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--accent); transition: width .3s var(--ease-out);
+}
+.uso-barra.is-cheio > i { background: var(--terracotta); }
+
+.plano-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.lista-check { display: grid; gap: 6px; padding: 0; list-style: none; }
+.lista-check li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.5; }
+.lista-passos { padding-left: 20px; display: grid; gap: 5px; font-size: 13px; line-height: 1.55; }
+
+@media (max-width: 560px) {
+  .plano-card { padding: 22px 18px; }
+  .plano-valor { font-size: 26px; }
+  .plano-acoes .btn { flex: 1 1 100%; justify-content: center; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
