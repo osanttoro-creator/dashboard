@@ -84,7 +84,11 @@
   /** Na conta não existe "número do cartão": o identificador é a conta em si. */
   function accountNumber(acc) {
     const last = String(acc.last4 || '').replace(/\D/g, '').slice(-4);
-    return last ? '•••• ' + last : U.smartCase(acc.type || 'Conta');
+    if (last) return '•••• ' + last;
+    /* Sem os 4 dígitos mostramos o tipo — a menos que ele repita o nome
+       que já está logo acima, o que gastaria uma linha dizendo o mesmo. */
+    const tipo = U.smartCase(acc.type || 'Conta');
+    return U.norm(tipo) === U.norm(acc.name || '') ? '•••• ••••' : tipo;
   }
 
   /* ---------------- casco comum ---------------- */
@@ -99,7 +103,13 @@
    */
   function shell(o) {
     const filhos = [];
-    if (o.status) filhos.push(el('span', { class: 'cc-status' }, o.status));
+
+    /* Selo de situação e faixa de tipo dividem o mesmo canto. Empilhados
+       numa coluna à direita, um nunca cobre o outro — que era o que
+       acontecia com o selo posicionado em absoluto sobre o cabeçalho. */
+    const canto = [];
+    if (o.status) canto.push(el('span', { class: 'cc-status' }, o.status));
+    if (o.kind) canto.push(el('span', { class: 'cc-kind', text: o.kind }));
 
     filhos.push(el('span', { class: 'cc-row' }, [
       Icons.bankTile(o.bank || o.title, 34, o.grad.a),
@@ -107,7 +117,7 @@
         el('span', { class: 'cc-title', text: o.title, title: o.title }),
         el('span', { class: 'cc-sub', text: o.sub || '' })
       ]),
-      el('span', { class: 'cc-kind', text: o.kind })
+      el('span', { class: 'cc-corner' }, canto)
     ]));
 
     filhos.push(el('span', { class: 'cc-number', text: o.number }));
@@ -128,7 +138,7 @@
         el('span', { class: 'v', text: o.footRight.v })
       ])
     ]));
-    filhos.push(el('span', {}, base));
+    filhos.push(el('span', { class: 'cc-base' }, base));
 
     return el('button', {
       type: 'button',

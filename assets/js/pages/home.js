@@ -70,9 +70,9 @@
     // 2πr com r=38 ≈ 238.8
     const volta = 238.8;
 
-    anel.appendChild(el('svg', { viewBox: '0 0 88 88', width: '108', height: '108', 'aria-hidden': 'true' }, [
-      el('circle', { cx: '44', cy: '44', r: '38', class: 'ring-bg' }),
-      el('circle', {
+    anel.appendChild(U.svg('svg', { viewBox: '0 0 88 88', width: '108', height: '108', 'aria-hidden': 'true' }, [
+      U.svg('circle', { cx: '44', cy: '44', r: '38', class: 'ring-bg' }),
+      U.svg('circle', {
         cx: '44', cy: '44', r: '38', class: 'ring-fg',
         style: { stroke: cor, strokeDasharray: String(volta), strokeDashoffset: String(volta * (1 - s.total / 100)) }
       })

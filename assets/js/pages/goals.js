@@ -49,9 +49,9 @@
     }
 
     const anel = el('div', { class: 'goal-ring' + (completa ? ' is-done' : '') }, [
-      el('svg', { viewBox: '0 0 44 44', width: '52', height: '52' }, [
-        el('circle', { cx: '22', cy: '22', r: '19', class: 'ring-bg' }),
-        el('circle', {
+      U.svg('svg', { viewBox: '0 0 44 44', width: '52', height: '52', 'aria-hidden': 'true' }, [
+        U.svg('circle', { cx: '22', cy: '22', r: '19', class: 'ring-bg' }),
+        U.svg('circle', {
           cx: '22', cy: '22', r: '19', class: 'ring-fg',
           style: {
             stroke: g.color,

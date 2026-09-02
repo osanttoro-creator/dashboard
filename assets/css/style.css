@@ -1903,3 +1903,42 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
    O subtítulo do cartão é texto pequeno: precisa dos 4,5. */
 .cc-sub { color: rgba(255, 255, 255, .94); }
 .cc-holder .k, .cc-invoice .k { color: rgba(255, 255, 255, .94); }
+
+/* O anel do Score precisa reservar o próprio espaço: sem largura fixa,
+   "SAUDÁVEL" escapava por baixo e colidia com a lista de critérios. */
+.score-ring { width: 108px; height: 108px; }
+.score-num { width: 108px; text-align: center; }
+.score-faixa {
+  font-size: 9.5px; letter-spacing: .06em; line-height: 1.2;
+  max-width: 104px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ------------------------------------------------------------
+   Correções vindas da inspeção visual das capturas
+   ------------------------------------------------------------ */
+
+/* A barra de limite é um <span> dentro de outro <span> — não é filha
+   direta do grid do cartão, então não era "blockificada" e a altura de
+   4px era ignorada: virava um retângulo branco de ~35px sobre o cartão. */
+.cc-limit-bar { display: block; }
+/* só o invólucro da barra + rodapé — a regra cega em `.wallet-card > span`
+   apagava o display:flex do cabeçalho e empilhava nome, banco e faixa. */
+.cc-base { display: block; }
+
+/* O leque sobrepunha 96px e comia justamente a identidade do cartão
+   seguinte — o ladrilho do banco e o começo do nome. Dado escondido não
+   é estética: vira grade, e cada cartão aparece inteiro. */
+.wallet-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px; align-items: start;
+  padding: 6px 0 10px; min-height: 0;
+  overflow: visible;
+}
+.wallet-deck > * { width: 100%; }
+.wallet-deck .wallet-card:not(:first-child) { margin-left: 0; }
+.deck-hint { margin-top: 6px; margin-bottom: 0; }
+
+/* Canto direito do cartão: situação em cima, tipo embaixo. */
+.cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
+.cc-status { position: static; }

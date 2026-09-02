@@ -216,6 +216,43 @@
   U.$ = (sel, root) => (root || document).querySelector(sel);
   U.$$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
+  /**
+   * Irmão de U.el para SVG.
+   *
+   * createElement('circle') cria um elemento HTML chamado "circle" — que
+   * o navegador aceita, insere no DOM e simplesmente NÃO desenha. O
+   * elemento existe, mede zero e não dá erro nenhum: some em silêncio.
+   * SVG exige createElementNS.
+   *
+   * Também não dá para usar node.className aqui: em SVG ele é um
+   * SVGAnimatedString somente-leitura. Vai por setAttribute.
+   */
+  const NS_SVG = 'http://www.w3.org/2000/svg';
+  U.svg = function (tag, attrs, children) {
+    const node = document.createElementNS(NS_SVG, tag);
+    if (attrs) {
+      Object.keys(attrs).forEach((k) => {
+        const v = attrs[k];
+        if (v == null || v === false) return;
+        if (k === 'style' && typeof v === 'object') {
+          Object.keys(v).forEach((prop) => {
+            if (prop.indexOf('--') === 0) node.style.setProperty(prop, v[prop]);
+            else node.style[prop] = v[prop];
+          });
+        } else if (k === 'text') {
+          node.textContent = v;
+        } else if (k.startsWith('on') && typeof v === 'function') {
+          node.addEventListener(k.slice(2), v);
+        } else {
+          node.setAttribute(k, v === true ? '' : v);
+        }
+      });
+    }
+    (Array.isArray(children) ? children : (children != null ? [children] : []))
+      .forEach((c) => { if (c != null && c !== false) node.appendChild(c); });
+    return node;
+  };
+
   U.el = function (tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
