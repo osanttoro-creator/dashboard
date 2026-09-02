@@ -1940,6 +1940,45 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .cc-sub { color: rgba(255, 255, 255, .94); }
 .cc-holder .k, .cc-invoice .k { color: rgba(255, 255, 255, .94); }
 
+/* O anel do Score precisa reservar o próprio espaço: sem largura fixa,
+   "SAUDÁVEL" escapava por baixo e colidia com a lista de critérios. */
+.score-ring { width: 108px; height: 108px; }
+.score-num { width: 108px; text-align: center; }
+.score-faixa {
+  font-size: 9.5px; letter-spacing: .06em; line-height: 1.2;
+  max-width: 104px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ------------------------------------------------------------
+   Correções vindas da inspeção visual das capturas
+   ------------------------------------------------------------ */
+
+/* A barra de limite é um <span> dentro de outro <span> — não é filha
+   direta do grid do cartão, então não era "blockificada" e a altura de
+   4px era ignorada: virava um retângulo branco de ~35px sobre o cartão. */
+.cc-limit-bar { display: block; }
+/* só o invólucro da barra + rodapé — a regra cega em `.wallet-card > span`
+   apagava o display:flex do cabeçalho e empilhava nome, banco e faixa. */
+.cc-base { display: block; }
+
+/* O leque sobrepunha 96px e comia justamente a identidade do cartão
+   seguinte — o ladrilho do banco e o começo do nome. Dado escondido não
+   é estética: vira grade, e cada cartão aparece inteiro. */
+.wallet-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px; align-items: start;
+  padding: 6px 0 10px; min-height: 0;
+  overflow: visible;
+}
+.wallet-deck > * { width: 100%; }
+.wallet-deck .wallet-card:not(:first-child) { margin-left: 0; }
+.deck-hint { margin-top: 6px; margin-bottom: 0; }
+
+/* Canto direito do cartão: situação em cima, tipo embaixo. */
+.cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
+.cc-status { position: static; }
+
 </style>
 </head>
 <body>
@@ -3545,6 +3584,43 @@ window.FirebaseConfig = {
 
   U.$ = (sel, root) => (root || document).querySelector(sel);
   U.$$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  /**
+   * Irmão de U.el para SVG.
+   *
+   * createElement('circle') cria um elemento HTML chamado "circle" — que
+   * o navegador aceita, insere no DOM e simplesmente NÃO desenha. O
+   * elemento existe, mede zero e não dá erro nenhum: some em silêncio.
+   * SVG exige createElementNS.
+   *
+   * Também não dá para usar node.className aqui: em SVG ele é um
+   * SVGAnimatedString somente-leitura. Vai por setAttribute.
+   */
+  const NS_SVG = 'http://www.w3.org/2000/svg';
+  U.svg = function (tag, attrs, children) {
+    const node = document.createElementNS(NS_SVG, tag);
+    if (attrs) {
+      Object.keys(attrs).forEach((k) => {
+        const v = attrs[k];
+        if (v == null || v === false) return;
+        if (k === 'style' && typeof v === 'object') {
+          Object.keys(v).forEach((prop) => {
+            if (prop.indexOf('--') === 0) node.style.setProperty(prop, v[prop]);
+            else node.style[prop] = v[prop];
+          });
+        } else if (k === 'text') {
+          node.textContent = v;
+        } else if (k.startsWith('on') && typeof v === 'function') {
+          node.addEventListener(k.slice(2), v);
+        } else {
+          node.setAttribute(k, v === true ? '' : v);
+        }
+      });
+    }
+    (Array.isArray(children) ? children : (children != null ? [children] : []))
+      .forEach((c) => { if (c != null && c !== false) node.appendChild(c); });
+    return node;
+  };
 
   U.el = function (tag, attrs, children) {
     const node = document.createElement(tag);
@@ -6135,7 +6211,11 @@ window.FirebaseConfig = {
   /** Na conta não existe "número do cartão": o identificador é a conta em si. */
   function accountNumber(acc) {
     const last = String(acc.last4 || '').replace(/\D/g, '').slice(-4);
-    return last ? '•••• ' + last : U.smartCase(acc.type || 'Conta');
+    if (last) return '•••• ' + last;
+    /* Sem os 4 dígitos mostramos o tipo — a menos que ele repita o nome
+       que já está logo acima, o que gastaria uma linha dizendo o mesmo. */
+    const tipo = U.smartCase(acc.type || 'Conta');
+    return U.norm(tipo) === U.norm(acc.name || '') ? '•••• ••••' : tipo;
   }
 
   /* ---------------- casco comum ---------------- */
@@ -6150,7 +6230,13 @@ window.FirebaseConfig = {
    */
   function shell(o) {
     const filhos = [];
-    if (o.status) filhos.push(el('span', { class: 'cc-status' }, o.status));
+
+    /* Selo de situação e faixa de tipo dividem o mesmo canto. Empilhados
+       numa coluna à direita, um nunca cobre o outro — que era o que
+       acontecia com o selo posicionado em absoluto sobre o cabeçalho. */
+    const canto = [];
+    if (o.status) canto.push(el('span', { class: 'cc-status' }, o.status));
+    if (o.kind) canto.push(el('span', { class: 'cc-kind', text: o.kind }));
 
     filhos.push(el('span', { class: 'cc-row' }, [
       Icons.bankTile(o.bank || o.title, 34, o.grad.a),
@@ -6158,7 +6244,7 @@ window.FirebaseConfig = {
         el('span', { class: 'cc-title', text: o.title, title: o.title }),
         el('span', { class: 'cc-sub', text: o.sub || '' })
       ]),
-      el('span', { class: 'cc-kind', text: o.kind })
+      el('span', { class: 'cc-corner' }, canto)
     ]));
 
     filhos.push(el('span', { class: 'cc-number', text: o.number }));
@@ -6179,7 +6265,7 @@ window.FirebaseConfig = {
         el('span', { class: 'v', text: o.footRight.v })
       ])
     ]));
-    filhos.push(el('span', {}, base));
+    filhos.push(el('span', { class: 'cc-base' }, base));
 
     return el('button', {
       type: 'button',
@@ -9258,9 +9344,9 @@ window.FirebaseConfig = {
     // 2πr com r=38 ≈ 238.8
     const volta = 238.8;
 
-    anel.appendChild(el('svg', { viewBox: '0 0 88 88', width: '108', height: '108', 'aria-hidden': 'true' }, [
-      el('circle', { cx: '44', cy: '44', r: '38', class: 'ring-bg' }),
-      el('circle', {
+    anel.appendChild(U.svg('svg', { viewBox: '0 0 88 88', width: '108', height: '108', 'aria-hidden': 'true' }, [
+      U.svg('circle', { cx: '44', cy: '44', r: '38', class: 'ring-bg' }),
+      U.svg('circle', {
         cx: '44', cy: '44', r: '38', class: 'ring-fg',
         style: { stroke: cor, strokeDasharray: String(volta), strokeDashoffset: String(volta * (1 - s.total / 100)) }
       })
@@ -10689,9 +10775,9 @@ window.FirebaseConfig = {
     }
 
     const anel = el('div', { class: 'goal-ring' + (completa ? ' is-done' : '') }, [
-      el('svg', { viewBox: '0 0 44 44', width: '52', height: '52' }, [
-        el('circle', { cx: '22', cy: '22', r: '19', class: 'ring-bg' }),
-        el('circle', {
+      U.svg('svg', { viewBox: '0 0 44 44', width: '52', height: '52', 'aria-hidden': 'true' }, [
+        U.svg('circle', { cx: '22', cy: '22', r: '19', class: 'ring-bg' }),
+        U.svg('circle', {
           cx: '22', cy: '22', r: '19', class: 'ring-fg',
           style: {
             stroke: g.color,
