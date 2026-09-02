@@ -109,18 +109,18 @@
 
     box.appendChild(linha(
       'Como o UGLEZ responde',
-      modo.chave === 'backend'
-        ? 'Pelo servidor. A chave fica em variável de ambiente e nunca chega ao navegador.'
-        : modo.chave === 'local'
-          ? 'Com a sua chave, guardada só neste aparelho e enviada apenas para a Anthropic.'
-          : 'Sem chave configurada. As leituras da página UGLEZ continuam funcionando: elas são calculadas aqui, sem rede.',
-      el('span', { class: 'badge ' + (modo.chave === 'backend' ? 'badge-ok' : modo.chave === 'local' ? 'badge-card' : ''), text: modo.rotulo })
+      modo.chave === 'servidor'
+        ? 'Por um servidor autenticado. Nenhuma chave de IA existe neste navegador.'
+        : modo.chave === 'sem-sessao'
+          ? 'Entre na sua conta para conversar. As leituras da página UGLEZ continuam funcionando: são calculadas aqui, sem rede.'
+          : 'Assistente não configurado neste ambiente. As leituras da página UGLEZ continuam funcionando.',
+      el('span', { class: 'badge ' + (modo.chave === 'servidor' ? 'badge-ok' : ''), text: modo.rotulo })
     ));
 
     box.appendChild(linha(
-      'Chave da API',
-      'Usada só quando não há servidor — arquivo aberto do disco ou no iPhone.',
-      el('button', { class: 'btn btn-outline btn-sm', text: 'Configurar chave', onclick: () => AI.openConfig() })
+      'O que é enviado',
+      'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
     ));
   }
 

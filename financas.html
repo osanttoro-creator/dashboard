@@ -1915,6 +1915,214 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .login-alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
 .login-alt .btn { justify-content: center; }
 
+/* ------------------------------------------------------------
+   22.6 · NAVEGAÇÃO SUPERIOR (≥ 821px)
+   ------------------------------------------------------------
+   A sidebar-ilha sai do desktop e do tablet deitado; o conteúdo
+   ganha a largura dela de volta. Abaixo de 821px NADA muda: a
+   barra inferior continua sendo a mesma, no mesmo lugar, com o
+   mesmo comportamento — por isso tudo aqui está trancado atrás
+   de min-width, e não o contrário.
+
+   Os itens são .nav-item, os mesmos da barra de baixo. O roteador
+   marca o ativo em todos de uma vez, então as duas navegações
+   nunca discordam sobre onde você está.
+   ------------------------------------------------------------ */
+
+/* Fora do desktop, a barra superior simplesmente não existe:
+   display:none tira do fluxo E da ordem de tabulação, então o
+   celular não ganha nenhum destino invisível no caminho. */
+.topnav-brand, .topnav-menu { display: none; }
+
+@media (min-width: 821px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 16px 24px 0; }
+  .content { max-width: 1440px; margin: 0 auto; }
+
+  .topbar {
+    position: sticky; top: 12px; z-index: 70;
+    gap: 8px; flex-wrap: nowrap;
+  }
+
+  /* --- marca --- */
+  .topnav-brand {
+    display: inline-flex; align-items: center; gap: 8px; flex: none;
+    padding: 6px 10px 6px 6px; border: 0; border-radius: 12px;
+    background: transparent; cursor: pointer; color: inherit;
+  }
+  .topnav-brand .brand-mark { width: 28px; height: 28px; border-radius: 9px; }
+  .topnav-brand .brand-name { font-weight: 680; letter-spacing: .14em; font-size: 12.5px; }
+  .topnav-brand:hover { background: var(--plane-2); }
+  .topnav-brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* --- a fita de destinos --- */
+  .topnav-menu {
+    display: flex; align-items: center; gap: 2px;
+    min-width: 0; flex: 0 1 auto;
+  }
+  .topnav-menu .nav-item {
+    width: auto; flex: none; white-space: nowrap;
+    padding: 8px 11px; gap: 7px; font-size: 13px;
+  }
+  .topnav-menu .nav-short { display: none; }
+  .topnav-menu .nav-long { display: inline; }
+
+  /* UGLEZ tem identidade própria — é o único destino com cor. */
+  .topnav-menu .nav-item.is-uglez { color: var(--terracotta); font-weight: 620; }
+  .topnav-menu .nav-item.is-uglez .nav-ico { color: var(--terracotta); }
+  .topnav-menu .nav-item.is-uglez:hover {
+    background: color-mix(in srgb, var(--terracotta) 14%, transparent);
+  }
+  .topnav-menu .nav-item.is-uglez.is-active {
+    background: color-mix(in srgb, var(--terracotta) 20%, transparent);
+    box-shadow: var(--uglez-glow);
+  }
+
+  /* --- grupos --- */
+  .topnav-group { position: relative; flex: none; }
+  .topnav-trigger {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 10px; border: 0; border-radius: 11px;
+    background: transparent; cursor: pointer; white-space: nowrap;
+    color: var(--ink-2); font-size: 13px; font-weight: 520; font-family: inherit;
+    transition: background .18s var(--ease-out);
+  }
+  .topnav-trigger:hover { background: var(--plane-2); color: var(--ink); }
+  .topnav-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .topnav-trigger .nav-ico { display: grid; place-items: center; color: var(--muted); }
+
+  /* Aberto, ou com a página atual dentro dele: o grupo precisa dizer
+     "você está aqui" mesmo com o menu fechado. */
+  .topnav-trigger[aria-expanded="true"],
+  .topnav-group.has-active .topnav-trigger {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--ink); font-weight: 640;
+  }
+  .topnav-group.has-active .topnav-trigger .nav-ico { color: var(--accent); }
+
+  .topnav-caret {
+    width: 0; height: 0; flex: none;
+    border-left: 3.5px solid transparent; border-right: 3.5px solid transparent;
+    border-top: 4px solid currentColor; opacity: .55;
+    transition: transform .18s var(--ease-out);
+  }
+  .topnav-trigger[aria-expanded="true"] .topnav-caret { transform: rotate(180deg); }
+
+  /* --- o painel do grupo --- */
+  .topnav-drop {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 90;
+    min-width: 214px; padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
+    border-radius: var(--radius); border: 1px solid var(--glass-line);
+    box-shadow: var(--shadow-lift);
+    /* nasce no canto de onde veio e volta pelo mesmo caminho */
+    transform-origin: top left;
+    animation: dropIn .16s var(--ease-out);
+  }
+  .topnav-drop[hidden] { display: none; }
+  .topnav-drop .nav-item { width: 100%; justify-content: flex-start; }
+  .topnav-group[data-group="mais"] .topnav-drop { left: auto; right: 0; transform-origin: top right; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-4px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* --- controles da direita --- */
+  .topbar-gap { flex: 1 1 auto; min-width: 4px; }
+  .pill-period select { max-width: 110px; }
+}
+
+@media (min-width: 821px) and (prefers-reduced-motion: reduce) {
+  .topnav-drop { animation: none; }
+}
+
+/* ------------------------------------------------------------
+   Degraus de largura — medidos, não estimados
+   ------------------------------------------------------------
+   O menu completo ocupa 725px e o lado direito ~765px: em 1440
+   isso não cabe, e o que acontecia era o UGLEZ deslizar por baixo
+   do perfil. Cada degrau abaixo devolve espaço na ordem inversa
+   da importância — primeiro o que é redundante, por último o que
+   é destino.
+
+   A ordem de sacrifício:
+     1. rótulo do botão de busca (a lupa já diz)
+     2. engrenagem de perfis (também vive em Configurações)
+     3. o grupo "Crescer" recolhe para "Mais" (consulta, não uso diário)
+     4. nome da marca (o símbolo permanece)
+     5. rótulo dos destinos diretos
+     6. rótulo dos grupos
+   ------------------------------------------------------------ */
+
+@media (min-width: 821px) {
+  /* A lupa é auto-explicativa; o rótulo custa 48px o tempo todo. */
+  #btnSearch .pill-label { display: none; }
+
+  /* Rede de segurança: se um degrau ficar apertado por causa de fonte
+     ou idioma, o menu corta em vez de escorregar por baixo dos
+     controles. Corte é feio; sobreposição esconde um destino. */
+  .topnav-menu { overflow: hidden; }
+  .topbar-gap { min-width: 12px; }
+}
+
+/* ---- todo desktop: o que é redundante sai de saída ----
+   A engrenagem de perfis também vive em Configurações, e o botão de
+   mês compacto continua legível. Juntos devolvem 35px sem custo. */
+@media (min-width: 821px) {
+  #btnProfiles { display: none; }
+  .pill-hoje { font-size: 11.5px; padding: 5px 9px; }
+}
+
+/* ---- < 1460: "Crescer" recolhe, o nome da marca sai ----
+   A fita completa pede 725px. Em 1440 sobram 601 depois da marca e
+   dos controles, então ela não cabe — e o que acontecia era o UGLEZ
+   escorregar por baixo do perfil. Recolher "Crescer" devolve 112 e o
+   nome da marca outros 49: 617 − 112 = 505, com folga.
+
+   Investimentos e Análises são consulta; Planejar é uso diário. Por
+   isso é o de consulta que recolhe. Acima de 1460 a fita aparece
+   inteira, com marca escrita. */
+@media (min-width: 821px) and (max-width: 1460px) {
+  .topnav-group[data-group="crescer"] { display: none; }
+  .topnav-brand .brand-name { display: none; }
+  .topnav-group[data-group="mais"] .topnav-drop { min-width: 236px; }
+  .topnav-group[data-group="mais"] .topnav-drop::before {
+    content: 'Crescer'; display: block; order: -1;
+    font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); padding: 8px 12px 4px;
+  }
+}
+
+/* ---- < 1400: os destinos diretos e o UGLEZ ficam só com o ícone ----
+   Devolve 210px. O nome continua no title e no aria-label, então
+   quem usa leitor de tela ouve "Visão geral", não "botão". */
+@media (min-width: 821px) and (max-width: 1400px) {
+  .topnav-menu .nav-item .nav-long,
+  .topnav-menu .nav-item .nav-short { display: none; }
+  .topnav-menu .nav-item { padding: 9px 10px; }
+  .topnav-drop .nav-item .nav-long { display: inline; }
+  .topnav-drop .nav-item .nav-short { display: none; }
+  .topnav-drop .nav-item { padding: 9px 12px; }
+  .main { padding: 16px 20px 0; }
+}
+
+/* ---- < 1140: o texto dos grupos também ---- */
+@media (min-width: 821px) and (max-width: 1140px) {
+  .topnav-trigger .topnav-trigger-txt { display: none; }
+  .topnav-trigger { padding: 9px 9px; }
+  .main { padding: 16px 18px 0; }
+}
+
+/* ---- < 1020: o último aperto, sem tirar destino nenhum ---- */
+@media (min-width: 821px) and (max-width: 1020px) {
+  .topnav-menu { gap: 0; }
+  .topnav-menu .nav-item { padding: 9px 7px; }
+  .topnav-trigger { padding: 9px 6px; }
+  .pill-profile select { max-width: 88px; }
+  .pill-hoje { display: none; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
@@ -2102,6 +2310,109 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 
     <!-- ══════ TOP BAR — objetos de vidro independentes ══════ -->
     <header class="topbar" aria-label="Controles">
+
+      <!-- ══════ NAVEGAÇÃO SUPERIOR (desktop e tablet deitado) ══════
+           Some abaixo de 821px, onde a barra inferior assume — a mesma
+           que já existia, sem nenhuma alteração de comportamento.
+
+           Os botões são .nav-item com data-page: o roteador liga o
+           clique e marca o ativo em todos eles de uma vez, então a
+           barra de baixo e a de cima ficam sempre em sincronia. -->
+      <button class="topnav-brand" id="topnavBrand" aria-label="OAZE — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="18" height="18" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+            <circle cx="20" cy="20" r="8"/>
+            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+          </svg>
+        </span>
+        <span class="brand-name">OAZE</span>
+      </button>
+
+      <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
+        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
+          <span class="nav-ico" data-ico="layout-dashboard"></span>
+          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
+        </button>
+        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
+          <span class="nav-ico" data-ico="arrow-left-right"></span>
+          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+        </button>
+        <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
+          <span class="nav-ico" data-ico="wallet"></span>
+          <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
+        </button>
+
+      <div class="topnav-group" data-group="planejar">
+        <button class="topnav-trigger" id="trg-planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="topnav-trigger-txt">Planejar</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-planejar" role="group" aria-labelledby="trg-planejar" hidden>
+        <button class="nav-item" data-page="budget" title="Orçamento" aria-label="Orçamento">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="nav-long">Orçamento</span><span class="nav-short">Orçamento</span>
+        </button>
+        <button class="nav-item" data-page="goals" title="Metas" aria-label="Metas">
+          <span class="nav-ico" data-ico="flag"></span>
+          <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
+        </button>
+        <button class="nav-item" data-page="recurring" title="Recorrências" aria-label="Recorrências">
+          <span class="nav-ico" data-ico="repeat"></span>
+          <span class="nav-long">Recorrências</span><span class="nav-short">Recorrências</span>
+        </button>
+        <button class="nav-item" data-page="calendar" title="Calendário" aria-label="Calendário">
+          <span class="nav-ico" data-ico="calendar"></span>
+          <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
+        </button>
+        </div>
+      </div>
+
+      <div class="topnav-group" data-group="crescer">
+        <button class="topnav-trigger" id="trg-crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="topnav-trigger-txt">Crescer</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
+        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
+        </button>
+        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
+          <span class="nav-ico" data-ico="chart-line"></span>
+          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+        </button>
+        </div>
+      </div>
+
+        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
+
+      <div class="topnav-group" data-group="mais">
+        <button class="topnav-trigger" id="trg-mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
+          <span class="nav-ico" data-ico="ellipsis"></span>
+          <span class="topnav-trigger-txt">Mais</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
+          <span class="nav-ico" data-ico="tag"></span>
+          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+        </button>
+        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
+          <span class="nav-ico" data-ico="settings"></span>
+          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
+        </button>
+        </div>
+      </div>
+      </nav>
+
+      <span class="topbar-gap"></span>
+
       <span class="pill pill-profile">
         <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
         <select id="profileSelect" aria-label="Perfil ativo"></select>
@@ -2110,14 +2421,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 
       <span class="pill pill-period" id="periodPicker">
         <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-        <select id="daySelect" aria-label="Dia"></select>
         <select id="monthSelect" aria-label="Mês"></select>
         <select id="yearSelect" aria-label="Ano"></select>
         <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
-        <button class="pill-hoje" id="btnToday">Hoje</button>
+        <button class="pill-hoje" id="btnToday">Mês atual</button>
       </span>
-
-      <span class="topbar-gap"></span>
 
       <button class="pill pill-btn" id="btnSearch" aria-label="Buscar" title="Buscar (/)">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>
@@ -4631,146 +4939,6 @@ window.SupabaseConfig = {
     Store.commit('reset');
   };
 
-  /* ---------------- dados de exemplo ---------------- */
-
-  Store.seedDemo = function () {
-    const p = Store.profile();
-    const catE = (n) => (p.categories.find((c) => c.kind === 'expense' && c.name === n) || {}).id || null;
-    const catI = (n) => (p.categories.find((c) => c.kind === 'income' && c.name === n) || {}).id || null;
-
-    // as contas "nascem" no início da janela histórica que vamos popular
-    const openedAt = U.addMonths(U.todayYM(), -11) + '-01';
-
-    let acc = p.accounts[0];
-    if (!acc) {
-      acc = Store.accounts.add({
-        name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente', color: '#9A5F35',
-        gradient: 'terracotta', last4: '2210',
-        openingBalance: 3500, openedAt, archived: false
-      });
-    } else {
-      if (!acc.openingBalance) acc.openingBalance = 3500;
-      acc.openedAt = openedAt;
-    }
-    const acc2 = Store.accounts.add({
-      name: 'Reserva', bank: 'Nubank', type: 'Conta de pagamento', color: '#7B5A8E',
-      gradient: 'midnight', last4: '9034',
-      openingBalance: 22000, openedAt, archived: false
-    });
-    const card = Store.cards.add({
-      name: 'Cartão principal', bank: 'Nubank', color: '#7B5A8E', gradient: 'midnight', last4: '4352',
-      limit: 8000, closingDay: 28, dueDay: 8, accountId: acc.id
-    });
-    Store.cards.add({
-      name: 'Cartão da viagem', bank: 'Itaú', color: '#9A5F35', gradient: 'terracotta', last4: '8871',
-      limit: 4000, closingDay: 15, dueDay: 25, accountId: acc.id
-    });
-
-    const today = U.todayISO();
-    const ym = U.todayYM();
-    const start = U.addMonths(ym, -11) + '-01';
-    const d = (offsetMonths, day) => {
-      const q = U.ymParts(U.addMonths(ym, offsetMonths));
-      return U.isoOf(q.y, q.m, U.clampDay(q.y, q.m, day));
-    };
-
-    const txs = [
-      { kind: 'income', description: 'Salário', amount: 7800, date: start, categoryId: catI('Salário'), accountId: acc.id, recurring: true, confirmed: true },
-      { kind: 'expense', description: 'Aluguel', amount: 2200, date: start, categoryId: catE('Moradia'), accountId: acc.id, recurring: true, confirmed: true },
-      { kind: 'expense', description: 'Internet + celular', amount: 189.9, date: U.addMonths(ym, -11) + '-10', categoryId: catE('Assinaturas'), accountId: acc.id, recurring: true, confirmed: true },
-      { kind: 'expense', description: 'Plano de saúde', amount: 640, date: U.addMonths(ym, -11) + '-15', categoryId: catE('Saúde'), accountId: acc.id, recurring: true, confirmed: true },
-      { kind: 'expense', description: 'Academia', amount: 129, date: U.addMonths(ym, -11) + '-05', categoryId: catE('Lazer'), accountId: acc.id, recurring: true, confirmed: true }
-    ];
-    // variáveis dos últimos 6 meses
-    const varSpecs = [
-      ['Supermercado', 'Alimentação', 620, 980, 'account'],
-      ['Combustível', 'Transporte', 180, 420, 'card'],
-      ['Restaurante', 'Alimentação', 90, 260, 'card'],
-      ['Farmácia', 'Saúde', 40, 190, 'card'],
-      ['Streaming', 'Assinaturas', 39.9, 59.9, 'card'],
-      ['Compras online', 'Compras', 120, 700, 'card']
-    ];
-    for (let k = -5; k <= 0; k++) {
-      varSpecs.forEach((s, idx) => {
-        const amount = U.round2(s[2] + Math.random() * (s[3] - s[2]));
-        txs.push({
-          kind: 'expense', description: s[0], amount, date: d(k, 3 + idx * 4),
-          categoryId: catE(s[1]), accountId: s[4] === 'card' ? null : acc.id,
-          cardId: s[4] === 'card' ? card.id : null,
-          confirmed: k < 0 ? true : Math.random() > 0.35
-        });
-      });
-      if (k % 2 === 0) {
-        txs.push({
-          kind: 'income', description: 'Projeto freelance', amount: U.round2(900 + Math.random() * 2400),
-          date: d(k, 18), categoryId: catI('Freelance / PJ'), accountId: acc.id, confirmed: k < 0
-        });
-      }
-    }
-    // dois lançamentos previstos no mês corrente
-    txs.push({ kind: 'expense', description: 'IPTU (parcela)', amount: 312.4, date: d(0, 20), categoryId: catE('Impostos e taxas'), accountId: acc.id, confirmed: false });
-    txs.push({ kind: 'income', description: 'Reembolso viagem', amount: 480, date: d(0, 25), categoryId: catI('Reembolso'), accountId: acc.id, confirmed: false });
-    txs.push({ kind: 'transfer', description: 'Aporte na reserva', amount: 1000, date: d(0, 6), accountId: acc.id, toAccountId: acc2.id, confirmed: true });
-
-    Store.profile().transactions = Store.profile().transactions.concat(txs.map(Store.normalizeTx));
-
-    [['Tesouro Selic 2029', 'Tesouro Direto', 6000, -10, 11.5],
-     ['CDB 110% CDI', 'CDB', 4500, -7, 12.2],
-     ['ETF IVVB11', 'ETF', 3200, -5, 14],
-     ['Bitcoin', 'Criptomoeda', 1500, -3, 20]].forEach((iv) => {
-      const q = U.ymParts(U.addMonths(ym, iv[3]));
-      Store.profile().investments.push({
-        id: U.uid('inv'), name: iv[0], type: iv[1], amount: iv[2],
-        date: U.isoOf(q.y, q.m, 10), rate: iv[4], currentValue: null, accountId: acc2.id, notes: ''
-      });
-    });
-
-    // fatura do mês anterior já paga
-    const prevRef = U.addMonths(ym, -1);
-    Store.profile().invoices[Store.invoiceKey(card.id, prevRef)] = {
-      paid: true, paidAt: U.monthStart(prevRef), accountId: acc.id, amount: 0
-    };
-
-    /* Orçamento e metas de exemplo. Sem eles as páginas nasceriam
-       vazias na demonstração e o recurso pareceria não existir.
-       Os limites saem do gasto médio real que acabamos de criar,
-       um pouco apertados de propósito — orçamento folgado não
-       ensina nada. */
-    const mediaDe = (catId) => {
-      let soma = 0, meses = 0;
-      for (let i = 1; i <= 3; i++) {
-        const ym = U.addMonths(U.todayYM(), -i);
-        const de = U.monthStart(ym), ate = U.monthEnd(ym);
-        soma += p.transactions
-          .filter((t) => t.categoryId === catId && t.kind === 'expense' && t.date >= de && t.date <= ate)
-          .reduce((a, b) => a + b.amount, 0);
-        meses++;
-      }
-      return meses ? U.round2(soma / meses) : 0;
-    };
-    ['Moradia', 'Alimentação', 'Transporte', 'Lazer'].forEach((nome) => {
-      const id = catE(nome);
-      if (!id) return;
-      const m = mediaDe(id);
-      if (m > 0) p.budgets[id] = U.round2(Math.ceil((m * 0.95) / 10) * 10);
-    });
-
-    if (!p.goals.length) {
-      const hoje = new Date();
-      const emMeses = (n) => U.toISO(new Date(hoje.getFullYear(), hoje.getMonth() + n, 15));
-      p.goals.push(
-        { id: U.uid('goal'), name: 'Reserva de emergência', target: 30000, saved: 12400,
-          deadline: emMeses(12), color: '#3B6558', icon: 'shield', accountId: null, createdAt: U.todayISO() },
-        { id: U.uid('goal'), name: 'Viagem', target: 12000, saved: 4200,
-          deadline: emMeses(8), color: '#B07C3E', icon: 'plane', accountId: null, createdAt: U.todayISO() },
-        { id: U.uid('goal'), name: 'Troca do notebook', target: 8000, saved: 8000,
-          deadline: null, color: '#34557A', icon: 'target', accountId: null, createdAt: U.todayISO() }
-      );
-    }
-
-    Store.commit('seed');
-    return today;
-  };
 
   global.Store = Store;
 })(window);
@@ -7436,17 +7604,6 @@ window.SupabaseConfig = {
       title: 'Perfis',
       body,
       buttons: [
-        {
-          label: 'Preencher com dados de exemplo', class: 'btn-ghost', align: 'left',
-          onClick: async () => {
-            const ok = await UI.confirm({
-              title: 'Dados de exemplo',
-              message: `Adicionar contas, cartão, categorias e ~12 meses de lançamentos fictícios ao perfil <strong>${U.escape(Store.profile().name)}</strong>? Serve para conhecer o painel — depois é só excluir o perfil.`,
-              confirmLabel: 'Preencher'
-            });
-            if (ok) { Store.seedDemo(); UI.toast('Dados de exemplo criados.', 'success'); UI.closeModal(); }
-          }
-        },
         { label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }
       ]
     });
@@ -9004,6 +9161,11 @@ window.SupabaseConfig = {
     }
   };
 
+  /* O UGLEZ precisa do access token da sessão para chamar a Edge
+     Function. Expor o cliente é mais honesto do que guardar uma
+     cópia do token em outro lugar. */
+  SB.cliente = () => cliente;
+
   Sync.registerBackend(SB);
   global.SupabaseBackend = SB;
 })(window);
@@ -9012,16 +9174,34 @@ window.SupabaseConfig = {
 <script>
 /* ===== assets/js/ai.js ===== */
 /* =============================================================
-   ai.js — sugestões de organização financeira via API da Anthropic
+   ai.js — o UGLEZ, do lado do navegador
    ------------------------------------------------------------
-   · A chave é do próprio usuário e fica só no localStorage deste
-     navegador. Nunca é embutida no código nem enviada a outro
-     servidor além de api.anthropic.com.
-   · O resumo enviado cobre APENAS o perfil e o mês selecionados,
-     e respeita as convenções contábeis do app (só confirmado
-     entra nos totais; cartão conta na data da compra).
-   · Sem chave configurada, a seção fica inerte — o resto do app
-     não depende dela.
+   UM ÚNICO CAMINHO:
+
+     navegador → Edge Function oaze-assistant → OpenAI
+
+   Não existe mais chamada direta a provedor de IA a partir daqui,
+   e não existe mais campo para o usuário guardar uma chave. As
+   duas coisas saíram de propósito.
+
+   Chave de IA no navegador é chave publicada: qualquer pessoa
+   abre o DevTools, copia do localStorage e passa a gastar na
+   conta de quem colou. Guardar num campo "só meu" não muda isso —
+   o navegador é território do usuário, e o que está lá está
+   exposto.
+
+   O QUE ESTE ARQUIVO MANDA
+   A pergunta, o mês e um resumo AGREGADO — totais, categorias
+   consolidadas, metas e compromissos do período. Nunca a lista de
+   lançamentos, nunca identificador interno, nunca outro perfil.
+
+   O QUE ELE NÃO DECIDE
+   Modelo, prompt de sistema e teto de tokens. Isso é do servidor.
+   Se o cliente pudesse escolher, o prompt de sistema deixaria de
+   ser garantia e viraria sugestão.
+
+   SEM CONTA, SEM UGLEZ. É consequência da arquitetura, não regra
+   comercial: a função exige sessão para saber de quem é o limite.
    ============================================================= */
 (function (global) {
   'use strict';
@@ -9029,66 +9209,36 @@ window.SupabaseConfig = {
   const AI = {};
   const el = U.el;
 
-  const KEY = 'financas.anthropicKey';
-  const ENDPOINT = 'https://api.anthropic.com/v1/messages';
-  const BACKEND = '/api/uglez';
+  const FUNCAO = 'oaze-assistant';
 
-  /* ------------------------------------------------------------
-     DOIS CAMINHOS, NESTA ORDEM
-     ------------------------------------------------------------
-     1 · backend (/api/uglez) — a chave fica no servidor, em
-         ANTHROPIC_API_KEY, e nunca chega ao navegador. É o caminho
-         padrão quando o app está publicado.
-     2 · chave do próprio usuário no localStorage — usado quando não
-         há servidor: arquivo aberto do disco (file://) e o arquivo
-         único do iPhone. Não é segredo do produto: é a chave dele,
-         no aparelho dele, indo direto para a Anthropic.
-
-     A sondagem roda uma vez por sessão e é cacheada: perguntar ao
-     servidor a cada pergunta seria latência sem retorno.
-     ------------------------------------------------------------ */
-  let backendCache = null;
-
-  AI.temBackend = async function () {
-    if (backendCache !== null) return backendCache;
-    // file:// não tem origem HTTP: nem tenta
-    if (location.protocol === 'file:') { backendCache = false; return false; }
-    try {
-      const r = await fetch(BACKEND, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ pergunta: 'ping', resumo: 'ping' })
-      });
-      // 501 = função existe mas sem chave configurada → caminho local
-      backendCache = r.status !== 404 && r.status !== 501;
-    } catch (e) {
-      backendCache = false;
-    }
-    return backendCache;
-  };
-
-  /** Como o UGLEZ vai responder agora — mostrado nas Configurações. */
-  AI.modo = function () {
-    if (backendCache === true) return { chave: 'backend', rotulo: 'Servidor (chave protegida)' };
-    if (AI.hasKey()) return { chave: 'local', rotulo: 'Chave neste aparelho' };
-    return { chave: 'nenhum', rotulo: 'Não configurado' };
-  };
-  const MODEL = 'claude-opus-5';
+  /* Chave antiga do formato anterior. Só existe aqui para ser
+     APAGADA — ver AI.init(). */
+  const CHAVE_ANTIGA = 'financas.anthropicKey';
 
   let busy = false;
 
-  /* ---------------- chave ---------------- */
+  /**
+   * Como o UGLEZ vai responder agora. Usado nas Configurações e na
+   * página do UGLEZ para explicar o estado sem prometer nada.
+   */
+  AI.modo = function () {
+    if (!global.Sync || !Sync.isConfigured()) {
+      return { chave: 'sem-nuvem', rotulo: 'Indisponível — sem conta configurada' };
+    }
+    if (!Sync.currentUser()) {
+      return { chave: 'sem-sessao', rotulo: 'Entre na sua conta para usar' };
+    }
+    return { chave: 'servidor', rotulo: 'Servidor seguro (chave protegida)' };
+  };
 
-  AI.getKey = function () {
-    try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; }
-  };
-  AI.setKey = function (k) {
-    try {
-      if (k) localStorage.setItem(KEY, k); else localStorage.removeItem(KEY);
-      return true;
-    } catch (e) { return false; }
-  };
-  AI.hasKey = () => !!AI.getKey();
+  /** As categorias de dado que saem daqui — mostradas ao usuário. */
+  AI.CATEGORIAS_ENVIADAS = [
+    'Mês e ano selecionados',
+    'Total de receitas, despesas e saldo',
+    'Gastos consolidados por categoria',
+    'Metas e quanto já foi guardado',
+    'Compromissos previstos do período'
+  ];
 
   /* ============================================================
      1 · RESUMO FINANCEIRO ENVIADO AO MODELO
@@ -9233,6 +9383,11 @@ window.SupabaseConfig = {
      2 · CHAMADA À API
      ============================================================ */
 
+  /**
+   * Envia a pergunta. Um envio por vez: `busy` existe porque dois
+   * cliques rápidos custariam duas chamadas pagas e devolveriam a
+   * segunda por cima da primeira.
+   */
   AI.ask = async function (question) {
     const box = document.getElementById('aiAnswer');
     if (!box) return;
@@ -9241,116 +9396,143 @@ window.SupabaseConfig = {
     if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
     if (busy) return;
 
-    // sem backend E sem chave local não há como responder
-    const viaBackend = await AI.temBackend();
-    if (!viaBackend && !AI.hasKey()) { AI.openConfig(); return; }
+    const modo = AI.modo();
+    if (modo.chave !== 'servidor') { AI.explicarIndisponivel(modo); return; }
 
     busy = true;
     const btn = document.getElementById('btnAiAsk');
     if (btn) { btn.disabled = true; btn.textContent = 'Pensando…'; }
     box.hidden = false;
     box.className = 'ai-answer is-loading';
+    /* aria-live faz o leitor de tela anunciar a chegada da resposta
+       sem que a pessoa precise sair procurando. */
+    box.setAttribute('aria-live', 'polite');
+    box.setAttribute('aria-busy', 'true');
     box.textContent = 'Analisando os dados de ' + U.monthLabel(App.ym);
 
     try {
-      const resumo = AI.buildSummary();
-
-      /* Caminho 1 — servidor. O navegador não vê chave nenhuma. */
-      if (viaBackend) {
-        const r = await fetch(BACKEND, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pergunta: q, resumo })
-        });
-        const j = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(j.erro || friendlyError(r.status, ''));
-        if (!j.texto) {
-          renderError(box, 'A resposta veio vazia. Tente novamente ou reformule a pergunta.');
-          return;
-        }
-        box.className = 'ai-answer';
-        box.innerHTML = renderMarkdown(j.texto);
-        box.appendChild(el('div', { class: 'ai-meta',
-          text: (j.modelo || 'servidor') + ' · resposta gerada no backend, sem chave no navegador' }));
-        return;
-      }
-
-      /* Caminho 2 — chave do próprio usuário, direto para a Anthropic. */
-      const resp = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'x-api-key': AI.getKey(),
-          'anthropic-version': '2023-06-01',
-          // sem este cabeçalho o navegador é bloqueado por CORS
-          'anthropic-dangerous-direct-browser-access': 'true',
-          'anthropic-beta': 'server-side-fallback-2026-07-01'
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          max_tokens: 16000,
-          system: SYSTEM,
-          output_config: { effort: 'medium' },
-          fallbacks: 'default',
-          messages: [{
-            role: 'user',
-            content: `${resumo}\n\n---\n\nPERGUNTA: ${q}`
-          }]
-        })
+      const r = await AI.chamarFuncao({
+        pergunta: q,
+        periodo: App.ym,
+        resumo: AI.resumoAgregado()
       });
 
-      if (!resp.ok) {
-        const raw = await resp.text();
-        throw new Error(friendlyError(resp.status, raw));
-      }
-
-      const data = await resp.json();
-
-      // refusal chega com HTTP 200 e content vazio — checar ANTES de ler content
-      if (data.stop_reason === 'refusal') {
-        renderError(box, 'O modelo recusou responder a esta solicitação. Reformule a pergunta.');
+      if (r.erro === 'sem_sessao') {
+        renderError(box, 'Sua sessão expirou. Entre de novo para continuar.');
         return;
       }
-
-      const text = (data.content || [])
-        .filter((b) => b.type === 'text')
-        .map((b) => b.text)
-        .join('\n').trim();
-
-      if (!text) {
-        renderError(box, 'A resposta veio vazia. Tente novamente ou reformule a pergunta.');
+      if (r.erro === 'limite') {
+        const u = r.usado || {};
+        const l = r.limites || {};
+        renderError(box, 'Você usou ' + (u.dia || 0) + ' de ' + (l.por_dia || '?') +
+          ' perguntas hoje. O limite recomeça amanhã.');
+        return;
+      }
+      if (r.erro) {
+        renderError(box, r.mensagem || 'O assistente está indisponível agora.');
+        return;
+      }
+      if (!r.texto) {
+        renderError(box, 'A resposta veio vazia. Tente reformular a pergunta.');
         return;
       }
 
       box.className = 'ai-answer';
-      box.innerHTML = renderMarkdown(text);
-
-      const u = data.usage || {};
-      box.appendChild(el('div', {
-        class: 'ai-meta',
-        text: `${MODEL} · ${U.fmtInt(u.input_tokens || 0)} tokens de entrada, ${U.fmtInt(u.output_tokens || 0)} de saída` +
-          (data.stop_reason === 'max_tokens' ? ' · resposta cortada no limite de tokens' : '')
-      }));
+      box.innerHTML = renderMarkdown(r.texto);
+      box.appendChild(el('div', { class: 'ai-meta' }, [
+        el('span', { text: 'Orientativo, não é consultoria financeira.' }),
+        r.uso ? el('span', { text: ' · ' + r.uso.dia + ' de ' + r.uso.limite_dia + ' hoje' }) : null
+      ].filter(Boolean)));
     } catch (e) {
-      console.error('IA:', e);
-      renderError(box, e.message || 'Falha na chamada.');
+      console.error('UGLEZ:', e);
+      renderError(box, 'Não foi possível falar com o assistente. Verifique a conexão e tente de novo.');
     } finally {
+      box.setAttribute('aria-busy', 'false');
       busy = false;
-      if (btn) { btn.disabled = false; btn.textContent = 'Pedir sugestão'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Perguntar'; }
     }
   };
 
-  function friendlyError(status, raw) {
-    let apiMsg = '';
-    try { apiMsg = (JSON.parse(raw).error || {}).message || ''; } catch (e) { /* texto cru */ }
-    if (status === 401) return 'Chave de API inválida ou revogada. Confira em "⚙ Configurar chave".';
-    if (status === 403) return 'Esta chave não tem permissão para usar este modelo.';
-    if (status === 404) return 'Modelo não encontrado para esta chave.';
-    if (status === 429) return 'Limite de uso excedido. Aguarde um pouco e tente de novo.';
-    if (status === 400) return 'A API recusou a requisição' + (apiMsg ? ': ' + apiMsg : '.');
-    if (status >= 500) return 'A API da Anthropic está indisponível no momento. Tente mais tarde.';
-    return `Erro ${status}${apiMsg ? ': ' + apiMsg : ''}`;
-  }
+  /**
+   * A chamada. O token da sessão vai no Authorization; a plataforma
+   * do Supabase valida antes de a função rodar, e a função valida
+   * de novo por dentro.
+   */
+  AI.chamarFuncao = async function (corpo) {
+    const cfg = global.SupabaseConfig || {};
+    const base = String(cfg.url || '').replace(/\/+$/, '');
+    const chave = String(cfg.publishableKey || cfg.anonKey || '');
+    if (!base || !chave) return { erro: 'indisponivel', mensagem: 'Assistente não configurado.' };
+
+    const sessao = await AI.tokenDaSessao();
+    if (!sessao) return { erro: 'sem_sessao' };
+
+    const r = await fetch(base + '/functions/v1/' + FUNCAO, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: chave,
+        authorization: 'Bearer ' + sessao
+      },
+      body: JSON.stringify(corpo)
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok && !j.erro) j.erro = r.status === 401 ? 'sem_sessao' : 'indisponivel';
+    return j;
+  };
+
+  /** O access token atual, direto do SDK — nunca guardado por nós. */
+  AI.tokenDaSessao = async function () {
+    try {
+      const c = global.SupabaseBackend && SupabaseBackend.cliente && SupabaseBackend.cliente();
+      if (!c) return null;
+      const { data } = await c.auth.getSession();
+      return (data && data.session && data.session.access_token) || null;
+    } catch (e) { return null; }
+  };
+
+  /** Explica por que não dá para perguntar, e o que fazer. */
+  AI.explicarIndisponivel = function (modo) {
+    UI.openModal({
+      title: 'UGLEZ',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', {
+          text: modo.chave === 'sem-sessao'
+            ? 'O UGLEZ precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.'
+            : 'O assistente ainda não está configurado neste ambiente.'
+        }),
+        el('p', { style: { marginTop: '10px' }, text: 'A análise acontece no servidor. Nenhuma chave de IA existe neste navegador, e nenhuma pergunta sai daqui sem passar por ele.' })
+      ]),
+      buttons: [
+        { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal },
+        modo.chave === 'sem-sessao'
+          ? { label: 'Entrar', class: 'btn-primary', onClick: () => { UI.closeModal(); Sync.signIn(); } }
+          : null
+      ].filter(Boolean)
+    });
+  };
+
+  /** O que exatamente será enviado — o usuário tem direito de ver. */
+  AI.mostrarDados = function () {
+    const r = AI.resumoAgregado();
+    UI.openModal({
+      title: 'O que o UGLEZ recebe',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: 'Ao perguntar, sai daqui um resumo agregado do mês exibido — e só ele:' }),
+        el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } },
+          AI.CATEGORIAS_ENVIADAS.map((c) => el('li', { text: c }))),
+        el('p', { style: { marginTop: '10px' }, text: 'Não sai: a lista de lançamentos, nomes de contas ou cartões, identificadores internos, seu e-mail, nem qualquer dado de outro perfil ou de outro mês.' }),
+        el('p', { class: 'hint', style: { marginTop: '10px' }, text: 'Abaixo, exatamente o que seria enviado agora:' }),
+        el('textarea', {
+          class: 'input textarea', rows: 12, readonly: true,
+          style: { marginTop: '6px', fontFamily: 'ui-monospace, monospace', fontSize: '11.5px' },
+          text: JSON.stringify(r, null, 2)
+        })
+      ]),
+      wide: true,
+      buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
+    });
+  };
 
   function renderError(box, message) {
     box.className = 'ai-answer is-error';
@@ -9411,89 +9593,6 @@ window.SupabaseConfig = {
 
   /* ============================================================
      4 · CONFIGURAÇÃO DA CHAVE
-     ============================================================ */
-
-  AI.openConfig = function () {
-    const input = el('input', {
-      class: 'input', type: 'password', value: AI.getKey(),
-      placeholder: 'sk-ant-api03-…', autocomplete: 'off', spellcheck: 'false'
-    });
-
-    const body = el('div', {}, [
-      el('div', { class: 'parse-info' }, el('div', {
-        html: 'Esta função é <strong>opcional</strong> e usa a <strong>sua</strong> chave da API da Anthropic, ' +
-          'cobrada por uso conforme a tabela de preços deles. Sem chave, o resto do painel funciona igual.'
-      })),
-      el('div', { class: 'field' }, [
-        el('span', { class: 'field-label', text: 'Chave da API (x-api-key)' }),
-        input,
-        el('p', {
-          class: 'hint',
-          html: 'Crie em <strong>console.anthropic.com → API Keys</strong>. A chave fica salva apenas no ' +
-            'localStorage deste navegador e vai direto para <code>api.anthropic.com</code> — não passa por mais nenhum servidor.'
-        })
-      ]),
-      el('div', { class: 'parse-info is-warn', style: { marginTop: '14px' } }, el('div', {
-        html: '<strong>Cuidado:</strong> qualquer pessoa com acesso a este navegador consegue ler a chave. ' +
-          'Se hospedar o painel na internet, prefira uma chave com limite de gasto baixo e revogue-a se suspeitar de vazamento.'
-      })),
-      el('div', { style: { marginTop: '14px' } }, [
-        el('span', { class: 'field-label', text: 'O que é enviado' }),
-        el('p', {
-          class: 'hint',
-          text: 'Apenas o resumo do perfil e do mês selecionados: saldos, totais por categoria, faturas e investimentos. ' +
-            'Nenhum outro perfil é incluído, e a chave nunca sai deste navegador a não ser para a própria API.'
-        }),
-        el('button', {
-          class: 'btn btn-ghost btn-sm', style: { marginTop: '6px' }, text: 'Ver o resumo exato que seria enviado',
-          onclick: () => {
-            UI.openModal({
-              title: 'Resumo que seria enviado à API',
-              wide: true,
-              body: el('textarea', { class: 'input textarea', rows: 22, readonly: true, text: AI.buildSummary() }),
-              buttons: [{ label: 'Voltar', class: 'btn-primary', onClick: () => AI.openConfig() }]
-            });
-          }
-        })
-      ])
-    ]);
-
-    UI.openModal({
-      title: 'Sugestões com IA — configuração',
-      wide: true,
-      body,
-      buttons: [
-        AI.hasKey() ? {
-          label: 'Remover chave', class: 'btn-ghost', align: 'left',
-          onClick: () => { AI.setKey(''); UI.toast('Chave removida deste navegador.'); UI.closeModal(); }
-        } : null,
-        { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
-        {
-          label: 'Salvar', class: 'btn-ai',
-          onClick: () => {
-            const v = input.value.trim();
-            if (v && !/^sk-ant-/.test(v)) {
-              UI.toast('Chaves da Anthropic começam com "sk-ant-". Confira antes de salvar.', 'error');
-              return;
-            }
-            AI.setKey(v);
-            UI.toast(v ? 'Chave salva neste navegador.' : 'Chave removida.', v ? 'success' : null);
-            UI.closeModal();
-          }
-        }
-      ].filter(Boolean)
-    });
-  };
-
-  /* ============================================================
-     LEITURA PROATIVA — calculada aqui, sem rede
-     ------------------------------------------------------------
-     A frase do topo sai do próprio Calc: é aritmética sobre os
-     dados locais, não uma resposta de modelo. Isso importa por
-     dois motivos — aparece para quem nunca configurou chave
-     nenhuma, e nada sai do navegador para produzi-la.
-
-     Só a caixa "Pedir sugestão" chama a API da Anthropic.
      ============================================================ */
 
   AI.insight = function (ym) {
@@ -9567,8 +9666,28 @@ window.SupabaseConfig = {
   /* ---------------- ligação com a página ---------------- */
 
   AI.init = function () {
+    /* Higiene: se este navegador guardou uma chave no formato
+       antigo, ela sai agora. Uma chave que já esteve no
+       localStorage deve ser considerada comprometida — o usuário
+       precisa revogá-la no provedor, não só apagá-la daqui. */
+    try {
+      if (localStorage.getItem(CHAVE_ANTIGA)) {
+        localStorage.removeItem(CHAVE_ANTIGA);
+        console.warn('UGLEZ: uma chave de IA guardada neste navegador foi removida. ' +
+          'Revogue-a no painel do provedor: uma chave que esteve no navegador está exposta.');
+        if (global.UI) UI.toast('Removemos a chave de IA guardada neste aparelho. Revogue-a no painel do provedor.', 'error', 12000);
+      }
+    } catch (e) { /* sem localStorage, nada a limpar */ }
+
+    /* O botão que configurava a chave agora mostra o que é enviado.
+       O lugar na interface continua útil; o que mudou foi a pergunta
+       que ele responde — de "onde ponho minha chave" para "o que sai
+       daqui". */
     const btnCfg = document.getElementById('btnAiConfig');
-    if (btnCfg) btnCfg.addEventListener('click', () => AI.openConfig());
+    if (btnCfg) {
+      btnCfg.textContent = 'O que é enviado';
+      btnCfg.addEventListener('click', () => AI.mostrarDados());
+    }
 
     const btnAsk = document.getElementById('btnAiAsk');
     const field = document.getElementById('aiQuestion');
@@ -9916,6 +10035,116 @@ window.SupabaseConfig = {
       if (ev.key === '/' && !digitando(ev.target)) { ev.preventDefault(); abreBusca(); }
     });
     global.addEventListener('resize', fecha);
+  };
+
+  /* =============================================================
+     NAVEGAÇÃO SUPERIOR — grupos com menu
+     ------------------------------------------------------------
+     Só existe a partir de 821px; abaixo disso o CSS esconde a barra
+     e a de baixo assume. Como display:none tira da ordem de foco,
+     nada aqui atrapalha o celular mesmo estando sempre ligado.
+
+     Regras de teclado, todas exigidas por quem navega sem mouse:
+       Enter/Espaço  abre e fecha
+       ↓             abre e cai no primeiro item
+       ↑             abre e cai no último
+       Esc           fecha e DEVOLVE o foco ao gatilho — sem isso a
+                     pessoa é largada no início da página
+       Tab para fora fecha o grupo
+     ============================================================= */
+
+  let grupoAberto = null;
+
+  function fechaGrupo(devolveFoco) {
+    if (!grupoAberto) return;
+    const g = grupoAberto;
+    grupoAberto = null;
+    g.querySelector('.topnav-trigger').setAttribute('aria-expanded', 'false');
+    g.querySelector('.topnav-drop').hidden = true;
+    if (devolveFoco) g.querySelector('.topnav-trigger').focus();
+  }
+  Shell.fecharGrupos = () => fechaGrupo(false);
+
+  function abreGrupo(g, focar) {
+    if (grupoAberto && grupoAberto !== g) fechaGrupo(false);
+    grupoAberto = g;
+    g.querySelector('.topnav-trigger').setAttribute('aria-expanded', 'true');
+    const drop = g.querySelector('.topnav-drop');
+    drop.hidden = false;
+    if (focar) {
+      const itens = drop.querySelectorAll('.nav-item');
+      (focar === 'ultimo' ? itens[itens.length - 1] : itens[0]).focus();
+    }
+  }
+
+  function itensDo(g) {
+    return Array.from(g.querySelectorAll('.topnav-drop .nav-item'));
+  }
+
+  Shell.wireTopnav = function () {
+    const menu = document.getElementById('topnavMenu');
+    if (!menu) return;
+
+    const marca = document.getElementById('topnavBrand');
+    if (marca) marca.addEventListener('click', () => App.goTo('home'));
+
+    U.$$('.topnav-group').forEach((g) => {
+      const trigger = g.querySelector('.topnav-trigger');
+
+      trigger.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (grupoAberto === g) fechaGrupo(false); else abreGrupo(g);
+      });
+
+      trigger.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowDown') { ev.preventDefault(); abreGrupo(g, 'primeiro'); }
+        else if (ev.key === 'ArrowUp') { ev.preventDefault(); abreGrupo(g, 'ultimo'); }
+        else if (ev.key === 'Escape') fechaGrupo(true);
+      });
+
+      g.querySelector('.topnav-drop').addEventListener('keydown', (ev) => {
+        const itens = itensDo(g);
+        const i = itens.indexOf(document.activeElement);
+        if (ev.key === 'ArrowDown') { ev.preventDefault(); itens[(i + 1) % itens.length].focus(); }
+        else if (ev.key === 'ArrowUp') { ev.preventDefault(); itens[(i - 1 + itens.length) % itens.length].focus(); }
+        else if (ev.key === 'Home') { ev.preventDefault(); itens[0].focus(); }
+        else if (ev.key === 'End') { ev.preventDefault(); itens[itens.length - 1].focus(); }
+        else if (ev.key === 'Escape') { ev.preventDefault(); fechaGrupo(true); }
+      });
+
+      /* Sair do grupo com Tab fecha. O timeout deixa o foco pousar
+         antes de perguntarmos onde ele está. */
+      g.addEventListener('focusout', () => {
+        setTimeout(() => {
+          if (grupoAberto === g && !g.contains(document.activeElement)) fechaGrupo(false);
+        }, 0);
+      });
+    });
+
+    /* Escolher um destino fecha o menu — senão ele fica pairando
+       sobre a página que acabou de trocar. */
+    U.$$('.topnav-drop .nav-item').forEach((b) => {
+      b.addEventListener('click', () => fechaGrupo(false));
+    });
+
+    document.addEventListener('click', (ev) => {
+      if (grupoAberto && !grupoAberto.contains(ev.target)) fechaGrupo(false);
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && grupoAberto) fechaGrupo(true);
+    });
+  };
+
+  /**
+   * Marca o grupo que contém a página atual. Sem isso, quem está em
+   * "Metas" não vê nenhum destino aceso: o item ativo está escondido
+   * dentro de um menu fechado.
+   */
+  Shell.marcarGrupoAtivo = function () {
+    U.$$('.topnav-group').forEach((g) => {
+      const dentro = itensDo(g).some((b) => b.dataset.page === App.page);
+      g.classList.toggle('has-active', dentro);
+    });
   };
 
   global.Shell = Shell;
@@ -12117,9 +12346,11 @@ window.SupabaseConfig = {
     renderChips('uglezChipsFull');
     const modo = AI.modo();
     document.getElementById('uglezMode').textContent =
-      modo.chave === 'backend' ? 'Respondendo pelo servidor — nenhuma chave no navegador'
-        : modo.chave === 'local' ? 'Respondendo com a sua chave, guardada só neste aparelho'
-          : 'Configure uma chave para conversar. Os insights acima não precisam dela.';
+      modo.chave === 'servidor'
+        ? 'Respondendo por servidor autenticado — nenhuma chave de IA neste navegador'
+        : modo.chave === 'sem-sessao'
+          ? 'Entre na sua conta para conversar. As leituras acima não precisam disso.'
+          : 'Assistente indisponível neste ambiente. As leituras acima continuam funcionando.';
   };
 
   /** Chips de pergunta, reusados na home e na página. */
@@ -12400,18 +12631,18 @@ window.SupabaseConfig = {
 
     box.appendChild(linha(
       'Como o UGLEZ responde',
-      modo.chave === 'backend'
-        ? 'Pelo servidor. A chave fica em variável de ambiente e nunca chega ao navegador.'
-        : modo.chave === 'local'
-          ? 'Com a sua chave, guardada só neste aparelho e enviada apenas para a Anthropic.'
-          : 'Sem chave configurada. As leituras da página UGLEZ continuam funcionando: elas são calculadas aqui, sem rede.',
-      el('span', { class: 'badge ' + (modo.chave === 'backend' ? 'badge-ok' : modo.chave === 'local' ? 'badge-card' : ''), text: modo.rotulo })
+      modo.chave === 'servidor'
+        ? 'Por um servidor autenticado. Nenhuma chave de IA existe neste navegador.'
+        : modo.chave === 'sem-sessao'
+          ? 'Entre na sua conta para conversar. As leituras da página UGLEZ continuam funcionando: são calculadas aqui, sem rede.'
+          : 'Assistente não configurado neste ambiente. As leituras da página UGLEZ continuam funcionando.',
+      el('span', { class: 'badge ' + (modo.chave === 'servidor' ? 'badge-ok' : ''), text: modo.rotulo })
     ));
 
     box.appendChild(linha(
-      'Chave da API',
-      'Usada só quando não há servidor — arquivo aberto do disco ou no iPhone.',
-      el('button', { class: 'btn btn-outline btn-sm', text: 'Configurar chave', onclick: () => AI.openConfig() })
+      'O que é enviado',
+      'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
     ));
   }
 
@@ -12439,22 +12670,6 @@ window.SupabaseConfig = {
       })
     ));
 
-    box.appendChild(linha(
-      'Dados de exemplo',
-      'Popula o perfil ativo com um ano de movimentação fictícia, para explorar o painel.',
-      el('button', {
-        class: 'btn btn-ghost btn-sm', text: 'Carregar exemplo',
-        onclick: async () => {
-          const ok = await UI.confirm({
-            title: 'Carregar dados de exemplo',
-            message: 'Isto acrescenta lançamentos fictícios ao perfil <strong>' +
-              U.escape(Store.profile().name) + '</strong>. Continuar?',
-            confirmLabel: 'Carregar'
-          });
-          if (ok) { Store.seedDemo(); UI.toast('Dados de exemplo criados.', 'success'); }
-        }
-      })
-    ));
   }
 
   global.Cfg = Cfg;
@@ -12471,8 +12686,7 @@ window.SupabaseConfig = {
 
   const App = {
     page: 'home',
-    refDate: U.todayISO(),  // dia de referência; App.ym é o mês dele
-    ym: U.todayYM(),
+    ym: U.todayYM(),        // YYYY-MM — o período é o MÊS, não um dia
     txSearch: '',
     txOnlyPending: false,
     txMethod: 'all',        // all | account (débito) | card (crédito)
@@ -12514,48 +12728,57 @@ window.SupabaseConfig = {
       if (opts.invoiceRef) App.invoiceRef = opts.invoiceRef;
     }
     U.$$('.nav-item').forEach((b) => b.classList.toggle('is-active', b.dataset.page === page));
+    if (global.Shell && Shell.marcarGrupoAtivo) Shell.marcarGrupoAtivo();
     U.$$('.page').forEach((s) => s.classList.toggle('is-active', s.dataset.page === page));
     document.getElementById('pageTitle').textContent = PAGES[page].title;
     App.render();
     global.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /**
-   * Muda o período. O dia acompanha: se o dia de referência não existe no
-   * mês de destino (31 → fevereiro), encosta no último dia do mês.
-   */
-  App.setYM = function (ym, dia) {
-    const p = U.ymParts(ym);
-    const d = U.clampDay(p.y, p.m, dia != null ? dia : (+String(App.refDate).slice(8, 10) || 1));
+  /** Muda o período exibido. A unidade é o mês. */
+  App.setYM = function (ym) {
     App.ym = ym;
-    App.refDate = U.isoOf(p.y, p.m, d);
     App.invoiceRef = null;
     App.calDay = null;      // o dia selecionado não existe no mês novo
     syncPeriodPicker();
     App.render();
   };
 
-  /** Volta o painel para hoje — dia, mês e ano. */
+  /** Volta o painel para o mês corrente. */
   App.goToday = function () {
-    App.refDate = U.todayISO();
     App.ym = U.todayYM();
     App.invoiceRef = null;
     syncPeriodPicker();
     App.render();
   };
 
-  /** Data padrão dos formulários: o dia de referência escolhido no topo. */
-  App.selectedDateOrToday = function () {
-    return U.isValidISO(App.refDate) ? App.refDate : U.monthStart(App.ym);
+  /** O mês exibido é o mês em que estamos? */
+  App.noMesAtual = function () {
+    return App.ym === U.todayYM();
   };
 
   /**
-   * Data de corte dos saldos: o dia escolhido, mas nunca além do fim do
-   * mês exibido — o cartão de uma conta diz "saldo em" exatamente isto.
+   * Data de corte dos saldos e indicadores.
+   *
+   * No mês corrente é HOJE: mostrar o saldo do dia 31 no dia 5 seria
+   * contar dinheiro que ainda não entrou nem saiu. Em qualquer outro
+   * mês — passado ou futuro — é o mês inteiro, porque ali não existe
+   * "hoje": o passado já aconteceu e o futuro é o que está previsto.
    */
   App.balanceDate = function () {
-    const fim = U.monthEnd(App.ym);
-    return App.refDate && App.refDate <= fim && App.refDate >= U.monthStart(App.ym) ? App.refDate : fim;
+    return App.noMesAtual() ? U.todayISO() : U.monthEnd(App.ym);
+  };
+
+  /**
+   * Data que os formulários trazem preenchida. No mês corrente, hoje.
+   * Em outro mês, o mesmo dia do mês — encostado no último dia quando
+   * ele não existe lá (31 de janeiro → 28 ou 29 de fevereiro). Nunca
+   * uma data fora do mês que a pessoa está olhando.
+   */
+  App.selectedDateOrToday = function () {
+    if (App.noMesAtual()) return U.todayISO();
+    const p = U.ymParts(App.ym);
+    return U.isoOf(p.y, p.m, U.clampDay(p.y, p.m, +U.todayISO().slice(8, 10)));
   };
 
   App.render = function () {
@@ -12632,7 +12855,6 @@ window.SupabaseConfig = {
   /* ---------------- seletores de período e perfil ---------------- */
 
   function syncPeriodPicker() {
-    const daySel = document.getElementById('daySelect');
     const monthSel = document.getElementById('monthSelect');
     const yearSel = document.getElementById('yearSelect');
     const p = U.ymParts(App.ym);
@@ -12648,10 +12870,9 @@ window.SupabaseConfig = {
     UI.fillSelect(yearSel, opts, String(p.y));
     monthSel.value = String(p.m);
 
-    // o dia acompanha o mês: fevereiro não oferece 30 nem 31
-    const dias = [];
-    for (let d = 1; d <= U.daysInMonth(p.y, p.m); d++) dias.push({ value: String(d), label: String(d) });
-    UI.fillSelect(daySel, dias, String(+String(App.refDate).slice(8, 10) || 1));
+    /* "Mês atual" só faz sentido quando não estamos nele. */
+    const hoje = document.getElementById('btnToday');
+    if (hoje) hoje.disabled = App.noMesAtual();
   }
 
   function syncProfileSelect() {
@@ -12726,9 +12947,7 @@ window.SupabaseConfig = {
     document.getElementById('ownerName').addEventListener('click', askOwnerName);
     wireFab();
 
-    // período — dia, mês e ano são editáveis
-    document.getElementById('daySelect').addEventListener('change', (e) =>
-      App.setYM(App.ym, +e.target.value));
+    // período — mês e ano; o dia não é escolha global
     document.getElementById('monthSelect').addEventListener('change', (e) =>
       App.setYM(U.ymKey(U.ymParts(App.ym).y, +e.target.value)));
     document.getElementById('yearSelect').addEventListener('change', (e) =>
@@ -12770,7 +12989,6 @@ window.SupabaseConfig = {
       reader.onload = () => {
         try {
           Store.importJSON(String(reader.result));
-          App.refDate = U.todayISO();
           App.ym = U.todayYM();
           syncProfileSelect(); syncPeriodPicker();
           UI.toast('Backup restaurado.', 'success');
@@ -12909,12 +13127,13 @@ window.SupabaseConfig = {
     passo('perfis', syncProfileSelect);
     passo('período', syncPeriodPicker);
     passo('eventos', wire);
+    passo('navegação superior', () => Shell.wireTopnav());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());
     App.goTo('home');
 
-    // primeira visita: oferece dados de exemplo
+    // primeira visita: aponta o primeiro passo, não preenche nada
     // (o Safari em aba privada lança exceção no localStorage — daí o try)
     const flag = (function () { try { return localStorage.getItem('financas.welcomed'); } catch (e) { return null; } })();
     const prof = Store.profile();
@@ -12924,19 +13143,15 @@ window.SupabaseConfig = {
         UI.openModal({
           title: 'Bem-vindo ao OAZE',
           body: U.el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-            U.el('p', { text: 'Tudo fica salvo apenas neste navegador — nenhum dado sai do seu computador. Use "↓ Backup" no topo da tela para guardar uma cópia.' }),
-            U.el('p', { style: { marginTop: '10px' }, text: 'Duas formas de começar:' }),
-            U.el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } }, [
-              U.el('li', { text: 'Cadastre suas contas e cartões em "Cartões e Contas" e comece a lançar.' }),
-              U.el('li', { text: 'Ou carregue dados de exemplo para explorar o painel antes.' })
-            ]),
+            U.el('p', { text: 'Seus dados ficam neste aparelho. Ao criar uma conta, eles passam a acompanhar você no computador e no celular.' }),
+            U.el('p', { style: { marginTop: '10px' }, text: 'O primeiro passo é cadastrar onde o seu dinheiro está — uma conta ou um cartão. Sem isso, não há o que somar.' }),
             U.el('p', { style: { marginTop: '10px', color: 'var(--muted)' }, text: 'Atalhos: D = nova despesa · R = nova receita · Alt+←/→ muda o mês.' })
           ]),
           buttons: [
-            { label: 'Começar do zero', class: 'btn-outline', onClick: () => { UI.closeModal(); App.goTo('accounts'); } },
+            { label: 'Depois', class: 'btn-outline', onClick: UI.closeModal },
             {
-              label: 'Carregar dados de exemplo', class: 'btn-primary',
-              onClick: () => { Store.seedDemo(); UI.closeModal(); UI.toast('Dados de exemplo criados. Explore à vontade.', 'success'); }
+              label: 'Cadastrar minha primeira conta', class: 'btn-primary',
+              onClick: () => { UI.closeModal(); App.goTo('accounts'); }
             }
           ],
           noAutofocus: true

@@ -423,6 +423,11 @@
     }
   };
 
+  /* O UGLEZ precisa do access token da sessão para chamar a Edge
+     Function. Expor o cliente é mais honesto do que guardar uma
+     cópia do token em outro lugar. */
+  SB.cliente = () => cliente;
+
   Sync.registerBackend(SB);
   global.SupabaseBackend = SB;
 })(window);
