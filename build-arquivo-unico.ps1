@@ -75,7 +75,10 @@ foreach ($f in $arquivos) {
 # ---- 4 · confere que nada ficou apontando para fora ----
 #      (so o markup; dentro de <script>/<style> ha strings que so parecem atributos)
 $markup = [regex]::Replace($html, '(?is)<(script|style)\b[^>]*>.*?</\1>', '')
-$pendentes = [regex]::Matches($markup, '(?:src|href)="(?!data:|https?://)([^"]+)"') |
+# Ancora interna (#id) nao e referencia externa: o link "Pular para o
+# conteudo" aponta para #content e sempre apontou. Aviso falso treina
+# a ignorar aviso verdadeiro.
+$pendentes = [regex]::Matches($markup, '(?:src|href)="(?!data:|#|https?://)([^"]+)"') |
   ForEach-Object { $_.Groups[1].Value } | Where-Object { $_ -ne '' }
 if ($pendentes) {
   Write-Warning ("Ainda ha referencias externas: " + ($pendentes -join ', '))

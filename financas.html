@@ -2232,6 +2232,72 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .pu-acoes .btn { flex: 1 1 100%; justify-content: center; }
 }
 
+/* ------------------------------------------------------------
+   22.9 · ACESSIBILIDADE
+   ------------------------------------------------------------ */
+
+/* Conteúdo só para leitor de tela. NÃO usar display:none nem
+   visibility:hidden: os dois removem o elemento da árvore de
+   acessibilidade também, que é exatamente o contrário do que
+   queremos. O recorte de 1px é a técnica que esconde da vista sem
+   esconder de quem lê. */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; white-space: nowrap;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+}
+
+/* Primeiro foco da página. Fica fora da tela até ser focado —
+   quem navega por teclado não deveria atravessar 12 destinos toda
+   vez que muda de página. */
+.pular-conteudo {
+  position: fixed; top: -100px; left: 12px; z-index: 200;
+  padding: 10px 16px; border-radius: 0 0 12px 12px;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 620; text-decoration: none;
+  transition: top .16s var(--ease-out);
+}
+.pular-conteudo:focus { top: 0; }
+
+/* O destino do salto não deve ganhar contorno: ele recebe o foco
+   por programação, não por navegação. */
+.content:focus { outline: none; }
+
+/* ---- alvos de toque ----
+   WCAG 2.2 (2.5.8) pede 24×24 CSS no mínimo. Vários controles
+   estavam em 16px e 28px. Onde o elemento é pequeno de propósito
+   — uma caixa de seleção numa tabela densa — a área clicável
+   cresce por pseudo-elemento, sem mudar o desenho. */
+.icon-btn { min-width: 32px; min-height: 32px; }
+
+/* Caixa de seleção com o tamanho REAL de 24px, não com área
+   ampliada por pseudo-elemento: ::before e ::after não renderizam
+   de forma confiável em elementos substituídos como <input>, e a
+   área maior existiria só no CSS, não sob o dedo. 24×24 é o mínimo
+   do WCAG 2.2 (2.5.8). */
+input[type="checkbox"], input[type="radio"] {
+  width: 24px; height: 24px;
+  flex: none; cursor: pointer;
+}
+
+.ai-chip { min-height: 32px; }
+
+/* .tab e .seg button são âncoras de navegação: 32px de altura para
+   não exigir mira no mouse, 40px no toque (regra de @media abaixo). */
+.tab { min-height: 32px; }
+.seg button { min-height: 32px; }
+
+/* No toque, o dedo pede mais do que o mouse: 44px é a medida que
+   a Apple e o Google convergiram, e é ela que evita o toque que
+   erra o alvo. */
+@media (hover: none) {
+  .icon-btn { min-width: 44px; min-height: 44px; }
+  .ai-chip, .tab, .pill-ico, .seg button { min-height: 40px; }
+  input[type="checkbox"], input[type="radio"] { width: 28px; height: 28px; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
@@ -2350,6 +2416,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   <div class="ambient-blob b1"></div>
   <div class="ambient-blob b2"></div>
 </div>
+
+<!-- Primeiro foco da página. Quem navega por teclado não deveria
+     passar por 12 destinos toda vez que troca de página. -->
+<a class="pular-conteudo" href="#content">Pular para o conteúdo</a>
 
 <div class="shell">
 
@@ -2564,10 +2634,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
       <button class="pill pill-btn" id="btnSettings" aria-label="Configurações" aria-expanded="false" title="Configurações">
         <span data-ico="settings"></span>
       </button>
-      <input type="file" id="fileRestore" accept="application/json,.json" hidden>
+      <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
     </header>
 
-    <main class="content" id="content">
+    <main class="content" id="content" tabindex="-1">
 
       <div class="page-head">
         <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
@@ -2703,8 +2773,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
             <button type="button" data-method="account">Débito</button>
             <button type="button" data-method="card">Crédito</button>
           </div>
-          <input type="search" class="input input-sm" id="txSearch" placeholder="Buscar por descrição…">
-          <label class="check check-inline"><input type="checkbox" id="txOnlyPending"><span>Só pendentes</span></label>
+          <input type="search" class="input input-sm" id="txSearch" aria-label="Buscar nos lançamentos" placeholder="Buscar por descrição…">
+          <label class="check check-inline"><input type="checkbox" id="txOnlyPending" aria-label="Mostrar apenas lançamentos a confirmar"><span>Só pendentes</span></label>
         </div>
       </div>
 
@@ -2750,7 +2820,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
           <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
         </div>
         <div class="toolbar-right">
-          <select class="input input-sm" id="invTypeFilter"><option value="">Todos os tipos</option></select>
+          <select class="input input-sm" id="invTypeFilter" aria-label="Filtrar investimentos por tipo"><option value="">Todos os tipos</option></select>
         </div>
       </div>
 
@@ -2799,19 +2869,19 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
         <div class="proj-layout">
           <form class="proj-form" id="projForm">
             <label class="field"><span class="field-label">Valor inicial (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projInitial" value="10.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
             <label class="field"><span class="field-label">Aporte mensal (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projMonthly" value="1.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
             <label class="field"><span class="field-label">Taxa de juros</span>
               <div class="row gap-6">
-                <input class="input" type="text" inputmode="decimal" id="projRate" value="10,00">
-                <select class="input input-sm" id="projRatePeriod" style="max-width:110px">
+                <input class="input" type="text" inputmode="decimal" id="projRate" aria-label="Taxa de rendimento da projeção" value="10,00">
+                <select class="input input-sm" id="projRatePeriod" aria-label="Período da taxa" style="max-width:110px">
                   <option value="year">% ao ano</option>
                   <option value="month">% ao mês</option>
                 </select>
               </div></label>
             <label class="field"><span class="field-label">Período (meses)</span>
-              <input class="input" type="number" min="1" max="960" id="projMonths" value="120"></label>
+              <input class="input" type="number" min="1" max="960" id="projMonths" aria-label="Meses da projeção" value="120"></label>
             <button class="btn btn-primary" type="submit">Calcular projeção</button>
           </form>
           <div class="proj-result">
@@ -2840,7 +2910,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
         <div class="card">
           <div class="card-head">
             <h2>Extrato da conta</h2>
-            <select class="input input-sm" id="accHistorySelect" style="max-width:240px"></select>
+            <select class="input input-sm" id="accHistorySelect" aria-label="Conta do extrato" style="max-width:240px"></select>
           </div>
           <div class="table-wrap table-scroll-lg">
             <table class="table table-compact" id="tableAccHistory">
@@ -2873,17 +2943,17 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
           <div class="import-grid">
             <div class="field">
               <span class="field-label">1 · Envie um arquivo</span>
-              <input type="file" class="input" id="importFile" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
+              <input type="file" class="input" id="importFile" aria-label="Arquivo de extrato para importar" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
               <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
             </div>
             <div class="field">
               <span class="field-label">ou cole o conteúdo aqui</span>
-              <textarea class="input textarea" id="importText" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
+              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
             </div>
           </div>
           <div class="import-opts">
             <label class="field"><span class="field-label">Destino</span>
-              <select class="input" id="importTarget"></select></label>
+              <select class="input" id="importTarget" aria-label="Conta ou cartão de destino da importação"></select></label>
             <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
           </div>
         </div>
@@ -2899,7 +2969,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
           <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
         </div>
         <div class="toolbar-right">
-          <select class="input input-sm" id="catRangeSelect">
+          <select class="input input-sm" id="catRangeSelect" aria-label="Período das categorias">
             <option value="all">Histórico completo</option>
             <option value="year">Ano selecionado</option>
             <option value="12m">Últimos 12 meses</option>
@@ -3044,7 +3114,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
         </div>
         <div class="uglez-chips" id="uglezChipsFull"></div>
         <div class="ai-ask" style="margin-top:12px">
-          <textarea class="input textarea-plain" id="aiQuestion" rows="2"
+          <textarea class="input textarea-plain" id="aiQuestion" aria-label="Sua pergunta para o UGLEZ" rows="2"
             placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
           <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
         </div>
@@ -3097,7 +3167,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   <div class="search-box n1" role="dialog" aria-modal="true" aria-label="Buscar">
     <div class="search-field">
       <span data-ico="search" aria-hidden="true"></span>
-      <input type="search" id="searchInput" autocomplete="off"
+      <input type="search" id="searchInput" aria-label="Buscar em todo o app" autocomplete="off"
         placeholder="Buscar lançamento, conta, cartão, meta ou categoria…">
       <button class="pill-ico" data-close-search aria-label="Fechar busca">✕</button>
     </div>
@@ -5957,8 +6027,123 @@ window.SupabaseConfig = {
     if (prev) { prev.destroy(); registry.delete(canvasId); }
     const chart = new Chart(canvas.getContext('2d'), config);
     registry.set(canvasId, chart);
+    descrever(canvas, config);
     return chart;
   };
+
+  /* ============================================================
+     ALTERNATIVA TEXTUAL
+     ------------------------------------------------------------
+     Um <canvas> é um retângulo de pixels: para quem usa leitor de
+     tela, um gráfico sem descrição simplesmente não existe. E não
+     basta um rótulo dizendo "gráfico de despesas" — isso anuncia
+     que há informação e a nega no mesmo gesto.
+
+     Por isso saem daqui duas coisas: um aria-label com a leitura
+     resumida (quantos pontos, qual o maior, qual o menor) e uma
+     TABELA com todos os valores, invisível na tela e disponível
+     para quem navega por texto. É a mesma informação, na forma que
+     cada um consegue receber.
+
+     Como todo gráfico passa por Charts.render, isto vale para os
+     13 de uma vez — e para os próximos, sem ninguém precisar
+     lembrar.
+     ============================================================ */
+
+  function valorFmt(v, formato) {
+    if (v == null || !isFinite(v)) return '—';
+    if (formato === 'pct') return U.fmtPct(v, 1);
+    if (formato === 'num') return U.fmtNum(v);
+    return U.fmtBRL(v);
+  }
+
+  function descrever(canvas, config) {
+    const a = (config && config.acessivel) || {};
+    const formato = a.formato || 'brl';
+    const titulo = a.titulo || canvas.getAttribute('data-titulo') || tituloDoContexto(canvas);
+
+    const labels = (config.data && config.data.labels) || [];
+    const sets = ((config.data && config.data.datasets) || [])
+      .filter((d) => d && Array.isArray(d.data) && d.data.length);
+
+    /* Sem dados, dizer isso é mais útil do que uma tabela vazia. */
+    if (!sets.length) {
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', titulo + ': sem dados no período.');
+      limparTabela(canvas);
+      return;
+    }
+
+    /* --- o resumo falado --- */
+    const partes = [titulo + '.'];
+    sets.forEach((d) => {
+      const nums = d.data.map((v) => (typeof v === 'object' && v ? +v.y : +v))
+        .filter((v) => isFinite(v));
+      if (!nums.length) return;
+      let iMax = 0, iMin = 0;
+      nums.forEach((v, i) => { if (v > nums[iMax]) iMax = i; if (v < nums[iMin]) iMin = i; });
+      const nome = d.label ? d.label + ': ' : '';
+      partes.push(nome + nums.length + ' pontos. Maior: ' +
+        (labels[iMax] != null ? labels[iMax] + ', ' : '') + valorFmt(nums[iMax], formato) +
+        '. Menor: ' + (labels[iMin] != null ? labels[iMin] + ', ' : '') +
+        valorFmt(nums[iMin], formato) + '.');
+    });
+
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', partes.join(' '));
+
+    /* --- a tabela equivalente --- */
+    const tabelaId = canvas.id + '-tabela';
+    limparTabela(canvas);
+
+    const tab = U.el('table', {});
+    const thead = U.el('thead', {}, U.el('tr', {}, [U.el('th', { scope: 'col', text: 'Item' })]
+      .concat(sets.map((d, i) => U.el('th', { scope: 'col', text: d.label || 'Série ' + (i + 1) })))));
+    tab.appendChild(thead);
+
+    const tbody = U.el('tbody', {});
+    const linhas = Math.max.apply(null, sets.map((d) => d.data.length));
+    for (let i = 0; i < linhas; i++) {
+      tbody.appendChild(U.el('tr', {}, [
+        U.el('th', { scope: 'row', text: String(labels[i] != null ? labels[i] : i + 1) })
+      ].concat(sets.map((d) => {
+        const v = d.data[i];
+        const n = typeof v === 'object' && v ? +v.y : +v;
+        return U.el('td', { text: valorFmt(n, formato) });
+      }))));
+    }
+    tab.appendChild(tbody);
+
+    const caixa = U.el('div', { class: 'sr-only', id: tabelaId }, [
+      U.el('p', { text: titulo + ' — os mesmos dados do gráfico, em tabela.' }),
+      tab
+    ]);
+    canvas.insertAdjacentElement('afterend', caixa);
+    canvas.setAttribute('aria-describedby', tabelaId);
+  }
+
+  /**
+   * O título vem do cartão que envolve o gráfico. Fazer cada chamada
+   * passar o nome funcionaria, mas seria uma linha a mais para
+   * lembrar em cada gráfico novo — e a que fosse esquecida voltaria
+   * a anunciar "Gráfico" para quem depende dessa frase.
+   */
+  function tituloDoContexto(canvas) {
+    let n = canvas.parentElement;
+    for (let i = 0; i < 4 && n; i++, n = n.parentElement) {
+      const h = n.querySelector('h1, h2, h3, h4, .card-title, .chart-title, .hero-label');
+      const t = h && h.textContent.trim();
+      if (t) return 'Gráfico: ' + t;
+    }
+    return 'Gráfico';
+  }
+
+  function limparTabela(canvas) {
+    const antiga = document.getElementById(canvas.id + '-tabela');
+    if (antiga) antiga.remove();
+  }
+
+  Charts.descrever = descrever;
 
   Charts.destroy = function (canvasId) {
     const c = registry.get(canvasId);

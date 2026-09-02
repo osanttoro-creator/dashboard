@@ -110,8 +110,123 @@
     if (prev) { prev.destroy(); registry.delete(canvasId); }
     const chart = new Chart(canvas.getContext('2d'), config);
     registry.set(canvasId, chart);
+    descrever(canvas, config);
     return chart;
   };
+
+  /* ============================================================
+     ALTERNATIVA TEXTUAL
+     ------------------------------------------------------------
+     Um <canvas> é um retângulo de pixels: para quem usa leitor de
+     tela, um gráfico sem descrição simplesmente não existe. E não
+     basta um rótulo dizendo "gráfico de despesas" — isso anuncia
+     que há informação e a nega no mesmo gesto.
+
+     Por isso saem daqui duas coisas: um aria-label com a leitura
+     resumida (quantos pontos, qual o maior, qual o menor) e uma
+     TABELA com todos os valores, invisível na tela e disponível
+     para quem navega por texto. É a mesma informação, na forma que
+     cada um consegue receber.
+
+     Como todo gráfico passa por Charts.render, isto vale para os
+     13 de uma vez — e para os próximos, sem ninguém precisar
+     lembrar.
+     ============================================================ */
+
+  function valorFmt(v, formato) {
+    if (v == null || !isFinite(v)) return '—';
+    if (formato === 'pct') return U.fmtPct(v, 1);
+    if (formato === 'num') return U.fmtNum(v);
+    return U.fmtBRL(v);
+  }
+
+  function descrever(canvas, config) {
+    const a = (config && config.acessivel) || {};
+    const formato = a.formato || 'brl';
+    const titulo = a.titulo || canvas.getAttribute('data-titulo') || tituloDoContexto(canvas);
+
+    const labels = (config.data && config.data.labels) || [];
+    const sets = ((config.data && config.data.datasets) || [])
+      .filter((d) => d && Array.isArray(d.data) && d.data.length);
+
+    /* Sem dados, dizer isso é mais útil do que uma tabela vazia. */
+    if (!sets.length) {
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', titulo + ': sem dados no período.');
+      limparTabela(canvas);
+      return;
+    }
+
+    /* --- o resumo falado --- */
+    const partes = [titulo + '.'];
+    sets.forEach((d) => {
+      const nums = d.data.map((v) => (typeof v === 'object' && v ? +v.y : +v))
+        .filter((v) => isFinite(v));
+      if (!nums.length) return;
+      let iMax = 0, iMin = 0;
+      nums.forEach((v, i) => { if (v > nums[iMax]) iMax = i; if (v < nums[iMin]) iMin = i; });
+      const nome = d.label ? d.label + ': ' : '';
+      partes.push(nome + nums.length + ' pontos. Maior: ' +
+        (labels[iMax] != null ? labels[iMax] + ', ' : '') + valorFmt(nums[iMax], formato) +
+        '. Menor: ' + (labels[iMin] != null ? labels[iMin] + ', ' : '') +
+        valorFmt(nums[iMin], formato) + '.');
+    });
+
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', partes.join(' '));
+
+    /* --- a tabela equivalente --- */
+    const tabelaId = canvas.id + '-tabela';
+    limparTabela(canvas);
+
+    const tab = U.el('table', {});
+    const thead = U.el('thead', {}, U.el('tr', {}, [U.el('th', { scope: 'col', text: 'Item' })]
+      .concat(sets.map((d, i) => U.el('th', { scope: 'col', text: d.label || 'Série ' + (i + 1) })))));
+    tab.appendChild(thead);
+
+    const tbody = U.el('tbody', {});
+    const linhas = Math.max.apply(null, sets.map((d) => d.data.length));
+    for (let i = 0; i < linhas; i++) {
+      tbody.appendChild(U.el('tr', {}, [
+        U.el('th', { scope: 'row', text: String(labels[i] != null ? labels[i] : i + 1) })
+      ].concat(sets.map((d) => {
+        const v = d.data[i];
+        const n = typeof v === 'object' && v ? +v.y : +v;
+        return U.el('td', { text: valorFmt(n, formato) });
+      }))));
+    }
+    tab.appendChild(tbody);
+
+    const caixa = U.el('div', { class: 'sr-only', id: tabelaId }, [
+      U.el('p', { text: titulo + ' — os mesmos dados do gráfico, em tabela.' }),
+      tab
+    ]);
+    canvas.insertAdjacentElement('afterend', caixa);
+    canvas.setAttribute('aria-describedby', tabelaId);
+  }
+
+  /**
+   * O título vem do cartão que envolve o gráfico. Fazer cada chamada
+   * passar o nome funcionaria, mas seria uma linha a mais para
+   * lembrar em cada gráfico novo — e a que fosse esquecida voltaria
+   * a anunciar "Gráfico" para quem depende dessa frase.
+   */
+  function tituloDoContexto(canvas) {
+    let n = canvas.parentElement;
+    for (let i = 0; i < 4 && n; i++, n = n.parentElement) {
+      const h = n.querySelector('h1, h2, h3, h4, .card-title, .chart-title, .hero-label');
+      const t = h && h.textContent.trim();
+      if (t) return 'Gráfico: ' + t;
+    }
+    return 'Gráfico';
+  }
+
+  function limparTabela(canvas) {
+    const antiga = document.getElementById(canvas.id + '-tabela');
+    if (antiga) antiga.remove();
+  }
+
+  Charts.descrever = descrever;
 
   Charts.destroy = function (canvasId) {
     const c = registry.get(canvasId);

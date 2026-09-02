@@ -2196,6 +2196,72 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .pu-acoes .btn { flex: 1 1 100%; justify-content: center; }
 }
 
+/* ------------------------------------------------------------
+   22.9 · ACESSIBILIDADE
+   ------------------------------------------------------------ */
+
+/* Conteúdo só para leitor de tela. NÃO usar display:none nem
+   visibility:hidden: os dois removem o elemento da árvore de
+   acessibilidade também, que é exatamente o contrário do que
+   queremos. O recorte de 1px é a técnica que esconde da vista sem
+   esconder de quem lê. */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; white-space: nowrap;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+}
+
+/* Primeiro foco da página. Fica fora da tela até ser focado —
+   quem navega por teclado não deveria atravessar 12 destinos toda
+   vez que muda de página. */
+.pular-conteudo {
+  position: fixed; top: -100px; left: 12px; z-index: 200;
+  padding: 10px 16px; border-radius: 0 0 12px 12px;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 620; text-decoration: none;
+  transition: top .16s var(--ease-out);
+}
+.pular-conteudo:focus { top: 0; }
+
+/* O destino do salto não deve ganhar contorno: ele recebe o foco
+   por programação, não por navegação. */
+.content:focus { outline: none; }
+
+/* ---- alvos de toque ----
+   WCAG 2.2 (2.5.8) pede 24×24 CSS no mínimo. Vários controles
+   estavam em 16px e 28px. Onde o elemento é pequeno de propósito
+   — uma caixa de seleção numa tabela densa — a área clicável
+   cresce por pseudo-elemento, sem mudar o desenho. */
+.icon-btn { min-width: 32px; min-height: 32px; }
+
+/* Caixa de seleção com o tamanho REAL de 24px, não com área
+   ampliada por pseudo-elemento: ::before e ::after não renderizam
+   de forma confiável em elementos substituídos como <input>, e a
+   área maior existiria só no CSS, não sob o dedo. 24×24 é o mínimo
+   do WCAG 2.2 (2.5.8). */
+input[type="checkbox"], input[type="radio"] {
+  width: 24px; height: 24px;
+  flex: none; cursor: pointer;
+}
+
+.ai-chip { min-height: 32px; }
+
+/* .tab e .seg button são âncoras de navegação: 32px de altura para
+   não exigir mira no mouse, 40px no toque (regra de @media abaixo). */
+.tab { min-height: 32px; }
+.seg button { min-height: 32px; }
+
+/* No toque, o dedo pede mais do que o mouse: 44px é a medida que
+   a Apple e o Google convergiram, e é ela que evita o toque que
+   erra o alvo. */
+@media (hover: none) {
+  .icon-btn { min-width: 44px; min-height: 44px; }
+  .ai-chip, .tab, .pill-ico, .seg button { min-height: 40px; }
+  input[type="checkbox"], input[type="radio"] { width: 28px; height: 28px; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
