@@ -20,3 +20,9 @@ Desktop.ini
 # Nada de dependências instaladas: as bibliotecas usadas estão
 # vendorizadas de propósito em assets/vendor/ e DEVEM ser versionadas.
 node_modules/
+
+# Skills instaladas por `npx skills add`. O conteúdo em .agents/skills/ é
+# versionado — é documentação, e quem clonar o repositório recebe a mesma
+# orientação. Já os atalhos em .claude/skills/ são links ABSOLUTOS para o
+# caminho desta máquina: no clone de outra pessoa apontariam para o nada.
+.claude/skills/
