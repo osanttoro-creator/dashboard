@@ -33,13 +33,41 @@
   let canal = null;
   let sdkPromise = null;
 
+  /* O que ESTE projeto aceita. Preenchido por lerProvedores(); até lá,
+     assume só e-mail — o mínimo que sempre existe. */
+  let aceita = { email: true, google: false, cadastro: true, confirmaEmail: true };
+
+  /**
+   * /auth/v1/settings é público e diz quais provedores estão ligados.
+   * Vale a chamada: um botão que só leva a "provider is not enabled" é
+   * pior do que botão nenhum — promete uma porta que não existe.
+   */
+  async function lerProvedores(c) {
+    try {
+      const r = await fetch(c.url + '/auth/v1/settings', { headers: { apikey: c.chave } });
+      if (!r.ok) return;
+      const j = await r.json();
+      aceita = {
+        email: !!(j.external && j.external.email),
+        google: !!(j.external && j.external.google),
+        cadastro: !j.disable_signup,
+        confirmaEmail: !j.mailer_autoconfirm
+      };
+    } catch (e) {
+      /* sem rede a resposta não vem; seguimos com o padrão conservador */
+    }
+  }
+
   function cfg() {
     const c = global.SupabaseConfig;
     if (!c || typeof c !== 'object') return null;
     const url = String(c.url || '').trim();
-    const key = String(c.anonKey || '').trim();
+    /* A publicável (sb_publishable_…) é o padrão atual; a anon em JWT
+       continua valendo em projetos antigos. Aceitamos as duas — para o
+       createClient, é o mesmo argumento. */
+    const key = String(c.publishableKey || c.anonKey || '').trim();
     if (!url || !key) return null;
-    return { url: url.replace(/\/+$/, ''), anonKey: key };
+    return { url: url.replace(/\/+$/, ''), chave: key };
   }
 
   function loadSDK() {
@@ -245,6 +273,10 @@
         campo.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); enviar(); } });
       });
 
+      /* Só entra na tela o que o projeto realmente aceita. */
+      if (!aceita.cadastro) alternar.style.display = 'none';
+      const alternativas = [aceita.google ? comGoogle : null, linkMagico].filter(Boolean);
+
       const corpo = el('div', { class: 'login-box' }, [
         titulo,
         el('p', { class: 'login-sub', text: 'Sua conta serve para ver os mesmos dados no PC e no celular. Sem ela, o app continua funcionando neste aparelho.' }),
@@ -254,10 +286,12 @@
         aviso,
         el('div', { class: 'login-actions' }, [botaoPrincipal, alternar, esqueci]),
         el('div', { class: 'login-sep' }, el('span', { text: 'ou' })),
-        el('div', { class: 'login-alt' }, [comGoogle, linkMagico]),
-        el('p', { class: 'hint', style: { marginTop: '10px' } },
-          'Google e link por e-mail só funcionam se você tiver ativado esses métodos no seu projeto Supabase.')
-      ]);
+        el('div', { class: 'login-alt' }, alternativas),
+        aceita.confirmaEmail
+          ? el('p', { class: 'hint', style: { marginTop: '10px' } },
+            'Ao criar a conta você recebe um link de confirmação por e-mail. É preciso abri-lo antes do primeiro login.')
+          : null
+      ].filter(Boolean));
 
       UI.openModal({
         title: 'Conta OAZE',
@@ -292,7 +326,7 @@
       await loadSDK();
       if (cliente) return;
 
-      cliente = global.supabase.createClient(c.url, c.anonKey, {
+      cliente = global.supabase.createClient(c.url, c.chave, {
         auth: {
           persistSession: true,
           autoRefreshToken: true,
@@ -306,6 +340,8 @@
         if (evento === 'TOKEN_REFRESHED') return;   // não é troca de conta
         Sync._onUser(mapUser(session));
       });
+
+      await lerProvedores(c);
 
       // sessão já existente neste aparelho
       const { data } = await cliente.auth.getSession();

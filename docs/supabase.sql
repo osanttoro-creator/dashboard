@@ -10,8 +10,8 @@
 -- O QUE ELE CRIA
 --   • a tabela public.dados — uma linha por usuário, com todos os
 --     perfis num campo jsonb;
---   • RLS ligado, com quatro políticas que amarram cada linha ao
---     seu dono;
+--   • RLS ligado e forçado, com quatro políticas que amarram cada
+--     linha ao seu dono, e o papel anônimo sem privilégio nenhum;
 --   • um gatilho que mantém updated_at honesto, mesmo que o
 --     cliente minta;
 --   • a publicação de Realtime, para um aparelho avisar o outro.
@@ -53,6 +53,14 @@ comment on column public.dados.meta       is 'Carimbo do último envio: quando e
 -- propósito: ninguém deslogado tem o que fazer nesta tabela.
 grant usage on schema public to authenticated;
 grant select, insert, update, delete on public.dados to authenticated;
+
+-- O schema `public` do Supabase concede tudo a anon e authenticated por
+-- padrão, então a tabela nasce acessível ao papel anônimo mesmo sem o
+-- grant acima. O RLS já barra — as políticas são todas `to
+-- authenticated`, e sem política aplicável o anônimo lê zero linhas.
+-- Ainda assim tiramos: privilégio que não deveria existir é privilégio
+-- esperando uma política distraída no futuro.
+revoke all on public.dados from anon;
 
 -- -------------------------------------------------------------
 -- 3 · RLS — a proteção de verdade

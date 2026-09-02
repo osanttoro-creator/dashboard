@@ -9,3 +9,4 @@ README.md
 .gitignore
 .agents/
 skills-lock.json
+.env.example

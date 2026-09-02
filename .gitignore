@@ -26,3 +26,10 @@ node_modules/
 # orientação. Já os atalhos em .claude/skills/ são links ABSOLUTOS para o
 # caminho desta máquina: no clone de outra pessoa apontariam para o nada.
 .claude/skills/
+
+# Variáveis de ambiente. O .env fica de fora porque é o lugar onde uma
+# chave secreta de verdade vai acabar caindo um dia — a ANTHROPIC_API_KEY
+# já está prevista ali. O .env.example, versionado, documenta o formato.
+.env
+.env.local
+.env.*.local
