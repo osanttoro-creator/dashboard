@@ -2262,6 +2262,31 @@ input[type="checkbox"], input[type="radio"] {
   input[type="checkbox"], input[type="radio"] { width: 28px; height: 28px; }
 }
 
+/* ------------------------------------------------------------
+   22.10 · AVISO DE CONTA
+   ------------------------------------------------------------
+   Faixa acima do conteúdo quando a assinatura precisa de atenção.
+   Fica acima porque é sobre o acesso à ferramenta, não sobre o
+   mês exibido — colocá-la dentro da página faria a mensagem
+   desaparecer ao trocar de seção.
+   ------------------------------------------------------------ */
+.aviso-conta {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  margin-bottom: 16px; padding: 14px 18px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--terracotta) 42%, transparent);
+  background: color-mix(in srgb, var(--terracotta) 12%, var(--n1));
+}
+.aviso-conta strong { font-size: 13.5px; font-weight: 660; }
+.aviso-conta p { font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin-top: 3px; max-width: 68ch; }
+.aviso-conta .btn { flex: none; }
+
+@media (max-width: 560px) {
+  .aviso-conta { padding: 12px 14px; }
+  .aviso-conta .btn { width: 100%; justify-content: center; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------

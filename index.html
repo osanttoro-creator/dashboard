@@ -248,6 +248,10 @@
       <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
     </header>
 
+    <!-- Pendência de assinatura. role=status para o leitor de tela
+         anunciar sem roubar o foco de quem está digitando. -->
+    <div id="avisoConta" hidden></div>
+
     <main class="content" id="content" tabindex="-1">
 
       <div class="page-head">
@@ -739,6 +743,7 @@
       <div class="grid grid-2">
         <div class="card">
           <div class="card-head"><h2>Perfil</h2></div>
+          <div id="setConta"></div>
           <div id="setProfile"></div>
         </div>
         <div class="card">
@@ -869,6 +874,7 @@
 <script src="assets/js/fila.js"></script>
 <script src="assets/js/migracao.js"></script>
 <script src="assets/js/onboarding.js"></script>
+<script src="assets/js/conta.js"></script>
 <script src="assets/js/ai.js"></script>
 <script src="assets/js/shell.js"></script>
 <script src="assets/js/pages/home.js"></script>

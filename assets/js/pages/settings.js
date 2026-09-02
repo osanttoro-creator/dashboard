@@ -17,6 +17,7 @@
     sinc();
     uglez();
     dados();
+    conta();
   };
 
   /** Uma linha de configuração: rótulo, explicação e o controle. */
@@ -121,6 +122,55 @@
       'O que é enviado',
       'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
       el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
+    ));
+  }
+
+  /* ---------------- conta ---------------- */
+
+  function conta() {
+    const box = document.getElementById('setConta');
+    if (!box) return;
+    U.clear(box);
+
+    const u = global.Sync && Sync.currentUser();
+
+    if (!u) {
+      box.appendChild(linha(
+        'Sem conta neste aparelho',
+        'O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar o UGLEZ.',
+        el('button', { class: 'btn btn-primary btn-sm', text: 'Entrar ou criar conta', onclick: () => Sync.signIn() })
+      ));
+      return;
+    }
+
+    box.appendChild(linha(
+      'Seu perfil',
+      u.email || 'conta conectada',
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Editar perfil', onclick: () => Conta.editarPerfil() })
+    ));
+
+    /* O plano vem do banco. O navegador não tem como alterá-lo:
+       não existe política de escrita em subscriptions. */
+    const a = Conta.assinatura();
+    const plano = Conta.plano();
+    const pend = Conta.pendencia();
+    box.appendChild(linha(
+      'Plano',
+      pend ? pend.texto
+        : plano === 'free'
+          ? 'Plano gratuito. Todos os recursos disponíveis hoje estão liberados.'
+          : 'Assinatura ativa' + (a && a.current_period_end
+            ? ' até ' + U.fmtDateBR(String(a.current_period_end).slice(0, 10)) : '') + '.',
+      el('span', {
+        class: 'badge ' + (pend ? 'badge-late' : plano === 'free' ? '' : 'badge-ok'),
+        text: pend ? pend.titulo : plano === 'free' ? 'Gratuito' : U.smartCase(plano)
+      })
+    ));
+
+    box.appendChild(linha(
+      'Excluir a conta',
+      'Apaga a conta e todos os dados do servidor, em todos os aparelhos. Não tem volta.',
+      el('button', { class: 'btn btn-outline btn-sm danger', text: 'Excluir conta…', onclick: () => Conta.excluir() })
     ));
   }
 

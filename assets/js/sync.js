@@ -243,7 +243,11 @@
     // mesclagem (e o toast) rodariam duplicadas.
     solta();
 
-    if (!user) { setState('signed-out'); return; }
+    if (!user) {
+      setState('signed-out');
+      if (global.Conta && Conta.aoSair) Conta.aoSair();
+      return;
+    }
 
     setState('connecting');
     try { backend.observar(user); } catch (e) {
@@ -259,6 +263,7 @@
     /* Com o esquema normalizado disponível, a entrada é o momento de
        oferecer a migração — e de drenar o que ficou pendente offline
        na sessão anterior. */
+    if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();
   };
