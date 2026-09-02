@@ -1852,6 +1852,33 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .bud-main, .set-id, .search-item > span, .notif-item > span:last-child { min-width: 0; }
 .cat-tile-num, .due-val, .rec-nums { white-space: nowrap; }
 
+/* ------------------------------------------------------------
+   22.5 · FORMULÁRIO DE CONTA
+   ------------------------------------------------------------
+   O login mora dentro do app, num modal nosso — não num pop-up de
+   terceiro. Por isso precisa parecer parte da casa: mesmo
+   material, mesma tipografia, mesmos campos do resto do produto.
+   ------------------------------------------------------------ */
+.login-box { display: grid; gap: 12px; }
+.login-title { font-size: 17px; font-weight: 660; letter-spacing: -.01em; margin: 0; }
+.login-sub { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin: -6px 0 2px; }
+
+.login-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.login-actions .btn-primary { flex: 1 1 140px; }
+
+/* separador com a palavra no meio da linha */
+.login-sep {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--muted); margin: 2px 0;
+}
+.login-sep::before, .login-sep::after {
+  content: ''; flex: 1; height: 1px; background: var(--glass-line);
+}
+
+.login-alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.login-alt .btn { justify-content: center; }
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
