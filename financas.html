@@ -2214,6 +2214,22 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
 
+/* Indicador da fila offline. Fica escondido quando não há nada
+   pendente — um selo permanente de "tudo certo" vira ruído e
+   ninguém repara quando ele muda. */
+.fila-chip {
+  display: block; margin-bottom: 6px;
+  padding: 6px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.35;
+  border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
+}
+.fila-chip.is-offline      { color: var(--ink-2); }
+.fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-erro {
+  color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
+  border-color: transparent;
+}
+
 </style>
 </head>
 <body>
@@ -2302,6 +2318,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
     </nav>
 
     <div class="sidebar-foot">
+      <!-- estado da fila offline; escondido quando tudo está em dia -->
+      <span id="filaBox" class="fila-chip" hidden></span>
       <span id="syncBox"></span>
     </div>
   </aside>
@@ -8445,6 +8463,12 @@ window.SupabaseConfig = {
     if (anterior !== user.uid) {
       UI.toast('Sincronizando como ' + (user.displayName || user.email) + '.', 'success');
     }
+
+    /* Com o esquema normalizado disponível, a entrada é o momento de
+       oferecer a migração — e de drenar o que ficou pendente offline
+       na sessão anterior. */
+    if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
+    if (global.Fila && Fila.drenar) Fila.drenar();
   };
 
   /** Chamado pelo backend quando chegam perfis da nuvem. */
@@ -9168,6 +9192,800 @@ window.SupabaseConfig = {
 
   Sync.registerBackend(SB);
   global.SupabaseBackend = SB;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/repo.js ===== */
+/* =============================================================
+   repo.js — a tradução entre o app e o banco normalizado
+   ------------------------------------------------------------
+   O app inteiro trabalha com um "perfil": um objeto com arrays de
+   contas, cartões, categorias, lançamentos. O banco trabalha com
+   tabelas ligadas por UUID. Este arquivo é a única fronteira entre
+   os dois mundos — e existir num lugar só é o ponto: qualquer
+   campo novo se traduz aqui, e nenhuma página precisa saber que o
+   Supabase existe.
+
+   IDENTIDADE, E POR QUE HÁ DOIS IDs
+   No localStorage o id é uma string como "acc_k3f9". No banco é
+   um UUID. Guardamos o antigo em `legacy_id` porque ele é a chave
+   da idempotência: reimportar o mesmo perfil encontra as linhas
+   que já existem em vez de criar cópias. Sem isso, um F5 no meio
+   da migração duplicaria um ano de lançamentos.
+
+   ORDEM DE INSERÇÃO
+   Não é arbitrária: cartão aponta para conta, lançamento aponta
+   para categoria, conta e cartão. Inserir fora de ordem quebraria
+   a chave estrangeira ou gravaria null onde havia ligação.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Repo = {};
+
+  /* Um pedaço grande de uma vez é mais rápido, mas um erro derruba
+     o lote inteiro e o diagnóstico fica pior. 200 é o meio-termo:
+     poucas viagens e uma falha ainda aponta para onde olhar. */
+  const LOTE = 200;
+
+  function cliente() {
+    const c = global.SupabaseBackend && SupabaseBackend.cliente && SupabaseBackend.cliente();
+    if (!c) throw new Error('Sem conexão com o Supabase.');
+    return c;
+  }
+
+  /** Nome curto do aparelho, para saber de onde veio cada linha. */
+  Repo.origem = function () {
+    const ua = navigator.userAgent;
+    const nome = /iPhone|iPad/.test(ua) ? 'iOS'
+      : /Android/.test(ua) ? 'Android'
+        : /Mac/.test(ua) ? 'Mac'
+          : /Windows/.test(ua) ? 'Windows' : 'web';
+    return nome + ' · ' + (navigator.language || 'pt-BR');
+  };
+
+  const dataOu = (v, alt) => (U.isValidISO(v) ? v : alt);
+  const num = (v) => U.round2(+v || 0);
+
+  /* ============================================================
+     1 · APP → BANCO
+     ============================================================ */
+
+  Repo.mapa = {
+    conta: (a, ws) => ({
+      workspace_id: ws, legacy_id: a.id,
+      name: String(a.name || 'Conta').slice(0, 80),
+      bank: String(a.bank || ''),
+      tipo: String(a.type || 'Conta corrente'),
+      cor: a.color, gradiente: a.gradient || null,
+      last4: String(a.last4 || ''),
+      saldo_inicial: num(a.openingBalance),
+      aberta_em: dataOu(a.openedAt, U.todayISO()),
+      arquivada: !!a.archived,
+      origem: Repo.origem()
+    }),
+
+    cartao: (c, ws, idDe) => ({
+      workspace_id: ws, legacy_id: c.id,
+      name: String(c.name || 'Cartão').slice(0, 80),
+      bank: String(c.bank || ''),
+      cor: c.color, gradiente: c.gradient || null,
+      last4: String(c.last4 || ''),
+      limite: num(c.limit),
+      dia_fechamento: Math.min(31, Math.max(1, +c.closingDay || 1)),
+      dia_vencimento: Math.min(31, Math.max(1, +c.dueDay || 10)),
+      account_id: idDe.contas[c.accountId] || null,
+      origem: Repo.origem()
+    }),
+
+    categoria: (c, ws) => ({
+      workspace_id: ws, legacy_id: c.id,
+      name: String(c.name || 'Categoria').slice(0, 60),
+      kind: c.kind === 'income' ? 'income' : 'expense',
+      cor: c.color, icone: c.icon || null,
+      origem: Repo.origem()
+    }),
+
+    lancamento: (t, ws, idDe) => ({
+      workspace_id: ws, legacy_id: t.id,
+      kind: t.kind,
+      descricao: String(t.description || '').slice(0, 200),
+      valor: Math.abs(num(t.amount)),
+      data: dataOu(t.date, U.todayISO()),
+      category_id: idDe.categorias[t.categoryId] || null,
+      metodo: t.method === 'card' ? 'card' : 'account',
+      account_id: idDe.contas[t.accountId] || null,
+      to_account_id: idDe.contas[t.toAccountId] || null,
+      card_id: idDe.cartoes[t.cardId] || null,
+      recorrente: !!t.recurring,
+      recorrencia_fim: t.recurEnd || null,
+      confirmado: t.confirmed !== false,
+      /* Atributos da linha, não entidades — ver o cabeçalho. */
+      ocorrencias: t.occ && typeof t.occ === 'object' ? t.occ : {},
+      parcelamento: t.installment || null,
+      notas: String(t.notes || ''),
+      origem_registro: String(t.source || 'manual'),
+      origem: Repo.origem()
+    }),
+
+    investimento: (i, ws, idDe) => ({
+      workspace_id: ws, legacy_id: i.id,
+      name: String(i.name || 'Investimento').slice(0, 80),
+      tipo: String(i.type || 'Renda fixa'),
+      valor: num(i.amount),
+      data: dataOu(i.date, U.todayISO()),
+      taxa: +i.rate || 0,
+      valor_atual: i.currentValue == null ? null : num(i.currentValue),
+      account_id: idDe.contas[i.accountId] || null,
+      notas: String(i.notes || ''),
+      origem: Repo.origem()
+    }),
+
+    meta: (g, ws, idDe) => ({
+      workspace_id: ws, legacy_id: g.id,
+      name: String(g.name || 'Meta').slice(0, 60),
+      alvo: num(g.target), guardado: num(g.saved),
+      prazo: U.isValidISO(g.deadline) ? g.deadline : null,
+      cor: g.color, icone: g.icon || 'target',
+      account_id: idDe.contas[g.accountId] || null,
+      origem: Repo.origem()
+    })
+  };
+
+  /* ============================================================
+     2 · ENVIO DE UM ESPAÇO INTEIRO
+     ============================================================ */
+
+  /**
+   * Grava (ou reaproveita) o espaço e tudo dentro dele.
+   *
+   * Idempotente por construção: cada upsert usa `legacy_id` como
+   * chave de conflito, então rodar duas vezes atualiza as mesmas
+   * linhas em vez de criar outras.
+   *
+   * @param {object} perfil  perfil do Store
+   * @param {string} userId  dono
+   * @param {function} aviso  recebe ('contas', 12) para a barra de progresso
+   */
+  Repo.enviarEspaco = async function (perfil, userId, aviso) {
+    const sb = cliente();
+    const diga = aviso || function () {};
+
+    /* ---- o espaço ---- */
+    const { data: ws, error: eWs } = await sb.from('workspaces').upsert({
+      owner_id: userId,
+      legacy_id: perfil.id,
+      name: String(perfil.name || 'Pessoal').slice(0, 60),
+      origem: Repo.origem()
+    }, { onConflict: 'owner_id,legacy_id' }).select('id').single();
+    if (eWs) throw new Error('espaço: ' + eWs.message);
+    const wsId = ws.id;
+
+    /* A participação é o que o RLS consulta. Sem ela, as próprias
+       inserções abaixo seriam negadas — o dono não é membro por
+       decreto, é membro por linha. */
+    const { error: eM } = await sb.from('workspace_members')
+      .upsert({ workspace_id: wsId, user_id: userId, papel: 'owner' },
+        { onConflict: 'workspace_id,user_id' });
+    if (eM) throw new Error('participação: ' + eM.message);
+
+    const idDe = { contas: {}, cartoes: {}, categorias: {} };
+    const contagens = { contas: 0, cartoes: 0, categorias: 0, lancamentos: 0, investimentos: 0, faturas: 0, orcamentos: 0, metas: 0 };
+
+    /** Envia em lotes e devolve o mapa legacy_id → uuid. */
+    async function enviar(tabela, linhas, guardarEm) {
+      if (!linhas.length) return;
+      for (let i = 0; i < linhas.length; i += LOTE) {
+        const pedaco = linhas.slice(i, i + LOTE);
+        const { data, error } = await sb.from(tabela)
+          .upsert(pedaco, { onConflict: 'workspace_id,legacy_id', ignoreDuplicates: false })
+          .select('id, legacy_id');
+        if (error) throw new Error(tabela + ': ' + error.message);
+        if (guardarEm) (data || []).forEach((r) => { guardarEm[r.legacy_id] = r.id; });
+      }
+    }
+
+    /* ---- ordem obrigatória: quem é apontado vem antes ---- */
+    const contas = (perfil.accounts || []).map((a) => Repo.mapa.conta(a, wsId));
+    await enviar('accounts', contas, idDe.contas);
+    contagens.contas = contas.length; diga('contas', contas.length);
+
+    const cats = (perfil.categories || []).map((c) => Repo.mapa.categoria(c, wsId));
+    await enviar('categories', cats, idDe.categorias);
+    contagens.categorias = cats.length; diga('categorias', cats.length);
+
+    const cartoes = (perfil.cards || []).map((c) => Repo.mapa.cartao(c, wsId, idDe));
+    await enviar('credit_cards', cartoes, idDe.cartoes);
+    contagens.cartoes = cartoes.length; diga('cartões', cartoes.length);
+
+    const txs = (perfil.transactions || []).map((t) => Repo.mapa.lancamento(t, wsId, idDe));
+    await enviar('transactions', txs);
+    contagens.lancamentos = txs.length; diga('lançamentos', txs.length);
+
+    const invs = (perfil.investments || []).map((i) => Repo.mapa.investimento(i, wsId, idDe));
+    await enviar('investments', invs);
+    contagens.investimentos = invs.length; diga('investimentos', invs.length);
+
+    const metas = (perfil.goals || []).map((g) => Repo.mapa.meta(g, wsId, idDe));
+    await enviar('goals', metas);
+    contagens.metas = metas.length; diga('metas', metas.length);
+
+    /* ---- faturas: mapa "cardId|YYYY-MM" vira linhas ---- */
+    const faturas = [];
+    Object.keys(perfil.invoices || {}).forEach((k) => {
+      const [legacyCard, ref] = String(k).split('|');
+      const cardId = idDe.cartoes[legacyCard];
+      if (!cardId || !/^\d{4}-\d{2}$/.test(ref || '')) return;   // cartão apagado: a fatura perdeu o dono
+      const v = perfil.invoices[k] || {};
+      faturas.push({
+        workspace_id: wsId, card_id: cardId, referencia: ref,
+        paga: v.paid !== false,
+        paga_em: U.isValidISO(v.paidAt) ? v.paidAt : null,
+        account_id: idDe.contas[v.accountId] || null,
+        valor: num(v.amount),
+        origem: Repo.origem()
+      });
+    });
+    if (faturas.length) {
+      const { error } = await sb.from('card_invoices')
+        .upsert(faturas, { onConflict: 'card_id,referencia' });
+      if (error) throw new Error('faturas: ' + error.message);
+    }
+    contagens.faturas = faturas.length; diga('faturas', faturas.length);
+
+    /* ---- orçamentos: mapa categoria → limite ---- */
+    const orcs = [];
+    Object.keys(perfil.budgets || {}).forEach((legacyCat) => {
+      const catId = idDe.categorias[legacyCat];
+      const limite = num(perfil.budgets[legacyCat]);
+      if (catId && limite > 0) {
+        orcs.push({ workspace_id: wsId, category_id: catId, limite, origem: Repo.origem() });
+      }
+    });
+    if (orcs.length) {
+      const { error } = await sb.from('budgets')
+        .upsert(orcs, { onConflict: 'workspace_id,category_id' });
+      if (error) throw new Error('orçamentos: ' + error.message);
+    }
+    contagens.orcamentos = orcs.length; diga('orçamentos', orcs.length);
+
+    return { workspaceId: wsId, contagens };
+  };
+
+  /* ============================================================
+     3 · CONFERÊNCIA
+     ============================================================
+     Gravar sem conferir é torcer. Contamos de volta o que o banco
+     realmente tem, e é ESSE número que decide se a migração pode
+     ser marcada como concluída. */
+
+  Repo.contarNoBanco = async function (wsId) {
+    const sb = cliente();
+    const tabelas = {
+      contas: 'accounts', cartoes: 'credit_cards', categorias: 'categories',
+      lancamentos: 'transactions', investimentos: 'investments',
+      faturas: 'card_invoices', orcamentos: 'budgets', metas: 'goals'
+    };
+    const out = {};
+    await Promise.all(Object.keys(tabelas).map(async (chave) => {
+      const { count, error } = await sb.from(tabelas[chave])
+        .select('id', { count: 'exact', head: true })
+        .eq('workspace_id', wsId).is('deleted_at', null);
+      out[chave] = error ? -1 : (count || 0);
+    }));
+    return out;
+  };
+
+  /** Compara o que foi enviado com o que o banco devolveu. */
+  Repo.conferir = function (enviado, noBanco) {
+    const problemas = [];
+    Object.keys(enviado).forEach((k) => {
+      const a = enviado[k], b = noBanco[k];
+      if (b < 0) problemas.push(k + ': não foi possível contar');
+      else if (b < a) problemas.push(k + ': enviados ' + a + ', gravados ' + b);
+    });
+    return { ok: !problemas.length, problemas };
+  };
+
+  global.Repo = Repo;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/fila.js ===== */
+/* =============================================================
+   fila.js — o que fazer quando não há rede
+   ------------------------------------------------------------
+   O app continua funcionando offline porque o localStorage segue
+   respondendo na hora. O que falta é a nuvem saber — e é isso que
+   a fila resolve: cada alteração vira uma tarefa persistida, e as
+   tarefas são drenadas quando a conexão volta.
+
+   POR QUE A FILA VIVE NO localStorage
+   Se ela morasse na memória, fechar a aba offline perderia tudo
+   que foi feito naquela sessão. Uma fila que não sobrevive ao
+   fechamento da aba não é uma fila: é um adiamento.
+
+   POR QUE NÃO DUPLICA
+   Cada tarefa carrega a chave da linha que ela representa
+   (espaço + legacy_id), e a fila guarda UMA tarefa por chave. Dez
+   edições no mesmo lançamento offline viram um envio, com o estado
+   final — que é o único que importa. É também o que impede a
+   duplicata quando a mesma tarefa é reenviada após um erro de
+   rede que na verdade chegou ao servidor.
+
+   OS QUATRO ESTADOS
+     offline      sem rede; as alterações estão na fila
+     sincronizando  drenando
+     sincronizado   fila vazia
+     erro           uma tarefa falhou e vai ser tentada de novo
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Fila = {};
+  const CHAVE = 'oaze.fila.v1';
+
+  /* Espera crescente entre tentativas: insistir de um em um segundo
+     numa rede caída só gasta bateria e enche o log. */
+  const ESPERAS = [2000, 5000, 15000, 60000];
+
+  let tarefas = carregar();
+  let drenando = false;
+  let tentativa = 0;
+  let relogio = null;
+
+  function carregar() {
+    try { return JSON.parse(localStorage.getItem(CHAVE) || '[]'); } catch (e) { return []; }
+  }
+  function salvar() {
+    try { localStorage.setItem(CHAVE, JSON.stringify(tarefas)); } catch (e) { /* cheio */ }
+  }
+
+  Fila.pendentes = () => tarefas.length;
+  Fila.limpar = () => { tarefas = []; salvar(); };
+
+  /**
+   * Enfileira. Uma tarefa por chave: a nova substitui a anterior,
+   * porque só o estado final é enviado.
+   */
+  Fila.push = function (tarefa) {
+    const chave = tarefa.chave;
+    const i = tarefas.findIndex((t) => t.chave === chave);
+    const nova = Object.assign({}, tarefa, { em: Date.now() });
+    if (i >= 0) tarefas[i] = nova; else tarefas.push(nova);
+    salvar();
+    Fila.pintar();
+    Fila.drenar();
+  };
+
+  /* ---------------- estado visível ---------------- */
+
+  Fila.estado = function () {
+    if (!navigator.onLine) return 'offline';
+    if (drenando) return 'sincronizando';
+    if (tarefas.length) return tentativa ? 'erro' : 'sincronizando';
+    return 'sincronizado';
+  };
+
+  const ROTULO = {
+    offline: 'Sem conexão — alterações guardadas',
+    sincronizando: 'Sincronizando…',
+    sincronizado: 'Sincronizado',
+    erro: 'Falha ao sincronizar — tentando de novo'
+  };
+
+  /**
+   * O indicador vive na barra lateral e é anunciado por leitor de
+   * tela: aria-live existe porque a mudança de "sincronizando" para
+   * "sincronizado" não tem nenhum outro sinal para quem não vê.
+   */
+  Fila.pintar = function () {
+    const alvo = document.getElementById('filaBox');
+    if (!alvo) return;
+    const e = Fila.estado();
+    const n = tarefas.length;
+    alvo.setAttribute('aria-live', 'polite');
+    alvo.className = 'fila-chip is-' + e;
+    alvo.textContent = ROTULO[e] + (n && e !== 'sincronizado' ? ' (' + n + ')' : '');
+    alvo.hidden = e === 'sincronizado' && !n;
+  };
+
+  /* ---------------- drenagem ---------------- */
+
+  Fila.drenar = async function () {
+    if (drenando || !tarefas.length) return;
+    if (!navigator.onLine) { Fila.pintar(); return; }
+    if (!global.Sync || !Sync.currentUser()) return;
+
+    drenando = true;
+    Fila.pintar();
+
+    try {
+      /* Uma por vez, na ordem. Paralelizar aqui trocaria alguns
+         milissegundos por uma ordem de gravação imprevisível. */
+      while (tarefas.length) {
+        const t = tarefas[0];
+        await Fila.executar(t);
+        tarefas.shift();
+        salvar();
+        Fila.pintar();
+      }
+      tentativa = 0;
+    } catch (e) {
+      console.warn('Fila:', e.message);
+      /* A tarefa continua na frente da fila. Não é perda: é espera. */
+      const espera = ESPERAS[Math.min(tentativa, ESPERAS.length - 1)];
+      tentativa++;
+      clearTimeout(relogio);
+      relogio = setTimeout(() => { drenando = false; Fila.drenar(); }, espera);
+      drenando = false;
+      Fila.pintar();
+      return;
+    }
+
+    drenando = false;
+    Fila.pintar();
+  };
+
+  /** Executa uma tarefa. Upsert sempre — é o que torna o reenvio seguro. */
+  Fila.executar = async function (t) {
+    const sb = SupabaseBackend.cliente();
+    if (!sb) throw new Error('sem cliente');
+
+    if (t.tipo === 'espaco') {
+      const perfil = Store.state().profiles.find((p) => p.id === t.perfilId);
+      if (!perfil) return;                 // perfil apagado: a tarefa perdeu o objeto
+      await Repo.enviarEspaco(perfil, Sync.currentUser().uid);
+      return;
+    }
+    throw new Error('tipo de tarefa desconhecido: ' + t.tipo);
+  };
+
+  /** Tentar de novo agora, a pedido do usuário. */
+  Fila.tentarAgora = function () {
+    tentativa = 0;
+    clearTimeout(relogio);
+    drenando = false;
+    Fila.drenar();
+  };
+
+  Fila.init = function () {
+    /* A volta da conexão é o gatilho natural — melhor do que ficar
+       perguntando de tempos em tempos se já deu. */
+    global.addEventListener('online', () => { tentativa = 0; Fila.drenar(); });
+    global.addEventListener('offline', () => Fila.pintar());
+
+    /* Voltar para a aba também merece uma tentativa: o evento
+       'online' não dispara quando a rede caiu e voltou com a aba
+       em segundo plano. */
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) Fila.drenar();
+    });
+
+    Fila.pintar();
+    Fila.drenar();
+  };
+
+  global.Fila = Fila;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/migracao.js ===== */
+/* =============================================================
+   migracao.js — do localStorage para o banco, uma única vez
+   ------------------------------------------------------------
+   A ordem dos passos não é burocracia: cada um existe porque a
+   ausência dele causa um estrago específico.
+
+     1. detecta         nada acontece sem dado antigo para migrar
+     2. explica         o usuário aprova antes, não descobre depois
+     3. registra        abre o diário ANTES de gravar qualquer coisa
+     4. faz backup      arquivo baixado, na mão dele, antes de tocar
+     5. valida          formato quebrado não vira linha no banco
+     6. envia           por espaço, em lotes, idempotente
+     7. confere         conta de volta o que o banco realmente tem
+     8. conclui         só então marca; e a marca é única por origem
+     9. preserva        o localStorage FICA, intacto
+
+   O QUE NUNCA ACONTECE
+   O conteúdo antigo não é apagado. Nem no fim, nem depois de
+   conferir, nem nunca por esta função. Apagar seria a única ação
+   irreversível de todo o processo, e não há motivo: o custo de
+   manter é alguns kilobytes.
+
+   IDEMPOTÊNCIA EM DUAS CAMADAS
+   O diário (data_migrations) impede a segunda execução; o
+   legacy_id impede a duplicata se ela acontecer mesmo assim —
+   numa aba paralela, por exemplo. Uma camada só seria fé.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Mig = {};
+  const el = U.el;
+  const CHAVE_LOCAL = 'financas.v1';
+
+  /**
+   * A "origem" identifica O QUE está sendo migrado, não de onde.
+   * O índice único em data_migrations é por (user_id, origem), então
+   * este texto é o que garante uma migração por conjunto de dados.
+   */
+  const ORIGEM = 'localStorage:financas.v1';
+
+  /* ---------------- 1 · detectar ---------------- */
+
+  /** Há dado antigo com substância? Perfil vazio não é migração. */
+  Mig.temDadoAntigo = function () {
+    try {
+      const bruto = localStorage.getItem(CHAVE_LOCAL);
+      if (!bruto) return false;
+      const st = JSON.parse(bruto);
+      if (!st || !Array.isArray(st.profiles)) return false;
+      return st.profiles.some((p) =>
+        (p.transactions || []).length || (p.accounts || []).length > 1 ||
+        (p.cards || []).length || (p.goals || []).length);
+    } catch (e) { return false; }
+  };
+
+  /** Já migrou? A pergunta vai ao banco, não ao navegador. */
+  Mig.jaMigrou = async function () {
+    try {
+      const sb = SupabaseBackend.cliente();
+      const u = Sync.currentUser();
+      if (!sb || !u) return null;
+      const { data } = await sb.from('data_migrations')
+        .select('id, status, contagens, concluido_em')
+        .eq('user_id', u.uid).eq('origem', ORIGEM)
+        .eq('status', 'concluida').maybeSingle();
+      return data || null;
+    } catch (e) { return null; }
+  };
+
+  /* ---------------- 5 · validar ---------------- */
+
+  /**
+   * Formato quebrado não vira linha no banco. Este é o último
+   * ponto em que um dado estranho pode ser recusado de graça —
+   * depois dele, o estrago já está gravado.
+   */
+  Mig.validar = function (st) {
+    const erros = [];
+    if (!st || typeof st !== 'object') return { ok: false, erros: ['arquivo não é um objeto'] };
+    if (!Array.isArray(st.profiles) || !st.profiles.length) erros.push('nenhum perfil encontrado');
+
+    (st.profiles || []).forEach((p, i) => {
+      const onde = 'perfil ' + (i + 1) + (p && p.name ? ' (' + p.name + ')' : '');
+      if (!p || typeof p !== 'object') { erros.push(onde + ': não é um objeto'); return; }
+      if (!p.id) erros.push(onde + ': sem identificador');
+      ['accounts', 'cards', 'categories', 'transactions', 'investments', 'goals'].forEach((campo) => {
+        if (p[campo] != null && !Array.isArray(p[campo])) erros.push(onde + ': ' + campo + ' não é uma lista');
+      });
+      (p.transactions || []).forEach((t, j) => {
+        if (!t || !t.id) erros.push(onde + ': lançamento ' + (j + 1) + ' sem identificador');
+        else if (!U.isValidISO(t.date)) erros.push(onde + ': lançamento "' + (t.description || t.id) + '" com data inválida');
+        else if (!isFinite(+t.amount)) erros.push(onde + ': lançamento "' + (t.description || t.id) + '" com valor não numérico');
+      });
+    });
+    /* Uma lista infinita de erros não ajuda ninguém a decidir. */
+    return { ok: !erros.length, erros: erros.slice(0, 12), total: erros.length };
+  };
+
+  /** Quanto há para migrar — mostrado antes de começar. */
+  Mig.inventario = function (st) {
+    const c = { perfis: (st.profiles || []).length, contas: 0, cartoes: 0, categorias: 0, lancamentos: 0, investimentos: 0, metas: 0 };
+    (st.profiles || []).forEach((p) => {
+      c.contas += (p.accounts || []).length;
+      c.cartoes += (p.cards || []).length;
+      c.categorias += (p.categories || []).length;
+      c.lancamentos += (p.transactions || []).length;
+      c.investimentos += (p.investments || []).length;
+      c.metas += (p.goals || []).length;
+    });
+    return c;
+  };
+
+  /* ---------------- o fluxo ---------------- */
+
+  /**
+   * Abre a conversa. Só executa depois que a pessoa aceita —
+   * migração silenciosa é a forma mais rápida de perder confiança
+   * quando algo dá errado.
+   */
+  Mig.oferecer = async function () {
+    if (!Mig.temDadoAntigo()) return;
+    if (!Sync.currentUser()) return;
+    if (await Mig.jaMigrou()) return;
+
+    let st;
+    try { st = JSON.parse(localStorage.getItem(CHAVE_LOCAL)); } catch (e) { return; }
+
+    const inv = Mig.inventario(st);
+    const v = Mig.validar(st);
+
+    const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+      el('p', { text: 'Seus dados estão neste aparelho. Vamos copiá-los para a sua conta, para que apareçam também no celular.' }),
+
+      el('div', { class: 'parse-info', style: { marginTop: '12px' } },
+        el('div', {}, [
+          el('strong', { text: 'O que será copiado' }),
+          el('ul', { style: { marginTop: '6px', paddingLeft: '18px', listStyle: 'disc' } }, [
+            el('li', { text: inv.perfis + ' perfil(is)' }),
+            el('li', { text: inv.lancamentos + ' lançamento(s)' }),
+            el('li', { text: inv.contas + ' conta(s) e ' + inv.cartoes + ' cartão(ões)' }),
+            el('li', { text: inv.categorias + ' categoria(s), ' + inv.investimentos + ' investimento(s), ' + inv.metas + ' meta(s)' })
+          ])
+        ])),
+
+      v.ok ? null : el('div', { class: 'parse-info is-warn', style: { marginTop: '12px' } },
+        el('div', {}, [
+          el('strong', { text: 'Encontramos ' + v.total + ' problema(s) nos dados' }),
+          el('ul', { style: { marginTop: '6px', paddingLeft: '18px', listStyle: 'disc' } },
+            v.erros.map((e) => el('li', { text: e }))),
+          el('p', { style: { marginTop: '6px' }, text: 'A cópia não vai começar enquanto isso não for resolvido. Baixe o backup e me procure com ele.' })
+        ])),
+
+      el('p', { style: { marginTop: '12px' } }, [
+        el('strong', { text: 'Nada é apagado. ' }),
+        el('span', { text: 'Os dados continuam neste aparelho depois da cópia, e você baixa um backup antes de começar.' })
+      ])
+    ].filter(Boolean));
+
+    UI.openModal({
+      title: 'Levar seus dados para a conta',
+      wide: true,
+      body: corpo,
+      buttons: [
+        { label: 'Agora não', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Baixar backup', class: 'btn-outline',
+          onClick: () => Mig.baixarBackup()
+        },
+        v.ok
+          ? { label: 'Copiar para a conta', class: 'btn-primary', onClick: () => Mig.executar(st) }
+          : null
+      ].filter(Boolean)
+    });
+  };
+
+  /* ---------------- 4 · backup ---------------- */
+
+  Mig.baixarBackup = function () {
+    const bruto = localStorage.getItem(CHAVE_LOCAL) || '{}';
+    U.download('oaze-antes-da-migracao-' + U.todayISO() + '.json', bruto);
+    /* E uma segunda cópia dentro do próprio navegador: se a pessoa
+       fechar a aba antes de salvar o arquivo, ainda há de onde voltar. */
+    try { localStorage.setItem(CHAVE_LOCAL + '.backup', bruto); } catch (e) { /* cheio: o arquivo já saiu */ }
+    UI.toast('Backup baixado. Guarde-o antes de continuar.', 'success');
+  };
+
+  /* ---------------- 6..8 · executar ---------------- */
+
+  Mig.executar = async function (st) {
+    const u = Sync.currentUser();
+    if (!u) { UI.toast('Entre na sua conta primeiro.', 'error'); return; }
+
+    /* Uma segunda checagem, agora que o clique aconteceu: entre
+       abrir o modal e clicar, outra aba pode ter migrado. */
+    if (await Mig.jaMigrou()) {
+      UI.closeModal();
+      UI.toast('Seus dados já estão na conta.', 'success');
+      return;
+    }
+
+    const sb = SupabaseBackend.cliente();
+    const painel = el('div', { style: { fontSize: '13.5px', lineHeight: '1.7' } });
+    const linha = (t) => { painel.appendChild(el('p', { text: t })); };
+
+    UI.openModal({
+      title: 'Copiando…',
+      body: el('div', {}, [
+        el('p', { class: 'hint', text: 'Não feche esta aba. Se algo falhar, nada é perdido — os dados continuam no aparelho.' }),
+        painel
+      ]),
+      buttons: [],
+      noAutofocus: true
+    });
+
+    let registro = null;
+    try {
+      /* 4 · backup ANTES de tocar em qualquer coisa */
+      Mig.baixarBackup();
+      linha('✓ Backup baixado');
+
+      /* 3 · abre o diário. Se o processo morrer no meio, fica a
+         linha "em_andamento" — e ela conta a história. */
+      const { data: reg, error: eReg } = await sb.from('data_migrations').insert({
+        user_id: u.uid, origem: ORIGEM, status: 'em_andamento'
+      }).select('id').single();
+      if (eReg) throw new Error('não foi possível registrar a migração: ' + eReg.message);
+      registro = reg.id;
+
+      /* 6 · envio, espaço por espaço */
+      const totalEnviado = {};
+      const totalNoBanco = {};
+      const espacos = [];
+
+      for (const perfil of st.profiles) {
+        linha('→ ' + (perfil.name || 'perfil') + '…');
+        const r = await Repo.enviarEspaco(Store.normalizeProfile(perfil), u.uid,
+          (o, n) => { if (n) linha('   ' + n + ' ' + o); });
+        espacos.push(r.workspaceId);
+        Object.keys(r.contagens).forEach((k) => {
+          totalEnviado[k] = (totalEnviado[k] || 0) + r.contagens[k];
+        });
+      }
+
+      /* 7 · conferência: conta de volta o que o banco tem */
+      linha('→ Conferindo…');
+      for (const wsId of espacos) {
+        const c = await Repo.contarNoBanco(wsId);
+        Object.keys(c).forEach((k) => { totalNoBanco[k] = (totalNoBanco[k] || 0) + c[k]; });
+      }
+      const conf = Repo.conferir(totalEnviado, totalNoBanco);
+      if (!conf.ok) throw new Error('conferência falhou — ' + conf.problemas.join('; '));
+
+      /* 8 · só agora conclui */
+      await sb.from('data_migrations').update({
+        status: 'concluida',
+        contagens: { enviado: totalEnviado, no_banco: totalNoBanco },
+        concluido_em: new Date().toISOString()
+      }).eq('id', registro);
+
+      linha('✓ ' + (totalNoBanco.lancamentos || 0) + ' lançamentos conferidos no servidor');
+      UI.closeModal();
+      UI.openModal({
+        title: 'Pronto',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('p', { text: 'Seus dados agora estão na conta e aparecem em qualquer aparelho onde você entrar.' }),
+          el('p', { style: { marginTop: '10px' } }, [
+            el('strong', { text: 'O que estava aqui continua aqui. ' }),
+            el('span', { text: 'Nada foi apagado deste navegador, e o backup está na sua pasta de downloads.' })
+          ])
+        ]),
+        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
+      });
+    } catch (e) {
+      console.error('Migração:', e);
+      /* O diário guarda a falha: na próxima tentativa sabemos que
+         houve uma, e o índice único só bloqueia as CONCLUÍDAS. */
+      if (registro) {
+        try {
+          await sb.from('data_migrations').update({
+            status: 'falhou', erro: String(e.message || e).slice(0, 500)
+          }).eq('id', registro);
+        } catch (e2) { /* sem rede: a linha fica em_andamento */ }
+      }
+      UI.closeModal();
+      UI.openModal({
+        title: 'A cópia não terminou',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('p', { text: 'Algo falhou no meio do caminho:' }),
+          el('p', { class: 'hint', style: { marginTop: '6px' }, text: String(e.message || e) }),
+          el('p', { style: { marginTop: '10px' } }, [
+            el('strong', { text: 'Seus dados estão intactos. ' }),
+            el('span', { text: 'Nada foi apagado deste aparelho e o backup está na sua pasta de downloads. Pode tentar de novo — o que já foi copiado não será duplicado.' })
+          ])
+        ]),
+        buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
+      });
+    }
+  };
+
+  /* ---------------- gancho ---------------- */
+
+  /**
+   * Chamado quando a sessão abre. O atraso deixa a interface
+   * desenhar antes: um modal que aparece sobre a tela em branco
+   * assusta mais do que informa.
+   */
+  Mig.aoEntrar = function () {
+    setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
+  };
+
+  global.Mig = Mig;
 })(window);
 
 </script>
@@ -13128,6 +13946,7 @@ window.SupabaseConfig = {
     passo('período', syncPeriodPicker);
     passo('eventos', wire);
     passo('navegação superior', () => Shell.wireTopnav());
+    passo('fila offline', () => Fila.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());

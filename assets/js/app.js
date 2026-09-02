@@ -448,6 +448,7 @@
     passo('período', syncPeriodPicker);
     passo('eventos', wire);
     passo('navegação superior', () => Shell.wireTopnav());
+    passo('fila offline', () => Fila.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());
