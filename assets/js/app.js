@@ -6,8 +6,7 @@
 
   const App = {
     page: 'home',
-    refDate: U.todayISO(),  // dia de referência; App.ym é o mês dele
-    ym: U.todayYM(),
+    ym: U.todayYM(),        // YYYY-MM — o período é o MÊS, não um dia
     txSearch: '',
     txOnlyPending: false,
     txMethod: 'all',        // all | account (débito) | card (crédito)
@@ -49,48 +48,57 @@
       if (opts.invoiceRef) App.invoiceRef = opts.invoiceRef;
     }
     U.$$('.nav-item').forEach((b) => b.classList.toggle('is-active', b.dataset.page === page));
+    if (global.Shell && Shell.marcarGrupoAtivo) Shell.marcarGrupoAtivo();
     U.$$('.page').forEach((s) => s.classList.toggle('is-active', s.dataset.page === page));
     document.getElementById('pageTitle').textContent = PAGES[page].title;
     App.render();
     global.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /**
-   * Muda o período. O dia acompanha: se o dia de referência não existe no
-   * mês de destino (31 → fevereiro), encosta no último dia do mês.
-   */
-  App.setYM = function (ym, dia) {
-    const p = U.ymParts(ym);
-    const d = U.clampDay(p.y, p.m, dia != null ? dia : (+String(App.refDate).slice(8, 10) || 1));
+  /** Muda o período exibido. A unidade é o mês. */
+  App.setYM = function (ym) {
     App.ym = ym;
-    App.refDate = U.isoOf(p.y, p.m, d);
     App.invoiceRef = null;
     App.calDay = null;      // o dia selecionado não existe no mês novo
     syncPeriodPicker();
     App.render();
   };
 
-  /** Volta o painel para hoje — dia, mês e ano. */
+  /** Volta o painel para o mês corrente. */
   App.goToday = function () {
-    App.refDate = U.todayISO();
     App.ym = U.todayYM();
     App.invoiceRef = null;
     syncPeriodPicker();
     App.render();
   };
 
-  /** Data padrão dos formulários: o dia de referência escolhido no topo. */
-  App.selectedDateOrToday = function () {
-    return U.isValidISO(App.refDate) ? App.refDate : U.monthStart(App.ym);
+  /** O mês exibido é o mês em que estamos? */
+  App.noMesAtual = function () {
+    return App.ym === U.todayYM();
   };
 
   /**
-   * Data de corte dos saldos: o dia escolhido, mas nunca além do fim do
-   * mês exibido — o cartão de uma conta diz "saldo em" exatamente isto.
+   * Data de corte dos saldos e indicadores.
+   *
+   * No mês corrente é HOJE: mostrar o saldo do dia 31 no dia 5 seria
+   * contar dinheiro que ainda não entrou nem saiu. Em qualquer outro
+   * mês — passado ou futuro — é o mês inteiro, porque ali não existe
+   * "hoje": o passado já aconteceu e o futuro é o que está previsto.
    */
   App.balanceDate = function () {
-    const fim = U.monthEnd(App.ym);
-    return App.refDate && App.refDate <= fim && App.refDate >= U.monthStart(App.ym) ? App.refDate : fim;
+    return App.noMesAtual() ? U.todayISO() : U.monthEnd(App.ym);
+  };
+
+  /**
+   * Data que os formulários trazem preenchida. No mês corrente, hoje.
+   * Em outro mês, o mesmo dia do mês — encostado no último dia quando
+   * ele não existe lá (31 de janeiro → 28 ou 29 de fevereiro). Nunca
+   * uma data fora do mês que a pessoa está olhando.
+   */
+  App.selectedDateOrToday = function () {
+    if (App.noMesAtual()) return U.todayISO();
+    const p = U.ymParts(App.ym);
+    return U.isoOf(p.y, p.m, U.clampDay(p.y, p.m, +U.todayISO().slice(8, 10)));
   };
 
   App.render = function () {
@@ -167,7 +175,6 @@
   /* ---------------- seletores de período e perfil ---------------- */
 
   function syncPeriodPicker() {
-    const daySel = document.getElementById('daySelect');
     const monthSel = document.getElementById('monthSelect');
     const yearSel = document.getElementById('yearSelect');
     const p = U.ymParts(App.ym);
@@ -183,10 +190,9 @@
     UI.fillSelect(yearSel, opts, String(p.y));
     monthSel.value = String(p.m);
 
-    // o dia acompanha o mês: fevereiro não oferece 30 nem 31
-    const dias = [];
-    for (let d = 1; d <= U.daysInMonth(p.y, p.m); d++) dias.push({ value: String(d), label: String(d) });
-    UI.fillSelect(daySel, dias, String(+String(App.refDate).slice(8, 10) || 1));
+    /* "Mês atual" só faz sentido quando não estamos nele. */
+    const hoje = document.getElementById('btnToday');
+    if (hoje) hoje.disabled = App.noMesAtual();
   }
 
   function syncProfileSelect() {
@@ -261,9 +267,7 @@
     document.getElementById('ownerName').addEventListener('click', askOwnerName);
     wireFab();
 
-    // período — dia, mês e ano são editáveis
-    document.getElementById('daySelect').addEventListener('change', (e) =>
-      App.setYM(App.ym, +e.target.value));
+    // período — mês e ano; o dia não é escolha global
     document.getElementById('monthSelect').addEventListener('change', (e) =>
       App.setYM(U.ymKey(U.ymParts(App.ym).y, +e.target.value)));
     document.getElementById('yearSelect').addEventListener('change', (e) =>
@@ -305,7 +309,6 @@
       reader.onload = () => {
         try {
           Store.importJSON(String(reader.result));
-          App.refDate = U.todayISO();
           App.ym = U.todayYM();
           syncProfileSelect(); syncPeriodPicker();
           UI.toast('Backup restaurado.', 'success');
@@ -444,12 +447,13 @@
     passo('perfis', syncProfileSelect);
     passo('período', syncPeriodPicker);
     passo('eventos', wire);
+    passo('navegação superior', () => Shell.wireTopnav());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());
     App.goTo('home');
 
-    // primeira visita: oferece dados de exemplo
+    // primeira visita: aponta o primeiro passo, não preenche nada
     // (o Safari em aba privada lança exceção no localStorage — daí o try)
     const flag = (function () { try { return localStorage.getItem('financas.welcomed'); } catch (e) { return null; } })();
     const prof = Store.profile();
@@ -459,19 +463,15 @@
         UI.openModal({
           title: 'Bem-vindo ao OAZE',
           body: U.el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-            U.el('p', { text: 'Tudo fica salvo apenas neste navegador — nenhum dado sai do seu computador. Use "↓ Backup" no topo da tela para guardar uma cópia.' }),
-            U.el('p', { style: { marginTop: '10px' }, text: 'Duas formas de começar:' }),
-            U.el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } }, [
-              U.el('li', { text: 'Cadastre suas contas e cartões em "Cartões e Contas" e comece a lançar.' }),
-              U.el('li', { text: 'Ou carregue dados de exemplo para explorar o painel antes.' })
-            ]),
+            U.el('p', { text: 'Seus dados ficam neste aparelho. Ao criar uma conta, eles passam a acompanhar você no computador e no celular.' }),
+            U.el('p', { style: { marginTop: '10px' }, text: 'O primeiro passo é cadastrar onde o seu dinheiro está — uma conta ou um cartão. Sem isso, não há o que somar.' }),
             U.el('p', { style: { marginTop: '10px', color: 'var(--muted)' }, text: 'Atalhos: D = nova despesa · R = nova receita · Alt+←/→ muda o mês.' })
           ]),
           buttons: [
-            { label: 'Começar do zero', class: 'btn-outline', onClick: () => { UI.closeModal(); App.goTo('accounts'); } },
+            { label: 'Depois', class: 'btn-outline', onClick: UI.closeModal },
             {
-              label: 'Carregar dados de exemplo', class: 'btn-primary',
-              onClick: () => { Store.seedDemo(); UI.closeModal(); UI.toast('Dados de exemplo criados. Explore à vontade.', 'success'); }
+              label: 'Cadastrar minha primeira conta', class: 'btn-primary',
+              onClick: () => { UI.closeModal(); App.goTo('accounts'); }
             }
           ],
           noAutofocus: true

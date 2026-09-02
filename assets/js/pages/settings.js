@@ -148,22 +148,6 @@
       })
     ));
 
-    box.appendChild(linha(
-      'Dados de exemplo',
-      'Popula o perfil ativo com um ano de movimentação fictícia, para explorar o painel.',
-      el('button', {
-        class: 'btn btn-ghost btn-sm', text: 'Carregar exemplo',
-        onclick: async () => {
-          const ok = await UI.confirm({
-            title: 'Carregar dados de exemplo',
-            message: 'Isto acrescenta lançamentos fictícios ao perfil <strong>' +
-              U.escape(Store.profile().name) + '</strong>. Continuar?',
-            confirmLabel: 'Carregar'
-          });
-          if (ok) { Store.seedDemo(); UI.toast('Dados de exemplo criados.', 'success'); }
-        }
-      })
-    ));
   }
 
   global.Cfg = Cfg;

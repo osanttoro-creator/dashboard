@@ -112,6 +112,109 @@
 
     <!-- ══════ TOP BAR — objetos de vidro independentes ══════ -->
     <header class="topbar" aria-label="Controles">
+
+      <!-- ══════ NAVEGAÇÃO SUPERIOR (desktop e tablet deitado) ══════
+           Some abaixo de 821px, onde a barra inferior assume — a mesma
+           que já existia, sem nenhuma alteração de comportamento.
+
+           Os botões são .nav-item com data-page: o roteador liga o
+           clique e marca o ativo em todos eles de uma vez, então a
+           barra de baixo e a de cima ficam sempre em sincronia. -->
+      <button class="topnav-brand" id="topnavBrand" aria-label="OAZE — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="18" height="18" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+            <circle cx="20" cy="20" r="8"/>
+            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+          </svg>
+        </span>
+        <span class="brand-name">OAZE</span>
+      </button>
+
+      <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
+        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
+          <span class="nav-ico" data-ico="layout-dashboard"></span>
+          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
+        </button>
+        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
+          <span class="nav-ico" data-ico="arrow-left-right"></span>
+          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+        </button>
+        <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
+          <span class="nav-ico" data-ico="wallet"></span>
+          <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
+        </button>
+
+      <div class="topnav-group" data-group="planejar">
+        <button class="topnav-trigger" id="trg-planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="topnav-trigger-txt">Planejar</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-planejar" role="group" aria-labelledby="trg-planejar" hidden>
+        <button class="nav-item" data-page="budget" title="Orçamento" aria-label="Orçamento">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="nav-long">Orçamento</span><span class="nav-short">Orçamento</span>
+        </button>
+        <button class="nav-item" data-page="goals" title="Metas" aria-label="Metas">
+          <span class="nav-ico" data-ico="flag"></span>
+          <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
+        </button>
+        <button class="nav-item" data-page="recurring" title="Recorrências" aria-label="Recorrências">
+          <span class="nav-ico" data-ico="repeat"></span>
+          <span class="nav-long">Recorrências</span><span class="nav-short">Recorrências</span>
+        </button>
+        <button class="nav-item" data-page="calendar" title="Calendário" aria-label="Calendário">
+          <span class="nav-ico" data-ico="calendar"></span>
+          <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
+        </button>
+        </div>
+      </div>
+
+      <div class="topnav-group" data-group="crescer">
+        <button class="topnav-trigger" id="trg-crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="topnav-trigger-txt">Crescer</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
+        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
+        </button>
+        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
+          <span class="nav-ico" data-ico="chart-line"></span>
+          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+        </button>
+        </div>
+      </div>
+
+        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
+
+      <div class="topnav-group" data-group="mais">
+        <button class="topnav-trigger" id="trg-mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
+          <span class="nav-ico" data-ico="ellipsis"></span>
+          <span class="topnav-trigger-txt">Mais</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
+          <span class="nav-ico" data-ico="tag"></span>
+          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+        </button>
+        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
+          <span class="nav-ico" data-ico="settings"></span>
+          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
+        </button>
+        </div>
+      </div>
+      </nav>
+
+      <span class="topbar-gap"></span>
+
       <span class="pill pill-profile">
         <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
         <select id="profileSelect" aria-label="Perfil ativo"></select>
@@ -120,14 +223,11 @@
 
       <span class="pill pill-period" id="periodPicker">
         <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-        <select id="daySelect" aria-label="Dia"></select>
         <select id="monthSelect" aria-label="Mês"></select>
         <select id="yearSelect" aria-label="Ano"></select>
         <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
-        <button class="pill-hoje" id="btnToday">Hoje</button>
+        <button class="pill-hoje" id="btnToday">Mês atual</button>
       </span>
-
-      <span class="topbar-gap"></span>
 
       <button class="pill pill-btn" id="btnSearch" aria-label="Buscar" title="Buscar (/)">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>

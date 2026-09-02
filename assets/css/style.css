@@ -1879,6 +1879,214 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .login-alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
 .login-alt .btn { justify-content: center; }
 
+/* ------------------------------------------------------------
+   22.6 · NAVEGAÇÃO SUPERIOR (≥ 821px)
+   ------------------------------------------------------------
+   A sidebar-ilha sai do desktop e do tablet deitado; o conteúdo
+   ganha a largura dela de volta. Abaixo de 821px NADA muda: a
+   barra inferior continua sendo a mesma, no mesmo lugar, com o
+   mesmo comportamento — por isso tudo aqui está trancado atrás
+   de min-width, e não o contrário.
+
+   Os itens são .nav-item, os mesmos da barra de baixo. O roteador
+   marca o ativo em todos de uma vez, então as duas navegações
+   nunca discordam sobre onde você está.
+   ------------------------------------------------------------ */
+
+/* Fora do desktop, a barra superior simplesmente não existe:
+   display:none tira do fluxo E da ordem de tabulação, então o
+   celular não ganha nenhum destino invisível no caminho. */
+.topnav-brand, .topnav-menu { display: none; }
+
+@media (min-width: 821px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 16px 24px 0; }
+  .content { max-width: 1440px; margin: 0 auto; }
+
+  .topbar {
+    position: sticky; top: 12px; z-index: 70;
+    gap: 8px; flex-wrap: nowrap;
+  }
+
+  /* --- marca --- */
+  .topnav-brand {
+    display: inline-flex; align-items: center; gap: 8px; flex: none;
+    padding: 6px 10px 6px 6px; border: 0; border-radius: 12px;
+    background: transparent; cursor: pointer; color: inherit;
+  }
+  .topnav-brand .brand-mark { width: 28px; height: 28px; border-radius: 9px; }
+  .topnav-brand .brand-name { font-weight: 680; letter-spacing: .14em; font-size: 12.5px; }
+  .topnav-brand:hover { background: var(--plane-2); }
+  .topnav-brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* --- a fita de destinos --- */
+  .topnav-menu {
+    display: flex; align-items: center; gap: 2px;
+    min-width: 0; flex: 0 1 auto;
+  }
+  .topnav-menu .nav-item {
+    width: auto; flex: none; white-space: nowrap;
+    padding: 8px 11px; gap: 7px; font-size: 13px;
+  }
+  .topnav-menu .nav-short { display: none; }
+  .topnav-menu .nav-long { display: inline; }
+
+  /* UGLEZ tem identidade própria — é o único destino com cor. */
+  .topnav-menu .nav-item.is-uglez { color: var(--terracotta); font-weight: 620; }
+  .topnav-menu .nav-item.is-uglez .nav-ico { color: var(--terracotta); }
+  .topnav-menu .nav-item.is-uglez:hover {
+    background: color-mix(in srgb, var(--terracotta) 14%, transparent);
+  }
+  .topnav-menu .nav-item.is-uglez.is-active {
+    background: color-mix(in srgb, var(--terracotta) 20%, transparent);
+    box-shadow: var(--uglez-glow);
+  }
+
+  /* --- grupos --- */
+  .topnav-group { position: relative; flex: none; }
+  .topnav-trigger {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 10px; border: 0; border-radius: 11px;
+    background: transparent; cursor: pointer; white-space: nowrap;
+    color: var(--ink-2); font-size: 13px; font-weight: 520; font-family: inherit;
+    transition: background .18s var(--ease-out);
+  }
+  .topnav-trigger:hover { background: var(--plane-2); color: var(--ink); }
+  .topnav-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .topnav-trigger .nav-ico { display: grid; place-items: center; color: var(--muted); }
+
+  /* Aberto, ou com a página atual dentro dele: o grupo precisa dizer
+     "você está aqui" mesmo com o menu fechado. */
+  .topnav-trigger[aria-expanded="true"],
+  .topnav-group.has-active .topnav-trigger {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--ink); font-weight: 640;
+  }
+  .topnav-group.has-active .topnav-trigger .nav-ico { color: var(--accent); }
+
+  .topnav-caret {
+    width: 0; height: 0; flex: none;
+    border-left: 3.5px solid transparent; border-right: 3.5px solid transparent;
+    border-top: 4px solid currentColor; opacity: .55;
+    transition: transform .18s var(--ease-out);
+  }
+  .topnav-trigger[aria-expanded="true"] .topnav-caret { transform: rotate(180deg); }
+
+  /* --- o painel do grupo --- */
+  .topnav-drop {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 90;
+    min-width: 214px; padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
+    border-radius: var(--radius); border: 1px solid var(--glass-line);
+    box-shadow: var(--shadow-lift);
+    /* nasce no canto de onde veio e volta pelo mesmo caminho */
+    transform-origin: top left;
+    animation: dropIn .16s var(--ease-out);
+  }
+  .topnav-drop[hidden] { display: none; }
+  .topnav-drop .nav-item { width: 100%; justify-content: flex-start; }
+  .topnav-group[data-group="mais"] .topnav-drop { left: auto; right: 0; transform-origin: top right; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-4px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* --- controles da direita --- */
+  .topbar-gap { flex: 1 1 auto; min-width: 4px; }
+  .pill-period select { max-width: 110px; }
+}
+
+@media (min-width: 821px) and (prefers-reduced-motion: reduce) {
+  .topnav-drop { animation: none; }
+}
+
+/* ------------------------------------------------------------
+   Degraus de largura — medidos, não estimados
+   ------------------------------------------------------------
+   O menu completo ocupa 725px e o lado direito ~765px: em 1440
+   isso não cabe, e o que acontecia era o UGLEZ deslizar por baixo
+   do perfil. Cada degrau abaixo devolve espaço na ordem inversa
+   da importância — primeiro o que é redundante, por último o que
+   é destino.
+
+   A ordem de sacrifício:
+     1. rótulo do botão de busca (a lupa já diz)
+     2. engrenagem de perfis (também vive em Configurações)
+     3. o grupo "Crescer" recolhe para "Mais" (consulta, não uso diário)
+     4. nome da marca (o símbolo permanece)
+     5. rótulo dos destinos diretos
+     6. rótulo dos grupos
+   ------------------------------------------------------------ */
+
+@media (min-width: 821px) {
+  /* A lupa é auto-explicativa; o rótulo custa 48px o tempo todo. */
+  #btnSearch .pill-label { display: none; }
+
+  /* Rede de segurança: se um degrau ficar apertado por causa de fonte
+     ou idioma, o menu corta em vez de escorregar por baixo dos
+     controles. Corte é feio; sobreposição esconde um destino. */
+  .topnav-menu { overflow: hidden; }
+  .topbar-gap { min-width: 12px; }
+}
+
+/* ---- todo desktop: o que é redundante sai de saída ----
+   A engrenagem de perfis também vive em Configurações, e o botão de
+   mês compacto continua legível. Juntos devolvem 35px sem custo. */
+@media (min-width: 821px) {
+  #btnProfiles { display: none; }
+  .pill-hoje { font-size: 11.5px; padding: 5px 9px; }
+}
+
+/* ---- < 1460: "Crescer" recolhe, o nome da marca sai ----
+   A fita completa pede 725px. Em 1440 sobram 601 depois da marca e
+   dos controles, então ela não cabe — e o que acontecia era o UGLEZ
+   escorregar por baixo do perfil. Recolher "Crescer" devolve 112 e o
+   nome da marca outros 49: 617 − 112 = 505, com folga.
+
+   Investimentos e Análises são consulta; Planejar é uso diário. Por
+   isso é o de consulta que recolhe. Acima de 1460 a fita aparece
+   inteira, com marca escrita. */
+@media (min-width: 821px) and (max-width: 1460px) {
+  .topnav-group[data-group="crescer"] { display: none; }
+  .topnav-brand .brand-name { display: none; }
+  .topnav-group[data-group="mais"] .topnav-drop { min-width: 236px; }
+  .topnav-group[data-group="mais"] .topnav-drop::before {
+    content: 'Crescer'; display: block; order: -1;
+    font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); padding: 8px 12px 4px;
+  }
+}
+
+/* ---- < 1400: os destinos diretos e o UGLEZ ficam só com o ícone ----
+   Devolve 210px. O nome continua no title e no aria-label, então
+   quem usa leitor de tela ouve "Visão geral", não "botão". */
+@media (min-width: 821px) and (max-width: 1400px) {
+  .topnav-menu .nav-item .nav-long,
+  .topnav-menu .nav-item .nav-short { display: none; }
+  .topnav-menu .nav-item { padding: 9px 10px; }
+  .topnav-drop .nav-item .nav-long { display: inline; }
+  .topnav-drop .nav-item .nav-short { display: none; }
+  .topnav-drop .nav-item { padding: 9px 12px; }
+  .main { padding: 16px 20px 0; }
+}
+
+/* ---- < 1140: o texto dos grupos também ---- */
+@media (min-width: 821px) and (max-width: 1140px) {
+  .topnav-trigger .topnav-trigger-txt { display: none; }
+  .topnav-trigger { padding: 9px 9px; }
+  .main { padding: 16px 18px 0; }
+}
+
+/* ---- < 1020: o último aperto, sem tirar destino nenhum ---- */
+@media (min-width: 821px) and (max-width: 1020px) {
+  .topnav-menu { gap: 0; }
+  .topnav-menu .nav-item { padding: 9px 7px; }
+  .topnav-trigger { padding: 9px 6px; }
+  .pill-profile select { max-width: 88px; }
+  .pill-hoje { display: none; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------

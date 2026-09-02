@@ -847,17 +847,6 @@
       title: 'Perfis',
       body,
       buttons: [
-        {
-          label: 'Preencher com dados de exemplo', class: 'btn-ghost', align: 'left',
-          onClick: async () => {
-            const ok = await UI.confirm({
-              title: 'Dados de exemplo',
-              message: `Adicionar contas, cartão, categorias e ~12 meses de lançamentos fictícios ao perfil <strong>${U.escape(Store.profile().name)}</strong>? Serve para conhecer o painel — depois é só excluir o perfil.`,
-              confirmLabel: 'Preencher'
-            });
-            if (ok) { Store.seedDemo(); UI.toast('Dados de exemplo criados.', 'success'); UI.closeModal(); }
-          }
-        },
         { label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }
       ]
     });
