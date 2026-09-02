@@ -128,6 +128,15 @@
     const box = U.clear(document.getElementById('setData'));
 
     box.appendChild(linha(
+      'Configuração inicial',
+      'Refazer as etapas de configuração. Nada é apagado — os campos vêm preenchidos com o que já existe.',
+      el('button', {
+        class: 'btn btn-outline btn-sm', text: 'Reabrir configuração',
+        onclick: () => Ob.reabrir()
+      })
+    ));
+
+    box.appendChild(linha(
       'Backup',
       'Baixa um JSON com TODOS os perfis. Guarde antes de mexer em algo grande.',
       el('button', {

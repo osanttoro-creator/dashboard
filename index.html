@@ -259,7 +259,12 @@
          o peso dela. -->
     <section class="page is-active" data-page="home">
 
-      <div class="grid grid-hero">
+      <!-- Painel de primeiro uso. Substitui TODO o resto quando não
+           há lançamento nenhum: zeros e um score calculado sobre
+           nada não são informação, são a aparência de defeito. -->
+      <div id="homeVazia" hidden></div>
+
+      <div data-home-conteudo class="grid grid-hero" id="homeConteudo">
         <!-- patrimônio líquido: o número que manda na página -->
         <section class="hero" aria-labelledby="heroLabel">
           <div class="hero-face">
@@ -285,10 +290,10 @@
         </section>
       </div>
 
-      <div class="kpi-row kpi-row-3" id="homeKpis"></div>
+      <div data-home-conteudo class="kpi-row kpi-row-3" id="homeKpis"></div>
 
       <!-- fluxo financeiro do ano -->
-      <div class="card">
+      <div data-home-conteudo class="card">
         <div class="card-head">
           <h2 id="homeFlowTitle">Fluxo financeiro</h2>
           <span class="card-note">Entradas, saídas e o saldo de cada mês</span>
@@ -297,7 +302,7 @@
       </div>
 
       <!-- UGLEZ: painel de leitura, não caixa de chat -->
-      <section class="uglez-panel" aria-labelledby="uglezTitle">
+      <section data-home-conteudo class="uglez-panel" aria-labelledby="uglezTitle">
         <div class="uglez-head">
           <span class="uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
           <div class="uglez-read">
@@ -310,7 +315,7 @@
         <div class="uglez-chips" id="uglezChips"></div>
       </section>
 
-      <div class="grid grid-wide-left">
+      <div data-home-conteudo class="grid grid-wide-left">
         <div class="card">
           <div class="card-head">
             <h2 id="homePieTitle">Distribuição de gastos</h2>
@@ -332,7 +337,7 @@
         </div>
       </div>
 
-      <div class="grid grid-wide-right">
+      <div data-home-conteudo class="grid grid-wide-right">
         <div class="card">
           <div class="card-head">
             <h2>Resumo do mês</h2>
@@ -350,7 +355,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div data-home-conteudo class="card">
         <div class="card-head">
           <h2>Movimentações recentes</h2>
           <button class="btn btn-ghost btn-sm" data-goto="transactions">Ver tudo →</button>
@@ -859,6 +864,7 @@
 <script src="assets/js/repo.js"></script>
 <script src="assets/js/fila.js"></script>
 <script src="assets/js/migracao.js"></script>
+<script src="assets/js/onboarding.js"></script>
 <script src="assets/js/ai.js"></script>
 <script src="assets/js/shell.js"></script>
 <script src="assets/js/pages/home.js"></script>

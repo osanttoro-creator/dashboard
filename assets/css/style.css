@@ -505,7 +505,17 @@ table { border-collapse: collapse; width: 100%; }
 .page-head h1 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 620; letter-spacing: -.026em; line-height: 1.12; }
 .page-sub { font-size: 13px; color: var(--muted); }
 
-.content { padding: 0 0 8px; display: grid; gap: 20px; align-content: start; flex: 1; }
+/* grid-template-columns explícito: sem ele a coluna implícita é
+   `auto` e encolhe até o conteúdo mais largo — o que fazia a página
+   inteira, cabeçalho incluído, deslizar para o centro quando o único
+   bloco visível era o painel estreito de primeiro uso.
+   minmax(0, 1fr) e não 1fr: o mínimo padrão de 1fr é min-content, e
+   uma tabela larga voltaria a esticar a coluna. */
+.content {
+  padding: 0 0 8px; display: grid; gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start; flex: 1;
+}
 .page { display: none; gap: 20px; grid-template-columns: 1fr; }
 .page.is-active { display: grid; }
 
@@ -1901,7 +1911,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 @media (min-width: 821px) {
   .sidebar { display: none; }
   .main { margin-left: 0; padding: 16px 24px 0; }
-  .content { max-width: 1440px; margin: 0 auto; }
+  /* width:100% é obrigatório aqui. .main é um flex column, e
+     margin:auto num item flex ANULA o stretch: o item passa a ter a
+     largura do conteúdo e as margens automáticas o centralizam. Com
+     painéis largos isso nunca aparecia; com o painel estreito de
+     primeiro uso, a página inteira deslizava para o meio. */
+  .content { width: 100%; max-width: 1440px; margin: 0 auto; }
 
   .topbar {
     position: sticky; top: 12px; z-index: 70;
@@ -2085,6 +2100,100 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .topnav-trigger { padding: 9px 6px; }
   .pill-profile select { max-width: 88px; }
   .pill-hoje { display: none; }
+}
+
+/* ------------------------------------------------------------
+   22.7 · ONBOARDING
+   ------------------------------------------------------------
+   Etapas dentro do modal comum. Nada de tela cheia: o painel fica
+   visível atrás, e é ele que a pessoa está construindo — ver o
+   resultado aparecendo é metade do valor da configuração guiada.
+   ------------------------------------------------------------ */
+.ob-progresso { margin-bottom: 16px; }
+.ob-barra {
+  height: 4px; border-radius: 999px; overflow: hidden;
+  background: var(--plane-2);
+}
+.ob-barra > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--accent);
+  transition: width .3s var(--ease-out);
+}
+.ob-passo {
+  margin-top: 6px; font-size: 11px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+
+.ob-corpo { display: grid; gap: 12px; }
+.ob-texto { font-size: 13.5px; line-height: 1.65; }
+.ob-titulo { font-size: 17px; font-weight: 660; letter-spacing: -.01em; }
+.ob-sub {
+  font-size: 11px; font-weight: 680; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); margin-top: 4px;
+}
+
+/* Duas colunas onde cabe; uma só no celular — e é o campo que
+   decide, não a largura da tela. */
+.ob-dupla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+
+.ob-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ob-cat {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 10px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--glass-line); background: var(--plane-2);
+  color: var(--ink-2); font-size: 12.5px; font-family: inherit;
+  transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ob-cat:hover { background: color-mix(in srgb, var(--danger, #B3402F) 14%, transparent); color: var(--ink); }
+.ob-cat:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ob-cat-x { font-size: 15px; line-height: 1; opacity: .5; }
+.ob-cat:hover .ob-cat-x { opacity: 1; }
+
+.ob-fim { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 8px 0; }
+.ob-proximos { display: grid; gap: 6px; margin-top: 6px; }
+.ob-proximos .btn { justify-content: flex-start; }
+
+/* ------------------------------------------------------------
+   22.8 · PAINEL DE PRIMEIRO USO
+   ------------------------------------------------------------
+   Ocupa o lugar do painel inteiro enquanto não há dado. Grande de
+   propósito: se fosse um aviso discreto no topo de uma tela de
+   zeros, a tela de zeros continuaria sendo a mensagem.
+   ------------------------------------------------------------ */
+#homeVazia { display: grid; justify-items: center; }
+.primeiro-uso {
+  display: grid; gap: 10px; justify-items: start;
+  padding: 32px; width: 100%; max-width: 620px;
+}
+.pu-titulo { font-size: 22px; font-weight: 680; letter-spacing: -.02em; }
+.pu-texto { font-size: 13.5px; line-height: 1.65; color: var(--ink-2); }
+
+.pu-passos { display: grid; gap: 2px; margin: 6px 0 4px; padding: 0; list-style: none; width: 100%; }
+.pu-passo { display: flex; align-items: center; gap: 11px; padding: 7px 0; }
+.pu-num {
+  width: 24px; height: 24px; flex: none;
+  display: grid; place-items: center; border-radius: 50%;
+  font-size: 12px; font-weight: 660;
+  background: var(--plane-2); color: var(--muted);
+}
+.pu-passo.is-feito .pu-num { background: color-mix(in srgb, var(--ok, #4C6B33) 22%, transparent); color: var(--ok, #4C6B33); }
+.pu-passo.is-feito .pu-link { color: var(--muted); text-decoration: line-through; }
+
+.pu-link {
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font: inherit; font-size: 13.5px; color: var(--ink);
+  text-align: left; text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: var(--glass-line);
+}
+.pu-link:hover { text-decoration-color: var(--accent); }
+.pu-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.pu-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+@media (max-width: 560px) {
+  .primeiro-uso { padding: 22px 18px; }
+  .pu-titulo { font-size: 19px; }
+  .pu-acoes .btn { flex: 1 1 100%; justify-content: center; }
 }
 
 /* ============================================================

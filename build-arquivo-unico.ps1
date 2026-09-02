@@ -60,7 +60,7 @@ $arquivos = @(
   'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
   'assets/js/sync.js', 'assets/js/supabase-auth.js',
-  'assets/js/repo.js', 'assets/js/fila.js', 'assets/js/migracao.js',
+  'assets/js/repo.js', 'assets/js/fila.js', 'assets/js/migracao.js', 'assets/js/onboarding.js',
   'assets/js/ai.js', 'assets/js/shell.js',
   'assets/js/pages/home.js', 'assets/js/pages/transactions.js', 'assets/js/pages/investments.js',
   'assets/js/pages/accounts.js', 'assets/js/pages/categories.js',

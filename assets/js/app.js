@@ -454,31 +454,17 @@
     passo('controles', () => Shell.init());
     App.goTo('home');
 
-    // primeira visita: aponta o primeiro passo, não preenche nada
-    // (o Safari em aba privada lança exceção no localStorage — daí o try)
-    const flag = (function () { try { return localStorage.getItem('financas.welcomed'); } catch (e) { return null; } })();
-    const prof = Store.profile();
-    if (!prof.transactions.length && !flag) {
-      try { localStorage.setItem('financas.welcomed', '1'); } catch (e) { /* segue sem marcar */ }
-      setTimeout(() => {
-        UI.openModal({
-          title: 'Bem-vindo ao OAZE',
-          body: U.el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-            U.el('p', { text: 'Seus dados ficam neste aparelho. Ao criar uma conta, eles passam a acompanhar você no computador e no celular.' }),
-            U.el('p', { style: { marginTop: '10px' }, text: 'O primeiro passo é cadastrar onde o seu dinheiro está — uma conta ou um cartão. Sem isso, não há o que somar.' }),
-            U.el('p', { style: { marginTop: '10px', color: 'var(--muted)' }, text: 'Atalhos: D = nova despesa · R = nova receita · Alt+←/→ muda o mês.' })
-          ]),
-          buttons: [
-            { label: 'Depois', class: 'btn-outline', onClick: UI.closeModal },
-            {
-              label: 'Cadastrar minha primeira conta', class: 'btn-primary',
-              onClick: () => { UI.closeModal(); App.goTo('accounts'); }
-            }
-          ],
-          noAutofocus: true
-        });
-      }, 500);
-    }
+    /* Primeira visita sem dados: configuração progressiva.
+       Antes daqui havia um modal que oferecia "carregar dados de
+       exemplo" — a saída mais rápida para um painel bonito e a mais
+       lenta para um painel útil. Agora as etapas constroem o
+       produto de verdade, e o que aparece no fim é do usuário.
+
+       O atraso deixa a interface desenhar antes: um modal sobre a
+       tela em branco assusta mais do que informa. */
+    setTimeout(() => {
+      if (global.Ob && Ob.talvezOferecer) Ob.talvezOferecer();
+    }, 700);
   }
 
   global.App = App;
