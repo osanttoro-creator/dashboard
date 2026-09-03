@@ -40,9 +40,56 @@
 
   /* ---------------- navegação ---------------- */
 
+  /* ============================================================
+     ENDEREÇOS
+     ------------------------------------------------------------
+     Cada página ganha uma URL de verdade. Sem isso, /precos não é
+     um link que se manda para alguém, o botão "voltar" do
+     navegador sai do app, e o fallback de SPA no servidor não tem
+     o que reescrever.
+
+     MAS SÓ ONDE HÁ SERVIDOR. Aberto do disco (file://) ou como
+     arquivo único no iPhone, a History API não funciona — e o app
+     precisa continuar funcionando nos dois. Por isso a troca de
+     URL é condicional; a navegação nunca depende dela.
+     ============================================================ */
+  App.URLS = {
+    home: '/', transactions: '/financeiro', accounts: '/carteira',
+    budget: '/orcamento', goals: '/metas', recurring: '/recorrencias',
+    calendar: '/calendario', investments: '/investimentos',
+    reports: '/analises', uglez: '/uglez', categories: '/categorias',
+    settings: '/configuracoes', precos: '/precos'
+  };
+
+  const PAGINA_DE = Object.keys(App.URLS)
+    .reduce((m, k) => { m[App.URLS[k]] = k; return m; }, {});
+
+  /** Só troca a URL onde ela existe: http(s) com History API. */
+  function podeTrocarUrl() {
+    return (location.protocol === 'http:' || location.protocol === 'https:') &&
+      !!(global.history && history.pushState);
+  }
+
+  /** A página que a URL atual pede, ou 'home'. */
+  App.paginaDaUrl = function () {
+    if (!podeTrocarUrl()) return null;
+    const caminho = location.pathname.replace(/\/+$/, '') || '/';
+    return PAGINA_DE[caminho] || (caminho === '' ? 'home' : null);
+  };
+
   App.goTo = function (page, opts) {
     if (!PAGES[page]) return;
     App.page = page;
+
+    /* replace quando é o próprio endereço (evita entrada duplicada
+       no histórico ao abrir a página direto), push quando é
+       navegação de verdade. */
+    if (podeTrocarUrl() && !(opts && opts.semUrl)) {
+      const alvo = App.URLS[page] || '/';
+      if (location.pathname !== alvo) {
+        try { history.pushState({ page }, '', alvo); } catch (e) { /* segue sem URL */ }
+      }
+    }
     if (opts) {
       if (opts.tab) App.accTab = opts.tab;
       if (opts.cardId) App.cardFocusId = opts.cardId;
@@ -449,13 +496,30 @@
     passo('período', syncPeriodPicker);
     passo('eventos', wire);
     passo('navegação superior', () => Shell.wireTopnav());
+    /* O botão "voltar" do navegador precisa voltar DENTRO do app.
+       Sem isto, ele sai do OAZE — que é a forma mais rápida de
+       alguém achar que perdeu o que estava fazendo. */
+    /* O "voltar" do navegador precisa voltar DENTRO do app. Sem
+       isto, ele sai do OAZE — a forma mais rápida de alguém achar
+       que perdeu o que estava fazendo. */
+    passo('endereços', () => {
+      global.addEventListener('popstate', () => {
+        const pg = App.paginaDaUrl();
+        if (pg) App.goTo(pg, { semUrl: true });
+      });
+    });
     passo('conta', () => Conta.init());
     passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());
-    App.goTo('home');
+    /* A rota é lida ANTES de qualquer navegação. App.goTo('home')
+       faz pushState('/') e, ao fazer isso, apaga a URL que estamos
+       tentando ler — abrir /precos direto caía na visão geral, sem
+       erro nenhum. Ler primeiro, navegar depois. */
+    const rotaInicial = App.paginaDaUrl && App.paginaDaUrl();
+    App.goTo(rotaInicial && PAGES[rotaInicial] ? rotaInicial : 'home', { semUrl: true });
 
     /* Primeira visita sem dados: configuração progressiva.
        Antes daqui havia um modal que oferecia "carregar dados de

@@ -35,3 +35,8 @@ node_modules/
 .env.*.local
 supabase/functions/.env
 supabase/.temp/
+
+# Pacote gerado para a Hostinger. É derivado — reconstruído por
+# deploy/hostinger/montar-pacote.ps1 a qualquer momento.
+deploy/hostinger/public_html/
+deploy/hostinger/*.zip

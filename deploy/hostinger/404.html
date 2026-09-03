@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página não encontrada — OAZE</title>
+<meta name="robots" content="noindex">
+<!--
+  Esta página quase nunca aparece: o .htaccess manda todo caminho
+  desconhecido para o index.html, e é o app que decide. O que sobra
+  aqui é o arquivo que realmente não existe — um asset removido, um
+  link antigo para um arquivo. Por isso o texto não diz "página não
+  encontrada" e para: diz o que aconteceu e oferece a saída.
+
+  Sem CSS externo de propósito: se o 404 é por causa de um asset
+  que sumiu, depender do mesmo diretório seria pedir para a página
+  de erro dar erro.
+-->
+<style>
+  :root { color-scheme: dark light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-items: center; padding: 24px;
+    background: #081A24; color: #EFE9DF;
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .caixa {
+    max-width: 480px; width: 100%; text-align: center;
+    background: rgba(45, 79, 86, .38);
+    border: 1px solid rgba(255, 255, 255, .09);
+    border-radius: 18px; padding: 40px 28px;
+  }
+  .marca {
+    width: 44px; height: 44px; margin: 0 auto 18px;
+    display: grid; place-items: center; border-radius: 14px;
+    background: #C4936A; color: #fff; font-weight: 700; letter-spacing: .1em;
+  }
+  h1 { font-size: 21px; font-weight: 660; letter-spacing: -.02em; margin: 0 0 10px; }
+  p { color: #9DAFA9; margin: 0 0 20px; }
+  a.botao {
+    display: inline-block; padding: 11px 22px; border-radius: 12px;
+    background: #C4936A; color: #fff; text-decoration: none; font-weight: 600;
+  }
+  a.botao:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .miudo { font-size: 12.5px; color: #7C8C88; margin-top: 18px; }
+  @media (prefers-color-scheme: light) {
+    body { background: #F2EDE4; color: #24312F; }
+    .caixa { background: rgba(255,255,255,.9); border-color: rgba(0,0,0,.08); }
+    p { color: #5C6B67; }
+    .miudo { color: #8A968F; }
+  }
+</style>
+</head>
+<body>
+  <main class="caixa">
+    <div class="marca" aria-hidden="true">O</div>
+    <h1>Não achamos esse arquivo</h1>
+    <p>O endereço existe, mas o arquivo que ele pedia não está mais aqui. Costuma acontecer com um link antigo.</p>
+    <a class="botao" href="/">Voltar para o painel</a>
+    <p class="miudo">Seus dados não foram afetados por isto.</p>
+  </main>
+</body>
+</html>
