@@ -48,6 +48,13 @@ Copy-Item (Join-Path $PSScriptRoot '404.html')  -Destination $destino
 
 # ---- 3 · conferencia de segredos ----
 # A ultima chance de perceber uma chave antes de ela virar publica.
+#
+# O -Force nao e detalhe: no Linux, Get-ChildItem sem ele ignora
+# tudo que comeca com ponto. No runner do GitHub isso fazia a
+# varredura pular justamente o .htaccess -- ela passava por nao ter
+# olhado. No Windows o mesmo arquivo era lido, porque la "oculto" e
+# um atributo, nao o nome. Uma conferencia que muda de alcance
+# conforme o sistema e pior que nenhuma: da confianca sem cobertura.
 Write-Host ""
 Write-Host "  Conferindo segredos no que vai ser servido..." -ForegroundColor Cyan
 
@@ -59,7 +66,7 @@ $padroes = @(
 )
 
 $achados = @()
-Get-ChildItem $destino -Recurse -File | ForEach-Object {
+Get-ChildItem $destino -Recurse -File -Force | ForEach-Object {
   $conteudo = Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
   if ($null -eq $conteudo) { return }
   foreach ($p in $padroes) {
@@ -79,7 +86,7 @@ if ($achados.Count -gt 0) {
 Write-Host "  nenhum segredo encontrado" -ForegroundColor Green
 
 # ---- 4 · conferencia de arquivos indevidos ----
-$indevidos = Get-ChildItem $destino -Recurse -File |
+$indevidos = Get-ChildItem $destino -Recurse -File -Force |
   Where-Object { $_.Name -match '\.(ps1|sql|md)$' -or $_.Name -eq '.env' }
 if ($indevidos) {
   Write-Host ""
@@ -120,7 +127,7 @@ try {
   }
 } finally { $arquivo.Dispose() }
 
-$n  = (Get-ChildItem $destino -Recurse -File).Count
+$n  = (Get-ChildItem $destino -Recurse -File -Force).Count
 $kb = [math]::Round((Get-Item $zip).Length / 1KB)
 
 Write-Host ""

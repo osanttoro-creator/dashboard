@@ -59,7 +59,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # ---- 1 · monta o pacote ----
       # O mesmo script usado à mão. Ele varre o que vai ser servido
