@@ -12,10 +12,8 @@ protegida pelo RLS — aqui não existe nada atrás dela. Quem tem a chave, gast
 
 ## Como configurar
 
-**Em produção**, que é o que vale: Vercel → projeto → *Settings* →
-*Environment Variables* → ambiente **Production**.
-
-**Localmente**, para `vercel dev`: no `.env` da raiz, que está no `.gitignore`.
+Painel do Supabase → *Edge Functions* → *Secrets*. É o único lugar: não há
+camada de servidor neste repositório, e por isso não há `.env` de produção.
 
 | Variável | Para quê |
 |---|---|
@@ -33,35 +31,42 @@ redeploy.
 
 ## Como funciona
 
-O front chama `POST /api/uglez` com `{ pergunta, resumo }` e recebe
-`{ texto, modelo }`. A chave nunca sai do servidor: vai no cabeçalho da
-chamada à API do provedor e nada mais.
+O front chama a Edge Function `oaze-assistant` do Supabase, com a sessão do
+usuário no cabeçalho `Authorization`. A chave da OpenAI nunca sai do servidor:
+vai no cabeçalho da chamada ao provedor e nada mais.
 
-Três defesas na função, e cada uma existe por um motivo:
+Quatro defesas na função, e cada uma existe por um motivo:
 
-- **A pergunta é cortada em 500 caracteres e o resumo em 6.000.** A rota é
-  pública e paga por token; sem limite, qualquer um transforma o seu endpoint
-  numa conta aberta.
-- **O corpo de erro da API nunca é repassado cru.** Em alguns erros ele ecoa
-  parte do cabeçalho enviado. Só a mensagem extraída volta ao navegador.
-- **Sem chave nenhuma, a resposta é 501** — não é falha, é ausência do
-  recurso, e o cliente entende que deve usar o outro caminho.
+- **A rota exige sessão.** Ao contrário de um endpoint público, aqui cada
+  chamada tem dono — é o que torna possível cobrar cota de alguém.
+- **A pergunta é cortada em 500 caracteres, e o contexto em 4.000 (plano
+  grátis) ou 8.000.** Token custa; sem limite, uma chamada vira uma conta
+  aberta.
+- **O que chega ao modelo depende do plano.** O mapa `PERFIL` decide quantas
+  categorias, quantos meses de histórico e quantos tokens de resposta. Não é
+  só preço: é menos dado saindo do banco para quem pediu menos.
+- **A cota é reservada antes da chamada e estornada em qualquer erro.** A
+  reserva é um `INSERT … ON CONFLICT DO UPDATE … WHERE usado < limite`: duas
+  abas simultâneas não conseguem gastar a mesma última pergunta.
+
+O corpo de erro do provedor **nunca é repassado cru** — em alguns erros ele
+ecoa parte do cabeçalho enviado. O navegador recebe só um código curto
+(`limite`, `provedor`, `contexto_grande`…), uma frase pronta e o `request_id`
+para casar com o log.
 
 ### O outro caminho, e por que ele existe
 
-O app roda em três lugares: no Vercel, aberto direto do disco (`file://`) e
-como arquivo único no iPhone. **Nos dois últimos não existe servidor nenhum.**
+O app roda em três lugares: publicado na Hostinger, aberto direto do disco
+(`file://`) e como arquivo único no iPhone. **Nos dois últimos não existe
+servidor nenhum, e não há sessão do Supabase.**
 
-Quando `/api/uglez` não responde, o cliente cai para a chave que o próprio
+Quando a Edge Function não responde, o cliente cai para a chave que o próprio
 usuário guardou no `localStorage` dele. Essa não é um segredo do produto — é
 dele, no aparelho dele, sob a responsabilidade dele.
 
-**Esse caminho local fala com a Anthropic apenas.** Se você configurar só a
-OpenAI, o UGLEZ funciona no site publicado e fica indisponível no arquivo
-único do iPhone — a menos que o usuário tenha uma chave Anthropic própria
+**Esse caminho local fala com a Anthropic apenas.** Ou seja, no arquivo único
+do iPhone o UGLEZ só conversa se o usuário tiver uma chave Anthropic própria
 guardada. É uma limitação real, não um bug.
-
----
 
 ## Verificação
 

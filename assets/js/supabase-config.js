@@ -7,9 +7,8 @@
    navegador, e um `process.env` nunca chegaria até eles. O valor
    precisa estar num arquivo que o navegador leia — este.
 
-   O .env na raiz existe e traz os mesmos valores, mas quem o lê é
-   só a camada de servidor (as funções em api/, via `vercel dev`).
-   Ao trocar de projeto, troque nos DOIS lugares.
+   Quem guarda os valores de servidor é o Supabase, em secrets das
+   Edge Functions — não há camada de servidor neste repositório.
 
    Onde encontrar os valores:
      supabase.com/dashboard → seu projeto

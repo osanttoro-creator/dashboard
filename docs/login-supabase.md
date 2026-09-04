@@ -33,9 +33,9 @@ Três consequências práticas:
 2. **`@supabase/ssr` não tem função aqui.** Ele serve para guardar a sessão em
    *cookies* no servidor. Não há servidor renderizando página neste app — a
    sessão vive no `localStorage`, que é o modelo certo para SPA estática.
-3. **Um `package.json` na raiz seria perigoso.** A Vercel usa a presença dele
-   para detectar framework: o projeto poderia deixar de ser servido como
-   estático e passar a tentar um build inexistente, derrubando o deploy.
+3. **Um `package.json` na raiz seria perigoso.** Hospedagens detectam framework
+   pela presença dele: o projeto poderia deixar de ser servido como estático e
+   passar a tentar um build inexistente, derrubando o deploy.
 
 O que foi feito no lugar: o **mesmo pacote**, `@supabase/supabase-js@2.113.0`,
 na build UMD, vendorizado em `assets/vendor/supabase.js` — exatamente como o
@@ -51,7 +51,7 @@ Em **dois** lugares, porque servem a dois consumidores diferentes:
 | Arquivo | Quem lê | Versionado |
 |---|---|---|
 | `assets/js/supabase-config.js` | o **front-end** — é isto que faz o login funcionar | sim |
-| `.env` | só a camada de servidor (`api/`, via `vercel dev`) | não |
+| `.env` | nada mais — os valores de servidor vivem nos secrets do Supabase | não |
 | `.env.example` | ninguém; documenta o formato | sim |
 
 O `.env` está no `.gitignore` porque é onde uma chave secreta de verdade vai

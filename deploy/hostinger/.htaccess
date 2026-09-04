@@ -64,8 +64,10 @@ ErrorDocument 404 /404.html
 # 4 · cabeçalhos de segurança
 # -------------------------------------------------------------
 <IfModule mod_headers.c>
-  # A CSP é a mesma do vercel.json — dois ambientes com a mesma
-  # regra, para o que passa num não quebrar no outro.
+  # Esta é a única CSP do projeto. Ela vale para o site publicado;
+  # em file:// e no servidor local não há CSP nenhuma, então uma
+  # integração nova pode funcionar no desenvolvimento e ser
+  # bloqueada aqui. Ao adicionar destino, mexa em connect-src.
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in wss://*.supabase.in https://api.anthropic.com https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
   Header always set X-Content-Type-Options "nosniff"

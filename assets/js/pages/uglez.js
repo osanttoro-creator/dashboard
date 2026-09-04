@@ -6,8 +6,9 @@
    para quem nunca configurou nada, e nenhum dado sai do navegador
    para produzi-los.
 
-   Só a caixa "Conversar" chama a API — e, quando publicado, ela
-   passa pelo backend (ver api/uglez.js).
+   Só a caixa "Conversar" chama a API, e ela passa pela Edge
+   Function oaze-assistant do Supabase (ver assets/js/ai.js).
+   Nenhuma chave de IA existe neste navegador.
    ============================================================= */
 (function (global) {
   'use strict';

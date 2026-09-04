@@ -4130,9 +4130,8 @@ window.FirebaseConfig = {
    navegador, e um `process.env` nunca chegaria até eles. O valor
    precisa estar num arquivo que o navegador leia — este.
 
-   O .env na raiz existe e traz os mesmos valores, mas quem o lê é
-   só a camada de servidor (as funções em api/, via `vercel dev`).
-   Ao trocar de projeto, troque nos DOIS lugares.
+   Quem guarda os valores de servidor é o Supabase, em secrets das
+   Edge Functions — não há camada de servidor neste repositório.
 
    Onde encontrar os valores:
      supabase.com/dashboard → seu projeto
@@ -11958,7 +11957,16 @@ window.SupabaseConfig = {
               const r = await Conta.chamarFuncao('oaze-conta', {
                 acao: 'excluir', confirmacao: digitado
               });
-              if (r.erro) { diz(r.mensagem || 'Não foi possível excluir.', true); return; }
+              /* Exige ok:true EXPLÍCITO, não a ausência de erro.
+                 Uma resposta inesperada — função ainda não publicada,
+                 versão antiga, proxy no caminho — não traz campo
+                 'erro', e tratar isso como sucesso apagaria o
+                 localStorage de alguém cuja conta continua existindo.
+                 Em operação irreversível, o silêncio é "não". */
+              if (r.ok !== true) {
+                diz(r.mensagem || 'O servidor não confirmou a exclusão. Nada foi apagado.', true);
+                return;
+              }
 
               /* Só agora o local sai — e só porque o servidor
                  confirmou. Apagar antes trocaria uma perda de dados
@@ -15461,8 +15469,9 @@ window.SupabaseConfig = {
    para quem nunca configurou nada, e nenhum dado sai do navegador
    para produzi-los.
 
-   Só a caixa "Conversar" chama a API — e, quando publicado, ela
-   passa pelo backend (ver api/uglez.js).
+   Só a caixa "Conversar" chama a API, e ela passa pela Edge
+   Function oaze-assistant do Supabase (ver assets/js/ai.js).
+   Nenhuma chave de IA existe neste navegador.
    ============================================================= */
 (function (global) {
   'use strict';

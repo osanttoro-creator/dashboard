@@ -49,41 +49,42 @@ Só funciona com o PC ligado e o script rodando. Se o roteador trocar o IP do PC
 o endereço muda — e, como o endereço é a "identidade" do armazenamento, os dados
 somem. Para uso diário, prefira a opção 1 ou 3.
 
-### Opção 3 — hospedar no Vercel (melhor para uso diário)
+### Opção 3 — hospedar na Hostinger (melhor para uso diário)
 
-Um endereço fixo em HTTPS, funciona em qualquer lugar, sem o PC ligado. O projeto já
-vem configurado — veja **[Publicar no Vercel](#publicar-no-vercel)** abaixo.
+Um endereço fixo em HTTPS, funciona em qualquer lugar, sem o PC ligado. Já está
+no ar — veja **[Publicar](#publicar)** abaixo.
 
 Só o *código* do app fica público; **seus dados financeiros nunca saem do celular**,
 continuam no `localStorage` do Safari. Ainda assim, se preferir não deixar nada
 público, fique na opção 1.
 
-## Publicar no Vercel
+## Publicar
 
-O repositório já traz tudo pronto: é um site estático, **sem build e sem back-end**.
+É um site estático, **sem build e sem back-end** — o que existe de servidor são as
+Edge Functions do Supabase, que não fazem parte da página.
 
-1. Em [vercel.com/new](https://vercel.com/new), importe o repositório do GitHub.
-2. Em **Framework Preset**, escolha **Other**.
-3. Deixe **Build Command** e **Output Directory** em branco — não há build.
-4. **Deploy**.
-
-O `vercel.json` cuida do resto. Cada `git push` para a `main` republica sozinho.
+Cada `git push` para a `main` publica sozinho, pelo workflow
+[`.github/workflows/deploy-hostinger.yml`](.github/workflows/deploy-hostinger.yml).
+O que ele confere, e o caminho manual para rollback, estão em
+[`deploy/hostinger/README.md`](deploy/hostinger/README.md).
 
 **Arquivos de configuração:**
 
 | Arquivo | Para que serve |
 |---|---|
-| `vercel.json` | Cabeçalhos de segurança, CSP e cache |
-| `.vercelignore` | Mantém `.ps1`, `tools/` e o README fora do site |
+| `deploy/hostinger/.htaccess` | Rotas de SPA, cabeçalhos de segurança, CSP e cache |
+| `deploy/hostinger/montar-pacote.ps1` | Decide o que vai para o servidor, e varre por segredos |
 | `robots.txt` | Pede aos buscadores que não indexem — é um painel pessoal |
 
-**Endereços depois do deploy:** `/` abre o `index.html` (versão multiarquivo, a de
-uso normal) e `/financas` abre o arquivo único — útil para baixar direto no iPhone
-sem precisar do PC.
+> A Hostinger intercepta o `robots.txt` no subdomínio temporário e serve o dela, que
+> bloqueia só o Googlebot. O nosso passa a valer quando o domínio próprio for apontado.
+
+**Endereços:** `/` abre o `index.html` (versão multiarquivo, a de uso normal) e
+`/financas` abre o arquivo único — útil para baixar direto no iPhone sem o PC.
 
 ### Content-Security-Policy
 
-O `vercel.json` publica uma CSP que trava para onde o app pode **enviar** dados
+O `.htaccess` publica uma CSP que trava para onde o app pode **enviar** dados
 (`connect-src`). Isso importa num painel que guarda uma chave de API no navegador:
 mesmo que algo malicioso rodasse na página, não conseguiria mandar seus dados para
 um domínio qualquer. Os destinos liberados são exatamente os que o app usa:
@@ -111,7 +112,7 @@ forem apertadas demais:
 
 **Ao publicar, o app começa vazio.** O `localStorage` é por endereço: os dados que
 estão no `file://` ou no `http://192.168.x.x` **não** vão junto. Use **↓ Backup** no
-lugar antigo e **↑ Restaurar** no endereço do Vercel.
+lugar antigo e **↑ Restaurar** no endereço novo.
 
 ### Adicionar à Tela de Início
 
@@ -326,7 +327,7 @@ No [console.firebase.google.com](https://console.firebase.google.com):
 5. **⚙ Configurações do projeto → Seus apps → Web** (`</>`) → registre um app e copie
    o objeto `firebaseConfig` para **`assets/js/firebase-config.js`**.
 6. **Authentication → Settings → Authorized domains** → adicione o endereço onde o app
-   está publicado (o domínio do Vercel). Sem isso o popup de login recusa com
+   está publicado (o domínio da Hostinger). Sem isso o popup de login recusa com
    `auth/unauthorized-domain`.
 7. Rode `build-arquivo-unico.ps1` de novo, para o `financas.html` levar a configuração.
 
@@ -500,7 +501,7 @@ O **tracking é por tamanho**, nunca um valor só: rótulos em caixa alta e text
 levam `+0,05em`; o número do destaque leva `−0,035em`. Um `letter-spacing` único
 está errado em algum tamanho.
 
-> A CSP do `vercel.json` precisa de `font-src 'self' data:`. Com o `data:` de fora,
+> A CSP do `.htaccess` precisa de `font-src 'self' data:`. Com o `data:` de fora,
 > a fonte é bloqueada **só em produção** — em `file://` e no servidor local não há
 > CSP, então a falha não aparece durante o desenvolvimento.
 
