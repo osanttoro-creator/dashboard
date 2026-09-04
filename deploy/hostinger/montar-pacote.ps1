@@ -101,11 +101,23 @@ Compress-Archive -Path (Join-Path $destino '*') -DestinationPath $zip -Force
 
 # O Compress-Archive ignora arquivos que comecam com ponto; o
 # .htaccess e o mais importante do pacote, entao entra a mao.
-Add-Type -AssemblyName System.IO.Compression.FileSystem
+#
+# O Add-Type so e necessario no Windows PowerShell 5.1. No
+# PowerShell 7 (o do runner do GitHub) a montagem ja faz parte do
+# framework e o Add-Type falha dizendo que nao acha a DLL -- por
+# isso ele e tentado, nao exigido.
+try { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop } catch { }
+
 $arquivo = [System.IO.Compression.ZipFile]::Open($zip, 'Update')
 try {
-  [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
-    $arquivo, (Join-Path $destino '.htaccess'), '.htaccess') | Out-Null
+  # No Linux o curinga do Compress-Archive PODE ter pego o .htaccess.
+  # Adicionar de novo criaria uma segunda entrada com o mesmo nome:
+  # o zip aceita, o unzip fica com a ultima, e o pacote passa a
+  # depender de qual das duas venceu. Melhor nao criar a duvida.
+  if (-not ($arquivo.Entries | Where-Object { $_.FullName -eq '.htaccess' })) {
+    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+      $arquivo, (Join-Path $destino '.htaccess'), '.htaccess') | Out-Null
+  }
 } finally { $arquivo.Dispose() }
 
 $n  = (Get-ChildItem $destino -Recurse -File).Count
