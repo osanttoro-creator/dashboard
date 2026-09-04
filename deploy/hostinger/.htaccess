@@ -1,0 +1,136 @@
+# =============================================================
+# OAZE — configuração do Apache na Hostinger
+# -------------------------------------------------------------
+# Vai para a raiz de public_html, junto com os arquivos do site.
+#
+# A ORDEM DAS REGRAS IMPORTA. Redirecionar antes de reescrever, e
+# reescrever só o que não é arquivo. Trocar essa ordem faz um CSS
+# virar HTML e a página abrir sem estilo — sem erro nenhum no log.
+# =============================================================
+
+# -------------------------------------------------------------
+# 1 · HTTPS e domínio canônico
+# -------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # HTTP → HTTPS. A Hostinger termina TLS antes do Apache, então o
+  # sinal confiável é o cabeçalho do proxy, não HTTPS=on.
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # www → domínio principal. Um endereço só: dois endereços são
+  # duas sessões, dois cookies e duas entradas no índice de busca.
+  #
+  # TROQUE SEUDOMINIO.COM.BR ao apontar o domínio. Enquanto o site
+  # roda no subdomínio *.hostingersite.com, esta regra não casa e
+  # fica inerte — não precisa ser removida.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # -----------------------------------------------------------
+  # 2 · fallback de SPA
+  # -----------------------------------------------------------
+  # /precos, /carteira e os demais não existem como arquivo: são
+  # estados do app. O Apache entrega o index.html e o JavaScript
+  # decide o que mostrar.
+  #
+  # As duas condições são o que impede o estrago: se o caminho É
+  # um arquivo ou um diretório de verdade, nada é reescrito. Sem
+  # elas, /assets/css/style.css devolveria HTML.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # A API não é do front: se um dia existir aqui, não vira index.
+  RewriteCond %{REQUEST_URI} !^/api/
+  # Arquivo com extensão de asset que não existe é ERRO, não rota.
+  # Sem esta linha, /assets/css/style.css digitado errado devolvia o
+  # index.html com status 200: o navegador recusava por MIME e a
+  # página abria sem estilo, sem nada no log dizendo o porquê. Uma
+  # rota do app nunca tem extensão, então excluí-las não custa nada.
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip)$ [NC]
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# -------------------------------------------------------------
+# 3 · página de erro
+# -------------------------------------------------------------
+# Com o fallback acima, um 404 de verdade acontece para qualquer
+# caminho com extensão de arquivo que não exista — e aí a página
+# explica isso em vez de mostrar o erro cru do Apache.
+ErrorDocument 404 /404.html
+
+# -------------------------------------------------------------
+# 4 · cabeçalhos de segurança
+# -------------------------------------------------------------
+<IfModule mod_headers.c>
+  # A CSP é a mesma do vercel.json — dois ambientes com a mesma
+  # regra, para o que passa num não quebrar no outro.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in wss://*.supabase.in https://api.anthropic.com https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()"
+
+  # O login com Google abre um pop-up e precisa conversar com ele.
+  # same-origin puro quebraria esse retorno.
+  Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+
+  # HSTS: só depois de confirmar que o HTTPS funciona em TODO o
+  # domínio, subdomínios inclusive. Ligar antes prende o navegador
+  # num HTTPS que talvez não exista ainda — e o prazo é longo.
+  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# -------------------------------------------------------------
+# 5 · cache
+# -------------------------------------------------------------
+# O HTML nunca é guardado: é ele que aponta para o resto, e um HTML
+# velho em cache serve um app velho inteiro. Os arquivos de assets
+# revalidam — o projeto não usa nome com hash, então cache longo
+# aqui significaria CSS antigo depois de um deploy.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 hour"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/svg+xml "access plus 7 days"
+  ExpiresByType font/woff2 "access plus 30 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(woff2|svg|png|jpg|webp)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# -------------------------------------------------------------
+# 6 · compressão
+# -------------------------------------------------------------
+# O arquivo único passa de 1 MB; comprimido cai para perto de um
+# quinto. Em rede móvel isso é a diferença entre abrir e desistir.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# -------------------------------------------------------------
+# 7 · o que não deve ser servido
+# -------------------------------------------------------------
+# Nenhum destes arquivos vai no pacote de deploy, mas a regra é
+# barata e cobre o dia em que alguém subir a pasta inteira por
+# engano.
+<FilesMatch "^\.env|\.md$|\.sql$|\.ps1$|package(-lock)?\.json$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>

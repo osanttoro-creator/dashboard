@@ -28,6 +28,10 @@
   <div class="ambient-blob b2"></div>
 </div>
 
+<!-- Primeiro foco da página. Quem navega por teclado não deveria
+     passar por 12 destinos toda vez que troca de página. -->
+<a class="pular-conteudo" href="#content">Pular para o conteúdo</a>
+
 <div class="shell">
 
   <!-- ══════ SIDEBAR — ilha flutuante ══════
@@ -104,6 +108,8 @@
     </nav>
 
     <div class="sidebar-foot">
+      <!-- estado da fila offline; escondido quando tudo está em dia -->
+      <span id="filaBox" class="fila-chip" hidden></span>
       <span id="syncBox"></span>
     </div>
   </aside>
@@ -112,6 +118,113 @@
 
     <!-- ══════ TOP BAR — objetos de vidro independentes ══════ -->
     <header class="topbar" aria-label="Controles">
+
+      <!-- ══════ NAVEGAÇÃO SUPERIOR (desktop e tablet deitado) ══════
+           Some abaixo de 821px, onde a barra inferior assume — a mesma
+           que já existia, sem nenhuma alteração de comportamento.
+
+           Os botões são .nav-item com data-page: o roteador liga o
+           clique e marca o ativo em todos eles de uma vez, então a
+           barra de baixo e a de cima ficam sempre em sincronia. -->
+      <button class="topnav-brand" id="topnavBrand" aria-label="OAZE — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="18" height="18" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+            <circle cx="20" cy="20" r="8"/>
+            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+          </svg>
+        </span>
+        <span class="brand-name">OAZE</span>
+      </button>
+
+      <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
+        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
+          <span class="nav-ico" data-ico="layout-dashboard"></span>
+          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
+        </button>
+        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
+          <span class="nav-ico" data-ico="arrow-left-right"></span>
+          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+        </button>
+        <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
+          <span class="nav-ico" data-ico="wallet"></span>
+          <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
+        </button>
+
+      <div class="topnav-group" data-group="planejar">
+        <button class="topnav-trigger" id="trg-planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="topnav-trigger-txt">Planejar</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-planejar" role="group" aria-labelledby="trg-planejar" hidden>
+        <button class="nav-item" data-page="budget" title="Orçamento" aria-label="Orçamento">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="nav-long">Orçamento</span><span class="nav-short">Orçamento</span>
+        </button>
+        <button class="nav-item" data-page="goals" title="Metas" aria-label="Metas">
+          <span class="nav-ico" data-ico="flag"></span>
+          <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
+        </button>
+        <button class="nav-item" data-page="recurring" title="Recorrências" aria-label="Recorrências">
+          <span class="nav-ico" data-ico="repeat"></span>
+          <span class="nav-long">Recorrências</span><span class="nav-short">Recorrências</span>
+        </button>
+        <button class="nav-item" data-page="calendar" title="Calendário" aria-label="Calendário">
+          <span class="nav-ico" data-ico="calendar"></span>
+          <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
+        </button>
+        </div>
+      </div>
+
+      <div class="topnav-group" data-group="crescer">
+        <button class="topnav-trigger" id="trg-crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="topnav-trigger-txt">Crescer</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
+        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
+        </button>
+        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
+          <span class="nav-ico" data-ico="chart-line"></span>
+          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+        </button>
+        </div>
+      </div>
+
+        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
+
+      <div class="topnav-group" data-group="mais">
+        <button class="topnav-trigger" id="trg-mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
+          <span class="nav-ico" data-ico="ellipsis"></span>
+          <span class="topnav-trigger-txt">Mais</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
+        </button>
+        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
+          <span class="nav-ico" data-ico="tag"></span>
+          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+        </button>
+        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
+          <span class="nav-ico" data-ico="settings"></span>
+          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
+        </button>
+        </div>
+      </div>
+      </nav>
+
+      <span class="topbar-gap"></span>
+
       <span class="pill pill-profile">
         <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
         <select id="profileSelect" aria-label="Perfil ativo"></select>
@@ -120,14 +233,11 @@
 
       <span class="pill pill-period" id="periodPicker">
         <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-        <select id="daySelect" aria-label="Dia"></select>
         <select id="monthSelect" aria-label="Mês"></select>
         <select id="yearSelect" aria-label="Ano"></select>
         <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
-        <button class="pill-hoje" id="btnToday">Hoje</button>
+        <button class="pill-hoje" id="btnToday">Mês atual</button>
       </span>
-
-      <span class="topbar-gap"></span>
 
       <button class="pill pill-btn" id="btnSearch" aria-label="Buscar" title="Buscar (/)">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>
@@ -139,10 +249,14 @@
       <button class="pill pill-btn" id="btnSettings" aria-label="Configurações" aria-expanded="false" title="Configurações">
         <span data-ico="settings"></span>
       </button>
-      <input type="file" id="fileRestore" accept="application/json,.json" hidden>
+      <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
     </header>
 
-    <main class="content" id="content">
+    <!-- Pendência de assinatura. role=status para o leitor de tela
+         anunciar sem roubar o foco de quem está digitando. -->
+    <div id="avisoConta" hidden></div>
+
+    <main class="content" id="content" tabindex="-1">
 
       <div class="page-head">
         <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
@@ -157,7 +271,12 @@
          o peso dela. -->
     <section class="page is-active" data-page="home">
 
-      <div class="grid grid-hero">
+      <!-- Painel de primeiro uso. Substitui TODO o resto quando não
+           há lançamento nenhum: zeros e um score calculado sobre
+           nada não são informação, são a aparência de defeito. -->
+      <div id="homeVazia" hidden></div>
+
+      <div data-home-conteudo class="grid grid-hero" id="homeConteudo">
         <!-- patrimônio líquido: o número que manda na página -->
         <section class="hero" aria-labelledby="heroLabel">
           <div class="hero-face">
@@ -183,10 +302,10 @@
         </section>
       </div>
 
-      <div class="kpi-row kpi-row-3" id="homeKpis"></div>
+      <div data-home-conteudo class="kpi-row kpi-row-3" id="homeKpis"></div>
 
       <!-- fluxo financeiro do ano -->
-      <div class="card">
+      <div data-home-conteudo class="card">
         <div class="card-head">
           <h2 id="homeFlowTitle">Fluxo financeiro</h2>
           <span class="card-note">Entradas, saídas e o saldo de cada mês</span>
@@ -195,7 +314,7 @@
       </div>
 
       <!-- UGLEZ: painel de leitura, não caixa de chat -->
-      <section class="uglez-panel" aria-labelledby="uglezTitle">
+      <section data-home-conteudo class="uglez-panel" aria-labelledby="uglezTitle">
         <div class="uglez-head">
           <span class="uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
           <div class="uglez-read">
@@ -208,7 +327,7 @@
         <div class="uglez-chips" id="uglezChips"></div>
       </section>
 
-      <div class="grid grid-wide-left">
+      <div data-home-conteudo class="grid grid-wide-left">
         <div class="card">
           <div class="card-head">
             <h2 id="homePieTitle">Distribuição de gastos</h2>
@@ -230,7 +349,7 @@
         </div>
       </div>
 
-      <div class="grid grid-wide-right">
+      <div data-home-conteudo class="grid grid-wide-right">
         <div class="card">
           <div class="card-head">
             <h2>Resumo do mês</h2>
@@ -248,7 +367,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div data-home-conteudo class="card">
         <div class="card-head">
           <h2>Movimentações recentes</h2>
           <button class="btn btn-ghost btn-sm" data-goto="transactions">Ver tudo →</button>
@@ -273,8 +392,8 @@
             <button type="button" data-method="account">Débito</button>
             <button type="button" data-method="card">Crédito</button>
           </div>
-          <input type="search" class="input input-sm" id="txSearch" placeholder="Buscar por descrição…">
-          <label class="check check-inline"><input type="checkbox" id="txOnlyPending"><span>Só pendentes</span></label>
+          <input type="search" class="input input-sm" id="txSearch" aria-label="Buscar nos lançamentos" placeholder="Buscar por descrição…">
+          <label class="check check-inline"><input type="checkbox" id="txOnlyPending" aria-label="Mostrar apenas lançamentos a confirmar"><span>Só pendentes</span></label>
         </div>
       </div>
 
@@ -320,7 +439,7 @@
           <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
         </div>
         <div class="toolbar-right">
-          <select class="input input-sm" id="invTypeFilter"><option value="">Todos os tipos</option></select>
+          <select class="input input-sm" id="invTypeFilter" aria-label="Filtrar investimentos por tipo"><option value="">Todos os tipos</option></select>
         </div>
       </div>
 
@@ -369,19 +488,19 @@
         <div class="proj-layout">
           <form class="proj-form" id="projForm">
             <label class="field"><span class="field-label">Valor inicial (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projInitial" value="10.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
             <label class="field"><span class="field-label">Aporte mensal (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projMonthly" value="1.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
             <label class="field"><span class="field-label">Taxa de juros</span>
               <div class="row gap-6">
-                <input class="input" type="text" inputmode="decimal" id="projRate" value="10,00">
-                <select class="input input-sm" id="projRatePeriod" style="max-width:110px">
+                <input class="input" type="text" inputmode="decimal" id="projRate" aria-label="Taxa de rendimento da projeção" value="10,00">
+                <select class="input input-sm" id="projRatePeriod" aria-label="Período da taxa" style="max-width:110px">
                   <option value="year">% ao ano</option>
                   <option value="month">% ao mês</option>
                 </select>
               </div></label>
             <label class="field"><span class="field-label">Período (meses)</span>
-              <input class="input" type="number" min="1" max="960" id="projMonths" value="120"></label>
+              <input class="input" type="number" min="1" max="960" id="projMonths" aria-label="Meses da projeção" value="120"></label>
             <button class="btn btn-primary" type="submit">Calcular projeção</button>
           </form>
           <div class="proj-result">
@@ -410,7 +529,7 @@
         <div class="card">
           <div class="card-head">
             <h2>Extrato da conta</h2>
-            <select class="input input-sm" id="accHistorySelect" style="max-width:240px"></select>
+            <select class="input input-sm" id="accHistorySelect" aria-label="Conta do extrato" style="max-width:240px"></select>
           </div>
           <div class="table-wrap table-scroll-lg">
             <table class="table table-compact" id="tableAccHistory">
@@ -443,17 +562,17 @@
           <div class="import-grid">
             <div class="field">
               <span class="field-label">1 · Envie um arquivo</span>
-              <input type="file" class="input" id="importFile" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
+              <input type="file" class="input" id="importFile" aria-label="Arquivo de extrato para importar" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
               <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
             </div>
             <div class="field">
               <span class="field-label">ou cole o conteúdo aqui</span>
-              <textarea class="input textarea" id="importText" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
+              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
             </div>
           </div>
           <div class="import-opts">
             <label class="field"><span class="field-label">Destino</span>
-              <select class="input" id="importTarget"></select></label>
+              <select class="input" id="importTarget" aria-label="Conta ou cartão de destino da importação"></select></label>
             <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
           </div>
         </div>
@@ -469,7 +588,7 @@
           <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
         </div>
         <div class="toolbar-right">
-          <select class="input input-sm" id="catRangeSelect">
+          <select class="input input-sm" id="catRangeSelect" aria-label="Período das categorias">
             <option value="all">Histórico completo</option>
             <option value="year">Ano selecionado</option>
             <option value="12m">Últimos 12 meses</option>
@@ -614,7 +733,7 @@
         </div>
         <div class="uglez-chips" id="uglezChipsFull"></div>
         <div class="ai-ask" style="margin-top:12px">
-          <textarea class="input textarea-plain" id="aiQuestion" rows="2"
+          <textarea class="input textarea-plain" id="aiQuestion" aria-label="Sua pergunta para o UGLEZ" rows="2"
             placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
           <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
         </div>
@@ -628,6 +747,8 @@
       <div class="grid grid-2">
         <div class="card">
           <div class="card-head"><h2>Perfil</h2></div>
+          <div id="setConta"></div>
+          <div id="setPlano"></div>
           <div id="setProfile"></div>
         </div>
         <div class="card">
@@ -652,6 +773,42 @@
       </div>
     </section>
 
+    <!-- ══════ PLANOS ══════
+         Não é uma página de marketing solta: é a mesma casa. Por
+         isso vive dentro do app, com a mesma navegação e o mesmo
+         material — quem chega aqui vindo de um limite não deveria
+         sentir que saiu do produto. -->
+    <section class="page" data-page="precos" aria-labelledby="precosTitulo">
+
+      <div class="precos-topo">
+        <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
+        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
+
+        <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
+          <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
+          <button class="ciclo-btn" data-ciclo="annual" aria-pressed="false">
+            Anual <span class="ciclo-selo">2 meses grátis</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="precos-cards" id="precosCards"></div>
+
+      <div class="card precos-tabela-wrap">
+        <h3 class="precos-h3">Comparativo completo</h3>
+        <div class="table-wrap">
+          <table class="table precos-tabela" id="precosTabela"></table>
+        </div>
+        <p class="hint" id="precosNota"></p>
+      </div>
+
+      <div class="card precos-faq">
+        <h3 class="precos-h3">Perguntas frequentes</h3>
+        <div id="precosFaq"></div>
+      </div>
+
+    </section>
+
       <footer class="app-foot">
         <span id="footInfo"></span>
         <span class="dot-sep">·</span>
@@ -667,7 +824,7 @@
   <div class="search-box n1" role="dialog" aria-modal="true" aria-label="Buscar">
     <div class="search-field">
       <span data-ico="search" aria-hidden="true"></span>
-      <input type="search" id="searchInput" autocomplete="off"
+      <input type="search" id="searchInput" aria-label="Buscar em todo o app" autocomplete="off"
         placeholder="Buscar lançamento, conta, cartão, meta ou categoria…">
       <button class="pill-ico" data-close-search aria-label="Fechar busca">✕</button>
     </div>
@@ -742,6 +899,7 @@
 <script src="assets/vendor/bancos.js"></script>
 <script src="assets/vendor/icons.js"></script>
 <script src="assets/js/firebase-config.js"></script>
+<script src="assets/js/supabase-config.js"></script>
 <script src="assets/js/utils.js"></script>
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/store.js"></script>
@@ -752,6 +910,15 @@
 <script src="assets/js/forms.js"></script>
 <script src="assets/js/importer.js"></script>
 <script src="assets/js/sync.js"></script>
+<script src="assets/js/supabase-auth.js"></script>
+<script src="assets/js/repo.js"></script>
+<script src="assets/js/fila.js"></script>
+<script src="assets/js/migracao.js"></script>
+<script src="assets/js/onboarding.js"></script>
+<script src="assets/js/planos.js"></script>
+<script src="assets/js/limites.js"></script>
+<script src="assets/js/conta.js"></script>
+<script src="assets/js/checkout.js"></script>
 <script src="assets/js/ai.js"></script>
 <script src="assets/js/shell.js"></script>
 <script src="assets/js/pages/home.js"></script>
@@ -765,6 +932,7 @@
 <script src="assets/js/pages/calendar.js"></script>
 <script src="assets/js/pages/reports.js"></script>
 <script src="assets/js/pages/uglez.js"></script>
+<script src="assets/js/pages/precos.js"></script>
 <script src="assets/js/pages/settings.js"></script>
 <script src="assets/js/app.js"></script>
 </body>

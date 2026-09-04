@@ -14,6 +14,15 @@
 
   Home.render = function () {
     const ym = App.ym;
+
+    /* Sem nenhum lançamento, o painel inteiro sai do ar e dá lugar a
+       um caminho. Mostrar patrimônio R$ 0,00, um gráfico chapado e um
+       OAZE Score "47 · ATENÇÃO" calculado sobre nada não é honesto
+       nem útil: é a aparência de um produto quebrado, e o score chega
+       a soar como acusação a quem ainda não fez nada. */
+    if (semDados()) { renderPrimeiroUso(); return; }
+    mostrarConteudo(true);
+
     renderHero(ym);
     renderScore(ym);
     renderKpis(ym);
@@ -387,6 +396,67 @@
       ]));
     });
     box.appendChild(el('div', { class: 'table-wrap' }, table));
+  }
+
+  /* ---------------- primeiro uso ---------------- */
+
+  /** Vazio de verdade: nem lançamento, nem cartão, nem investimento. */
+  function semDados() {
+    const p = Store.profile();
+    if (!p) return true;
+    return !(p.transactions || []).length &&
+           !(p.cards || []).length &&
+           !(p.investments || []).length;
+  }
+
+  function mostrarConteudo(sim) {
+    const vazia = document.getElementById('homeVazia');
+    if (vazia) vazia.hidden = sim;
+    U.$$('[data-home-conteudo]').forEach((n) => { n.hidden = !sim; });
+  }
+
+  function renderPrimeiroUso() {
+    mostrarConteudo(false);
+    const box = U.clear(document.getElementById('homeVazia'));
+    if (!box) return;
+
+    const p = Store.profile();
+    const temConta = (p.accounts || []).length > 0;
+
+    /* Uma lista curta do que falta, na ordem em que faz diferença.
+       Marcar o que já foi feito importa: mostra que o progresso é
+       real, e não uma tela estática de boas-vindas. */
+    const passos = [
+      { feito: temConta, texto: 'Cadastrar onde seu dinheiro está', ir: () => App.goTo('accounts') },
+      { feito: false, texto: 'Registrar a primeira movimentação', ir: () => Forms.openTransaction({ kind: 'expense' }) },
+      { feito: false, texto: 'Definir uma meta ou um orçamento', ir: () => App.goTo('goals') }
+    ];
+
+    box.appendChild(el('div', { class: 'card primeiro-uso' }, [
+      el('span', { class: 'empty-ico' }, Icons.lucide('sparkles', 26)),
+      el('h2', { class: 'pu-titulo', text: 'Seu painel começa aqui' }),
+      el('p', { class: 'pu-texto', text: 'Ainda não há nada para mostrar — e é por isso que não estamos mostrando gráficos zerados. Assim que houver movimentação, esta página se preenche sozinha.' }),
+
+      el('ol', { class: 'pu-passos' }, passos.map((s, i) => el('li', {
+        class: 'pu-passo' + (s.feito ? ' is-feito' : '')
+      }, [
+        el('span', { class: 'pu-num', 'aria-hidden': 'true', text: s.feito ? '✓' : String(i + 1) }),
+        el('button', {
+          class: 'pu-link', type: 'button', text: s.texto, onclick: s.ir
+        })
+      ]))),
+
+      el('div', { class: 'pu-acoes' }, [
+        el('button', {
+          class: 'btn btn-primary', type: 'button', text: 'Configurar em alguns minutos',
+          onclick: () => { if (global.Ob) Ob.reabrir(); }
+        }),
+        el('button', {
+          class: 'btn btn-outline', type: 'button', text: 'Importar um extrato',
+          onclick: () => App.goTo('accounts', { tab: 'import' })
+        })
+      ])
+    ]));
   }
 
   global.Home = Home;

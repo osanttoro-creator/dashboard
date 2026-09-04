@@ -313,5 +313,115 @@
     global.addEventListener('resize', fecha);
   };
 
+  /* =============================================================
+     NAVEGAÇÃO SUPERIOR — grupos com menu
+     ------------------------------------------------------------
+     Só existe a partir de 821px; abaixo disso o CSS esconde a barra
+     e a de baixo assume. Como display:none tira da ordem de foco,
+     nada aqui atrapalha o celular mesmo estando sempre ligado.
+
+     Regras de teclado, todas exigidas por quem navega sem mouse:
+       Enter/Espaço  abre e fecha
+       ↓             abre e cai no primeiro item
+       ↑             abre e cai no último
+       Esc           fecha e DEVOLVE o foco ao gatilho — sem isso a
+                     pessoa é largada no início da página
+       Tab para fora fecha o grupo
+     ============================================================= */
+
+  let grupoAberto = null;
+
+  function fechaGrupo(devolveFoco) {
+    if (!grupoAberto) return;
+    const g = grupoAberto;
+    grupoAberto = null;
+    g.querySelector('.topnav-trigger').setAttribute('aria-expanded', 'false');
+    g.querySelector('.topnav-drop').hidden = true;
+    if (devolveFoco) g.querySelector('.topnav-trigger').focus();
+  }
+  Shell.fecharGrupos = () => fechaGrupo(false);
+
+  function abreGrupo(g, focar) {
+    if (grupoAberto && grupoAberto !== g) fechaGrupo(false);
+    grupoAberto = g;
+    g.querySelector('.topnav-trigger').setAttribute('aria-expanded', 'true');
+    const drop = g.querySelector('.topnav-drop');
+    drop.hidden = false;
+    if (focar) {
+      const itens = drop.querySelectorAll('.nav-item');
+      (focar === 'ultimo' ? itens[itens.length - 1] : itens[0]).focus();
+    }
+  }
+
+  function itensDo(g) {
+    return Array.from(g.querySelectorAll('.topnav-drop .nav-item'));
+  }
+
+  Shell.wireTopnav = function () {
+    const menu = document.getElementById('topnavMenu');
+    if (!menu) return;
+
+    const marca = document.getElementById('topnavBrand');
+    if (marca) marca.addEventListener('click', () => App.goTo('home'));
+
+    U.$$('.topnav-group').forEach((g) => {
+      const trigger = g.querySelector('.topnav-trigger');
+
+      trigger.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (grupoAberto === g) fechaGrupo(false); else abreGrupo(g);
+      });
+
+      trigger.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowDown') { ev.preventDefault(); abreGrupo(g, 'primeiro'); }
+        else if (ev.key === 'ArrowUp') { ev.preventDefault(); abreGrupo(g, 'ultimo'); }
+        else if (ev.key === 'Escape') fechaGrupo(true);
+      });
+
+      g.querySelector('.topnav-drop').addEventListener('keydown', (ev) => {
+        const itens = itensDo(g);
+        const i = itens.indexOf(document.activeElement);
+        if (ev.key === 'ArrowDown') { ev.preventDefault(); itens[(i + 1) % itens.length].focus(); }
+        else if (ev.key === 'ArrowUp') { ev.preventDefault(); itens[(i - 1 + itens.length) % itens.length].focus(); }
+        else if (ev.key === 'Home') { ev.preventDefault(); itens[0].focus(); }
+        else if (ev.key === 'End') { ev.preventDefault(); itens[itens.length - 1].focus(); }
+        else if (ev.key === 'Escape') { ev.preventDefault(); fechaGrupo(true); }
+      });
+
+      /* Sair do grupo com Tab fecha. O timeout deixa o foco pousar
+         antes de perguntarmos onde ele está. */
+      g.addEventListener('focusout', () => {
+        setTimeout(() => {
+          if (grupoAberto === g && !g.contains(document.activeElement)) fechaGrupo(false);
+        }, 0);
+      });
+    });
+
+    /* Escolher um destino fecha o menu — senão ele fica pairando
+       sobre a página que acabou de trocar. */
+    U.$$('.topnav-drop .nav-item').forEach((b) => {
+      b.addEventListener('click', () => fechaGrupo(false));
+    });
+
+    document.addEventListener('click', (ev) => {
+      if (grupoAberto && !grupoAberto.contains(ev.target)) fechaGrupo(false);
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && grupoAberto) fechaGrupo(true);
+    });
+  };
+
+  /**
+   * Marca o grupo que contém a página atual. Sem isso, quem está em
+   * "Metas" não vê nenhum destino aceso: o item ativo está escondido
+   * dentro de um menu fechado.
+   */
+  Shell.marcarGrupoAtivo = function () {
+    U.$$('.topnav-group').forEach((g) => {
+      const dentro = itensDo(g).some((b) => b.dataset.page === App.page);
+      g.classList.toggle('has-active', dentro);
+    });
+  };
+
   global.Shell = Shell;
 })(window);

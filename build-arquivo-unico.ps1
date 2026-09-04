@@ -45,15 +45,27 @@ $html = $html.Replace(
 $html = [regex]::Replace($html,
   '(?s)<!-- sem internet.*?-->\s*<script>window\.Chart \|\| document\.write.*?</script>', '')
 
+# ---- 2.5 · SDK do Supabase ----
+# Sync.loadScript tenta o CDN e cai no arquivo vendorizado. No arquivo
+# unico nao existe assets/vendor/ ao lado, entao a queda nao teria onde
+# cair: o SDK vai inline, pelo mesmo motivo do Chart.js.
+$sb = Proteger (Ler 'assets/vendor/supabase.js')
+$html = $html.Replace(
+  '<script src="assets/js/firebase-config.js"></script>',
+  "<script>`r`n/* ===== assets/vendor/supabase.js ===== */`r`n$sb`r`n</script>`r`n<script src=`"assets/js/firebase-config.js`"></script>")
+
 # ---- 3 · scripts do app, na mesma ordem ----
 $arquivos = @(
-  'assets/vendor/bancos.js', 'assets/vendor/icons.js', 'assets/js/firebase-config.js',
+  'assets/vendor/bancos.js', 'assets/vendor/icons.js', 'assets/js/firebase-config.js', 'assets/js/supabase-config.js',
   'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
-  'assets/js/sync.js', 'assets/js/ai.js', 'assets/js/shell.js',
+  'assets/js/sync.js', 'assets/js/supabase-auth.js',
+  'assets/js/planos.js', 'assets/js/limites.js', 'assets/js/checkout.js',
+  'assets/js/repo.js', 'assets/js/fila.js', 'assets/js/migracao.js', 'assets/js/onboarding.js', 'assets/js/conta.js',
+  'assets/js/ai.js', 'assets/js/shell.js',
   'assets/js/pages/home.js', 'assets/js/pages/transactions.js', 'assets/js/pages/investments.js',
   'assets/js/pages/accounts.js', 'assets/js/pages/categories.js',
-  'assets/js/pages/budget.js', 'assets/js/pages/goals.js', 'assets/js/pages/recurring.js', 'assets/js/pages/calendar.js', 'assets/js/pages/reports.js', 'assets/js/pages/uglez.js', 'assets/js/pages/settings.js',
+  'assets/js/pages/budget.js', 'assets/js/pages/goals.js', 'assets/js/pages/recurring.js', 'assets/js/pages/calendar.js', 'assets/js/pages/reports.js', 'assets/js/pages/uglez.js', 'assets/js/pages/precos.js', 'assets/js/pages/settings.js',
   'assets/js/app.js'
 )
 foreach ($f in $arquivos) {
@@ -64,7 +76,10 @@ foreach ($f in $arquivos) {
 # ---- 4 · confere que nada ficou apontando para fora ----
 #      (so o markup; dentro de <script>/<style> ha strings que so parecem atributos)
 $markup = [regex]::Replace($html, '(?is)<(script|style)\b[^>]*>.*?</\1>', '')
-$pendentes = [regex]::Matches($markup, '(?:src|href)="(?!data:|https?://)([^"]+)"') |
+# Ancora interna (#id) nao e referencia externa: o link "Pular para o
+# conteudo" aponta para #content e sempre apontou. Aviso falso treina
+# a ignorar aviso verdadeiro.
+$pendentes = [regex]::Matches($markup, '(?:src|href)="(?!data:|#|https?://)([^"]+)"') |
   ForEach-Object { $_.Groups[1].Value } | Where-Object { $_ -ne '' }
 if ($pendentes) {
   Write-Warning ("Ainda ha referencias externas: " + ($pendentes -join ', '))
@@ -79,13 +94,17 @@ Write-Host "  Esse e o arquivo para mandar para o iPhone." -ForegroundColor Gree
 # O financas.html e um retrato do codigo no momento da geracao. Se voce
 # preencher o firebase-config.js e esquecer de rodar este script, o PC
 # sincroniza e o iPhone nao - falha silenciosa. Por isso o aviso abaixo.
-if ($html -match "apiKey:\s*''") {
-  Write-Host ""
+$temFirebase = $html -notmatch "apiKey:\s*''"
+$temSupabase = $html -notmatch "url:\s*''"
+Write-Host ""
+if ($temSupabase) {
+  Write-Host "  Sincronizacao: Supabase (login com e-mail e senha dentro do app)." -ForegroundColor Green
+} elseif ($temFirebase) {
+  Write-Host "  Sincronizacao: Firebase (login com Google)." -ForegroundColor Green
+} else {
   Write-Host "  Sincronizacao: DESLIGADA neste arquivo." -ForegroundColor Yellow
   Write-Host "  O app funciona normal, so nao sincroniza entre aparelhos." -ForegroundColor DarkGray
-  Write-Host "  Para ligar: preencha assets/js/firebase-config.js e rode este script de novo." -ForegroundColor DarkGray
-} else {
-  Write-Host ""
-  Write-Host "  Sincronizacao: configurada neste arquivo (login com Google)." -ForegroundColor Green
+  Write-Host "  Para ligar: preencha assets/js/supabase-config.js (ou firebase-config.js)" -ForegroundColor DarkGray
+  Write-Host "  e rode este script de novo." -ForegroundColor DarkGray
 }
 Write-Host ""

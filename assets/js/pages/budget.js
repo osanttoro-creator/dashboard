@@ -151,6 +151,10 @@
 
   /** Formulário de limite. Sem categoria escolhida, oferece as de despesa. */
   Bud.open = function (categoryId) {
+    /* Orçamento é por categoria: já existir um para esta
+       categoria é edição, não criação. */
+    const jaTem = categoryId && Store.budgets && Store.budgets.get && Store.budgets.get(categoryId);
+    if (!jaTem && global.Limites && !Limites.exigirEspaco('budgets')) return;
     const cats = Store.profile().categories.filter((c) => c.kind === 'expense');
     if (!cats.length) {
       UI.toast('Crie uma categoria de despesa antes de definir um limite.', 'error');

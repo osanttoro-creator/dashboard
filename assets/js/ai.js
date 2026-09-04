@@ -1,14 +1,32 @@
 /* =============================================================
-   ai.js — sugestões de organização financeira via API da Anthropic
+   ai.js — o UGLEZ, do lado do navegador
    ------------------------------------------------------------
-   · A chave é do próprio usuário e fica só no localStorage deste
-     navegador. Nunca é embutida no código nem enviada a outro
-     servidor além de api.anthropic.com.
-   · O resumo enviado cobre APENAS o perfil e o mês selecionados,
-     e respeita as convenções contábeis do app (só confirmado
-     entra nos totais; cartão conta na data da compra).
-   · Sem chave configurada, a seção fica inerte — o resto do app
-     não depende dela.
+   UM ÚNICO CAMINHO:
+
+     navegador → Edge Function oaze-assistant → OpenAI
+
+   Não existe mais chamada direta a provedor de IA a partir daqui,
+   e não existe mais campo para o usuário guardar uma chave. As
+   duas coisas saíram de propósito.
+
+   Chave de IA no navegador é chave publicada: qualquer pessoa
+   abre o DevTools, copia do localStorage e passa a gastar na
+   conta de quem colou. Guardar num campo "só meu" não muda isso —
+   o navegador é território do usuário, e o que está lá está
+   exposto.
+
+   O QUE ESTE ARQUIVO MANDA
+   A pergunta, o mês e um resumo AGREGADO — totais, categorias
+   consolidadas, metas e compromissos do período. Nunca a lista de
+   lançamentos, nunca identificador interno, nunca outro perfil.
+
+   O QUE ELE NÃO DECIDE
+   Modelo, prompt de sistema e teto de tokens. Isso é do servidor.
+   Se o cliente pudesse escolher, o prompt de sistema deixaria de
+   ser garantia e viraria sugestão.
+
+   SEM CONTA, SEM UGLEZ. É consequência da arquitetura, não regra
+   comercial: a função exige sessão para saber de quem é o limite.
    ============================================================= */
 (function (global) {
   'use strict';
@@ -16,66 +34,36 @@
   const AI = {};
   const el = U.el;
 
-  const KEY = 'financas.anthropicKey';
-  const ENDPOINT = 'https://api.anthropic.com/v1/messages';
-  const BACKEND = '/api/uglez';
+  const FUNCAO = 'oaze-assistant';
 
-  /* ------------------------------------------------------------
-     DOIS CAMINHOS, NESTA ORDEM
-     ------------------------------------------------------------
-     1 · backend (/api/uglez) — a chave fica no servidor, em
-         ANTHROPIC_API_KEY, e nunca chega ao navegador. É o caminho
-         padrão quando o app está publicado.
-     2 · chave do próprio usuário no localStorage — usado quando não
-         há servidor: arquivo aberto do disco (file://) e o arquivo
-         único do iPhone. Não é segredo do produto: é a chave dele,
-         no aparelho dele, indo direto para a Anthropic.
-
-     A sondagem roda uma vez por sessão e é cacheada: perguntar ao
-     servidor a cada pergunta seria latência sem retorno.
-     ------------------------------------------------------------ */
-  let backendCache = null;
-
-  AI.temBackend = async function () {
-    if (backendCache !== null) return backendCache;
-    // file:// não tem origem HTTP: nem tenta
-    if (location.protocol === 'file:') { backendCache = false; return false; }
-    try {
-      const r = await fetch(BACKEND, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ pergunta: 'ping', resumo: 'ping' })
-      });
-      // 501 = função existe mas sem chave configurada → caminho local
-      backendCache = r.status !== 404 && r.status !== 501;
-    } catch (e) {
-      backendCache = false;
-    }
-    return backendCache;
-  };
-
-  /** Como o UGLEZ vai responder agora — mostrado nas Configurações. */
-  AI.modo = function () {
-    if (backendCache === true) return { chave: 'backend', rotulo: 'Servidor (chave protegida)' };
-    if (AI.hasKey()) return { chave: 'local', rotulo: 'Chave neste aparelho' };
-    return { chave: 'nenhum', rotulo: 'Não configurado' };
-  };
-  const MODEL = 'claude-opus-5';
+  /* Chave antiga do formato anterior. Só existe aqui para ser
+     APAGADA — ver AI.init(). */
+  const CHAVE_ANTIGA = 'financas.anthropicKey';
 
   let busy = false;
 
-  /* ---------------- chave ---------------- */
+  /**
+   * Como o UGLEZ vai responder agora. Usado nas Configurações e na
+   * página do UGLEZ para explicar o estado sem prometer nada.
+   */
+  AI.modo = function () {
+    if (!global.Sync || !Sync.isConfigured()) {
+      return { chave: 'sem-nuvem', rotulo: 'Indisponível — sem conta configurada' };
+    }
+    if (!Sync.currentUser()) {
+      return { chave: 'sem-sessao', rotulo: 'Entre na sua conta para usar' };
+    }
+    return { chave: 'servidor', rotulo: 'Servidor seguro (chave protegida)' };
+  };
 
-  AI.getKey = function () {
-    try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; }
-  };
-  AI.setKey = function (k) {
-    try {
-      if (k) localStorage.setItem(KEY, k); else localStorage.removeItem(KEY);
-      return true;
-    } catch (e) { return false; }
-  };
-  AI.hasKey = () => !!AI.getKey();
+  /** As categorias de dado que saem daqui — mostradas ao usuário. */
+  AI.CATEGORIAS_ENVIADAS = [
+    'Mês e ano selecionados',
+    'Total de receitas, despesas e saldo',
+    'Gastos consolidados por categoria',
+    'Metas e quanto já foi guardado',
+    'Compromissos previstos do período'
+  ];
 
   /* ============================================================
      1 · RESUMO FINANCEIRO ENVIADO AO MODELO
@@ -220,6 +208,11 @@
      2 · CHAMADA À API
      ============================================================ */
 
+  /**
+   * Envia a pergunta. Um envio por vez: `busy` existe porque dois
+   * cliques rápidos custariam duas chamadas pagas e devolveriam a
+   * segunda por cima da primeira.
+   */
   AI.ask = async function (question) {
     const box = document.getElementById('aiAnswer');
     if (!box) return;
@@ -228,116 +221,143 @@
     if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
     if (busy) return;
 
-    // sem backend E sem chave local não há como responder
-    const viaBackend = await AI.temBackend();
-    if (!viaBackend && !AI.hasKey()) { AI.openConfig(); return; }
+    const modo = AI.modo();
+    if (modo.chave !== 'servidor') { AI.explicarIndisponivel(modo); return; }
 
     busy = true;
     const btn = document.getElementById('btnAiAsk');
     if (btn) { btn.disabled = true; btn.textContent = 'Pensando…'; }
     box.hidden = false;
     box.className = 'ai-answer is-loading';
+    /* aria-live faz o leitor de tela anunciar a chegada da resposta
+       sem que a pessoa precise sair procurando. */
+    box.setAttribute('aria-live', 'polite');
+    box.setAttribute('aria-busy', 'true');
     box.textContent = 'Analisando os dados de ' + U.monthLabel(App.ym);
 
     try {
-      const resumo = AI.buildSummary();
-
-      /* Caminho 1 — servidor. O navegador não vê chave nenhuma. */
-      if (viaBackend) {
-        const r = await fetch(BACKEND, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pergunta: q, resumo })
-        });
-        const j = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(j.erro || friendlyError(r.status, ''));
-        if (!j.texto) {
-          renderError(box, 'A resposta veio vazia. Tente novamente ou reformule a pergunta.');
-          return;
-        }
-        box.className = 'ai-answer';
-        box.innerHTML = renderMarkdown(j.texto);
-        box.appendChild(el('div', { class: 'ai-meta',
-          text: (j.modelo || 'servidor') + ' · resposta gerada no backend, sem chave no navegador' }));
-        return;
-      }
-
-      /* Caminho 2 — chave do próprio usuário, direto para a Anthropic. */
-      const resp = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'x-api-key': AI.getKey(),
-          'anthropic-version': '2023-06-01',
-          // sem este cabeçalho o navegador é bloqueado por CORS
-          'anthropic-dangerous-direct-browser-access': 'true',
-          'anthropic-beta': 'server-side-fallback-2026-07-01'
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          max_tokens: 16000,
-          system: SYSTEM,
-          output_config: { effort: 'medium' },
-          fallbacks: 'default',
-          messages: [{
-            role: 'user',
-            content: `${resumo}\n\n---\n\nPERGUNTA: ${q}`
-          }]
-        })
+      const r = await AI.chamarFuncao({
+        pergunta: q,
+        periodo: App.ym,
+        resumo: AI.resumoAgregado()
       });
 
-      if (!resp.ok) {
-        const raw = await resp.text();
-        throw new Error(friendlyError(resp.status, raw));
-      }
-
-      const data = await resp.json();
-
-      // refusal chega com HTTP 200 e content vazio — checar ANTES de ler content
-      if (data.stop_reason === 'refusal') {
-        renderError(box, 'O modelo recusou responder a esta solicitação. Reformule a pergunta.');
+      if (r.erro === 'sem_sessao') {
+        renderError(box, 'Sua sessão expirou. Entre de novo para continuar.');
         return;
       }
-
-      const text = (data.content || [])
-        .filter((b) => b.type === 'text')
-        .map((b) => b.text)
-        .join('\n').trim();
-
-      if (!text) {
-        renderError(box, 'A resposta veio vazia. Tente novamente ou reformule a pergunta.');
+      if (r.erro === 'limite') {
+        const u = r.usado || {};
+        const l = r.limites || {};
+        renderError(box, 'Você usou ' + (u.dia || 0) + ' de ' + (l.por_dia || '?') +
+          ' perguntas hoje. O limite recomeça amanhã.');
+        return;
+      }
+      if (r.erro) {
+        renderError(box, r.mensagem || 'O assistente está indisponível agora.');
+        return;
+      }
+      if (!r.texto) {
+        renderError(box, 'A resposta veio vazia. Tente reformular a pergunta.');
         return;
       }
 
       box.className = 'ai-answer';
-      box.innerHTML = renderMarkdown(text);
-
-      const u = data.usage || {};
-      box.appendChild(el('div', {
-        class: 'ai-meta',
-        text: `${MODEL} · ${U.fmtInt(u.input_tokens || 0)} tokens de entrada, ${U.fmtInt(u.output_tokens || 0)} de saída` +
-          (data.stop_reason === 'max_tokens' ? ' · resposta cortada no limite de tokens' : '')
-      }));
+      box.innerHTML = renderMarkdown(r.texto);
+      box.appendChild(el('div', { class: 'ai-meta' }, [
+        el('span', { text: 'Orientativo, não é consultoria financeira.' }),
+        r.uso ? el('span', { text: ' · ' + r.uso.dia + ' de ' + r.uso.limite_dia + ' hoje' }) : null
+      ].filter(Boolean)));
     } catch (e) {
-      console.error('IA:', e);
-      renderError(box, e.message || 'Falha na chamada.');
+      console.error('UGLEZ:', e);
+      renderError(box, 'Não foi possível falar com o assistente. Verifique a conexão e tente de novo.');
     } finally {
+      box.setAttribute('aria-busy', 'false');
       busy = false;
-      if (btn) { btn.disabled = false; btn.textContent = 'Pedir sugestão'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Perguntar'; }
     }
   };
 
-  function friendlyError(status, raw) {
-    let apiMsg = '';
-    try { apiMsg = (JSON.parse(raw).error || {}).message || ''; } catch (e) { /* texto cru */ }
-    if (status === 401) return 'Chave de API inválida ou revogada. Confira em "⚙ Configurar chave".';
-    if (status === 403) return 'Esta chave não tem permissão para usar este modelo.';
-    if (status === 404) return 'Modelo não encontrado para esta chave.';
-    if (status === 429) return 'Limite de uso excedido. Aguarde um pouco e tente de novo.';
-    if (status === 400) return 'A API recusou a requisição' + (apiMsg ? ': ' + apiMsg : '.');
-    if (status >= 500) return 'A API da Anthropic está indisponível no momento. Tente mais tarde.';
-    return `Erro ${status}${apiMsg ? ': ' + apiMsg : ''}`;
-  }
+  /**
+   * A chamada. O token da sessão vai no Authorization; a plataforma
+   * do Supabase valida antes de a função rodar, e a função valida
+   * de novo por dentro.
+   */
+  AI.chamarFuncao = async function (corpo) {
+    const cfg = global.SupabaseConfig || {};
+    const base = String(cfg.url || '').replace(/\/+$/, '');
+    const chave = String(cfg.publishableKey || cfg.anonKey || '');
+    if (!base || !chave) return { erro: 'indisponivel', mensagem: 'Assistente não configurado.' };
+
+    const sessao = await AI.tokenDaSessao();
+    if (!sessao) return { erro: 'sem_sessao' };
+
+    const r = await fetch(base + '/functions/v1/' + FUNCAO, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: chave,
+        authorization: 'Bearer ' + sessao
+      },
+      body: JSON.stringify(corpo)
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok && !j.erro) j.erro = r.status === 401 ? 'sem_sessao' : 'indisponivel';
+    return j;
+  };
+
+  /** O access token atual, direto do SDK — nunca guardado por nós. */
+  AI.tokenDaSessao = async function () {
+    try {
+      const c = global.SupabaseBackend && SupabaseBackend.cliente && SupabaseBackend.cliente();
+      if (!c) return null;
+      const { data } = await c.auth.getSession();
+      return (data && data.session && data.session.access_token) || null;
+    } catch (e) { return null; }
+  };
+
+  /** Explica por que não dá para perguntar, e o que fazer. */
+  AI.explicarIndisponivel = function (modo) {
+    UI.openModal({
+      title: 'UGLEZ',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', {
+          text: modo.chave === 'sem-sessao'
+            ? 'O UGLEZ precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.'
+            : 'O assistente ainda não está configurado neste ambiente.'
+        }),
+        el('p', { style: { marginTop: '10px' }, text: 'A análise acontece no servidor. Nenhuma chave de IA existe neste navegador, e nenhuma pergunta sai daqui sem passar por ele.' })
+      ]),
+      buttons: [
+        { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal },
+        modo.chave === 'sem-sessao'
+          ? { label: 'Entrar', class: 'btn-primary', onClick: () => { UI.closeModal(); Sync.signIn(); } }
+          : null
+      ].filter(Boolean)
+    });
+  };
+
+  /** O que exatamente será enviado — o usuário tem direito de ver. */
+  AI.mostrarDados = function () {
+    const r = AI.resumoAgregado();
+    UI.openModal({
+      title: 'O que o UGLEZ recebe',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: 'Ao perguntar, sai daqui um resumo agregado do mês exibido — e só ele:' }),
+        el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } },
+          AI.CATEGORIAS_ENVIADAS.map((c) => el('li', { text: c }))),
+        el('p', { style: { marginTop: '10px' }, text: 'Não sai: a lista de lançamentos, nomes de contas ou cartões, identificadores internos, seu e-mail, nem qualquer dado de outro perfil ou de outro mês.' }),
+        el('p', { class: 'hint', style: { marginTop: '10px' }, text: 'Abaixo, exatamente o que seria enviado agora:' }),
+        el('textarea', {
+          class: 'input textarea', rows: 12, readonly: true,
+          style: { marginTop: '6px', fontFamily: 'ui-monospace, monospace', fontSize: '11.5px' },
+          text: JSON.stringify(r, null, 2)
+        })
+      ]),
+      wide: true,
+      buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
+    });
+  };
 
   function renderError(box, message) {
     box.className = 'ai-answer is-error';
@@ -398,89 +418,6 @@
 
   /* ============================================================
      4 · CONFIGURAÇÃO DA CHAVE
-     ============================================================ */
-
-  AI.openConfig = function () {
-    const input = el('input', {
-      class: 'input', type: 'password', value: AI.getKey(),
-      placeholder: 'sk-ant-api03-…', autocomplete: 'off', spellcheck: 'false'
-    });
-
-    const body = el('div', {}, [
-      el('div', { class: 'parse-info' }, el('div', {
-        html: 'Esta função é <strong>opcional</strong> e usa a <strong>sua</strong> chave da API da Anthropic, ' +
-          'cobrada por uso conforme a tabela de preços deles. Sem chave, o resto do painel funciona igual.'
-      })),
-      el('div', { class: 'field' }, [
-        el('span', { class: 'field-label', text: 'Chave da API (x-api-key)' }),
-        input,
-        el('p', {
-          class: 'hint',
-          html: 'Crie em <strong>console.anthropic.com → API Keys</strong>. A chave fica salva apenas no ' +
-            'localStorage deste navegador e vai direto para <code>api.anthropic.com</code> — não passa por mais nenhum servidor.'
-        })
-      ]),
-      el('div', { class: 'parse-info is-warn', style: { marginTop: '14px' } }, el('div', {
-        html: '<strong>Cuidado:</strong> qualquer pessoa com acesso a este navegador consegue ler a chave. ' +
-          'Se hospedar o painel na internet, prefira uma chave com limite de gasto baixo e revogue-a se suspeitar de vazamento.'
-      })),
-      el('div', { style: { marginTop: '14px' } }, [
-        el('span', { class: 'field-label', text: 'O que é enviado' }),
-        el('p', {
-          class: 'hint',
-          text: 'Apenas o resumo do perfil e do mês selecionados: saldos, totais por categoria, faturas e investimentos. ' +
-            'Nenhum outro perfil é incluído, e a chave nunca sai deste navegador a não ser para a própria API.'
-        }),
-        el('button', {
-          class: 'btn btn-ghost btn-sm', style: { marginTop: '6px' }, text: 'Ver o resumo exato que seria enviado',
-          onclick: () => {
-            UI.openModal({
-              title: 'Resumo que seria enviado à API',
-              wide: true,
-              body: el('textarea', { class: 'input textarea', rows: 22, readonly: true, text: AI.buildSummary() }),
-              buttons: [{ label: 'Voltar', class: 'btn-primary', onClick: () => AI.openConfig() }]
-            });
-          }
-        })
-      ])
-    ]);
-
-    UI.openModal({
-      title: 'Sugestões com IA — configuração',
-      wide: true,
-      body,
-      buttons: [
-        AI.hasKey() ? {
-          label: 'Remover chave', class: 'btn-ghost', align: 'left',
-          onClick: () => { AI.setKey(''); UI.toast('Chave removida deste navegador.'); UI.closeModal(); }
-        } : null,
-        { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
-        {
-          label: 'Salvar', class: 'btn-ai',
-          onClick: () => {
-            const v = input.value.trim();
-            if (v && !/^sk-ant-/.test(v)) {
-              UI.toast('Chaves da Anthropic começam com "sk-ant-". Confira antes de salvar.', 'error');
-              return;
-            }
-            AI.setKey(v);
-            UI.toast(v ? 'Chave salva neste navegador.' : 'Chave removida.', v ? 'success' : null);
-            UI.closeModal();
-          }
-        }
-      ].filter(Boolean)
-    });
-  };
-
-  /* ============================================================
-     LEITURA PROATIVA — calculada aqui, sem rede
-     ------------------------------------------------------------
-     A frase do topo sai do próprio Calc: é aritmética sobre os
-     dados locais, não uma resposta de modelo. Isso importa por
-     dois motivos — aparece para quem nunca configurou chave
-     nenhuma, e nada sai do navegador para produzi-la.
-
-     Só a caixa "Pedir sugestão" chama a API da Anthropic.
      ============================================================ */
 
   AI.insight = function (ym) {
@@ -554,8 +491,28 @@
   /* ---------------- ligação com a página ---------------- */
 
   AI.init = function () {
+    /* Higiene: se este navegador guardou uma chave no formato
+       antigo, ela sai agora. Uma chave que já esteve no
+       localStorage deve ser considerada comprometida — o usuário
+       precisa revogá-la no provedor, não só apagá-la daqui. */
+    try {
+      if (localStorage.getItem(CHAVE_ANTIGA)) {
+        localStorage.removeItem(CHAVE_ANTIGA);
+        console.warn('UGLEZ: uma chave de IA guardada neste navegador foi removida. ' +
+          'Revogue-a no painel do provedor: uma chave que esteve no navegador está exposta.');
+        if (global.UI) UI.toast('Removemos a chave de IA guardada neste aparelho. Revogue-a no painel do provedor.', 'error', 12000);
+      }
+    } catch (e) { /* sem localStorage, nada a limpar */ }
+
+    /* O botão que configurava a chave agora mostra o que é enviado.
+       O lugar na interface continua útil; o que mudou foi a pergunta
+       que ele responde — de "onde ponho minha chave" para "o que sai
+       daqui". */
     const btnCfg = document.getElementById('btnAiConfig');
-    if (btnCfg) btnCfg.addEventListener('click', () => AI.openConfig());
+    if (btnCfg) {
+      btnCfg.textContent = 'O que é enviado';
+      btnCfg.addEventListener('click', () => AI.mostrarDados());
+    }
 
     const btnAsk = document.getElementById('btnAiAsk');
     const field = document.getElementById('aiQuestion');

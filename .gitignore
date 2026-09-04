@@ -20,3 +20,23 @@ Desktop.ini
 # Nada de dependências instaladas: as bibliotecas usadas estão
 # vendorizadas de propósito em assets/vendor/ e DEVEM ser versionadas.
 node_modules/
+
+# Skills instaladas por `npx skills add`. O conteúdo em .agents/skills/ é
+# versionado — é documentação, e quem clonar o repositório recebe a mesma
+# orientação. Já os atalhos em .claude/skills/ são links ABSOLUTOS para o
+# caminho desta máquina: no clone de outra pessoa apontariam para o nada.
+.claude/skills/
+
+# Variáveis de ambiente. O .env fica de fora porque é o lugar onde uma
+# chave secreta de verdade vai acabar caindo um dia — a ANTHROPIC_API_KEY
+# já está prevista ali. O .env.example, versionado, documenta o formato.
+.env
+.env.local
+.env.*.local
+supabase/functions/.env
+supabase/.temp/
+
+# Pacote gerado para a Hostinger. É derivado — reconstruído por
+# deploy/hostinger/montar-pacote.ps1 a qualquer momento.
+deploy/hostinger/public_html/
+deploy/hostinger/*.zip

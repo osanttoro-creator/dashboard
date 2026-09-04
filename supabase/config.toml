@@ -1,0 +1,12 @@
+# Configuração do projeto Supabase.
+project_id = "gxwatircdhhetvzzlwwq"
+
+[functions.oaze-assistant]
+# Deixado LIGADO de propósito. Com verify_jwt ativo, a plataforma
+# valida o JWT antes de o código rodar: quem chega sem sessão leva
+# 401 sem gastar um ciclo da função nem um token da OpenAI.
+#
+# A função valida de novo por dentro, com getUser(). Não é
+# redundância inútil — é a diferença entre "o token é válido" e
+# "este é o usuário, e é dele que vamos ler o plano".
+verify_jwt = true

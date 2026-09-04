@@ -505,7 +505,17 @@ table { border-collapse: collapse; width: 100%; }
 .page-head h1 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 620; letter-spacing: -.026em; line-height: 1.12; }
 .page-sub { font-size: 13px; color: var(--muted); }
 
-.content { padding: 0 0 8px; display: grid; gap: 20px; align-content: start; flex: 1; }
+/* grid-template-columns explícito: sem ele a coluna implícita é
+   `auto` e encolhe até o conteúdo mais largo — o que fazia a página
+   inteira, cabeçalho incluído, deslizar para o centro quando o único
+   bloco visível era o painel estreito de primeiro uso.
+   minmax(0, 1fr) e não 1fr: o mínimo padrão de 1fr é min-content, e
+   uma tabela larga voltaria a esticar a coluna. */
+.content {
+  padding: 0 0 8px; display: grid; gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start; flex: 1;
+}
 .page { display: none; gap: 20px; grid-template-columns: 1fr; }
 .page.is-active { display: grid; }
 
@@ -1852,6 +1862,551 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .bud-main, .set-id, .search-item > span, .notif-item > span:last-child { min-width: 0; }
 .cat-tile-num, .due-val, .rec-nums { white-space: nowrap; }
 
+/* ------------------------------------------------------------
+   22.5 · FORMULÁRIO DE CONTA
+   ------------------------------------------------------------
+   O login mora dentro do app, num modal nosso — não num pop-up de
+   terceiro. Por isso precisa parecer parte da casa: mesmo
+   material, mesma tipografia, mesmos campos do resto do produto.
+   ------------------------------------------------------------ */
+.login-box { display: grid; gap: 12px; }
+.login-title { font-size: 17px; font-weight: 660; letter-spacing: -.01em; margin: 0; }
+.login-sub { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin: -6px 0 2px; }
+
+.login-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.login-actions .btn-primary { flex: 1 1 140px; }
+
+/* separador com a palavra no meio da linha */
+.login-sep {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--muted); margin: 2px 0;
+}
+.login-sep::before, .login-sep::after {
+  content: ''; flex: 1; height: 1px; background: var(--glass-line);
+}
+
+.login-alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.login-alt .btn { justify-content: center; }
+
+/* ------------------------------------------------------------
+   22.6 · NAVEGAÇÃO SUPERIOR (≥ 821px)
+   ------------------------------------------------------------
+   A sidebar-ilha sai do desktop e do tablet deitado; o conteúdo
+   ganha a largura dela de volta. Abaixo de 821px NADA muda: a
+   barra inferior continua sendo a mesma, no mesmo lugar, com o
+   mesmo comportamento — por isso tudo aqui está trancado atrás
+   de min-width, e não o contrário.
+
+   Os itens são .nav-item, os mesmos da barra de baixo. O roteador
+   marca o ativo em todos de uma vez, então as duas navegações
+   nunca discordam sobre onde você está.
+   ------------------------------------------------------------ */
+
+/* Fora do desktop, a barra superior simplesmente não existe:
+   display:none tira do fluxo E da ordem de tabulação, então o
+   celular não ganha nenhum destino invisível no caminho. */
+.topnav-brand, .topnav-menu { display: none; }
+
+@media (min-width: 821px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 16px 24px 0; }
+  /* width:100% é obrigatório aqui. .main é um flex column, e
+     margin:auto num item flex ANULA o stretch: o item passa a ter a
+     largura do conteúdo e as margens automáticas o centralizam. Com
+     painéis largos isso nunca aparecia; com o painel estreito de
+     primeiro uso, a página inteira deslizava para o meio. */
+  .content { width: 100%; max-width: 1440px; margin: 0 auto; }
+
+  .topbar {
+    position: sticky; top: 12px; z-index: 70;
+    gap: 8px; flex-wrap: nowrap;
+  }
+
+  /* --- marca --- */
+  .topnav-brand {
+    display: inline-flex; align-items: center; gap: 8px; flex: none;
+    padding: 6px 10px 6px 6px; border: 0; border-radius: 12px;
+    background: transparent; cursor: pointer; color: inherit;
+  }
+  .topnav-brand .brand-mark { width: 28px; height: 28px; border-radius: 9px; }
+  .topnav-brand .brand-name { font-weight: 680; letter-spacing: .14em; font-size: 12.5px; }
+  .topnav-brand:hover { background: var(--plane-2); }
+  .topnav-brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* --- a fita de destinos --- */
+  .topnav-menu {
+    display: flex; align-items: center; gap: 2px;
+    min-width: 0; flex: 0 1 auto;
+  }
+  .topnav-menu .nav-item {
+    width: auto; flex: none; white-space: nowrap;
+    padding: 8px 11px; gap: 7px; font-size: 13px;
+  }
+  .topnav-menu .nav-short { display: none; }
+  .topnav-menu .nav-long { display: inline; }
+
+  /* UGLEZ tem identidade própria — é o único destino com cor. */
+  .topnav-menu .nav-item.is-uglez { color: var(--terracotta); font-weight: 620; }
+  .topnav-menu .nav-item.is-uglez .nav-ico { color: var(--terracotta); }
+  .topnav-menu .nav-item.is-uglez:hover {
+    background: color-mix(in srgb, var(--terracotta) 14%, transparent);
+  }
+  .topnav-menu .nav-item.is-uglez.is-active {
+    background: color-mix(in srgb, var(--terracotta) 20%, transparent);
+    box-shadow: var(--uglez-glow);
+  }
+
+  /* --- grupos --- */
+  .topnav-group { position: relative; flex: none; }
+  .topnav-trigger {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 10px; border: 0; border-radius: 11px;
+    background: transparent; cursor: pointer; white-space: nowrap;
+    color: var(--ink-2); font-size: 13px; font-weight: 520; font-family: inherit;
+    transition: background .18s var(--ease-out);
+  }
+  .topnav-trigger:hover { background: var(--plane-2); color: var(--ink); }
+  .topnav-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .topnav-trigger .nav-ico { display: grid; place-items: center; color: var(--muted); }
+
+  /* Aberto, ou com a página atual dentro dele: o grupo precisa dizer
+     "você está aqui" mesmo com o menu fechado. */
+  .topnav-trigger[aria-expanded="true"],
+  .topnav-group.has-active .topnav-trigger {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--ink); font-weight: 640;
+  }
+  .topnav-group.has-active .topnav-trigger .nav-ico { color: var(--accent); }
+
+  .topnav-caret {
+    width: 0; height: 0; flex: none;
+    border-left: 3.5px solid transparent; border-right: 3.5px solid transparent;
+    border-top: 4px solid currentColor; opacity: .55;
+    transition: transform .18s var(--ease-out);
+  }
+  .topnav-trigger[aria-expanded="true"] .topnav-caret { transform: rotate(180deg); }
+
+  /* --- o painel do grupo --- */
+  .topnav-drop {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 90;
+    min-width: 214px; padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
+    border-radius: var(--radius); border: 1px solid var(--glass-line);
+    box-shadow: var(--shadow-lift);
+    /* nasce no canto de onde veio e volta pelo mesmo caminho */
+    transform-origin: top left;
+    animation: dropIn .16s var(--ease-out);
+  }
+  .topnav-drop[hidden] { display: none; }
+  .topnav-drop .nav-item { width: 100%; justify-content: flex-start; }
+  .topnav-group[data-group="mais"] .topnav-drop { left: auto; right: 0; transform-origin: top right; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-4px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* --- controles da direita --- */
+  .topbar-gap { flex: 1 1 auto; min-width: 4px; }
+  .pill-period select { max-width: 110px; }
+}
+
+@media (min-width: 821px) and (prefers-reduced-motion: reduce) {
+  .topnav-drop { animation: none; }
+}
+
+/* ------------------------------------------------------------
+   Degraus de largura — medidos, não estimados
+   ------------------------------------------------------------
+   O menu completo ocupa 725px e o lado direito ~765px: em 1440
+   isso não cabe, e o que acontecia era o UGLEZ deslizar por baixo
+   do perfil. Cada degrau abaixo devolve espaço na ordem inversa
+   da importância — primeiro o que é redundante, por último o que
+   é destino.
+
+   A ordem de sacrifício:
+     1. rótulo do botão de busca (a lupa já diz)
+     2. engrenagem de perfis (também vive em Configurações)
+     3. o grupo "Crescer" recolhe para "Mais" (consulta, não uso diário)
+     4. nome da marca (o símbolo permanece)
+     5. rótulo dos destinos diretos
+     6. rótulo dos grupos
+   ------------------------------------------------------------ */
+
+@media (min-width: 821px) {
+  /* A lupa é auto-explicativa; o rótulo custa 48px o tempo todo. */
+  #btnSearch .pill-label { display: none; }
+
+  /* Rede de segurança: se um degrau ficar apertado por causa de fonte
+     ou idioma, o menu corta em vez de escorregar por baixo dos
+     controles. Corte é feio; sobreposição esconde um destino. */
+  .topnav-menu { overflow: hidden; }
+  .topbar-gap { min-width: 12px; }
+}
+
+/* ---- todo desktop: o que é redundante sai de saída ----
+   A engrenagem de perfis também vive em Configurações, e o botão de
+   mês compacto continua legível. Juntos devolvem 35px sem custo. */
+@media (min-width: 821px) {
+  #btnProfiles { display: none; }
+  .pill-hoje { font-size: 11.5px; padding: 5px 9px; }
+}
+
+/* ---- < 1460: "Crescer" recolhe, o nome da marca sai ----
+   A fita completa pede 725px. Em 1440 sobram 601 depois da marca e
+   dos controles, então ela não cabe — e o que acontecia era o UGLEZ
+   escorregar por baixo do perfil. Recolher "Crescer" devolve 112 e o
+   nome da marca outros 49: 617 − 112 = 505, com folga.
+
+   Investimentos e Análises são consulta; Planejar é uso diário. Por
+   isso é o de consulta que recolhe. Acima de 1460 a fita aparece
+   inteira, com marca escrita. */
+@media (min-width: 821px) and (max-width: 1460px) {
+  .topnav-group[data-group="crescer"] { display: none; }
+  .topnav-brand .brand-name { display: none; }
+  .topnav-group[data-group="mais"] .topnav-drop { min-width: 236px; }
+  .topnav-group[data-group="mais"] .topnav-drop::before {
+    content: 'Crescer'; display: block; order: -1;
+    font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); padding: 8px 12px 4px;
+  }
+}
+
+/* ---- < 1400: os destinos diretos e o UGLEZ ficam só com o ícone ----
+   Devolve 210px. O nome continua no title e no aria-label, então
+   quem usa leitor de tela ouve "Visão geral", não "botão". */
+@media (min-width: 821px) and (max-width: 1400px) {
+  .topnav-menu .nav-item .nav-long,
+  .topnav-menu .nav-item .nav-short { display: none; }
+  .topnav-menu .nav-item { padding: 9px 10px; }
+  .topnav-drop .nav-item .nav-long { display: inline; }
+  .topnav-drop .nav-item .nav-short { display: none; }
+  .topnav-drop .nav-item { padding: 9px 12px; }
+  .main { padding: 16px 20px 0; }
+}
+
+/* ---- < 1140: o texto dos grupos também ---- */
+@media (min-width: 821px) and (max-width: 1140px) {
+  .topnav-trigger .topnav-trigger-txt { display: none; }
+  .topnav-trigger { padding: 9px 9px; }
+  .main { padding: 16px 18px 0; }
+}
+
+/* ---- < 1020: o último aperto, sem tirar destino nenhum ---- */
+@media (min-width: 821px) and (max-width: 1020px) {
+  .topnav-menu { gap: 0; }
+  .topnav-menu .nav-item { padding: 9px 7px; }
+  .topnav-trigger { padding: 9px 6px; }
+  .pill-profile select { max-width: 88px; }
+  .pill-hoje { display: none; }
+}
+
+/* ------------------------------------------------------------
+   22.7 · ONBOARDING
+   ------------------------------------------------------------
+   Etapas dentro do modal comum. Nada de tela cheia: o painel fica
+   visível atrás, e é ele que a pessoa está construindo — ver o
+   resultado aparecendo é metade do valor da configuração guiada.
+   ------------------------------------------------------------ */
+.ob-progresso { margin-bottom: 16px; }
+.ob-barra {
+  height: 4px; border-radius: 999px; overflow: hidden;
+  background: var(--plane-2);
+}
+.ob-barra > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--accent);
+  transition: width .3s var(--ease-out);
+}
+.ob-passo {
+  margin-top: 6px; font-size: 11px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+
+.ob-corpo { display: grid; gap: 12px; }
+.ob-texto { font-size: 13.5px; line-height: 1.65; }
+.ob-titulo { font-size: 17px; font-weight: 660; letter-spacing: -.01em; }
+.ob-sub {
+  font-size: 11px; font-weight: 680; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); margin-top: 4px;
+}
+
+/* Duas colunas onde cabe; uma só no celular — e é o campo que
+   decide, não a largura da tela. */
+.ob-dupla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+
+.ob-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ob-cat {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 10px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--glass-line); background: var(--plane-2);
+  color: var(--ink-2); font-size: 12.5px; font-family: inherit;
+  transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ob-cat:hover { background: color-mix(in srgb, var(--danger, #B3402F) 14%, transparent); color: var(--ink); }
+.ob-cat:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ob-cat-x { font-size: 15px; line-height: 1; opacity: .5; }
+.ob-cat:hover .ob-cat-x { opacity: 1; }
+
+.ob-fim { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 8px 0; }
+.ob-proximos { display: grid; gap: 6px; margin-top: 6px; }
+.ob-proximos .btn { justify-content: flex-start; }
+
+/* ------------------------------------------------------------
+   22.8 · PAINEL DE PRIMEIRO USO
+   ------------------------------------------------------------
+   Ocupa o lugar do painel inteiro enquanto não há dado. Grande de
+   propósito: se fosse um aviso discreto no topo de uma tela de
+   zeros, a tela de zeros continuaria sendo a mensagem.
+   ------------------------------------------------------------ */
+#homeVazia { display: grid; justify-items: center; }
+.primeiro-uso {
+  display: grid; gap: 10px; justify-items: start;
+  padding: 32px; width: 100%; max-width: 620px;
+}
+.pu-titulo { font-size: 22px; font-weight: 680; letter-spacing: -.02em; }
+.pu-texto { font-size: 13.5px; line-height: 1.65; color: var(--ink-2); }
+
+.pu-passos { display: grid; gap: 2px; margin: 6px 0 4px; padding: 0; list-style: none; width: 100%; }
+.pu-passo { display: flex; align-items: center; gap: 11px; padding: 7px 0; }
+.pu-num {
+  width: 24px; height: 24px; flex: none;
+  display: grid; place-items: center; border-radius: 50%;
+  font-size: 12px; font-weight: 660;
+  background: var(--plane-2); color: var(--muted);
+}
+.pu-passo.is-feito .pu-num { background: color-mix(in srgb, var(--ok, #4C6B33) 22%, transparent); color: var(--ok, #4C6B33); }
+.pu-passo.is-feito .pu-link { color: var(--muted); text-decoration: line-through; }
+
+.pu-link {
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font: inherit; font-size: 13.5px; color: var(--ink);
+  text-align: left; text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: var(--glass-line);
+}
+.pu-link:hover { text-decoration-color: var(--accent); }
+.pu-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.pu-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+@media (max-width: 560px) {
+  .primeiro-uso { padding: 22px 18px; }
+  .pu-titulo { font-size: 19px; }
+  .pu-acoes .btn { flex: 1 1 100%; justify-content: center; }
+}
+
+/* ------------------------------------------------------------
+   22.9 · ACESSIBILIDADE
+   ------------------------------------------------------------ */
+
+/* Conteúdo só para leitor de tela. NÃO usar display:none nem
+   visibility:hidden: os dois removem o elemento da árvore de
+   acessibilidade também, que é exatamente o contrário do que
+   queremos. O recorte de 1px é a técnica que esconde da vista sem
+   esconder de quem lê. */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; white-space: nowrap;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+}
+
+/* Primeiro foco da página. Fica fora da tela até ser focado —
+   quem navega por teclado não deveria atravessar 12 destinos toda
+   vez que muda de página. */
+.pular-conteudo {
+  position: fixed; top: -100px; left: 12px; z-index: 200;
+  padding: 10px 16px; border-radius: 0 0 12px 12px;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 620; text-decoration: none;
+  transition: top .16s var(--ease-out);
+}
+.pular-conteudo:focus { top: 0; }
+
+/* O destino do salto não deve ganhar contorno: ele recebe o foco
+   por programação, não por navegação. */
+.content:focus { outline: none; }
+
+/* ---- alvos de toque ----
+   WCAG 2.2 (2.5.8) pede 24×24 CSS no mínimo. Vários controles
+   estavam em 16px e 28px. Onde o elemento é pequeno de propósito
+   — uma caixa de seleção numa tabela densa — a área clicável
+   cresce por pseudo-elemento, sem mudar o desenho. */
+.icon-btn { min-width: 32px; min-height: 32px; }
+
+/* Caixa de seleção com o tamanho REAL de 24px, não com área
+   ampliada por pseudo-elemento: ::before e ::after não renderizam
+   de forma confiável em elementos substituídos como <input>, e a
+   área maior existiria só no CSS, não sob o dedo. 24×24 é o mínimo
+   do WCAG 2.2 (2.5.8). */
+input[type="checkbox"], input[type="radio"] {
+  width: 24px; height: 24px;
+  flex: none; cursor: pointer;
+}
+
+.ai-chip { min-height: 32px; }
+
+/* .tab e .seg button são âncoras de navegação: 32px de altura para
+   não exigir mira no mouse, 40px no toque (regra de @media abaixo). */
+.tab { min-height: 32px; }
+.seg button { min-height: 32px; }
+
+/* No toque, o dedo pede mais do que o mouse: 44px é a medida que
+   a Apple e o Google convergiram, e é ela que evita o toque que
+   erra o alvo. */
+@media (hover: none) {
+  .icon-btn { min-width: 44px; min-height: 44px; }
+  .ai-chip, .tab, .pill-ico, .seg button { min-height: 40px; }
+  input[type="checkbox"], input[type="radio"] { width: 28px; height: 28px; }
+}
+
+/* ------------------------------------------------------------
+   22.10 · AVISO DE CONTA
+   ------------------------------------------------------------
+   Faixa acima do conteúdo quando a assinatura precisa de atenção.
+   Fica acima porque é sobre o acesso à ferramenta, não sobre o
+   mês exibido — colocá-la dentro da página faria a mensagem
+   desaparecer ao trocar de seção.
+   ------------------------------------------------------------ */
+.aviso-conta {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  margin-bottom: 16px; padding: 14px 18px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--terracotta) 42%, transparent);
+  background: color-mix(in srgb, var(--terracotta) 12%, var(--n1));
+}
+.aviso-conta strong { font-size: 13.5px; font-weight: 660; }
+.aviso-conta p { font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin-top: 3px; max-width: 68ch; }
+.aviso-conta .btn { flex: none; }
+
+@media (max-width: 560px) {
+  .aviso-conta { padding: 12px 14px; }
+  .aviso-conta .btn { width: 100%; justify-content: center; }
+}
+
+/* ------------------------------------------------------------
+   22.11 · PLANOS
+   ------------------------------------------------------------
+   Três cartões que precisam ser comparáveis num relance. O do
+   meio é o destacado — não por ser o mais caro, mas por ser o que
+   resolve a maioria dos casos.
+   ------------------------------------------------------------ */
+.precos-topo { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 8px 0 4px; }
+.precos-titulo { font-size: clamp(21px, 2.4vw, 28px); font-weight: 680; letter-spacing: -.022em; }
+.precos-sub { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 60ch; }
+.precos-h3 { font-size: 15.5px; font-weight: 660; margin-bottom: 12px; }
+
+/* --- alternância de ciclo --- */
+.precos-ciclo {
+  display: inline-flex; gap: 3px; padding: 3px; margin-top: 4px;
+  border-radius: 999px; background: var(--plane-2); border: 1px solid var(--glass-line);
+}
+.ciclo-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; min-height: 32px; border: 0; border-radius: 999px;
+  background: transparent; cursor: pointer; font-family: inherit;
+  font-size: 13px; font-weight: 580; color: var(--ink-2);
+  transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ciclo-btn.is-active { background: var(--surface-2); color: var(--ink); box-shadow: var(--shadow); }
+.ciclo-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ciclo-selo {
+  padding: 2px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 680;
+  background: color-mix(in srgb, var(--ok, #4C6B33) 24%, transparent);
+  color: var(--ok, #4C6B33);
+}
+
+/* --- os cartões --- */
+.precos-cards {
+  display: grid; gap: 16px; margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+}
+.plano-card { position: relative; display: grid; gap: 10px; padding: 26px 22px; }
+.plano-card.is-destaque {
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  box-shadow: var(--shadow-lift), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.plano-selo {
+  position: absolute; top: -10px; left: 22px;
+  padding: 4px 11px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: #fff;
+}
+.plano-selo.is-atual { background: var(--ok, #4C6B33); left: auto; right: 22px; }
+.plano-nome { font-size: 18px; font-weight: 680; }
+.plano-desc { font-size: 12.5px; line-height: 1.55; color: var(--muted); min-height: 34px; }
+
+.plano-preco { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.plano-valor { font-size: 30px; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.plano-periodo { font-size: 12.5px; color: var(--muted); }
+.plano-cobranca { flex: 1 1 100%; font-size: 12px; color: var(--muted); }
+.plano-economia {
+  flex: 1 1 100%; font-size: 12px; font-weight: 620;
+  color: var(--ok, #4C6B33);
+}
+
+.plano-card > .btn { width: 100%; justify-content: center; margin-top: 4px; }
+.plano-card > .btn:disabled { opacity: .6; cursor: default; }
+
+.plano-itens { display: grid; gap: 7px; margin-top: 6px; padding: 0; list-style: none; }
+.plano-itens li { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; line-height: 1.5; }
+.plano-check { display: grid; place-items: center; flex: none; margin-top: 1px; color: var(--ok, #4C6B33); }
+
+/* --- comparativo --- */
+.precos-tabela th:not(:first-child), .precos-tabela td { text-align: center; }
+.precos-tabela th[scope="row"] { text-align: left; font-weight: 560; }
+.precos-tabela td.is-nao { color: var(--muted); }
+
+/* --- FAQ --- */
+.faq-item { border-top: 1px solid var(--glass-line); }
+.faq-item:first-child { border-top: 0; }
+.faq-p {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 2px; min-height: 44px;
+  border: 0; background: none; cursor: pointer; font-family: inherit;
+  font-size: 13.5px; font-weight: 580; color: var(--ink); text-align: left;
+}
+.faq-p:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.faq-seta {
+  width: 0; height: 0; flex: none;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid currentColor; opacity: .5;
+  transition: transform .18s var(--ease-out);
+}
+.faq-p[aria-expanded="true"] .faq-seta { transform: rotate(180deg); }
+.faq-corpo { padding: 0 2px 14px; font-size: 13px; line-height: 1.65; color: var(--ink-2); max-width: 74ch; }
+
+/* --- barras de consumo --- */
+.uso-caixa { display: grid; gap: 10px; min-width: min(100%, 300px); }
+.uso-linha { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
+.uso-rotulo { font-size: 12.5px; color: var(--ink-2); }
+.uso-num { font-size: 12.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.uso-num.is-cheio { color: var(--terracotta); }
+.uso-barra {
+  grid-column: 1 / -1; height: 5px; border-radius: 999px;
+  background: var(--plane-2); overflow: hidden;
+}
+.uso-barra > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: var(--accent); transition: width .3s var(--ease-out);
+}
+.uso-barra.is-cheio > i { background: var(--terracotta); }
+
+.plano-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.lista-check { display: grid; gap: 6px; padding: 0; list-style: none; }
+.lista-check li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.5; }
+.lista-passos { padding-left: 20px; display: grid; gap: 5px; font-size: 13px; line-height: 1.55; }
+
+@media (max-width: 560px) {
+  .plano-card { padding: 22px 18px; }
+  .plano-valor { font-size: 26px; }
+  .plano-acoes .btn { flex: 1 1 100%; justify-content: center; }
+}
+
 /* ============================================================
    23 · SOBREPOSIÇÕES RESPONSIVAS — precisam ficar por último
    ------------------------------------------------------------
@@ -1942,3 +2497,19 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 /* Canto direito do cartão: situação em cima, tipo embaixo. */
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
+
+/* Indicador da fila offline. Fica escondido quando não há nada
+   pendente — um selo permanente de "tudo certo" vira ruído e
+   ninguém repara quando ele muda. */
+.fila-chip {
+  display: block; margin-bottom: 6px;
+  padding: 6px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.35;
+  border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
+}
+.fila-chip.is-offline      { color: var(--ink-2); }
+.fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-erro {
+  color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
+  border-color: transparent;
+}

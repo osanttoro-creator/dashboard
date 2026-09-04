@@ -1,0 +1,196 @@
+# =============================================================
+# OAZE — publica na Hostinger a cada push em main
+# -------------------------------------------------------------
+# POR QUE ISTO EXISTE
+# O hPanel tem uma integração nativa com Git, mas ela não aparece
+# para este site: ele foi provisionado como "Aplicativo web
+# Node.js", cujo único modelo de deploy é enviar um arquivo. O menu
+# vai de Avançado direto para Acesso SSH, sem seção GIT, e a API da
+# Hostinger também não expõe nada de Git. Este workflow faz o que a
+# integração nativa faria: pega o repositório e põe no ar.
+#
+# O QUE ELE NÃO FAZ: publicar o repositório inteiro. O repo tem
+# supabase/, tools/, docs/ e scripts .ps1 que não têm por que ser
+# servidos. Quem decide o que vai é o montar-pacote.ps1 — lista de
+# inclusão, não de exclusão — e é ele que roda aqui. Uma segunda
+# lista de arquivos, mantida dentro deste YAML, sairia de sincronia
+# com a primeira no dia em que alguém criasse um arquivo novo.
+#
+# ANTES DO PRIMEIRO USO
+# Crie um token em https://hpanel.hostinger.com/profile/api e
+# guarde em Settings → Secrets and variables → Actions como
+# HOSTINGER_API_TOKEN. O token não passa por aqui em texto: é o
+# GitHub que injeta.
+# =============================================================
+
+name: Publica na Hostinger
+
+on:
+  push:
+    branches: [main]
+    # Um commit que só mexe em supabase/ ou docs/ não muda o que é
+    # servido. Deploy à toa é ruído: some com o sinal de quando um
+    # deploy de verdade quebrou algo.
+    paths:
+      - 'index.html'
+      - 'robots.txt'
+      - 'assets/**'
+      - 'deploy/hostinger/**'
+      - '.github/workflows/deploy-hostinger.yml'
+  workflow_dispatch:
+
+# Dois deploys ao mesmo tempo se sobrescrevem no meio da extração e
+# deixam o site num estado que não corresponde a commit nenhum.
+# cancel-in-progress fica falso de propósito: cancelar um deploy no
+# meio da extração é exatamente o estado que se quer evitar.
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+env:
+  HOSTINGER_API: https://developers.hostinger.com
+  HOSTINGER_USER: u231435333
+  SITE_DOMAIN: mediumvioletred-viper-277230.hostingersite.com
+  ZIP_NOME: oaze-public_html.zip
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---- 1 · monta o pacote ----
+      # O mesmo script usado à mão. Ele varre o que vai ser servido
+      # atrás de chaves e sai com código 1 se achar alguma — e aí o
+      # job falha aqui, antes de qualquer coisa sair do runner.
+      - name: Monta o pacote
+        shell: pwsh
+        run: ./deploy/hostinger/montar-pacote.ps1
+
+      - name: Confere o que foi montado
+        run: |
+          set -euo pipefail
+          cd deploy/hostinger
+          test -f "$ZIP_NOME" || { echo "::error::zip nao foi gerado"; exit 1; }
+          # Sem .htaccess, /precos vira 404 e o site fica sem rota
+          # nenhuma além da raiz. Ele começa com ponto e o
+          # Compress-Archive ignora arquivos assim — o script trata
+          # isso à mão, e é justamente por ser um passo à mão que
+          # vale conferir aqui.
+          unzip -l "$ZIP_NOME" | grep -q '\.htaccess' \
+            || { echo "::error::.htaccess ausente do zip"; exit 1; }
+          echo "zip: $(stat -c%s "$ZIP_NOME") bytes, $(unzip -l "$ZIP_NOME" | tail -1)"
+
+      # ---- 2 · credenciais de upload ----
+      - name: Pede a URL de upload
+        env:
+          TOKEN: ${{ secrets.HOSTINGER_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TOKEN:-}" ]; then
+            echo "::error::HOSTINGER_API_TOKEN nao esta configurado nos secrets do repositorio"
+            exit 1
+          fi
+          resp=$(curl -sS -w '\n%{http_code}' -X POST \
+            "$HOSTINGER_API/api/hosting/v1/files/upload-urls" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H 'Content-Type: application/json' \
+            -d "{\"username\":\"$HOSTINGER_USER\",\"domain\":\"$SITE_DOMAIN\"}")
+          codigo=$(echo "$resp" | tail -1)
+          corpo=$(echo "$resp" | sed '$d')
+          if [ "$codigo" != "200" ]; then
+            # O corpo pode conter a credencial numa resposta parcial,
+            # entao so o codigo vai para o log.
+            echo "::error::upload-urls devolveu HTTP $codigo"
+            exit 1
+          fi
+          # >> $GITHUB_ENV vazaria as chaves no log de quem tem acesso
+          # ao runner; um arquivo no workspace some com o job.
+          echo "$corpo" > /tmp/cred.json
+          for c in url auth_key rest_auth_key; do
+            jq -er ".$c" /tmp/cred.json > /dev/null \
+              || { echo "::error::resposta sem campo $c"; exit 1; }
+          done
+          echo "credenciais obtidas"
+
+      # ---- 3 · envia o zip (TUS: cria, depois manda os bytes) ----
+      - name: Envia o zip
+        run: |
+          set -euo pipefail
+          URL=$(jq -r .url /tmp/cred.json)
+          AUTH=$(jq -r .auth_key /tmp/cred.json)
+          REST=$(jq -r .rest_auth_key /tmp/cred.json)
+          ARQ="deploy/hostinger/$ZIP_NOME"
+          TAM=$(stat -c%s "$ARQ")
+          ALVO="$URL/$ZIP_NOME?override=true"
+
+          criar=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$ALVO" \
+            -H "X-Auth: $AUTH" -H "X-Auth-Rest: $REST" \
+            -H 'Tus-Resumable: 1.0.0' \
+            -H "Upload-Length: $TAM" -H 'Upload-Offset: 0')
+          [ "$criar" = "201" ] || [ "$criar" = "200" ] \
+            || { echo "::error::TUS POST devolveu $criar"; exit 1; }
+
+          offset=$(curl -sS -D - -o /dev/null -X PATCH "$ALVO" \
+            -H "X-Auth: $AUTH" -H "X-Auth-Rest: $REST" \
+            -H 'Tus-Resumable: 1.0.0' \
+            -H 'Content-Type: application/offset+octet-stream' \
+            -H 'Upload-Offset: 0' --data-binary "@$ARQ" \
+            | tr -d '\r' | awk 'tolower($1)=="upload-offset:"{print $2}')
+
+          # Um PATCH truncado devolve 204 do mesmo jeito. O offset e
+          # a unica prova de que os bytes chegaram inteiros -- sem
+          # esta comparacao, um zip pela metade seguiria para a
+          # extracao e derrubaria o site.
+          [ "$offset" = "$TAM" ] \
+            || { echo "::error::upload incompleto: $offset de $TAM bytes"; exit 1; }
+          echo "enviados $TAM bytes"
+
+      # ---- 4 · extrai, sobrescrevendo o site ----
+      - name: Extrai no servidor
+        env:
+          TOKEN: ${{ secrets.HOSTINGER_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          codigo=$(curl -sS -o /tmp/deploy.txt -w '%{http_code}' -X POST \
+            "$HOSTINGER_API/api/hosting/v1/accounts/$HOSTINGER_USER/websites/$SITE_DOMAIN/deploy" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H 'Content-Type: application/json' \
+            -d "{\"archive_path\":\"$ZIP_NOME\"}")
+          case "$codigo" in
+            200|201|202) cat /tmp/deploy.txt; echo ;;
+            *) echo "::error::deploy devolveu HTTP $codigo"; cat /tmp/deploy.txt; exit 1 ;;
+          esac
+
+      # ---- 5 · prova que o site respondeu certo ----
+      # Sem esta etapa o workflow diria "sucesso" por ter enviado um
+      # arquivo, que nao e a mesma coisa que o site estar de pe. As
+      # duas ultimas linhas cobrem o defeito que o .htaccess ja teve:
+      # arquivo inexistente voltando index.html com status 200.
+      - name: Verifica o site no ar
+        run: |
+          set -uo pipefail
+          sleep 10
+          falhou=0
+          checar() {
+            real=$(curl -s -o /dev/null -w '%{http_code}' "https://$SITE_DOMAIN$1")
+            if [ "$real" = "$2" ]; then
+              printf '  ok    %-24s %s\n' "$1" "$real"
+            else
+              printf '  FALHA %-24s esperado %s, veio %s\n' "$1" "$2" "$real"
+              falhou=1
+            fi
+          }
+          checar /                       200
+          checar /precos                 200
+          checar /assets/css/style.css   200
+          checar /assets/js/app.js       200
+          checar /naoexiste.css          404
+          checar /assets/js/sumiu.js     404
+          if [ "$falhou" != "0" ]; then
+            echo "::error::o site respondeu diferente do esperado apos o deploy"
+            exit 1
+          fi
+          echo "site verificado"

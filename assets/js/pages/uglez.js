@@ -29,9 +29,11 @@
     renderChips('uglezChipsFull');
     const modo = AI.modo();
     document.getElementById('uglezMode').textContent =
-      modo.chave === 'backend' ? 'Respondendo pelo servidor — nenhuma chave no navegador'
-        : modo.chave === 'local' ? 'Respondendo com a sua chave, guardada só neste aparelho'
-          : 'Configure uma chave para conversar. Os insights acima não precisam dela.';
+      modo.chave === 'servidor'
+        ? 'Respondendo por servidor autenticado — nenhuma chave de IA neste navegador'
+        : modo.chave === 'sem-sessao'
+          ? 'Entre na sua conta para conversar. As leituras acima não precisam disso.'
+          : 'Assistente indisponível neste ambiente. As leituras acima continuam funcionando.';
   };
 
   /** Chips de pergunta, reusados na home e na página. */

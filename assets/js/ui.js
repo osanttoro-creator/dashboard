@@ -131,6 +131,34 @@
     return el('p', { class: 'empty-note', text: message });
   };
 
+  /**
+   * Estado vazio com saída. Uma tela sem dados que só diz "nada aqui"
+   * parece quebrada; a mesma tela dizendo o que fazer em seguida
+   * ensina o produto. Por isso a ação não é opcional na prática:
+   * quase todo lugar sem dado tem um próximo passo óbvio.
+   *
+   * @param {object} o { ico, titulo, sub, acao: {texto, onClick}, secundaria }
+   */
+  UI.emptyState = function (o) {
+    return el('div', { class: 'card empty-state' }, [
+      o.ico ? el('span', { class: 'empty-ico' }, Icons.lucide(o.ico, 26)) : null,
+      el('p', { class: 'empty-title', text: o.titulo }),
+      o.sub ? el('p', { class: 'empty-sub', text: o.sub }) : null,
+      o.acao
+        ? el('button', {
+          class: 'btn btn-primary btn-sm', type: 'button',
+          text: o.acao.texto, onclick: o.acao.onClick
+        })
+        : null,
+      o.secundaria
+        ? el('button', {
+          class: 'btn btn-ghost btn-sm', type: 'button',
+          text: o.secundaria.texto, onclick: o.secundaria.onClick
+        })
+        : null
+    ].filter(Boolean));
+  };
+
   UI.emptyRow = function (colspan, message) {
     return el('tr', { class: 'empty-row' }, el('td', { colspan, text: message }));
   };

@@ -379,6 +379,7 @@
      ============================================================ */
 
   Forms.openAccount = function (accountId) {
+    if (!accountId && global.Limites && !Limites.exigirEspaco('accounts')) return;
     const editing = accountId ? Store.accounts.get(accountId) : null;
 
     const fName = field('Nome da conta *', input({ value: editing ? editing.name : '', placeholder: 'Ex.: Conta corrente', maxlength: 50 }));
@@ -503,6 +504,7 @@
      ============================================================ */
 
   Forms.openCard = function (cardId) {
+    if (!cardId && global.Limites && !Limites.exigirEspaco('credit_cards')) return;
     const editing = cardId ? Store.cards.get(cardId) : null;
     const accounts = accountOptions();
 
@@ -620,6 +622,7 @@
      ============================================================ */
 
   Forms.openCategory = function (kind, catId) {
+    if (!catId && global.Limites && !Limites.exigirEspaco('custom_categories')) return;
     const editing = catId ? Store.categories.get(catId) : null;
     const k = editing ? editing.kind : (kind || 'expense');
 
@@ -833,6 +836,7 @@
             onclick: () => {
               const n = nameInput.value.trim();
               if (!n) { UI.toast('Informe um nome.', 'error'); return; }
+              if (global.Limites && !Limites.exigirEspaco('workspaces')) return;
               Store.addProfile(n);
               UI.toast(`Perfil "${n}" criado e selecionado.`, 'success');
               draw();
@@ -847,17 +851,6 @@
       title: 'Perfis',
       body,
       buttons: [
-        {
-          label: 'Preencher com dados de exemplo', class: 'btn-ghost', align: 'left',
-          onClick: async () => {
-            const ok = await UI.confirm({
-              title: 'Dados de exemplo',
-              message: `Adicionar contas, cartão, categorias e ~12 meses de lançamentos fictícios ao perfil <strong>${U.escape(Store.profile().name)}</strong>? Serve para conhecer o painel — depois é só excluir o perfil.`,
-              confirmLabel: 'Preencher'
-            });
-            if (ok) { Store.seedDemo(); UI.toast('Dados de exemplo criados.', 'success'); UI.closeModal(); }
-          }
-        },
         { label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }
       ]
     });

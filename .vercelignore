@@ -7,3 +7,6 @@ README.md
 .claude/
 .gitattributes
 .gitignore
+.agents/
+skills-lock.json
+.env.example
