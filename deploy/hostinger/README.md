@@ -41,7 +41,46 @@ sobe é um problema; um segredo que sobe é outro, bem maior.
 
 ---
 
-## Publicar
+## Publicar pelo GitHub (caminho normal)
+
+Cada push em `main` que toque em `index.html`, `robots.txt`,
+`assets/` ou `deploy/hostinger/` publica sozinho, pelo workflow
+[`.github/workflows/deploy-hostinger.yml`](../../.github/workflows/deploy-hostinger.yml).
+
+**Por que não é a integração nativa do hPanel:** ela não existe para
+este site. Ele foi provisionado como *Aplicativo web Node.js*, cujo
+único deploy é por arquivo — o menu vai de **Avançado** direto para
+**Acesso SSH**, sem seção GIT, e a API da Hostinger também não expõe
+nada de Git. O workflow faz o que a integração faria.
+
+### Passo único de configuração
+
+1. hPanel → <https://hpanel.hostinger.com/profile/api> → gere um token
+2. GitHub → repositório → **Settings** → **Secrets and variables** →
+   **Actions** → **New repository secret**
+3. Nome exato: `HOSTINGER_API_TOKEN`. Valor: o token.
+
+Enquanto ele não existir, o workflow falha no terceiro passo com
+`HOSTINGER_API_TOKEN nao esta configurado` — de propósito, e antes de
+qualquer coisa sair do runner.
+
+### O que o workflow confere
+
+Enviar arquivo não é a mesma coisa que o site estar de pé, então ele
+não confia no "deu certo" da API:
+
+- o **offset** do upload tem que bater com o tamanho do zip — um
+  envio truncado também devolve `204`, e seguiria para a extração
+- o **`.htaccess`** tem que estar dentro do zip — ele entra por um
+  passo à mão, justamente o tipo de passo que quebra calado
+- o **site tem que responder certo** depois: `/`, `/precos` e os
+  assets em `200`; `/naoexiste.css` em `404`
+
+Qualquer uma dessas falhando derruba o job.
+
+---
+
+## Publicar à mão (rollback e emergência)
 
 1. hPanel → **Arquivos** → **Gerenciador de Arquivos**
 2. Entre em `public_html` do site escolhido
