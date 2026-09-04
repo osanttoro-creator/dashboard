@@ -43,15 +43,21 @@
   RewriteCond %{REQUEST_FILENAME} !-d
   # A API não é do front: se um dia existir aqui, não vira index.
   RewriteCond %{REQUEST_URI} !^/api/
+  # Arquivo com extensão de asset que não existe é ERRO, não rota.
+  # Sem esta linha, /assets/css/style.css digitado errado devolvia o
+  # index.html com status 200: o navegador recusava por MIME e a
+  # página abria sem estilo, sem nada no log dizendo o porquê. Uma
+  # rota do app nunca tem extensão, então excluí-las não custa nada.
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip)$ [NC]
   RewriteRule ^ /index.html [L]
 </IfModule>
 
 # -------------------------------------------------------------
 # 3 · página de erro
 # -------------------------------------------------------------
-# Com o fallback acima, um 404 de verdade só acontece para arquivo
-# inexistente dentro de /assets — e aí a página explica isso em vez
-# de mostrar o erro cru do Apache.
+# Com o fallback acima, um 404 de verdade acontece para qualquer
+# caminho com extensão de arquivo que não exista — e aí a página
+# explica isso em vez de mostrar o erro cru do Apache.
 ErrorDocument 404 /404.html
 
 # -------------------------------------------------------------

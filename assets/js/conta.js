@@ -333,7 +333,16 @@
               const r = await Conta.chamarFuncao('oaze-conta', {
                 acao: 'excluir', confirmacao: digitado
               });
-              if (r.erro) { diz(r.mensagem || 'Não foi possível excluir.', true); return; }
+              /* Exige ok:true EXPLÍCITO, não a ausência de erro.
+                 Uma resposta inesperada — função ainda não publicada,
+                 versão antiga, proxy no caminho — não traz campo
+                 'erro', e tratar isso como sucesso apagaria o
+                 localStorage de alguém cuja conta continua existindo.
+                 Em operação irreversível, o silêncio é "não". */
+              if (r.ok !== true) {
+                diz(r.mensagem || 'O servidor não confirmou a exclusão. Nada foi apagado.', true);
+                return;
+              }
 
               /* Só agora o local sai — e só porque o servidor
                  confirmou. Apagar antes trocaria uma perda de dados
