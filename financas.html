@@ -2534,20 +2534,55 @@ input[type="checkbox"], input[type="radio"] {
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
 
-/* Indicador da fila offline. Fica escondido quando não há nada
-   pendente — um selo permanente de "tudo certo" vira ruído e
-   ninguém repara quando ele muda. */
+/* Indicador do estado da sincronização.
+   "Sincronizado" aparece por alguns segundos e some; um selo
+   permanente de "tudo certo" vira mobília, e quando ele mudar para
+   erro também ninguém vai reparar. Offline e erro ficam até
+   deixarem de ser verdade. */
 .fila-chip {
-  display: block; margin-bottom: 6px;
-  padding: 6px 10px; border-radius: 10px;
-  font-size: 11px; font-weight: 560; line-height: 1.35;
+  /* flex, e não block: o chip agora carrega texto, um detalhe e um
+     botão. Com display:block eles empilhariam colados e o botão
+     encostaria no texto. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+  margin-bottom: 6px;
+  padding: 7px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.4;
   border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
 }
+.fila-chip.is-local        { color: var(--muted); }
 .fila-chip.is-offline      { color: var(--ink-2); }
 .fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-sincronizado { color: var(--good, #1F6B4F); }
 .fila-chip.is-erro {
   color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
   border-color: transparent;
+}
+
+/* O detalhe quebra para a linha inteira: ele é uma frase, não um
+   complemento curto, e disputar a linha com o rótulo deixaria os
+   dois ilegíveis. */
+.fila-detalhe {
+  flex-basis: 100%;
+  font-weight: 400; opacity: .88;
+}
+
+/* Ação dentro do chip. 24px de altura é o mínimo da WCAG 2.2 para
+   alvo de toque -- um "tentar novamente" de 16px de altura existe
+   no papel e não no dedo. */
+.fila-acao {
+  display: inline-flex; align-items: center;
+  min-height: 24px; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid currentColor;
+  background: transparent; color: inherit;
+  font: 600 11px/1 inherit; font-family: inherit;
+  cursor: pointer; text-decoration: none;
+}
+.fila-acao:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.fila-acao:disabled { opacity: .6; cursor: default; }
+/* O foco precisa aparecer sobre o fundo vermelho do estado de erro,
+   onde um anel da cor do texto sumiria. */
+.fila-chip.is-erro .fila-acao:focus-visible {
+  outline: 2px solid #fff; outline-offset: 2px;
 }
 
 </style>
@@ -9002,8 +9037,21 @@ window.SupabaseConfig = {
        na sessão anterior. */
     if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
+
+    /* Os três são disparados juntos, e NÃO em sequência.
+       A ordem que importa não é a de chamada: a migração é
+       interativa -- abre um modal e espera a pessoa decidir, o que
+       pode levar minutos ou não acontecer nunca. Nenhum `await`
+       ordena isso.
+
+       Quem garante a ordem é a trava do lado de quem lê:
+       Dados.carregarDoBanco recusa aplicar enquanto houver tarefa na
+       fila ou migração pendente. Assim a regra "o local sobe antes
+       de o servidor descer" vale independentemente de quem chamou
+       quem, e de quando. */
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();
+    if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco();
   };
 
   /** Chamado pelo backend quando chegam perfis da nuvem. */
@@ -10023,6 +10071,186 @@ window.SupabaseConfig = {
     return { ok: !problemas.length, problemas };
   };
 
+  /* ============================================================
+     4 · LEITURA — o caminho de volta
+     ============================================================
+     Até aqui o Repo era via de mão única: o app escrevia no banco e
+     nunca lia de lá. Isso é o que mantinha o localStorage como
+     fonte da verdade, com o banco de cópia. Invertida a direção, o
+     banco passa a ser o original e o localStorage o cache.
+     ============================================================ */
+
+  /* Quantas linhas por viagem. NÃO É AJUSTE DE DESEMPENHO -- é
+     correção. O PostgREST corta a resposta em 1.000 linhas por
+     padrão e NÃO avisa: uma conta com 1.400 lançamentos leria 1.000
+     e o app mostraria um ano incompleto sem erro nenhum, sem nada no
+     console, com todos os totais errados por um valor plausível.
+     Por isso toda leitura abaixo passa por `todas()`. */
+  const PAGINA = 1000;
+
+  /** Lê uma tabela inteira do espaço, paginando até acabar. */
+  async function todas(sb, tabela, wsId, ordem) {
+    const linhas = [];
+    for (let de = 0; ; de += PAGINA) {
+      let q = sb.from(tabela).select('*')
+        .eq('workspace_id', wsId)
+        .is('deleted_at', null)
+        .range(de, de + PAGINA - 1);
+      /* A ordenação precisa ser TOTAL. Ordenar só por data deixa
+         empates soltos, e o Postgres não promete ordem estável entre
+         eles -- duas leituras devolveriam a mesma lista embaralhada,
+         e a tela pisca a cada sincronização sem nada ter mudado. */
+      if (ordem) ordem.forEach((c) => { q = q.order(c.col, { ascending: c.asc !== false }); });
+      q = q.order('id', { ascending: true });
+
+      const { data, error } = await q;
+      if (error) throw new Error(tabela + ': ' + error.message);
+      linhas.push.apply(linhas, data || []);
+      if (!data || data.length < PAGINA) return linhas;
+    }
+  }
+
+  /* O id que o app usa. Preferimos o legacy_id porque é ele que
+     mantém a identidade estável na ida e na volta: enviarEspaco
+     grava `legacy_id: a.id`, então ler de volta como `a.id` fecha o
+     ciclo e o upsert seguinte encontra a MESMA linha.
+     Linha criada direto no banco não tem legacy_id; aí o UUID vira o
+     id do app, e o próximo envio grava esse UUID em legacy_id. O
+     ciclo se fecha sozinho na primeira volta. */
+  const idApp = (r) => r.legacy_id || r.id;
+
+  /**
+   * Lê um espaço inteiro e devolve no formato que o Store espera.
+   * O inverso exato de Repo.mapa.
+   */
+  Repo.carregarEspaco = async function (wsId, nome, legacyDoEspaco) {
+    const sb = cliente();
+
+    /* Em paralelo: são consultas independentes, e em série o tempo
+       de abrir o app seria a soma de oito viagens em vez da mais
+       lenta delas. */
+    const [contas, cats, cartoes, txs, invs, metas, faturas, orcs] = await Promise.all([
+      todas(sb, 'accounts',      wsId, [{ col: 'name' }]),
+      todas(sb, 'categories',    wsId, [{ col: 'name' }]),
+      todas(sb, 'credit_cards',  wsId, [{ col: 'name' }]),
+      todas(sb, 'transactions',  wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'investments',   wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'goals',         wsId, [{ col: 'name' }]),
+      todas(sb, 'card_invoices', wsId, [{ col: 'referencia' }]),
+      todas(sb, 'budgets',       wsId, [{ col: 'created_at' }])
+    ]);
+
+    /* UUID → id do app, para reconstruir as ligações. As chaves
+       estrangeiras no banco são UUID; o app cruza por id de texto. */
+    const de = {};
+    [contas, cats, cartoes].forEach((lista) => lista.forEach((r) => { de[r.id] = idApp(r); }));
+
+    const perfil = {
+      id: legacyDoEspaco || wsId,
+      name: nome || 'Pessoal',
+      /* O uuid do espaço não é do formato do app, mas o app nunca o
+         lê -- quem usa é a sincronização, para saber onde gravar. */
+      workspaceId: wsId,
+
+      accounts: contas.map((a) => ({
+        id: idApp(a),
+        name: a.name, bank: a.bank || '', type: a.tipo || 'Conta corrente',
+        color: a.cor, gradient: a.gradiente || null,
+        last4: String(a.last4 || ''),
+        openingBalance: +a.saldo_inicial || 0,
+        openedAt: a.aberta_em, archived: !!a.arquivada
+      })),
+
+      categories: cats.map((c) => ({
+        id: idApp(c), name: c.name,
+        kind: c.kind === 'income' ? 'income' : 'expense',
+        color: c.cor, icon: c.icone || null
+      })),
+
+      cards: cartoes.map((c) => ({
+        id: idApp(c), name: c.name, bank: c.bank || '',
+        color: c.cor, gradient: c.gradiente || null,
+        last4: String(c.last4 || ''),
+        limit: +c.limite || 0,
+        closingDay: +c.dia_fechamento || 1,
+        dueDay: +c.dia_vencimento || 10,
+        accountId: de[c.account_id] || null
+      })),
+
+      transactions: txs.map((t) => ({
+        id: idApp(t), kind: t.kind,
+        description: t.descricao || '',
+        amount: +t.valor || 0,
+        date: t.data,
+        categoryId: de[t.category_id] || null,
+        method: t.metodo === 'card' ? 'card' : 'account',
+        accountId: de[t.account_id] || null,
+        toAccountId: de[t.to_account_id] || null,
+        cardId: de[t.card_id] || null,
+        recurring: !!t.recorrente,
+        recurEnd: t.recorrencia_fim || null,
+        confirmed: t.confirmado !== false,
+        occ: t.ocorrencias && typeof t.ocorrencias === 'object' ? t.ocorrencias : {},
+        installment: t.parcelamento || null,
+        notes: t.notas || '',
+        source: t.origem_registro || 'manual'
+      })),
+
+      investments: invs.map((i) => ({
+        id: idApp(i), name: i.name, type: i.tipo,
+        amount: +i.valor || 0, date: i.data, rate: +i.taxa || 0,
+        currentValue: i.valor_atual == null ? null : +i.valor_atual,
+        accountId: de[i.account_id] || null,
+        notes: i.notas || ''
+      })),
+
+      goals: metas.map((g) => ({
+        id: idApp(g), name: g.name,
+        target: +g.alvo || 0, saved: +g.guardado || 0,
+        deadline: g.prazo || null,
+        color: g.cor, icon: g.icone || 'target',
+        accountId: de[g.account_id] || null
+      })),
+
+      /* Faturas e orçamentos voltam a ser MAPAS, não listas -- é
+         assim que o app os usa, e converter aqui evita que cada
+         página tenha de saber dos dois formatos. */
+      invoices: {},
+      budgets: {}
+    };
+
+    faturas.forEach((f) => {
+      const cartao = de[f.card_id];
+      if (!cartao) return;   /* cartão apagado: a fatura perdeu o dono */
+      perfil.invoices[cartao + '|' + f.referencia] = {
+        paid: f.paga !== false,
+        paidAt: f.paga_em || null,
+        accountId: de[f.account_id] || null,
+        amount: +f.valor || 0
+      };
+    });
+
+    orcs.forEach((o) => {
+      const cat = de[o.category_id];
+      if (cat) perfil.budgets[cat] = +o.limite || 0;
+    });
+
+    return perfil;
+  };
+
+  /** Os espaços do usuário, em ordem estável. */
+  Repo.listarEspacos = async function (userId) {
+    const sb = cliente();
+    const { data, error } = await sb.from('workspaces')
+      .select('id, name, legacy_id, posicao, created_at')
+      .eq('owner_id', userId)
+      .is('deleted_at', null)
+      .order('posicao', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw new Error('espaços: ' + error.message);
+    return data || [];
+  };
+
   global.Repo = Repo;
 })(window);
 
@@ -10116,15 +10344,27 @@ window.SupabaseConfig = {
    * tela: aria-live existe porque a mudança de "sincronizando" para
    * "sincronizado" não tem nenhum outro sinal para quem não vê.
    */
+  /* ---------------- quem quer saber ---------------- */
+
+  const ouvintes = [];
+  Fila.aoMudar = (fn) => { ouvintes.push(fn); };
+  Fila.rotulo = (e) => ROTULO[e] || '';
+
+  /**
+   * Anuncia o estado. NÃO desenha mais nada.
+   *
+   * Antes esta função escrevia direto no #filaBox. Com o dados.js
+   * também tendo o que dizer sobre sincronização, dois módulos
+   * escreveriam no mesmo nó e o último a rodar venceria -- um
+   * "Sincronizado" apagaria um "erro ao trazer do servidor" ou o
+   * contrário, dependendo da ordem, que ninguém controla.
+   * Agora há um desenhista só (estado-sync.js) e duas fontes que o
+   * alimentam. O nome continua `pintar` porque é chamado de doze
+   * lugares aqui dentro; o que ele pinta é o estado, não a tela.
+   */
   Fila.pintar = function () {
-    const alvo = document.getElementById('filaBox');
-    if (!alvo) return;
     const e = Fila.estado();
-    const n = tarefas.length;
-    alvo.setAttribute('aria-live', 'polite');
-    alvo.className = 'fila-chip is-' + e;
-    alvo.textContent = ROTULO[e] + (n && e !== 'sincronizado' ? ' (' + n + ')' : '');
-    alvo.hidden = e === 'sincronizado' && !n;
+    ouvintes.forEach((fn) => { try { fn(e, tarefas.length); } catch (err) { console.error(err); } });
   };
 
   /* ---------------- drenagem ---------------- */
@@ -10207,6 +10447,8 @@ window.SupabaseConfig = {
 })(window);
 
 </script>
+<script src="assets/js/dados.js"></script>
+<script src="assets/js/estado-sync.js"></script>
 <script>
 /* ===== assets/js/migracao.js ===== */
 /* =============================================================
@@ -10405,10 +10647,18 @@ window.SupabaseConfig = {
     /* Uma segunda checagem, agora que o clique aconteceu: entre
        abrir o modal e clicar, outra aba pode ter migrado. */
     if (await Mig.jaMigrou()) {
+      jaMigrouCache = true;
       UI.closeModal();
       UI.toast('Seus dados já estão na conta.', 'success');
       return;
     }
+
+    /* A partir daqui o banco fica temporariamente incompleto: alguns
+       espaços já subiram e outros não. Ler dele agora e aplicar por
+       cima do aparelho seria substituir o inteiro pelo pedaço. A
+       bandeira fecha essa janela, e o `finally` garante que ela
+       abra de novo mesmo se algo estourar no meio. */
+    rodando = true;
 
     const sb = SupabaseBackend.cliente();
     const painel = el('div', { style: { fontSize: '13.5px', lineHeight: '1.7' } });
@@ -10506,6 +10756,17 @@ window.SupabaseConfig = {
         ]),
         buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
       });
+    } finally {
+      /* Sai da trava aconteça o que acontecer. Sem o finally, uma
+         falha no meio deixaria `rodando` verdadeiro para sempre e o
+         app nunca mais traria dados do servidor -- um defeito que
+         só apareceria depois, longe daqui, como "a sincronização
+         parou de funcionar". */
+      rodando = false;
+      /* Se deu certo, o cache passa a saber; se falhou, volta para a
+         dúvida, que é o lado seguro. */
+      try { jaMigrouCache = await Mig.jaMigrou(); } catch (e) { jaMigrouCache = null; }
+      if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco({ silencioso: true });
     }
   };
 
@@ -10516,7 +10777,48 @@ window.SupabaseConfig = {
    * desenhar antes: um modal que aparece sobre a tela em branco
    * assusta mais do que informa.
    */
+  /* ---------------- 9 · a trava ----------------
+     Enquanto houver dado local que ainda não subiu, o dados.js NÃO
+     pode trazer o banco por cima -- seria apagar exatamente o que a
+     migração existe para salvar.
+
+     Isto é uma trava consultável, e não uma questão de ordem de
+     chamada, porque a migração é INTERATIVA: ela abre um modal e
+     espera a pessoa decidir, o que pode levar minutos ou nunca
+     acontecer. Nenhum `await` resolve isso. O que resolve é o
+     leitor perguntar antes de escrever.
+
+     A primeira versão desta integração tinha um `await Mig.aoEntrar()`
+     no sync.js. Não esperava nada: aoEntrar era um setTimeout que
+     retornava na hora. A leitura corria junto com a migração e podia
+     aplicar um banco pela metade sobre os dados completos do
+     aparelho. */
+  let rodando = false;
+  let jaMigrouCache = null;
+
+  Mig.emAndamento = () => rodando;
+
+  /**
+   * Há dado local que ainda não está na conta?
+   * Síncrono de propósito: quem chama é o caminho da leitura, e uma
+   * checagem assíncrona ali abriria justamente a janela de corrida
+   * que esta função existe para fechar. Por isso o resultado de
+   * jaMigrou() é guardado quando conhecido.
+   */
+  Mig.pendente = function () {
+    if (rodando) return true;
+    if (!Mig.temDadoAntigo()) return false;
+    /* Ainda não sabemos se migrou: na dúvida, PENDENTE. Errar para
+       este lado adia uma leitura; errar para o outro apaga dados. */
+    return jaMigrouCache !== true;
+  };
+
   Mig.aoEntrar = function () {
+    /* Descobre o quanto antes, para que Mig.pendente() pare de
+       responder "na dúvida" assim que houver certeza. */
+    Mig.jaMigrou().then((sim) => { jaMigrouCache = sim; })
+      .catch(() => { /* segue na dúvida, que é o lado seguro */ });
+
     setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
   };
 
@@ -10676,14 +10978,26 @@ window.SupabaseConfig = {
 
   function barra() {
     const total = ETAPAS.length - 1;   // "fim" não é trabalho
+
+    /* UM NÚMERO SÓ, CALCULADO UMA VEZ.
+       Antes o texto dizia "Etapa 1 de 7" e o aria-label dizia
+       "Etapa 1 de 8": o label somava 'fim', que o texto exclui de
+       propósito. Quem enxerga via 7, quem usa leitor de tela ouvia
+       8 -- a mesma tela contando duas histórias, e a discordância
+       vinha de a frase estar escrita duas vezes.
+       Agora existe uma frase só, e as duas leituras não têm como
+       divergir de novo. */
+    const passo = Math.min(indice + 1, total);
+    const rotulo = 'Etapa ' + passo + ' de ' + total;
     const pct = Math.round((indice / total) * 100);
+
     return el('div', { class: 'ob-progresso' }, [
       el('div', {
         class: 'ob-barra', role: 'progressbar',
         'aria-valuenow': String(indice), 'aria-valuemin': '0', 'aria-valuemax': String(total),
-        'aria-label': 'Etapa ' + (indice + 1) + ' de ' + (total + 1)
+        'aria-label': rotulo
       }, el('i', { style: { width: pct + '%' } })),
-      el('p', { class: 'ob-passo', text: 'Etapa ' + Math.min(indice + 1, total) + ' de ' + total })
+      el('p', { class: 'ob-passo', text: rotulo })
     ]);
   }
 
@@ -15978,9 +16292,23 @@ window.SupabaseConfig = {
     const destino = document.getElementById('syncBoxSettings');
     if (origem && destino) destino.appendChild(el('span', { class: 'muted', text: origem.textContent.trim() || '—' }));
 
+    /* A frase muda conforme a situação REAL da conta, e não é
+       decorativa: ela é a diferença entre "se eu limpar o navegador,
+       perco tudo" e "não perco". Antes dizia sempre que a
+       sincronização era uma cópia e o navegador o original -- o que
+       deixou de ser verdade quando o banco virou a fonte, e
+       continuar dizendo faria alguém tratar como descartável o
+       único lugar onde os dados dele existem. */
+    const comConta = global.Dados && Dados.estado() !== 'local';
     box.appendChild(linha(
       'Onde os dados ficam',
-      'Sempre neste navegador (localStorage). A sincronização é uma cópia, não o original.',
+      comConta
+        ? 'No servidor, na sua conta — é lá que eles existem de verdade e é de lá que ' +
+          'vêm ao abrir em qualquer aparelho. Este navegador guarda uma cópia local para ' +
+          'a tela abrir rápido e para você continuar trabalhando sem internet.'
+        : 'Só neste navegador (localStorage). Não há cópia em lugar nenhum: limpar os ' +
+          'dados do site, trocar de aparelho ou usar uma janela anônima apaga tudo. ' +
+          'Com uma conta, eles passam a viver no servidor.',
       el('span', { class: 'muted', text: Store.storageOK ? 'Armazenamento disponível' : 'BLOQUEADO neste navegador' })
     ));
   }
@@ -16740,6 +17068,11 @@ window.SupabaseConfig = {
     passo('conta', () => Conta.init());
     passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
+    /* Dados antes de Sync: é o Sync que avisa da entrada, e quando
+       avisar o Dados já precisa estar escutando. Na ordem inversa a
+       primeira sessão da sessão passaria despercebida. */
+    passo('fonte dos dados', () => Dados.init());
+    passo('estado da sincronia', () => EstadoSync.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());

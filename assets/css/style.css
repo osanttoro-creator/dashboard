@@ -2498,18 +2498,53 @@ input[type="checkbox"], input[type="radio"] {
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
 
-/* Indicador da fila offline. Fica escondido quando não há nada
-   pendente — um selo permanente de "tudo certo" vira ruído e
-   ninguém repara quando ele muda. */
+/* Indicador do estado da sincronização.
+   "Sincronizado" aparece por alguns segundos e some; um selo
+   permanente de "tudo certo" vira mobília, e quando ele mudar para
+   erro também ninguém vai reparar. Offline e erro ficam até
+   deixarem de ser verdade. */
 .fila-chip {
-  display: block; margin-bottom: 6px;
-  padding: 6px 10px; border-radius: 10px;
-  font-size: 11px; font-weight: 560; line-height: 1.35;
+  /* flex, e não block: o chip agora carrega texto, um detalhe e um
+     botão. Com display:block eles empilhariam colados e o botão
+     encostaria no texto. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+  margin-bottom: 6px;
+  padding: 7px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.4;
   border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
 }
+.fila-chip.is-local        { color: var(--muted); }
 .fila-chip.is-offline      { color: var(--ink-2); }
 .fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-sincronizado { color: var(--good, #1F6B4F); }
 .fila-chip.is-erro {
   color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
   border-color: transparent;
+}
+
+/* O detalhe quebra para a linha inteira: ele é uma frase, não um
+   complemento curto, e disputar a linha com o rótulo deixaria os
+   dois ilegíveis. */
+.fila-detalhe {
+  flex-basis: 100%;
+  font-weight: 400; opacity: .88;
+}
+
+/* Ação dentro do chip. 24px de altura é o mínimo da WCAG 2.2 para
+   alvo de toque -- um "tentar novamente" de 16px de altura existe
+   no papel e não no dedo. */
+.fila-acao {
+  display: inline-flex; align-items: center;
+  min-height: 24px; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid currentColor;
+  background: transparent; color: inherit;
+  font: 600 11px/1 inherit; font-family: inherit;
+  cursor: pointer; text-decoration: none;
+}
+.fila-acao:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.fila-acao:disabled { opacity: .6; cursor: default; }
+/* O foco precisa aparecer sobre o fundo vermelho do estado de erro,
+   onde um anel da cor do texto sumiria. */
+.fila-chip.is-erro .fila-acao:focus-visible {
+  outline: 2px solid #fff; outline-offset: 2px;
 }

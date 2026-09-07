@@ -133,12 +133,45 @@ Tema e perfil ativo **não** sincronizam: são preferências de cada aparelho.
 perfil a perfil. No primeiro login os dois lados se somam, então pode haver
 duplicata (dois "Pessoal", por exemplo) — apague o que sobrar em ⚙ Perfis.
 
-### Por que `jsonb` e não tabelas normalizadas
+### Onde os dados moram de verdade
 
-Não existe consulta relacional do lado do servidor: o app lê tudo de uma vez e
-calcula no navegador. Normalizar obrigaria a manter duas modelagens em sincronia
-e a migrar o banco a cada campo novo, sem ganho nenhum. Um documento por usuário
-é a forma honesta do que isto é — uma cópia sincronizada do `localStorage`.
+**No Supabase, quando há conta.** O `localStorage` deixou de ser o original e
+passou a ser cinco coisas menores:
+
+- cache, para a tela abrir sem esperar a rede;
+- fila do que foi feito offline;
+- recuperação temporária quando a leitura do servidor falha;
+- backup da migração;
+- preferências deste aparelho (tema, mês em foco, perfil aberto).
+
+Nada disso é "os dados". É a conveniência em volta deles.
+
+**Sem conta, o `localStorage` continua sendo tudo o que existe** — e o app diz
+isso com essas palavras no indicador de sincronização, em vez de fingir que há
+um servidor por trás.
+
+#### As duas modelagens, e por que as duas existem
+
+A tabela `dados` (um documento `jsonb` por usuário) veio primeiro e continua
+servindo à sincronização entre aparelhos, que é uma troca de estado inteiro.
+O esquema normalizado — `workspaces`, `accounts`, `transactions` e companhia —
+é o registro oficial: é sobre ele que o RLS isola conta a conta, é dele que os
+limites de plano são contados, e é ele que a exclusão de conta apaga em cascata.
+
+`repo.js` é a única fronteira entre as duas formas. O caminho de ida
+(`enviarEspaco`) já existia; o de volta (`carregarEspaco`) foi escrito na fase 2
+e é o que tornou o banco a fonte, em vez de um depósito.
+
+#### A regra que não se quebra
+
+`Dados.carregarDoBanco` **recusa** trazer o servidor por cima do aparelho
+enquanto houver fila pendente ou migração não concluída. Sem essa trava, o
+caminho para perder dados é curto e silencioso: edita offline, a rede volta, o
+banco desce por cima, e a edição some sem erro nenhum.
+
+A trava é consultada por quem lê, e não garantida por ordem de chamada — a
+migração é interativa e pode levar minutos ou nunca acontecer, e nenhum `await`
+ordena isso. Coberto por `tools/testes/trava-sobrescrita.js`, seis casos.
 
 ---
 

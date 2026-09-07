@@ -511,6 +511,11 @@
     passo('conta', () => Conta.init());
     passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
+    /* Dados antes de Sync: é o Sync que avisa da entrada, e quando
+       avisar o Dados já precisa estar escutando. Na ordem inversa a
+       primeira sessão da sessão passaria despercebida. */
+    passo('fonte dos dados', () => Dados.init());
+    passo('estado da sincronia', () => EstadoSync.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());

@@ -266,8 +266,21 @@
        na sessão anterior. */
     if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
+
+    /* Os três são disparados juntos, e NÃO em sequência.
+       A ordem que importa não é a de chamada: a migração é
+       interativa -- abre um modal e espera a pessoa decidir, o que
+       pode levar minutos ou não acontecer nunca. Nenhum `await`
+       ordena isso.
+
+       Quem garante a ordem é a trava do lado de quem lê:
+       Dados.carregarDoBanco recusa aplicar enquanto houver tarefa na
+       fila ou migração pendente. Assim a regra "o local sobe antes
+       de o servidor descer" vale independentemente de quem chamou
+       quem, e de quando. */
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();
+    if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco();
   };
 
   /** Chamado pelo backend quando chegam perfis da nuvem. */

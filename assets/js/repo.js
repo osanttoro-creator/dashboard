@@ -289,5 +289,185 @@
     return { ok: !problemas.length, problemas };
   };
 
+  /* ============================================================
+     4 · LEITURA — o caminho de volta
+     ============================================================
+     Até aqui o Repo era via de mão única: o app escrevia no banco e
+     nunca lia de lá. Isso é o que mantinha o localStorage como
+     fonte da verdade, com o banco de cópia. Invertida a direção, o
+     banco passa a ser o original e o localStorage o cache.
+     ============================================================ */
+
+  /* Quantas linhas por viagem. NÃO É AJUSTE DE DESEMPENHO -- é
+     correção. O PostgREST corta a resposta em 1.000 linhas por
+     padrão e NÃO avisa: uma conta com 1.400 lançamentos leria 1.000
+     e o app mostraria um ano incompleto sem erro nenhum, sem nada no
+     console, com todos os totais errados por um valor plausível.
+     Por isso toda leitura abaixo passa por `todas()`. */
+  const PAGINA = 1000;
+
+  /** Lê uma tabela inteira do espaço, paginando até acabar. */
+  async function todas(sb, tabela, wsId, ordem) {
+    const linhas = [];
+    for (let de = 0; ; de += PAGINA) {
+      let q = sb.from(tabela).select('*')
+        .eq('workspace_id', wsId)
+        .is('deleted_at', null)
+        .range(de, de + PAGINA - 1);
+      /* A ordenação precisa ser TOTAL. Ordenar só por data deixa
+         empates soltos, e o Postgres não promete ordem estável entre
+         eles -- duas leituras devolveriam a mesma lista embaralhada,
+         e a tela pisca a cada sincronização sem nada ter mudado. */
+      if (ordem) ordem.forEach((c) => { q = q.order(c.col, { ascending: c.asc !== false }); });
+      q = q.order('id', { ascending: true });
+
+      const { data, error } = await q;
+      if (error) throw new Error(tabela + ': ' + error.message);
+      linhas.push.apply(linhas, data || []);
+      if (!data || data.length < PAGINA) return linhas;
+    }
+  }
+
+  /* O id que o app usa. Preferimos o legacy_id porque é ele que
+     mantém a identidade estável na ida e na volta: enviarEspaco
+     grava `legacy_id: a.id`, então ler de volta como `a.id` fecha o
+     ciclo e o upsert seguinte encontra a MESMA linha.
+     Linha criada direto no banco não tem legacy_id; aí o UUID vira o
+     id do app, e o próximo envio grava esse UUID em legacy_id. O
+     ciclo se fecha sozinho na primeira volta. */
+  const idApp = (r) => r.legacy_id || r.id;
+
+  /**
+   * Lê um espaço inteiro e devolve no formato que o Store espera.
+   * O inverso exato de Repo.mapa.
+   */
+  Repo.carregarEspaco = async function (wsId, nome, legacyDoEspaco) {
+    const sb = cliente();
+
+    /* Em paralelo: são consultas independentes, e em série o tempo
+       de abrir o app seria a soma de oito viagens em vez da mais
+       lenta delas. */
+    const [contas, cats, cartoes, txs, invs, metas, faturas, orcs] = await Promise.all([
+      todas(sb, 'accounts',      wsId, [{ col: 'name' }]),
+      todas(sb, 'categories',    wsId, [{ col: 'name' }]),
+      todas(sb, 'credit_cards',  wsId, [{ col: 'name' }]),
+      todas(sb, 'transactions',  wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'investments',   wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'goals',         wsId, [{ col: 'name' }]),
+      todas(sb, 'card_invoices', wsId, [{ col: 'referencia' }]),
+      todas(sb, 'budgets',       wsId, [{ col: 'created_at' }])
+    ]);
+
+    /* UUID → id do app, para reconstruir as ligações. As chaves
+       estrangeiras no banco são UUID; o app cruza por id de texto. */
+    const de = {};
+    [contas, cats, cartoes].forEach((lista) => lista.forEach((r) => { de[r.id] = idApp(r); }));
+
+    const perfil = {
+      id: legacyDoEspaco || wsId,
+      name: nome || 'Pessoal',
+      /* O uuid do espaço não é do formato do app, mas o app nunca o
+         lê -- quem usa é a sincronização, para saber onde gravar. */
+      workspaceId: wsId,
+
+      accounts: contas.map((a) => ({
+        id: idApp(a),
+        name: a.name, bank: a.bank || '', type: a.tipo || 'Conta corrente',
+        color: a.cor, gradient: a.gradiente || null,
+        last4: String(a.last4 || ''),
+        openingBalance: +a.saldo_inicial || 0,
+        openedAt: a.aberta_em, archived: !!a.arquivada
+      })),
+
+      categories: cats.map((c) => ({
+        id: idApp(c), name: c.name,
+        kind: c.kind === 'income' ? 'income' : 'expense',
+        color: c.cor, icon: c.icone || null
+      })),
+
+      cards: cartoes.map((c) => ({
+        id: idApp(c), name: c.name, bank: c.bank || '',
+        color: c.cor, gradient: c.gradiente || null,
+        last4: String(c.last4 || ''),
+        limit: +c.limite || 0,
+        closingDay: +c.dia_fechamento || 1,
+        dueDay: +c.dia_vencimento || 10,
+        accountId: de[c.account_id] || null
+      })),
+
+      transactions: txs.map((t) => ({
+        id: idApp(t), kind: t.kind,
+        description: t.descricao || '',
+        amount: +t.valor || 0,
+        date: t.data,
+        categoryId: de[t.category_id] || null,
+        method: t.metodo === 'card' ? 'card' : 'account',
+        accountId: de[t.account_id] || null,
+        toAccountId: de[t.to_account_id] || null,
+        cardId: de[t.card_id] || null,
+        recurring: !!t.recorrente,
+        recurEnd: t.recorrencia_fim || null,
+        confirmed: t.confirmado !== false,
+        occ: t.ocorrencias && typeof t.ocorrencias === 'object' ? t.ocorrencias : {},
+        installment: t.parcelamento || null,
+        notes: t.notas || '',
+        source: t.origem_registro || 'manual'
+      })),
+
+      investments: invs.map((i) => ({
+        id: idApp(i), name: i.name, type: i.tipo,
+        amount: +i.valor || 0, date: i.data, rate: +i.taxa || 0,
+        currentValue: i.valor_atual == null ? null : +i.valor_atual,
+        accountId: de[i.account_id] || null,
+        notes: i.notas || ''
+      })),
+
+      goals: metas.map((g) => ({
+        id: idApp(g), name: g.name,
+        target: +g.alvo || 0, saved: +g.guardado || 0,
+        deadline: g.prazo || null,
+        color: g.cor, icon: g.icone || 'target',
+        accountId: de[g.account_id] || null
+      })),
+
+      /* Faturas e orçamentos voltam a ser MAPAS, não listas -- é
+         assim que o app os usa, e converter aqui evita que cada
+         página tenha de saber dos dois formatos. */
+      invoices: {},
+      budgets: {}
+    };
+
+    faturas.forEach((f) => {
+      const cartao = de[f.card_id];
+      if (!cartao) return;   /* cartão apagado: a fatura perdeu o dono */
+      perfil.invoices[cartao + '|' + f.referencia] = {
+        paid: f.paga !== false,
+        paidAt: f.paga_em || null,
+        accountId: de[f.account_id] || null,
+        amount: +f.valor || 0
+      };
+    });
+
+    orcs.forEach((o) => {
+      const cat = de[o.category_id];
+      if (cat) perfil.budgets[cat] = +o.limite || 0;
+    });
+
+    return perfil;
+  };
+
+  /** Os espaços do usuário, em ordem estável. */
+  Repo.listarEspacos = async function (userId) {
+    const sb = cliente();
+    const { data, error } = await sb.from('workspaces')
+      .select('id, name, legacy_id, posicao, created_at')
+      .eq('owner_id', userId)
+      .is('deleted_at', null)
+      .order('posicao', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw new Error('espaços: ' + error.message);
+    return data || [];
+  };
+
   global.Repo = Repo;
 })(window);

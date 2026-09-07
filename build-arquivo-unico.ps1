@@ -23,7 +23,23 @@ function Ler([string]$rel) {
 # fecha-tag dentro de string JS quebraria o <script> que a envolve
 function Proteger([string]$js) { return $js -replace '</script', '<\/script' }
 
-$html = Ler 'index.html'
+# A FONTE É app.html, NÃO index.html.
+#
+# Isto já foi index.html e quebrou quando o site público tomou a
+# raiz: o script passou a inlinar a landing, e o financas.html caiu
+# de 1.269 KB para 29 KB -- um arquivo que abre, não dá erro nenhum,
+# e não é o aplicativo. Quem só olhasse "gerado com sucesso" não
+# perceberia.
+$html = Ler 'app.html'
+
+# Cinto e suspensório: se um dia o conteúdo do app.html mudar de
+# natureza, é melhor o build FALHAR do que gerar um arquivo errado
+# em silêncio. O app tem dezenas de <script src="assets/...">; a
+# landing tem um.
+$quantosScripts = ([regex]::Matches($html, '<script\s+src="assets/')).Count
+if ($quantosScripts -lt 20) {
+  throw "app.html tem apenas $quantosScripts scripts de assets/ - isso nao parece o aplicativo. Build abortado."
+}
 
 # ---- 1 · CSS embutido (a fonte vem primeiro: o @font-face precisa
 #         existir antes das regras que a usam) ----

@@ -194,10 +194,18 @@
     /* Uma segunda checagem, agora que o clique aconteceu: entre
        abrir o modal e clicar, outra aba pode ter migrado. */
     if (await Mig.jaMigrou()) {
+      jaMigrouCache = true;
       UI.closeModal();
       UI.toast('Seus dados já estão na conta.', 'success');
       return;
     }
+
+    /* A partir daqui o banco fica temporariamente incompleto: alguns
+       espaços já subiram e outros não. Ler dele agora e aplicar por
+       cima do aparelho seria substituir o inteiro pelo pedaço. A
+       bandeira fecha essa janela, e o `finally` garante que ela
+       abra de novo mesmo se algo estourar no meio. */
+    rodando = true;
 
     const sb = SupabaseBackend.cliente();
     const painel = el('div', { style: { fontSize: '13.5px', lineHeight: '1.7' } });
@@ -295,6 +303,17 @@
         ]),
         buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
       });
+    } finally {
+      /* Sai da trava aconteça o que acontecer. Sem o finally, uma
+         falha no meio deixaria `rodando` verdadeiro para sempre e o
+         app nunca mais traria dados do servidor -- um defeito que
+         só apareceria depois, longe daqui, como "a sincronização
+         parou de funcionar". */
+      rodando = false;
+      /* Se deu certo, o cache passa a saber; se falhou, volta para a
+         dúvida, que é o lado seguro. */
+      try { jaMigrouCache = await Mig.jaMigrou(); } catch (e) { jaMigrouCache = null; }
+      if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco({ silencioso: true });
     }
   };
 
@@ -305,7 +324,48 @@
    * desenhar antes: um modal que aparece sobre a tela em branco
    * assusta mais do que informa.
    */
+  /* ---------------- 9 · a trava ----------------
+     Enquanto houver dado local que ainda não subiu, o dados.js NÃO
+     pode trazer o banco por cima -- seria apagar exatamente o que a
+     migração existe para salvar.
+
+     Isto é uma trava consultável, e não uma questão de ordem de
+     chamada, porque a migração é INTERATIVA: ela abre um modal e
+     espera a pessoa decidir, o que pode levar minutos ou nunca
+     acontecer. Nenhum `await` resolve isso. O que resolve é o
+     leitor perguntar antes de escrever.
+
+     A primeira versão desta integração tinha um `await Mig.aoEntrar()`
+     no sync.js. Não esperava nada: aoEntrar era um setTimeout que
+     retornava na hora. A leitura corria junto com a migração e podia
+     aplicar um banco pela metade sobre os dados completos do
+     aparelho. */
+  let rodando = false;
+  let jaMigrouCache = null;
+
+  Mig.emAndamento = () => rodando;
+
+  /**
+   * Há dado local que ainda não está na conta?
+   * Síncrono de propósito: quem chama é o caminho da leitura, e uma
+   * checagem assíncrona ali abriria justamente a janela de corrida
+   * que esta função existe para fechar. Por isso o resultado de
+   * jaMigrou() é guardado quando conhecido.
+   */
+  Mig.pendente = function () {
+    if (rodando) return true;
+    if (!Mig.temDadoAntigo()) return false;
+    /* Ainda não sabemos se migrou: na dúvida, PENDENTE. Errar para
+       este lado adia uma leitura; errar para o outro apaga dados. */
+    return jaMigrouCache !== true;
+  };
+
   Mig.aoEntrar = function () {
+    /* Descobre o quanto antes, para que Mig.pendente() pare de
+       responder "na dúvida" assim que houver certeza. */
+    Mig.jaMigrou().then((sim) => { jaMigrouCache = sim; })
+      .catch(() => { /* segue na dúvida, que é o lado seguro */ });
+
     setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
   };
 
