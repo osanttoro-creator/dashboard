@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>OAZE — Gestão Financeira</title>
 
+
 <!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,8 +16,8 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
 
 <!-- fonte vendorizada (Inter, embutida em base64): sem CDN, funciona em file:// -->
-<link rel="stylesheet" href="assets/vendor/fonte.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="/assets/vendor/fonte.css">
+<link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
@@ -264,6 +265,13 @@
         <p class="page-sub" id="pageSub"></p>
       </div>
 
+      <!-- Excedente de plano. Aparece só quando há mais itens do que
+           o plano permite — normalmente depois de descer de plano.
+           Fica acima do conteúdo porque explica por que a criação
+           está barrada; escondido no rodapé, o usuário só encontraria
+           o bloqueio, nunca o motivo. -->
+      <div class="faixa-excedente" id="faixaExcedente" role="status" hidden></div>
+
     <!-- ─────────── VISÃO GERAL ───────────
          Responde, de cima para baixo: quanto eu tenho, como estou,
          quanto entrou e saiu, o que vem aí, e onde o dinheiro foi.
@@ -402,30 +410,54 @@
         <div class="col-stack" id="colExpense"></div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
-        </div>
-        <div class="chart-box chart-box-lg"><canvas id="chartTxExpenseCat"></canvas>
-          <div class="empty-overlay" id="txExpCatEmpty" hidden>Nada confirmado ainda.</div>
+      <!-- ============================================================
+           ANÁLISES DO MÊS
+           Cada cartão some inteiro quando não há o que desenhar. Um
+           gráfico zerado não é neutro: ele ocupa 320px dizendo que a
+           resposta é "nada", quando a resposta é "ainda não há
+           pergunta". Antes desta mudança a página tinha 2.250px de
+           altura com zero lançamentos.
+           ============================================================ -->
+
+      <!-- Vazio total: um cartão compacto no lugar dos quatro. -->
+      <div class="card tx-vazio" id="txSemDados" hidden>
+        <h2>Sem movimentações neste mês</h2>
+        <p class="muted">
+          As análises aparecem assim que houver o que analisar: uma receita ou
+          uma despesa já bastam para o primeiro gráfico.
+        </p>
+        <div class="quick-actions">
+          <button class="btn btn-primary" type="button" data-novo="income">Registrar receita</button>
+          <button class="btn btn-outline" type="button" data-novo="expense">Registrar despesa</button>
         </div>
       </div>
 
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartMethodTrend"></canvas></div>
+      <div id="txGraficos">
+        <div class="card" id="cardExpCat">
+          <div class="card-head">
+            <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
+          </div>
+          <div class="chart-box"><canvas id="chartTxExpenseCat"></canvas></div>
+          <p class="chart-resumo" id="txExpCatResumo"></p>
         </div>
-        <div class="card">
-          <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartPlannedVsReal"></canvas></div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
-        <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas>
-          <div class="empty-overlay" id="txIncCatEmpty" hidden>Nada confirmado ainda.</div>
+        <div class="grid grid-2">
+          <div class="card" id="cardSplit">
+            <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
+            <div class="chart-box"><canvas id="chartMethodTrend"></canvas></div>
+            <p class="chart-resumo" id="txSplitResumo"></p>
+          </div>
+          <div class="card" id="cardPlanned">
+            <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
+            <div class="chart-box"><canvas id="chartPlannedVsReal"></canvas></div>
+            <p class="chart-resumo" id="txPlannedResumo"></p>
+          </div>
+        </div>
+
+        <div class="card" id="cardIncCat">
+          <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
+          <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas></div>
+          <p class="chart-resumo" id="txIncCatResumo"></p>
         </div>
       </div>
     </section>
@@ -896,46 +928,46 @@
 <!-- sem internet (avião, celular offline), cai para a cópia local -->
 <script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>
 <!-- ícones vendorizados (bancos + Lucide): sem CDN em runtime -->
-<script src="assets/vendor/bancos.js"></script>
-<script src="assets/vendor/icons.js"></script>
-<script src="assets/js/firebase-config.js"></script>
-<script src="assets/js/supabase-config.js"></script>
-<script src="assets/js/utils.js"></script>
-<script src="assets/js/icons.js"></script>
-<script src="assets/js/store.js"></script>
-<script src="assets/js/calc.js"></script>
-<script src="assets/js/charts.js"></script>
-<script src="assets/js/ui.js"></script>
-<script src="assets/js/cards.js"></script>
-<script src="assets/js/forms.js"></script>
-<script src="assets/js/importer.js"></script>
-<script src="assets/js/sync.js"></script>
-<script src="assets/js/supabase-auth.js"></script>
-<script src="assets/js/repo.js"></script>
-<script src="assets/js/fila.js"></script>
-<script src="assets/js/dados.js"></script>
-<script src="assets/js/estado-sync.js"></script>
-<script src="assets/js/migracao.js"></script>
-<script src="assets/js/onboarding.js"></script>
-<script src="assets/js/planos.js"></script>
-<script src="assets/js/limites.js"></script>
-<script src="assets/js/conta.js"></script>
-<script src="assets/js/checkout.js"></script>
-<script src="assets/js/ai.js"></script>
-<script src="assets/js/shell.js"></script>
-<script src="assets/js/pages/home.js"></script>
-<script src="assets/js/pages/transactions.js"></script>
-<script src="assets/js/pages/investments.js"></script>
-<script src="assets/js/pages/accounts.js"></script>
-<script src="assets/js/pages/categories.js"></script>
-<script src="assets/js/pages/budget.js"></script>
-<script src="assets/js/pages/goals.js"></script>
-<script src="assets/js/pages/recurring.js"></script>
-<script src="assets/js/pages/calendar.js"></script>
-<script src="assets/js/pages/reports.js"></script>
-<script src="assets/js/pages/uglez.js"></script>
-<script src="assets/js/pages/precos.js"></script>
-<script src="assets/js/pages/settings.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="/assets/vendor/bancos.js"></script>
+<script src="/assets/vendor/icons.js"></script>
+<script src="/assets/js/firebase-config.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/icons.js"></script>
+<script src="/assets/js/store.js"></script>
+<script src="/assets/js/calc.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/cards.js"></script>
+<script src="/assets/js/forms.js"></script>
+<script src="/assets/js/importer.js"></script>
+<script src="/assets/js/sync.js"></script>
+<script src="/assets/js/supabase-auth.js"></script>
+<script src="/assets/js/repo.js"></script>
+<script src="/assets/js/fila.js"></script>
+<script src="/assets/js/dados.js"></script>
+<script src="/assets/js/estado-sync.js"></script>
+<script src="/assets/js/migracao.js"></script>
+<script src="/assets/js/onboarding.js"></script>
+<script src="/assets/js/planos.js"></script>
+<script src="/assets/js/limites.js"></script>
+<script src="/assets/js/conta.js"></script>
+<script src="/assets/js/checkout.js"></script>
+<script src="/assets/js/ai.js"></script>
+<script src="/assets/js/shell.js"></script>
+<script src="/assets/js/pages/home.js"></script>
+<script src="/assets/js/pages/transactions.js"></script>
+<script src="/assets/js/pages/investments.js"></script>
+<script src="/assets/js/pages/accounts.js"></script>
+<script src="/assets/js/pages/categories.js"></script>
+<script src="/assets/js/pages/budget.js"></script>
+<script src="/assets/js/pages/goals.js"></script>
+<script src="/assets/js/pages/recurring.js"></script>
+<script src="/assets/js/pages/calendar.js"></script>
+<script src="/assets/js/pages/reports.js"></script>
+<script src="/assets/js/pages/uglez.js"></script>
+<script src="/assets/js/pages/precos.js"></script>
+<script src="/assets/js/pages/settings.js"></script>
+<script src="/assets/js/app.js"></script>
 </body>
 </html>

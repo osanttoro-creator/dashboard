@@ -63,8 +63,19 @@
   # verdade é o RLS no banco, que devolve zero linhas para quem não
   # tem sessão. Um guarda no servidor de arquivos estáticos seria
   # teatro: não há sessão para ele consultar.
+  #
+  # A CONDIÇÃO DE EXTENSÃO NÃO É OPCIONAL. Sem ela,
+  # /app/assets/js/app.js casa com ^app(/.*)$ e recebe o app.html
+  # com status 200 — o navegador tenta executar HTML como
+  # JavaScript e o console enche de "Unexpected token '<'".
+  # (Aconteceu: 41 scripts, 41 erros. O app até funcionava, porque
+  # os caminhos são absolutos e havia um segundo pedido correto,
+  # mas cada arquivo era baixado duas vezes.)
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
   RewriteRule ^app(/.*)?$         /app.html [L]
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
   RewriteRule ^onboarding(/.*)?$  /app.html [L]
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
   RewriteRule ^checkout(/.*)?$    /app.html [L]
 
   # -----------------------------------------------------------

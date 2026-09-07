@@ -73,6 +73,8 @@ jobs:
           node tools/testes/ida-e-volta.js
           echo "--- o banco consegue apagar o aparelho?"
           node tools/testes/trava-sobrescrita.js
+          echo "--- o cartao em destaque tem contraste legivel?"
+          node tools/testes/contraste.js
           echo "--- os preços do código e do banco concordam?"
           node tools/testes/confere-planos.js || {
             echo "::warning::confere-planos falhou (ele consulta o banco; sem credencial no runner isso é esperado)"
