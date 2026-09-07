@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escolher senha nova — OAZE</title>
+<meta name="description" content="Defina uma senha nova para a sua conta OAZE.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/redefinir-senha">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      OAZE
+    </a>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Escolher senha nova</h1>
+      <p id="explica">Confirmando o link…</p>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-senha" novalidate hidden>
+        <div class="campo">
+          <label for="senha">Senha nova</label>
+          <input type="password" id="senha" name="senha" autocomplete="new-password"
+                 required minlength="8" placeholder="Pelo menos 8 caracteres"
+                 aria-describedby="senha-dica senha-erro">
+          <p class="dica" id="senha-dica">Mínimo de 8 caracteres.</p>
+          <p class="erro" id="senha-erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="senha2">Repita a senha nova</label>
+          <input type="password" id="senha2" name="senha2" autocomplete="new-password"
+                 required placeholder="A mesma senha" aria-describedby="senha2-erro">
+          <p class="erro" id="senha2-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao">Salvar e entrar</button>
+      </form>
+
+      <p class="pe-do-painel" id="pe" hidden>
+        <a href="/recuperar-senha">Pedir um link novo</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var explica = document.getElementById('explica');
+  var form = document.getElementById('form-senha');
+  var senha = document.getElementById('senha');
+  var senha2 = document.getElementById('senha2');
+  var botao = document.getElementById('botao');
+  var pe = document.getElementById('pe');
+
+  if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
+
+  /* O link do e-mail chega com o token no fragmento da URL. O SDK
+     troca isso por uma sessão de recuperação -- mas leva um instante,
+     e o evento pode chegar depois deste script rodar. Por isso duas
+     vias: escutar o evento E consultar direto. A que responder
+     primeiro libera o formulário; um guarda impede o formulário de
+     ser mostrado duas vezes. */
+  var liberado = false;
+
+  function liberar() {
+    if (liberado) return;
+    liberado = true;
+    explica.textContent = 'Escolha uma senha que você não use em outro lugar.';
+    form.hidden = false;
+    senha.focus();
+  }
+
+  function recusar() {
+    if (liberado) return;
+    explica.textContent = '';
+    A.diz(recado, 'Este link não vale mais. Links de recuperação servem uma vez só e expiram em uma hora.', 'erro');
+    pe.hidden = false;
+  }
+
+  A.cliente().auth.onAuthStateChange(function (evento, sessao) {
+    if (evento === 'PASSWORD_RECOVERY' || (sessao && sessao.user)) liberar();
+  });
+
+  A.quemEsta().then(function (u) {
+    if (u) liberar();
+    /* Só recusa depois de dar tempo ao SDK de processar o fragmento.
+       Recusar de imediato mostraria "link inválido" para todo mundo,
+       inclusive para quem tem um link perfeitamente bom. */
+    else setTimeout(function () { A.quemEsta().then(function (v) { v ? liberar() : recusar(); }); }, 1200);
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    A.erroNoCampo(senha, ''); A.erroNoCampo(senha2, '');
+
+    if (senha.value.length < 8) {
+      A.erroNoCampo(senha, 'A senha precisa ter pelo menos 8 caracteres.');
+      senha.focus(); return;
+    }
+    if (senha.value !== senha2.value) {
+      A.erroNoCampo(senha2, 'As duas senhas não são iguais.');
+      senha2.focus(); return;
+    }
+
+    A.ocupado(botao, true, 'Salvando…');
+    try {
+      var r = await A.trocarSenha(senha.value);
+      if (r.error) throw r.error;
+      A.diz(recado, 'Senha alterada. Abrindo seu painel…', 'ok');
+      location.replace('/app');
+    } catch (err) {
+      A.ocupado(botao, false);
+      A.diz(recado, A.frase(err), 'erro');
+    }
+  });
+})();
+</script>
+</body>
+</html>

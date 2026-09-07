@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Só as páginas públicas e indexáveis. As telas de sessão
+     (entrar, cadastro, recuperar-senha, confirmar-email,
+     redefinir-senha) estão marcadas noindex e ficam de fora: pôr no
+     sitemap o que se pediu para não indexar é um sinal contraditório.
+     O aplicativo (/app) também não entra -- ele não tem conteúdo
+     para buscador nenhum.
+
+     TROQUE O DOMÍNIO ao apontar o definitivo. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/recursos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/precos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/suporte</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/termos</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://mediumvioletred-viper-277230.hostingersite.com/privacidade</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

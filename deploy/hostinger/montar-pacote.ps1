@@ -30,13 +30,36 @@ New-Item -ItemType Directory -Force -Path $destino | Out-Null
 # ---- 2 · o que VAI ----
 # Lista explícita, não exclusão: a lista de exclusão esquece o
 # arquivo novo que alguem acabou de criar; a de inclusão, não.
-$arquivos = @('index.html', 'robots.txt')
+$arquivos = @(
+  # site público — um documento por rota, cada um com title,
+  # description e canônica próprias
+  'index.html', 'recursos.html', 'precos.html',
+  'entrar.html', 'cadastro.html', 'recuperar-senha.html',
+  'redefinir-senha.html', 'confirmar-email.html',
+  'privacidade.html', 'termos.html', 'suporte.html',
+  # aplicativo
+  'app.html',
+  # apoio
+  'robots.txt', 'sitemap.xml', 'manifest.webmanifest', '404.html'
+)
 $pastas   = @('assets')
 
+$faltando = @()
 foreach ($f in $arquivos) {
   $o = Join-Path $raiz $f
   if (Test-Path $o) { Copy-Item $o -Destination $destino }
-  else { Write-Warning "nao encontrado: $f" }
+  else { $faltando += $f }
+}
+
+# Um arquivo da lista que não existe é erro, não aviso. Antes isto
+# era Write-Warning e o pacote saía sem a página -- a rota
+# respondia 404 em produção e nada no build tinha reclamado.
+if ($faltando.Count -gt 0) {
+  Write-Host ""
+  Write-Host "  PACOTE NAO GERADO - arquivos da lista nao encontrados:" -ForegroundColor Red
+  $faltando | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
+  Remove-Item $destino -Recurse -Force
+  exit 1
 }
 foreach ($d in $pastas) {
   $o = Join-Path $raiz $d
@@ -44,7 +67,6 @@ foreach ($d in $pastas) {
 }
 
 Copy-Item (Join-Path $PSScriptRoot '.htaccess') -Destination $destino
-Copy-Item (Join-Path $PSScriptRoot '404.html')  -Destination $destino
 
 # ---- 3 · conferencia de segredos ----
 # A ultima chance de perceber uma chave antes de ela virar publica.

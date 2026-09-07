@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Política de privacidade — OAZE</title>
+<meta name="description" content="Quais dados o OAZE coleta, para quê, com quem compartilha, por quanto tempo guarda e como você exerce seus direitos pela LGPD.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/privacidade">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="OAZE">
+<meta property="og:title" content="Política de privacidade — OAZE">
+<meta property="og:description" content="Quais dados coletamos, para quê e como você exerce seus direitos.">
+<meta property="og:url" content="https://mediumvioletred-viper-277230.hostingersite.com/privacidade">
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      OAZE
+    </a>
+    <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="menu" id="menu-principal" aria-label="Navegação principal">
+      <a href="/recursos">Recursos</a><a href="/precos">Preços</a>
+      <a href="/#seguranca">Segurança</a><a href="/suporte">Suporte</a>
+    </nav>
+    <div class="acoes-topo">
+      <a class="btn btn-fantasma" href="/entrar">Entrar</a>
+      <a class="btn btn-principal" href="/cadastro">Criar conta grátis</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="texto">
+      <h1>Política de privacidade</h1>
+      <p class="atualizado">Última atualização: 7 de setembro de 2026</p>
+
+      <div class="aviso">
+        <p><strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o
+        funcionamento real do produto, mas <strong>não foi revisado por advogado</strong>
+        e faltam dados obrigatórios.</p>
+        <p>Antes de publicar em definitivo: preencher a identificação do controlador
+        (§1), nomear o encarregado pelo tratamento de dados (§10, exigido pelo art. 41 da
+        LGPD) e revisar as bases legais do §3.</p>
+      </div>
+
+      <h2 id="controlador">1. Quem é o responsável</h2>
+      <p>O OAZE é o <strong>controlador</strong> dos dados pessoais tratados aqui, nos
+      termos da Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
+      <p><em>A completar: razão social, CNPJ e endereço.</em></p>
+
+      <h2 id="coleta">2. O que coletamos</h2>
+      <p><strong>Dados de cadastro.</strong> E-mail, senha (guardada apenas como hash,
+      nunca em texto) e, opcionalmente, o nome pelo qual você quer ser chamado.</p>
+      <p><strong>Dados financeiros que você insere.</strong> Contas, cartões, categorias,
+      lançamentos, orçamentos, metas e investimentos. Nós não buscamos isso em lugar
+      nenhum: tudo chega porque você digitou ou importou um arquivo que você mesmo baixou
+      do seu banco.</p>
+      <p><strong>Dados de assinatura.</strong> Plano, ciclo, status e identificadores da
+      transação no Mercado Pago. <strong>Não recebemos nem guardamos dados do seu
+      cartão</strong> — eles são digitados no ambiente do Mercado Pago.</p>
+      <p><strong>Dados técnicos mínimos.</strong> Registros de erro do servidor, com
+      identificador de requisição e horário. Eles não incluem conteúdo financeiro.</p>
+      <p><strong>Não coletamos:</strong> sua localização, sua lista de contatos, seu
+      histórico de navegação em outros sites, nem dados de terceiros. Não usamos cookies
+      de publicidade nem rastreadores de rede social.</p>
+
+      <h2 id="bases">3. Para que usamos, e com que base legal</h2>
+      <ul>
+        <li><strong>Executar o contrato</strong> (art. 7º, V) — manter sua conta,
+        sincronizar seus dados entre aparelhos, aplicar os limites do plano e processar a
+        assinatura.</li>
+        <li><strong>Cumprir obrigação legal</strong> (art. 7º, II) — guardar registros
+        fiscais e de acesso pelo prazo que a lei exige.</li>
+        <li><strong>Legítimo interesse</strong> (art. 7º, IX) — segurança, prevenção a
+        fraude e correção de defeitos, sempre com o mínimo de dado necessário.</li>
+        <li><strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à
+        UGLEZ, descrito no §5. Você pode não usar a UGLEZ e o restante do produto continua
+        funcionando igual.</li>
+      </ul>
+
+      <h2 id="onde">4. Onde os dados ficam</h2>
+      <p>Os registros ficam em um banco PostgreSQL gerenciado pelo
+      <strong>Supabase</strong>, com isolamento por conta aplicado no próprio banco
+      (Row Level Security): uma conta só alcança as linhas dela, e isso é imposto pelo
+      banco, não por uma verificação no aplicativo.</p>
+      <p>O site é hospedado na <strong>Hostinger</strong>.</p>
+      <p><strong>Transferência internacional:</strong> esses serviços podem manter
+      servidores fora do Brasil. A LGPD permite (art. 33), e nós escolhemos fornecedores
+      com cláusulas contratuais de proteção. <em>A confirmar na revisão jurídica: a região
+      exata do projeto Supabase.</em></p>
+
+      <h2 id="ia">5. A UGLEZ e o uso de inteligência artificial</h2>
+      <p>Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio
+      navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.</p>
+      <p>Quando você <em>conversa</em> com a UGLEZ, a pergunta e um resumo dos seus números
+      vão para um servidor nosso, que fala com o provedor do modelo. A tela mostra
+      <strong>quais categorias de dado seguem junto antes de você enviar</strong>.</p>
+      <p>O que <strong>não</strong> é enviado: descrições de lançamento, nomes de
+      estabelecimento, números de conta ou cartão, e o seu e-mail.</p>
+      <p><strong>Seus dados não são usados para treinar modelos.</strong> Eles são enviados
+      apenas para gerar a sua resposta.</p>
+      <p>A chave de acesso ao provedor fica no servidor. <strong>Ela nunca chega ao seu
+      navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.</p>
+
+      <h2 id="compartilha">6. Com quem compartilhamos</h2>
+      <p>Apenas com operadores necessários para o serviço funcionar: Supabase (banco e
+      autenticação), Hostinger (hospedagem), Mercado Pago (pagamento) e o provedor do
+      modelo de linguagem (só o que o §5 descreve).</p>
+      <p><strong>Não vendemos seus dados. Não os cedemos para publicidade. Não os cruzamos
+      com outras bases.</strong></p>
+      <p>Podemos fornecer dados por ordem judicial. Nesse caso avisamos você, salvo quando
+      a lei proibir o aviso.</p>
+
+      <h2 id="local">7. O que fica só no seu aparelho</h2>
+      <p>O OAZE guarda no <code>localStorage</code> do navegador: preferências de exibição
+      (tema, mês selecionado), um cache dos seus dados para a tela abrir rápido e uma fila
+      do que ainda não subiu quando você está sem internet.</p>
+      <p>Isso é por aparelho e não chega até nós. Limpar os dados do navegador apaga essa
+      parte — sem afetar o que está na sua conta.</p>
+      <p>Se você usa o OAZE <strong>sem conta</strong>, é só isso que existe: tudo fica no
+      aparelho, e nós não temos cópia nem como recuperar.</p>
+
+      <h2 id="prazo">8. Por quanto tempo guardamos</h2>
+      <p>Enquanto sua conta existir. Ao excluir a conta, os registros financeiros são
+      apagados junto, em cascata no banco.</p>
+      <p>Registros fiscais de pagamento são mantidos pelo prazo legal, mesmo após a
+      exclusão — é obrigação, não escolha. Registros de erro são descartados em
+      <strong>90 dias</strong>.</p>
+
+      <h2 id="direitos">9. Seus direitos</h2>
+      <p>A LGPD (art. 18) garante a você: confirmação de tratamento, acesso, correção,
+      anonimização ou bloqueio, portabilidade, eliminação, informação sobre
+      compartilhamento e revogação do consentimento.</p>
+      <p>Na prática, dois deles você exerce sozinho, sem pedir nada a ninguém:</p>
+      <ul>
+        <li><strong>Portabilidade e acesso</strong> — Configurações → Exportar. Sai tudo,
+        em formato aberto, na hora.</li>
+        <li><strong>Eliminação</strong> — Configurações → Excluir conta. Pedimos que você
+        digite o próprio e-mail para confirmar, porque a operação não tem volta.</li>
+      </ul>
+      <p>Para os demais, escreva para <a href="/suporte">o suporte</a>. Respondemos em até
+      <strong>15 dias</strong>.</p>
+
+      <h2 id="encarregado">10. Encarregado (DPO)</h2>
+      <p><em>A completar: nome e contato do encarregado, conforme o art. 41 da LGPD.</em></p>
+
+      <h2 id="menores">11. Crianças e adolescentes</h2>
+      <p>O OAZE não se destina a menores de 18 anos sem autorização de responsável legal, e
+      não coletamos dados de crianças conscientemente. Se isso acontecer, avise o suporte
+      e apagamos.</p>
+
+      <h2 id="mudancas">12. Mudanças nesta política</h2>
+      <p>Se algo relevante mudar, avisamos por e-mail com <strong>30 dias</strong> de
+      antecedência e atualizamos a data no topo desta página.</p>
+
+      <h2 id="contato">13. Contato</h2>
+      <p><a href="/suporte">Página de suporte</a> ou
+      <a href="mailto:suporte@oaze.com.br">suporte@oaze.com.br</a>.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="rodape">
+  <div class="env">
+    <div class="rodape-grade">
+      <div>
+        <a class="marca" href="/" aria-label="OAZE, página inicial">
+          <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+            <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+            <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          OAZE
+        </a>
+        <p class="rodape-sobre">Um painel para enxergar o próprio dinheiro sem virar planilha.</p>
+      </div>
+      <div><h4>Produto</h4><ul>
+        <li><a href="/recursos">Recursos</a></li><li><a href="/precos">Preços</a></li>
+        <li><a href="/#uglez">UGLEZ</a></li><li><a href="/#seguranca">Segurança</a></li></ul></div>
+      <div><h4>Conta</h4><ul>
+        <li><a href="/entrar">Entrar</a></li><li><a href="/cadastro">Criar conta</a></li>
+        <li><a href="/recuperar-senha">Recuperar senha</a></li></ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="/termos">Termos de uso</a></li><li><a href="/privacidade">Política de privacidade</a></li>
+        <li><a href="/termos#cancelamento">Cancelamento</a></li><li><a href="/termos#reembolso">Reembolso</a></li>
+        <li><a href="/suporte">Suporte</a></li></ul></div>
+    </div>
+    <div class="rodape-fim">
+      <p>© <span data-ano>2026</span> OAZE</p>
+      <p>Feito no Brasil · valores em reais</p>
+      <p><a href="/suporte">suporte@oaze.com.br</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

@@ -1,4 +1,20 @@
-# Painel financeiro pessoal — não faz sentido aparecer em busca.
-# (Os dados nunca saem do navegador, mas o endereço em si é privado.)
+# O site público pode e deve ser indexado — ele é a porta de entrada.
+# O aplicativo, não: não há conteúdo para buscador em /app, e as
+# telas de sessão já vêm com noindex no próprio HTML.
+#
+# ATENÇÃO: no subdomínio *.hostingersite.com a Hostinger INTERCEPTA
+# este arquivo e serve o dela. Este passa a valer só quando o domínio
+# próprio for apontado. Confira por HTTP, não olhando o arquivo no
+# servidor — o disco mostra este, a requisição mostra o outro.
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /app
+Disallow: /onboarding
+Disallow: /checkout
+Disallow: /entrar
+Disallow: /cadastro
+Disallow: /recuperar-senha
+Disallow: /redefinir-senha
+Disallow: /confirmar-email
+
+Sitemap: https://mediumvioletred-viper-277230.hostingersite.com/sitemap.xml

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recuperar senha — OAZE</title>
+<meta name="description" content="Receba um link para redefinir a senha da sua conta OAZE.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/recuperar-senha">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      OAZE
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/entrar">Entrar</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Recuperar senha</h1>
+      <p>Informe o e-mail da conta e enviamos um link para você escolher uma senha nova.</p>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-recuperar" novalidate>
+        <div class="campo">
+          <label for="email">E-mail da conta</label>
+          <input type="email" id="email" name="email" autocomplete="email"
+                 required inputmode="email" placeholder="voce@exemplo.com"
+                 aria-describedby="email-erro">
+          <p class="erro" id="email-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao">Enviar link</button>
+      </form>
+
+      <p class="pe-do-painel">
+        Lembrou a senha? <a href="/entrar">Voltar para entrar</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var email = document.getElementById('email');
+  var form = document.getElementById('form-recuperar');
+  var botao = document.getElementById('botao');
+
+  if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); return; }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    A.erroNoCampo(email, '');
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) {
+      A.erroNoCampo(email, 'Informe um e-mail válido.');
+      email.focus();
+      return;
+    }
+
+    A.ocupado(botao, true, 'Enviando…');
+    try {
+      var r = await A.recuperarSenha(email.value.trim());
+      if (r.error) throw r.error;
+    } catch (err) {
+      /* Erro de rede o usuário precisa saber; o resto, não.
+         Ver a mensagem abaixo. */
+      if (/network|fetch/i.test(err && err.message || '')) {
+        A.ocupado(botao, false);
+        A.diz(recado, A.frase(err), 'erro');
+        return;
+      }
+    }
+
+    /* A MESMA RESPOSTA EXISTINDO OU NÃO A CONTA.
+       Dizer "esse e-mail não está cadastrado" transforma esta tela
+       num verificador de contas: qualquer um descobre quem tem conta
+       aqui testando endereços. Numa ferramenta financeira isso é
+       informação que não deve vazar. O preço é que quem digitou
+       errado espera um e-mail que não vem -- por isso o texto avisa
+       para conferir o endereço. */
+    form.hidden = true;
+    A.ocupado(botao, false);
+    A.diz(recado, 'Se existe uma conta com ' + email.value.trim() +
+      ', o link está a caminho. Ele vale por uma hora. ' +
+      'Não chegou? Confira o endereço digitado e a caixa de spam.', 'ok');
+  });
+})();
+</script>
+</body>
+</html>

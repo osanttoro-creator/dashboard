@@ -23,52 +23,97 @@
   # www → domínio principal. Um endereço só: dois endereços são
   # duas sessões, dois cookies e duas entradas no índice de busca.
   #
-  # TROQUE SEUDOMINIO.COM.BR ao apontar o domínio. Enquanto o site
-  # roda no subdomínio *.hostingersite.com, esta regra não casa e
-  # fica inerte — não precisa ser removida.
+  # Esta regra é genérica de propósito — casa qualquer host que
+  # comece com www e redireciona para o mesmo host sem ele. Não
+  # precisa saber qual é o domínio, então continua correta depois
+  # de apontar o domínio próprio.
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
   # -----------------------------------------------------------
-  # 2 · fallback de SPA
+  # 2 · rotas públicas → documentos próprios
   # -----------------------------------------------------------
-  # /precos, /carteira e os demais não existem como arquivo: são
-  # estados do app. O Apache entrega o index.html e o JavaScript
-  # decide o que mostrar.
+  # Cada página pública é um arquivo HTML de verdade, com <title>,
+  # meta description e canônica próprias. Isso não é preferência
+  # estética: uma SPA entrega o mesmo HTML para todas as rotas, e
+  # aí só existe um título e uma descrição para o site inteiro.
   #
-  # As duas condições são o que impede o estrago: se o caminho É
-  # um arquivo ou um diretório de verdade, nada é reescrito. Sem
-  # elas, /assets/css/style.css devolveria HTML.
+  # O [L] encerra o processamento de cada uma — sem ele a regra
+  # seguinte reescreveria por cima.
+  RewriteRule ^recursos/?$          /recursos.html        [L]
+  RewriteRule ^precos/?$            /precos.html          [L]
+  RewriteRule ^entrar/?$            /entrar.html          [L]
+  RewriteRule ^cadastro/?$          /cadastro.html        [L]
+  RewriteRule ^recuperar-senha/?$   /recuperar-senha.html [L]
+  RewriteRule ^redefinir-senha/?$   /redefinir-senha.html [L]
+  RewriteRule ^confirmar-email/?$   /confirmar-email.html [L]
+  RewriteRule ^privacidade/?$       /privacidade.html     [L]
+  RewriteRule ^termos/?$            /termos.html          [L]
+  RewriteRule ^suporte/?$           /suporte.html         [L]
+
+  # -----------------------------------------------------------
+  # 3 · rotas do aplicativo → app.html
+  # -----------------------------------------------------------
+  # /app, /onboarding e /checkout são estados do aplicativo, não
+  # arquivos. O Apache entrega o app.html e o JavaScript decide o
+  # que mostrar — inclusive se a pessoa pode estar ali.
+  #
+  # ISTO NÃO É A PROTEÇÃO DA ROTA. Qualquer um pode pedir /app e
+  # receber este HTML; o que ele NÃO recebe é dado. A proteção de
+  # verdade é o RLS no banco, que devolve zero linhas para quem não
+  # tem sessão. Um guarda no servidor de arquivos estáticos seria
+  # teatro: não há sessão para ele consultar.
+  RewriteRule ^app(/.*)?$         /app.html [L]
+  RewriteRule ^onboarding(/.*)?$  /app.html [L]
+  RewriteRule ^checkout(/.*)?$    /app.html [L]
+
+  # -----------------------------------------------------------
+  # 4 · fallback da raiz
+  # -----------------------------------------------------------
+  # Só o que não é arquivo nem diretório de verdade. Sem estas duas
+  # condições, /assets/css/style.css devolveria HTML.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  # A API não é do front: se um dia existir aqui, não vira index.
-  RewriteCond %{REQUEST_URI} !^/api/
   # Arquivo com extensão de asset que não existe é ERRO, não rota.
-  # Sem esta linha, /assets/css/style.css digitado errado devolvia o
+  # Sem esta linha, /assets/js/algo.js digitado errado devolvia o
   # index.html com status 200: o navegador recusava por MIME e a
   # página abria sem estilo, sem nada no log dizendo o porquê. Uma
-  # rota do app nunca tem extensão, então excluí-las não custa nada.
-  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip)$ [NC]
-  RewriteRule ^ /index.html [L]
+  # rota do site nunca tem extensão, então excluí-las não custa nada.
+  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
+  RewriteRule ^$ /index.html [L]
 </IfModule>
 
 # -------------------------------------------------------------
-# 3 · página de erro
+# 5 · página de erro
 # -------------------------------------------------------------
-# Com o fallback acima, um 404 de verdade acontece para qualquer
-# caminho com extensão de arquivo que não exista — e aí a página
-# explica isso em vez de mostrar o erro cru do Apache.
+# Qualquer caminho que não casou com nada acima cai aqui. Com as
+# rotas explícitas da seção 2, um endereço inventado é 404 de
+# verdade — e não a landing devolvida com status 200, que é o pior
+# dos dois mundos: o usuário não entende e o buscador indexa lixo.
 ErrorDocument 404 /404.html
 
 # -------------------------------------------------------------
-# 4 · cabeçalhos de segurança
+# 6 · cabeçalhos de segurança
 # -------------------------------------------------------------
 <IfModule mod_headers.c>
+  # ---- CSP ----
   # Esta é a única CSP do projeto. Ela vale para o site publicado;
   # em file:// e no servidor local não há CSP nenhuma, então uma
   # integração nova pode funcionar no desenvolvimento e ser
-  # bloqueada aqui. Ao adicionar destino, mexa em connect-src.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in wss://*.supabase.in https://api.anthropic.com https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+  # bloqueada aqui. Ao acrescentar destino, mexa em connect-src.
+  #
+  # api.anthropic.com FOI REMOVIDO. O navegador não fala com
+  # provedor de IA nenhum: a UGLEZ chama a Edge Function
+  # oaze-assistant, que é *.supabase.co, e é ela quem fala com o
+  # provedor. Deixar o domínio liberado seria manter aberta uma
+  # porta que ninguém usa.
+  #
+  # Os domínios do Firebase CONTINUAM porque o sync.js ainda traz o
+  # Firebase como backend alternativo de sincronização. Tirá-los
+  # daqui sem tirar aquele código quebraria o login com Google em
+  # silêncio — o pop-up abre e nunca volta. Para removê-los, remova
+  # antes o backend.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in wss://*.supabase.in https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "DENY"
@@ -79,14 +124,25 @@ ErrorDocument 404 /404.html
   # same-origin puro quebraria esse retorno.
   Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
 
-  # HSTS: só depois de confirmar que o HTTPS funciona em TODO o
-  # domínio, subdomínios inclusive. Ligar antes prende o navegador
-  # num HTTPS que talvez não exista ainda — e o prazo é longo.
-  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # ---- HSTS ----
+  # LIGADO, com prazo curto e SEM includeSubDomains e SEM preload.
+  #
+  # Isso é deliberado. O HTTPS está confirmado funcionando neste
+  # host (a regra da seção 1 redireciona e o certificado responde),
+  # então um ano de HSTS na raiz é seguro. Mas includeSubDomains
+  # obrigaria HTTPS em subdomínios que talvez ainda não existam nem
+  # tenham certificado — e o navegador guardaria essa exigência por
+  # um ano, sem como voltar atrás do lado do servidor.
+  #
+  # AO APONTAR O DOMÍNIO PRÓPRIO: confirme o HTTPS em todos os
+  # subdomínios que for usar, e só então acrescente
+  # includeSubDomains. preload só depois disso, e é irreversível na
+  # prática.
+  Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
 
 # -------------------------------------------------------------
-# 5 · cache
+# 7 · cache
 # -------------------------------------------------------------
 # O HTML nunca é guardado: é ele que aponta para o resto, e um HTML
 # velho em cache serve um app velho inteiro. Os arquivos de assets
@@ -107,29 +163,34 @@ ErrorDocument 404 /404.html
   <FilesMatch "\.(css|js)$">
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </FilesMatch>
-  <FilesMatch "\.(woff2|svg|png|jpg|webp)$">
+  <FilesMatch "\.(woff2|svg|png|jpg|webp|ico)$">
     Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  # O manifesto aponta ícones e nome; se ficar preso em cache, uma
+  # troca de identidade não chega em quem já instalou.
+  <FilesMatch "\.(webmanifest)$">
+    Header set Cache-Control "public, max-age=3600"
   </FilesMatch>
 </IfModule>
 
 # -------------------------------------------------------------
-# 6 · compressão
+# 8 · compressão
 # -------------------------------------------------------------
 # O arquivo único passa de 1 MB; comprimido cai para perto de um
 # quinto. Em rede móvel isso é a diferença entre abrir e desistir.
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
   AddOutputFilterByType DEFLATE application/javascript application/json
-  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/svg+xml application/manifest+json
 </IfModule>
 
 # -------------------------------------------------------------
-# 7 · o que não deve ser servido
+# 9 · o que não deve ser servido
 # -------------------------------------------------------------
 # Nenhum destes arquivos vai no pacote de deploy, mas a regra é
 # barata e cobre o dia em que alguém subir a pasta inteira por
 # engano.
-<FilesMatch "^\.env|\.md$|\.sql$|\.ps1$|package(-lock)?\.json$">
+<FilesMatch "^\.env|\.md$|\.sql$|\.ps1$|\.ts$|package(-lock)?\.json$">
   Require all denied
 </FilesMatch>
 

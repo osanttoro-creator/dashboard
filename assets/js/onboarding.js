@@ -148,14 +148,26 @@
 
   function barra() {
     const total = ETAPAS.length - 1;   // "fim" não é trabalho
+
+    /* UM NÚMERO SÓ, CALCULADO UMA VEZ.
+       Antes o texto dizia "Etapa 1 de 7" e o aria-label dizia
+       "Etapa 1 de 8": o label somava 'fim', que o texto exclui de
+       propósito. Quem enxerga via 7, quem usa leitor de tela ouvia
+       8 -- a mesma tela contando duas histórias, e a discordância
+       vinha de a frase estar escrita duas vezes.
+       Agora existe uma frase só, e as duas leituras não têm como
+       divergir de novo. */
+    const passo = Math.min(indice + 1, total);
+    const rotulo = 'Etapa ' + passo + ' de ' + total;
     const pct = Math.round((indice / total) * 100);
+
     return el('div', { class: 'ob-progresso' }, [
       el('div', {
         class: 'ob-barra', role: 'progressbar',
         'aria-valuenow': String(indice), 'aria-valuemin': '0', 'aria-valuemax': String(total),
-        'aria-label': 'Etapa ' + (indice + 1) + ' de ' + (total + 1)
+        'aria-label': rotulo
       }, el('i', { style: { width: pct + '%' } })),
-      el('p', { class: 'ob-passo', text: 'Etapa ' + Math.min(indice + 1, total) + ' de ' + total })
+      el('p', { class: 'ob-passo', text: rotulo })
     ]);
   }
 
