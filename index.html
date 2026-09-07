@@ -1,939 +1,549 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OAZE — Gestão Financeira</title>
 
-<!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="OAZE">
-<meta name="theme-color" content="#F2EDE4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#081A24" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
+<!-- =============================================================
+     ATENÇÃO AO TROCAR DE DOMÍNIO
+     As URLs canônicas e as og:url de TODAS as páginas apontam para
+     o subdomínio temporário da Hostinger. Ao apontar o domínio
+     próprio, troque em todas -- uma canônica errada faz o buscador
+     indexar o endereço antigo e ignorar o novo.
+     Arquivos afetados: index, recursos, precos, entrar, cadastro,
+     recuperar-senha, privacidade, termos, suporte, 404.
+     ============================================================= -->
+<title>OAZE — organize seu dinheiro sem planilha</title>
+<meta name="description" content="Painel de finanças pessoais com contas, cartões, orçamentos, metas e leitura automática do seu mês. Comece grátis, sem cartão de crédito.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/">
 
-<!-- fonte vendorizada (Inter, embutida em base64): sem CDN, funciona em file:// -->
-<link rel="stylesheet" href="assets/vendor/fonte.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OAZE">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="OAZE — organize seu dinheiro sem planilha">
+<meta property="og:description" content="Contas, cartões, orçamentos e metas num painel só. Comece grátis, sem cartão de crédito.">
+<meta property="og:url" content="https://mediumvioletred-viper-277230.hostingersite.com/">
+<meta property="og:image" content="https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="OAZE — painel de finanças pessoais">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+<!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
+     classe o CSS esconde os blocos que serao revelados ao rolar. Sem
+     ela -- script bloqueado, erro, navegador antigo -- a pagina
+     aparece inteira, que e o comportamento certo para um site que
+     precisa ser lido e indexado. -->
+<script>document.documentElement.classList.add("anima");</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "OAZE",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "pt-BR",
+  "description": "Painel de finanças pessoais com contas, cartões, orçamentos, metas e leitura automática do mês.",
+  "offers": [
+    { "@type": "Offer", "name": "Grátis", "price": "0.00", "priceCurrency": "BRL" },
+    { "@type": "Offer", "name": "Basic",  "price": "14.90", "priceCurrency": "BRL" },
+    { "@type": "Offer", "name": "Pro",    "price": "29.90", "priceCurrency": "BRL" }
+  ]
+}
+</script>
 </head>
 <body>
 
-<!-- tempestade de areia atravessando o fundo -->
-<!-- ambiente: o céu do oásis. Luz, nunca textura. -->
-<div class="ambient" aria-hidden="true">
-  <div class="ambient-sun"></div>
-  <div class="ambient-blob b1"></div>
-  <div class="ambient-blob b2"></div>
-</div>
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-<!-- Primeiro foco da página. Quem navega por teclado não deveria
-     passar por 12 destinos toda vez que troca de página. -->
-<a class="pular-conteudo" href="#content">Pular para o conteúdo</a>
+<!-- ============================ cabeçalho ============================ -->
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <!-- Um horizonte sobre água: o traço reto é a linha, os dois
+             arcos são a refração abaixo dela. -->
+        <circle cx="16" cy="16" r="14.5" stroke="url(#g1)" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="url(#g1)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+        <path d="M9.5 24c2.2-1.7 4.4-1.7 6.5 0s4.3 1.7 6.5 0" stroke="#5FD4E8" stroke-width="1.4" stroke-linecap="round" opacity=".45"/>
+        <defs><linearGradient id="g1" x1="4" y1="4" x2="28" y2="28">
+          <stop stop-color="#A98BFF"/><stop offset="1" stop-color="#7C5CFF"/>
+        </linearGradient></defs>
+      </svg>
+      OAZE
+    </a>
 
-<div class="shell">
-
-  <!-- ══════ SIDEBAR — ilha flutuante ══════
-       Recuada das bordas nos quatro lados: o conteúdo passa por trás,
-       e é isso que a faz ler como peça pousada, não como coluna. -->
-  <aside class="sidebar n3" id="sidebar" aria-label="Navegação principal">
-    <button type="button" class="brand" id="brandHome" aria-label="OAZE — ir para a visão geral">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="22" height="22" fill="none"
-             stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
-          <circle cx="20" cy="20" r="8"/>
-          <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
-        </svg>
-      </span>
-      <span class="brand-name">OAZE</span>
+    <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
     </button>
 
-    <nav class="nav" id="nav" aria-label="Seções">
-      <p class="nav-group">Principal</p>
-      <button class="nav-item" data-page="home">
-        <span class="nav-ico" data-ico="layout-dashboard"></span>
-        <span class="nav-long">Visão geral</span><span class="nav-short">Início</span>
-      </button>
-      <button class="nav-item" data-page="transactions">
-        <span class="nav-ico" data-ico="arrow-left-right"></span>
-        <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
-      </button>
-      <button class="nav-item" data-page="accounts">
-        <span class="nav-ico" data-ico="wallet"></span>
-        <span class="nav-long">Contas e cartões</span><span class="nav-short">Carteira</span>
-      </button>
-
-      <p class="nav-group">Planejar</p>
-      <button class="nav-item" data-page="budget">
-        <span class="nav-ico" data-ico="target"></span>
-        <span class="nav-long">Orçamento</span><span class="nav-short">Planejar</span>
-      </button>
-      <button class="nav-item" data-page="goals">
-        <span class="nav-ico" data-ico="flag"></span>
-        <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
-      </button>
-      <button class="nav-item" data-page="recurring">
-        <span class="nav-ico" data-ico="repeat"></span>
-        <span class="nav-long">Recorrências</span><span class="nav-short">Fixas</span>
-      </button>
-      <button class="nav-item" data-page="calendar">
-        <span class="nav-ico" data-ico="calendar"></span>
-        <span class="nav-long">Calendário</span><span class="nav-short">Agenda</span>
-      </button>
-
-      <p class="nav-group">Crescer</p>
-      <button class="nav-item" data-page="investments">
-        <span class="nav-ico" data-ico="trending-up"></span>
-        <span class="nav-long">Investimentos</span><span class="nav-short">Investir</span>
-      </button>
-      <button class="nav-item" data-page="reports">
-        <span class="nav-ico" data-ico="chart-line"></span>
-        <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
-      </button>
-
-      <p class="nav-group">Sistema</p>
-      <button class="nav-item" data-page="uglez">
-        <span class="nav-ico" data-ico="sparkles"></span>
-        <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
-      </button>
-      <button class="nav-item" data-page="categories">
-        <span class="nav-ico" data-ico="tag"></span>
-        <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-      </button>
-      <button class="nav-item" data-page="settings">
-        <span class="nav-ico" data-ico="settings"></span>
-        <span class="nav-long">Configurações</span><span class="nav-short">Mais</span>
-      </button>
+    <nav class="menu" id="menu-principal" aria-label="Navegação principal">
+      <a href="/recursos">Recursos</a>
+      <a href="/precos">Preços</a>
+      <a href="#seguranca">Segurança</a>
+      <a href="/suporte">Suporte</a>
     </nav>
 
-    <div class="sidebar-foot">
-      <!-- estado da fila offline; escondido quando tudo está em dia -->
-      <span id="filaBox" class="fila-chip" hidden></span>
-      <span id="syncBox"></span>
+    <div class="acoes-topo">
+      <a class="btn btn-fantasma" href="/entrar">Entrar</a>
+      <a class="btn btn-principal" href="/cadastro">Criar conta grátis</a>
     </div>
-  </aside>
+  </div>
+</header>
 
-  <div class="main">
+<main id="conteudo">
 
-    <!-- ══════ TOP BAR — objetos de vidro independentes ══════ -->
-    <header class="topbar" aria-label="Controles">
+  <!-- ============================ hero ============================ -->
+  <section class="secao hero">
+    <div class="env">
+      <p class="etiqueta">Finanças pessoais</p>
+      <h1>Seu dinheiro faz sentido <em>quando você o vê inteiro</em></h1>
+      <p class="hero-sub">
+        Contas, cartões, orçamentos e metas num painel só — com a leitura do
+        seu mês pronta antes de você perguntar. Sem planilha, sem fórmula
+        quebrada, sem começar de novo todo janeiro.
+      </p>
+      <div class="hero-botoes">
+        <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
+        <a class="btn btn-fantasma btn-grande" href="/recursos">Ver os recursos</a>
+      </div>
+      <p class="hero-nota">Não pedimos cartão de crédito. O plano grátis não expira.</p>
 
-      <!-- ══════ NAVEGAÇÃO SUPERIOR (desktop e tablet deitado) ══════
-           Some abaixo de 821px, onde a barra inferior assume — a mesma
-           que já existia, sem nenhuma alteração de comportamento.
+      <!-- ---- demonstração do painel ----
+           Desenhada em HTML e SVG, não capturada de tela. Captura
+           envelhece no primeiro deploy e ninguém lembra de trocar;
+           isto acompanha o código. -->
+      <div class="demo revela" role="img"
+           aria-label="Demonstração do painel do OAZE: saldo do mês de 4.182 reais e 30 centavos, entradas de 7.400 reais, saídas de 3.217 reais e 70 centavos, e um gráfico de barras comparando entradas e saídas nos últimos seis meses.">
+        <div class="demo-barra" aria-hidden="true">
+          <span class="demo-ponto"></span><span class="demo-ponto"></span><span class="demo-ponto"></span>
+          <span class="demo-url">app.oaze.com.br</span>
+        </div>
+        <div class="demo-corpo" aria-hidden="true">
+          <div class="demo-cartoes">
+            <div class="demo-cartao">
+              <p class="demo-rotulo">Saldo do mês</p>
+              <p class="demo-valor">R$ 4.182,30</p>
+            </div>
+            <div class="demo-cartao">
+              <p class="demo-rotulo">Entradas</p>
+              <p class="demo-valor entra">R$ 7.400,00</p>
+            </div>
+            <div class="demo-cartao">
+              <p class="demo-rotulo">Saídas</p>
+              <p class="demo-valor sai">R$ 3.217,70</p>
+            </div>
+          </div>
+          <div class="demo-grafico">
+            <svg viewBox="0 0 640 190" width="640" height="190" aria-hidden="true" style="width:100%;height:auto">
+              <g fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1">
+                <path d="M0 40h640M0 80h640M0 120h640M0 160h640"/>
+              </g>
+              <g>
+                <rect x="26"  y="66"  width="26" height="94"  rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="58"  y="104" width="26" height="56"  rx="5" fill="#FF9E7D" opacity=".75"/>
+                <rect x="128" y="52"  width="26" height="108" rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="160" y="112" width="26" height="48"  rx="5" fill="#FF9E7D" opacity=".75"/>
+                <rect x="230" y="72"  width="26" height="88"  rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="262" y="94"  width="26" height="66"  rx="5" fill="#FF9E7D" opacity=".75"/>
+                <rect x="332" y="44"  width="26" height="116" rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="364" y="118" width="26" height="42"  rx="5" fill="#FF9E7D" opacity=".75"/>
+                <rect x="434" y="60"  width="26" height="100" rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="466" y="100" width="26" height="60"  rx="5" fill="#FF9E7D" opacity=".75"/>
+                <rect x="536" y="36"  width="26" height="124" rx="5" fill="#6FE3B0" opacity=".85"/>
+                <rect x="568" y="122" width="26" height="38"  rx="5" fill="#FF9E7D" opacity=".75"/>
+              </g>
+              <path d="M0 168h640" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-           Os botões são .nav-item com data-page: o roteador liga o
-           clique e marca o ativo em todos eles de uma vez, então a
-           barra de baixo e a de cima ficam sempre em sincronia. -->
-      <button class="topnav-brand" id="topnavBrand" aria-label="OAZE — início">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 40 40" width="18" height="18" fill="none"
-               stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
-            <circle cx="20" cy="20" r="8"/>
-            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+  <hr class="horizonte" style="position:static" aria-hidden="true">
+
+  <!-- ============================ benefícios ============================ -->
+  <section class="secao" id="beneficios">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>O que muda no seu mês</h2>
+        <p>Não é mais um lugar para digitar números. É o lugar onde eles finalmente respondem alguma coisa.</p>
+      </div>
+
+      <div class="grade grade-3">
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>
+            </svg>
+          </div>
+          <h3>Você vê o mês antes de ele acabar</h3>
+          <p>Entradas, saídas e o que sobra, atualizados a cada lançamento. O saldo de hoje e a projeção do fechamento na mesma tela.</p>
+        </article>
+
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/>
+            </svg>
+          </div>
+          <h3>Cartão de crédito que fecha certo</h3>
+          <p>Fatura por ciclo, não por mês do calendário. Parcelamento entra nos meses em que realmente cai — não todo no primeiro.</p>
+        </article>
+
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+          </div>
+          <h3>Recorrências que não somem</h3>
+          <p>Assinatura, aluguel, mensalidade: cadastrou uma vez, aparece todo mês, no dia certo, sem você lembrar.</p>
+        </article>
+
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/>
+            </svg>
+          </div>
+          <h3>Metas com prazo de verdade</h3>
+          <p>Quanto falta, quanto por mês, e em que data chega no ritmo atual. Sem promessa vaga de "guardar um pouco".</p>
+        </article>
+
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20V10M10 20V4M16 20v-7M22 20v-4"/>
+            </svg>
+          </div>
+          <h3>Comparação com os meses anteriores</h3>
+          <p>Gastou mais em quê, e desde quando. A categoria que cresceu aparece sozinha, sem você ir procurar.</p>
+        </article>
+
+        <article class="carta revela">
+          <div class="icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l7 4v5c0 4.4-3 8.2-7 9-4-.8-7-4.6-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h3>Seus dados são seus</h3>
+          <p>Backup e exportação a qualquer momento, sem pedir permissão. Sai tudo, em formato aberto, quando você quiser.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ como funciona ============================ -->
+  <section class="secao" id="como-funciona">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Como funciona</h2>
+        <p>Três passos. O primeiro leva um minuto; os outros dois acontecem enquanto você usa.</p>
+      </div>
+
+      <div class="passos">
+        <article class="passo revela">
+          <h3>Diga como é o seu dinheiro</h3>
+          <p>Suas contas, seus cartões, quanto entra. Uma configuração curta, que você pode parar no meio e continuar depois de onde parou.</p>
+        </article>
+        <article class="passo revela">
+          <h3>Registre o que acontece</h3>
+          <p>Lançamentos em segundos, ou importados do extrato do banco em CSV e OFX. O que se repete você cadastra uma vez só.</p>
+        </article>
+        <article class="passo revela">
+          <h3>Leia o que os números dizem</h3>
+          <p>O painel se monta sozinho: saldo, categorias, orçamento, metas. E a UGLEZ traduz tudo isso em frases, não em gráficos.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ UGLEZ ============================ -->
+  <section class="secao" id="uglez">
+    <div class="env">
+      <div class="grade grade-2" style="align-items:center;gap:clamp(28px,4vw,56px)">
+        <div class="revela">
+          <p class="etiqueta">UGLEZ</p>
+          <h2>A leitura do seu mês, em português</h2>
+          <p class="leve">
+            A UGLEZ olha os seus números e diz o que eles significam: onde o gasto
+            cresceu, o que dá para cortar sem doer, se a reserva cobre quantos meses.
+          </p>
+          <p class="leve">
+            Boa parte do que ela mostra é <strong>aritmética feita no seu próprio
+            navegador</strong> — não sai dado nenhum para produzir aquilo, e aparece
+            mesmo para quem nunca configurou nada. Só a conversa passa por um
+            servidor autenticado, e a tela diz exatamente quais categorias de dado
+            seguem junto antes de você enviar.
+          </p>
+          <p class="leve">
+            Quando não há movimentação suficiente, ela diz isso — em vez de inventar
+            uma previsão de zero reais.
+          </p>
+        </div>
+
+        <div class="carta revela" style="background:linear-gradient(180deg,rgba(124,92,255,.12),var(--carta))">
+          <p class="demo-rotulo" style="margin-bottom:14px">Exemplo de leitura</p>
+          <p style="color:var(--branco);font-size:1.04rem;line-height:1.6">
+            “Em setembro você gastou <strong>R$ 3.217,70</strong>, 12% a menos que em
+            agosto. A queda veio quase toda de <strong>Delivery</strong>, que caiu de
+            R$ 640 para R$ 290. <strong>Transporte</strong> subiu 18% e é o único
+            grupo acima do orçamento.”
+          </p>
+          <p style="color:var(--texto-3);font-size:.85rem;margin:16px 0 0">
+            Período analisado: setembro de 2026 · gerado com dados de categorias e
+            totais, sem descrições de lançamento
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ segurança ============================ -->
+  <section class="secao" id="seguranca">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Segurança e privacidade</h2>
+        <p>O que fazemos com os seus dados, dito sem eufemismo.</p>
+      </div>
+
+      <div class="grade grade-3">
+        <article class="carta revela">
+          <h3>Cada conta enxerga só a si mesma</h3>
+          <p>O isolamento é feito no banco, por política de linha — não por uma verificação no aplicativo, que um erro de programação poderia contornar.</p>
+        </article>
+        <article class="carta revela">
+          <h3>Nenhuma chave no seu navegador</h3>
+          <p>As chamadas para a inteligência artificial saem de um servidor autenticado. Nenhuma chave de API existe no código que chega até você.</p>
+        </article>
+        <article class="carta revela">
+          <h3>Não vendemos e não cruzamos seus dados</h3>
+          <p>Sem venda para terceiros, sem perfil publicitário, sem cruzamento com outras bases. Seu extrato não vira produto de ninguém.</p>
+        </article>
+        <article class="carta revela">
+          <h3>Você leva embora quando quiser</h3>
+          <p>Exportação completa em formato aberto, a qualquer hora, sem falar com o suporte e sem período de carência.</p>
+        </article>
+        <article class="carta revela">
+          <h3>Exclusão apaga de verdade</h3>
+          <p>Pedir a exclusão da conta remove os registros financeiros junto, em cascata no banco. Não é um botão que só esconde.</p>
+        </article>
+        <article class="carta revela">
+          <h3>Sem conexão automática com banco</h3>
+          <p>O OAZE não pede a senha do seu banco e não usa Open Finance. Você importa o extrato quando quiser, no arquivo que o próprio banco te dá.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ planos ============================ -->
+  <section class="secao" id="planos">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Planos</h2>
+        <p>Comece no grátis. Ele não expira e não pede cartão.</p>
+      </div>
+
+      <div style="text-align:center">
+        <div class="alternador" data-alternador role="group" aria-label="Ciclo de cobrança">
+          <button type="button" data-ciclo="mensal" aria-pressed="true">Mensal</button>
+          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−16%</span></button>
+        </div>
+      </div>
+
+      <div class="planos">
+        <article class="plano revela">
+          <h3>Grátis</h3>
+          <p class="plano-alvo">Para começar a enxergar o mês</p>
+          <p class="plano-preco"><b>R$ 0</b> <span>para sempre</span></p>
+          <p class="plano-nota">Sem cartão de crédito</p>
+          <a class="btn btn-fantasma btn-largo" href="/cadastro">Criar conta grátis</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 espaço financeiro</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 2 contas e 1 cartão</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Lançamentos ilimitados</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico de 6 meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 consultas à UGLEZ por mês</li>
+          </ul>
+        </article>
+
+        <article class="plano plano-destaque revela">
+          <span class="selo">Mais escolhido</span>
+          <h3>Basic</h3>
+          <p class="plano-alvo">Para quem já organiza e quer histórico</p>
+          <p class="plano-preco">
+            <b data-mensal="R$ 14,90" data-anual="R$ 12,49">R$ 14,90</b>
+            <span>por mês</span>
+          </p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 149,90 por ano · economia de R$ 28,90</span></p>
+          <a class="btn btn-principal btn-largo" href="/checkout?plano=basic" data-link-plano="/checkout?plano=basic">Assinar o Basic</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 2 espaços financeiros</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 contas e 5 cartões</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico completo</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Categorias, metas e orçamentos ilimitados</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 50 consultas à UGLEZ por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importação e exportação em CSV</li>
+          </ul>
+        </article>
+
+        <article class="plano revela">
+          <h3>Pro</h3>
+          <p class="plano-alvo">Para quem separa pessoal de trabalho</p>
+          <p class="plano-preco">
+            <b data-mensal="R$ 29,90" data-anual="R$ 24,99">R$ 29,90</b>
+            <span>por mês</span>
+          </p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 299,90 por ano · economia de R$ 58,90</span></p>
+          <a class="btn btn-fantasma btn-largo" href="/checkout?plano=pro" data-link-plano="/checkout?plano=pro">Assinar o Pro</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 espaços financeiros</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Contas e cartões ilimitados</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Comparações avançadas entre períodos</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 200 consultas à UGLEZ por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importação em CSV e OFX</li>
+          </ul>
+        </article>
+      </div>
+
+      <p style="text-align:center;margin-top:28px">
+        <a href="/precos">Ver a comparação completa dos planos →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ perguntas ============================ -->
+  <section class="secao" id="perguntas">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Perguntas frequentes</h2>
+      </div>
+
+      <div class="faq">
+        <details class="revela">
+          <summary>O plano grátis expira?</summary>
+          <div class="resposta"><p>Não. Ele não tem prazo e não pede cartão de crédito. Tem limites — 1 espaço, 2 contas, 1 cartão, histórico de 6 meses — mas lançamentos são ilimitados e ele continua funcionando indefinidamente.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Preciso de conta para usar?</summary>
+          <div class="resposta">
+            <p>Para experimentar, não: o painel funciona no seu navegador e os dados ficam no próprio aparelho. Mas aí eles existem só ali — trocar de celular ou limpar o navegador leva tudo junto.</p>
+            <p>Com conta, os registros passam a viver no servidor, sincronizam entre aparelhos e sobrevivem a qualquer coisa que aconteça com o navegador. Quando você cria a conta, oferecemos trazer o que já estava no aparelho, com confirmação antes de qualquer coisa ser apagada.</p>
+          </div>
+        </details>
+
+        <details class="revela">
+          <summary>O OAZE se conecta ao meu banco?</summary>
+          <div class="resposta"><p>Não, e isso é decisão de projeto. Não pedimos a senha do seu banco e não usamos Open Finance. Você importa o extrato em CSV ou OFX quando quiser — o arquivo que o próprio banco disponibiliza.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Como funciona a cobrança anual?</summary>
+          <div class="resposta"><p>O ano inteiro é cobrado de uma vez, com desconto: o Basic sai por R$ 149,90 em vez de R$ 178,80, uma economia de R$ 28,90; o Pro por R$ 299,90 em vez de R$ 358,80, economia de R$ 58,90. O valor equivalente por mês fica em R$ 12,49 e R$ 24,99.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Posso cancelar quando quiser?</summary>
+          <div class="resposta"><p>Sim, pela própria tela de configurações, sem falar com ninguém. O acesso continua até o fim do período já pago — cancelar não corta no meio nem devolve proporcional.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Se eu voltar para o grátis, perco meus dados?</summary>
+          <div class="resposta"><p>Não. Nada é apagado numa mudança de plano. O que passar do limite do plano novo fica em modo de leitura: você continua vendo, exportando e escolhendo o que manter ativo — mas não cria mais até ficar dentro do limite.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Meus dados financeiros são usados para treinar IA?</summary>
+          <div class="resposta"><p>Não. As consultas à UGLEZ vão para o provedor do modelo apenas para gerar a sua resposta. A tela mostra quais categorias de dado seguem junto antes de você enviar, e nada de descrição de lançamento é incluído.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ chamada final ============================ -->
+  <section class="secao">
+    <div class="env">
+      <div class="chamada revela">
+        <h2>Comece a enxergar o seu mês hoje</h2>
+        <p>Leva um minuto para criar a conta. Não pedimos cartão, e o plano grátis não expira.</p>
+        <div class="hero-botoes" style="margin-top:26px">
+          <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
+          <a class="btn btn-fantasma btn-grande" href="/precos">Comparar os planos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ rodapé ============================ -->
+<footer class="rodape">
+  <div class="env">
+    <div class="rodape-grade">
+      <div>
+        <a class="marca" href="/" aria-label="OAZE, página inicial">
+          <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+            <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+            <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
           </svg>
-        </span>
-        <span class="brand-name">OAZE</span>
-      </button>
-
-      <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
-        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
-          <span class="nav-ico" data-ico="layout-dashboard"></span>
-          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
-        </button>
-        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
-          <span class="nav-ico" data-ico="arrow-left-right"></span>
-          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
-        </button>
-        <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
-          <span class="nav-ico" data-ico="wallet"></span>
-          <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
-        </button>
-
-      <div class="topnav-group" data-group="planejar">
-        <button class="topnav-trigger" id="trg-planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
-          <span class="nav-ico" data-ico="target"></span>
-          <span class="topnav-trigger-txt">Planejar</span>
-          <span class="topnav-caret" aria-hidden="true"></span>
-        </button>
-        <div class="topnav-drop n1" id="drop-planejar" role="group" aria-labelledby="trg-planejar" hidden>
-        <button class="nav-item" data-page="budget" title="Orçamento" aria-label="Orçamento">
-          <span class="nav-ico" data-ico="target"></span>
-          <span class="nav-long">Orçamento</span><span class="nav-short">Orçamento</span>
-        </button>
-        <button class="nav-item" data-page="goals" title="Metas" aria-label="Metas">
-          <span class="nav-ico" data-ico="flag"></span>
-          <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
-        </button>
-        <button class="nav-item" data-page="recurring" title="Recorrências" aria-label="Recorrências">
-          <span class="nav-ico" data-ico="repeat"></span>
-          <span class="nav-long">Recorrências</span><span class="nav-short">Recorrências</span>
-        </button>
-        <button class="nav-item" data-page="calendar" title="Calendário" aria-label="Calendário">
-          <span class="nav-ico" data-ico="calendar"></span>
-          <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
-        </button>
-        </div>
+          OAZE
+        </a>
+        <p class="rodape-sobre">Um painel para enxergar o próprio dinheiro sem virar planilha.</p>
       </div>
 
-      <div class="topnav-group" data-group="crescer">
-        <button class="topnav-trigger" id="trg-crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
-          <span class="nav-ico" data-ico="trending-up"></span>
-          <span class="topnav-trigger-txt">Crescer</span>
-          <span class="topnav-caret" aria-hidden="true"></span>
-        </button>
-        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
-        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
-          <span class="nav-ico" data-ico="trending-up"></span>
-          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
-        </button>
-        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
-          <span class="nav-ico" data-ico="chart-line"></span>
-          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
-        </button>
-        </div>
+      <div>
+        <h4>Produto</h4>
+        <ul>
+          <li><a href="/recursos">Recursos</a></li>
+          <li><a href="/precos">Preços</a></li>
+          <li><a href="/#uglez">UGLEZ</a></li>
+          <li><a href="/#seguranca">Segurança</a></li>
+        </ul>
       </div>
 
-        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
-          <span class="nav-ico" data-ico="sparkles"></span>
-          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
-        </button>
-
-      <div class="topnav-group" data-group="mais">
-        <button class="topnav-trigger" id="trg-mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
-          <span class="nav-ico" data-ico="ellipsis"></span>
-          <span class="topnav-trigger-txt">Mais</span>
-          <span class="topnav-caret" aria-hidden="true"></span>
-        </button>
-        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
-        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
-          <span class="nav-ico" data-ico="sparkles"></span>
-          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
-        </button>
-        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
-          <span class="nav-ico" data-ico="tag"></span>
-          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-        </button>
-        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
-          <span class="nav-ico" data-ico="settings"></span>
-          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
-        </button>
-        </div>
-      </div>
-      </nav>
-
-      <span class="topbar-gap"></span>
-
-      <span class="pill pill-profile">
-        <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
-        <select id="profileSelect" aria-label="Perfil ativo"></select>
-        <button class="pill-ico" id="btnProfiles" title="Gerenciar perfis" aria-label="Gerenciar perfis">⚙</button>
-      </span>
-
-      <span class="pill pill-period" id="periodPicker">
-        <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-        <select id="monthSelect" aria-label="Mês"></select>
-        <select id="yearSelect" aria-label="Ano"></select>
-        <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
-        <button class="pill-hoje" id="btnToday">Mês atual</button>
-      </span>
-
-      <button class="pill pill-btn" id="btnSearch" aria-label="Buscar" title="Buscar (/)">
-        <span data-ico="search"></span><span class="pill-label">Buscar</span>
-      </button>
-      <button class="pill pill-btn" id="btnNotif" aria-label="Notificações" aria-expanded="false" title="Notificações">
-        <span data-ico="bell"></span>
-        <span class="notif-count" id="notifCount" hidden>0</span>
-      </button>
-      <button class="pill pill-btn" id="btnSettings" aria-label="Configurações" aria-expanded="false" title="Configurações">
-        <span data-ico="settings"></span>
-      </button>
-      <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
-    </header>
-
-    <!-- Pendência de assinatura. role=status para o leitor de tela
-         anunciar sem roubar o foco de quem está digitando. -->
-    <div id="avisoConta" hidden></div>
-
-    <main class="content" id="content" tabindex="-1">
-
-      <div class="page-head">
-        <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
-        <h1 id="pageTitle">Visão geral</h1>
-        <p class="page-sub" id="pageSub"></p>
+      <div>
+        <h4>Conta</h4>
+        <ul>
+          <li><a href="/entrar">Entrar</a></li>
+          <li><a href="/cadastro">Criar conta</a></li>
+          <li><a href="/recuperar-senha">Recuperar senha</a></li>
+        </ul>
       </div>
 
-    <!-- ─────────── VISÃO GERAL ───────────
-         Responde, de cima para baixo: quanto eu tenho, como estou,
-         quanto entrou e saiu, o que vem aí, e onde o dinheiro foi.
-         Layout assimétrico de propósito: a largura de cada peça diz
-         o peso dela. -->
-    <section class="page is-active" data-page="home">
-
-      <!-- Painel de primeiro uso. Substitui TODO o resto quando não
-           há lançamento nenhum: zeros e um score calculado sobre
-           nada não são informação, são a aparência de defeito. -->
-      <div id="homeVazia" hidden></div>
-
-      <div data-home-conteudo class="grid grid-hero" id="homeConteudo">
-        <!-- patrimônio líquido: o número que manda na página -->
-        <section class="hero" aria-labelledby="heroLabel">
-          <div class="hero-face">
-            <p class="hero-label" id="heroLabel">Patrimônio líquido</p>
-            <p class="hero-value" id="heroValue">—</p>
-            <p class="hero-sub" id="heroSub"></p>
-            <p class="hero-delta" id="heroDelta"></p>
-          </div>
-          <div class="hero-spark" aria-hidden="true"><canvas id="chartHeroSpark"></canvas></div>
-        </section>
-
-        <!-- OAZE Score: saúde financeira em um número -->
-        <section class="card score-card" aria-labelledby="scoreTitle">
-          <div class="card-head">
-            <h2 id="scoreTitle">OAZE Score</h2>
-            <button class="icon-btn" id="btnScoreHelp" title="Como o score é calculado"
-              aria-label="Como o score é calculado"><span data-ico="circle-help"></span></button>
-          </div>
-          <div class="score-body">
-            <div class="score-ring" id="scoreRing"></div>
-            <ul class="score-parts" id="scoreParts"></ul>
-          </div>
-        </section>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/termos">Termos de uso</a></li>
+          <li><a href="/privacidade">Política de privacidade</a></li>
+          <li><a href="/termos#cancelamento">Cancelamento</a></li>
+          <li><a href="/termos#reembolso">Reembolso</a></li>
+          <li><a href="/suporte">Suporte</a></li>
+        </ul>
       </div>
-
-      <div data-home-conteudo class="kpi-row kpi-row-3" id="homeKpis"></div>
-
-      <!-- fluxo financeiro do ano -->
-      <div data-home-conteudo class="card">
-        <div class="card-head">
-          <h2 id="homeFlowTitle">Fluxo financeiro</h2>
-          <span class="card-note">Entradas, saídas e o saldo de cada mês</span>
-        </div>
-        <div class="chart-box chart-box-xl"><canvas id="chartFlow"></canvas></div>
-      </div>
-
-      <!-- UGLEZ: painel de leitura, não caixa de chat -->
-      <section data-home-conteudo class="uglez-panel" aria-labelledby="uglezTitle">
-        <div class="uglez-head">
-          <span class="uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
-          <div class="uglez-read">
-            <p class="uglez-name" id="uglezTitle">UGLEZ</p>
-            <p class="uglez-line" id="uglezInsight">Analisando o mês…</p>
-            <p class="uglez-sub" id="uglezInsightSub"></p>
-          </div>
-          <button class="btn btn-ghost btn-sm" data-goto="uglez">Abrir →</button>
-        </div>
-        <div class="uglez-chips" id="uglezChips"></div>
-      </section>
-
-      <div data-home-conteudo class="grid grid-wide-left">
-        <div class="card">
-          <div class="card-head">
-            <h2 id="homePieTitle">Distribuição de gastos</h2>
-            <span class="card-note" id="homePieNote"></span>
-          </div>
-          <div class="chart-box chart-box-pie">
-            <canvas id="chartCatPie"></canvas>
-            <div class="empty-overlay" id="catPieEmpty" hidden>Sem despesas confirmadas neste mês.</div>
-          </div>
-          <ul class="cat-tiles" id="catRankList"></ul>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2>Próximos eventos</h2>
-            <button class="btn btn-ghost btn-sm" data-goto="calendar">Calendário →</button>
-          </div>
-          <div id="upcomingList"></div>
-        </div>
-      </div>
-
-      <div data-home-conteudo class="grid grid-wide-right">
-        <div class="card">
-          <div class="card-head">
-            <h2>Resumo do mês</h2>
-            <span class="card-note" id="monthSummaryNote"></span>
-          </div>
-          <div id="monthSummary"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2>Sua carteira</h2>
-            <button class="btn btn-ghost btn-sm" data-goto="accounts">Gerenciar →</button>
-          </div>
-          <div id="homeCards"></div>
-        </div>
-      </div>
-
-      <div data-home-conteudo class="card">
-        <div class="card-head">
-          <h2>Movimentações recentes</h2>
-          <button class="btn btn-ghost btn-sm" data-goto="transactions">Ver tudo →</button>
-        </div>
-        <div id="recentList"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── PÁGINA 2 · RECEITAS E DESPESAS ─────────── -->
-    <section class="page" data-page="transactions">
-      <div class="kpi-row kpi-row-3" id="txKpis"></div>
-
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-income btn-sm" data-quick="income">+ Receita</button>
-          <button class="btn btn-danger btn-sm" data-quick="expense">− Despesa</button>
-          <button class="btn btn-outline btn-sm" data-quick="transfer">⇄ Transferência</button>
-        </div>
-        <div class="toolbar-right">
-          <div class="seg seg-sm" id="txMethodFilter" role="group" aria-label="Filtrar despesas por forma de pagamento">
-            <button type="button" class="is-active" data-method="all">Tudo</button>
-            <button type="button" data-method="account">Débito</button>
-            <button type="button" data-method="card">Crédito</button>
-          </div>
-          <input type="search" class="input input-sm" id="txSearch" aria-label="Buscar nos lançamentos" placeholder="Buscar por descrição…">
-          <label class="check check-inline"><input type="checkbox" id="txOnlyPending" aria-label="Mostrar apenas lançamentos a confirmar"><span>Só pendentes</span></label>
-        </div>
-      </div>
-
-      <div class="grid grid-2">
-        <div class="col-stack" id="colIncome"></div>
-        <div class="col-stack" id="colExpense"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
-        </div>
-        <div class="chart-box chart-box-lg"><canvas id="chartTxExpenseCat"></canvas>
-          <div class="empty-overlay" id="txExpCatEmpty" hidden>Nada confirmado ainda.</div>
-        </div>
-      </div>
-
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartMethodTrend"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartPlannedVsReal"></canvas></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
-        <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas>
-          <div class="empty-overlay" id="txIncCatEmpty" hidden>Nada confirmado ainda.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─────────── PÁGINA 3 · INVESTIMENTOS ─────────── -->
-    <section class="page" data-page="investments">
-      <div class="kpi-row kpi-row-4" id="invKpis"></div>
-
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
-        </div>
-        <div class="toolbar-right">
-          <select class="input input-sm" id="invTypeFilter" aria-label="Filtrar investimentos por tipo"><option value="">Todos os tipos</option></select>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <h2>Carteira de investimentos</h2>
-          <span class="card-note">Valor atual estimado por juros compostos sobre o aporte</span>
-        </div>
-        <div class="table-wrap">
-          <table class="table" id="tableInvestments">
-            <thead>
-              <tr>
-                <th>Nome</th><th>Tipo</th><th>Aporte</th>
-                <th class="num">Valor aportado</th><th class="num">Taxa a.a.</th>
-                <th class="num">Valor atual</th><th class="num">Rendimento</th><th></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="grid grid-wide-left">
-        <div class="card">
-          <div class="card-head">
-            <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
-            <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
-          </div>
-          <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2 id="invMixTitle">Distribuição da carteira</h2>
-            <span class="card-note">Por tipo de investimento</span>
-          </div>
-          <div class="chart-box chart-box-pie"><canvas id="chartInvMix"></canvas>
-            <div class="empty-overlay" id="invMixEmpty" hidden>Nenhum aporte registrado até aqui.</div>
-          </div>
-          <ul class="cat-tiles" id="invMixList"></ul>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h2>Calculadora de projeção — juros compostos</h2></div>
-        <div class="proj-layout">
-          <form class="proj-form" id="projForm">
-            <label class="field"><span class="field-label">Valor inicial (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
-            <label class="field"><span class="field-label">Aporte mensal (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
-            <label class="field"><span class="field-label">Taxa de juros</span>
-              <div class="row gap-6">
-                <input class="input" type="text" inputmode="decimal" id="projRate" aria-label="Taxa de rendimento da projeção" value="10,00">
-                <select class="input input-sm" id="projRatePeriod" aria-label="Período da taxa" style="max-width:110px">
-                  <option value="year">% ao ano</option>
-                  <option value="month">% ao mês</option>
-                </select>
-              </div></label>
-            <label class="field"><span class="field-label">Período (meses)</span>
-              <input class="input" type="number" min="1" max="960" id="projMonths" aria-label="Meses da projeção" value="120"></label>
-            <button class="btn btn-primary" type="submit">Calcular projeção</button>
-          </form>
-          <div class="proj-result">
-            <div class="proj-figures" id="projFigures"></div>
-            <div class="chart-box chart-box-lg"><canvas id="chartProjection"></canvas></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─────────── PÁGINA 4 · CARTÕES E CONTAS ─────────── -->
-    <section class="page" data-page="accounts">
-      <div class="tabs" id="accTabs">
-        <button class="tab is-active" data-tab="accounts">Contas de débito</button>
-        <button class="tab" data-tab="cards">Cartões de crédito</button>
-        <button class="tab" data-tab="import">Importar extratos / Registrato</button>
-      </div>
-
-      <!-- Aba contas -->
-      <div class="tabpane is-active" data-tab="accounts">
-        <div class="toolbar">
-          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewAccount">+ Nova conta</button></div>
-          <div class="toolbar-right"><span class="muted" id="accTotalLabel"></span></div>
-        </div>
-        <div class="wallet-grid" id="accountGrid"></div>
-        <div class="card">
-          <div class="card-head">
-            <h2>Extrato da conta</h2>
-            <select class="input input-sm" id="accHistorySelect" aria-label="Conta do extrato" style="max-width:240px"></select>
-          </div>
-          <div class="table-wrap table-scroll-lg">
-            <table class="table table-compact" id="tableAccHistory">
-              <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th><th class="num">Saldo</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba cartões -->
-      <div class="tabpane" data-tab="cards">
-        <div class="toolbar">
-          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewCard">+ Novo cartão</button></div>
-          <div class="toolbar-right"><span class="muted" id="cardTotalLabel"></span></div>
-        </div>
-        <div class="card" id="cardDeckCard">
-          <div id="cardDeck"></div>
-          <div id="cardDetail"></div>
-        </div>
-      </div>
-
-      <!-- Aba importação -->
-      <div class="tabpane" data-tab="import">
-        <div class="card">
-          <div class="card-head">
-            <h2>Importar lançamentos</h2>
-            <span class="card-note">CSV · OFX · texto colado de extrato, fatura ou Registrato</span>
-          </div>
-          <div class="import-grid">
-            <div class="field">
-              <span class="field-label">1 · Envie um arquivo</span>
-              <input type="file" class="input" id="importFile" aria-label="Arquivo de extrato para importar" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
-              <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
-            </div>
-            <div class="field">
-              <span class="field-label">ou cole o conteúdo aqui</span>
-              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
-            </div>
-          </div>
-          <div class="import-opts">
-            <label class="field"><span class="field-label">Destino</span>
-              <select class="input" id="importTarget" aria-label="Conta ou cartão de destino da importação"></select></label>
-            <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
-          </div>
-        </div>
-        <div id="importResult"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── PÁGINA 5 · CATEGORIAS ─────────── -->
-    <section class="page" data-page="categories">
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-danger btn-sm" data-newcat="expense">+ Categoria de despesa</button>
-          <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
-        </div>
-        <div class="toolbar-right">
-          <select class="input input-sm" id="catRangeSelect" aria-label="Período das categorias">
-            <option value="all">Histórico completo</option>
-            <option value="year">Ano selecionado</option>
-            <option value="12m">Últimos 12 meses</option>
-            <option value="month">Mês selecionado</option>
-          </select>
-        </div>
-      </div>
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2>Categorias de despesa</h2></div>
-          <div id="catListExpense" class="cat-list"></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>Categorias de receita</h2></div>
-          <div id="catListIncome" class="cat-list"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2 id="catHistTitle">Peso histórico de cada categoria de despesa</h2></div>
-        <div class="chart-box chart-box-lg"><canvas id="chartCatHistory"></canvas></div>
-      </div>
-    </section>
-
-    <!-- ─────────── ORÇAMENTO ─────────── -->
-    <section class="page" data-page="budget">
-      <div class="kpi-row kpi-row-3" id="budgetKpis"></div>
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-primary btn-sm" id="btnNewBudget">+ Definir limite</button>
-        </div>
-        <div class="toolbar-right"><span class="muted" id="budgetNote"></span></div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <h2>Limites por categoria</h2>
-          <span class="card-note">Quanto você decidiu gastar, contra o que já gastou</span>
-        </div>
-        <div id="budgetList"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── METAS ─────────── -->
-    <section class="page" data-page="goals">
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-primary btn-sm" id="btnNewGoal">+ Nova meta</button>
-        </div>
-        <div class="toolbar-right"><span class="muted" id="goalsNote"></span></div>
-      </div>
-      <div class="goal-grid" id="goalGrid"></div>
-    </section>
-
-    <!-- ─────────── RECORRÊNCIAS E ASSINATURAS ─────────── -->
-    <section class="page" data-page="recurring">
-      <div class="kpi-row kpi-row-3" id="recKpis"></div>
-      <div class="tabs" id="recTabs">
-        <button class="tab is-active" data-rectab="all">Todas as recorrências</button>
-        <button class="tab" data-rectab="subs">Assinaturas</button>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <h2 id="recTitle">Lançamentos fixos</h2>
-          <span class="card-note">Repetem todo mês até você encerrar</span>
-        </div>
-        <div id="recList"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── CALENDÁRIO FINANCEIRO ─────────── -->
-    <section class="page" data-page="calendar">
-      <div class="toolbar">
-        <div class="toolbar-left"><h2 class="cal-title" id="calTitle"></h2></div>
-        <div class="toolbar-right">
-          <span class="legend-icons">
-            <span><i class="dot-in"></i>Entrada</span>
-            <span><i class="dot-out"></i>Saída</span>
-            <span><i class="dot-due"></i>Fatura</span>
-          </span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="cal-grid" id="calGrid"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2 id="calDayTitle">Selecione um dia</h2></div>
-        <div id="calDayList"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── ANÁLISES ─────────── -->
-    <section class="page" data-page="reports">
-      <div class="kpi-row kpi-row-4" id="repKpis"></div>
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head">
-            <h2 id="repYoyTitle">Comparação ano a ano</h2>
-          </div>
-          <div class="chart-box chart-box-lg"><canvas id="chartYoY"></canvas>
-            <div class="empty-overlay" id="yoyEmpty" hidden>Ainda não há dados de outro ano para comparar.</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>Taxa de poupança</h2>
-            <span class="card-note">Quanto de cada real recebido sobrou</span></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartSavings"></canvas></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <h2>Consolidado mensal</h2>
-          <button class="btn btn-outline btn-sm" id="btnExportCsv">↓ Exportar CSV</button>
-        </div>
-        <div class="table-wrap">
-          <table class="table" id="tableAnnual">
-            <thead><tr>
-              <th>Mês</th><th class="num">Receitas</th><th class="num">Despesas</th>
-              <th class="num">Saldo</th><th class="num">Acumulado</th><th class="num">Investido</th>
-            </tr></thead>
-            <tbody></tbody><tfoot></tfoot>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─────────── UGLEZ ─────────── -->
-    <section class="page" data-page="uglez">
-      <section class="uglez-hero">
-        <span class="uglez-orb is-big" aria-hidden="true"><span data-ico="sparkles"></span></span>
-        <div>
-          <h2 class="uglez-hero-name">UGLEZ</h2>
-          <p class="uglez-hero-sub">Leitura do seu dinheiro, feita sobre os seus próprios dados.</p>
-        </div>
-      </section>
-
-      <div class="grid grid-2" id="uglezInsights"></div>
-
-      <div class="card">
-        <div class="card-head">
-          <h2>Conversar</h2>
-          <span class="card-note" id="uglezMode"></span>
-          <button class="btn btn-ghost btn-sm" id="btnAiConfig">⚙ Configurar</button>
-        </div>
-        <div class="uglez-chips" id="uglezChipsFull"></div>
-        <div class="ai-ask" style="margin-top:12px">
-          <textarea class="input textarea-plain" id="aiQuestion" aria-label="Sua pergunta para o UGLEZ" rows="2"
-            placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
-          <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
-        </div>
-        <div class="ai-answer" id="aiAnswer" hidden></div>
-        <div id="uglezHistory"></div>
-      </div>
-    </section>
-
-    <!-- ─────────── CONFIGURAÇÕES ─────────── -->
-    <section class="page" data-page="settings">
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2>Perfil</h2></div>
-          <div id="setConta"></div>
-          <div id="setPlano"></div>
-          <div id="setProfile"></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>Aparência</h2></div>
-          <div id="setAppearance"></div>
-        </div>
-      </div>
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2>Sincronização</h2></div>
-          <div id="setSync"></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>UGLEZ</h2></div>
-          <div id="setUglez"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2>Dados</h2>
-          <span class="card-note">Tudo fica neste navegador. O backup é a sua rede de segurança.</span></div>
-        <div id="setData"></div>
-      </div>
-    </section>
-
-    <!-- ══════ PLANOS ══════
-         Não é uma página de marketing solta: é a mesma casa. Por
-         isso vive dentro do app, com a mesma navegação e o mesmo
-         material — quem chega aqui vindo de um limite não deveria
-         sentir que saiu do produto. -->
-    <section class="page" data-page="precos" aria-labelledby="precosTitulo">
-
-      <div class="precos-topo">
-        <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
-        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
-
-        <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
-          <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
-          <button class="ciclo-btn" data-ciclo="annual" aria-pressed="false">
-            Anual <span class="ciclo-selo">2 meses grátis</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="precos-cards" id="precosCards"></div>
-
-      <div class="card precos-tabela-wrap">
-        <h3 class="precos-h3">Comparativo completo</h3>
-        <div class="table-wrap">
-          <table class="table precos-tabela" id="precosTabela"></table>
-        </div>
-        <p class="hint" id="precosNota"></p>
-      </div>
-
-      <div class="card precos-faq">
-        <h3 class="precos-h3">Perguntas frequentes</h3>
-        <div id="precosFaq"></div>
-      </div>
-
-    </section>
-
-      <footer class="app-foot">
-        <span id="footInfo"></span>
-        <span class="dot-sep">·</span>
-        <span>Dados salvos apenas neste navegador (localStorage)</span>
-      </footer>
-    </main>
-  </div>
-</div>
-
-<!-- ══════ BUSCA — sobreposição de vidro ══════ -->
-<div class="overlay" id="searchOverlay" hidden>
-  <div class="overlay-scrim" data-close-search></div>
-  <div class="search-box n1" role="dialog" aria-modal="true" aria-label="Buscar">
-    <div class="search-field">
-      <span data-ico="search" aria-hidden="true"></span>
-      <input type="search" id="searchInput" aria-label="Buscar em todo o app" autocomplete="off"
-        placeholder="Buscar lançamento, conta, cartão, meta ou categoria…">
-      <button class="pill-ico" data-close-search aria-label="Fechar busca">✕</button>
     </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</div>
 
-<!-- ══════ POPOVERS DA TOP BAR ══════ -->
-<div class="popover n3" id="notifPop" hidden role="dialog" aria-label="Notificações">
-  <div class="popover-head"><h3>Notificações</h3></div>
-  <div id="notifList"></div>
-</div>
-
-<div class="popover n3" id="settingsPop" hidden role="menu" aria-label="Menu de configurações">
-  <button class="pop-item" role="menuitem" id="btnTheme">
-    <span class="pop-ico" data-ico="sliders-horizontal"></span><span>Alternar tema claro/escuro</span>
-  </button>
-  <button class="pop-item" role="menuitem" data-goto="settings">
-    <span class="pop-ico" data-ico="settings"></span><span>Todas as configurações</span>
-  </button>
-  <div class="pop-sep"></div>
-  <button class="pop-item" role="menuitem" id="btnExport">
-    <span class="pop-ico" data-ico="download"></span><span>Baixar backup (JSON)</span>
-  </button>
-  <button class="pop-item" role="menuitem" id="btnImport">
-    <span class="pop-ico" data-ico="upload"></span><span>Restaurar backup</span>
-  </button>
-</div>
-
-<!-- ação principal flutuante: os quatro lançamentos, em qualquer página -->
-<div class="fab-wrap" id="fabWrap">
-  <div class="fab-menu" id="fabMenu" hidden role="menu" aria-label="Novo lançamento">
-    <button class="fab-item" role="menuitem" data-quick="expense">
-      <span class="fab-item-ico is-expense" data-ico="arrow-down-right"></span><span>Nova despesa</span>
-    </button>
-    <button class="fab-item" role="menuitem" data-quick="income">
-      <span class="fab-item-ico is-income" data-ico="arrow-up-right"></span><span>Nova receita</span>
-    </button>
-    <button class="fab-item" role="menuitem" data-quick="transfer">
-      <span class="fab-item-ico" data-ico="arrow-left-right"></span><span>Transferência</span>
-    </button>
-    <button class="fab-item" role="menuitem" data-quick="investment">
-      <span class="fab-item-ico is-invest" data-ico="trending-up"></span><span>Novo investimento</span>
-    </button>
-  </div>
-  <button class="fab" id="fabBtn" aria-expanded="false" aria-haspopup="menu" aria-label="Novo lançamento" title="Novo lançamento (N)">
-    <span class="fab-plus" aria-hidden="true"></span>
-  </button>
-</div>
-
-<!-- modal / toast -->
-<div class="modal-root" id="modalRoot" hidden>
-  <div class="modal-backdrop" data-close-modal></div>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-head">
-      <h3 id="modalTitle">Título</h3>
-      <button class="icon-btn" data-close-modal aria-label="Fechar">✕</button>
+    <div class="rodape-fim">
+      <p>© <span data-ano>2026</span> OAZE</p>
+      <p>Feito no Brasil · valores em reais</p>
+      <p><a href="/suporte">suporte@oaze.com.br</a></p>
     </div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-foot" id="modalFoot"></div>
   </div>
-</div>
-<div class="toasts" id="toasts"></div>
-<div class="offline-note" id="offlineNote" hidden>
-  Chart.js não pôde ser carregado (sem internet). Tabelas e números continuam funcionando; os gráficos ficam ocultos.
-</div>
+</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<!-- sem internet (avião, celular offline), cai para a cópia local -->
-<script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>
-<!-- ícones vendorizados (bancos + Lucide): sem CDN em runtime -->
-<script src="assets/vendor/bancos.js"></script>
-<script src="assets/vendor/icons.js"></script>
-<script src="assets/js/firebase-config.js"></script>
-<script src="assets/js/supabase-config.js"></script>
-<script src="assets/js/utils.js"></script>
-<script src="assets/js/icons.js"></script>
-<script src="assets/js/store.js"></script>
-<script src="assets/js/calc.js"></script>
-<script src="assets/js/charts.js"></script>
-<script src="assets/js/ui.js"></script>
-<script src="assets/js/cards.js"></script>
-<script src="assets/js/forms.js"></script>
-<script src="assets/js/importer.js"></script>
-<script src="assets/js/sync.js"></script>
-<script src="assets/js/supabase-auth.js"></script>
-<script src="assets/js/repo.js"></script>
-<script src="assets/js/fila.js"></script>
-<script src="assets/js/migracao.js"></script>
-<script src="assets/js/onboarding.js"></script>
-<script src="assets/js/planos.js"></script>
-<script src="assets/js/limites.js"></script>
-<script src="assets/js/conta.js"></script>
-<script src="assets/js/checkout.js"></script>
-<script src="assets/js/ai.js"></script>
-<script src="assets/js/shell.js"></script>
-<script src="assets/js/pages/home.js"></script>
-<script src="assets/js/pages/transactions.js"></script>
-<script src="assets/js/pages/investments.js"></script>
-<script src="assets/js/pages/accounts.js"></script>
-<script src="assets/js/pages/categories.js"></script>
-<script src="assets/js/pages/budget.js"></script>
-<script src="assets/js/pages/goals.js"></script>
-<script src="assets/js/pages/recurring.js"></script>
-<script src="assets/js/pages/calendar.js"></script>
-<script src="assets/js/pages/reports.js"></script>
-<script src="assets/js/pages/uglez.js"></script>
-<script src="assets/js/pages/precos.js"></script>
-<script src="assets/js/pages/settings.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="/assets/js/site.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,590 @@
+/* =============================================================
+   site.css — o site público do OAZE
+   -------------------------------------------------------------
+   Isto NÃO é o app. Nenhuma regra daqui é usada pelo painel, e
+   nenhuma regra do style.css é usada aqui. Os dois arquivos são
+   independentes de propósito: o app é uma ferramenta de trabalho
+   com fundo claro e denso de informação; o site é uma peça
+   comercial, escura, com muito ar.
+
+   A ponte entre os dois é o --midnight #0F2C3D, que já era a cor
+   âncora do app. O site desce a partir dele até quase preto e
+   acrescenta a luz violeta. Assim as duas superfícies são
+   reconhecivelmente a mesma marca sem serem a mesma tela.
+
+   REFERÊNCIAS DE FORMA: água, refração, horizonte, oásis. Todas
+   feitas com gradiente e SVG inline -- nada de imagem pesada, e
+   nada copiado de outra marca.
+   ============================================================= */
+
+/* ---------------------------------------------------------------
+   1 · tokens
+   --------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  /* o chão: azul-noturno descendo para quase preto */
+  --noite-0:  #05080F;
+  --noite-1:  #080D18;
+  --noite-2:  #0C1424;
+  --midnight: #0F2C3D;
+
+  /* a luz: violeta e lilás, com a água como terceiro tom frio */
+  --violeta:  #7C5CFF;
+  --lilas:    #A98BFF;
+  --agua:     #5FD4E8;
+
+  --branco:   #F5F7FF;
+  --texto:    #E8ECFA;
+  /* 7.2:1 sobre --noite-1. O cinza "bonito" costuma ficar em 3:1 e
+     falhar; este foi escolhido pelo contraste, não pela aparência. */
+  --texto-2:  #A9B4D0;
+  --texto-3:  #7E8AA8;
+
+  /* superfícies de vidro. A transparência é controlada: sobre um
+     fundo escuro, vidro claro demais some e o texto vai junto. */
+  --carta:      rgba(255, 255, 255, .045);
+  --carta-alta: rgba(255, 255, 255, .07);
+  --borda:      rgba(255, 255, 255, .10);
+  --borda-viva: rgba(169, 139, 255, .38);
+
+  --raio:    16px;
+  --raio-lg: 24px;
+  --raio-sm: 10px;
+
+  --sombra:      0 1px 2px rgba(0, 0, 0, .4), 0 18px 50px -24px rgba(0, 0, 0, .8);
+  --sombra-alta: 0 2px 8px rgba(0, 0, 0, .45), 0 40px 80px -32px rgba(124, 92, 255, .40);
+
+  --largura: 1120px;
+  --gutter:  24px;
+
+  /* Uma curva só para tudo. Várias curvas diferentes numa mesma
+     página leem como falta de decisão, não como riqueza. */
+  --curva: cubic-bezier(.22, .61, .36, 1);
+}
+
+/* ---------------------------------------------------------------
+   2 · base
+   --------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* Sem isto, clicar num link de âncora joga o alvo debaixo do
+     cabeçalho fixo -- o usuário chega na seção certa vendo o
+     título cortado. */
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--noite-1);
+  color: var(--texto);
+  font: 400 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* O site nunca rola de lado. Se algo vazar, a barra horizontal é
+     o sintoma -- e escondê-la esconderia o defeito, então em vez de
+     overflow:hidden o layout é que se contém (ver §12). */
+  overflow-x: clip;
+}
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--lilas); text-decoration: none; }
+a:hover { color: var(--branco); }
+
+h1, h2, h3 {
+  color: var(--branco);
+  /* Tracking negativo cresce com o tamanho: letras grandes leem-se
+     espaçadas demais com o valor que serve ao corpo do texto. */
+  letter-spacing: -.02em;
+  line-height: 1.12;
+  margin: 0 0 .5em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); letter-spacing: -.035em; }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); letter-spacing: -.028em; }
+h3 { font-size: clamp(1.05rem, 1.6vw, 1.22rem); letter-spacing: -.015em; line-height: 1.3; }
+p  { margin: 0 0 1em; }
+p.leve { color: var(--texto-2); }
+
+/* ---- foco ----
+   Dois anéis: o escuro por baixo garante que o foco continue
+   visível quando o elemento está sobre a luz violeta, onde um anel
+   claro sozinho desapareceria. */
+:focus-visible {
+  outline: 2px solid var(--lilas);
+  outline-offset: 3px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 6px rgba(5, 8, 15, .85);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* Pular para o conteúdo: existe sempre, aparece ao receber foco.
+   display:none o tiraria da ordem de tabulação e ele nunca seria
+   alcançado -- que é o mesmo que não existir. */
+.pular {
+  position: absolute; left: 12px; top: -60px; z-index: 200;
+  padding: 12px 18px; border-radius: var(--raio-sm);
+  background: var(--violeta); color: #fff; font-weight: 600;
+  transition: top .18s var(--curva);
+}
+.pular:focus { top: 12px; color: #fff; }
+
+.env {
+  width: 100%; max-width: var(--largura);
+  margin-inline: auto; padding-inline: var(--gutter);
+}
+
+/* ---------------------------------------------------------------
+   3 · o fundo: água, refração, horizonte
+   ---------------------------------------------------------------
+   Três camadas de gradiente radial, fixas no topo da página. Não
+   são imagem: são luz. O custo é zero em rede e a nitidez é
+   infinita em qualquer densidade de tela. */
+.ceu {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(90rem 48rem at 18% -12%, rgba(124, 92, 255, .30), transparent 62%),
+    radial-gradient(70rem 40rem at 88% -6%,  rgba(95, 212, 232, .16), transparent 60%),
+    radial-gradient(60rem 46rem at 50% 108%, rgba(15, 44, 61, .85),  transparent 66%),
+    linear-gradient(180deg, var(--noite-0) 0%, var(--noite-1) 46%, var(--noite-2) 100%);
+}
+
+/* A linha do horizonte: uma faixa fininha de luz que atravessa a
+   dobra. É o elemento que dá o nome à marca uma leitura visual --
+   o oásis é o que existe depois do horizonte. */
+.horizonte {
+  position: absolute; left: 0; right: 0; height: 1px; border: 0;
+  background: linear-gradient(90deg, transparent, var(--borda-viva) 22%, rgba(95, 212, 232, .5) 50%, var(--borda-viva) 78%, transparent);
+  opacity: .55;
+}
+
+/* ---------------------------------------------------------------
+   4 · cabeçalho
+   --------------------------------------------------------------- */
+.topo {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8, 13, 24, .72);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid var(--borda);
+}
+.topo .env { display: flex; align-items: center; gap: 18px; height: 68px; }
+
+.marca { display: flex; align-items: center; gap: 10px; color: var(--branco); font-weight: 650; letter-spacing: -.02em; font-size: 1.12rem; }
+.marca:hover { color: var(--branco); }
+.marca svg { width: 28px; height: 28px; flex: none; }
+
+.menu { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.menu a {
+  padding: 9px 13px; border-radius: var(--raio-sm);
+  color: var(--texto-2); font-size: .94rem; font-weight: 500;
+  transition: background .16s var(--curva), color .16s var(--curva);
+}
+.menu a:hover { background: var(--carta); color: var(--branco); }
+
+.acoes-topo { display: flex; align-items: center; gap: 10px; }
+
+/* ---- botões ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  /* 44px de alto: alvo de toque confortável, acima do mínimo de 24
+     que a WCAG 2.2 pede. Padding sozinho não garante isso quando a
+     fonte do usuário é pequena, então a altura é explícita. */
+  min-height: 44px; padding: 11px 20px;
+  border-radius: 11px; border: 1px solid transparent;
+  font: 600 .95rem/1 inherit; font-family: inherit;
+  cursor: pointer; white-space: nowrap;
+  transition: transform .16s var(--curva), background .16s var(--curva),
+              border-color .16s var(--curva), box-shadow .16s var(--curva);
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-principal {
+  background: linear-gradient(135deg, var(--violeta), #5B3FE0);
+  color: #fff; box-shadow: 0 8px 26px -10px rgba(124, 92, 255, .9);
+}
+.btn-principal:hover { background: linear-gradient(135deg, #8B6DFF, #6A4CEA); color: #fff; }
+
+.btn-fantasma {
+  background: var(--carta); color: var(--texto);
+  border-color: var(--borda);
+}
+.btn-fantasma:hover { background: var(--carta-alta); border-color: var(--borda-viva); color: var(--branco); }
+
+.btn-grande { min-height: 52px; padding: 15px 28px; font-size: 1.02rem; }
+.btn-largo  { width: 100%; }
+
+/* ---- menu no celular ---- */
+.hamburguer {
+  display: none; width: 44px; height: 44px; margin-left: auto;
+  align-items: center; justify-content: center;
+  background: var(--carta); border: 1px solid var(--borda);
+  border-radius: var(--raio-sm); color: var(--texto); cursor: pointer;
+}
+.hamburguer svg { width: 20px; height: 20px; }
+
+/* ---------------------------------------------------------------
+   5 · seções
+   --------------------------------------------------------------- */
+.secao { padding: clamp(64px, 9vw, 116px) 0; position: relative; }
+.secao-topo { text-align: center; max-width: 44rem; margin: 0 auto clamp(36px, 5vw, 60px); }
+.secao-topo p { color: var(--texto-2); font-size: 1.06rem; margin: 0; }
+
+.etiqueta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 13px; margin-bottom: 18px;
+  border-radius: 999px; border: 1px solid var(--borda-viva);
+  background: rgba(124, 92, 255, .12);
+  color: var(--lilas); font-size: .8rem; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------
+   6 · hero
+   --------------------------------------------------------------- */
+.hero { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(48px, 6vw, 80px); text-align: center; }
+.hero h1 { max-width: 18ch; margin-inline: auto; }
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(120deg, var(--lilas), var(--agua));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: var(--lilas);
+}
+.hero-sub {
+  max-width: 46ch; margin: 0 auto 30px;
+  font-size: clamp(1.02rem, 1.7vw, 1.2rem); color: var(--texto-2);
+}
+.hero-botoes { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.hero-nota { margin-top: 18px; font-size: .88rem; color: var(--texto-3); }
+
+/* ---- a demonstração do painel ----
+   Uma representação do produto, desenhada em HTML/SVG. Não é
+   captura de tela: captura envelhece no primeiro deploy e ninguém
+   lembra de trocar. Isto acompanha o código. */
+.demo {
+  margin-top: clamp(44px, 6vw, 76px);
+  border-radius: var(--raio-lg);
+  border: 1px solid var(--borda);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: var(--sombra-alta);
+  overflow: hidden;
+}
+.demo-barra {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px; border-bottom: 1px solid var(--borda);
+  background: rgba(0, 0, 0, .25);
+}
+.demo-ponto { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.16); }
+.demo-url {
+  margin-left: 10px; padding: 4px 12px; border-radius: 999px;
+  background: rgba(0,0,0,.35); color: var(--texto-3);
+  font-size: .76rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.demo-corpo { padding: clamp(16px, 3vw, 28px); text-align: left; }
+
+.demo-cartoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.demo-cartao {
+  padding: 16px; border-radius: var(--raio);
+  background: var(--carta); border: 1px solid var(--borda);
+}
+.demo-rotulo { font-size: .76rem; color: var(--texto-3); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 6px; }
+.demo-valor  { font-size: clamp(1.1rem, 2.4vw, 1.55rem); font-weight: 650; color: var(--branco); letter-spacing: -.02em; }
+.demo-valor.entra { color: #6FE3B0; }
+.demo-valor.sai   { color: #FF9E7D; }
+
+.demo-grafico {
+  border-radius: var(--raio); border: 1px solid var(--borda);
+  background: var(--carta); padding: 18px;
+}
+
+/* ---------------------------------------------------------------
+   7 · grade de cartões
+   --------------------------------------------------------------- */
+.grade { display: grid; gap: 18px; }
+.grade-3 { grid-template-columns: repeat(3, 1fr); }
+.grade-2 { grid-template-columns: repeat(2, 1fr); }
+
+.carta {
+  padding: clamp(20px, 2.6vw, 28px);
+  border-radius: var(--raio);
+  border: 1px solid var(--borda);
+  background: var(--carta);
+  transition: border-color .2s var(--curva), background .2s var(--curva), transform .2s var(--curva);
+}
+.carta:hover { border-color: var(--borda-viva); background: var(--carta-alta); }
+.carta p:last-child { margin-bottom: 0; }
+.carta p { color: var(--texto-2); font-size: .97rem; }
+
+.icone {
+  width: 42px; height: 42px; margin-bottom: 16px;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: rgba(124, 92, 255, .16);
+  border: 1px solid var(--borda-viva);
+  color: var(--lilas);
+}
+.icone svg { width: 21px; height: 21px; }
+
+/* ---- passos numerados ---- */
+.passos { counter-reset: passo; display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+.passo { position: relative; padding-top: 52px; }
+.passo::before {
+  counter-increment: passo; content: counter(passo);
+  position: absolute; top: 0; left: 0;
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--borda-viva);
+  background: rgba(124, 92, 255, .14);
+  color: var(--lilas); font-weight: 700; font-size: .96rem;
+}
+
+/* ---------------------------------------------------------------
+   8 · planos (resumo na landing e página cheia)
+   --------------------------------------------------------------- */
+.alternador {
+  display: inline-flex; padding: 4px; margin: 0 auto 34px;
+  border-radius: 999px; border: 1px solid var(--borda); background: var(--carta);
+}
+.alternador button {
+  min-height: 40px; padding: 8px 20px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--texto-2);
+  font: 600 .92rem/1 inherit; font-family: inherit; cursor: pointer;
+  transition: background .18s var(--curva), color .18s var(--curva);
+}
+.alternador button[aria-pressed="true"] { background: var(--violeta); color: #fff; }
+
+.economia {
+  display: inline-block; margin-left: 8px; padding: 2px 8px;
+  border-radius: 999px; background: rgba(95, 212, 232, .16);
+  color: var(--agua); font-size: .74rem; font-weight: 700;
+}
+
+.planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; }
+
+.plano {
+  position: relative; display: flex; flex-direction: column;
+  padding: clamp(22px, 2.8vw, 30px);
+  border-radius: var(--raio-lg);
+  border: 1px solid var(--borda);
+  background: var(--carta);
+}
+.plano-destaque {
+  border-color: var(--borda-viva);
+  background: linear-gradient(180deg, rgba(124, 92, 255, .14), var(--carta) 55%);
+  box-shadow: var(--sombra-alta);
+}
+.selo {
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  padding: 5px 14px; border-radius: 999px; white-space: nowrap;
+  background: linear-gradient(135deg, var(--violeta), #5B3FE0);
+  color: #fff; font-size: .74rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+}
+.plano h3 { margin-bottom: 4px; }
+.plano-alvo { color: var(--texto-3); font-size: .9rem; margin-bottom: 18px; }
+.plano-preco { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+.plano-preco b { font-size: clamp(1.9rem, 3.6vw, 2.5rem); font-weight: 700; color: var(--branco); letter-spacing: -.03em; }
+.plano-preco span { color: var(--texto-3); font-size: .92rem; }
+.plano-nota { min-height: 1.4em; color: var(--agua); font-size: .85rem; margin-bottom: 20px; }
+.plano .btn { margin-bottom: 20px; }
+
+.lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.lista li { display: flex; gap: 9px; align-items: flex-start; font-size: .93rem; color: var(--texto-2); }
+.lista svg { width: 16px; height: 16px; flex: none; margin-top: 3px; color: var(--agua); }
+
+/* ---------------------------------------------------------------
+   9 · perguntas frequentes
+   --------------------------------------------------------------- */
+.faq { max-width: 46rem; margin-inline: auto; display: grid; gap: 10px; }
+.faq details {
+  border-radius: var(--raio); border: 1px solid var(--borda);
+  background: var(--carta); overflow: hidden;
+}
+.faq details[open] { border-color: var(--borda-viva); }
+.faq summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 17px 20px; min-height: 44px;
+  cursor: pointer; list-style: none;
+  color: var(--branco); font-weight: 600; font-size: 1rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ''; margin-left: auto; flex: none;
+  width: 9px; height: 9px; border-right: 2px solid var(--texto-3); border-bottom: 2px solid var(--texto-3);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .2s var(--curva);
+}
+.faq details[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.faq .resposta { padding: 0 20px 18px; color: var(--texto-2); font-size: .96rem; }
+.faq .resposta p:last-child { margin-bottom: 0; }
+
+/* ---------------------------------------------------------------
+   10 · chamada final e rodapé
+   --------------------------------------------------------------- */
+.chamada {
+  text-align: center; padding: clamp(40px, 6vw, 68px) clamp(20px, 4vw, 56px);
+  border-radius: var(--raio-lg); border: 1px solid var(--borda-viva);
+  background:
+    radial-gradient(40rem 20rem at 50% -30%, rgba(124, 92, 255, .28), transparent 70%),
+    var(--carta);
+}
+.chamada h2 { max-width: 20ch; margin-inline: auto; }
+.chamada p { max-width: 44ch; margin-inline: auto; color: var(--texto-2); }
+
+.rodape { border-top: 1px solid var(--borda); padding: clamp(40px, 5vw, 60px) 0 32px; background: rgba(0,0,0,.25); }
+.rodape-grade { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 32px; margin-bottom: 36px; }
+.rodape h4 { margin: 0 0 14px; color: var(--branco); font-size: .84rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 650; }
+.rodape ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.rodape a { color: var(--texto-2); font-size: .93rem; }
+.rodape a:hover { color: var(--branco); }
+.rodape-sobre { color: var(--texto-3); font-size: .92rem; max-width: 30ch; margin: 14px 0 0; }
+.rodape-fim {
+  display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
+  padding-top: 24px; border-top: 1px solid var(--borda);
+  color: var(--texto-3); font-size: .86rem;
+}
+.rodape-fim p { margin: 0; }
+
+/* ---------------------------------------------------------------
+   11 · páginas de texto (termos, privacidade, suporte)
+   --------------------------------------------------------------- */
+.texto { max-width: 46rem; margin-inline: auto; }
+.texto h2 { margin-top: 2.2em; font-size: clamp(1.25rem, 2.2vw, 1.55rem); }
+.texto h2:first-of-type { margin-top: 0; }
+.texto h3 { margin-top: 1.6em; }
+.texto p, .texto li { color: var(--texto-2); }
+.texto ul, .texto ol { padding-left: 1.3em; display: grid; gap: .5em; margin: 0 0 1.2em; }
+.texto strong { color: var(--branco); }
+
+.aviso {
+  padding: 18px 20px; margin: 0 0 32px;
+  border-radius: var(--raio); border: 1px solid rgba(255, 190, 120, .38);
+  background: rgba(255, 170, 90, .10);
+  color: #FFD9B5; font-size: .94rem;
+}
+.aviso strong { color: #FFE9D2; }
+.aviso p:last-child { margin-bottom: 0; }
+
+.atualizado { color: var(--texto-3); font-size: .88rem; margin-bottom: 2.4em; }
+
+/* ---------------------------------------------------------------
+   12 · responsivo
+   ---------------------------------------------------------------
+   Os cortes acompanham os tamanhos que o brief pede testar. O de
+   820px existe porque é a largura do iPad em pé: 821 ainda é
+   desktop, 820 já não é -- e é exatamente aí que a navegação
+   superior deixa de caber. */
+@media (max-width: 980px) {
+  .grade-3, .planos, .passos { grid-template-columns: repeat(2, 1fr); }
+  .rodape-grade { grid-template-columns: 1fr 1fr; gap: 28px; }
+  /* O plano do meio ocupa a linha inteira: numa grade de 2, o
+     terceiro cartão ficaria órfão embaixo, e o destaque some. */
+  .planos > :last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 820px) {
+  .menu, .acoes-topo { display: none; }
+  .hamburguer { display: flex; }
+
+  /* Aberto, o menu vira uma folha abaixo do cabeçalho. Não é
+     overlay de tela cheia: o usuário continua vendo onde estava. */
+  .topo.aberto .menu,
+  .topo.aberto .acoes-topo {
+    display: flex; flex-direction: column; align-items: stretch;
+    position: absolute; left: 0; right: 0; top: 68px;
+    margin: 0; padding: 12px var(--gutter);
+    background: rgba(8, 13, 24, .97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--borda);
+  }
+  .topo.aberto .acoes-topo { top: auto; padding-top: 0; padding-bottom: 18px; gap: 10px; }
+  .topo.aberto .menu a { padding: 13px; min-height: 44px; display: flex; align-items: center; }
+  .topo.aberto .acoes-topo .btn { width: 100%; }
+}
+
+@media (max-width: 720px) {
+  .grade-3, .grade-2, .planos, .passos { grid-template-columns: 1fr; }
+  .planos > :last-child { grid-column: auto; }
+  .demo-cartoes { grid-template-columns: 1fr; }
+  .rodape-grade { grid-template-columns: 1fr; }
+  .hero-botoes .btn { width: 100%; }
+}
+
+@media (max-width: 420px) {
+  :root { --gutter: 16px; }
+  /* A URL falsa da demonstração é decoração; em 375px ela empurra
+     a barra e cria rolagem lateral. Sai. */
+  .demo-url { display: none; }
+}
+
+/* ---------------------------------------------------------------
+   13 · movimento
+   ---------------------------------------------------------------
+   Entrada por revelação, uma vez, ao rolar. Sem paralaxe e sem
+   laço: movimento contínuo numa página de leitura é ruído. */
+/* O SELETOR .anima NÃO É DECORAÇÃO -- é o que impede a página de
+   sumir.
+   Esconder por CSS e revelar por JavaScript inverte a ordem certa:
+   basta o script falhar, chegar tarde, ser bloqueado por extensão,
+   ou o IntersectionObserver não existir, e o conteúdo fica preso em
+   opacity:0. A página vira uma tela preta com um cabeçalho.
+   (Aconteceu: a primeira versão deste arquivo escondia direto, e a
+   captura de tela mostrou dois terços da landing em branco.)
+
+   Agora o padrão é VISÍVEL. A classe .anima é posta no <html> por um
+   script inline no <head> -- antes da primeira pintura, então não há
+   piscada -- e só então o CSS passa a esconder para revelar depois.
+   Sem JavaScript, nada esconde nada. */
+.anima .revela {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .6s var(--curva), transform .6s var(--curva);
+}
+.anima .revela.visivel { opacity: 1; transform: none; }
+
+/* Quem pede menos movimento recebe a página inteira, imediatamente.
+   O !important cobre o caso de a classe .anima já estar no <html>
+   quando a preferência é lida. Conteúdo visível é inegociável. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .revela { opacity: 1 !important; transform: none !important; }
+}
+
+/* Menos transparência: o vidro vira superfície sólida. Manter o
+   blur aqui contrariaria exatamente o que a preferência pede. */
+@media (prefers-reduced-transparency: reduce) {
+  .topo { background: var(--noite-0); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .carta, .plano, .faq details, .demo-cartao, .demo-grafico { background: var(--noite-2); }
+  .ceu { background: linear-gradient(180deg, var(--noite-0), var(--noite-2)); }
+}
+
+@media (prefers-contrast: more) {
+  :root { --borda: rgba(255,255,255,.34); --texto-2: #D3DAEE; --texto-3: #AEB8D2; }
+  .carta, .plano, .faq details { background: var(--noite-2); }
+}
+
+/* ---------------------------------------------------------------
+   14 · impressão
+   --------------------------------------------------------------- */
+@media print {
+  /* Ao imprimir não há rolagem, logo o observador nunca revela nada.
+     Sem esta linha o papel sairia com o cabeçalho e mais nada. */
+  .anima .revela { opacity: 1 !important; transform: none !important; }
+  .ceu, .topo, .chamada, .hamburguer { display: none !important; }
+  body { background: #fff; color: #000; }
+  h1, h2, h3, strong { color: #000; }
+  .texto p, .texto li { color: #222; }
+  a { color: #000; text-decoration: underline; }
+}
