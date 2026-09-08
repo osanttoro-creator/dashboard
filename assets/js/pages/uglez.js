@@ -25,7 +25,48 @@
     { rotulo: 'Como está minha reserva?', q: 'Minha reserva de emergência está adequada? Quanto tempo ela cobre?' }
   ];
 
+  /**
+   * O período que está sendo lido, e a cota que resta.
+   *
+   * O PERÍODO precisa aparecer porque o app tem seletor de mês: sem
+   * ele, quem voltou para março vê quatro cartões afirmando coisas
+   * e não sabe sobre quando. "Subiu 18%" sem data é uma frase que
+   * não pode ser conferida.
+   *
+   * A COTA precisa aparecer aqui, e não só em Configurações, porque
+   * é aqui que ela é gasta. Escondida na outra tela, a pessoa
+   * descobre o limite ao bater nele.
+   */
+  function renderContexto() {
+    const alvo = document.getElementById('uglezPeriodo');
+    if (alvo) {
+      alvo.textContent = 'Período analisado: ' +
+        U.smartCase(U.monthLabel(App.ym)) + '.';
+    }
+
+    const cota = document.getElementById('uglezCota');
+    if (!cota) return;
+
+    const modo = AI.modo();
+    if (modo.chave !== 'servidor' || !global.Limites) { cota.hidden = true; return; }
+
+    const c = Limites.consumoIA();
+    /* limite null = ilimitado. Escrever "0 de null" seria pior do
+       que não escrever nada. */
+    if (c.limite === null || c.limite === undefined) { cota.hidden = true; return; }
+
+    const resta = Math.max(0, c.limite - c.usado);
+    cota.hidden = false;
+    cota.className = 'uglez-cota' + (resta === 0 ? ' is-esgotada' : resta <= 2 ? ' is-pouca' : '');
+    cota.textContent = resta === 0
+      ? 'Você usou as ' + c.limite + ' consultas do seu plano neste mês. Elas voltam no dia 1º.'
+      : resta + ' de ' + c.limite + ' consultas restantes neste mês. ' +
+        'Erro nosso ou indisponibilidade não consomem consulta.';
+  }
+  Ug.renderContexto = renderContexto;
+
   Ug.render = function () {
+    renderContexto();
     renderInsights();
     renderChips('uglezChipsFull');
     const modo = AI.modo();
@@ -54,6 +95,32 @@
   /* ============================================================
      INSIGHTS — quatro leituras, todas verificáveis
      ============================================================ */
+
+  /**
+   * De quantos meses com movimentação a previsão dispõe, e qual a
+   * sobra média deles.
+   *
+   * Só conta mês que teve ALGUMA coisa. Incluir os meses vazios na
+   * média puxaria tudo para zero e faria "não usei o app em março"
+   * parecer "não gastei nada em março" — que é uma afirmação sobre
+   * a vida financeira de alguém, feita a partir da ausência de
+   * dado.
+   *
+   * Olha 12 meses para trás porque é o horizonte que uma projeção
+   * anual pode honestamente usar; mais que isso, o comportamento
+   * provavelmente já mudou.
+   */
+  Ug.baseDePrevisao = function (ym) {
+    const inicio = U.addMonths(ym, -11);
+    let serie = [];
+    try { serie = Calc.monthlySeries(inicio, ym) || []; } catch (e) { return { meses: 0, media: 0 }; }
+
+    const comDado = serie.filter((m) => (m.income + m.expense) > 0);
+    if (!comDado.length) return { meses: 0, media: 0 };
+
+    const soma = U.sum(comDado, (m) => m.income - m.expense);
+    return { meses: comDado.length, media: U.round2(soma / comDado.length) };
+  };
 
   Ug.insights = function (ym) {
     const out = [];
@@ -99,20 +166,70 @@
       });
     }
 
-    /* 3 · previsão — projeção de sobra anual no ritmo atual */
+    /* ============================================================
+       3 · PREVISÃO — e o que ela precisa para existir
+       ------------------------------------------------------------
+       Este bloco era empilhado SEM CONDIÇÃO NENHUMA. Com zero
+       lançamentos, sobra = 0, a comparação `0 >= 0` dava verdadeira,
+       e a tela dizia:
+
+         "R$ 0,00 em um ano"
+         "Você está guardando R$ 0,00 por mês."
+
+       Duas frases confiantes sobre nada. Pior que um espaço vazio,
+       porque um espaço vazio ninguém confunde com informação.
+
+       E havia um erro maior escondido nele: mesmo COM dados, ele
+       multiplicava a sobra de UM mês por doze e chamava isso de
+       previsão. Um mês não é tendência -- é um ponto. Dezembro com
+       décimo terceiro projetaria um ano de fartura; janeiro com IPTU
+       projetaria a ruína.
+
+       A regra agora é a base, e ela é dita em voz alta:
+         0 meses  → não há previsão, e a tela explica o que falta
+         1-2      → o resultado do mês, SEM extrapolar
+         3+       → projeção pela MÉDIA, dizendo de quantos meses
+       ============================================================ */
+    const base = Ug.baseDePrevisao(ym);
     const sobra = U.round2(t.income - t.expense);
-    out.push({
-      tipo: sobra >= 0 ? 'previsao' : 'risco',
-      icone: 'chart-line',
-      titulo: sobra >= 0 ? 'Se mantiver o ritmo' : 'Atenção ao ritmo',
-      linha: sobra >= 0
-        ? `${U.fmtBRL(U.round2(sobra * 12))} em um ano`
-        : `Faltam ${U.fmtBRL(Math.abs(sobra))} neste mês`,
-      detalhe: sobra >= 0
-        ? `Você está guardando ${U.fmtBRL(sobra)} por mês.`
-        : 'As despesas passaram as receitas. Vale olhar as maiores categorias.',
-      acao: { rotulo: 'Ver análises', ir: () => App.goTo('reports') }
-    });
+
+    if (!base.meses) {
+      out.push({
+        tipo: 'previsao', icone: 'chart-line',
+        titulo: 'Ainda sem base para prever',
+        linha: 'Você ainda não possui movimentações suficientes para uma previsão.',
+        detalhe: 'Cadastre receitas e despesas para receber sua primeira análise.',
+        acao: { rotulo: 'Registrar lançamento', ir: () => Forms.openTransaction('expense') }
+      });
+    } else if (base.meses < 3) {
+      /* Há dado, mas não o bastante para chamar de tendência. Diz o
+         que sabe -- o resultado deste mês -- e diz o que falta. */
+      out.push({
+        tipo: sobra >= 0 ? 'previsao' : 'risco', icone: 'chart-line',
+        titulo: sobra >= 0 ? 'Resultado deste mês' : 'Atenção ao mês',
+        linha: sobra >= 0
+          ? `Sobraram ${U.fmtBRL(sobra)} em ${U.monthLabel(ym, true)}`
+          : `Faltaram ${U.fmtBRL(Math.abs(sobra))} em ${U.monthLabel(ym, true)}`,
+        detalhe: `Com ${base.meses} ${base.meses === 1 ? 'mês' : 'meses'} de histórico ainda não dá para projetar um ano — ` +
+          'um mês isolado não mostra tendência. A partir de três, a previsão aparece aqui.',
+        acao: { rotulo: 'Ver análises', ir: () => App.goTo('reports') }
+      });
+    } else {
+      const anual = U.round2(base.media * 12);
+      out.push({
+        tipo: base.media >= 0 ? 'previsao' : 'risco', icone: 'chart-line',
+        titulo: base.media >= 0 ? 'Se mantiver o ritmo' : 'Atenção ao ritmo',
+        linha: base.media >= 0
+          ? `${U.fmtBRL(anual)} em um ano`
+          : `${U.fmtBRL(Math.abs(anual))} de rombo em um ano`,
+        /* A base entra na frase. Sem ela, uma projeção parece um
+           fato; com ela, o leitor sabe de onde saiu e o quanto
+           confiar. */
+        detalhe: `Média de ${U.fmtBRL(base.media)} por mês nos últimos ${base.meses} meses com movimentação. ` +
+          'É uma projeção do ritmo atual, não uma promessa.',
+        acao: { rotulo: 'Ver análises', ir: () => App.goTo('reports') }
+      });
+    }
 
     /* 4 · oportunidade — recorrências pesam muito? */
     const fixas = Store.profile().transactions.filter((x) => x.recurring && x.kind === 'expense');

@@ -315,22 +315,40 @@ Deno.serve(async (req: Request) => {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  /* ---- plano: do banco, nunca do corpo ---- */
-  const { data: assinatura } = await admin
-    .from('subscriptions').select('plan, status').eq('user_id', userId).maybeSingle();
+  /* ---- plano: de meus_direitos(), e de mais lugar nenhum ----
+     Esta parte lia `subscriptions.plan` -- coluna que NÃO EXISTE; o
+     nome é plan_id. O select falhava, a assinatura vinha nula, e
+     TODO usuário caía no plano grátis com 5 consultas. Um Pro
+     pagante teria sido rebaixado em silêncio, sem erro em lugar
+     nenhum, e a única pista seria a cota acabando cedo demais.
 
-  const ativo = assinatura && ['active', 'trialing'].includes(assinatura.status);
-  const plano = ativo ? (assinatura!.plan as string) : 'free';
+     Também conferia `status in ('active','trialing')` à mão.
+     'trialing' nem existe no CHECK da tabela, e a checagem ignorava
+     current_period_end e o downgrade agendado -- ou seja, era uma
+     SEGUNDA implementação da regra de plano, divergindo da primeira.
+     Já foi assim que 'pending' passou a conceder plano.
 
-  /* O teto de consultas vem do direito do plano, no banco. Nunca
-     do corpo da requisição: "sou pro" escrito pelo cliente é uma
-     afirmação, não uma credencial. */
-  const { data: direito } = await admin
-    .from('plan_entitlements').select('limite')
-    .eq('plan_id', plano).eq('chave', 'ai_queries_per_month').maybeSingle();
+     Agora há uma fonte só: meus_direitos(). Ela é chamada com o
+     cliente do USUÁRIO, e não com o de serviço, porque depende de
+     auth.uid() -- que sob service_role seria nulo e devolveria o
+     plano grátis para todo mundo, recriando o mesmo defeito por
+     outro caminho. */
+  const { data: direitos, error: erroDireitos } = await userClient.rpc('meus_direitos');
+  if (erroDireitos || !direitos) {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'direitos_falharam' }));
+    return erro('indisponivel', 503, origem, requestId);
+  }
 
+  const plano = String(direitos.plano || 'free');
   const perfil = PERFIL[plano] ?? PERFIL.free;
-  const cota = direito?.limite ?? PERFIL.free.meses;   // sem direito, o menor
+
+  /* O teto vem do mesmo objeto. null significa ilimitado; nesse
+     caso a reserva ainda acontece (para contar o uso), mas com um
+     teto que não barra. */
+  const tetoDoPlano = direitos.limites?.ai_queries_per_month;
+  const cota = tetoDoPlano === null || tetoDoPlano === undefined
+    ? Number.MAX_SAFE_INTEGER
+    : Number(tetoDoPlano);
   const maxTokens = plano === 'pro' ? 1200 : plano === 'basic' ? 900 : 500;
   const maxEntrada = plano === 'free' ? 4000 : 8000;
 

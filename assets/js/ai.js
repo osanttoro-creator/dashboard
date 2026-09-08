@@ -247,10 +247,22 @@
         return;
       }
       if (r.erro === 'limite') {
-        const u = r.usado || {};
-        const l = r.limites || {};
-        renderError(box, 'Você usou ' + (u.dia || 0) + ' de ' + (l.por_dia || '?') +
-          ' perguntas hoje. O limite recomeça amanhã.');
+        /* A COTA É MENSAL, e este trecho dizia "hoje".
+           Ele lia r.usado.dia e r.limites.por_dia — campos de um
+           desenho anterior, com limite diário, que a função nunca
+           devolveu. Na prática a tela diria "Você usou 0 de ?
+           perguntas hoje. O limite recomeça amanhã": errada no
+           número, no período e na promessa. Alguém esperaria até o
+           dia seguinte por algo que só volta no mês que vem.
+
+           Os nomes agora são os que a função realmente manda:
+           usado, limite e periodo. */
+        const usado = r.usado != null ? r.usado : '?';
+        const teto = r.limite != null ? r.limite : '?';
+        renderError(box, 'Você usou ' + usado + ' de ' + teto +
+          ' consultas do seu plano neste mês. Elas voltam no dia 1º. ' +
+          'Erro nosso ou indisponibilidade não consomem consulta.');
+        if (global.Ug && Ug.renderContexto) Ug.renderContexto();
         return;
       }
       if (r.erro) {
@@ -265,9 +277,25 @@
       box.className = 'ai-answer';
       box.innerHTML = renderMarkdown(r.texto);
       box.appendChild(el('div', { class: 'ai-meta' }, [
-        el('span', { text: 'Orientativo, não é consultoria financeira.' }),
-        r.uso ? el('span', { text: ' · ' + r.uso.dia + ' de ' + r.uso.limite_dia + ' hoje' }) : null
+        /* O período analisado sai junto da resposta, e vem da
+           FUNÇÃO — não do que a tela achava que tinha pedido. Se os
+           dois divergirem, é a resposta que manda, porque foi sobre
+           ela que o modelo escreveu. */
+        r.periodo ? el('span', { text: 'Período analisado: ' + U.monthLabel(r.periodo) + '.' }) : null,
+        el('span', { text: ' Orientativo, não é consultoria financeira.' }),
+        /* Mensal, não diário. Mesma correção de nomes de campo. */
+        r.uso && r.uso.limite != null
+          ? el('span', { text: ' · ' + r.uso.usado + ' de ' + r.uso.limite + ' neste mês' })
+          : null
       ].filter(Boolean)));
+
+      /* A cota mudou; a faixa da página precisa refletir isso agora,
+         e não só no próximo carregamento. */
+      if (global.Limites && Limites.carregarConsumo) {
+        Limites.carregarConsumo().then(() => {
+          if (global.Ug && Ug.renderContexto) Ug.renderContexto();
+        });
+      }
     } catch (e) {
       console.error('UGLEZ:', e);
       renderError(box, 'Não foi possível falar com o assistente. Verifique a conexão e tente de novo.');

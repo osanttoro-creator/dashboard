@@ -2641,3 +2641,55 @@ input[type="checkbox"], input[type="radio"] {
 @media (max-width: 720px) {
   .faixa-excedente { padding: 14px; }
 }
+
+/* ==================================================================
+   UGLEZ — de onde vem cada informação
+   ------------------------------------------------------------------
+   Duas naturezas convivem nesta tela: aritmética feita no navegador
+   e frase gerada por um modelo. Um número calculado aqui é
+   verificável; uma frase de modelo não é. Misturar as duas sem
+   marcação faz a segunda herdar a credibilidade da primeira.
+   ================================================================== */
+.uglez-contexto {
+  display: grid; gap: 6px;
+  margin: 0 0 16px; padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--plane-2);
+}
+.uglez-contexto-linha {
+  margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 13px; color: var(--ink);
+}
+.uglez-contexto-nota { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); max-width: 70ch; }
+
+.uglez-selo {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 650; letter-spacing: .02em;
+  border: 1px solid transparent; white-space: nowrap;
+}
+.uglez-selo-local {
+  background: color-mix(in srgb, var(--invest) 16%, transparent);
+  border-color: color-mix(in srgb, var(--invest) 40%, transparent);
+  color: var(--invest);
+}
+.uglez-selo-ia {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  color: var(--accent-strong);
+}
+
+/* A cota fica onde é gasta. O tom sobe conforme ela acaba — mas
+   nunca vira vermelho de erro: acabar a cota do mês não é falha, é
+   o plano funcionando como contratado. */
+.uglez-cota {
+  margin: 10px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted);
+}
+.uglez-cota.is-pouca { color: var(--ink-2); font-weight: 560; }
+.uglez-cota.is-esgotada {
+  padding: 9px 12px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--ink);
+}

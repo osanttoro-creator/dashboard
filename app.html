@@ -755,11 +755,33 @@
         </div>
       </section>
 
+      <!-- ============================================================
+           DE ONDE VEM CADA COISA
+           As leituras abaixo sao aritmetica feita neste navegador; a
+           conversa passa por um servidor. Sao naturezas diferentes de
+           informacao, e a tela precisa dizer qual e qual: um numero
+           calculado aqui e verificavel, uma frase de modelo nao.
+           Tambem diz QUAL periodo esta sendo lido -- sem isso, quem
+           trocou o mes no seletor nao sabe a que os cartoes se
+           referem.
+           ============================================================ -->
+      <div class="uglez-contexto" id="uglezContexto">
+        <p class="uglez-contexto-linha">
+          <span class="uglez-selo uglez-selo-local">Cálculo local</span>
+          <span id="uglezPeriodo"></span>
+        </p>
+        <p class="uglez-contexto-nota" id="uglezNota">
+          Estas leituras são feitas neste navegador, sobre os seus próprios lançamentos.
+          Nenhum dado sai daqui para produzi-las.
+        </p>
+      </div>
+
       <div class="grid grid-2" id="uglezInsights"></div>
 
       <div class="card">
         <div class="card-head">
           <h2>Conversar</h2>
+          <span class="uglez-selo uglez-selo-ia">Resposta de IA</span>
           <span class="card-note" id="uglezMode"></span>
           <button class="btn btn-ghost btn-sm" id="btnAiConfig">⚙ Configurar</button>
         </div>
@@ -769,6 +791,10 @@
             placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
           <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
         </div>
+        <!-- Consumo do plano, ao lado de onde ele e gasto. Ficava so
+             em Configuracoes: quem esta perguntando descobria o
+             limite ao bater nele, e ai ja era. -->
+        <p class="uglez-cota" id="uglezCota" hidden></p>
         <div class="ai-answer" id="aiAnswer" hidden></div>
         <div id="uglezHistory"></div>
       </div>
