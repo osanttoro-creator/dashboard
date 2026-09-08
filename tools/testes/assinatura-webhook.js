@@ -73,7 +73,15 @@ function portao(opcoes) {
   const esperado = assinar(segredo, manifesto(dataId, requestId, ts));
   if (!igualSemVazar(esperado, v1)) return { ok: false, motivo: 'assinatura_invalida' };
 
-  const idade = Math.abs(agoraMs - Number(ts));
+  /* O ts do Mercado Pago vem em SEGUNDOS. agoraMs e em
+     milissegundos. Sem converter, a diferenca da ~1,7 trilhao e
+     TODO webhook legitimo e recusado -- a integracao pareceria
+     configurada e nenhum pagamento seria aplicado.
+     Este teste nao pegava o defeito porque usava milissegundos nos
+     casos, repetindo a mesma suposicao errada da implementacao. */
+  const tsNum = Number(ts);
+  const tsMs = tsNum < 1e11 ? tsNum * 1000 : tsNum;
+  const idade = Math.abs(agoraMs - tsMs);
   if (!Number.isFinite(idade) || idade > janelaMs) return { ok: false, motivo: 'fora_da_janela' };
 
   return { ok: true, motivo: 'aceita' };
@@ -83,8 +91,9 @@ function portao(opcoes) {
    os casos
    --------------------------------------------------------------- */
 const SEGREDO = 'segredo-de-teste-nao-e-real';
-const AGORA = 1789000000000;
-const TS = String(AGORA);
+const AGORA = 1789000000000;               /* milissegundos, como Date.now() */
+const TS_SEG = Math.floor(AGORA / 1000);   /* segundos, como o Mercado Pago manda */
+const TS = String(TS_SEG);
 
 /* ATENÇÃO — POR QUE OS MANIFESTOS ABAIXO SÃO LITERAIS
    A primeira versão deste arquivo assinava os casos "bons" chamando
@@ -166,7 +175,7 @@ const casos = [
     /* Assinatura perfeitamente valida, capturada e reenviada. Sem
        janela de tempo ela valeria para sempre. */
     entrada: {
-      cabecalho: assinaLiteral(`id:123456;request-id:req-abc;ts:${AGORA - 3600000};`, String(AGORA - 3600000)),
+      cabecalho: assinaLiteral(`id:123456;request-id:req-abc;ts:${TS_SEG - 3600};`, String(TS_SEG - 3600)),
       dataId: '123456', requestId: 'req-abc'
     },
     espera: 'fora_da_janela'
@@ -174,7 +183,7 @@ const casos = [
   {
     nome: 'ts no futuro distante',
     entrada: {
-      cabecalho: assinaLiteral(`id:123456;request-id:req-abc;ts:${AGORA + 3600000};`, String(AGORA + 3600000)),
+      cabecalho: assinaLiteral(`id:123456;request-id:req-abc;ts:${TS_SEG + 3600};`, String(TS_SEG + 3600)),
       dataId: '123456', requestId: 'req-abc'
     },
     espera: 'fora_da_janela'

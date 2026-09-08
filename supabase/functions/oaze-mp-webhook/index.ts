@@ -134,8 +134,22 @@ Deno.serve(async (req: Request) => {
   /* Janela de tempo. Sem ela, uma notificação legítima capturada
      hoje continuaria válida daqui a um ano -- a assinatura não
      expira sozinha. Cinco minutos cobre atraso de rede e relógio
-     fora de sincronia sem virar uma porta aberta. */
-  const idadeMs = Math.abs(Date.now() - Number(ts));
+     fora de sincronia sem virar uma porta aberta.
+
+     O ts DO MERCADO PAGO VEM EM SEGUNDOS (ex.: 1704908010, dez
+     dígitos). Date.now() é em milissegundos. Subtrair um do outro
+     sem converter dá uma diferença de ~1,7 trilhão e RECUSA TODO
+     WEBHOOK LEGÍTIMO -- a integração pareceria configurada e
+     nenhum pagamento seria aplicado.
+
+     A normalização abaixo aceita as duas escalas em vez de fixar
+     uma: menos de 1e11 só pode ser segundos (1e11 ms seria o ano
+     5138, e 1e11 s seria o ano 5138 também — mas em segundos a era
+     atual tem 10 dígitos, ~1,7e9). Assim a checagem continua certa
+     se o provedor mudar a unidade um dia. */
+  const tsNum = Number(ts);
+  const tsMs = tsNum < 1e11 ? tsNum * 1000 : tsNum;
+  const idadeMs = Math.abs(Date.now() - tsMs);
   if (!Number.isFinite(idadeMs) || idadeMs > 5 * 60 * 1000) {
     console.error(JSON.stringify({ request_id: requestId, evento: 'assinatura_velha', idade_ms: idadeMs }));
     return new Response('assinatura fora da janela', { status: 401 });
