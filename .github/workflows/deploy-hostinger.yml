@@ -61,6 +61,27 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # ---- 0 · testes que não precisam de rede ----
+      # Antes de empacotar, não depois: um pacote que não deveria
+      # existir é melhor não existir. Estes dois rodam sem banco e
+      # sem chave — o que precisa de credencial fica no SQL, para
+      # ser rodado à mão.
+      - name: Testes
+        run: |
+          set -euo pipefail
+          echo "--- o perfil sobrevive à ida e volta pelo banco?"
+          node tools/testes/ida-e-volta.js
+          echo "--- o banco consegue apagar o aparelho?"
+          node tools/testes/trava-sobrescrita.js
+          echo "--- o cartao em destaque tem contraste legivel?"
+          node tools/testes/contraste.js
+          echo "--- o portao do webhook aguenta?"
+          node tools/testes/assinatura-webhook.js
+          echo "--- os preços do código e do banco concordam?"
+          node tools/testes/confere-planos.js || {
+            echo "::warning::confere-planos falhou (ele consulta o banco; sem credencial no runner isso é esperado)"
+          }
+
       # ---- 1 · monta o pacote ----
       # O mesmo script usado à mão. Ele varre o que vai ser servido
       # atrás de chaves e sai com código 1 se achar alguma — e aí o

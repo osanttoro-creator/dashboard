@@ -53,12 +53,24 @@
      precisa continuar funcionando nos dois. Por isso a troca de
      URL é condicional; a navegação nunca depende dela.
      ============================================================ */
+  /* TODAS SOB /app, E ISSO NÃO É COSMÉTICO.
+     Quando o site público tomou a raiz, estas rotas ficaram na
+     mesma vizinhança que /precos, /entrar e /termos -- e o servidor
+     não tem como adivinhar que /orcamento é do aplicativo e
+     /privacidade não é. Na prática todas passaram a dar 404: o
+     .htaccess mapeia rotas públicas por nome e manda o resto para o
+     404, então /financeiro simplesmente não existia mais.
+
+     Com o prefixo, uma regra só (`^app(/.*)?$`) cobre o aplicativo
+     inteiro, hoje e nas páginas que ainda não existem. E os dois
+     lados param de disputar o mesmo espaço de nomes: /precos é a
+     página pública de preços; a de dentro do app é /app/planos. */
   App.URLS = {
-    home: '/', transactions: '/financeiro', accounts: '/carteira',
-    budget: '/orcamento', goals: '/metas', recurring: '/recorrencias',
-    calendar: '/calendario', investments: '/investimentos',
-    reports: '/analises', uglez: '/uglez', categories: '/categorias',
-    settings: '/configuracoes', precos: '/precos'
+    home: '/app', transactions: '/app/financeiro', accounts: '/app/carteira',
+    budget: '/app/orcamento', goals: '/app/metas', recurring: '/app/recorrencias',
+    calendar: '/app/calendario', investments: '/app/investimentos',
+    reports: '/app/analises', uglez: '/app/uglez', categories: '/app/categorias',
+    settings: '/app/configuracoes', precos: '/app/planos'
   };
 
   const PAGINA_DE = Object.keys(App.URLS)
@@ -161,6 +173,10 @@
       UI.toast('Algo deu errado ao desenhar esta página. Veja o console.', 'error');
     }
     if (global.Shell && Shell.renderNotifCount) Shell.renderNotifCount();
+    /* A cada render, não só na entrada: o excedente muda quando a
+       pessoa apaga uma conta para voltar a caber, e uma faixa que
+       continua acusando o que já foi resolvido treina a ignorá-la. */
+    if (global.Limites && Limites.pintarExcedente) Limites.pintarExcedente();
     renderFooter();
   };
 
@@ -511,6 +527,11 @@
     passo('conta', () => Conta.init());
     passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
+    /* Dados antes de Sync: é o Sync que avisa da entrada, e quando
+       avisar o Dados já precisa estar escutando. Na ordem inversa a
+       primeira sessão da sessão passaria despercebida. */
+    passo('fonte dos dados', () => Dados.init());
+    passo('estado da sincronia', () => EstadoSync.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());

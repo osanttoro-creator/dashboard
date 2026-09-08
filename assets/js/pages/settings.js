@@ -98,9 +98,23 @@
     const destino = document.getElementById('syncBoxSettings');
     if (origem && destino) destino.appendChild(el('span', { class: 'muted', text: origem.textContent.trim() || '—' }));
 
+    /* A frase muda conforme a situação REAL da conta, e não é
+       decorativa: ela é a diferença entre "se eu limpar o navegador,
+       perco tudo" e "não perco". Antes dizia sempre que a
+       sincronização era uma cópia e o navegador o original -- o que
+       deixou de ser verdade quando o banco virou a fonte, e
+       continuar dizendo faria alguém tratar como descartável o
+       único lugar onde os dados dele existem. */
+    const comConta = global.Dados && Dados.estado() !== 'local';
     box.appendChild(linha(
       'Onde os dados ficam',
-      'Sempre neste navegador (localStorage). A sincronização é uma cópia, não o original.',
+      comConta
+        ? 'No servidor, na sua conta — é lá que eles existem de verdade e é de lá que ' +
+          'vêm ao abrir em qualquer aparelho. Este navegador guarda uma cópia local para ' +
+          'a tela abrir rápido e para você continuar trabalhando sem internet.'
+        : 'Só neste navegador (localStorage). Não há cópia em lugar nenhum: limpar os ' +
+          'dados do site, trocar de aparelho ou usar uma janela anônima apaga tudo. ' +
+          'Com uma conta, eles passam a viver no servidor.',
       el('span', { class: 'muted', text: Store.storageOK ? 'Armazenamento disponível' : 'BLOQUEADO neste navegador' })
     ));
   }

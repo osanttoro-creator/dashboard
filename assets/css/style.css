@@ -684,22 +684,45 @@ select.input { cursor: pointer; }
 .kpi-value { font-size: 24px; font-weight: 660; letter-spacing: -.026em; line-height: 1.15; }
 .kpi-hero .kpi-value { font-size: 28px; }
 
-/* Destaque em areia com tinta escura. A direção (alta/baixa) continua
-   nas setas e no sinal — a cor nunca carrega o sentido sozinha. */
+/* ------------------------------------------------------------------
+   CARTÃO EM DESTAQUE ("Saldo do mês")
+   ------------------------------------------------------------------
+   Tinta CLARA sobre fundo escuro. Isto já foi o contrário e estava
+   errado: o comentário aqui dizia "destaque em areia com tinta
+   escura", mas --surface-hero é um gradiente azul-escuro
+   (#17394C → #0F2C3D). Tinta #2A1D12 sobre esse fundo dá
+   **1,13:1** — o mínimo da WCAG para texto normal é 4,5:1. O valor
+   mais importante da tela era, na prática, invisível.
+
+   Provável origem: o gradiente mudou de areia para azul em algum
+   momento e as cores de texto ficaram para trás. Nada quebra quando
+   isso acontece — a página monta, o número está lá, e só quem tenta
+   ler percebe.
+
+   As cores abaixo foram MEDIDAS, não escolhidas no olho, contra as
+   três pontas de gradiente que existem (duas no tema claro, uma no
+   escuro). tools/testes/contraste.js refaz a conta e falha se
+   alguém baixar qualquer par.
+
+   A direção (alta/baixa) continua nas setas e no sinal — a cor
+   nunca carrega o sentido sozinha. */
 .kpi-hero {
   background: var(--surface-hero);
   border-color: transparent; border-top-color: transparent;
-  color: #2A1D12;
+  color: #F4F1EA;
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-.kpi-hero .kpi-label { color: rgba(42, 29, 18, .76); }
+.kpi-hero .kpi-label { color: #BCCBD3; }              /* 5,34:1 */
 .kpi-hero .kpi-value,
 .kpi-hero .kpi-value.val-pos,
-.kpi-hero .kpi-value.val-neg { color: #2A1D12; }
-.kpi-hero .kpi-delta, .kpi-hero .muted { color: rgba(42, 29, 18, .76); }
-.kpi-hero .up, .kpi-hero .val-pos { color: #33471F; }
-.kpi-hero .down, .kpi-hero .val-neg { color: #7E2A18; }
-.kpi-hero .badge { background: rgba(42, 29, 18, .16); color: #2A1D12; }
+.kpi-hero .kpi-value.val-neg { color: #F4F1EA; }      /* 7,87:1 */
+.kpi-hero .kpi-delta, .kpi-hero .muted { color: #BCCBD3; }
+.kpi-hero .up, .kpi-hero .val-pos { color: #8BE0B4; } /* 5,68:1 */
+.kpi-hero .down, .kpi-hero .val-neg { color: #FFB09A; } /* 5,05:1 */
+.kpi-hero .badge { background: rgba(255, 255, 255, .18); color: #E9F0F3; }
+/* O foco precisa aparecer sobre o gradiente escuro, onde o anel da
+   cor de acento do tema claro sumiria. */
+.kpi-hero :focus-visible { outline-color: #F4F1EA; }
 .kpi-delta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .up   { color: var(--good-text); font-weight: 600; }
 .down { color: var(--critical); font-weight: 600; }
@@ -722,6 +745,12 @@ select.input { cursor: pointer; }
 /* ------------------------------------------------------------
    9 · GRÁFICOS
    ------------------------------------------------------------ */
+/* 260px é a altura padrão. Os gráficos do Financeiro usavam
+   chart-box-lg (320px) e, somados, faziam a página passar de
+   2.200px — obrigando a rolar muito para chegar na lista de
+   lançamentos, que é o que a maioria vem ver. Um gráfico de
+   categorias não fica mais legível com 60px a mais; ele só empurra
+   o resto para baixo. */
 .chart-box { position: relative; height: 260px; min-width: 0; }
 .chart-box-lg { height: 320px; }
 .chart-box-xl { height: 380px; }
@@ -733,6 +762,28 @@ select.input { cursor: pointer; }
   background: color-mix(in srgb, var(--bg) 70%, transparent);
   border-radius: var(--radius-sm);
 }
+
+/* ------------------------------------------------------------------
+   ESTADO VAZIO DAS ANÁLISES
+   Compacto de propósito. A versão anterior desenhava quatro gráficos
+   zerados em 2.250px de página; este cartão diz a mesma coisa em
+   pouco mais de 160px e ainda oferece a ação que resolve.
+   ------------------------------------------------------------------ */
+.tx-vazio { display: grid; gap: 10px; }
+.tx-vazio h2 { margin: 0; font-size: 15px; }
+.tx-vazio p { margin: 0; max-width: 52ch; font-size: 13px; line-height: 1.55; }
+
+/* O resumo em texto de cada gráfico. Não é legenda nem rodapé
+   decorativo: é a resposta que o gráfico dá, escrita. Serve a quem
+   não interpreta gráficos, a quem usa leitor de tela junto com a
+   tabela equivalente, e a quem abriu a página com o Chart.js
+   bloqueado — nesse caso é a única informação que sobra. */
+.chart-resumo {
+  margin: 10px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-2);
+}
+.chart-resumo[hidden] { display: none; }
 .offline-note {
   position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
   background: var(--n1); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
@@ -2498,18 +2549,95 @@ input[type="checkbox"], input[type="radio"] {
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
 
-/* Indicador da fila offline. Fica escondido quando não há nada
-   pendente — um selo permanente de "tudo certo" vira ruído e
-   ninguém repara quando ele muda. */
+/* Indicador do estado da sincronização.
+   "Sincronizado" aparece por alguns segundos e some; um selo
+   permanente de "tudo certo" vira mobília, e quando ele mudar para
+   erro também ninguém vai reparar. Offline e erro ficam até
+   deixarem de ser verdade. */
 .fila-chip {
-  display: block; margin-bottom: 6px;
-  padding: 6px 10px; border-radius: 10px;
-  font-size: 11px; font-weight: 560; line-height: 1.35;
+  /* flex, e não block: o chip agora carrega texto, um detalhe e um
+     botão. Com display:block eles empilhariam colados e o botão
+     encostaria no texto. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+  margin-bottom: 6px;
+  padding: 7px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.4;
   border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
 }
+.fila-chip.is-local        { color: var(--muted); }
 .fila-chip.is-offline      { color: var(--ink-2); }
 .fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-sincronizado { color: var(--good, #1F6B4F); }
 .fila-chip.is-erro {
   color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
   border-color: transparent;
+}
+
+/* O detalhe quebra para a linha inteira: ele é uma frase, não um
+   complemento curto, e disputar a linha com o rótulo deixaria os
+   dois ilegíveis. */
+.fila-detalhe {
+  flex-basis: 100%;
+  font-weight: 400; opacity: .88;
+}
+
+/* Ação dentro do chip. 24px de altura é o mínimo da WCAG 2.2 para
+   alvo de toque -- um "tentar novamente" de 16px de altura existe
+   no papel e não no dedo. */
+.fila-acao {
+  display: inline-flex; align-items: center;
+  min-height: 24px; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid currentColor;
+  background: transparent; color: inherit;
+  font: 600 11px/1 inherit; font-family: inherit;
+  cursor: pointer; text-decoration: none;
+}
+.fila-acao:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.fila-acao:disabled { opacity: .6; cursor: default; }
+/* O foco precisa aparecer sobre o fundo vermelho do estado de erro,
+   onde um anel da cor do texto sumiria. */
+.fila-chip.is-erro .fila-acao:focus-visible {
+  outline: 2px solid #fff; outline-offset: 2px;
+}
+
+/* ==================================================================
+   FAIXA DE EXCEDENTE DE PLANO
+   ------------------------------------------------------------------
+   Aparece quando há mais itens do que o plano permite — na prática,
+   depois de descer de plano.
+
+   O TOM É DELIBERADO: aviso, não erro. Vermelho aqui diria "algo
+   está quebrado" e produziria exatamente o medo que a faixa existe
+   para evitar — o de ter perdido dados. Nada foi perdido; só a
+   criação parou.
+   ================================================================== */
+.faixa-excedente {
+  margin: 0 0 18px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  padding: 16px 18px;
+}
+.faixa-excedente[hidden] { display: none; }
+.faixa-excedente-corpo { display: grid; gap: 10px; }
+.faixa-excedente-titulo {
+  margin: 0; font-size: 14px; font-weight: 650; color: var(--ink);
+}
+.faixa-excedente-texto {
+  margin: 0; max-width: 72ch;
+  font-size: 13px; line-height: 1.6; color: var(--ink-2);
+}
+/* "Nada foi apagado" é a primeira coisa que precisa ser lida, e a
+   única em negrito: quem só bate o olho tem que sair com essa
+   informação. */
+.faixa-excedente-texto strong { color: var(--ink); }
+
+.faixa-excedente-usos {
+  display: grid; gap: 6px;
+  margin-top: 4px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 720px) {
+  .faixa-excedente { padding: 14px; }
 }

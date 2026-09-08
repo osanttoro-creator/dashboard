@@ -294,6 +294,19 @@
       }
       if (!ok) return false;
 
+      /* Recorrência é o único limite de plano que não estava sendo
+         aplicado: o teto existia no banco (3 no Grátis) e o
+         Limites.contar já sabia contá-las, mas nada chamava
+         exigirEspaco. Dava para criar quantas quisesse.
+
+         A checagem só vale para NOVAS: editar uma recorrência que já
+         existe não aumenta o total, e barrar aí seria prender a
+         pessoa num registro que ela não pode nem corrigir. */
+      const viraRecorrente = cbRecurring._input.checked;
+      const jaEraRecorrente = !!(editing && editing.recurring);
+      if (viraRecorrente && !jaEraRecorrente &&
+          global.Limites && !Limites.exigirEspaco('recurring_items')) return false;
+
       const base = {
         kind: currentKind,
         description,

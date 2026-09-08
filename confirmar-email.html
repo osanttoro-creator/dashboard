@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Confirmar e-mail — OAZE</title>
+<meta name="description" content="Confirmação de e-mail da sua conta OAZE.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/confirmar-email">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      OAZE
+    </a>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta" style="text-align:center">
+      <h1 id="titulo">Confirmando…</h1>
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+      <p id="explica">Um instante enquanto validamos o link.</p>
+      <p id="acoes" hidden>
+        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/onboarding">Continuar</a>
+      </p>
+      <p class="pe-do-painel" id="pe" hidden>
+        <a href="/entrar">Ir para a tela de entrada</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var titulo = document.getElementById('titulo');
+  var explica = document.getElementById('explica');
+  var recado = document.getElementById('recado');
+  var acoes = document.getElementById('acoes');
+  var pe = document.getElementById('pe');
+
+  if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
+
+  function pronto(u) {
+    titulo.textContent = 'E-mail confirmado';
+    explica.textContent = 'Sua conta ' + (u.email ? '(' + u.email + ') ' : '') +
+      'está ativa. Vamos montar seu painel em alguns passos rápidos.';
+    acoes.hidden = false;
+  }
+
+  function falhou() {
+    titulo.textContent = 'Link expirado';
+    explica.textContent = '';
+    /* Nem sempre é falha: quem já confirmou antes e clicou de novo
+       cai aqui igual. O texto cobre os dois casos em vez de acusar
+       um erro que pode não ter havido. */
+    A.diz(recado, 'Este link não vale mais — ou porque expirou, ou porque ' +
+      'já foi usado. Se você já confirmou antes, é só entrar normalmente.', 'aviso');
+    pe.hidden = false;
+  }
+
+  /* Mesmo padrão da redefinição: o SDK precisa de um instante para
+     transformar o fragmento da URL em sessão. */
+  A.quemEsta().then(function (u) {
+    if (u) return pronto(u);
+    setTimeout(function () {
+      A.quemEsta().then(function (v) { v ? pronto(v) : falhou(); });
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>

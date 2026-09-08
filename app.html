@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OAZE — Gestão Financeira</title>
+
+
+<!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OAZE">
+<meta name="theme-color" content="#F2EDE4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#081A24" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
+
+<!-- fonte vendorizada (Inter, embutida em base64): sem CDN, funciona em file:// -->
+<link rel="stylesheet" href="/assets/vendor/fonte.css">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<!-- tempestade de areia atravessando o fundo -->
+<!-- ambiente: o céu do oásis. Luz, nunca textura. -->
+<div class="ambient" aria-hidden="true">
+  <div class="ambient-sun"></div>
+  <div class="ambient-blob b1"></div>
+  <div class="ambient-blob b2"></div>
+</div>
+
+<!-- Primeiro foco da página. Quem navega por teclado não deveria
+     passar por 12 destinos toda vez que troca de página. -->
+<a class="pular-conteudo" href="#content">Pular para o conteúdo</a>
+
+<div class="shell">
+
+  <!-- ══════ SIDEBAR — ilha flutuante ══════
+       Recuada das bordas nos quatro lados: o conteúdo passa por trás,
+       e é isso que a faz ler como peça pousada, não como coluna. -->
+  <aside class="sidebar n3" id="sidebar" aria-label="Navegação principal">
+    <button type="button" class="brand" id="brandHome" aria-label="OAZE — ir para a visão geral">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+          <circle cx="20" cy="20" r="8"/>
+          <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+        </svg>
+      </span>
+      <span class="brand-name">OAZE</span>
+    </button>
+
+    <nav class="nav" id="nav" aria-label="Seções">
+      <p class="nav-group">Principal</p>
+      <button class="nav-item" data-page="home">
+        <span class="nav-ico" data-ico="layout-dashboard"></span>
+        <span class="nav-long">Visão geral</span><span class="nav-short">Início</span>
+      </button>
+      <button class="nav-item" data-page="transactions">
+        <span class="nav-ico" data-ico="arrow-left-right"></span>
+        <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+      </button>
+      <button class="nav-item" data-page="accounts">
+        <span class="nav-ico" data-ico="wallet"></span>
+        <span class="nav-long">Contas e cartões</span><span class="nav-short">Carteira</span>
+      </button>
+
+      <p class="nav-group">Planejar</p>
+      <button class="nav-item" data-page="budget">
+        <span class="nav-ico" data-ico="target"></span>
+        <span class="nav-long">Orçamento</span><span class="nav-short">Planejar</span>
+      </button>
+      <button class="nav-item" data-page="goals">
+        <span class="nav-ico" data-ico="flag"></span>
+        <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
+      </button>
+      <button class="nav-item" data-page="recurring">
+        <span class="nav-ico" data-ico="repeat"></span>
+        <span class="nav-long">Recorrências</span><span class="nav-short">Fixas</span>
+      </button>
+      <button class="nav-item" data-page="calendar">
+        <span class="nav-ico" data-ico="calendar"></span>
+        <span class="nav-long">Calendário</span><span class="nav-short">Agenda</span>
+      </button>
+
+      <p class="nav-group">Crescer</p>
+      <button class="nav-item" data-page="investments">
+        <span class="nav-ico" data-ico="trending-up"></span>
+        <span class="nav-long">Investimentos</span><span class="nav-short">Investir</span>
+      </button>
+      <button class="nav-item" data-page="reports">
+        <span class="nav-ico" data-ico="chart-line"></span>
+        <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+      </button>
+
+      <p class="nav-group">Sistema</p>
+      <button class="nav-item" data-page="uglez">
+        <span class="nav-ico" data-ico="sparkles"></span>
+        <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+      </button>
+      <button class="nav-item" data-page="categories">
+        <span class="nav-ico" data-ico="tag"></span>
+        <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <span class="nav-ico" data-ico="settings"></span>
+        <span class="nav-long">Configurações</span><span class="nav-short">Mais</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <!-- estado da fila offline; escondido quando tudo está em dia -->
+      <span id="filaBox" class="fila-chip" hidden></span>
+      <span id="syncBox"></span>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <!-- ══════ TOP BAR — objetos de vidro independentes ══════ -->
+    <header class="topbar" aria-label="Controles">
+
+      <!-- ══════ NAVEGAÇÃO SUPERIOR (desktop e tablet deitado) ══════
+           Some abaixo de 821px, onde a barra inferior assume — a mesma
+           que já existia, sem nenhuma alteração de comportamento.
+
+           Os botões são .nav-item com data-page: o roteador liga o
+           clique e marca o ativo em todos eles de uma vez, então a
+           barra de baixo e a de cima ficam sempre em sincronia. -->
+      <button class="topnav-brand" id="topnavBrand" aria-label="OAZE — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="18" height="18" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+            <circle cx="20" cy="20" r="8"/>
+            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M31.3 8.7l-2.8 2.8M11.5 28.5l-2.8 2.8"/>
+          </svg>
+        </span>
+        <span class="brand-name">OAZE</span>
+      </button>
+
+      <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
+        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
+          <span class="nav-ico" data-ico="layout-dashboard"></span>
+          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
+        </button>
+        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
+          <span class="nav-ico" data-ico="arrow-left-right"></span>
+          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+        </button>
+        <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
+          <span class="nav-ico" data-ico="wallet"></span>
+          <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
+        </button>
+
+      <div class="topnav-group" data-group="planejar">
+        <button class="topnav-trigger" id="trg-planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="topnav-trigger-txt">Planejar</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-planejar" role="group" aria-labelledby="trg-planejar" hidden>
+        <button class="nav-item" data-page="budget" title="Orçamento" aria-label="Orçamento">
+          <span class="nav-ico" data-ico="target"></span>
+          <span class="nav-long">Orçamento</span><span class="nav-short">Orçamento</span>
+        </button>
+        <button class="nav-item" data-page="goals" title="Metas" aria-label="Metas">
+          <span class="nav-ico" data-ico="flag"></span>
+          <span class="nav-long">Metas</span><span class="nav-short">Metas</span>
+        </button>
+        <button class="nav-item" data-page="recurring" title="Recorrências" aria-label="Recorrências">
+          <span class="nav-ico" data-ico="repeat"></span>
+          <span class="nav-long">Recorrências</span><span class="nav-short">Recorrências</span>
+        </button>
+        <button class="nav-item" data-page="calendar" title="Calendário" aria-label="Calendário">
+          <span class="nav-ico" data-ico="calendar"></span>
+          <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
+        </button>
+        </div>
+      </div>
+
+      <div class="topnav-group" data-group="crescer">
+        <button class="topnav-trigger" id="trg-crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="topnav-trigger-txt">Crescer</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
+        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
+        </button>
+        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
+          <span class="nav-ico" data-ico="chart-line"></span>
+          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+        </button>
+        </div>
+      </div>
+
+        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
+
+      <div class="topnav-group" data-group="mais">
+        <button class="topnav-trigger" id="trg-mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
+          <span class="nav-ico" data-ico="ellipsis"></span>
+          <span class="topnav-trigger-txt">Mais</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
+        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
+        </button>
+        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
+          <span class="nav-ico" data-ico="tag"></span>
+          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+        </button>
+        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
+          <span class="nav-ico" data-ico="settings"></span>
+          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
+        </button>
+        </div>
+      </div>
+      </nav>
+
+      <span class="topbar-gap"></span>
+
+      <span class="pill pill-profile">
+        <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
+        <select id="profileSelect" aria-label="Perfil ativo"></select>
+        <button class="pill-ico" id="btnProfiles" title="Gerenciar perfis" aria-label="Gerenciar perfis">⚙</button>
+      </span>
+
+      <span class="pill pill-period" id="periodPicker">
+        <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
+        <select id="monthSelect" aria-label="Mês"></select>
+        <select id="yearSelect" aria-label="Ano"></select>
+        <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
+        <button class="pill-hoje" id="btnToday">Mês atual</button>
+      </span>
+
+      <button class="pill pill-btn" id="btnSearch" aria-label="Buscar" title="Buscar (/)">
+        <span data-ico="search"></span><span class="pill-label">Buscar</span>
+      </button>
+      <button class="pill pill-btn" id="btnNotif" aria-label="Notificações" aria-expanded="false" title="Notificações">
+        <span data-ico="bell"></span>
+        <span class="notif-count" id="notifCount" hidden>0</span>
+      </button>
+      <button class="pill pill-btn" id="btnSettings" aria-label="Configurações" aria-expanded="false" title="Configurações">
+        <span data-ico="settings"></span>
+      </button>
+      <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
+    </header>
+
+    <!-- Pendência de assinatura. role=status para o leitor de tela
+         anunciar sem roubar o foco de quem está digitando. -->
+    <div id="avisoConta" hidden></div>
+
+    <main class="content" id="content" tabindex="-1">
+
+      <div class="page-head">
+        <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
+        <h1 id="pageTitle">Visão geral</h1>
+        <p class="page-sub" id="pageSub"></p>
+      </div>
+
+      <!-- Excedente de plano. Aparece só quando há mais itens do que
+           o plano permite — normalmente depois de descer de plano.
+           Fica acima do conteúdo porque explica por que a criação
+           está barrada; escondido no rodapé, o usuário só encontraria
+           o bloqueio, nunca o motivo. -->
+      <div class="faixa-excedente" id="faixaExcedente" role="status" hidden></div>
+
+    <!-- ─────────── VISÃO GERAL ───────────
+         Responde, de cima para baixo: quanto eu tenho, como estou,
+         quanto entrou e saiu, o que vem aí, e onde o dinheiro foi.
+         Layout assimétrico de propósito: a largura de cada peça diz
+         o peso dela. -->
+    <section class="page is-active" data-page="home">
+
+      <!-- Painel de primeiro uso. Substitui TODO o resto quando não
+           há lançamento nenhum: zeros e um score calculado sobre
+           nada não são informação, são a aparência de defeito. -->
+      <div id="homeVazia" hidden></div>
+
+      <div data-home-conteudo class="grid grid-hero" id="homeConteudo">
+        <!-- patrimônio líquido: o número que manda na página -->
+        <section class="hero" aria-labelledby="heroLabel">
+          <div class="hero-face">
+            <p class="hero-label" id="heroLabel">Patrimônio líquido</p>
+            <p class="hero-value" id="heroValue">—</p>
+            <p class="hero-sub" id="heroSub"></p>
+            <p class="hero-delta" id="heroDelta"></p>
+          </div>
+          <div class="hero-spark" aria-hidden="true"><canvas id="chartHeroSpark"></canvas></div>
+        </section>
+
+        <!-- OAZE Score: saúde financeira em um número -->
+        <section class="card score-card" aria-labelledby="scoreTitle">
+          <div class="card-head">
+            <h2 id="scoreTitle">OAZE Score</h2>
+            <button class="icon-btn" id="btnScoreHelp" title="Como o score é calculado"
+              aria-label="Como o score é calculado"><span data-ico="circle-help"></span></button>
+          </div>
+          <div class="score-body">
+            <div class="score-ring" id="scoreRing"></div>
+            <ul class="score-parts" id="scoreParts"></ul>
+          </div>
+        </section>
+      </div>
+
+      <div data-home-conteudo class="kpi-row kpi-row-3" id="homeKpis"></div>
+
+      <!-- fluxo financeiro do ano -->
+      <div data-home-conteudo class="card">
+        <div class="card-head">
+          <h2 id="homeFlowTitle">Fluxo financeiro</h2>
+          <span class="card-note">Entradas, saídas e o saldo de cada mês</span>
+        </div>
+        <div class="chart-box chart-box-xl"><canvas id="chartFlow"></canvas></div>
+      </div>
+
+      <!-- UGLEZ: painel de leitura, não caixa de chat -->
+      <section data-home-conteudo class="uglez-panel" aria-labelledby="uglezTitle">
+        <div class="uglez-head">
+          <span class="uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
+          <div class="uglez-read">
+            <p class="uglez-name" id="uglezTitle">UGLEZ</p>
+            <p class="uglez-line" id="uglezInsight">Analisando o mês…</p>
+            <p class="uglez-sub" id="uglezInsightSub"></p>
+          </div>
+          <button class="btn btn-ghost btn-sm" data-goto="uglez">Abrir →</button>
+        </div>
+        <div class="uglez-chips" id="uglezChips"></div>
+      </section>
+
+      <div data-home-conteudo class="grid grid-wide-left">
+        <div class="card">
+          <div class="card-head">
+            <h2 id="homePieTitle">Distribuição de gastos</h2>
+            <span class="card-note" id="homePieNote"></span>
+          </div>
+          <div class="chart-box chart-box-pie">
+            <canvas id="chartCatPie"></canvas>
+            <div class="empty-overlay" id="catPieEmpty" hidden>Sem despesas confirmadas neste mês.</div>
+          </div>
+          <ul class="cat-tiles" id="catRankList"></ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Próximos eventos</h2>
+            <button class="btn btn-ghost btn-sm" data-goto="calendar">Calendário →</button>
+          </div>
+          <div id="upcomingList"></div>
+        </div>
+      </div>
+
+      <div data-home-conteudo class="grid grid-wide-right">
+        <div class="card">
+          <div class="card-head">
+            <h2>Resumo do mês</h2>
+            <span class="card-note" id="monthSummaryNote"></span>
+          </div>
+          <div id="monthSummary"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Sua carteira</h2>
+            <button class="btn btn-ghost btn-sm" data-goto="accounts">Gerenciar →</button>
+          </div>
+          <div id="homeCards"></div>
+        </div>
+      </div>
+
+      <div data-home-conteudo class="card">
+        <div class="card-head">
+          <h2>Movimentações recentes</h2>
+          <button class="btn btn-ghost btn-sm" data-goto="transactions">Ver tudo →</button>
+        </div>
+        <div id="recentList"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 2 · RECEITAS E DESPESAS ─────────── -->
+    <section class="page" data-page="transactions">
+      <div class="kpi-row kpi-row-3" id="txKpis"></div>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-income btn-sm" data-quick="income">+ Receita</button>
+          <button class="btn btn-danger btn-sm" data-quick="expense">− Despesa</button>
+          <button class="btn btn-outline btn-sm" data-quick="transfer">⇄ Transferência</button>
+        </div>
+        <div class="toolbar-right">
+          <div class="seg seg-sm" id="txMethodFilter" role="group" aria-label="Filtrar despesas por forma de pagamento">
+            <button type="button" class="is-active" data-method="all">Tudo</button>
+            <button type="button" data-method="account">Débito</button>
+            <button type="button" data-method="card">Crédito</button>
+          </div>
+          <input type="search" class="input input-sm" id="txSearch" aria-label="Buscar nos lançamentos" placeholder="Buscar por descrição…">
+          <label class="check check-inline"><input type="checkbox" id="txOnlyPending" aria-label="Mostrar apenas lançamentos a confirmar"><span>Só pendentes</span></label>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="col-stack" id="colIncome"></div>
+        <div class="col-stack" id="colExpense"></div>
+      </div>
+
+      <!-- ============================================================
+           ANÁLISES DO MÊS
+           Cada cartão some inteiro quando não há o que desenhar. Um
+           gráfico zerado não é neutro: ele ocupa 320px dizendo que a
+           resposta é "nada", quando a resposta é "ainda não há
+           pergunta". Antes desta mudança a página tinha 2.250px de
+           altura com zero lançamentos.
+           ============================================================ -->
+
+      <!-- Vazio total: um cartão compacto no lugar dos quatro. -->
+      <div class="card tx-vazio" id="txSemDados" hidden>
+        <h2>Sem movimentações neste mês</h2>
+        <p class="muted">
+          As análises aparecem assim que houver o que analisar: uma receita ou
+          uma despesa já bastam para o primeiro gráfico.
+        </p>
+        <div class="quick-actions">
+          <button class="btn btn-primary" type="button" data-novo="income">Registrar receita</button>
+          <button class="btn btn-outline" type="button" data-novo="expense">Registrar despesa</button>
+        </div>
+      </div>
+
+      <div id="txGraficos">
+        <div class="card" id="cardExpCat">
+          <div class="card-head">
+            <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
+          </div>
+          <div class="chart-box"><canvas id="chartTxExpenseCat"></canvas></div>
+          <p class="chart-resumo" id="txExpCatResumo"></p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card" id="cardSplit">
+            <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
+            <div class="chart-box"><canvas id="chartMethodTrend"></canvas></div>
+            <p class="chart-resumo" id="txSplitResumo"></p>
+          </div>
+          <div class="card" id="cardPlanned">
+            <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
+            <div class="chart-box"><canvas id="chartPlannedVsReal"></canvas></div>
+            <p class="chart-resumo" id="txPlannedResumo"></p>
+          </div>
+        </div>
+
+        <div class="card" id="cardIncCat">
+          <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
+          <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas></div>
+          <p class="chart-resumo" id="txIncCatResumo"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 3 · INVESTIMENTOS ─────────── -->
+    <section class="page" data-page="investments">
+      <div class="kpi-row kpi-row-4" id="invKpis"></div>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-primary btn-sm" data-quick="investment">+ Novo aporte</button>
+        </div>
+        <div class="toolbar-right">
+          <select class="input input-sm" id="invTypeFilter" aria-label="Filtrar investimentos por tipo"><option value="">Todos os tipos</option></select>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Carteira de investimentos</h2>
+          <span class="card-note">Valor atual estimado por juros compostos sobre o aporte</span>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="tableInvestments">
+            <thead>
+              <tr>
+                <th>Nome</th><th>Tipo</th><th>Aporte</th>
+                <th class="num">Valor aportado</th><th class="num">Taxa a.a.</th>
+                <th class="num">Valor atual</th><th class="num">Rendimento</th><th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid grid-wide-left">
+        <div class="card">
+          <div class="card-head">
+            <h2 id="invEvoTitle">Evolução do patrimônio investido</h2>
+            <span class="card-note">Aportes acumulados × valor estimado com rentabilidade</span>
+          </div>
+          <div class="chart-box chart-box-lg"><canvas id="chartInvEvolution"></canvas></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 id="invMixTitle">Distribuição da carteira</h2>
+            <span class="card-note">Por tipo de investimento</span>
+          </div>
+          <div class="chart-box chart-box-pie"><canvas id="chartInvMix"></canvas>
+            <div class="empty-overlay" id="invMixEmpty" hidden>Nenhum aporte registrado até aqui.</div>
+          </div>
+          <ul class="cat-tiles" id="invMixList"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Calculadora de projeção — juros compostos</h2></div>
+        <div class="proj-layout">
+          <form class="proj-form" id="projForm">
+            <label class="field"><span class="field-label">Valor inicial (R$)</span>
+              <input class="input" type="text" inputmode="decimal" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
+            <label class="field"><span class="field-label">Aporte mensal (R$)</span>
+              <input class="input" type="text" inputmode="decimal" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
+            <label class="field"><span class="field-label">Taxa de juros</span>
+              <div class="row gap-6">
+                <input class="input" type="text" inputmode="decimal" id="projRate" aria-label="Taxa de rendimento da projeção" value="10,00">
+                <select class="input input-sm" id="projRatePeriod" aria-label="Período da taxa" style="max-width:110px">
+                  <option value="year">% ao ano</option>
+                  <option value="month">% ao mês</option>
+                </select>
+              </div></label>
+            <label class="field"><span class="field-label">Período (meses)</span>
+              <input class="input" type="number" min="1" max="960" id="projMonths" aria-label="Meses da projeção" value="120"></label>
+            <button class="btn btn-primary" type="submit">Calcular projeção</button>
+          </form>
+          <div class="proj-result">
+            <div class="proj-figures" id="projFigures"></div>
+            <div class="chart-box chart-box-lg"><canvas id="chartProjection"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 4 · CARTÕES E CONTAS ─────────── -->
+    <section class="page" data-page="accounts">
+      <div class="tabs" id="accTabs">
+        <button class="tab is-active" data-tab="accounts">Contas de débito</button>
+        <button class="tab" data-tab="cards">Cartões de crédito</button>
+        <button class="tab" data-tab="import">Importar extratos / Registrato</button>
+      </div>
+
+      <!-- Aba contas -->
+      <div class="tabpane is-active" data-tab="accounts">
+        <div class="toolbar">
+          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewAccount">+ Nova conta</button></div>
+          <div class="toolbar-right"><span class="muted" id="accTotalLabel"></span></div>
+        </div>
+        <div class="wallet-grid" id="accountGrid"></div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Extrato da conta</h2>
+            <select class="input input-sm" id="accHistorySelect" aria-label="Conta do extrato" style="max-width:240px"></select>
+          </div>
+          <div class="table-wrap table-scroll-lg">
+            <table class="table table-compact" id="tableAccHistory">
+              <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th><th class="num">Saldo</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba cartões -->
+      <div class="tabpane" data-tab="cards">
+        <div class="toolbar">
+          <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewCard">+ Novo cartão</button></div>
+          <div class="toolbar-right"><span class="muted" id="cardTotalLabel"></span></div>
+        </div>
+        <div class="card" id="cardDeckCard">
+          <div id="cardDeck"></div>
+          <div id="cardDetail"></div>
+        </div>
+      </div>
+
+      <!-- Aba importação -->
+      <div class="tabpane" data-tab="import">
+        <div class="card">
+          <div class="card-head">
+            <h2>Importar lançamentos</h2>
+            <span class="card-note">CSV · OFX · texto colado de extrato, fatura ou Registrato</span>
+          </div>
+          <div class="import-grid">
+            <div class="field">
+              <span class="field-label">1 · Envie um arquivo</span>
+              <input type="file" class="input" id="importFile" aria-label="Arquivo de extrato para importar" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
+              <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
+            </div>
+            <div class="field">
+              <span class="field-label">ou cole o conteúdo aqui</span>
+              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
+            </div>
+          </div>
+          <div class="import-opts">
+            <label class="field"><span class="field-label">Destino</span>
+              <select class="input" id="importTarget" aria-label="Conta ou cartão de destino da importação"></select></label>
+            <button class="btn btn-primary" id="btnParseImport">Analisar conteúdo</button>
+          </div>
+        </div>
+        <div id="importResult"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PÁGINA 5 · CATEGORIAS ─────────── -->
+    <section class="page" data-page="categories">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-danger btn-sm" data-newcat="expense">+ Categoria de despesa</button>
+          <button class="btn btn-primary btn-sm" data-newcat="income">+ Categoria de receita</button>
+        </div>
+        <div class="toolbar-right">
+          <select class="input input-sm" id="catRangeSelect" aria-label="Período das categorias">
+            <option value="all">Histórico completo</option>
+            <option value="year">Ano selecionado</option>
+            <option value="12m">Últimos 12 meses</option>
+            <option value="month">Mês selecionado</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head"><h2>Categorias de despesa</h2></div>
+          <div id="catListExpense" class="cat-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Categorias de receita</h2></div>
+          <div id="catListIncome" class="cat-list"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 id="catHistTitle">Peso histórico de cada categoria de despesa</h2></div>
+        <div class="chart-box chart-box-lg"><canvas id="chartCatHistory"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ─────────── ORÇAMENTO ─────────── -->
+    <section class="page" data-page="budget">
+      <div class="kpi-row kpi-row-3" id="budgetKpis"></div>
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-primary btn-sm" id="btnNewBudget">+ Definir limite</button>
+        </div>
+        <div class="toolbar-right"><span class="muted" id="budgetNote"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h2>Limites por categoria</h2>
+          <span class="card-note">Quanto você decidiu gastar, contra o que já gastou</span>
+        </div>
+        <div id="budgetList"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── METAS ─────────── -->
+    <section class="page" data-page="goals">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-primary btn-sm" id="btnNewGoal">+ Nova meta</button>
+        </div>
+        <div class="toolbar-right"><span class="muted" id="goalsNote"></span></div>
+      </div>
+      <div class="goal-grid" id="goalGrid"></div>
+    </section>
+
+    <!-- ─────────── RECORRÊNCIAS E ASSINATURAS ─────────── -->
+    <section class="page" data-page="recurring">
+      <div class="kpi-row kpi-row-3" id="recKpis"></div>
+      <div class="tabs" id="recTabs">
+        <button class="tab is-active" data-rectab="all">Todas as recorrências</button>
+        <button class="tab" data-rectab="subs">Assinaturas</button>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h2 id="recTitle">Lançamentos fixos</h2>
+          <span class="card-note">Repetem todo mês até você encerrar</span>
+        </div>
+        <div id="recList"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── CALENDÁRIO FINANCEIRO ─────────── -->
+    <section class="page" data-page="calendar">
+      <div class="toolbar">
+        <div class="toolbar-left"><h2 class="cal-title" id="calTitle"></h2></div>
+        <div class="toolbar-right">
+          <span class="legend-icons">
+            <span><i class="dot-in"></i>Entrada</span>
+            <span><i class="dot-out"></i>Saída</span>
+            <span><i class="dot-due"></i>Fatura</span>
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 id="calDayTitle">Selecione um dia</h2></div>
+        <div id="calDayList"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── ANÁLISES ─────────── -->
+    <section class="page" data-page="reports">
+      <div class="kpi-row kpi-row-4" id="repKpis"></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head">
+            <h2 id="repYoyTitle">Comparação ano a ano</h2>
+          </div>
+          <div class="chart-box chart-box-lg"><canvas id="chartYoY"></canvas>
+            <div class="empty-overlay" id="yoyEmpty" hidden>Ainda não há dados de outro ano para comparar.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Taxa de poupança</h2>
+            <span class="card-note">Quanto de cada real recebido sobrou</span></div>
+          <div class="chart-box chart-box-lg"><canvas id="chartSavings"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h2>Consolidado mensal</h2>
+          <button class="btn btn-outline btn-sm" id="btnExportCsv">↓ Exportar CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="tableAnnual">
+            <thead><tr>
+              <th>Mês</th><th class="num">Receitas</th><th class="num">Despesas</th>
+              <th class="num">Saldo</th><th class="num">Acumulado</th><th class="num">Investido</th>
+            </tr></thead>
+            <tbody></tbody><tfoot></tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── UGLEZ ─────────── -->
+    <section class="page" data-page="uglez">
+      <section class="uglez-hero">
+        <span class="uglez-orb is-big" aria-hidden="true"><span data-ico="sparkles"></span></span>
+        <div>
+          <h2 class="uglez-hero-name">UGLEZ</h2>
+          <p class="uglez-hero-sub">Leitura do seu dinheiro, feita sobre os seus próprios dados.</p>
+        </div>
+      </section>
+
+      <div class="grid grid-2" id="uglezInsights"></div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Conversar</h2>
+          <span class="card-note" id="uglezMode"></span>
+          <button class="btn btn-ghost btn-sm" id="btnAiConfig">⚙ Configurar</button>
+        </div>
+        <div class="uglez-chips" id="uglezChipsFull"></div>
+        <div class="ai-ask" style="margin-top:12px">
+          <textarea class="input textarea-plain" id="aiQuestion" aria-label="Sua pergunta para o UGLEZ" rows="2"
+            placeholder="Ex.: quanto sobra se eu cortar 20% em alimentação?"></textarea>
+          <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
+        </div>
+        <div class="ai-answer" id="aiAnswer" hidden></div>
+        <div id="uglezHistory"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── CONFIGURAÇÕES ─────────── -->
+    <section class="page" data-page="settings">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head"><h2>Perfil</h2></div>
+          <div id="setConta"></div>
+          <div id="setPlano"></div>
+          <div id="setProfile"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Aparência</h2></div>
+          <div id="setAppearance"></div>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head"><h2>Sincronização</h2></div>
+          <div id="setSync"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>UGLEZ</h2></div>
+          <div id="setUglez"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Dados</h2>
+          <span class="card-note">Tudo fica neste navegador. O backup é a sua rede de segurança.</span></div>
+        <div id="setData"></div>
+      </div>
+    </section>
+
+    <!-- ══════ PLANOS ══════
+         Não é uma página de marketing solta: é a mesma casa. Por
+         isso vive dentro do app, com a mesma navegação e o mesmo
+         material — quem chega aqui vindo de um limite não deveria
+         sentir que saiu do produto. -->
+    <section class="page" data-page="precos" aria-labelledby="precosTitulo">
+
+      <div class="precos-topo">
+        <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
+        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
+
+        <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
+          <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
+          <button class="ciclo-btn" data-ciclo="annual" aria-pressed="false">
+            Anual <span class="ciclo-selo">2 meses grátis</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="precos-cards" id="precosCards"></div>
+
+      <div class="card precos-tabela-wrap">
+        <h3 class="precos-h3">Comparativo completo</h3>
+        <div class="table-wrap">
+          <table class="table precos-tabela" id="precosTabela"></table>
+        </div>
+        <p class="hint" id="precosNota"></p>
+      </div>
+
+      <div class="card precos-faq">
+        <h3 class="precos-h3">Perguntas frequentes</h3>
+        <div id="precosFaq"></div>
+      </div>
+
+    </section>
+
+      <footer class="app-foot">
+        <span id="footInfo"></span>
+        <span class="dot-sep">·</span>
+        <span>Dados salvos apenas neste navegador (localStorage)</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- ══════ BUSCA — sobreposição de vidro ══════ -->
+<div class="overlay" id="searchOverlay" hidden>
+  <div class="overlay-scrim" data-close-search></div>
+  <div class="search-box n1" role="dialog" aria-modal="true" aria-label="Buscar">
+    <div class="search-field">
+      <span data-ico="search" aria-hidden="true"></span>
+      <input type="search" id="searchInput" aria-label="Buscar em todo o app" autocomplete="off"
+        placeholder="Buscar lançamento, conta, cartão, meta ou categoria…">
+      <button class="pill-ico" data-close-search aria-label="Fechar busca">✕</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ══════ POPOVERS DA TOP BAR ══════ -->
+<div class="popover n3" id="notifPop" hidden role="dialog" aria-label="Notificações">
+  <div class="popover-head"><h3>Notificações</h3></div>
+  <div id="notifList"></div>
+</div>
+
+<div class="popover n3" id="settingsPop" hidden role="menu" aria-label="Menu de configurações">
+  <button class="pop-item" role="menuitem" id="btnTheme">
+    <span class="pop-ico" data-ico="sliders-horizontal"></span><span>Alternar tema claro/escuro</span>
+  </button>
+  <button class="pop-item" role="menuitem" data-goto="settings">
+    <span class="pop-ico" data-ico="settings"></span><span>Todas as configurações</span>
+  </button>
+  <div class="pop-sep"></div>
+  <button class="pop-item" role="menuitem" id="btnExport">
+    <span class="pop-ico" data-ico="download"></span><span>Baixar backup (JSON)</span>
+  </button>
+  <button class="pop-item" role="menuitem" id="btnImport">
+    <span class="pop-ico" data-ico="upload"></span><span>Restaurar backup</span>
+  </button>
+</div>
+
+<!-- ação principal flutuante: os quatro lançamentos, em qualquer página -->
+<div class="fab-wrap" id="fabWrap">
+  <div class="fab-menu" id="fabMenu" hidden role="menu" aria-label="Novo lançamento">
+    <button class="fab-item" role="menuitem" data-quick="expense">
+      <span class="fab-item-ico is-expense" data-ico="arrow-down-right"></span><span>Nova despesa</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="income">
+      <span class="fab-item-ico is-income" data-ico="arrow-up-right"></span><span>Nova receita</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="transfer">
+      <span class="fab-item-ico" data-ico="arrow-left-right"></span><span>Transferência</span>
+    </button>
+    <button class="fab-item" role="menuitem" data-quick="investment">
+      <span class="fab-item-ico is-invest" data-ico="trending-up"></span><span>Novo investimento</span>
+    </button>
+  </div>
+  <button class="fab" id="fabBtn" aria-expanded="false" aria-haspopup="menu" aria-label="Novo lançamento" title="Novo lançamento (N)">
+    <span class="fab-plus" aria-hidden="true"></span>
+  </button>
+</div>
+
+<!-- modal / toast -->
+<div class="modal-root" id="modalRoot" hidden>
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h3 id="modalTitle">Título</h3>
+      <button class="icon-btn" data-close-modal aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+<div class="offline-note" id="offlineNote" hidden>
+  Chart.js não pôde ser carregado (sem internet). Tabelas e números continuam funcionando; os gráficos ficam ocultos.
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- sem internet (avião, celular offline), cai para a cópia local -->
+<script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>
+<!-- ícones vendorizados (bancos + Lucide): sem CDN em runtime -->
+<script src="/assets/vendor/bancos.js"></script>
+<script src="/assets/vendor/icons.js"></script>
+<script src="/assets/js/firebase-config.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/icons.js"></script>
+<script src="/assets/js/store.js"></script>
+<script src="/assets/js/calc.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/cards.js"></script>
+<script src="/assets/js/forms.js"></script>
+<script src="/assets/js/importer.js"></script>
+<script src="/assets/js/sync.js"></script>
+<script src="/assets/js/supabase-auth.js"></script>
+<script src="/assets/js/repo.js"></script>
+<script src="/assets/js/fila.js"></script>
+<script src="/assets/js/dados.js"></script>
+<script src="/assets/js/estado-sync.js"></script>
+<script src="/assets/js/migracao.js"></script>
+<script src="/assets/js/onboarding.js"></script>
+<script src="/assets/js/planos.js"></script>
+<script src="/assets/js/limites.js"></script>
+<script src="/assets/js/conta.js"></script>
+<script src="/assets/js/checkout.js"></script>
+<script src="/assets/js/ai.js"></script>
+<script src="/assets/js/shell.js"></script>
+<script src="/assets/js/pages/home.js"></script>
+<script src="/assets/js/pages/transactions.js"></script>
+<script src="/assets/js/pages/investments.js"></script>
+<script src="/assets/js/pages/accounts.js"></script>
+<script src="/assets/js/pages/categories.js"></script>
+<script src="/assets/js/pages/budget.js"></script>
+<script src="/assets/js/pages/goals.js"></script>
+<script src="/assets/js/pages/recurring.js"></script>
+<script src="/assets/js/pages/calendar.js"></script>
+<script src="/assets/js/pages/reports.js"></script>
+<script src="/assets/js/pages/uglez.js"></script>
+<script src="/assets/js/pages/precos.js"></script>
+<script src="/assets/js/pages/settings.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

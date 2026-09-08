@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>OAZE — Gestão Financeira</title>
 
+
 <!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -720,22 +721,45 @@ select.input { cursor: pointer; }
 .kpi-value { font-size: 24px; font-weight: 660; letter-spacing: -.026em; line-height: 1.15; }
 .kpi-hero .kpi-value { font-size: 28px; }
 
-/* Destaque em areia com tinta escura. A direção (alta/baixa) continua
-   nas setas e no sinal — a cor nunca carrega o sentido sozinha. */
+/* ------------------------------------------------------------------
+   CARTÃO EM DESTAQUE ("Saldo do mês")
+   ------------------------------------------------------------------
+   Tinta CLARA sobre fundo escuro. Isto já foi o contrário e estava
+   errado: o comentário aqui dizia "destaque em areia com tinta
+   escura", mas --surface-hero é um gradiente azul-escuro
+   (#17394C → #0F2C3D). Tinta #2A1D12 sobre esse fundo dá
+   **1,13:1** — o mínimo da WCAG para texto normal é 4,5:1. O valor
+   mais importante da tela era, na prática, invisível.
+
+   Provável origem: o gradiente mudou de areia para azul em algum
+   momento e as cores de texto ficaram para trás. Nada quebra quando
+   isso acontece — a página monta, o número está lá, e só quem tenta
+   ler percebe.
+
+   As cores abaixo foram MEDIDAS, não escolhidas no olho, contra as
+   três pontas de gradiente que existem (duas no tema claro, uma no
+   escuro). tools/testes/contraste.js refaz a conta e falha se
+   alguém baixar qualquer par.
+
+   A direção (alta/baixa) continua nas setas e no sinal — a cor
+   nunca carrega o sentido sozinha. */
 .kpi-hero {
   background: var(--surface-hero);
   border-color: transparent; border-top-color: transparent;
-  color: #2A1D12;
+  color: #F4F1EA;
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-.kpi-hero .kpi-label { color: rgba(42, 29, 18, .76); }
+.kpi-hero .kpi-label { color: #BCCBD3; }              /* 5,34:1 */
 .kpi-hero .kpi-value,
 .kpi-hero .kpi-value.val-pos,
-.kpi-hero .kpi-value.val-neg { color: #2A1D12; }
-.kpi-hero .kpi-delta, .kpi-hero .muted { color: rgba(42, 29, 18, .76); }
-.kpi-hero .up, .kpi-hero .val-pos { color: #33471F; }
-.kpi-hero .down, .kpi-hero .val-neg { color: #7E2A18; }
-.kpi-hero .badge { background: rgba(42, 29, 18, .16); color: #2A1D12; }
+.kpi-hero .kpi-value.val-neg { color: #F4F1EA; }      /* 7,87:1 */
+.kpi-hero .kpi-delta, .kpi-hero .muted { color: #BCCBD3; }
+.kpi-hero .up, .kpi-hero .val-pos { color: #8BE0B4; } /* 5,68:1 */
+.kpi-hero .down, .kpi-hero .val-neg { color: #FFB09A; } /* 5,05:1 */
+.kpi-hero .badge { background: rgba(255, 255, 255, .18); color: #E9F0F3; }
+/* O foco precisa aparecer sobre o gradiente escuro, onde o anel da
+   cor de acento do tema claro sumiria. */
+.kpi-hero :focus-visible { outline-color: #F4F1EA; }
 .kpi-delta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .up   { color: var(--good-text); font-weight: 600; }
 .down { color: var(--critical); font-weight: 600; }
@@ -758,6 +782,12 @@ select.input { cursor: pointer; }
 /* ------------------------------------------------------------
    9 · GRÁFICOS
    ------------------------------------------------------------ */
+/* 260px é a altura padrão. Os gráficos do Financeiro usavam
+   chart-box-lg (320px) e, somados, faziam a página passar de
+   2.200px — obrigando a rolar muito para chegar na lista de
+   lançamentos, que é o que a maioria vem ver. Um gráfico de
+   categorias não fica mais legível com 60px a mais; ele só empurra
+   o resto para baixo. */
 .chart-box { position: relative; height: 260px; min-width: 0; }
 .chart-box-lg { height: 320px; }
 .chart-box-xl { height: 380px; }
@@ -769,6 +799,28 @@ select.input { cursor: pointer; }
   background: color-mix(in srgb, var(--bg) 70%, transparent);
   border-radius: var(--radius-sm);
 }
+
+/* ------------------------------------------------------------------
+   ESTADO VAZIO DAS ANÁLISES
+   Compacto de propósito. A versão anterior desenhava quatro gráficos
+   zerados em 2.250px de página; este cartão diz a mesma coisa em
+   pouco mais de 160px e ainda oferece a ação que resolve.
+   ------------------------------------------------------------------ */
+.tx-vazio { display: grid; gap: 10px; }
+.tx-vazio h2 { margin: 0; font-size: 15px; }
+.tx-vazio p { margin: 0; max-width: 52ch; font-size: 13px; line-height: 1.55; }
+
+/* O resumo em texto de cada gráfico. Não é legenda nem rodapé
+   decorativo: é a resposta que o gráfico dá, escrita. Serve a quem
+   não interpreta gráficos, a quem usa leitor de tela junto com a
+   tabela equivalente, e a quem abriu a página com o Chart.js
+   bloqueado — nesse caso é a única informação que sobra. */
+.chart-resumo {
+  margin: 10px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-2);
+}
+.chart-resumo[hidden] { display: none; }
 .offline-note {
   position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
   background: var(--n1); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
@@ -2534,20 +2586,97 @@ input[type="checkbox"], input[type="radio"] {
 .cc-corner { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
 .cc-status { position: static; }
 
-/* Indicador da fila offline. Fica escondido quando não há nada
-   pendente — um selo permanente de "tudo certo" vira ruído e
-   ninguém repara quando ele muda. */
+/* Indicador do estado da sincronização.
+   "Sincronizado" aparece por alguns segundos e some; um selo
+   permanente de "tudo certo" vira mobília, e quando ele mudar para
+   erro também ninguém vai reparar. Offline e erro ficam até
+   deixarem de ser verdade. */
 .fila-chip {
-  display: block; margin-bottom: 6px;
-  padding: 6px 10px; border-radius: 10px;
-  font-size: 11px; font-weight: 560; line-height: 1.35;
+  /* flex, e não block: o chip agora carrega texto, um detalhe e um
+     botão. Com display:block eles empilhariam colados e o botão
+     encostaria no texto. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+  margin-bottom: 6px;
+  padding: 7px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 560; line-height: 1.4;
   border: 1px solid var(--glass-line); background: var(--plane-2); color: var(--muted);
 }
+.fila-chip.is-local        { color: var(--muted); }
 .fila-chip.is-offline      { color: var(--ink-2); }
 .fila-chip.is-sincronizando { color: var(--accent); }
+.fila-chip.is-sincronizado { color: var(--good, #1F6B4F); }
 .fila-chip.is-erro {
   color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
   border-color: transparent;
+}
+
+/* O detalhe quebra para a linha inteira: ele é uma frase, não um
+   complemento curto, e disputar a linha com o rótulo deixaria os
+   dois ilegíveis. */
+.fila-detalhe {
+  flex-basis: 100%;
+  font-weight: 400; opacity: .88;
+}
+
+/* Ação dentro do chip. 24px de altura é o mínimo da WCAG 2.2 para
+   alvo de toque -- um "tentar novamente" de 16px de altura existe
+   no papel e não no dedo. */
+.fila-acao {
+  display: inline-flex; align-items: center;
+  min-height: 24px; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid currentColor;
+  background: transparent; color: inherit;
+  font: 600 11px/1 inherit; font-family: inherit;
+  cursor: pointer; text-decoration: none;
+}
+.fila-acao:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+.fila-acao:disabled { opacity: .6; cursor: default; }
+/* O foco precisa aparecer sobre o fundo vermelho do estado de erro,
+   onde um anel da cor do texto sumiria. */
+.fila-chip.is-erro .fila-acao:focus-visible {
+  outline: 2px solid #fff; outline-offset: 2px;
+}
+
+/* ==================================================================
+   FAIXA DE EXCEDENTE DE PLANO
+   ------------------------------------------------------------------
+   Aparece quando há mais itens do que o plano permite — na prática,
+   depois de descer de plano.
+
+   O TOM É DELIBERADO: aviso, não erro. Vermelho aqui diria "algo
+   está quebrado" e produziria exatamente o medo que a faixa existe
+   para evitar — o de ter perdido dados. Nada foi perdido; só a
+   criação parou.
+   ================================================================== */
+.faixa-excedente {
+  margin: 0 0 18px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  padding: 16px 18px;
+}
+.faixa-excedente[hidden] { display: none; }
+.faixa-excedente-corpo { display: grid; gap: 10px; }
+.faixa-excedente-titulo {
+  margin: 0; font-size: 14px; font-weight: 650; color: var(--ink);
+}
+.faixa-excedente-texto {
+  margin: 0; max-width: 72ch;
+  font-size: 13px; line-height: 1.6; color: var(--ink-2);
+}
+/* "Nada foi apagado" é a primeira coisa que precisa ser lida, e a
+   única em negrito: quem só bate o olho tem que sair com essa
+   informação. */
+.faixa-excedente-texto strong { color: var(--ink); }
+
+.faixa-excedente-usos {
+  display: grid; gap: 6px;
+  margin-top: 4px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 720px) {
+  .faixa-excedente { padding: 14px; }
 }
 
 </style>
@@ -2798,6 +2927,13 @@ input[type="checkbox"], input[type="radio"] {
         <p class="page-sub" id="pageSub"></p>
       </div>
 
+      <!-- Excedente de plano. Aparece só quando há mais itens do que
+           o plano permite — normalmente depois de descer de plano.
+           Fica acima do conteúdo porque explica por que a criação
+           está barrada; escondido no rodapé, o usuário só encontraria
+           o bloqueio, nunca o motivo. -->
+      <div class="faixa-excedente" id="faixaExcedente" role="status" hidden></div>
+
     <!-- ─────────── VISÃO GERAL ───────────
          Responde, de cima para baixo: quanto eu tenho, como estou,
          quanto entrou e saiu, o que vem aí, e onde o dinheiro foi.
@@ -2936,30 +3072,54 @@ input[type="checkbox"], input[type="radio"] {
         <div class="col-stack" id="colExpense"></div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
-        </div>
-        <div class="chart-box chart-box-lg"><canvas id="chartTxExpenseCat"></canvas>
-          <div class="empty-overlay" id="txExpCatEmpty" hidden>Nada confirmado ainda.</div>
+      <!-- ============================================================
+           ANÁLISES DO MÊS
+           Cada cartão some inteiro quando não há o que desenhar. Um
+           gráfico zerado não é neutro: ele ocupa 320px dizendo que a
+           resposta é "nada", quando a resposta é "ainda não há
+           pergunta". Antes desta mudança a página tinha 2.250px de
+           altura com zero lançamentos.
+           ============================================================ -->
+
+      <!-- Vazio total: um cartão compacto no lugar dos quatro. -->
+      <div class="card tx-vazio" id="txSemDados" hidden>
+        <h2>Sem movimentações neste mês</h2>
+        <p class="muted">
+          As análises aparecem assim que houver o que analisar: uma receita ou
+          uma despesa já bastam para o primeiro gráfico.
+        </p>
+        <div class="quick-actions">
+          <button class="btn btn-primary" type="button" data-novo="income">Registrar receita</button>
+          <button class="btn btn-outline" type="button" data-novo="expense">Registrar despesa</button>
         </div>
       </div>
 
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartMethodTrend"></canvas></div>
+      <div id="txGraficos">
+        <div class="card" id="cardExpCat">
+          <div class="card-head">
+            <h2 id="txExpCatTitle">Despesas por categoria no mês</h2>
+          </div>
+          <div class="chart-box"><canvas id="chartTxExpenseCat"></canvas></div>
+          <p class="chart-resumo" id="txExpCatResumo"></p>
         </div>
-        <div class="card">
-          <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
-          <div class="chart-box chart-box-lg"><canvas id="chartPlannedVsReal"></canvas></div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
-        <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas>
-          <div class="empty-overlay" id="txIncCatEmpty" hidden>Nada confirmado ainda.</div>
+        <div class="grid grid-2">
+          <div class="card" id="cardSplit">
+            <div class="card-head"><h2 id="txSplitTitle">Débito × Crédito ao longo do ano</h2></div>
+            <div class="chart-box"><canvas id="chartMethodTrend"></canvas></div>
+            <p class="chart-resumo" id="txSplitResumo"></p>
+          </div>
+          <div class="card" id="cardPlanned">
+            <div class="card-head"><h2>Previsto × Realizado no mês</h2></div>
+            <div class="chart-box"><canvas id="chartPlannedVsReal"></canvas></div>
+            <p class="chart-resumo" id="txPlannedResumo"></p>
+          </div>
+        </div>
+
+        <div class="card" id="cardIncCat">
+          <div class="card-head"><h2>Receitas por categoria no mês</h2></div>
+          <div class="chart-box"><canvas id="chartTxIncomeCat"></canvas></div>
+          <p class="chart-resumo" id="txIncCatResumo"></p>
         </div>
       </div>
     </section>
@@ -7593,6 +7753,19 @@ window.SupabaseConfig = {
       }
       if (!ok) return false;
 
+      /* Recorrência é o único limite de plano que não estava sendo
+         aplicado: o teto existia no banco (3 no Grátis) e o
+         Limites.contar já sabia contá-las, mas nada chamava
+         exigirEspaco. Dava para criar quantas quisesse.
+
+         A checagem só vale para NOVAS: editar uma recorrência que já
+         existe não aumenta o total, e barrar aí seria prender a
+         pessoa num registro que ela não pode nem corrigir. */
+      const viraRecorrente = cbRecurring._input.checked;
+      const jaEraRecorrente = !!(editing && editing.recurring);
+      if (viraRecorrente && !jaEraRecorrente &&
+          global.Limites && !Limites.exigirEspaco('recurring_items')) return false;
+
       const base = {
         kind: currentKind,
         description,
@@ -9002,8 +9175,21 @@ window.SupabaseConfig = {
        na sessão anterior. */
     if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
+
+    /* Os três são disparados juntos, e NÃO em sequência.
+       A ordem que importa não é a de chamada: a migração é
+       interativa -- abre um modal e espera a pessoa decidir, o que
+       pode levar minutos ou não acontecer nunca. Nenhum `await`
+       ordena isso.
+
+       Quem garante a ordem é a trava do lado de quem lê:
+       Dados.carregarDoBanco recusa aplicar enquanto houver tarefa na
+       fila ou migração pendente. Assim a regra "o local sobe antes
+       de o servidor descer" vale independentemente de quem chamou
+       quem, e de quando. */
     if (global.Mig && Mig.aoEntrar) Mig.aoEntrar();
     if (global.Fila && Fila.drenar) Fila.drenar();
+    if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco();
   };
 
   /** Chamado pelo backend quando chegam perfis da nuvem. */
@@ -10023,6 +10209,186 @@ window.SupabaseConfig = {
     return { ok: !problemas.length, problemas };
   };
 
+  /* ============================================================
+     4 · LEITURA — o caminho de volta
+     ============================================================
+     Até aqui o Repo era via de mão única: o app escrevia no banco e
+     nunca lia de lá. Isso é o que mantinha o localStorage como
+     fonte da verdade, com o banco de cópia. Invertida a direção, o
+     banco passa a ser o original e o localStorage o cache.
+     ============================================================ */
+
+  /* Quantas linhas por viagem. NÃO É AJUSTE DE DESEMPENHO -- é
+     correção. O PostgREST corta a resposta em 1.000 linhas por
+     padrão e NÃO avisa: uma conta com 1.400 lançamentos leria 1.000
+     e o app mostraria um ano incompleto sem erro nenhum, sem nada no
+     console, com todos os totais errados por um valor plausível.
+     Por isso toda leitura abaixo passa por `todas()`. */
+  const PAGINA = 1000;
+
+  /** Lê uma tabela inteira do espaço, paginando até acabar. */
+  async function todas(sb, tabela, wsId, ordem) {
+    const linhas = [];
+    for (let de = 0; ; de += PAGINA) {
+      let q = sb.from(tabela).select('*')
+        .eq('workspace_id', wsId)
+        .is('deleted_at', null)
+        .range(de, de + PAGINA - 1);
+      /* A ordenação precisa ser TOTAL. Ordenar só por data deixa
+         empates soltos, e o Postgres não promete ordem estável entre
+         eles -- duas leituras devolveriam a mesma lista embaralhada,
+         e a tela pisca a cada sincronização sem nada ter mudado. */
+      if (ordem) ordem.forEach((c) => { q = q.order(c.col, { ascending: c.asc !== false }); });
+      q = q.order('id', { ascending: true });
+
+      const { data, error } = await q;
+      if (error) throw new Error(tabela + ': ' + error.message);
+      linhas.push.apply(linhas, data || []);
+      if (!data || data.length < PAGINA) return linhas;
+    }
+  }
+
+  /* O id que o app usa. Preferimos o legacy_id porque é ele que
+     mantém a identidade estável na ida e na volta: enviarEspaco
+     grava `legacy_id: a.id`, então ler de volta como `a.id` fecha o
+     ciclo e o upsert seguinte encontra a MESMA linha.
+     Linha criada direto no banco não tem legacy_id; aí o UUID vira o
+     id do app, e o próximo envio grava esse UUID em legacy_id. O
+     ciclo se fecha sozinho na primeira volta. */
+  const idApp = (r) => r.legacy_id || r.id;
+
+  /**
+   * Lê um espaço inteiro e devolve no formato que o Store espera.
+   * O inverso exato de Repo.mapa.
+   */
+  Repo.carregarEspaco = async function (wsId, nome, legacyDoEspaco) {
+    const sb = cliente();
+
+    /* Em paralelo: são consultas independentes, e em série o tempo
+       de abrir o app seria a soma de oito viagens em vez da mais
+       lenta delas. */
+    const [contas, cats, cartoes, txs, invs, metas, faturas, orcs] = await Promise.all([
+      todas(sb, 'accounts',      wsId, [{ col: 'name' }]),
+      todas(sb, 'categories',    wsId, [{ col: 'name' }]),
+      todas(sb, 'credit_cards',  wsId, [{ col: 'name' }]),
+      todas(sb, 'transactions',  wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'investments',   wsId, [{ col: 'data', asc: false }]),
+      todas(sb, 'goals',         wsId, [{ col: 'name' }]),
+      todas(sb, 'card_invoices', wsId, [{ col: 'referencia' }]),
+      todas(sb, 'budgets',       wsId, [{ col: 'created_at' }])
+    ]);
+
+    /* UUID → id do app, para reconstruir as ligações. As chaves
+       estrangeiras no banco são UUID; o app cruza por id de texto. */
+    const de = {};
+    [contas, cats, cartoes].forEach((lista) => lista.forEach((r) => { de[r.id] = idApp(r); }));
+
+    const perfil = {
+      id: legacyDoEspaco || wsId,
+      name: nome || 'Pessoal',
+      /* O uuid do espaço não é do formato do app, mas o app nunca o
+         lê -- quem usa é a sincronização, para saber onde gravar. */
+      workspaceId: wsId,
+
+      accounts: contas.map((a) => ({
+        id: idApp(a),
+        name: a.name, bank: a.bank || '', type: a.tipo || 'Conta corrente',
+        color: a.cor, gradient: a.gradiente || null,
+        last4: String(a.last4 || ''),
+        openingBalance: +a.saldo_inicial || 0,
+        openedAt: a.aberta_em, archived: !!a.arquivada
+      })),
+
+      categories: cats.map((c) => ({
+        id: idApp(c), name: c.name,
+        kind: c.kind === 'income' ? 'income' : 'expense',
+        color: c.cor, icon: c.icone || null
+      })),
+
+      cards: cartoes.map((c) => ({
+        id: idApp(c), name: c.name, bank: c.bank || '',
+        color: c.cor, gradient: c.gradiente || null,
+        last4: String(c.last4 || ''),
+        limit: +c.limite || 0,
+        closingDay: +c.dia_fechamento || 1,
+        dueDay: +c.dia_vencimento || 10,
+        accountId: de[c.account_id] || null
+      })),
+
+      transactions: txs.map((t) => ({
+        id: idApp(t), kind: t.kind,
+        description: t.descricao || '',
+        amount: +t.valor || 0,
+        date: t.data,
+        categoryId: de[t.category_id] || null,
+        method: t.metodo === 'card' ? 'card' : 'account',
+        accountId: de[t.account_id] || null,
+        toAccountId: de[t.to_account_id] || null,
+        cardId: de[t.card_id] || null,
+        recurring: !!t.recorrente,
+        recurEnd: t.recorrencia_fim || null,
+        confirmed: t.confirmado !== false,
+        occ: t.ocorrencias && typeof t.ocorrencias === 'object' ? t.ocorrencias : {},
+        installment: t.parcelamento || null,
+        notes: t.notas || '',
+        source: t.origem_registro || 'manual'
+      })),
+
+      investments: invs.map((i) => ({
+        id: idApp(i), name: i.name, type: i.tipo,
+        amount: +i.valor || 0, date: i.data, rate: +i.taxa || 0,
+        currentValue: i.valor_atual == null ? null : +i.valor_atual,
+        accountId: de[i.account_id] || null,
+        notes: i.notas || ''
+      })),
+
+      goals: metas.map((g) => ({
+        id: idApp(g), name: g.name,
+        target: +g.alvo || 0, saved: +g.guardado || 0,
+        deadline: g.prazo || null,
+        color: g.cor, icon: g.icone || 'target',
+        accountId: de[g.account_id] || null
+      })),
+
+      /* Faturas e orçamentos voltam a ser MAPAS, não listas -- é
+         assim que o app os usa, e converter aqui evita que cada
+         página tenha de saber dos dois formatos. */
+      invoices: {},
+      budgets: {}
+    };
+
+    faturas.forEach((f) => {
+      const cartao = de[f.card_id];
+      if (!cartao) return;   /* cartão apagado: a fatura perdeu o dono */
+      perfil.invoices[cartao + '|' + f.referencia] = {
+        paid: f.paga !== false,
+        paidAt: f.paga_em || null,
+        accountId: de[f.account_id] || null,
+        amount: +f.valor || 0
+      };
+    });
+
+    orcs.forEach((o) => {
+      const cat = de[o.category_id];
+      if (cat) perfil.budgets[cat] = +o.limite || 0;
+    });
+
+    return perfil;
+  };
+
+  /** Os espaços do usuário, em ordem estável. */
+  Repo.listarEspacos = async function (userId) {
+    const sb = cliente();
+    const { data, error } = await sb.from('workspaces')
+      .select('id, name, legacy_id, posicao, created_at')
+      .eq('owner_id', userId)
+      .is('deleted_at', null)
+      .order('posicao', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw new Error('espaços: ' + error.message);
+    return data || [];
+  };
+
   global.Repo = Repo;
 })(window);
 
@@ -10116,15 +10482,27 @@ window.SupabaseConfig = {
    * tela: aria-live existe porque a mudança de "sincronizando" para
    * "sincronizado" não tem nenhum outro sinal para quem não vê.
    */
+  /* ---------------- quem quer saber ---------------- */
+
+  const ouvintes = [];
+  Fila.aoMudar = (fn) => { ouvintes.push(fn); };
+  Fila.rotulo = (e) => ROTULO[e] || '';
+
+  /**
+   * Anuncia o estado. NÃO desenha mais nada.
+   *
+   * Antes esta função escrevia direto no #filaBox. Com o dados.js
+   * também tendo o que dizer sobre sincronização, dois módulos
+   * escreveriam no mesmo nó e o último a rodar venceria -- um
+   * "Sincronizado" apagaria um "erro ao trazer do servidor" ou o
+   * contrário, dependendo da ordem, que ninguém controla.
+   * Agora há um desenhista só (estado-sync.js) e duas fontes que o
+   * alimentam. O nome continua `pintar` porque é chamado de doze
+   * lugares aqui dentro; o que ele pinta é o estado, não a tela.
+   */
   Fila.pintar = function () {
-    const alvo = document.getElementById('filaBox');
-    if (!alvo) return;
     const e = Fila.estado();
-    const n = tarefas.length;
-    alvo.setAttribute('aria-live', 'polite');
-    alvo.className = 'fila-chip is-' + e;
-    alvo.textContent = ROTULO[e] + (n && e !== 'sincronizado' ? ' (' + n + ')' : '');
-    alvo.hidden = e === 'sincronizado' && !n;
+    ouvintes.forEach((fn) => { try { fn(e, tarefas.length); } catch (err) { console.error(err); } });
   };
 
   /* ---------------- drenagem ---------------- */
@@ -10204,6 +10582,412 @@ window.SupabaseConfig = {
   };
 
   global.Fila = Fila;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/dados.js ===== */
+/* =============================================================
+   dados.js — quem manda: o banco ou o aparelho
+   -------------------------------------------------------------
+   Este arquivo existe para inverter uma relação. Até aqui o
+   localStorage era o original e o Supabase a cópia — a tabela
+   `dados` tinha como comentário literal "espelho do localStorage".
+   Agora é o contrário: quem tem conta tem o registro oficial no
+   banco, e o localStorage passa a ser
+
+     · cache, para a tela abrir sem esperar a rede
+     · fila do que foi feito offline
+     · recuperação temporária quando a leitura falha
+     · backup da migração
+     · preferências do aparelho (tema, mês em foco)
+
+   Nada disso é "os dados". São a conveniência em volta deles.
+
+   A REGRA QUE NÃO PODE SER QUEBRADA
+   Não se sobrescreve o estado local enquanto houver tarefa na
+   fila. Se alguém editou offline e a fila ainda não drenou, puxar
+   do banco por cima apagaria exatamente o trabalho que ainda não
+   chegou lá — silenciosamente, e sem forma de recuperar.
+   Por isso toda leitura passa por `podeSobrescrever()`, e a
+   resposta negativa dela NUNCA é contornada: primeiro a fila sobe,
+   depois o banco desce.
+
+   POR QUE A TELA ABRE COM O CACHE, E NÃO ESPERANDO O BANCO
+   Esperar a rede para desenhar deixaria o app em branco por um
+   tempo que depende da conexão de quem abre. O cache pinta na
+   hora; o banco chega depois e corrige, se houver o que corrigir.
+   O preço é uma janela curta em que a tela pode estar
+   desatualizada — e é por isso que o estado da sincronização é
+   visível, em vez de escondido.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const Dados = {};
+
+  /* Estados possíveis, e o que cada um significa para quem lê:
+       local          sem conta — os dados vivem só neste aparelho
+       carregando     buscando o registro oficial no banco
+       sincronizado   o que está na tela é o que está no banco
+       offline        sem rede; alterações guardadas para depois
+       sincronizando  drenando a fila
+       erro           falhou; há o que tentar de novo             */
+  let estado = 'local';
+  let ultimoErro = null;
+  let carregando = false;
+  const ouvintes = [];
+
+  function anunciar(novo, erro) {
+    if (novo) estado = novo;
+    ultimoErro = erro || null;
+    ouvintes.forEach((fn) => { try { fn(estado, ultimoErro); } catch (e) { console.error(e); } });
+  }
+
+  Dados.estado = () => estado;
+  Dados.erro = () => ultimoErro;
+  Dados.aoMudar = (fn) => { ouvintes.push(fn); };
+
+  /** Há sessão válida e backend configurado? */
+  function temConta() {
+    return !!(global.Sync && Sync.isConfigured() && Sync.currentUser());
+  }
+
+  /**
+   * A trava. Só é seguro trazer o banco por cima do local quando
+   * não há nada local esperando para subir.
+   */
+  function podeSobrescrever() {
+    /* Duas travas, por dois motivos diferentes.
+
+       A FILA: há edição feita neste aparelho que ainda não subiu.
+       Trazer o banco por cima apagaria justamente ela.
+
+       A MIGRAÇÃO: há dado local que nunca esteve na conta, ou uma
+       migração acontecendo agora e portanto um banco pela metade.
+       Ler dele e aplicar seria substituir o inteiro pelo pedaço. */
+    if (global.Fila && Fila.pendentes() > 0) return false;
+    if (global.Mig && Mig.pendente && Mig.pendente()) return false;
+    return true;
+  }
+
+  /** Qual das duas travas está fechada — para dizer ao usuário. */
+  function motivoDaTrava() {
+    if (global.Mig && Mig.pendente && Mig.pendente()) {
+      return global.Mig.emAndamento && Mig.emAndamento()
+        ? 'A cópia dos seus dados para a conta está em andamento.'
+        : 'Este aparelho tem dados que ainda não foram copiados para a sua conta. ' +
+          'Eles sobem primeiro — nada foi substituído.';
+    }
+    return 'Há alterações deste aparelho ainda não enviadas. ' +
+      'Elas sobem primeiro — seus dados do servidor não foram trazidos por cima.';
+  }
+
+  /* ---------------------------------------------------------------
+     leitura
+     --------------------------------------------------------------- */
+
+  /**
+   * Traz do banco todos os espaços do usuário e substitui o estado.
+   *
+   * @param {object} opcoes
+   *   forcar  — ignora a checagem de "já carregou nesta sessão"
+   */
+  Dados.carregarDoBanco = async function (opcoes) {
+    const op = opcoes || {};
+
+    if (!temConta()) { anunciar('local'); return { ok: false, motivo: 'sem-conta' }; }
+    if (carregando) return { ok: false, motivo: 'em-andamento' };
+
+    if (!navigator.onLine) {
+      anunciar('offline');
+      return { ok: false, motivo: 'offline' };
+    }
+
+    /* A fila primeiro, sempre. Se ela não esvaziar, a leitura não
+       acontece -- e isso não é falha: é a proteção funcionando. */
+    if (!podeSobrescrever()) {
+      anunciar('sincronizando');
+      /* Drenar a fila pode destravar; a migração, não -- ela depende
+         de o usuário decidir. Por isso tenta uma e, se ainda estiver
+         travado, explica QUAL das duas travas é. */
+      if (global.Fila) { try { await Fila.drenar(); } catch (e) { /* o estado abaixo cobre */ } }
+      if (!podeSobrescrever()) {
+        anunciar('erro', motivoDaTrava());
+        return { ok: false, motivo: 'travado' };
+      }
+    }
+
+    carregando = true;
+    anunciar('carregando');
+
+    try {
+      const u = Sync.currentUser();
+      const espacos = await Repo.listarEspacos(u.uid);
+
+      /* Conta sem espaço nenhum no banco: é conta nova, ou conta
+         cujos dados ainda não migraram. Em nenhum dos dois casos se
+         deve esvaziar a tela -- o local é o que existe, e a migração
+         é quem resolve. */
+      if (!espacos.length) {
+        carregando = false;
+        anunciar(op.silencioso ? estado : 'sincronizado');
+        return { ok: true, vazio: true };
+      }
+
+      const perfis = [];
+      for (let i = 0; i < espacos.length; i++) {
+        const e = espacos[i];
+        perfis.push(await Repo.carregarEspaco(e.id, e.name, e.legacy_id));
+      }
+
+      /* Última checagem antes de trocar. A leitura levou tempo; se
+         alguém mexeu no app enquanto ela corria, a fila cresceu e a
+         troca voltou a ser destrutiva. */
+      if (!podeSobrescrever()) {
+        carregando = false;
+        anunciar('erro', 'Algo mudou enquanto os dados chegavam. Nada foi substituído.');
+        return { ok: false, motivo: 'travou-no-meio' };
+      }
+
+      Dados.aplicar(perfis);
+      carregando = false;
+      anunciar('sincronizado');
+      return { ok: true, espacos: perfis.length };
+
+    } catch (e) {
+      carregando = false;
+      console.error('[dados] leitura falhou:', e);
+      /* O cache continua na tela. Dizer "erro" sem apagar nada é o
+         comportamento certo: o usuário vê os dados que tinha, e sabe
+         que eles podem estar velhos. */
+      anunciar('erro', 'Não foi possível trazer seus dados do servidor. ' +
+        'O que está na tela é a última cópia deste aparelho.');
+      return { ok: false, motivo: 'falhou', erro: e };
+    }
+  };
+
+  /**
+   * Troca os perfis do estado pelos que vieram do banco e grava o
+   * cache. Preferências do aparelho — tema, perfil ativo — são
+   * mantidas: elas não pertencem ao banco.
+   */
+  Dados.aplicar = function (perfis) {
+    const st = Store.state();
+    const ativoAntes = st.activeProfileId;
+
+    st.profiles = perfis.map(Store.normalizeProfile);
+
+    /* Se o perfil que estava aberto ainda existe, continua aberto.
+       Trocar a tela por baixo de quem estava trabalhando é
+       desorientador mesmo quando os dados estão certos. */
+    st.activeProfileId = st.profiles.some((p) => p.id === ativoAntes)
+      ? ativoAntes
+      : (st.profiles[0] && st.profiles[0].id);
+
+    /* 'sync-apply' faz o Store gravar o cache e avisar as telas SEM
+       recarimbar updatedAt -- recarimbar faria isto parecer uma
+       edição local e devolveria tudo para a fila, num laço. */
+    Store.commit('sync-apply');
+  };
+
+  /* ---------------------------------------------------------------
+     tentar de novo
+     --------------------------------------------------------------- */
+  Dados.tentarNovamente = function () {
+    if (global.Fila && Fila.pendentes()) Fila.tentarAgora();
+    return Dados.carregarDoBanco({ forcar: true });
+  };
+
+  /* ---------------------------------------------------------------
+     início
+     --------------------------------------------------------------- */
+  Dados.init = function () {
+    /* Sem conta, o estado é 'local' e não há nada a sincronizar. Não
+       é um estado degradado: é um modo de uso legítimo, e a tela
+       diz isso com essas palavras em vez de mostrar um erro. */
+    if (!temConta()) { anunciar('local'); }
+
+    /* A fila e a leitura contam a mesma história para o usuário, mas
+       vêm de dois lugares. Espelhar aqui evita que a interface
+       precise consultar os dois e decidir qual vence. */
+    if (global.Fila && Fila.aoMudar) {
+      Fila.aoMudar(function (e) {
+        if (!temConta()) return;
+        if (e === 'sincronizado' && estado !== 'carregando') anunciar('sincronizado');
+        else if (e !== 'sincronizado') anunciar(e);
+      });
+    }
+
+    global.addEventListener('online', function () {
+      if (!temConta()) return;
+      /* Voltar a ter rede não é motivo para puxar do banco na hora:
+         primeiro sobe o que ficou pendente. carregarDoBanco já faz
+         essa ordem, e chamá-lo aqui é a forma de garanti-la. */
+      Dados.carregarDoBanco({ silencioso: true });
+    });
+
+    global.addEventListener('offline', function () {
+      if (temConta()) anunciar('offline');
+    });
+  };
+
+  global.Dados = Dados;
+})(window);
+
+</script>
+<script>
+/* ===== assets/js/estado-sync.js ===== */
+/* =============================================================
+   estado-sync.js — o único lugar que desenha o estado da sincronia
+   -------------------------------------------------------------
+   Duas fontes contam a mesma história por ângulos diferentes:
+
+     Fila   — o que este aparelho tem para SUBIR
+     Dados  — o que conseguimos DESCER do banco
+
+   Elas podem discordar num instante qualquer (a fila vazia e a
+   leitura falhando, por exemplo), e por isso existe uma regra de
+   precedência escrita num lugar só. Antes cada uma escrevia direto
+   no mesmo elemento e o último a rodar vencia: um "Sincronizado"
+   apagava um "não foi possível trazer do servidor" ou o contrário,
+   conforme a ordem — que ninguém controlava.
+
+   POR QUE "SINCRONIZADO" NÃO FICA NA TELA PARA SEMPRE
+   Um selo permanente dizendo que está tudo bem vira mobília: em
+   duas semanas ninguém enxerga, e quando ele mudar para "erro"
+   também não vão enxergar. Ele aparece por alguns segundos depois
+   de sincronizar e some. Os estados que exigem atenção — offline,
+   erro — ficam até deixarem de ser verdade.
+   ============================================================= */
+(function (global) {
+  'use strict';
+
+  const ES = {};
+  const SEGUNDOS_DO_OK = 4000;
+
+  let sumir = null;
+
+  /* Precedência, do mais grave ao menos. O primeiro que se aplicar
+     é o que aparece. */
+  function decidir() {
+    const eFila = global.Fila ? Fila.estado() : 'sincronizado';
+    const eDados = global.Dados ? Dados.estado() : 'local';
+    const pendentes = global.Fila ? Fila.pendentes() : 0;
+
+    /* Sem conta: não há sincronização para relatar, e chamar isso de
+       estado degradado seria mentira. É um modo de uso. */
+    if (eDados === 'local') {
+      return { chave: 'local', texto: 'Dados só neste aparelho', acao: 'entrar' };
+    }
+
+    /* Offline vem antes de tudo: com a rede caída, qualquer outro
+       diagnóstico é ruído sobre a mesma causa. */
+    if (!navigator.onLine) {
+      return {
+        chave: 'offline',
+        texto: pendentes
+          ? 'Sem conexão — ' + pendentes + (pendentes > 1 ? ' alterações guardadas' : ' alteração guardada')
+          : 'Sem conexão'
+      };
+    }
+
+    if (eFila === 'erro') {
+      return {
+        chave: 'erro',
+        texto: 'Não foi possível enviar ' + pendentes +
+          (pendentes > 1 ? ' alterações' : ' alteração'),
+        detalhe: 'Elas continuam guardadas aqui. Nada foi perdido.',
+        acao: 'tentar'
+      };
+    }
+
+    if (eDados === 'erro') {
+      return {
+        chave: 'erro',
+        texto: 'Não foi possível trazer seus dados',
+        detalhe: Dados.erro() || 'O que está na tela é a última cópia deste aparelho.',
+        acao: 'tentar'
+      };
+    }
+
+    if (eFila === 'sincronizando' || eDados === 'carregando' || eDados === 'sincronizando') {
+      return { chave: 'sincronizando', texto: 'Sincronizando…' };
+    }
+
+    return { chave: 'sincronizado', texto: 'Sincronizado' };
+  }
+
+  ES.pintar = function () {
+    const alvo = document.getElementById('filaBox');
+    if (!alvo) return;
+
+    const s = decidir();
+    clearTimeout(sumir);
+
+    alvo.className = 'fila-chip is-' + s.chave;
+    alvo.hidden = false;
+    alvo.textContent = '';
+
+    /* aria-live no elemento, não criado junto com o texto: uma
+       região viva só é anunciada se já existia na árvore antes de o
+       conteúdo mudar dentro dela. */
+    alvo.setAttribute('aria-live', 'polite');
+    /* Erro não é 'polite': quem está no meio de um lançamento
+       precisa saber que ele não subiu, e 'polite' pode esperar o
+       leitor de tela terminar tudo o que está fazendo. */
+    alvo.setAttribute('role', s.chave === 'erro' ? 'alert' : 'status');
+
+    const txt = document.createElement('span');
+    txt.textContent = s.texto;
+    alvo.appendChild(txt);
+
+    if (s.detalhe) {
+      /* O detalhe é para quem lê a tela e para o leitor de tela --
+         não é tooltip, que não existe no toque nem no teclado. */
+      const det = document.createElement('span');
+      det.className = 'fila-detalhe';
+      det.textContent = s.detalhe;
+      alvo.appendChild(det);
+    }
+
+    if (s.acao === 'tentar') {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'fila-acao';
+      b.textContent = 'Tentar novamente';
+      b.addEventListener('click', function () {
+        b.disabled = true;
+        b.textContent = 'Tentando…';
+        Promise.resolve(Dados.tentarNovamente()).then(ES.pintar, ES.pintar);
+      });
+      alvo.appendChild(b);
+    }
+
+    if (s.acao === 'entrar') {
+      const a = document.createElement('a');
+      a.className = 'fila-acao';
+      a.href = '/entrar?destino=/app';
+      a.textContent = 'Entrar para sincronizar';
+      alvo.appendChild(a);
+    }
+
+    /* Só o estado bom desaparece sozinho. Os outros ficam até
+       deixarem de ser verdade. */
+    if (s.chave === 'sincronizado') {
+      sumir = setTimeout(function () { alvo.hidden = true; }, SEGUNDOS_DO_OK);
+    }
+  };
+
+  ES.init = function () {
+    if (global.Fila && Fila.aoMudar) Fila.aoMudar(ES.pintar);
+    if (global.Dados && Dados.aoMudar) Dados.aoMudar(ES.pintar);
+    global.addEventListener('online', ES.pintar);
+    global.addEventListener('offline', ES.pintar);
+    ES.pintar();
+  };
+
+  global.EstadoSync = ES;
 })(window);
 
 </script>
@@ -10405,10 +11189,18 @@ window.SupabaseConfig = {
     /* Uma segunda checagem, agora que o clique aconteceu: entre
        abrir o modal e clicar, outra aba pode ter migrado. */
     if (await Mig.jaMigrou()) {
+      jaMigrouCache = true;
       UI.closeModal();
       UI.toast('Seus dados já estão na conta.', 'success');
       return;
     }
+
+    /* A partir daqui o banco fica temporariamente incompleto: alguns
+       espaços já subiram e outros não. Ler dele agora e aplicar por
+       cima do aparelho seria substituir o inteiro pelo pedaço. A
+       bandeira fecha essa janela, e o `finally` garante que ela
+       abra de novo mesmo se algo estourar no meio. */
+    rodando = true;
 
     const sb = SupabaseBackend.cliente();
     const painel = el('div', { style: { fontSize: '13.5px', lineHeight: '1.7' } });
@@ -10506,6 +11298,17 @@ window.SupabaseConfig = {
         ]),
         buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
       });
+    } finally {
+      /* Sai da trava aconteça o que acontecer. Sem o finally, uma
+         falha no meio deixaria `rodando` verdadeiro para sempre e o
+         app nunca mais traria dados do servidor -- um defeito que
+         só apareceria depois, longe daqui, como "a sincronização
+         parou de funcionar". */
+      rodando = false;
+      /* Se deu certo, o cache passa a saber; se falhou, volta para a
+         dúvida, que é o lado seguro. */
+      try { jaMigrouCache = await Mig.jaMigrou(); } catch (e) { jaMigrouCache = null; }
+      if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco({ silencioso: true });
     }
   };
 
@@ -10516,7 +11319,48 @@ window.SupabaseConfig = {
    * desenhar antes: um modal que aparece sobre a tela em branco
    * assusta mais do que informa.
    */
+  /* ---------------- 9 · a trava ----------------
+     Enquanto houver dado local que ainda não subiu, o dados.js NÃO
+     pode trazer o banco por cima -- seria apagar exatamente o que a
+     migração existe para salvar.
+
+     Isto é uma trava consultável, e não uma questão de ordem de
+     chamada, porque a migração é INTERATIVA: ela abre um modal e
+     espera a pessoa decidir, o que pode levar minutos ou nunca
+     acontecer. Nenhum `await` resolve isso. O que resolve é o
+     leitor perguntar antes de escrever.
+
+     A primeira versão desta integração tinha um `await Mig.aoEntrar()`
+     no sync.js. Não esperava nada: aoEntrar era um setTimeout que
+     retornava na hora. A leitura corria junto com a migração e podia
+     aplicar um banco pela metade sobre os dados completos do
+     aparelho. */
+  let rodando = false;
+  let jaMigrouCache = null;
+
+  Mig.emAndamento = () => rodando;
+
+  /**
+   * Há dado local que ainda não está na conta?
+   * Síncrono de propósito: quem chama é o caminho da leitura, e uma
+   * checagem assíncrona ali abriria justamente a janela de corrida
+   * que esta função existe para fechar. Por isso o resultado de
+   * jaMigrou() é guardado quando conhecido.
+   */
+  Mig.pendente = function () {
+    if (rodando) return true;
+    if (!Mig.temDadoAntigo()) return false;
+    /* Ainda não sabemos se migrou: na dúvida, PENDENTE. Errar para
+       este lado adia uma leitura; errar para o outro apaga dados. */
+    return jaMigrouCache !== true;
+  };
+
   Mig.aoEntrar = function () {
+    /* Descobre o quanto antes, para que Mig.pendente() pare de
+       responder "na dúvida" assim que houver certeza. */
+    Mig.jaMigrou().then((sim) => { jaMigrouCache = sim; })
+      .catch(() => { /* segue na dúvida, que é o lado seguro */ });
+
     setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
   };
 
@@ -10676,14 +11520,26 @@ window.SupabaseConfig = {
 
   function barra() {
     const total = ETAPAS.length - 1;   // "fim" não é trabalho
+
+    /* UM NÚMERO SÓ, CALCULADO UMA VEZ.
+       Antes o texto dizia "Etapa 1 de 7" e o aria-label dizia
+       "Etapa 1 de 8": o label somava 'fim', que o texto exclui de
+       propósito. Quem enxerga via 7, quem usa leitor de tela ouvia
+       8 -- a mesma tela contando duas histórias, e a discordância
+       vinha de a frase estar escrita duas vezes.
+       Agora existe uma frase só, e as duas leituras não têm como
+       divergir de novo. */
+    const passo = Math.min(indice + 1, total);
+    const rotulo = 'Etapa ' + passo + ' de ' + total;
     const pct = Math.round((indice / total) * 100);
+
     return el('div', { class: 'ob-progresso' }, [
       el('div', {
         class: 'ob-barra', role: 'progressbar',
         'aria-valuenow': String(indice), 'aria-valuemin': '0', 'aria-valuemax': String(total),
-        'aria-label': 'Etapa ' + (indice + 1) + ' de ' + (total + 1)
+        'aria-label': rotulo
       }, el('i', { style: { width: pct + '%' } })),
-      el('p', { class: 'ob-passo', text: 'Etapa ' + Math.min(indice + 1, total) + ' de ' + total })
+      el('p', { class: 'ob-passo', text: rotulo })
     ]);
   }
 
@@ -11603,6 +12459,123 @@ window.SupabaseConfig = {
     ]);
   };
 
+  /* ============================================================
+     EXCEDENTE — o que sobra depois de descer de plano
+     ------------------------------------------------------------
+     Quem tinha 8 contas no Basic e volta para o Grátis, que permite
+     2, continua com 8. NADA É APAGADO — nem aqui, nem em lugar
+     nenhum do código. Apagar seria a única ação irreversível de
+     toda a mudança de plano, e não há motivo para ela: o custo de
+     manter é algumas linhas no banco.
+
+     O QUE MUDA
+     Só a criação, que já estava barrada por exigirEspaco(). O que
+     existe continua visível, continua entrando nos relatórios de
+     períodos passados, continua exportável e continua editável --
+     "organizar" inclui poder editar e apagar o que se escolher.
+
+     QUAL É O EXCEDENTE, E POR QUE ESSA REGRA
+     Os ÚLTIMOS da lista. A ordem do array é a de criação, então o
+     excedente é o que foi criado mais tarde -- provavelmente já sob
+     o plano maior. Marcar os PRIMEIROS seria pior: apontaria como
+     sobra justamente a conta principal, criada no primeiro dia.
+
+     Isto é uma indicação, não uma trava: a pessoa escolhe o que
+     manter ativo, sem prazo, e o OAZE nunca decide por ela.
+     ============================================================ */
+
+  const TIPOS_COM_EXCEDENTE = ['workspaces', 'accounts', 'credit_cards',
+    'custom_categories', 'budgets', 'goals', 'recurring_items'];
+
+  /** Quantos passam do teto. Zero quando cabe ou quando é ilimitado. */
+  Limites.quantosExcedem = function (tipo) {
+    const teto = Limites.limite(tipo);
+    if (teto === null || teto === undefined) return 0;
+    return Math.max(0, Limites.contar(tipo) - teto);
+  };
+
+  /** Os ids que estão além do teto, ou [] quando não há excedente. */
+  Limites.idsExcedentes = function (tipo) {
+    const sobra = Limites.quantosExcedem(tipo);
+    if (!sobra) return [];
+    const p = Store.profile();
+    if (!p) return [];
+
+    let lista = [];
+    if (tipo === 'accounts') lista = (p.accounts || []).map((x) => x.id);
+    else if (tipo === 'credit_cards') lista = (p.cards || []).map((x) => x.id);
+    else if (tipo === 'goals') lista = (p.goals || []).map((x) => x.id);
+    else if (tipo === 'workspaces') lista = Store.state().profiles.map((x) => x.id);
+    else if (tipo === 'budgets') lista = Object.keys(p.budgets || {});
+    else if (tipo === 'custom_categories') {
+      const padrao = new Set(Store.CATEGORIAS_PADRAO || []);
+      lista = (p.categories || []).filter((c) => !padrao.has(c.name)).map((c) => c.id);
+    } else if (tipo === 'recurring_items') {
+      lista = (p.transactions || []).filter((t) => t.recurring).map((t) => t.id);
+    }
+    return lista.slice(-sobra);
+  };
+
+  /** Um resumo de tudo que excede, para a faixa de aviso. */
+  Limites.resumoExcedente = function () {
+    const itens = [];
+    TIPOS_COM_EXCEDENTE.forEach((tipo) => {
+      const sobra = Limites.quantosExcedem(tipo);
+      if (!sobra) return;
+      const nome = NOMES[tipo] || ['item', 'itens'];
+      itens.push({
+        tipo: tipo,
+        sobra: sobra,
+        texto: sobra + ' ' + (sobra === 1 ? nome[0] : nome[1]),
+        usado: Limites.contar(tipo),
+        limite: Limites.limite(tipo)
+      });
+    });
+    return itens;
+  };
+
+  Limites.temExcedente = () => Limites.resumoExcedente().length > 0;
+
+  /**
+   * Desenha a faixa de excedente. Chamada a cada render de página,
+   * porque o excedente muda quando o usuário apaga algo.
+   *
+   * O TEXTO IMPORTA MAIS QUE A FAIXA. Alguém que desceu de plano e
+   * encontra a criação barrada precisa saber três coisas, nesta
+   * ordem: que nada foi apagado, quanto está além do limite, e que
+   * a escolha do que manter é dele. Uma faixa que só dissesse
+   * "limite excedido" produziria exatamente o medo que ela deveria
+   * evitar — o de ter perdido alguma coisa.
+   */
+  Limites.pintarExcedente = function () {
+    const alvo = document.getElementById('faixaExcedente');
+    if (!alvo) return;
+
+    const itens = Limites.resumoExcedente();
+    if (!itens.length) { alvo.hidden = true; U.clear(alvo); return; }
+
+    const plano = Planos.get(direitos.plano);
+    const lista = itens.map((i) => i.texto).join(', ')
+      .replace(/, ([^,]*)$/, ' e $1');   /* "a, b e c", não "a, b, c" */
+
+    U.clear(alvo);
+    alvo.hidden = false;
+    alvo.appendChild(el('div', { class: 'faixa-excedente-corpo' }, [
+      el('p', { class: 'faixa-excedente-titulo',
+        text: 'Você tem mais itens do que o plano ' + (plano ? plano.nome : direitos.plano) + ' permite' }),
+      el('p', { class: 'faixa-excedente-texto' }, [
+        el('strong', { text: 'Nada foi apagado. ' }),
+        el('span', { text: 'Estão além do limite: ' + lista + '. ' +
+          'Tudo continua visível, entra nos relatórios e pode ser exportado — ' +
+          'mas não dá para criar novos até ficar dentro do limite. ' +
+          'Você escolhe o que manter ativo, sem prazo.' })
+      ]),
+      el('div', { class: 'faixa-excedente-usos' },
+        itens.map((i) => Limites.barra(
+          (NOMES[i.tipo] || ['item', 'itens'])[1], i.usado, i.limite)))
+    ]));
+  };
+
   /* ---------------- ciclo ---------------- */
 
   Limites.aoEntrar = async function () {
@@ -12117,22 +13090,32 @@ window.SupabaseConfig = {
   const PROVEDORES = {
     mercadopago: {
       nome: 'Mercado Pago',
-      /* Precisa do id do preço criado no painel do provedor. */
-      pronto: () => false,
       faltando: [
-        'Criar os quatro preços no painel do Mercado Pago (Basic e Pro, mensal e anual)',
-        'Preencher external_price_id em plan_prices com os ids gerados lá',
-        'Configurar MERCADOPAGO_ACCESS_TOKEN nos segredos do Supabase',
-        'Publicar a Edge Function de checkout e a de webhook',
-        'Cadastrar a URL do webhook no painel do provedor'
+        'Publicar as Edge Functions oaze-checkout, oaze-mp-webhook e oaze-assinatura',
+        'Configurar MERCADOPAGO_ACCESS_TOKEN e MERCADOPAGO_WEBHOOK_SECRET nos segredos do Supabase',
+        'Cadastrar a URL do webhook no painel do Mercado Pago',
+        'Testar em sandbox antes de trocar para as credenciais de produção'
       ]
     }
   };
 
   const PROVEDOR = 'mercadopago';
-
   Checkout.provedor = () => PROVEDORES[PROVEDOR];
-  Checkout.pronto = () => PROVEDORES[PROVEDOR].pronto();
+
+  /* QUEM SABE SE O CHECKOUT ESTÁ PRONTO É O SERVIDOR.
+     Isto já foi `pronto: () => false` — uma constante no código do
+     navegador. Constante mente das duas formas: fica `false` depois
+     de tudo pronto (e o botão continua recusando), ou vira `true`
+     antes de o segredo existir (e o botão abre uma tela de
+     pagamento que não cobra).
+
+     Agora a tentativa é feita, e a Edge Function responde
+     'nao_configurado' quando falta credencial. A verdade fica num
+     lugar só, e é o lugar que tem como saber. */
+  /* Não existe mais. Deixar um stub que devolve `false` seria pior
+     do que remover: quem chamasse continuaria recebendo uma resposta
+     plausível e errada para sempre. Sem o método, o erro aparece na
+     primeira execução — que é onde ele deve aparecer. */
 
   /**
    * Inicia a assinatura. Enquanto o provedor não está conectado,
@@ -12144,7 +13127,25 @@ window.SupabaseConfig = {
     const prov = Checkout.provedor();
     const centavos = Planos.preco(plano, ciclo);
 
-    if (!Checkout.pronto()) {
+    /* ---- pergunta ao servidor ----
+       O navegador manda plano e ciclo. NÃO manda preço: quem sabe
+       quanto custa é o banco, e um frontend que envia valor é um
+       frontend que decide quanto você recebe. */
+    let r = null;
+    let indisponivel = false;
+    try {
+      r = await Conta.chamarFuncao('oaze-checkout', { plano: planoId, ciclo });
+      /* 'nao_configurado' vem da própria função quando falta a
+         credencial do provedor. Não é erro do usuário nem defeito
+         do app — é instalação incompleta, e a tela diz isso. */
+      if (r && r.erro === 'nao_configurado') indisponivel = true;
+    } catch (e) {
+      /* A função ainda não publicada dá 404 aqui. Mesmo caso:
+         instalação incompleta, não falha de uso. */
+      indisponivel = true;
+    }
+
+    if (indisponivel) {
       UI.openModal({
         title: 'Assinatura ainda não disponível',
         wide: true,
@@ -12177,17 +13178,37 @@ window.SupabaseConfig = {
       return;
     }
 
-    /* ---- daqui para baixo, só roda quando o provedor estiver
-       conectado. O navegador manda plano e ciclo; o valor é
-       decidido no servidor. ---- */
-    try {
-      const r = await Conta.chamarFuncao('oaze-checkout', { plano: planoId, ciclo });
-      if (r.erro) { UI.toast(r.mensagem || 'Não foi possível iniciar a assinatura.', 'error'); return; }
-      if (r.url) { location.href = r.url; return; }
-      UI.toast('O provedor não devolveu um endereço de pagamento.', 'error');
-    } catch (e) {
-      UI.toast('Falha ao falar com o servidor: ' + e.message, 'error');
+    /* ---- a resposta do servidor ---- */
+    if (!r || r.erro) {
+      UI.toast((r && r.mensagem) || 'Não foi possível iniciar a assinatura.', 'error');
+      return;
     }
+
+    /* CONFERÊNCIA, não cobrança. O valor que a tela mostrou tem de
+       ser o que o servidor calculou. Divergir significa que a tabela
+       de preços do navegador está velha — e mandar a pessoa para uma
+       cobrança diferente da que ela leu é o tipo de surpresa que
+       vira estorno. Parar aqui custa um clique; não parar custa
+       confiança. */
+    if (typeof r.centavos === 'number' && r.centavos !== centavos) {
+      console.warn('[checkout] preço divergente: tela ' + centavos + ', servidor ' + r.centavos);
+      UI.openModal({
+        title: 'O preço mudou',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('p', { text: 'O valor desta página está desatualizado. Recarregue e confira antes de continuar.' }),
+          el('p', { class: 'hint', style: { marginTop: '8px' },
+            text: 'Nesta tela: ' + Planos.moeda(centavos) + ' · no servidor: ' + Planos.moeda(r.centavos) })
+        ]),
+        buttons: [
+          { label: 'Recarregar', class: 'btn-primary', onClick: () => location.reload() },
+          { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal }
+        ]
+      });
+      return;
+    }
+
+    if (r.url) { location.href = r.url; return; }
+    UI.toast('O provedor não devolveu um endereço de pagamento.', 'error');
   };
 
   /**
@@ -12218,15 +13239,28 @@ window.SupabaseConfig = {
         {
           label: 'Cancelar mesmo assim', class: 'btn-outline danger',
           onClick: async () => {
-            if (!Checkout.pronto()) {
+            /* oaze-assinatura, e não oaze-checkout: cancelar não
+               cobra nada, então não passa pelo caminho de cobrança.
+               Antes apontava para a função errada — o cancelamento
+               teria recebido "ação desconhecida". */
+            let r;
+            try {
+              r = await Conta.chamarFuncao('oaze-assinatura', { acao: 'cancelar' });
+            } catch (e) {
               UI.closeModal();
-              UI.toast('O cancelamento passa pelo provedor, que ainda não está conectado.', 'error', 7000);
+              UI.toast('O cancelamento ainda não está disponível neste ambiente. Nada foi alterado.', 'error', 7000);
               return;
             }
-            const r = await Conta.chamarFuncao('oaze-checkout', { acao: 'cancelar' });
             UI.closeModal();
-            UI.toast(r.erro ? (r.mensagem || 'Falha ao cancelar.') : 'Cancelamento agendado para o fim do período.',
-              r.erro ? 'error' : 'success');
+            /* A MENSAGEM VEM DO SERVIDOR. Ele sabe até que dia o
+               acesso continua; a tela não. Escrever aqui "cancelado"
+               sem a data faria a pessoa achar que perdeu o acesso na
+               hora — e a maioria dos pedidos de suporte depois de um
+               cancelamento é exatamente essa dúvida. */
+            UI.toast(r && r.erro
+              ? (r.mensagem || 'Falha ao cancelar.')
+              : (r && r.mensagem) || 'Cancelamento agendado para o fim do período.',
+              r && r.erro ? 'error' : 'success', 9000);
             if (global.Limites) Limites.carregar().then(() => Cfg.render());
           }
         }
@@ -13936,6 +14970,43 @@ window.SupabaseConfig = {
 
   /* ---------------- gráficos ---------------- */
 
+  /* Mostra ou esconde um cartão inteiro, e destrói o gráfico dentro
+     dele. Esconder sem destruir deixa o Chart.js segurando um canvas
+     invisível: ele continua respondendo a redimensionamento e volta
+     com o desenho antigo quando o cartão reaparece. */
+  /* Os botões do estado vazio. Ligados uma vez, na delegação: o
+     cartão aparece e some conforme o mês, e religar a cada render
+     empilharia ouvintes até o clique abrir cinco formulários. */
+  let vazioLigado = false;
+  function ligarVazio() {
+    if (vazioLigado) return;
+    const box = document.getElementById('txSemDados');
+    if (!box) return;
+    vazioLigado = true;
+    box.addEventListener('click', function (ev) {
+      const b = ev.target.closest && ev.target.closest('[data-novo]');
+      if (b) Forms.openTransaction(b.dataset.novo);
+    });
+  }
+
+  function cartao(id, mostrar, canvasId) {
+    const n = document.getElementById(id);
+    if (n) n.hidden = !mostrar;
+    if (!mostrar && canvasId) Charts.destroy(canvasId);
+    return mostrar;
+  }
+
+  /* O resumo em texto é para TODO MUNDO, não só para leitor de tela.
+     O Charts já gera uma tabela sr-only equivalente; isto é a frase
+     que responde a pergunta do gráfico sem precisar interpretá-lo —
+     e é a única coisa que sobra se o Chart.js não carregar. */
+  function resumo(id, texto) {
+    const n = document.getElementById(id);
+    if (!n) return;
+    n.textContent = texto || '';
+    n.hidden = !texto;
+  }
+
   function renderCharts(ym, t) {
     const from = U.monthStart(ym), to = U.monthEnd(ym);
     const th = Charts.theme();
@@ -13944,11 +15015,30 @@ window.SupabaseConfig = {
     const corDebito = th.salvia;
     const corCredito = th.terracota;
 
+    /* ---- há alguma coisa neste mês? ----
+       Se não há receita nem despesa, os quatro gráficos dariam a
+       mesma resposta vazia de quatro maneiras diferentes, em 2.250px
+       de página. Um cartão compacto diz a mesma coisa em 160px e
+       ainda oferece o que fazer a respeito. */
+    const temMes = (t.income + t.expense + t.plannedIncome + t.plannedExpense) > 0;
+    const semDados = document.getElementById('txSemDados');
+    const graficos = document.getElementById('txGraficos');
+    ligarVazio();
+    if (semDados) semDados.hidden = temMes;
+    if (graficos) graficos.hidden = !temMes;
+
+    if (!temMes) {
+      /* Destruir, e não só esconder: um Chart.js vivo num container
+         escondido volta com o desenho velho quando reaparece. */
+      ['chartTxExpenseCat', 'chartMethodTrend', 'chartPlannedVsReal', 'chartTxIncomeCat']
+        .forEach(Charts.destroy);
+      return;
+    }
+
     /* despesas por categoria, empilhadas por forma de pagamento */
     const exp = Calc.expenseTotalsByMethod(from, to).slice(0, 10);
-    UI.toggleEmptyOverlay('txExpCatEmpty', exp.length === 0);
     const title = document.getElementById('txExpCatTitle');
-    if (exp.length) {
+    if (cartao('cardExpCat', exp.length > 0, 'chartTxExpenseCat')) {
       const soDebito = exp.every((r) => r.credit === 0);
       const soCredito = exp.every((r) => r.debit === 0);
       title.textContent = soDebito ? 'Despesas por categoria — tudo em débito'
@@ -13958,9 +15048,17 @@ window.SupabaseConfig = {
         { label: 'Débito (conta)', color: corDebito, data: exp.map((r) => r.debit) },
         { label: 'Crédito (cartão)', color: corCredito, data: exp.map((r) => r.credit) }
       ]);
+
+      /* `total` e `pct` já vêm do Calc — refazer a conta aqui seria
+         um segundo lugar para o número divergir. */
+      const maior = exp[0];
+      resumo('txExpCatResumo',
+        `${exp.length} categoria${exp.length > 1 ? 's' : ''} com despesa. ` +
+        `A maior é ${maior.name}, com ${U.fmtBRL(maior.total)} — ` +
+        `${U.fmtPct(maior.pct, 0)} do total do mês.`);
     } else {
       title.textContent = 'Despesas por categoria no mês';
-      Charts.destroy('chartTxExpenseCat');
+      resumo('txExpCatResumo', '');
     }
 
     /* débito × crédito mês a mês no ano — mostra se o cartão está ganhando peso */
@@ -13969,26 +15067,61 @@ window.SupabaseConfig = {
     const totCred = U.sum(serie, (r) => r.expenseCredit);
     const totDeb = U.sum(serie, (r) => r.expenseDebit);
     const soma = U.round2(totCred + totDeb);
-    document.getElementById('txSplitTitle').textContent = soma > 0
-      ? `Débito × Crédito em ${ano} — ${U.fmtPct((totCred / soma) * 100, 0)} no cartão`
-      : `Débito × Crédito em ${ano}`;
-    Charts.lines('chartMethodTrend', serie.map((r) => r.label), [
-      { label: 'Débito (conta)', color: corDebito, data: serie.map((r) => r.expenseDebit) },
-      { label: 'Crédito (cartão)', color: corCredito, data: serie.map((r) => r.expenseCredit), pointStyle: 'rectRot' }
-    ], { markers: true });
+
+    /* Este era o pior dos quatro: desenhava doze meses de linha reta
+       no zero, em 320px, sempre — inclusive numa conta criada hoje. */
+    if (cartao('cardSplit', soma > 0, 'chartMethodTrend')) {
+      document.getElementById('txSplitTitle').textContent =
+        `Débito × Crédito em ${ano} — ${U.fmtPct((totCred / soma) * 100, 0)} no cartão`;
+      Charts.lines('chartMethodTrend', serie.map((r) => r.label), [
+        { label: 'Débito (conta)', color: corDebito, data: serie.map((r) => r.expenseDebit) },
+        { label: 'Crédito (cartão)', color: corCredito, data: serie.map((r) => r.expenseCredit), pointStyle: 'rectRot' }
+      ], { markers: true });
+
+      const meses = serie.filter((r) => (r.expenseDebit + r.expenseCredit) > 0).length;
+      resumo('txSplitResumo',
+        `${meses} ${meses > 1 ? 'meses' : 'mês'} com despesa em ${ano}. ` +
+        `No acumulado, ${U.fmtBRL(totCred)} no cartão e ${U.fmtBRL(totDeb)} em débito.`);
+    } else {
+      resumo('txSplitResumo', '');
+    }
 
     const inc = Calc.categoryTotals('income', from, to);
-    UI.toggleEmptyOverlay('txIncCatEmpty', inc.length === 0);
-    if (inc.length) Charts.rankedBars('chartTxIncomeCat', inc.slice(0, 10));
-    else Charts.destroy('chartTxIncomeCat');
+    if (cartao('cardIncCat', inc.length > 0, 'chartTxIncomeCat')) {
+      Charts.rankedBars('chartTxIncomeCat', inc.slice(0, 10));
+      /* `.total`, e não `.value`: o Calc devolve total/count/pct.
+         Escrito errado, a frase saía "A maior é Salário, com
+         R$ 0,00" — sem erro nenhum, porque undefined vira 0 no
+         formatador. Uma frase confiante e falsa é pior do que
+         frase nenhuma. */
+      resumo('txIncCatResumo',
+        `${inc.length} categoria${inc.length > 1 ? 's' : ''} com receita. ` +
+        `A maior é ${inc[0].name}, com ${U.fmtBRL(inc[0].total)}.`);
+    } else {
+      resumo('txIncCatResumo', '');
+    }
 
-    // Previsto em tom neutro (contexto) · Realizado colorido por natureza
-    Charts.groupedBars('chartPlannedVsReal',
-      ['Receitas', 'Despesas'],
-      [
-        { label: 'Previsto (tudo lançado)', color: Charts.hexA(th.muted, 0.45), data: [t.plannedIncome, t.plannedExpense] },
-        { label: 'Realizado (confirmado)', color: [th.income, th.expense], data: [t.income, t.expense] }
-      ]);
+    /* Previsto × Realizado só faz sentido quando há previsto OU
+       realizado. Com tudo em zero, as quatro barras têm altura zero
+       e o gráfico vira uma moldura vazia. */
+    const temPrevRea = (t.plannedIncome + t.plannedExpense + t.income + t.expense) > 0;
+    if (cartao('cardPlanned', temPrevRea, 'chartPlannedVsReal')) {
+      // Previsto em tom neutro (contexto) · Realizado colorido por natureza
+      Charts.groupedBars('chartPlannedVsReal',
+        ['Receitas', 'Despesas'],
+        [
+          { label: 'Previsto (tudo lançado)', color: Charts.hexA(th.muted, 0.45), data: [t.plannedIncome, t.plannedExpense] },
+          { label: 'Realizado (confirmado)', color: [th.income, th.expense], data: [t.income, t.expense] }
+        ]);
+
+      const falta = U.round2(t.plannedExpense - t.expense);
+      resumo('txPlannedResumo',
+        falta > 0
+          ? `Faltam ${U.fmtBRL(falta)} em despesas para confirmar.`
+          : 'Tudo o que estava lançado já foi confirmado.');
+    } else {
+      resumo('txPlannedResumo', '');
+    }
   }
 
   global.Tx = Tx;
@@ -15978,9 +17111,23 @@ window.SupabaseConfig = {
     const destino = document.getElementById('syncBoxSettings');
     if (origem && destino) destino.appendChild(el('span', { class: 'muted', text: origem.textContent.trim() || '—' }));
 
+    /* A frase muda conforme a situação REAL da conta, e não é
+       decorativa: ela é a diferença entre "se eu limpar o navegador,
+       perco tudo" e "não perco". Antes dizia sempre que a
+       sincronização era uma cópia e o navegador o original -- o que
+       deixou de ser verdade quando o banco virou a fonte, e
+       continuar dizendo faria alguém tratar como descartável o
+       único lugar onde os dados dele existem. */
+    const comConta = global.Dados && Dados.estado() !== 'local';
     box.appendChild(linha(
       'Onde os dados ficam',
-      'Sempre neste navegador (localStorage). A sincronização é uma cópia, não o original.',
+      comConta
+        ? 'No servidor, na sua conta — é lá que eles existem de verdade e é de lá que ' +
+          'vêm ao abrir em qualquer aparelho. Este navegador guarda uma cópia local para ' +
+          'a tela abrir rápido e para você continuar trabalhando sem internet.'
+        : 'Só neste navegador (localStorage). Não há cópia em lugar nenhum: limpar os ' +
+          'dados do site, trocar de aparelho ou usar uma janela anônima apaga tudo. ' +
+          'Com uma conta, eles passam a viver no servidor.',
       el('span', { class: 'muted', text: Store.storageOK ? 'Armazenamento disponível' : 'BLOQUEADO neste navegador' })
     ));
   }
@@ -16282,12 +17429,24 @@ window.SupabaseConfig = {
      precisa continuar funcionando nos dois. Por isso a troca de
      URL é condicional; a navegação nunca depende dela.
      ============================================================ */
+  /* TODAS SOB /app, E ISSO NÃO É COSMÉTICO.
+     Quando o site público tomou a raiz, estas rotas ficaram na
+     mesma vizinhança que /precos, /entrar e /termos -- e o servidor
+     não tem como adivinhar que /orcamento é do aplicativo e
+     /privacidade não é. Na prática todas passaram a dar 404: o
+     .htaccess mapeia rotas públicas por nome e manda o resto para o
+     404, então /financeiro simplesmente não existia mais.
+
+     Com o prefixo, uma regra só (`^app(/.*)?$`) cobre o aplicativo
+     inteiro, hoje e nas páginas que ainda não existem. E os dois
+     lados param de disputar o mesmo espaço de nomes: /precos é a
+     página pública de preços; a de dentro do app é /app/planos. */
   App.URLS = {
-    home: '/', transactions: '/financeiro', accounts: '/carteira',
-    budget: '/orcamento', goals: '/metas', recurring: '/recorrencias',
-    calendar: '/calendario', investments: '/investimentos',
-    reports: '/analises', uglez: '/uglez', categories: '/categorias',
-    settings: '/configuracoes', precos: '/precos'
+    home: '/app', transactions: '/app/financeiro', accounts: '/app/carteira',
+    budget: '/app/orcamento', goals: '/app/metas', recurring: '/app/recorrencias',
+    calendar: '/app/calendario', investments: '/app/investimentos',
+    reports: '/app/analises', uglez: '/app/uglez', categories: '/app/categorias',
+    settings: '/app/configuracoes', precos: '/app/planos'
   };
 
   const PAGINA_DE = Object.keys(App.URLS)
@@ -16390,6 +17549,10 @@ window.SupabaseConfig = {
       UI.toast('Algo deu errado ao desenhar esta página. Veja o console.', 'error');
     }
     if (global.Shell && Shell.renderNotifCount) Shell.renderNotifCount();
+    /* A cada render, não só na entrada: o excedente muda quando a
+       pessoa apaga uma conta para voltar a caber, e uma faixa que
+       continua acusando o que já foi resolvido treina a ignorá-la. */
+    if (global.Limites && Limites.pintarExcedente) Limites.pintarExcedente();
     renderFooter();
   };
 
@@ -16740,6 +17903,11 @@ window.SupabaseConfig = {
     passo('conta', () => Conta.init());
     passo('limites', () => Limites.carregar());
     passo('fila offline', () => Fila.init());
+    /* Dados antes de Sync: é o Sync que avisa da entrada, e quando
+       avisar o Dados já precisa estar escutando. Na ordem inversa a
+       primeira sessão da sessão passaria despercebida. */
+    passo('fonte dos dados', () => Dados.init());
+    passo('estado da sincronia', () => EstadoSync.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
     passo('controles', () => Shell.init());

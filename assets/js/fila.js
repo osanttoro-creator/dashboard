@@ -85,15 +85,27 @@
    * tela: aria-live existe porque a mudança de "sincronizando" para
    * "sincronizado" não tem nenhum outro sinal para quem não vê.
    */
+  /* ---------------- quem quer saber ---------------- */
+
+  const ouvintes = [];
+  Fila.aoMudar = (fn) => { ouvintes.push(fn); };
+  Fila.rotulo = (e) => ROTULO[e] || '';
+
+  /**
+   * Anuncia o estado. NÃO desenha mais nada.
+   *
+   * Antes esta função escrevia direto no #filaBox. Com o dados.js
+   * também tendo o que dizer sobre sincronização, dois módulos
+   * escreveriam no mesmo nó e o último a rodar venceria -- um
+   * "Sincronizado" apagaria um "erro ao trazer do servidor" ou o
+   * contrário, dependendo da ordem, que ninguém controla.
+   * Agora há um desenhista só (estado-sync.js) e duas fontes que o
+   * alimentam. O nome continua `pintar` porque é chamado de doze
+   * lugares aqui dentro; o que ele pinta é o estado, não a tela.
+   */
   Fila.pintar = function () {
-    const alvo = document.getElementById('filaBox');
-    if (!alvo) return;
     const e = Fila.estado();
-    const n = tarefas.length;
-    alvo.setAttribute('aria-live', 'polite');
-    alvo.className = 'fila-chip is-' + e;
-    alvo.textContent = ROTULO[e] + (n && e !== 'sincronizado' ? ' (' + n + ')' : '');
-    alvo.hidden = e === 'sincronizado' && !n;
+    ouvintes.forEach((fn) => { try { fn(e, tarefas.length); } catch (err) { console.error(err); } });
   };
 
   /* ---------------- drenagem ---------------- */

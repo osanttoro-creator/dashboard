@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entrar — OAZE</title>
+<meta name="description" content="Entre na sua conta do OAZE para acessar seu painel financeiro em qualquer aparelho.">
+<link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/entrar">
+<!-- Página de sessão: não há nada aqui que faça sentido num
+     resultado de busca, e indexá-la só canibaliza a landing. -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#080D18">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
+        <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      OAZE
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/cadastro">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Entrar</h1>
+      <p>Seus dados sincronizados em qualquer aparelho.</p>
+
+      <!-- A região existe desde o carregamento, vazia e escondida.
+           Criá-la junto com o texto faria o leitor de tela não
+           anunciar nada: só é anunciado o que muda dentro de uma
+           região que já estava na árvore. -->
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-entrar" novalidate>
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" autocomplete="email"
+                 required inputmode="email" placeholder="voce@exemplo.com"
+                 aria-describedby="email-erro">
+          <p class="erro" id="email-erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <div class="linha-campo">
+            <label for="senha">Senha</label>
+            <a href="/recuperar-senha">Esqueci a senha</a>
+          </div>
+          <input type="password" id="senha" name="senha" autocomplete="current-password"
+                 required placeholder="Sua senha" aria-describedby="senha-erro">
+          <p class="erro" id="senha-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-entrar">Entrar</button>
+      </form>
+
+      <div class="separa">ou</div>
+
+      <form id="form-magico" novalidate>
+        <button class="btn btn-fantasma btn-largo" type="submit" id="botao-magico">
+          Receber um link por e-mail
+        </button>
+        <p class="dica" style="text-align:center;margin-top:10px;color:var(--texto-3);font-size:.84rem">
+          Entra sem senha. O link vale por uma hora e serve uma vez só.
+        </p>
+      </form>
+
+      <p class="pe-do-painel">
+        Ainda não tem conta? <a href="/cadastro">Criar conta grátis</a>
+      </p>
+    </div>
+
+    <p class="legalzinho" style="max-width:27rem;margin-inline:auto">
+      Você pode usar o OAZE sem conta — os dados ficam só neste aparelho.
+      <a href="/#perguntas">Entenda a diferença</a>.
+    </p>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var email = document.getElementById('email');
+  var senha = document.getElementById('senha');
+  var form = document.getElementById('form-entrar');
+  var botao = document.getElementById('botao-entrar');
+  var formMagico = document.getElementById('form-magico');
+  var botaoMagico = document.getElementById('botao-magico');
+
+  if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); botaoMagico.disabled = true; return; }
+
+  /* Já logado? Não faz sentido mostrar o formulário. replace, e não
+     href: senão o "voltar" do navegador traz de volta para cá e a
+     pessoa fica presa num pingue-pongue. */
+  A.quemEsta().then(function (u) { if (u) location.replace(A.destino()); });
+
+  function valida() {
+    var ok = true;
+    A.erroNoCampo(email, '');
+    A.erroNoCampo(senha, '');
+    if (!email.value.trim()) { A.erroNoCampo(email, 'Informe seu e-mail.'); ok = false; }
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { A.erroNoCampo(email, 'Esse e-mail não parece válido.'); ok = false; }
+    if (!senha.value) { A.erroNoCampo(senha, 'Informe sua senha.'); ok = false; }
+    /* O foco vai para o primeiro campo com problema. Sem isso, quem
+       navega por teclado recebe a mensagem e continua no botão, sem
+       saber onde o erro está. */
+    if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
+    return ok;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    if (!valida()) return;
+
+    A.ocupado(botao, true, 'Entrando…');
+    try {
+      var r = await A.entrar(email.value.trim(), senha.value);
+      if (r.error) throw r.error;
+      A.diz(recado, 'Tudo certo. Abrindo seu painel…', 'ok');
+      location.replace(A.destino());
+    } catch (err) {
+      A.ocupado(botao, false);
+      A.diz(recado, A.frase(err), 'erro');
+      senha.focus();
+      senha.select();
+    }
+  });
+
+  formMagico.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    if (!email.value.trim()) {
+      A.erroNoCampo(email, 'Informe seu e-mail para receber o link.');
+      email.focus();
+      return;
+    }
+    A.ocupado(botaoMagico, true, 'Enviando…');
+    try {
+      var r = await A.linkMagico(email.value.trim());
+      if (r.error) throw r.error;
+      A.diz(recado, 'Enviamos um link para ' + email.value.trim() +
+        '. Abra a mensagem no mesmo aparelho para entrar.', 'ok');
+    } catch (err) {
+      A.diz(recado, A.frase(err), 'erro');
+    }
+    A.ocupado(botaoMagico, false);
+  });
+})();
+</script>
+</body>
+</html>
