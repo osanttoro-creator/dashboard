@@ -13090,22 +13090,32 @@ window.SupabaseConfig = {
   const PROVEDORES = {
     mercadopago: {
       nome: 'Mercado Pago',
-      /* Precisa do id do preço criado no painel do provedor. */
-      pronto: () => false,
       faltando: [
-        'Criar os quatro preços no painel do Mercado Pago (Basic e Pro, mensal e anual)',
-        'Preencher external_price_id em plan_prices com os ids gerados lá',
-        'Configurar MERCADOPAGO_ACCESS_TOKEN nos segredos do Supabase',
-        'Publicar a Edge Function de checkout e a de webhook',
-        'Cadastrar a URL do webhook no painel do provedor'
+        'Publicar as Edge Functions oaze-checkout, oaze-mp-webhook e oaze-assinatura',
+        'Configurar MERCADOPAGO_ACCESS_TOKEN e MERCADOPAGO_WEBHOOK_SECRET nos segredos do Supabase',
+        'Cadastrar a URL do webhook no painel do Mercado Pago',
+        'Testar em sandbox antes de trocar para as credenciais de produção'
       ]
     }
   };
 
   const PROVEDOR = 'mercadopago';
-
   Checkout.provedor = () => PROVEDORES[PROVEDOR];
-  Checkout.pronto = () => PROVEDORES[PROVEDOR].pronto();
+
+  /* QUEM SABE SE O CHECKOUT ESTÁ PRONTO É O SERVIDOR.
+     Isto já foi `pronto: () => false` — uma constante no código do
+     navegador. Constante mente das duas formas: fica `false` depois
+     de tudo pronto (e o botão continua recusando), ou vira `true`
+     antes de o segredo existir (e o botão abre uma tela de
+     pagamento que não cobra).
+
+     Agora a tentativa é feita, e a Edge Function responde
+     'nao_configurado' quando falta credencial. A verdade fica num
+     lugar só, e é o lugar que tem como saber. */
+  /* Não existe mais. Deixar um stub que devolve `false` seria pior
+     do que remover: quem chamasse continuaria recebendo uma resposta
+     plausível e errada para sempre. Sem o método, o erro aparece na
+     primeira execução — que é onde ele deve aparecer. */
 
   /**
    * Inicia a assinatura. Enquanto o provedor não está conectado,
@@ -13117,7 +13127,25 @@ window.SupabaseConfig = {
     const prov = Checkout.provedor();
     const centavos = Planos.preco(plano, ciclo);
 
-    if (!Checkout.pronto()) {
+    /* ---- pergunta ao servidor ----
+       O navegador manda plano e ciclo. NÃO manda preço: quem sabe
+       quanto custa é o banco, e um frontend que envia valor é um
+       frontend que decide quanto você recebe. */
+    let r = null;
+    let indisponivel = false;
+    try {
+      r = await Conta.chamarFuncao('oaze-checkout', { plano: planoId, ciclo });
+      /* 'nao_configurado' vem da própria função quando falta a
+         credencial do provedor. Não é erro do usuário nem defeito
+         do app — é instalação incompleta, e a tela diz isso. */
+      if (r && r.erro === 'nao_configurado') indisponivel = true;
+    } catch (e) {
+      /* A função ainda não publicada dá 404 aqui. Mesmo caso:
+         instalação incompleta, não falha de uso. */
+      indisponivel = true;
+    }
+
+    if (indisponivel) {
       UI.openModal({
         title: 'Assinatura ainda não disponível',
         wide: true,
@@ -13150,17 +13178,37 @@ window.SupabaseConfig = {
       return;
     }
 
-    /* ---- daqui para baixo, só roda quando o provedor estiver
-       conectado. O navegador manda plano e ciclo; o valor é
-       decidido no servidor. ---- */
-    try {
-      const r = await Conta.chamarFuncao('oaze-checkout', { plano: planoId, ciclo });
-      if (r.erro) { UI.toast(r.mensagem || 'Não foi possível iniciar a assinatura.', 'error'); return; }
-      if (r.url) { location.href = r.url; return; }
-      UI.toast('O provedor não devolveu um endereço de pagamento.', 'error');
-    } catch (e) {
-      UI.toast('Falha ao falar com o servidor: ' + e.message, 'error');
+    /* ---- a resposta do servidor ---- */
+    if (!r || r.erro) {
+      UI.toast((r && r.mensagem) || 'Não foi possível iniciar a assinatura.', 'error');
+      return;
     }
+
+    /* CONFERÊNCIA, não cobrança. O valor que a tela mostrou tem de
+       ser o que o servidor calculou. Divergir significa que a tabela
+       de preços do navegador está velha — e mandar a pessoa para uma
+       cobrança diferente da que ela leu é o tipo de surpresa que
+       vira estorno. Parar aqui custa um clique; não parar custa
+       confiança. */
+    if (typeof r.centavos === 'number' && r.centavos !== centavos) {
+      console.warn('[checkout] preço divergente: tela ' + centavos + ', servidor ' + r.centavos);
+      UI.openModal({
+        title: 'O preço mudou',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('p', { text: 'O valor desta página está desatualizado. Recarregue e confira antes de continuar.' }),
+          el('p', { class: 'hint', style: { marginTop: '8px' },
+            text: 'Nesta tela: ' + Planos.moeda(centavos) + ' · no servidor: ' + Planos.moeda(r.centavos) })
+        ]),
+        buttons: [
+          { label: 'Recarregar', class: 'btn-primary', onClick: () => location.reload() },
+          { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal }
+        ]
+      });
+      return;
+    }
+
+    if (r.url) { location.href = r.url; return; }
+    UI.toast('O provedor não devolveu um endereço de pagamento.', 'error');
   };
 
   /**
@@ -13191,15 +13239,28 @@ window.SupabaseConfig = {
         {
           label: 'Cancelar mesmo assim', class: 'btn-outline danger',
           onClick: async () => {
-            if (!Checkout.pronto()) {
+            /* oaze-assinatura, e não oaze-checkout: cancelar não
+               cobra nada, então não passa pelo caminho de cobrança.
+               Antes apontava para a função errada — o cancelamento
+               teria recebido "ação desconhecida". */
+            let r;
+            try {
+              r = await Conta.chamarFuncao('oaze-assinatura', { acao: 'cancelar' });
+            } catch (e) {
               UI.closeModal();
-              UI.toast('O cancelamento passa pelo provedor, que ainda não está conectado.', 'error', 7000);
+              UI.toast('O cancelamento ainda não está disponível neste ambiente. Nada foi alterado.', 'error', 7000);
               return;
             }
-            const r = await Conta.chamarFuncao('oaze-checkout', { acao: 'cancelar' });
             UI.closeModal();
-            UI.toast(r.erro ? (r.mensagem || 'Falha ao cancelar.') : 'Cancelamento agendado para o fim do período.',
-              r.erro ? 'error' : 'success');
+            /* A MENSAGEM VEM DO SERVIDOR. Ele sabe até que dia o
+               acesso continua; a tela não. Escrever aqui "cancelado"
+               sem a data faria a pessoa achar que perdeu o acesso na
+               hora — e a maioria dos pedidos de suporte depois de um
+               cancelamento é exatamente essa dúvida. */
+            UI.toast(r && r.erro
+              ? (r.mensagem || 'Falha ao cancelar.')
+              : (r && r.mensagem) || 'Cancelamento agendado para o fim do período.',
+              r && r.erro ? 'error' : 'success', 9000);
             if (global.Limites) Limites.carregar().then(() => Cfg.render());
           }
         }
