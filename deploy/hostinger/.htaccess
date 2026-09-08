@@ -153,6 +153,22 @@ ErrorDocument 404 /404.html
 </IfModule>
 
 # -------------------------------------------------------------
+# 6b · tipos que o Apache não conhece
+# -------------------------------------------------------------
+# O .webmanifest é recente e não está na tabela padrão do servidor
+# da Hostinger: sem esta linha ele sai como text/plain, e o
+# navegador RECUSA instalar o app com o tipo errado. Nada quebra
+# visivelmente — o botão "instalar" simplesmente nunca aparece, e
+# não há erro em lugar nenhum que explique por quê.
+# (Verificado no ar: /manifest.webmanifest voltava text/plain.)
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  # Pelo mesmo motivo, e porque o SVG do favicon precisa do tipo
+  # certo para o navegador aceitá-lo como ícone.
+  AddType image/svg+xml .svg
+</IfModule>
+
+# -------------------------------------------------------------
 # 7 · cache
 # -------------------------------------------------------------
 # O HTML nunca é guardado: é ele que aponta para o resto, e um HTML
