@@ -8,6 +8,24 @@
         "value": "inter",
         "createdAt": "2026-09-11T18:24:51.148Z",
         "reason": "PRODUCT.md registra a direção confirmada da landing: títulos em Playfair Display Italic, interface em Inter"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "recursos.html"
+        ],
+        "createdAt": "2026-09-11T18:44:57.361Z",
+        "reason": "Claude: o .aviso tem só um fio no topo e o texto fica 18px abaixo dele; não há borda lateral para o texto encostar (mesmo padrão da .grade-editorial)"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "precos.html"
+        ],
+        "createdAt": "2026-09-11T18:44:57.706Z",
+        "reason": "Claude: o .aviso tem só um fio no topo e o texto fica 18px abaixo dele; não há borda lateral para o texto encostar (mesmo padrão da .grade-editorial)"
       }
     ]
   }
