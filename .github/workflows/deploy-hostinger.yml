@@ -31,10 +31,22 @@ on:
     # Um commit que só mexe em supabase/ ou docs/ não muda o que é
     # servido. Deploy à toa é ruído: some com o sinal de quando um
     # deploy de verdade quebrou algo.
+    # ATENÇÃO AO QUE ESTA LISTA ESQUECIA. Ela cobria só `index.html`,
+    # e o site tem ONZE documentos HTML: app.html, precos.html,
+    # entrar.html, cadastro.html e companhia. Um commit que corrigisse
+    # o preço em precos.html não disparava deploy nenhum — sem erro,
+    # sem aviso, sem job vermelho. O commit entrava na main, a pessoa
+    # ia dormir achando que publicou, e o site continuava com o preço
+    # antigo.
+    #
+    # `*.html` cobre todos, inclusive os que ainda não existem.
     paths:
-      - 'index.html'
+      - '*.html'
       - 'robots.txt'
+      - 'sitemap.xml'
+      - 'manifest.webmanifest'
       - 'assets/**'
+      - 'tools/**'
       - 'deploy/hostinger/**'
       - '.github/workflows/deploy-hostinger.yml'
   workflow_dispatch:
@@ -66,21 +78,22 @@ jobs:
       # existir é melhor não existir. Estes dois rodam sem banco e
       # sem chave — o que precisa de credencial fica no SQL, para
       # ser rodado à mão.
-      - name: Testes
-        run: |
-          set -euo pipefail
-          echo "--- o perfil sobrevive à ida e volta pelo banco?"
-          node tools/testes/ida-e-volta.js
-          echo "--- o banco consegue apagar o aparelho?"
-          node tools/testes/trava-sobrescrita.js
-          echo "--- o cartao em destaque tem contraste legivel?"
-          node tools/testes/contraste.js
-          echo "--- o portao do webhook aguenta?"
-          node tools/testes/assinatura-webhook.js
-          echo "--- os preços do código e do banco concordam?"
-          node tools/testes/confere-planos.js || {
-            echo "::warning::confere-planos falhou (ele consulta o banco; sem credencial no runner isso é esperado)"
-          }
+      # UM COMANDO SÓ, E ELE NÃO PERDOA.
+      #
+      # Antes eram cinco chamadas soltas, e a última vinha com
+      # `|| echo warning` — silenciada sob a justificativa de que
+      # "consulta o banco, sem credencial no runner isso é esperado".
+      # A justificativa era FALSA: confere-planos.js compara
+      # planos.js com um retrato estático em ESPERADO, e não abre
+      # conexão nenhuma. Ele estava falhando de verdade, com 16
+      # divergências entre o preço do código e o do banco, e o
+      # `|| warning` transformou isso num aviso amarelo que ninguém
+      # lê num log de deploy que passou.
+      #
+      # Um teste silenciado é pior do que um teste ausente: o
+      # ausente todo mundo sabe que falta.
+      - name: Verificação completa
+        run: node tools/verificar-tudo.js
 
       # ---- 1 · monta o pacote ----
       # O mesmo script usado à mão. Ele varre o que vai ser servido

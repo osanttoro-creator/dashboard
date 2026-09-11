@@ -162,7 +162,19 @@
   }
 
   /** Exporta o consolidado. CSV com ponto e vírgula: é o que o Excel pt-BR espera. */
+  /* ============================================================
+     EXPORTAÇÃO — CSV e PDF
+     ------------------------------------------------------------
+     As duas passam pelo direito do plano ANTES de rodar. Isso é
+     orientação, não trava: quem chamar Rep.exportCsv() pelo console
+     exporta. Os dados já estão no navegador — são dele —, então
+     não há nada a proteger aqui. O que a checagem faz é não
+     entregar em silêncio o que o plano diz que não inclui, e
+     EXPLICAR em vez de simplesmente não fazer nada.
+     ============================================================ */
+
   Rep.exportCsv = function () {
+    if (global.Limites && !Limites.exigirRecurso('csvExport', 'A exportação em CSV')) return;
     const ano = U.ymParts(App.ym).y;
     const serie = Calc.monthlySeries(`${ano}-01`, `${ano}-12`);
     const linhas = [['Mes', 'Receitas', 'Despesas', 'Saldo', 'Acumulado']];
@@ -174,6 +186,59 @@
     UI.toast('CSV exportado.', 'success');
   };
   const br = (n) => String(U.round2(n)).replace('.', ',');
+
+  /* ============================================================
+     PDF — pela impressão do navegador, e isso é uma escolha
+     ------------------------------------------------------------
+     O plano Basic promete "exportação em CSV e PDF", e até aqui o
+     PDF não existia em lugar nenhum do código: era um direito
+     concedido no banco para uma função que ninguém tinha escrito.
+     Anunciado e não entregue é pior do que não anunciado.
+
+     A alternativa seria embutir um gerador de PDF (jsPDF e
+     companhia): ~250KB de biblioteca, carregados por todo mundo,
+     para produzir um layout que teria de ser mantido em paralelo
+     ao HTML — duas descrições da mesma tabela, que divergem na
+     primeira mudança.
+
+     A janela de impressão do navegador já gera PDF em todos os
+     sistemas que o OAZE alcança ("Salvar como PDF" é destino
+     padrão no Chrome, Edge, Safari e Firefox), usa a folha de
+     impressão que o projeto já tem, e produz um arquivo com texto
+     selecionável e pesquisável — que é melhor do que a maioria dos
+     PDFs gerados por biblioteca.
+
+     O QUE ESTA FUNÇÃO GARANTE ANTES DE IMPRIMIR
+     Que a página impressa é a de Análises. Chamar print() com o
+     usuário em outra tela imprimiria a outra tela — e é o tipo de
+     erro que só se descobre depois de gastar papel.
+     ============================================================ */
+  Rep.exportarPdf = function () {
+    if (global.Limites && !Limites.exigirRecurso('pdfExport', 'A exportação em PDF')) return;
+
+    if (App.page !== 'reports') App.goTo('reports');
+
+    const ano = U.ymParts(App.ym).y;
+    const tituloAntes = document.title;
+    /* O nome do arquivo sugerido pelo navegador vem do <title>. Sem
+       trocá-lo, o PDF sai chamado "OAZE — Gestão Financeira". */
+    document.title = 'OAZE — consolidado ' + ano;
+
+    const devolver = () => { document.title = tituloAntes; };
+    /* afterprint cobre o cancelamento também; o timeout é a rede
+       para navegadores que não disparam o evento (Safari antigo). */
+    global.addEventListener('afterprint', devolver, { once: true });
+    setTimeout(devolver, 60000);
+
+    /* O print é síncrono e bloqueia; o adiamento deixa o navegador
+       terminar de pintar a troca de página antes de fotografar. */
+    setTimeout(() => {
+      try { global.print(); } catch (e) {
+        devolver();
+        UI.toast('Este navegador não abriu a janela de impressão.', 'error');
+      }
+    }, 120);
+  };
 
   global.Rep = Rep;
 })(window);

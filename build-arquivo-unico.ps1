@@ -70,17 +70,46 @@ $html = $html.Replace(
   '<script src="/assets/js/firebase-config.js"></script>',
   "<script>`r`n/* ===== assets/vendor/supabase.js ===== */`r`n$sb`r`n</script>`r`n<script src=`"/assets/js/firebase-config.js`"></script>")
 
+# ---- 2.7 · o simbolo da marca, embutido ----
+# O <link rel=icon> aponta para /assets/img/favicon.svg, e no arquivo
+# unico nao existe /assets ao lado: o coqueiro simplesmente nao
+# carregaria. Como e um SVG pequeno, ele vira data URI -- a unica
+# forma de um favicon viajar dentro de um HTML solto.
+#
+# O mesmo <link> vale para o apple-touch-icon, que e o icone que
+# aparece na tela de inicio do iPhone depois de "Adicionar a Tela de
+# Inicio" -- exatamente o caso de uso deste build.
+$favicon = Ler 'assets/img/favicon.svg'
+# Percent-encoding do minimo necessario: # inicia um fragmento de URL
+# e " fecharia o atributo. O resto do SVG passa como esta.
+$faviconUri = 'data:image/svg+xml,' + (($favicon -replace '"', '%22') -replace '#', '%23' -replace '\r?\n', ' ')
+$html = $html.Replace('href="/assets/img/favicon.svg"', ('href="' + $faviconUri + '"'))
+
+# ---- 2.8 · links para paginas que so existem no servidor ----
+# O menu "Mais" tem um item Ajuda que aponta para /suporte -- uma
+# pagina publica, servida pelo Apache. No arquivo unico nao ha
+# servidor: /suporte nao resolve para nada, e o item viraria um link
+# morto. Um botao sem acao e exatamente o que o projeto nao aceita.
+#
+# A saida nao e remover o item (a ajuda continua existindo), e sim
+# apontar para onde ela existe de verdade. Absoluto, portanto -- e
+# so nesta versao do arquivo; no site servido o caminho relativo
+# continua sendo o certo.
+$SITE = 'https://mediumvioletred-viper-277230.hostingersite.com'
+$html = $html.Replace('href="/suporte"', ('href="' + $SITE + '/suporte" target="_blank" rel="noopener"'))
+
 # ---- 3 · scripts do app, na mesma ordem ----
 $arquivos = @(
   'assets/vendor/bancos.js', 'assets/vendor/icons.js', 'assets/js/firebase-config.js', 'assets/js/supabase-config.js',
-  'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/calc.js', 'assets/js/charts.js',
+  'assets/js/utils.js', 'assets/js/icons.js', 'assets/js/store.js', 'assets/js/tema.js', 'assets/js/calc.js', 'assets/js/charts.js',
   'assets/js/ui.js', 'assets/js/cards.js', 'assets/js/forms.js', 'assets/js/importer.js',
   'assets/js/sync.js', 'assets/js/supabase-auth.js',
   'assets/js/planos.js', 'assets/js/limites.js', 'assets/js/checkout.js',
   'assets/js/repo.js', 'assets/js/fila.js',
   'assets/js/dados.js', 'assets/js/estado-sync.js',
   'assets/js/migracao.js', 'assets/js/onboarding.js', 'assets/js/conta.js',
-  'assets/js/ai.js', 'assets/js/shell.js',
+  'assets/js/uglez-particulas.js', 'assets/js/ai.js', 'assets/js/uglez-flutuante.js',
+  'assets/js/shell.js',
   'assets/js/pages/home.js', 'assets/js/pages/transactions.js', 'assets/js/pages/investments.js',
   'assets/js/pages/accounts.js', 'assets/js/pages/categories.js',
   'assets/js/pages/budget.js', 'assets/js/pages/goals.js', 'assets/js/pages/recurring.js', 'assets/js/pages/calendar.js', 'assets/js/pages/reports.js', 'assets/js/pages/uglez.js', 'assets/js/pages/precos.js', 'assets/js/pages/settings.js',

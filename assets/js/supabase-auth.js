@@ -67,7 +67,15 @@
        createClient, é o mesmo argumento. */
     const key = String(c.publishableKey || c.anonKey || '').trim();
     if (!url || !key) return null;
-    return { url: url.replace(/\/+$/, ''), chave: key };
+    return {
+      url: url.replace(/\/+$/, ''),
+      chave: key,
+      /* Precisa atravessar o cfg(): sem isto, o storageKey da
+         configuração nunca chega ao createClient e o valor de
+         reserva assume — que por acaso é o mesmo, mas passaria a
+         não ser no dia em que alguém trocasse a configuração. */
+      storageKey: String(c.storageKey || '').trim() || null
+    };
   }
 
   function loadSDK() {
@@ -331,7 +339,10 @@
           persistSession: true,
           autoRefreshToken: true,
           detectSessionInUrl: true,   // volta do Google e do link mágico
-          storageKey: 'oaze.supabase.auth',
+          /* A mesma gaveta das páginas públicas. O nome vem da
+             configuração para que os dois clientes não possam
+             divergir — ver o comentário em supabase-config.js. */
+          storageKey: (c.storageKey || 'oaze.supabase.auth'),
           flowType: 'pkce'
         }
       });

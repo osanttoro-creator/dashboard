@@ -98,6 +98,23 @@
         ])
         : null,
 
+      /* A contribuição planejada, e o CONFRONTO com o ritmo
+         necessário. Mostrar só "R$ 300 todo dia 5" seria repetir o
+         que a pessoa digitou; o que ela precisa saber é se esse
+         valor chega lá. Quando não chega, o texto diz de quanto é a
+         diferença — não "insuficiente", que informa zero. */
+      g.contribution && falta > 0
+        ? el('p', { class: 'goal-pace' + (ritmo && g.contribution.amount < ritmo ? ' is-curto' : '') }, [
+          Icons.lucide('repeat', 14),
+          el('span', {
+            text: ritmo && g.contribution.amount < ritmo
+              ? `Você planejou ${U.fmtBRL(g.contribution.amount)} todo dia ${g.contribution.day} — ` +
+                `${U.fmtBRL(U.round2(ritmo - g.contribution.amount))} a menos do que o prazo pede`
+              : `Você planejou ${U.fmtBRL(g.contribution.amount)} todo dia ${g.contribution.day}`
+          })
+        ])
+        : null,
+
       el('div', { class: 'goal-actions' }, [
         el('button', { class: 'btn btn-primary btn-sm', text: '+ Guardar', onclick: () => depositar(g) }),
         el('button', { class: 'btn btn-ghost btn-sm', text: 'Editar', onclick: () => Goals.open(g.id) }),
@@ -164,6 +181,43 @@
     const prazo = el('input', { class: 'input', type: 'date', value: g && g.deadline ? g.deadline : '' });
     const cor = UI.colorPicker(g ? g.color : Store.PALETTE[0]);
 
+    /* ============================================================
+       CATEGORIA, CONTA E CONTRIBUIÇÃO — os três campos que faltavam
+       ------------------------------------------------------------
+       Os três são OPCIONAIS, e o placeholder diz isso em palavras.
+       Um formulário de meta com seis campos obrigatórios é um
+       formulário que ninguém termina, e "criar a primeira meta" é
+       exatamente o momento em que se desiste com mais facilidade.
+
+       A CONTRIBUIÇÃO NÃO VIRA LANÇAMENTO. Guardar dinheiro numa
+       meta não é despesa: é o mesmo dinheiro com outro nome (ver o
+       cabeçalho deste arquivo). Lançar automaticamente afundaria o
+       saldo do mês por uma transferência interna. O que fica
+       guardado é o PLANO — quanto e em que dia —, e é ele que
+       permite dizer se o ritmo alcança o prazo.
+       ============================================================ */
+    const prof = Store.profile();
+
+    const categoria = el('select', { class: 'input' });
+    UI.fillSelect(categoria,
+      (prof.categories || []).map((c) => ({ value: c.id, label: c.name })),
+      g ? g.categoryId : '', 'Sem categoria');
+
+    const conta = el('select', { class: 'input' });
+    UI.fillSelect(conta,
+      (prof.accounts || []).map((a) => ({ value: a.id, label: a.name })),
+      g ? g.accountId : '', 'Nenhuma conta em especial');
+
+    const contribValor = el('input', {
+      class: 'input', type: 'text', inputmode: 'decimal',
+      placeholder: '0,00',
+      value: g && g.contribution ? U.fmtNum(g.contribution.amount) : ''
+    });
+    const contribDia = el('input', {
+      class: 'input', type: 'number', min: '1', max: '31',
+      value: g && g.contribution ? String(g.contribution.day) : '5'
+    });
+
     const icones = ['target', 'flag', 'piggy-bank', 'plane', 'house', 'car', 'graduation-cap', 'heart-pulse', 'gift', 'shield'];
     let iconeAtual = g ? (g.icon || 'target') : 'target';
     const iconeBox = el('div', { class: 'icon-picker' });
@@ -189,6 +243,22 @@
           el('span', { class: 'field-label', text: 'Prazo' }), prazo,
           el('p', { class: 'hint', text: 'Opcional. Com prazo, o app calcula quanto guardar por mês.' })
         ]),
+        el('label', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Categoria' }), categoria,
+          el('p', { class: 'hint', text: 'Opcional. Serve para agrupar metas parecidas.' })
+        ]),
+        el('label', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Conta relacionada' }), conta,
+          el('p', { class: 'hint', text: 'Opcional. Onde este dinheiro costuma ficar.' })
+        ]),
+        el('label', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Contribuição mensal (R$)' }), contribValor,
+          el('p', { class: 'hint', text: 'Opcional. Quanto você pretende guardar por mês.' })
+        ]),
+        el('label', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Dia do mês' }), contribDia,
+          el('p', { class: 'hint', text: 'Só o lembrete: o aporte continua sendo confirmado por você.' })
+        ]),
         el('div', { class: 'field' }, [el('span', { class: 'field-label', text: 'Cor' }), cor]),
         el('div', { class: 'field span-2' }, [el('span', { class: 'field-label', text: 'Ícone' }), iconeBox])
       ]),
@@ -201,11 +271,20 @@
             const t = U.parseMoney(alvo.value) || 0;
             if (!n) { UI.toast('Informe o nome da meta.', 'error'); return; }
             if (t <= 0) { UI.toast('O alvo precisa ser maior que zero.', 'error'); return; }
+            const aporte = U.parseMoney(contribValor.value) || 0;
             const dados = {
               name: n, target: t,
               saved: U.parseMoney(guardado.value) || 0,
               deadline: U.isValidISO(prazo.value) ? prazo.value : null,
-              color: cor.getValue(), icon: iconeAtual
+              color: cor.getValue(), icon: iconeAtual,
+              categoryId: categoria.value || null,
+              accountId: conta.value || null,
+              /* Valor zerado apaga a contribuição em vez de guardar
+                 um objeto com zero: um plano de "guardar R$ 0 por
+                 mês" apareceria no cartão como se fosse um plano. */
+              contribution: aporte > 0
+                ? { amount: aporte, day: Math.min(31, Math.max(1, parseInt(contribDia.value, 10) || 1)) }
+                : null
             };
             if (g) { Store.goals.update(g.id, dados); UI.toast('Meta atualizada.', 'success'); }
             else { Store.goals.add(dados); UI.toast('Meta criada.', 'success'); }

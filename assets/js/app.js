@@ -182,8 +182,23 @@
 
   function renderFooter() {
     const prof = Store.profile();
+    /* "Espaço", e não "Perfil": o que a barra escolhe é um conjunto
+       de dados financeiros, não uma identidade. O rótulo do
+       controle e o do rodapé precisam concordar, senão a mesma
+       coisa tem dois nomes na mesma tela. */
     document.getElementById('footInfo').textContent =
-      `Perfil "${prof.name}" · ${prof.transactions.length} lançamentos · ${prof.accounts.length} contas · ${prof.cards.length} cartões`;
+      `Espaço "${prof.name}" · ${prof.transactions.length} lançamentos · ` +
+      `${prof.accounts.length} contas · ${prof.cards.length} cartões`;
+
+    const onde = document.getElementById('footOnde');
+    if (!onde) return;
+    const estado = global.Dados && Dados.estado ? Dados.estado() : 'local';
+    const restaurando = global.Sync && Sync.restaurando && Sync.restaurando();
+    onde.textContent = restaurando
+      ? 'Verificando sua conta…'
+      : estado === 'local'
+        ? 'Dados salvos apenas neste navegador — sem conta, não há cópia em outro lugar'
+        : 'Dados na sua conta, no servidor. Este navegador guarda uma cópia para abrir rápido';
   }
 
   /* ---------------- painel de boas-vindas ---------------- */
@@ -319,6 +334,11 @@
       if (n.firstElementChild) return;
       n.appendChild(Icons.lucide(n.dataset.ico, +n.dataset.icoSize || 17));
     });
+    /* E a marca, onde ela for declarada. Fica junto porque é o
+       mesmo problema -- HTML declara, JavaScript desenha -- e
+       separar em dois passos criaria a chance de um rodar sem o
+       outro depois de um render. */
+    Icons.pintarMarcas();
   }
 
   /* ---------------- ligação de eventos ---------------- */
@@ -348,9 +368,19 @@
     });
     document.getElementById('btnProfiles').addEventListener('click', () => Forms.openProfiles());
 
-    // tema
-    document.getElementById('btnTheme').addEventListener('click', () => {
-      Store.setTheme(Store.state().theme === 'dark' ? 'light' : 'dark');
+    /* A conta é um controle próprio agora, e leva para onde a conta
+       vive: Configurações. Antes o avatar era decoração dentro do
+       seletor de espaços, e clicar nele não fazia nada — um alvo do
+       tamanho de um botão que não era botão. */
+    document.getElementById('btnConta').addEventListener('click', () => {
+      App.goTo('settings');
+      /* O foco vai para o bloco da conta. Sem isso, quem clicou no
+         avatar cai no topo de uma página longa e precisa procurar
+         a informação que pediu. */
+      setTimeout(() => {
+        const alvo = document.getElementById('setConta');
+        if (alvo && alvo.scrollIntoView) alvo.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 60);
     });
 
     // backup
@@ -450,6 +480,7 @@
 
     // análises
     document.getElementById('btnExportCsv').addEventListener('click', () => Rep.exportCsv());
+    document.getElementById('btnExportPdf').addEventListener('click', () => Rep.exportarPdf());
 
     // como o score é calculado
     document.getElementById('btnScoreHelp').addEventListener('click', () => Home.explainScore());
@@ -482,7 +513,11 @@
 
   function boot() {
     const st = Store.load();
-    document.documentElement.setAttribute('data-theme', st.theme);
+    /* O tema é do Tema, e de mais ninguém. Ele resolve escolha
+       explícita × sistema operacional e pinta antes de qualquer
+       outra coisa, para não haver um piscar de tema errado. */
+    Tema.init();
+    void st;
 
     if (!Charts.available()) {
       document.getElementById('offlineNote').hidden = false;
@@ -534,6 +569,7 @@
     passo('estado da sincronia', () => EstadoSync.init());
     passo('sincronização', () => Sync.init());
     passo('UGLEZ', () => AI.init());
+    passo('UGLEZ flutuante', () => UglezFlutuante.init());
     passo('controles', () => Shell.init());
     /* A rota é lida ANTES de qualquer navegação. App.goTo('home')
        faz pushState('/') e, ao fazer isso, apaga a URL que estamos

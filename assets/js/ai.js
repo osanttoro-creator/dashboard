@@ -50,6 +50,13 @@
     if (!global.Sync || !Sync.isConfigured()) {
       return { chave: 'sem-nuvem', rotulo: 'Indisponível — sem conta configurada' };
     }
+    /* A sessão ainda está sendo restaurada: não é "sem sessão", é
+       "ainda não sei". Tratar as duas como a mesma coisa fazia o
+       UGLEZ pedir login por um instante a cada abertura, para quem
+       já estava logado. */
+    if (Sync.restaurando && Sync.restaurando()) {
+      return { chave: 'restaurando', rotulo: 'Verificando sua conta…' };
+    }
     if (!Sync.currentUser()) {
       return { chave: 'sem-sessao', rotulo: 'Entre na sua conta para usar' };
     }
@@ -66,123 +73,132 @@
   ];
 
   /* ============================================================
-     1 · RESUMO FINANCEIRO ENVIADO AO MODELO
+     1 · O QUE SAI DAQUI
+     ------------------------------------------------------------
+     Existia aqui um AI.buildSummary() de ~110 linhas que montava
+     um relatório em markdown com NOME DE CONTA, NOME DE CARTÃO,
+     saldo por conta, limite de cada cartão e a lista de
+     lançamentos pendentes um a um.
+
+     Ele foi REMOVIDO, e não apenas desligado. Ninguém o chamava —
+     o caminho real é AI.resumoAgregado(), logo abaixo — mas
+     código morto que já sabe montar um dossiê completo é um
+     convite: basta alguém precisar de "mais contexto" um dia,
+     achar a função pronta e ligá-la de volta. A tela promete ao
+     usuário que só sai agregado, e a forma de manter essa
+     promessa é não haver, no navegador, uma função capaz de
+     quebrá-la.
      ============================================================ */
 
-  const money = (n) => U.fmtBRL(n);
 
-  /** Monta o resumo do perfil/mês ativos. Nenhum outro perfil entra. */
-  AI.buildSummary = function () {
+  /* ============================================================
+     1b · O RESUMO QUE REALMENTE VAI PARA O SERVIDOR
+     ------------------------------------------------------------
+     ISTO ESTAVA FALTANDO, E ERA A FALHA QUE QUEBRAVA O UGLEZ
+     INTEIRO. AI.ask() chamava AI.resumoAgregado() e a função não
+     existia em lugar nenhum do projeto: toda pergunta estourava um
+     TypeError antes de sair do navegador, e o catch genérico
+     traduzia isso para "Não foi possível falar com o assistente.
+     Verifique a conexão" — uma mensagem que manda a pessoa olhar
+     para o roteador por causa de uma função ausente. O botão "O que
+     é enviado" morria pelo mesmo motivo.
+
+     O relatório em markdown que existia acima (ver a seção 1) não
+     serviria como substituto, e a diferença não é de formato:
+
+       · a Edge Function valida um OBJETO com campos declarados, e
+         descarta tudo que não está no schema — um texto corrido
+         chegaria como `resumo: undefined`;
+       · o brief e a tela prometem que só sai agregado. Mandar
+         nomes de conta quebraria essa promessa em silêncio.
+
+     Então este é o contrato, e ele é curto de propósito: totais,
+     categorias consolidadas, metas e compromissos. Mais nada.
+     ============================================================ */
+
+  /**
+   * O histórico mensal que acompanha a pergunta.
+   *
+   * O cliente MANDA e o servidor PODA: a Edge Function corta pelo
+   * que o plano autoriza (o Grátis recebe zero meses de comparação,
+   * o Pro recebe até 60). Mandar daqui o horizonte cheio e deixar o
+   * corte no servidor é o que impede um plano de ser destravado
+   * pelo DevTools — se a poda fosse aqui, bastaria editar o número.
+   */
+  AI.historico = function (ym, meses) {
+    const fim = ym || App.ym;
+    const inicio = U.addMonths(fim, -(meses || 11));
+    let serie = [];
+    try { serie = Calc.monthlySeries(inicio, U.addMonths(fim, -1)) || []; }
+    catch (e) { return []; }
+    return serie
+      .filter((m) => (m.income + m.expense) > 0)
+      .map((m) => ({
+        periodo: m.ym,
+        receitas: U.round2(m.income),
+        despesas: U.round2(m.expense),
+        saldo: U.round2(m.balance)
+      }));
+  };
+
+  /**
+   * O resumo agregado do mês exibido. Um objeto, e só com o que a
+   * função do servidor declara aceitar.
+   *
+   * NENHUM IDENTIFICADOR SAI DAQUI. Categoria e meta viajam pelo
+   * NOME, nunca pelo id: o nome é o que o modelo precisa para
+   * escrever uma frase legível, e o id só serviria para religar
+   * essa resposta a um registro nosso do lado de lá.
+   */
+  AI.resumoAgregado = function (ym) {
+    const periodo = ym || App.ym;
     const prof = Store.profile();
-    const ym = App.ym;
-    const prevYM = U.addMonths(ym, -1);
-    const monthEnd = U.monthEnd(ym);
-    const L = [];
+    const t = Calc.monthTotals(periodo);
 
-    const t = Calc.monthTotals(ym);
-    const prev = Calc.monthTotals(prevYM);
-    const opening = Calc.openingBalanceOfMonth(ym);
+    /* Só CONFIRMADOS entram nos totais, igual ao resto do app. Se a
+       IA somasse os previstos e o painel não, os dois dariam
+       números diferentes para a mesma pergunta — e a pessoa
+       acreditaria no errado. */
+    const resumo = {
+      receitas: U.round2(t.income),
+      despesas: U.round2(t.expense),
+      saldo: U.round2(t.balance),
+      categorias: [],
+      metas: [],
+      compromissos: []
+    };
 
-    L.push(`PERFIL: ${prof.name}`);
-    L.push(`MÊS DE REFERÊNCIA: ${U.monthLabel(ym)} (hoje é ${U.fmtDateBR(U.todayISO())})`);
-    L.push('');
+    try {
+      resumo.categorias = Calc
+        .categoryTotals('expense', U.monthStart(periodo), U.monthEnd(periodo))
+        .map((c) => ({ nome: c.name, total: U.round2(c.total) }));
+    } catch (e) { /* sem categorias, o resumo continua válido */ }
 
-    L.push('## Resumo do mês (somente lançamentos CONFIRMADOS)');
-    L.push(`- Saldo inicial: ${money(opening)}`);
-    L.push(`- Receitas: ${money(t.income)} (mês anterior: ${money(prev.income)})`);
-    L.push(`- Despesas: ${money(t.expense)} (mês anterior: ${money(prev.expense)})`);
-    L.push(`- Saldo do mês: ${money(t.balance)}`);
-    L.push(`- Saldo final projetado: ${money(opening + t.balance)}`);
-    if (t.income > 0) L.push(`- Taxa de poupança: ${U.fmtPct((t.balance / t.income) * 100)} da receita`);
-    L.push('');
+    try {
+      resumo.metas = (prof.goals || []).map((g) => ({
+        nome: g.name,
+        alvo: U.round2(g.target),
+        guardado: U.round2(g.saved)
+      }));
+    } catch (e) { /* idem */ }
 
-    if (t.pendingCount > 0) {
-      L.push('## Previstos ainda NÃO confirmados (fora dos totais acima)');
-      L.push(`- Receitas previstas: ${money(t.pendingIncome)}`);
-      L.push(`- Despesas previstas: ${money(t.pendingExpense)}`);
-      L.push(`- Se tudo se confirmar, o saldo do mês vira ${money(t.plannedBalance)}`);
-      const pend = t.entries.filter((e) => !e.confirmed && e.kind !== 'transfer').slice(0, 12);
-      pend.forEach((e) => L.push(`  · ${U.fmtDayMonth(e.date)} ${e.description} — ${money(e.amount)} (${e.kind === 'income' ? 'receita' : 'despesa'}, ${Calc.categoryName(e.categoryId)})`));
-      L.push('');
-    }
+    try {
+      /* Compromissos = o que está previsto e ainda não confirmado
+         no mês exibido. É a informação que responde "o que ainda vai
+         sair", e ela não aparece nos totais justamente por não ter
+         acontecido. Vai só o dia, nunca a data inteira: o dia basta
+         para o modelo falar de fim de mês apertado, e a data cheia
+         seria um passo a mais de identificação sem ganho nenhum. */
+      resumo.compromissos = (t.entries || [])
+        .filter((e) => !e.confirmed && e.kind !== 'transfer')
+        .map((e) => ({
+          titulo: String(e.description || 'Sem descrição').slice(0, 60),
+          valor: U.round2(e.amount),
+          dia: +String(e.date).slice(8, 10) || 1
+        }));
+    } catch (e) { /* idem */ }
 
-    /* despesas por categoria, com comparação */
-    const cats = Calc.categoryTotals('expense', U.monthStart(ym), U.monthEnd(ym));
-    const catsPrev = Calc.categoryTotals('expense', U.monthStart(prevYM), U.monthEnd(prevYM));
-    const prevById = new Map(catsPrev.map((c) => [c.id, c.total]));
-    if (cats.length) {
-      L.push('## Despesas por categoria neste mês (vs. mês anterior)');
-      cats.forEach((c) => {
-        const p = prevById.get(c.id) || 0;
-        const delta = p > 0 ? ` — variação ${((c.total - p) / p * 100).toFixed(0)}%` : ' — não havia no mês anterior';
-        L.push(`- ${c.name}: ${money(c.total)} (${U.fmtPct(c.pct, 0)} do total; anterior ${money(p)}${delta})`);
-      });
-      L.push('');
-    }
-
-    const inc = Calc.categoryTotals('income', U.monthStart(ym), U.monthEnd(ym));
-    if (inc.length) {
-      L.push('## Receitas por categoria neste mês');
-      inc.forEach((c) => L.push(`- ${c.name}: ${money(c.total)} (${U.fmtPct(c.pct, 0)})`));
-      L.push('');
-    }
-
-    /* fixas x variáveis */
-    const conf = t.entries.filter((e) => e.confirmed && e.kind === 'expense');
-    const fixas = U.sum(conf.filter((e) => e.recurring), (e) => e.amount);
-    const variaveis = U.sum(conf.filter((e) => !e.recurring), (e) => e.amount);
-    if (conf.length) {
-      L.push('## Estrutura das despesas confirmadas');
-      L.push(`- Fixas (recorrentes): ${money(fixas)}`);
-      L.push(`- Variáveis: ${money(variaveis)}`);
-      L.push('');
-    }
-
-    /* histórico */
-    const serie = Calc.monthlySeries(U.addMonths(ym, -5), ym);
-    L.push('## Últimos 6 meses');
-    serie.forEach((r) => L.push(`- ${U.monthLabel(r.ym)}: receitas ${money(r.income)} | despesas ${money(r.expense)} | saldo ${money(r.balance)}`));
-    L.push('');
-
-    /* contas */
-    if (prof.accounts.length) {
-      L.push('## Contas');
-      prof.accounts.forEach((a) => {
-        L.push(`- ${a.name} (${a.bank || 'sem banco'}, ${a.type}): saldo ${money(Calc.accountBalance(a.id, monthEnd))}`);
-      });
-      L.push(`- Soma em contas: ${money(Calc.totalAccountsBalance(monthEnd))}`);
-      L.push('');
-    }
-
-    /* cartões */
-    if (prof.cards.length) {
-      L.push('## Cartões de crédito');
-      prof.cards.forEach((card) => {
-        const ref = Calc.currentInvoiceRef(card, ym);
-        const invoice = Calc.invoice(card.id, ref);
-        const used = Calc.cardUsed(card.id);
-        const pct = card.limit > 0 ? ` (${U.fmtPct(used / card.limit * 100, 0)} do limite de ${money(card.limit)})` : '';
-        L.push(`- ${card.name}: fatura de ${U.monthLabel(ref)} = ${money(invoice.planned)}, vence ${U.fmtDateBR(invoice.dueDate)}, ${invoice.paid ? 'PAGA' : invoice.isOverdue ? 'VENCIDA' : invoice.isOpen ? 'em aberto' : 'fechada e a pagar'}`);
-        L.push(`  · comprometido em faturas não pagas: ${money(used)}${pct}`);
-      });
-      L.push('');
-    }
-
-    /* investimentos */
-    if (prof.investments.length) {
-      const value = Calc.investedTotal(monthEnd);
-      const contributed = Calc.contributedTotal(monthEnd);
-      L.push('## Investimentos');
-      L.push(`- Total aportado: ${money(contributed)}`);
-      L.push(`- Valor atual estimado: ${money(value)} (rendimento ${money(value - contributed)})`);
-      const byType = U.groupBy(prof.investments.filter((i) => i.date <= monthEnd), (i) => i.type);
-      byType.forEach((list, type) => {
-        L.push(`- ${type}: ${money(U.sum(list, (i) => Calc.investmentValueAt(i, monthEnd)))} em ${list.length} aporte(s)`);
-      });
-      L.push('');
-    }
-
-    return L.join('\n');
+    return resumo;
   };
 
   const SYSTEM = [
@@ -213,9 +229,59 @@
    * cliques rápidos custariam duas chamadas pagas e devolveriam a
    * segunda por cima da primeira.
    */
-  AI.ask = async function (question) {
-    const box = document.getElementById('aiAnswer');
-    if (!box) return;
+  /* ============================================================
+     O DESTINO DA RESPOSTA É PARÂMETRO, NÃO CONSTANTE
+     ------------------------------------------------------------
+     AI.ask escrevia direto em #aiAnswer e mexia em #btnAiAsk pelo
+     id. Isso funcionava enquanto existia UMA caixa de conversa no
+     produto inteiro. Com o assistente flutuante passa a haver duas,
+     e a versão antiga faria a resposta pedida no painel flutuante
+     aparecer na página do UGLEZ — atrás do painel, invisível, com o
+     flutuante parado dizendo "Pensando…" para sempre.
+
+     Então quem pergunta diz ONDE a resposta vai. AI.ask continua
+     existindo com a assinatura antiga (a página e os chips a usam),
+     e agora é só um atalho para AI.perguntar com o destino da
+     página.
+     ============================================================ */
+
+  /**
+   * @typedef {object} Destino
+   * @property {HTMLElement} caixa    onde a resposta é escrita
+   * @property {HTMLElement} [botao]  botão que vira "Pensando…"
+   * @property {function}   [estado]  recebe 'recebendo' | 'pensando'
+   *                                  | 'respondendo' | 'sucesso' | 'erro'
+   *                                  — é o que move as partículas
+   */
+
+  /** O destino padrão: a caixa da página do UGLEZ. */
+  function destinoDaPagina() {
+    const caixa = document.getElementById('aiAnswer');
+    if (!caixa) return null;
+    return {
+      caixa: caixa,
+      botao: document.getElementById('btnAiAsk'),
+      estado: (e) => { if (global.Ug && Ug.estadoParticulas) Ug.estadoParticulas(e); }
+    };
+  }
+
+  AI.ask = function (question) {
+    return AI.perguntar(question, destinoDaPagina());
+  };
+
+  /**
+   * Envia a pergunta e escreve a resposta no destino.
+   *
+   * Um envio por vez em TODO o app — `busy` é do módulo, não do
+   * destino. Dois cliques rápidos (ou um na página e outro no
+   * flutuante) custariam duas chamadas pagas e devolveriam a
+   * segunda por cima da primeira.
+   */
+  AI.perguntar = async function (question, destino) {
+    const d = destino || destinoDaPagina();
+    if (!d || !d.caixa) return;
+    const box = d.caixa;
+    const sinal = d.estado || function () {};
 
     const q = String(question || '').trim();
     if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
@@ -225,8 +291,10 @@
     if (modo.chave !== 'servidor') { AI.explicarIndisponivel(modo); return; }
 
     busy = true;
-    const btn = document.getElementById('btnAiAsk');
+    const btn = d.botao;
+    const rotuloAntes = btn ? btn.textContent : '';
     if (btn) { btn.disabled = true; btn.textContent = 'Pensando…'; }
+
     box.hidden = false;
     box.className = 'ai-answer is-loading';
     /* aria-live faz o leitor de tela anunciar a chegada da resposta
@@ -235,15 +303,35 @@
     box.setAttribute('aria-busy', 'true');
     box.textContent = 'Analisando os dados de ' + U.monthLabel(App.ym);
 
+    /* As partículas contam a mesma história do texto, em outro
+       canal: junta o material, pensa, responde. Quem não vê a
+       animação continua tendo o texto; quem não lê o texto de
+       relance percebe que algo está acontecendo. */
+    sinal('recebendo');
+    const paraPensar = setTimeout(() => sinal('pensando'), 420);
+
+    /** Encerra o estado ocupado, aconteça o que acontecer. */
+    const encerrar = (comoTerminou) => {
+      clearTimeout(paraPensar);
+      sinal(comoTerminou);
+      box.setAttribute('aria-busy', 'false');
+      busy = false;
+      if (btn) { btn.disabled = false; btn.textContent = rotuloAntes || 'Perguntar'; }
+    };
+
     try {
       const r = await AI.chamarFuncao({
         pergunta: q,
         periodo: App.ym,
-        resumo: AI.resumoAgregado()
+        resumo: AI.resumoAgregado(),
+        /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
+           é a Edge Function, pelo plano. Ver AI.historico. */
+        historico: AI.historico()
       });
 
       if (r.erro === 'sem_sessao') {
         renderError(box, 'Sua sessão expirou. Entre de novo para continuar.');
+        encerrar('erro');
         return;
       }
       if (r.erro === 'limite') {
@@ -263,17 +351,21 @@
           ' consultas do seu plano neste mês. Elas voltam no dia 1º. ' +
           'Erro nosso ou indisponibilidade não consomem consulta.');
         if (global.Ug && Ug.renderContexto) Ug.renderContexto();
+        encerrar('erro');
         return;
       }
       if (r.erro) {
         renderError(box, r.mensagem || 'O assistente está indisponível agora.');
+        encerrar('erro');
         return;
       }
       if (!r.texto) {
         renderError(box, 'A resposta veio vazia. Tente reformular a pergunta.');
+        encerrar('erro');
         return;
       }
 
+      sinal('respondendo');
       box.className = 'ai-answer';
       box.innerHTML = renderMarkdown(r.texto);
       box.appendChild(el('div', { class: 'ai-meta' }, [
@@ -294,15 +386,19 @@
       if (global.Limites && Limites.carregarConsumo) {
         Limites.carregarConsumo().then(() => {
           if (global.Ug && Ug.renderContexto) Ug.renderContexto();
+          if (global.UglezFlutuante && UglezFlutuante.renderCota) UglezFlutuante.renderCota();
         });
       }
+
+      /* O "respondendo" fica no ar um instante antes do pulso de
+         sucesso: a onda precisa de tempo para sair do centro e
+         chegar à borda, e cortá-la na metade transforma a conclusão
+         num piscar. */
+      setTimeout(() => encerrar('sucesso'), 700);
     } catch (e) {
       console.error('UGLEZ:', e);
       renderError(box, 'Não foi possível falar com o assistente. Verifique a conexão e tente de novo.');
-    } finally {
-      box.setAttribute('aria-busy', 'false');
-      busy = false;
-      if (btn) { btn.disabled = false; btn.textContent = 'Perguntar'; }
+      encerrar('erro');
     }
   };
 
@@ -392,10 +488,12 @@
     U.clear(box);
     box.appendChild(el('strong', { text: 'Não deu certo. ' }));
     box.appendChild(document.createTextNode(message));
-    if (/chave/i.test(message)) {
-      box.appendChild(el('div', { style: { marginTop: '10px' } },
-        el('button', { class: 'btn btn-outline btn-sm', text: '⚙ Configurar chave', onclick: () => AI.openConfig() })));
-    }
+    /* Havia aqui um botão "Configurar chave" que chamava
+       AI.openConfig() — função que não existe desde que a chave saiu
+       do navegador. Ele só aparecia quando a mensagem continha a
+       palavra "chave", então nunca era testado, e clicá-lo dava
+       TypeError em cima de uma tela que já estava mostrando um erro.
+       Não há chave para configurar: o botão saiu. */
   }
 
   /* ============================================================
@@ -544,29 +642,28 @@
 
     const btnAsk = document.getElementById('btnAiAsk');
     const field = document.getElementById('aiQuestion');
-    const caixa = document.getElementById('aiAskBox');
-    const abrir = document.getElementById('btnAiOpen');
 
-    if (abrir && caixa) {
-      abrir.addEventListener('click', () => {
-        const aberto = abrir.getAttribute('aria-expanded') === 'true';
-        abrir.setAttribute('aria-expanded', aberto ? 'false' : 'true');
-        caixa.hidden = aberto;
-        if (!aberto && field) field.focus();
-      });
-    }
+    /* Perguntar pela página guarda a pergunta no histórico da
+       sessão ANTES de enviar. Guardar só no sucesso perderia
+       justamente as que falharam — que são as que a pessoa quer
+       repetir. */
+    const perguntarDaPagina = () => {
+      const q = field ? String(field.value || '').trim() : '';
+      if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
+      if (global.Ug && Ug.registrar) Ug.registrar(q);
+      AI.ask(q);
+      if (field) field.value = '';
+    };
+
     if (btnAsk && field) {
-      btnAsk.addEventListener('click', () => AI.ask(field.value));
+      btnAsk.addEventListener('click', perguntarDaPagina);
       field.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Enter' && (ev.metaKey || ev.ctrlKey)) { ev.preventDefault(); AI.ask(field.value); }
+        /* Enter envia, Shift+Enter quebra linha — a convenção de
+           todo campo de conversa. O atalho antigo (Ctrl/Cmd+Enter)
+           continua valendo para quem já o tinha no dedo. */
+        if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); perguntarDaPagina(); }
       });
     }
-    U.$$('[data-ai-q]').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        if (field) field.value = chip.dataset.aiQ;
-        AI.ask(chip.dataset.aiQ);
-      });
-    });
   };
 
   global.AI = AI;

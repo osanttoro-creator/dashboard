@@ -76,6 +76,53 @@
   Sync.status = () => ({ state, detail, user, backend: backend && backend.nome });
   Sync.currentUser = () => user;
 
+  /* ============================================================
+     "AINDA NÃO SEI" É UM ESTADO, E FALTAVA
+     ------------------------------------------------------------
+     Restaurar a sessão do armazenamento é ASSÍNCRONO: o SDK lê o
+     token, confere a validade e, se preciso, renova — e só então
+     avisa quem está logado. Até lá, Sync.currentUser() devolve
+     null.
+
+     null estava sendo lido como "não tem conta". Resultado: toda
+     abertura do app mostrava, por alguns quadros, o painel de
+     "Sem conta neste aparelho" com um botão de criar conta — para
+     alguém que ESTAVA logado. Some sozinho meio segundo depois,
+     mas é exatamente o que faz a pessoa concluir que a sessão não
+     ficou salva. Numa rede lenta, dura o bastante para ela clicar.
+
+     Três estados, e não dois:
+       restaurando  ainda perguntando ao armazenamento
+       com sessão   Sync.currentUser() devolve o usuário
+       sem sessão   perguntou e não havia
+
+     Quem desenha interface deve tratar `restaurando` como
+     carregamento — nunca como ausência.
+     ============================================================ */
+  let restaurando = false;
+
+  /** true enquanto a sessão está sendo restaurada e ainda não há resposta. */
+  Sync.restaurando = () => restaurando;
+
+  /**
+   * Já sabemos quem é (ou que não há ninguém)?
+   * É a pergunta que a interface realmente quer fazer antes de
+   * afirmar qualquer coisa sobre a conta.
+   */
+  Sync.sessaoResolvida = () => !restaurando;
+
+  /* Quem quer ser avisado quando a dúvida acabar. É um aviso só,
+     no momento em que `restaurando` vira false — telas que já
+     desenharam o estado de carregamento precisam se redesenhar. */
+  const ouvintesSessao = [];
+  Sync.aoResolverSessao = (fn) => { ouvintesSessao.push(fn); };
+
+  function avisarSessao() {
+    ouvintesSessao.forEach((fn) => {
+      try { fn(user); } catch (e) { console.error('Sync/sessão:', e); }
+    });
+  }
+
   /* ---------------- indicador visual ---------------- */
 
   const LABEL = {
@@ -237,6 +284,10 @@
   Sync._onUser = function (u) {
     const anterior = user && user.uid;
     user = u || null;
+    /* Houve resposta: com sessão ou sem, a dúvida acabou. */
+    const eraDuvida = restaurando;
+    restaurando = false;
+    if (eraDuvida) avisarSessao();
 
     // A troca de sessão dispara também em renovação de token e re-login.
     // Sem soltar o ouvinte antigo, cada disparo empilha outro e a
@@ -266,6 +317,9 @@
        na sessão anterior. */
     if (global.Limites && Limites.aoEntrar) Limites.aoEntrar();
     if (global.Conta && Conta.aoEntrar) Conta.aoEntrar();
+    /* A preferência de tema é da PESSOA, não do aparelho: ao entrar,
+       o que a conta guarda vence a cópia local. */
+    if (global.Tema && Tema.aoEntrar) Tema.aoEntrar();
 
     /* Os três são disparados juntos, e NÃO em sequência.
        A ordem que importa não é a de chamada: a migração é
@@ -558,9 +612,17 @@
     backend = escolher();
     if (!backend) { setState('off'); return; }
 
+    /* A partir daqui, e até o backend responder, a pergunta "tem
+       conta neste aparelho" não tem resposta. Ver Sync.restaurando(). */
+    restaurando = true;
     setState('signed-out');
     // reconecta sozinho se já havia sessão neste aparelho
     backend.conectar().catch((e) => {
+      /* Falhou ao conectar: não sabemos quem é, e não vamos saber.
+         Encerrar a restauração aqui é o certo — deixá-la aberta
+         faria a tela carregar para sempre. */
+      restaurando = false;
+      avisarSessao();
       console.error('Sync/' + backend.nome + ':', e);
       setState('offline', e.message);
     });

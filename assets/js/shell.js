@@ -364,6 +364,28 @@
     const marca = document.getElementById('topnavBrand');
     if (marca) marca.addEventListener('click', () => App.goTo('home'));
 
+    /* ============================================================
+       ÍCONE SEM RÓTULO PRECISA DE DICA VISÍVEL
+       ------------------------------------------------------------
+       Abaixo de 1400px os destinos da barra perdem o texto e ficam
+       só com o ícone; abaixo de 1140px os grupos também. O `title`
+       cobre o mouse — mal, com quase um segundo de espera — e NÃO
+       cobre o teclado: quem chega de Tab a um ícone mudo não tem
+       como saber onde está.
+
+       O rótulo já existe no title de cada item. Copiá-lo para
+       data-dica liga a tooltip do projeto (que aparece no foco)
+       sem duplicar o texto em lugar nenhum — se o title mudar, a
+       dica muda junto.
+       ============================================================ */
+    U.$$('.topnav-menu [title]').forEach((b) => {
+      if (!b.dataset.dica) b.dataset.dica = b.getAttribute('title');
+    });
+    U.$$('.topnav-trigger').forEach((t) => {
+      const txt = t.querySelector('.topnav-trigger-txt');
+      if (txt && !t.dataset.dica) t.dataset.dica = txt.textContent.trim();
+    });
+
     U.$$('.topnav-group').forEach((g) => {
       const trigger = g.querySelector('.topnav-trigger');
 

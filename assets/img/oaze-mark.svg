@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OAZE">
+  <title>OAZE</title>
+  <!-- =========================================================
+       SÍMBOLO OFICIAL DO OAZE — o coqueiro sobre a água.
+       Único ícone figurativo da marca. Não existe mascote, e o
+       UGLEZ não tem desenho próprio: ele é partícula.
+
+       Vetorizado a partir do medalhão aprovado. O relevo da arte
+       original (bisel, brilho especular) NÃO foi reproduzido: em
+       16px ele vira ruído, e em tema escuro vira mancha. O que
+       sobrevive à redução é a silhueta — anel, coqueiro, onda —
+       e é ela que virou o arquivo.
+
+       Cores por variável CSS, com valor de reserva: o mesmo
+       arquivo serve tema claro, tema escuro e fundo dourado.
+       ========================================================= -->
+  <defs>
+    <linearGradient id="oazeGold" x1="10" y1="4" x2="54" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F0DA9B"/>
+      <stop offset=".45" stop-color="#D8B45E"/>
+      <stop offset="1" stop-color="#B8912F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- anel externo dourado -->
+  <circle cx="32" cy="32" r="31" fill="var(--oaze-gold, url(#oazeGold))"/>
+  <!-- filete escuro que separa o anel do campo -->
+  <circle cx="32" cy="32" r="27.2" fill="var(--oaze-navy, #23394D)"/>
+  <!-- campo dourado -->
+  <circle cx="32" cy="32" r="25.6" fill="var(--oaze-gold, url(#oazeGold))"/>
+
+  <g fill="var(--oaze-navy, #23394D)">
+    <!-- folha central, em lança -->
+    <path d="M32 10.5c3.2 5.3 3.9 11.4 1.9 18.4h-3.8c-2-7-1.3-13.1 1.9-18.4z"/>
+
+    <!-- copa: duas folhas de cada lado, espelhadas -->
+    <path d="M32.4 25.6C25.4 13.4 17.4 11.3 11.2 19.6c6.6-4 13-.7 18.6 8.9z"/>
+    <path d="M32.4 27.5C22.9 20.7 14.2 24.7 10.8 38.7c4.3-10.2 11.5-12.3 19.7-7.3z"/>
+    <path d="M31.6 25.6C38.6 13.4 46.6 11.3 52.8 19.6c-6.6-4-13-.7-18.6 8.9z"/>
+    <path d="M31.6 27.5C41.1 20.7 49.8 24.7 53.2 38.7c-4.3-10.2-11.5-12.3-19.7-7.3z"/>
+
+    <!-- tronco: estreito no alto, alargando na base -->
+    <path d="M30.5 27.2h3c.6 5.7 1.3 11.2 2.2 16.4H28.3c.9-5.2 1.6-10.7 2.2-16.4z"/>
+
+    <!-- água: uma onda só, de pontas afiadas -->
+    <path d="M10.9 46.3c6.8-4.9 12.9 4.7 21.1 4.7s14.3-9.6 21.1-4.7c-6.8 6.3-12.9 9-21.1 9s-14.3-2.7-21.1-9z"/>
+  </g>
+</svg>

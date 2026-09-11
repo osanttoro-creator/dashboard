@@ -1257,6 +1257,21 @@ select.input { cursor: pointer; }
 .seg-sm { padding: 2px; }
 .seg-sm button { padding: 5px 11px; font-size: 12px; flex: 0 0 auto; }
 
+/* Segmentado com ícone — o seletor de tema.
+   O alvo tem 34px de altura porque ele também existe no celular, e
+   um controle de 24px numa tela de toque é um erro de clique
+   esperando acontecer. */
+.seg-ico button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 34px;
+}
+.seg-ico button svg { flex: none; opacity: .8; }
+.seg-ico button.is-active svg { opacity: 1; color: var(--accent); }
+/* O foco precisa aparecer: num radiogroup só um botão está na
+   ordem de Tab, e sem anel visível quem navega por teclado não
+   sabe onde chegou. */
+.seg-ico button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 .bank-preview { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--ink-2); }
 .color-picker { display: flex; gap: 6px; flex-wrap: wrap; }
 .color-opt { width: 24px; height: 24px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; padding: 0; }
@@ -2149,7 +2164,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .topnav-menu { gap: 0; }
   .topnav-menu .nav-item { padding: 9px 7px; }
   .topnav-trigger { padding: 9px 6px; }
-  .pill-profile select { max-width: 88px; }
+  .pill-espaco select { max-width: 88px; }
   .pill-hoje { display: none; }
 }
 
@@ -2692,4 +2707,385 @@ input[type="checkbox"], input[type="radio"] {
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   background: color-mix(in srgb, var(--accent) 9%, transparent);
   color: var(--ink);
+}
+
+/* =============================================================
+   UGLEZ — partículas e assistente flutuante
+   -------------------------------------------------------------
+   O UGLEZ não tem mascote, ícone nem logotipo. O que existe é a
+   formação de partículas desenhada em <canvas> por
+   assets/js/uglez-particulas.js. Aqui só há caixa, posição e
+   estados de interação — nenhuma cor de partícula: elas vêm do
+   JavaScript, que precisa das mesmas cores para o tema claro e
+   para o escuro sem depender de CSS carregado.
+   ============================================================= */
+
+/* O canvas ocupa a caixa inteira e nunca intercepta clique: quem
+   recebe o clique é o botão embaixo dele. Sem pointer-events:none
+   o canvas engoliria o clique e o botão nunca abriria. */
+canvas.uglez-particulas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  /* Fundo COMPLETAMENTE transparente, como pede o brief: o canvas
+     nunca pinta um fundo, e nada aqui coloca um por baixo. */
+  background: none;
+}
+
+/* ---------- o botão flutuante ---------- */
+
+.uglez-flut {
+  position: fixed; z-index: 88;
+  /* Canto inferior ESQUERDO, e nunca sobre a navegação.
+     ONDE FICA A NAVEGAÇÃO DEPENDE DA LARGURA, e é por isso que a
+     posição tem duas versões:
+       · até 820px  a navegação é a barra INFERIOR — o botão sobe
+                    acima dela (regra no bloco de celular)
+       · 821px+     a navegação é a barra SUPERIOR, e a sidebar
+                    está em display:none — a borda esquerda está
+                    livre, e o botão acompanha o respiro da página
+     A primeira versão desta regra usava calc(var(--sidebar-w) +
+     32px) o tempo todo. Como --sidebar-w continua valendo 244px
+     mesmo com a sidebar escondida, o botão flutuava a 276px da
+     borda, no meio do nada, alinhado a uma coluna que não existe
+     mais. Variável que descreve um layout antigo é pior do que
+     número solto: parece intencional. */
+  left: 24px;
+  bottom: 22px;
+  display: flex; align-items: flex-end; gap: 10px;
+}
+
+.uglez-flut[hidden] { display: none; }
+
+.uglez-flut-botao {
+  position: relative;
+  /* 56px: dentro da faixa de 52–64 pedida, e o mesmo peso visual
+     do "+" (58px) sem competir com ele. */
+  width: 56px; height: 56px;
+  border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer; padding: 0;
+  box-shadow: var(--shadow);
+  transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out),
+              border-color .18s var(--ease-out);
+}
+.uglez-flut-botao:hover,
+.uglez-flut-botao:focus-visible {
+  /* O crescimento de verdade acontece nas partículas (máx. 8%).
+     Aqui é só a moldura acompanhando — 3% para não brigar. */
+  transform: scale(1.03);
+  border-color: color-mix(in srgb, #4669F0 45%, var(--border));
+  box-shadow: var(--shadow-lift);
+}
+.uglez-flut-botao:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Tooltip próprio. O title do navegador demora ~1s e não aparece
+   no foco por teclado — quem chega aqui de Tab precisa do rótulo. */
+.uglez-flut-dica {
+  align-self: center;
+  padding: 6px 10px; border-radius: 8px;
+  background: var(--tip-bg); border: 1px solid var(--tip-line);
+  color: var(--ink); font-size: 12px; font-weight: 560; white-space: nowrap;
+  opacity: 0; transform: translateX(-6px); pointer-events: none;
+  transition: opacity .16s var(--ease-out), transform .16s var(--ease-out);
+}
+.uglez-flut-botao:hover + .uglez-flut-dica,
+.uglez-flut-botao:focus-visible + .uglez-flut-dica {
+  opacity: 1; transform: translateX(0);
+}
+.uglez-flut.is-aberto .uglez-flut-dica { display: none; }
+
+/* ---------- o painel ---------- */
+
+.uglez-flut-painel {
+  position: absolute; left: 0; bottom: 68px;
+  width: min(400px, calc(100vw - 64px));
+  max-height: min(560px, calc(100vh - 140px));
+  display: flex; flex-direction: column;
+  border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--surface-2);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+.uglez-flut-painel[hidden] { display: none; }
+
+.uglez-flut-topo {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 12px 10px; border-bottom: 1px solid var(--border);
+}
+.uglez-flut-marca { position: relative; width: 30px; height: 30px; flex: none; }
+.uglez-flut-id { display: flex; flex-direction: column; min-width: 0; }
+.uglez-flut-id strong { font-size: 13px; letter-spacing: .1em; }
+.uglez-flut-periodo { font-size: 11.5px; color: var(--muted); }
+.uglez-flut-topo .icon-btn { margin-left: auto; }
+
+.uglez-flut-corpo { padding: 12px; overflow-y: auto; flex: 1; min-height: 90px; }
+.uglez-flut-pe { padding: 10px 12px 12px; border-top: 1px solid var(--border); }
+.uglez-flut-pe .ai-ask { margin-top: 8px; }
+.uglez-flut-pe .hint { margin-top: 8px; font-size: 11px; }
+
+/* ---------- celular ---------- */
+
+@media (max-width: 820px) {
+  .uglez-flut {
+    /* Acima da navegação inferior, e no lado oposto ao "+": os dois
+       no mesmo canto se cobririam, e o de baixo ficaria inalcançável. */
+    left: 16px;
+    bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+  /* 48px: dentro da faixa de 44–52 pedida para o celular. */
+  .uglez-flut-botao { width: 48px; height: 48px; }
+  .uglez-flut-dica { display: none; }
+
+  /* Bottom sheet: nasce embaixo, ocupa a largura e para antes do
+     topo, para a pessoa continuar vendo onde estava. */
+  .uglez-flut-painel {
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto;
+    max-height: 82vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-left: 0; border-right: 0; border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    z-index: 95;
+  }
+  /* Enquanto o painel está aberto, o botão sai da frente: num
+     bottom sheet ele ficaria sobre o conteúdo do próprio painel. */
+  .uglez-flut.is-aberto .uglez-flut-botao { display: none; }
+
+  /* E o "+" também. Ele é fixo no canto inferior direito, com
+     z-index próprio, e ficava POR CIMA do bottom sheet — cobrindo
+     exatamente o canto do campo de digitar. Dois flutuantes na
+     mesma tela é um a mais: enquanto o UGLEZ está aberto, quem
+     manda é ele. Some junto o menu do "+", que poderia estar
+     aberto quando o painel abriu.
+     A classe vem do JavaScript e não de :has(): :has() só existe
+     no Firefox desde a versão 121, e o botão de adicionar cobrindo
+     o campo de digitar é grave demais para depender do navegador
+     ser recente. */
+  body.uglez-aberto .fab-wrap { display: none; }
+}
+
+/* ---------- movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* As partículas já respondem sozinhas (ver uglez-particulas.js:
+     nada orbita, só o brilho respira). O que sai aqui é a
+     transformação da moldura, que é deslocamento de verdade. */
+  .uglez-flut-botao { transition: box-shadow .18s linear, border-color .18s linear; }
+  .uglez-flut-botao:hover,
+  .uglez-flut-botao:focus-visible { transform: none; }
+  .uglez-flut-dica { transition: none; transform: none; }
+}
+
+/* =============================================================
+   UGLEZ — a página
+   -------------------------------------------------------------
+   Uma conversa, não um mural. O cabeçalho diz quem está falando e
+   sobre qual mês; o cartão do meio é a conversa inteira; a leitura
+   calculada localmente vem depois, e só quando há o que ler.
+   ============================================================= */
+
+.uglez-topo {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 14px;
+}
+.uglez-formacao {
+  position: relative; width: 64px; height: 64px; flex: none;
+}
+.uglez-topo-id { min-width: 0; }
+.uglez-topo-nome {
+  font-size: 15px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  margin: 0;
+}
+.uglez-topo-sub { font-size: 13px; color: var(--muted); margin: 2px 0 0; }
+
+/* O estado em TEXTO, ao lado das partículas. Partícula não tem
+   alternativa textual: sem esta linha, quem usa leitor de tela não
+   distingue "pensando" de "quebrou". */
+.uglez-estado {
+  margin-left: auto; font-size: 12.5px; color: var(--muted);
+  text-align: right; min-height: 1em;
+}
+.uglez-estado.is-erro { color: var(--serious); }
+
+.uglez-conversa { display: flex; flex-direction: column; gap: 14px; }
+
+/* ---------- estado sem dados ---------- */
+.uglez-vazio { text-align: center; padding: 18px 8px 6px; }
+.uglez-vazio .empty-sub { max-width: 46ch; margin-left: auto; margin-right: auto; }
+.uglez-vazio-acoes {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 14px;
+}
+
+/* ---------- limite atingido ---------- */
+.uglez-aviso {
+  border: 1px solid var(--border); border-left: 3px solid var(--warning);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+}
+.uglez-aviso-t { font-weight: 620; font-size: 13.5px; margin: 0; }
+.uglez-aviso-s { font-size: 13px; color: var(--ink-2); line-height: 1.6; margin: 6px 0 12px; }
+
+/* ---------- histórico da sessão ---------- */
+.uglez-historico { display: flex; flex-direction: column; gap: 6px; }
+.uglez-pergunta {
+  display: flex; gap: 10px; align-items: baseline;
+  font-size: 13px; color: var(--ink-2);
+  padding: 7px 10px; border-radius: var(--radius-sm);
+  background: var(--plane-2);
+}
+.uglez-pergunta-hora {
+  font-size: 11px; color: var(--muted); flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- envio ---------- */
+.uglez-envio { border-top: 1px solid var(--border); padding-top: 12px; }
+.uglez-rodape {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px; font-size: 11.5px; color: var(--muted);
+}
+.uglez-rodape .btn { margin-left: auto; }
+
+/* ---------- leitura local ---------- */
+.uglez-leitura { margin-top: 22px; }
+.uglez-leitura-t {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 620; margin: 0 0 12px;
+}
+.uglez-leitura[hidden] { display: none; }
+
+@media (max-width: 560px) {
+  .uglez-formacao { width: 52px; height: 52px; }
+  /* O estado desce para a própria linha: espremido ao lado do nome
+     num celular, ele vira duas palavras cortadas. */
+  .uglez-topo { flex-wrap: wrap; }
+  .uglez-estado { margin-left: 0; width: 100%; text-align: left; }
+  .uglez-rodape .btn { margin-left: 0; }
+}
+
+/* =============================================================
+   IDENTIFICAÇÃO DOS CONTROLES DO CABEÇALHO
+   -------------------------------------------------------------
+   Ícone sozinho não se explica. O title do navegador não resolve:
+   demora ~1s, some ao mover o mouse um pixel e NÃO aparece para
+   quem chega pelo teclado — que é justamente quem mais precisa
+   dele. Esta tooltip aparece no hover E no foco visível.
+   ============================================================= */
+
+[data-dica] { position: relative; }
+
+[data-dica]::after {
+  content: attr(data-dica);
+  position: absolute; top: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 5px 9px; border-radius: 7px;
+  background: var(--tip-bg); border: 1px solid var(--tip-line);
+  color: var(--ink); font-size: 11.5px; font-weight: 560;
+  white-space: pre; letter-spacing: normal;
+  box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none;
+  transition: opacity .14s var(--ease-out), transform .14s var(--ease-out);
+  z-index: 120;
+}
+[data-dica]:hover::after,
+[data-dica]:focus-visible::after {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+/* Painel aberto: a tooltip sai de cena. Ela ficaria por cima do
+   próprio painel que o botão acabou de abrir. */
+[data-dica][aria-expanded="true"]::after { opacity: 0; }
+
+/* Alvo de toque. 44px é o mínimo que se acerta com o polegar; os
+   controles do cabeçalho ficam a 8px uns dos outros, e abaixo
+   disso o erro deixa de ser raro. */
+.pill-btn, .pill-ico {
+  min-width: 36px; min-height: 36px;
+}
+@media (pointer: coarse) {
+  .pill-btn, .pill-ico, .pill-hoje { min-width: 44px; min-height: 44px; }
+  /* Sem hover em tela de toque, a tooltip só atrapalharia: ela
+     apareceria presa depois do toque, cobrindo o que foi aberto. */
+  [data-dica]::after { display: none; }
+}
+
+/* Estado ativo do controle que abriu um painel. Já existia para
+   .pill-btn; o do perfil faltava, e sem ele o menu de espaços
+   abria sem nada indicar de onde. */
+.pill-ico[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--plane-2));
+  color: var(--ink);
+}
+.pill-btn:focus-visible, .pill-ico:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Contribuição planejada abaixo do que o prazo exige. Âmbar, e não
+   vermelho: não é erro nem urgência — é uma conta que ainda dá
+   tempo de ajustar, e pintá-la de vermelho transformaria um plano
+   conservador em alarme. */
+.goal-pace.is-curto { color: var(--warning-text); }
+.goal-pace.is-curto svg { color: var(--warning); }
+
+/* =============================================================
+   CONTA · ESPAÇO · PERÍODO — três controles, três formas
+   -------------------------------------------------------------
+   A distinção não pode depender só do rótulo: eles ficam lado a
+   lado numa barra estreita, e no celular os rótulos somem. Então
+   cada um tem um FORMATO próprio — círculo, cápsula com ícone de
+   carteira, cápsula com setas de navegação — e a diferença
+   sobrevive à redução.
+   ============================================================= */
+
+/* 1 · a conta: um círculo, e só. É a pessoa. */
+.pill-conta {
+  padding: 4px; border-radius: 999px;
+  /* 36px de alvo mesmo com avatar de 26: a área clicável não pode
+     ser do tamanho do desenho. */
+  min-width: 36px; min-height: 36px;
+  display: inline-grid; place-items: center;
+}
+.pill-conta .pill-avatar { pointer-events: none; }
+
+/* 2 · o espaço financeiro: cápsula com carteira. É o conjunto de
+   dados — contas, cartões e lançamentos de UM espaço. */
+.pill-espaco { padding-left: 10px; }
+.pill-espaco-ico { display: inline-flex; color: var(--muted); flex: none; }
+.pill-espaco select { font-weight: 560; }
+
+/* 3 · o período mantém as setas, que já o distinguem. */
+
+@media (max-width: 820px) {
+  /* No celular a barra tem três linhas de controles e pouca
+     largura. A conta encolhe primeiro: ela é a menos usada das
+     três, e continua alcançável por Configurações. */
+  .pill-conta { min-width: 34px; min-height: 34px; }
+  .pill-espaco { padding-left: 8px; }
+}
+
+/* ------------------------------------------------------------
+   O DEGRAU QUE FALTAVA — medido, não estimado
+   ------------------------------------------------------------
+   Os rótulos "Avisos" e "Ajustes" entraram no cabeçalho para que
+   sino e engrenagem parassem de ser ícones mudos. Eles custam
+   ~95px, e a fita de navegação não tinha esses 95px sobrando: em
+   1440 o grupo "Mais" passou a terminar em 694px dentro de um
+   contêiner que acaba em 639px.
+
+   Como .topnav-menu tem overflow:hidden (a rede de segurança que
+   prefere cortar a sobrepor), o resultado não era um menu
+   apertado: era um DESTINO CORTADO. Metade do botão "Mais" ficava
+   fora, e com ela Categorias, Configurações, Planos e Ajuda.
+   Recortar um destino é pior do que sobrepor — pelo menos a
+   sobreposição se vê.
+
+   A ordem de sacrifício é a mesma do resto da escada: primeiro o
+   que é redundante. O rótulo destes dois botões É redundante para
+   quem enxerga (o ícone já está ali) e continua disponível para
+   quem não enxerga — o aria-label não some, e a tooltip do foco
+   também não. Abaixo de 1560px, portanto, só os ícones.
+   ------------------------------------------------------------ */
+@media (min-width: 821px) and (max-width: 1560px) {
+  #btnNotif .pill-label,
+  #btnSettings .pill-label { display: none; }
 }

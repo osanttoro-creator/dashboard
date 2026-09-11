@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OAZE">
+  <title>OAZE</title>
+  <!-- Versão monocromática: currentColor, sem anel preenchido.
+       Para e-mail, impressão em uma tinta, carimbo e qualquer
+       lugar onde o dourado não sobrevive. -->
+  <g fill="currentColor">
+    <path d="M32 3a29 29 0 100 58 29 29 0 000-58zm0 3.6a25.4 25.4 0 110 50.8 25.4 25.4 0 010-50.8z"/>
+    <path d="M32 10.5c3.2 5.3 3.9 11.4 1.9 18.4h-3.8c-2-7-1.3-13.1 1.9-18.4z"/>
+    <path d="M32.4 25.6C25.4 13.4 17.4 11.3 11.2 19.6c6.6-4 13-.7 18.6 8.9z"/>
+    <path d="M32.4 27.5C22.9 20.7 14.2 24.7 10.8 38.7c4.3-10.2 11.5-12.3 19.7-7.3z"/>
+    <path d="M31.6 25.6C38.6 13.4 46.6 11.3 52.8 19.6c-6.6-4-13-.7-18.6 8.9z"/>
+    <path d="M31.6 27.5C41.1 20.7 49.8 24.7 53.2 38.7c-4.3-10.2-11.5-12.3-19.7-7.3z"/>
+    <path d="M30.5 27.2h3c.6 5.7 1.3 11.2 2.2 16.4H28.3c.9-5.2 1.6-10.7 2.2-16.4z"/>
+    <path d="M10.9 46.3c6.8-4.9 12.9 4.7 21.1 4.7s14.3-9.6 21.1-4.7c-6.8 6.3-12.9 9-21.1 9s-14.3-2.7-21.1-9z"/>
+  </g>
+</svg>

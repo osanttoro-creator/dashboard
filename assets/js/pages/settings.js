@@ -32,6 +32,48 @@
     ]);
   }
 
+  /**
+   * Um segmentado com ícone antes do rótulo.
+   *
+   * Existe em vez de UI.segmented porque aquele só aceita texto, e
+   * aqui o ícone é a metade que a pessoa reconhece de relance — sol
+   * e lua são lidos antes das palavras "claro" e "escuro". Mas o
+   * texto FICA: ícone sozinho num controle de três estados obriga a
+   * adivinhar, e é assim que se erra o clique.
+   *
+   * role=radiogroup, e não um punhado de botões soltos: são opções
+   * mutuamente exclusivas de um mesmo campo, e é isso que faz o
+   * leitor de tela anunciar "1 de 3" e as setas funcionarem.
+   */
+  function segmentadoComIcone(opcoes, valor, aoMudar) {
+    const wrap = el('div', { class: 'seg seg-ico', role: 'radiogroup', 'aria-label': 'Tema' });
+    opcoes.forEach((o) => {
+      const ativo = o.value === valor;
+      const b = el('button', {
+        type: 'button', role: 'radio',
+        'aria-checked': ativo ? 'true' : 'false',
+        /* Só o selecionado fica na ordem de Tab; as setas percorrem
+           o grupo. É como um grupo de rádio se comporta em todo
+           lugar, e quebrar isso faz o teclado parar num controle. */
+        tabindex: ativo ? '0' : '-1',
+        class: ativo ? 'is-active' : '',
+        onclick: () => aoMudar(o.value),
+        onkeydown: (ev) => {
+          if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft' &&
+              ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
+          ev.preventDefault();
+          const i = opcoes.findIndex((x) => x.value === o.value);
+          const passo = (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') ? 1 : -1;
+          aoMudar(opcoes[(i + passo + opcoes.length) % opcoes.length].value);
+        }
+      });
+      b.appendChild(Icons.lucide(o.icone, 15));
+      b.appendChild(el('span', { text: o.label }));
+      wrap.appendChild(b);
+    });
+    return wrap;
+  }
+
   function perfil() {
     const box = U.clear(document.getElementById('setProfile'));
     const st = Store.state();
@@ -47,31 +89,69 @@
     ));
 
     box.appendChild(linha(
-      'Perfil ativo',
-      `${st.profiles.length} perfil(is). Cada um tem contas, lançamentos e categorias próprios.`,
-      el('button', { class: 'btn btn-outline btn-sm', text: 'Gerenciar perfis', onclick: () => Forms.openProfiles() })
+      'Espaço financeiro ativo',
+      `${st.profiles.length} espaço(s). Cada um tem contas, cartões, lançamentos e categorias próprios — separar pessoal de trabalho, por exemplo.`,
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Gerenciar espaços', onclick: () => Forms.openProfiles() })
     ));
 
     const prof = Store.profile();
     box.appendChild(linha(
-      'Conteúdo deste perfil',
+      'Conteúdo deste espaço',
       `${prof.transactions.length} lançamentos · ${prof.accounts.length} contas · ${prof.cards.length} cartões · ${prof.goals.length} metas`,
       el('span', { class: 'muted', text: prof.name })
     ));
   }
 
+  /* ============================================================
+     APARÊNCIA — e este é o ÚNICO lugar onde o tema se troca
+     ------------------------------------------------------------
+     Havia um segundo controle no popover da engrenagem do
+     cabeçalho ("Alternar tema claro/escuro"). Ele saiu. Dois
+     controles para um estado é sempre a mesma história: um deles
+     desatualiza, e a pessoa nunca sabe qual venceu.
+
+     TRÊS OPÇÕES, NÃO DUAS. "Sistema" não é enfeite: sem ela,
+     "respeitar o tema do sistema operacional quando não houver
+     escolha" vira um estado do qual não se volta — quem tocasse
+     uma vez no seletor ficaria preso à escolha para sempre, mesmo
+     tendo tocado por engano.
+
+     SÓ SOL E LUA. Nenhum outro ícone entra aqui: um deslizador,
+     um contraste ou uma paleta obrigam a pessoa a aprender o que
+     significam. Sol e lua já são conhecidos, e "monitor" só marca
+     o estado que não é nem um nem outro.
+     ============================================================ */
   function aparencia() {
     const box = U.clear(document.getElementById('setAppearance'));
-    const escuro = Store.state().theme === 'dark';
+    const escolha = global.Tema ? Tema.escolha() : (Store.state().theme || null);
+    const doSistema = global.Tema ? Tema.doSistema() : 'dark';
+
+    const opcao = (valor, icone, rotulo) => ({
+      value: valor === null ? 'sistema' : valor,
+      label: rotulo,
+      icone: icone
+    });
+
+    const controle = segmentadoComIcone(
+      [
+        opcao(null, 'monitor', 'Sistema'),
+        opcao('light', 'sun', 'Claro'),
+        opcao('dark', 'moon', 'Escuro')
+      ],
+      escolha === null ? 'sistema' : escolha,
+      (v) => {
+        Tema.definir(v === 'sistema' ? null : v);
+        aparencia();          // redesenha para a frase abaixo acompanhar
+      }
+    );
 
     box.appendChild(linha(
       'Tema',
-      'O escuro é o padrão do OAZE. O claro usa os mesmos tons, em areia.',
-      UI.segmented(
-        [{ value: 'dark', label: 'Escuro' }, { value: 'light', label: 'Claro' }],
-        escuro ? 'dark' : 'light',
-        (v) => Store.setTheme(v)
-      )
+      escolha === null
+        ? 'Seguindo o seu sistema operacional, que agora pede o tema ' +
+          (doSistema === 'dark' ? 'escuro' : 'claro') + '. Escolher aqui vale para a sua conta, em qualquer aparelho.'
+        : 'Escolhido por você. Vale para a sua conta em qualquer aparelho — volte para "Sistema" se quiser acompanhar o aparelho de novo.',
+      controle
     ));
 
     box.appendChild(linha(
@@ -280,6 +360,21 @@
 
     const u = global.Sync && Sync.currentUser();
 
+    /* ENQUANTO A SESSÃO NÃO FOI RESOLVIDA, NÃO SE AFIRMA NADA.
+       Restaurar a sessão é assíncrono, e até a resposta chegar
+       currentUser() é null — que NÃO significa "não tem conta".
+       Dizer "sem conta neste aparelho" para quem está logado, com
+       um botão de criar conta ao lado, é como se ensinava a pessoa
+       a criar a segunda conta. */
+    if (global.Sync && Sync.restaurando && Sync.restaurando()) {
+      box.appendChild(linha(
+        'Verificando sua conta…',
+        'Restaurando a sessão salva neste aparelho.',
+        el('span', { class: 'muted', text: 'Aguarde' })
+      ));
+      return;
+    }
+
     if (!u) {
       box.appendChild(linha(
         'Sem conta neste aparelho',
@@ -353,6 +448,39 @@
       })
     ));
 
+    /* ============================================================
+       TRAZER OS DADOS ANTIGOS — a porta de volta
+       ------------------------------------------------------------
+       O convite automático agora aparece uma vez e respeita o "não".
+       Esta linha é a contrapartida obrigatória disso: uma decisão
+       que o sistema guarda para sempre e o usuário não pode revisar
+       não é uma decisão, é uma porta que trancou.
+
+       Só aparece quando há de fato dado antigo neste navegador.
+       Um botão que só sabe dizer "não há nada para trazer" é ruído
+       permanente em Configurações.
+       ============================================================ */
+    if (global.Mig && Mig.temDadoAntigo && Mig.temDadoAntigo()) {
+      const decisao = Mig.decisaoConhecida && Mig.decisaoConhecida();
+      const concluida = decisao && decisao.status === 'concluida';
+      box.appendChild(linha(
+        'Dados antigos deste navegador',
+        concluida
+          ? 'Já copiados para a sua conta e conferidos no servidor. O que está aqui continua aqui — nada foi apagado.'
+          : 'Este navegador guarda dados de antes da sua conta. Copiá-los é idempotente: rodar de novo não duplica nada.',
+        el('button', {
+          class: 'btn btn-outline btn-sm',
+          text: concluida ? 'Ver situação' : 'Trazer para a conta',
+          onclick: () => Mig.reabrir()
+        })
+      ));
+    }
+  }
+
+  /* Mesmo motivo da página do UGLEZ: quem desenhou "Verificando
+     sua conta…" precisa ser avisado quando a verificação termina. */
+  if (global.Sync && Sync.aoResolverSessao) {
+    Sync.aoResolverSessao(() => { if (App.page === 'settings') Cfg.render(); });
   }
 
   global.Cfg = Cfg;

@@ -68,17 +68,7 @@
 <header class="topo">
   <div class="env">
     <a class="marca" href="/" aria-label="OAZE, página inicial">
-      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
-        <!-- Um horizonte sobre água: o traço reto é a linha, os dois
-             arcos são a refração abaixo dela. -->
-        <circle cx="16" cy="16" r="14.5" stroke="url(#g1)" stroke-width="1.4"/>
-        <path d="M4 14.5h24" stroke="url(#g1)" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
-        <path d="M9.5 24c2.2-1.7 4.4-1.7 6.5 0s4.3 1.7 6.5 0" stroke="#5FD4E8" stroke-width="1.4" stroke-linecap="round" opacity=".45"/>
-        <defs><linearGradient id="g1" x1="4" y1="4" x2="28" y2="28">
-          <stop stop-color="#A98BFF"/><stop offset="1" stop-color="#7C5CFF"/>
-        </linearGradient></defs>
-      </svg>
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
       OAZE
     </a>
 
@@ -360,7 +350,7 @@
       <div style="text-align:center">
         <div class="alternador" data-alternador role="group" aria-label="Ciclo de cobrança">
           <button type="button" data-ciclo="mensal" aria-pressed="true">Mensal</button>
-          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−16%</span></button>
+          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−19%</span></button>
         </div>
       </div>
 
@@ -374,9 +364,9 @@
           <ul class="lista">
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 espaço financeiro</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 2 contas e 1 cartão</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Lançamentos ilimitados</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico de 6 meses</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 consultas à UGLEZ por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 100 movimentações por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico dos últimos 3 meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 consultas ao UGLEZ por mês</li>
           </ul>
         </article>
 
@@ -385,18 +375,17 @@
           <h3>Basic</h3>
           <p class="plano-alvo">Para quem já organiza e quer histórico</p>
           <p class="plano-preco">
-            <b data-mensal="R$ 14,90" data-anual="R$ 12,49">R$ 14,90</b>
+            <b data-mensal="R$ 24,90" data-anual="R$ 19,99">R$ 24,90</b>
             <span>por mês</span>
           </p>
-          <p class="plano-nota"><span data-so-anual hidden>R$ 149,90 por ano · economia de R$ 28,90</span></p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 239,90 por ano · economia de R$ 58,90</span></p>
           <a class="btn btn-principal btn-largo" href="/checkout?plano=basic" data-link-plano="/checkout?plano=basic">Assinar o Basic</a>
           <ul class="lista">
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 2 espaços financeiros</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 contas e 5 cartões</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico completo</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Categorias, metas e orçamentos ilimitados</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 50 consultas à UGLEZ por mês</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importação e exportação em CSV</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Movimentações e orçamentos ilimitados</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 10 metas e histórico de 24 meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importar CSV e OFX, exportar CSV e PDF</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 30 consultas ao UGLEZ por mês, com assistente flutuante</li>
           </ul>
         </article>
 
@@ -404,17 +393,17 @@
           <h3>Pro</h3>
           <p class="plano-alvo">Para quem separa pessoal de trabalho</p>
           <p class="plano-preco">
-            <b data-mensal="R$ 29,90" data-anual="R$ 24,99">R$ 29,90</b>
+            <b data-mensal="R$ 49,90" data-anual="R$ 39,99">R$ 49,90</b>
             <span>por mês</span>
           </p>
-          <p class="plano-nota"><span data-so-anual hidden>R$ 299,90 por ano · economia de R$ 58,90</span></p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 479,90 por ano · economia de R$ 118,90</span></p>
           <a class="btn btn-fantasma btn-largo" href="/checkout?plano=pro" data-link-plano="/checkout?plano=pro">Assinar o Pro</a>
           <ul class="lista">
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 espaços financeiros</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Contas e cartões ilimitados</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Comparações avançadas entre períodos</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 200 consultas à UGLEZ por mês</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importação em CSV e OFX</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 5 espaços financeiros</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Contas, cartões e movimentações ilimitados</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Comparação anual, tendências e projeções</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 120 consultas ao UGLEZ por mês, com assistente flutuante</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Acesso antecipado e atendimento prioritário</li>
           </ul>
         </article>
       </div>
@@ -453,7 +442,7 @@
 
         <details class="revela">
           <summary>Como funciona a cobrança anual?</summary>
-          <div class="resposta"><p>O ano inteiro é cobrado de uma vez, com desconto: o Basic sai por R$ 149,90 em vez de R$ 178,80, uma economia de R$ 28,90; o Pro por R$ 299,90 em vez de R$ 358,80, economia de R$ 58,90. O valor equivalente por mês fica em R$ 12,49 e R$ 24,99.</p></div>
+          <div class="resposta"><p>O ano inteiro é cobrado de uma vez, com desconto: o Basic sai por R$ 239,90 em vez de R$ 298,80, uma economia de R$ 58,90; o Pro por R$ 479,90 em vez de R$ 598,80, economia de R$ 118,90. O valor equivalente por mês fica em R$ 19,99 e R$ 39,99.</p></div>
         </details>
 
         <details class="revela">
@@ -495,11 +484,7 @@
     <div class="rodape-grade">
       <div>
         <a class="marca" href="/" aria-label="OAZE, página inicial">
-          <svg viewBox="0 0 32 32" aria-hidden="true" fill="none">
-            <circle cx="16" cy="16" r="14.5" stroke="#7C5CFF" stroke-width="1.4"/>
-            <path d="M4 14.5h24" stroke="#A98BFF" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M7 19.5c3-2.4 6-2.4 9 0s6 2.4 9 0" stroke="#5FD4E8" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
-          </svg>
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
           OAZE
         </a>
         <p class="rodape-sobre">Um painel para enxergar o próprio dinheiro sem virar planilha.</p>

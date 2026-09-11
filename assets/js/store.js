@@ -255,6 +255,22 @@
       color: migrateColor(g.color || '#2E6E7E'),
       icon: g.icon ? String(g.icon) : 'target',
       accountId: g.accountId || null,
+      /* A categoria da meta é DESCRITIVA ("Viagem", "Educação"):
+         serve para agrupar e para o UGLEZ falar delas por nome. Ela
+         não move dinheiro — guardar numa meta não é despesa. */
+      categoryId: g.categoryId || null,
+      /* Contribuição planejada: quanto e em que dia do mês. É um
+         PLANO, não um lançamento. Virar lançamento automático faria
+         o saldo do mês afundar por dinheiro que apenas mudou de
+         nome, que é o erro que o cabeçalho de pages/goals.js
+         descreve. O app usa isto para dizer se o ritmo alcança o
+         prazo — e é a pessoa que confirma cada aporte. */
+      contribution: (g.contribution && +g.contribution.amount > 0)
+        ? {
+          amount: U.round2(+g.contribution.amount),
+          day: Math.min(31, Math.max(1, parseInt(g.contribution.day, 10) || 1))
+        }
+        : null,
       createdAt: g.createdAt || U.todayISO()
     }));
     return prof;
@@ -378,7 +394,14 @@
     return true;
   };
 
+  /**
+   * Mantido por compatibilidade com chamadas antigas. A DECISÃO
+   * mora em tema.js — inclusive a terceira opção ("seguir o
+   * sistema"), que este atalho de dois valores não sabe expressar.
+   * Quem constrói interface de tema fala com o Tema direto.
+   */
   Store.setTheme = function (theme) {
+    if (global.Tema && Tema.definir) { Tema.definir(theme === 'dark' ? 'dark' : 'light'); return; }
     state.theme = theme === 'dark' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', state.theme);
     Store.commit('theme');
@@ -566,7 +589,11 @@
     const next = normalizeState(raw);
     if (!next.profiles.length) throw new Error('Arquivo sem perfis válidos.');
     state = next;
-    document.documentElement.setAttribute('data-theme', state.theme);
+    /* O tema NÃO vem do arquivo. Restaurar um backup feito por
+       outra pessoa (ou noutro aparelho) trocaria a aparência de
+       quem restaura por uma preferência que não é dele — e a
+       escolha de tema desta conta está em tema.js, não aqui. */
+    if (global.Tema && Tema.efetivo) state.theme = Tema.efetivo();
     Store.commit('import');
     return state;
   };

@@ -38,6 +38,13 @@
       auth: {
         persistSession: true,
         autoRefreshToken: true,
+        /* A MESMA gaveta do aplicativo. Sem esta linha o SDK usa
+           'sb-<ref>-auth-token' e o painel usa 'oaze.supabase.auth':
+           entrar aqui não é estar dentro lá, e a pessoa acaba
+           criando a conta duas vezes. O nome vem de
+           supabase-config.js justamente para não haver dois lugares
+           onde ele possa divergir de novo. */
+        storageKey: (c.storageKey || 'oaze.supabase.auth'),
         /* O link de recuperação e o de confirmação chegam com o token
            no fragmento da URL. Sem isto o SDK ignora o fragmento e a
            pessoa clica no e-mail, cai na página e continua deslogada

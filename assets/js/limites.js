@@ -112,12 +112,30 @@
 
   /* ---------------- perguntas ---------------- */
 
+  /* As perguntas aceitam o nome do brief (features.csvImport) e o
+     nome interno (import_csv) indiferentemente — Planos.chave()
+     traduz. Sem isso, um typo em qualquer um dos dois dialetos
+     devolveria "undefined", e "!!undefined" é false: o recurso
+     ficaria bloqueado para todo mundo, sem erro em lugar nenhum e
+     sem ninguém reclamando, porque quem não vê um botão não sabe
+     que deveria vê-lo. Por isso a chave desconhecida grita. */
+  function chaveConhecida(nome, mapa) {
+    const k = Planos.chave(nome);
+    if (mapa && !(k in mapa)) {
+      console.warn('Limites: chave desconhecida "' + nome + '". ' +
+        'Ela não existe em planos.js e será tratada como não liberada.');
+    }
+    return k;
+  }
+
   Limites.pode = function (recurso) {
-    return !!(direitos.recursos && direitos.recursos[recurso]);
+    const k = chaveConhecida(recurso, direitos.recursos);
+    return !!(direitos.recursos && direitos.recursos[k]);
   };
 
   Limites.limite = function (tipo) {
-    const v = direitos.limites ? direitos.limites[tipo] : undefined;
+    const k = chaveConhecida(tipo, direitos.limites);
+    const v = direitos.limites ? direitos.limites[k] : undefined;
     return v === undefined ? null : v;
   };
 
@@ -125,8 +143,17 @@
   Limites.contar = function (tipo) {
     const p = Store.profile();
     if (!p) return 0;
-    switch (tipo) {
+    switch (Planos.chave(tipo)) {
       case 'workspaces': return Store.state().profiles.length;
+      /* Lançamentos são contados POR MÊS, e pelo mês que está na
+         tela — não pelo total do perfil. O limite do brief é "até
+         100 movimentações por mês": um teto sobre o acervo inteiro
+         seria outro produto, e travaria alguém no segundo ano de
+         uso por causa do primeiro. */
+      case 'transactions_per_month': {
+        const ym = (global.App && App.ym) || U.todayYM();
+        return (p.transactions || []).filter((t) => U.ymOf(t.date) === ym).length;
+      }
       case 'accounts': return (p.accounts || []).length;
       case 'credit_cards': return (p.cards || []).length;
       case 'budgets': return Object.keys(p.budgets || {}).length;
@@ -158,6 +185,7 @@
 
   const NOMES = {
     workspaces: ['espaço financeiro', 'espaços financeiros'],
+    transactions_per_month: ['movimentação neste mês', 'movimentações neste mês'],
     accounts: ['conta', 'contas'],
     credit_cards: ['cartão de crédito', 'cartões de crédito'],
     custom_categories: ['categoria personalizada', 'categorias personalizadas'],
@@ -167,7 +195,8 @@
   };
 
   /** O próximo plano que resolve este limite — se houver. */
-  function proximoQueResolve(tipo) {
+  function proximoQueResolve(nome) {
+    const tipo = Planos.chave(nome);
     const atual = Planos.IDS.indexOf(direitos.plano);
     for (let i = atual + 1; i < Planos.LISTA.length; i++) {
       const p = Planos.LISTA[i];
@@ -182,7 +211,8 @@
    * quanto está usando, de quanto, e o que o próximo plano dá.
    * Um "limite atingido" seco manda a pessoa adivinhar.
    */
-  Limites.exigirEspaco = function (tipo) {
+  Limites.exigirEspaco = function (chave) {
+    const tipo = Planos.chave(chave);
     if (Limites.cabe(tipo)) return true;
 
     const teto = Limites.limite(tipo);
@@ -223,7 +253,8 @@
   };
 
   /** Mesma ideia, para recurso que é sim-ou-não. */
-  Limites.exigirRecurso = function (recurso, oQueEra) {
+  Limites.exigirRecurso = function (nome, oQueEra) {
+    const recurso = Planos.chave(nome);
     if (Limites.pode(recurso)) return true;
 
     const prox = Planos.LISTA.find((p) =>
@@ -301,7 +332,8 @@
     'custom_categories', 'budgets', 'goals', 'recurring_items'];
 
   /** Quantos passam do teto. Zero quando cabe ou quando é ilimitado. */
-  Limites.quantosExcedem = function (tipo) {
+  Limites.quantosExcedem = function (nome) {
+    const tipo = Planos.chave(nome);
     const teto = Limites.limite(tipo);
     if (teto === null || teto === undefined) return 0;
     return Math.max(0, Limites.contar(tipo) - teto);
@@ -393,12 +425,19 @@
 
   Limites.aoEntrar = async function () {
     await Limites.carregar();
+    /* O assistente flutuante depende de um DIREITO, e o direito só
+       é conhecido depois desta carga. Sincronizar aqui é o que faz
+       um upgrade aparecer na hora, sem recarregar a página — quem
+       acabou de pagar não deveria ter que dar F5 para ver o que
+       comprou. */
+    if (global.UglezFlutuante) UglezFlutuante.sincronizar();
     if (App.page === 'settings') Cfg.render();
     if (App.page === 'precos' && global.Precos) Precos.render();
   };
 
   Limites.aoSair = function () {
     direitos = PADRAO;
+    if (global.UglezFlutuante) UglezFlutuante.sincronizar();
     consumoIA = { usado: 0, limite: 5 };
   };
 

@@ -56,16 +56,93 @@
 
   /** Já migrou? A pergunta vai ao banco, não ao navegador. */
   Mig.jaMigrou = async function () {
+    const d = await Mig.decisao();
+    return d && d.status === 'concluida' ? d : null;
+  };
+
+  /**
+   * A decisão registrada para esta origem, seja ela qual for:
+   * concluída ou dispensada. As duas encerram o assunto.
+   *
+   * ESTE É O DEFEITO QUE ESTA FUNÇÃO CORRIGE. Antes só se procurava
+   * 'concluida'. Quem clicava "Agora não" não deixava registro
+   * nenhum, e o convite voltava a cada login — para sempre, e com
+   * mais insistência justamente para quem já tinha decidido que não
+   * queria. Um "não" que ninguém anota é um "não" que nunca foi
+   * ouvido.
+   *
+   * A decisão vive no BANCO e não no localStorage porque no
+   * localStorage ela sumiria exatamente em quem limpa o navegador —
+   * a mesma pessoa que mais recebe o convite.
+   */
+  Mig.decisao = async function () {
     try {
       const sb = SupabaseBackend.cliente();
       const u = Sync.currentUser();
       if (!sb || !u) return null;
       const { data } = await sb.from('data_migrations')
-        .select('id, status, contagens, concluido_em')
+        .select('id, status, contagens, concluido_em, dispensado_em, qtd_registros')
         .eq('user_id', u.uid).eq('origem', ORIGEM)
-        .eq('status', 'concluida').maybeSingle();
+        .in('status', ['concluida', 'dispensada'])
+        .maybeSingle();
       return data || null;
     } catch (e) { return null; }
+  };
+
+  /**
+   * Registra que a pessoa não quis migrar agora. Grava quantos
+   * registros havia: sem esse número, "havia dados aqui e você
+   * dispensou" vira uma frase sem prova, e ninguém consegue
+   * reconstruir o que foi decidido.
+   */
+  Mig.dispensar = async function () {
+    UI.closeModal();
+    const sb = (function () { try { return SupabaseBackend.cliente(); } catch (e) { return null; } })();
+    const u = global.Sync && Sync.currentUser();
+    if (!sb || !u) return;
+
+    let qtd = 0;
+    const bruto = localStorage.getItem(CHAVE_LOCAL) || '';
+    try {
+      const st = JSON.parse(bruto || 'null');
+      const inv = Mig.inventario(st || {});
+      qtd = inv.lancamentos + inv.contas + inv.cartoes + inv.metas + inv.investimentos;
+    } catch (e) { /* o número é informativo; a decisão vale sem ele */ }
+
+    /* A CÓPIA ANTES DE DESTRAVAR, E ELA NÃO É OPCIONAL.
+       Dispensar libera Dados.carregarDoBanco a escrever por cima do
+       estado local — e o estado local é gravado justamente em
+       CHAVE_LOCAL. Sem esta cópia, dizer "agora não" apagaria em
+       segundos exatamente os dados que a pessoa acabou de recusar
+       mandar para o servidor. É a única linha deste arquivo cuja
+       ausência causa perda irreversível. */
+    if (bruto) {
+      try { localStorage.setItem(CHAVE_LOCAL + '.dispensado', bruto); }
+      catch (e) {
+        /* Armazenamento cheio: sem cópia, não se destrava. Baixar o
+           arquivo é o plano B, e ele é oferecido em vez de a
+           dispensa acontecer às cegas. */
+        console.warn('Migração: sem espaço para a cópia de segurança —', e.message);
+        Mig.baixarBackup();
+      }
+    }
+
+    try {
+      await sb.from('data_migrations').insert({
+        user_id: u.uid, origem: ORIGEM, status: 'dispensada',
+        dispensado_em: new Date().toISOString(),
+        qtd_registros: qtd
+      });
+      decisaoCache = { status: 'dispensada' };
+      UI.toast('Entendido. Você pode trazer esses dados depois, em Configurações → Dados.', 'success', 7000);
+    } catch (e) {
+      /* Sem rede a decisão não sobe, e o convite volta na próxima
+         sessão. É chato e é o lado certo de errar: o outro lado
+         seria dar a migração por dispensada sem ter registrado, e
+         nunca mais oferecer dados que a pessoa ainda tem no
+         aparelho. */
+      console.warn('Migração: não deu para registrar a dispensa agora —', e.message);
+    }
   };
 
   /* ---------------- 5 · validar ---------------- */
@@ -121,11 +198,27 @@
   Mig.oferecer = async function () {
     if (!Mig.temDadoAntigo()) return;
     if (!Sync.currentUser()) return;
-    if (await Mig.jaMigrou()) return;
+    /* Concluída OU dispensada: nos dois casos o assunto foi
+       decidido, e reabrir a conversa sozinho seria desfazer a
+       decisão de quem já respondeu. Reabrir na mão continua
+       possível, em Configurações → Dados. */
+    const decidido = await Mig.decisao();
+    if (decidido) { decisaoCache = decidido; return; }
 
     let st;
     try { st = JSON.parse(localStorage.getItem(CHAVE_LOCAL)); } catch (e) { return; }
+    Mig.oferecerAgora(st);
+  };
 
+  /**
+   * O convite em si. Separado de oferecer() porque tem dois
+   * chamadores com regras opostas: a entrada na conta, que só
+   * convida quando ninguém decidiu ainda, e o botão de
+   * Configurações, que convida JUSTAMENTE para desfazer a decisão.
+   * Uma função só teria que receber um parâmetro dizendo qual das
+   * duas ela é -- e parâmetro assim é onde a regra se perde.
+   */
+  Mig.oferecerAgora = function (st) {
     const inv = Mig.inventario(st);
     const v = Mig.validar(st);
 
@@ -162,7 +255,7 @@
       wide: true,
       body: corpo,
       buttons: [
-        { label: 'Agora não', class: 'btn-outline', onClick: UI.closeModal },
+        { label: 'Agora não', class: 'btn-outline', onClick: () => Mig.dispensar() },
         {
           label: 'Baixar backup', class: 'btn-outline',
           onClick: () => Mig.baixarBackup()
@@ -194,7 +287,7 @@
     /* Uma segunda checagem, agora que o clique aconteceu: entre
        abrir o modal e clicar, outra aba pode ter migrado. */
     if (await Mig.jaMigrou()) {
-      jaMigrouCache = true;
+      decisaoCache = { status: 'concluida' };
       UI.closeModal();
       UI.toast('Seus dados já estão na conta.', 'success');
       return;
@@ -312,7 +405,7 @@
       rodando = false;
       /* Se deu certo, o cache passa a saber; se falhou, volta para a
          dúvida, que é o lado seguro. */
-      try { jaMigrouCache = await Mig.jaMigrou(); } catch (e) { jaMigrouCache = null; }
+      try { decisaoCache = await Mig.decisao(); } catch (e) { decisaoCache = null; }
       if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco({ silencioso: true });
     }
   };
@@ -341,7 +434,7 @@
      aplicar um banco pela metade sobre os dados completos do
      aparelho. */
   let rodando = false;
-  let jaMigrouCache = null;
+  let decisaoCache = null;
 
   Mig.emAndamento = () => rodando;
 
@@ -349,24 +442,81 @@
    * Há dado local que ainda não está na conta?
    * Síncrono de propósito: quem chama é o caminho da leitura, e uma
    * checagem assíncrona ali abriria justamente a janela de corrida
-   * que esta função existe para fechar. Por isso o resultado de
-   * jaMigrou() é guardado quando conhecido.
+   * que esta função existe para fechar. Por isso o resultado da
+   * consulta é guardado assim que se torna conhecido.
+   *
+   * DISPENSADA TAMBÉM DESTRAVA, e isso é deliberado. Enquanto a
+   * trava está fechada o app nunca traz os dados do servidor — quem
+   * dissesse "agora não" ficaria com a sincronização parada para
+   * sempre, sem nenhuma tela dizendo por quê. Por isso dispensar
+   * guarda antes uma cópia local intacta (ver Mig.dispensar) e só
+   * então libera a leitura.
    */
   Mig.pendente = function () {
     if (rodando) return true;
     if (!Mig.temDadoAntigo()) return false;
-    /* Ainda não sabemos se migrou: na dúvida, PENDENTE. Errar para
-       este lado adia uma leitura; errar para o outro apaga dados. */
-    return jaMigrouCache !== true;
+    /* Ainda não sabemos qual foi a decisão: na dúvida, PENDENTE.
+       Errar para este lado adia uma leitura; errar para o outro
+       apaga dados. */
+    return !(decisaoCache && (decisaoCache.status === 'concluida' ||
+      decisaoCache.status === 'dispensada'));
   };
+
+  /** A decisão já conhecida nesta sessão, sem ir à rede. */
+  Mig.decisaoConhecida = () => decisaoCache;
 
   Mig.aoEntrar = function () {
     /* Descobre o quanto antes, para que Mig.pendente() pare de
        responder "na dúvida" assim que houver certeza. */
-    Mig.jaMigrou().then((sim) => { jaMigrouCache = sim; })
+    Mig.decisao().then((d) => { decisaoCache = d; })
       .catch(() => { /* segue na dúvida, que é o lado seguro */ });
 
     setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
+  };
+
+  /* ---------------- reabrir na mão ----------------
+     A contrapartida obrigatória de "não perguntar de novo". Uma
+     decisão que o sistema respeita para sempre e o usuário não pode
+     revisar não é uma decisão: é uma porta que trancou.
+
+     Diferente de oferecer(), esta função IGNORA a decisão gravada —
+     porque quem clicou aqui está justamente desfazendo-a. O que ela
+     não ignora é a idempotência: executar() confere de novo antes
+     de gravar, e o legacy_id impede duplicata mesmo assim. */
+  Mig.reabrir = async function () {
+    if (!global.Sync || !Sync.currentUser()) {
+      UI.toast('Entre na sua conta para trazer estes dados.', 'error');
+      return;
+    }
+    if (!Mig.temDadoAntigo()) {
+      UI.openModal({
+        title: 'Nada para trazer',
+        body: el('p', { style: { fontSize: '13.5px', lineHeight: '1.65' },
+          text: 'Não há dados antigos guardados neste navegador. ' +
+            'Se eles estavam em outro aparelho, abra o OAZE por lá e entre na mesma conta.' }),
+        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
+      });
+      return;
+    }
+
+    let st;
+    try { st = JSON.parse(localStorage.getItem(CHAVE_LOCAL)); }
+    catch (e) { UI.toast('Os dados antigos deste navegador estão ilegíveis.', 'error'); return; }
+
+    const jaEsta = await Mig.jaMigrou();
+    if (jaEsta) {
+      UI.openModal({
+        title: 'Estes dados já estão na conta',
+        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+          el('p', { text: 'A cópia foi concluída e conferida. O que está neste navegador é a mesma coisa que está no servidor.' }),
+          el('p', { style: { marginTop: '10px' }, text: 'Copiar de novo não duplicaria nada — cada registro é reconhecido pelo identificador antigo —, mas também não mudaria nada.' })
+        ]),
+        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
+      });
+      return;
+    }
+
+    Mig.oferecerAgora(st);
   };
 
   global.Mig = Mig;

@@ -37,5 +37,44 @@ window.SupabaseConfig = {
      `anonKey` continua aceito para projetos que ainda usam a chave
      legada em JWT. */
   publishableKey: 'sb_publishable_VsxS6BSgddkxRdx5I1AAqQ_1A6nRUxD',
-  anonKey: ''
+  anonKey: '',
+
+  /* ============================================================
+     ONDE A SESSÃO MORA — UMA CHAVE SÓ, E ESTA É A LINHA MAIS
+     IMPORTANTE DESTE ARQUIVO
+     ------------------------------------------------------------
+     Existem DOIS clientes Supabase neste projeto, e é de propósito:
+     site-auth.js atende as páginas públicas (leve, sem carregar as
+     ~12.000 linhas do painel) e supabase-auth.js atende o
+     aplicativo. Os dois falam com o mesmo projeto e devem
+     compartilhar a MESMA sessão — "entrar em /entrar é estar
+     dentro em /app" é a promessa do produto.
+
+     E não compartilhavam. supabase-auth.js declarava
+     storageKey: 'oaze.supabase.auth'; site-auth.js não declarava
+     nada e caía no padrão do SDK, 'sb-<ref>-auth-token'. Duas
+     gavetas diferentes no mesmo localStorage.
+
+     O ESTRAGO, na ordem em que a pessoa encontrava:
+
+       1. Criava a conta em /cadastro. A sessão ia para a gaveta A.
+       2. Chegava em /app, que lia a gaveta B — vazia. O painel
+          dizia "sem conta neste aparelho" e oferecia criar uma.
+          Daí "o cadastro parece precisar ser feito duas vezes":
+          precisava mesmo, porque eram dois cofres.
+       3. Entrava de novo, agora por dentro do app. Sessão na
+          gaveta B. Voltava para /precos e estava deslogado de
+          novo.
+       4. Fechava e reabria: dependendo de por onde entrasse, caía
+          numa gaveta ou na outra. Daí "a sessão não fica salva".
+       5. O link de confirmação de e-mail e o mágico usam PKCE, e o
+          verificador é gravado em '<storageKey>-code-verifier'.
+          Pedido numa gaveta, resgatado na outra: o link abria e não
+          entrava, sem erro nenhum na tela.
+
+     Um único nome, declarado aqui, encerra os cinco de uma vez. Ele
+     não é derivado do id do projeto de propósito: assim uma
+     migração de projeto não desloga todo mundo em silêncio.
+     ============================================================ */
+  storageKey: 'oaze.supabase.auth'
 };
