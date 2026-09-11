@@ -14,13 +14,13 @@
 <meta property="og:url" content="https://mediumvioletred-viper-277230.hostingersite.com/precos">
 <meta property="og:image" content="https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#080D18">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script>document.documentElement.classList.add("anima");</script>
 </head>
-<body>
+<body class="tema-mineral">
 
 <div class="ceu" aria-hidden="true"></div>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -49,14 +49,23 @@
 
 <main id="conteudo">
 
-  <section class="secao" style="padding-bottom:0">
+  <section class="secao cabeca-pagina">
     <div class="env">
       <div class="secao-topo">
         <p class="etiqueta">Planos</p>
-        <h1 style="font-size:clamp(2rem,4.4vw,3rem)">Escolha o tamanho do seu OAZE</h1>
+        <h1>Escolha o tamanho do seu <em>OAZE</em></h1>
         <p>Comece no grátis, que não expira e não pede cartão. Mude de plano quando quiser — para cima ou para baixo.</p>
       </div>
+    </div>
+  </section>
 
+  <!-- ============================ planos ============================
+       A mesma cortina de luz da seção de planos da página inicial. -->
+  <section class="secao precos-cortina" style="padding-top:clamp(24px,3vw,40px)">
+    <div class="pricing-curtains" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="env">
       <!-- Já logado, esta faixa diz qual é o plano atual. Preenchida
            depois, mas o elemento existe desde o começo para não
            empurrar o layout ao aparecer. -->
@@ -124,17 +133,13 @@
           </ul>
         </article>
       </div>
-    </div>
-  </section>
 
-  <!-- ---- o que ainda não existe ----
-       Estas funções estão vendidas em muitos concorrentes e estavam
-       no plano de produto, mas não funcionam ainda. Anunciá-las
-       agora seria vender o que não se entrega -- então elas ficam
-       aqui, nomeadas como o que são. -->
-  <section class="secao" style="padding-top:clamp(40px,5vw,64px)">
-    <div class="env">
-      <div class="texto">
+      <!-- ---- o que ainda não existe ----
+           Estas funções estão vendidas em muitos concorrentes e estavam
+           no plano de produto, mas não funcionam ainda. Anunciá-las
+           agora seria vender o que não se entrega -- então elas ficam
+           aqui, nomeadas como o que são. -->
+      <div class="texto" style="margin:clamp(40px,5vw,64px) auto 0">
         <div class="aviso">
           <p><strong>Ainda não disponível, e por isso não está na lista acima:</strong>
           relatórios personalizados, backup completo agendado e colaboradores
@@ -154,7 +159,7 @@
   <!-- ============================ comparação ============================ -->
   <section class="secao" style="padding-top:0">
     <div class="env">
-      <div class="secao-topo">
+      <div class="secao-topo revela">
         <h2>Comparação completa</h2>
         <p>Todos os limites, lado a lado.</p>
       </div>
@@ -204,66 +209,87 @@
     </div>
   </section>
 
-  <!-- ============================ cobrança ============================ -->
+  <!-- ============================ cobrança ============================
+       Padrão editorial da seção Segurança da página inicial. Os ids
+       ficam em cada item: são âncoras que outras páginas usam. -->
   <section class="secao" style="padding-top:0">
     <div class="env">
-      <div class="texto">
-        <h2 id="pagamento">Formas de pagamento</h2>
-        <p>O pagamento é processado pelo <strong>Mercado Pago</strong>. Aceitamos cartão de
-        crédito, Pix e boleto, conforme o que o Mercado Pago oferecer no momento da compra.</p>
-        <p><strong>O OAZE não recebe nem guarda os dados do seu cartão.</strong> Eles são
-        digitados no ambiente do Mercado Pago, e o que volta para nós é apenas a
-        confirmação de que o pagamento aconteceu.</p>
+      <div class="secao-topo revela">
+        <h2>Como a cobrança funciona</h2>
+        <p>Pagamento, renovação, troca de plano, cancelamento e reembolso — sem letra miúda.</p>
+      </div>
 
-        <h2 id="anual">Como funciona a cobrança anual</h2>
-        <p>No plano anual o ano inteiro é cobrado de uma vez, com desconto. O Basic sai
-        por R$ 239,90 em vez de R$ 298,80 — economia de R$ 58,90. O Pro, por R$ 479,90
-        em vez de R$ 598,80 — economia de R$ 118,90.</p>
-        <p>A renovação é automática na data de aniversário da assinatura, pelo preço
-        vigente na época. Avisamos por e-mail antes de cada renovação.</p>
+      <div class="grade grade-editorial">
+        <article class="carta revela" id="pagamento">
+          <h3>Formas de pagamento</h3>
+          <p>O pagamento é processado pelo <strong>Mercado Pago</strong>. Aceitamos cartão de
+          crédito, Pix e boleto, conforme o que o Mercado Pago oferecer no momento da compra.</p>
+          <p><strong>O OAZE não recebe nem guarda os dados do seu cartão.</strong> Eles são
+          digitados no ambiente do Mercado Pago, e o que volta para nós é apenas a
+          confirmação de que o pagamento aconteceu.</p>
+        </article>
 
-        <h2 id="mudanca">Upgrade e downgrade</h2>
-        <p><strong>Upgrade</strong> vale na hora: assim que o pagamento é confirmado, os
-        limites novos passam a valer.</p>
-        <p><strong>Downgrade</strong> vale no fim do período já pago. Até lá nada muda —
-        você não perde o que já pagou.</p>
+        <article class="carta revela" id="anual">
+          <h3>Como funciona a cobrança anual</h3>
+          <p>No plano anual o ano inteiro é cobrado de uma vez, com desconto. O Basic sai
+          por R$ 239,90 em vez de R$ 298,80 — economia de R$ 58,90. O Pro, por R$ 479,90
+          em vez de R$ 598,80 — economia de R$ 118,90.</p>
+          <p>A renovação é automática na data de aniversário da assinatura, pelo preço
+          vigente na época. Avisamos por e-mail antes de cada renovação.</p>
+        </article>
 
-        <h2 id="dados-downgrade">O que acontece com os dados ao descer de plano</h2>
-        <p><strong>Nada é apagado.</strong> Se você tinha 8 contas no Basic e volta para o
-        Grátis, que permite 2, as 8 continuam existindo.</p>
-        <p>O que passa do limite entra em <strong>modo de visualização</strong>: continua
-        aparecendo, continua entrando nos relatórios de períodos passados e continua
-        podendo ser exportado — mas você não cria novos registros até ficar dentro do
-        limite, e escolhe quais quer manter ativos.</p>
-        <p>Essa escolha é sua e não tem prazo. O OAZE nunca decide sozinho o que apagar.</p>
+        <article class="carta revela" id="mudanca">
+          <h3>Upgrade e downgrade</h3>
+          <p><strong>Upgrade</strong> vale na hora: assim que o pagamento é confirmado, os
+          limites novos passam a valer.</p>
+          <p><strong>Downgrade</strong> vale no fim do período já pago. Até lá nada muda —
+          você não perde o que já pagou.</p>
+        </article>
 
-        <h2 id="cancelamento">Cancelamento</h2>
-        <p>Você cancela pela própria tela de configurações, sem falar com ninguém e sem
-        justificar. O acesso continua <strong>até o fim do período já pago</strong> —
-        cancelar não corta no meio.</p>
-        <p>Depois disso a conta volta ao plano Grátis. Ela não é apagada, e seus dados
-        continuam lá. Detalhes em <a href="/termos#cancelamento">Termos de uso</a>.</p>
+        <article class="carta revela" id="dados-downgrade">
+          <h3>O que acontece com os dados ao descer de plano</h3>
+          <p><strong>Nada é apagado.</strong> Se você tinha 8 contas no Basic e volta para o
+          Grátis, que permite 2, as 8 continuam existindo.</p>
+          <p>O que passa do limite entra em <strong>modo de visualização</strong>: continua
+          aparecendo, continua entrando nos relatórios de períodos passados e continua
+          podendo ser exportado — mas você não cria novos registros até ficar dentro do
+          limite, e escolhe quais quer manter ativos.</p>
+          <p>Essa escolha é sua e não tem prazo. O OAZE nunca decide sozinho o que apagar.</p>
+        </article>
 
-        <h2 id="reembolso">Reembolso</h2>
-        <p>Compras feitas pela internet têm <strong>7 dias de arrependimento</strong> pelo
-        Código de Defesa do Consumidor, contados da contratação. Nesse prazo, devolvemos
-        o valor integral. Veja <a href="/termos#reembolso">a política completa</a>.</p>
+        <article class="carta revela" id="cancelamento">
+          <h3>Cancelamento</h3>
+          <p>Você cancela pela própria tela de configurações, sem falar com ninguém e sem
+          justificar. O acesso continua <strong>até o fim do período já pago</strong> —
+          cancelar não corta no meio.</p>
+          <p>Depois disso a conta volta ao plano Grátis. Ela não é apagada, e seus dados
+          continuam lá. Detalhes em <a href="/termos#cancelamento">Termos de uso</a>.</p>
+        </article>
 
-        <h2 id="seguranca-pagamento">Segurança</h2>
-        <p>O plano que vale para a sua conta é o que está no <strong>nosso servidor</strong>,
-        liberado apenas quando o Mercado Pago confirma o pagamento por uma notificação
-        assinada. A tela de “compra concluída” não libera nada sozinha — ela é só uma
-        tela.</p>
-        <p>O valor cobrado também é decidido no servidor, a partir do plano e do ciclo. O
-        navegador nunca envia preço.</p>
+        <article class="carta revela" id="reembolso">
+          <h3>Reembolso</h3>
+          <p>Compras feitas pela internet têm <strong>7 dias de arrependimento</strong> pelo
+          Código de Defesa do Consumidor, contados da contratação. Nesse prazo, devolvemos
+          o valor integral. Veja <a href="/termos#reembolso">a política completa</a>.</p>
+        </article>
+
+        <article class="carta revela" id="seguranca-pagamento">
+          <h3>Segurança do pagamento</h3>
+          <p>O plano que vale para a sua conta é o que está no <strong>nosso servidor</strong>,
+          liberado apenas quando o Mercado Pago confirma o pagamento por uma notificação
+          assinada. A tela de “compra concluída” não libera nada sozinha — ela é só uma
+          tela.</p>
+          <p>O valor cobrado também é decidido no servidor, a partir do plano e do ciclo. O
+          navegador nunca envia preço.</p>
+        </article>
       </div>
     </div>
   </section>
 
   <!-- ============================ FAQ ============================ -->
-  <section class="secao" style="padding-top:0">
+  <section class="secao secao-faq" style="padding-top:0">
     <div class="env">
-      <div class="secao-topo"><h2>Perguntas sobre os planos</h2></div>
+      <div class="secao-topo revela"><h2>Perguntas sobre os planos</h2></div>
       <div class="faq">
         <details>
           <summary>Posso trocar de plano depois?</summary>
@@ -289,9 +315,9 @@
     </div>
   </section>
 
-  <section class="secao" style="padding-top:0">
+  <section class="secao secao-fecho" style="padding-top:0">
     <div class="env">
-      <div class="chamada">
+      <div class="chamada revela">
         <h2>Comece pelo grátis</h2>
         <p>Sem cartão, sem prazo. Você assina quando fizer sentido — não antes.</p>
         <div class="hero-botoes" style="margin-top:26px">

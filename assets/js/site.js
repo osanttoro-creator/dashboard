@@ -28,10 +28,47 @@
      camada preta por cima recebe um furo circular cujo raio cresce
      de 0 a 150% do maior lado da tela conforme o scroll. Sem JS ou
      com movimento reduzido, a camada nem aparece e o conteúdo segue
-     imediatamente legível e clicável. */
+     imediatamente legível e clicável.
+
+     Sobre o preto, o "hello" se escreve sozinho, à mão, assim que a
+     página abre. Não depende de rolar: quem não rola também precisa
+     ver alguma coisa acontecer. Rolar é o que o faz passar -- ele
+     cresce um pouco e se apaga enquanto a lente abre, como se a
+     câmera atravessasse a palavra. */
   var lente = document.querySelector('[data-lens]');
 
   if (lente && !menosMovimento) {
+    /* Avisa o CSS que há script vivo. Sem este aviso a cortina se
+       recolhe sozinha em 4 s (ver site.css), para o título nunca
+       ficar preso atrás do preto. */
+    document.documentElement.classList.add('lente-viva');
+
+    var saudacao = lente.querySelector('.lens-greeting');
+    var traco = lente.querySelector('.hello-traco');
+
+    if (saudacao && traco && traco.getTotalLength) {
+      /* O comprimento real, e não pathLength="1": o Safari levou anos
+         para respeitar pathLength no tracejado, e sem isso o hello
+         viraria uma linha pontilhada. O tracejado é posto antes da
+         primeira pintura, então o traço não pisca inteiro. */
+      var comprimento = traco.getTotalLength();
+      traco.style.strokeDasharray = comprimento + ' ' + (comprimento * 2);
+      traco.style.strokeDashoffset = String(comprimento);
+
+      var ATRASO = 350, DURACAO = 2600, inicio = null;
+      var escrever = function (agora) {
+        if (inicio === null) inicio = agora;
+        var t = Math.max(0, Math.min(1, (agora - inicio - ATRASO) / DURACAO));
+        /* ease-in-out: a caneta arranca devagar, corre no meio e pousa
+           devagar -- o ritmo de quem escreve, não o de uma máquina */
+        var e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        traco.style.strokeDashoffset = (comprimento * (1 - e)).toFixed(2);
+        if (t < 1) window.requestAnimationFrame(escrever);
+        else saudacao.classList.add('escrito');
+      };
+      window.requestAnimationFrame(escrever);
+    }
+
     var quadroLentePendente = false;
 
     var atualizarLente = function () {
@@ -40,11 +77,13 @@
       var progresso = Math.max(0, Math.min(1, percorrido / faixa));
       var suavizado = 1 - Math.pow(1 - progresso, 4); /* power4.out */
       var raio = Math.max(window.innerWidth, window.innerHeight) * 1.5 * suavizado;
-      var hello = 1 - Math.min(1, progresso / .16);
+      /* o hello atravessa a tela nos primeiros 20% da rolagem */
+      var passagem = Math.min(1, progresso / .2);
 
       lente.style.setProperty('--lens-radius', raio.toFixed(1) + 'px');
       lente.style.setProperty('--lens-progress', suavizado.toFixed(4));
-      lente.style.setProperty('--hello-opacity', hello.toFixed(3));
+      lente.style.setProperty('--hello-opacity', (1 - passagem).toFixed(3));
+      lente.style.setProperty('--hello-scale', (1 + passagem * .16).toFixed(4));
       quadroLentePendente = false;
     };
 

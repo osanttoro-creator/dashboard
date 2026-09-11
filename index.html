@@ -53,13 +53,13 @@
   "description": "Painel de finanças pessoais com contas, cartões, orçamentos, metas e leitura automática do mês.",
   "offers": [
     { "@type": "Offer", "name": "Grátis", "price": "0.00", "priceCurrency": "BRL" },
-    { "@type": "Offer", "name": "Basic",  "price": "14.90", "priceCurrency": "BRL" },
-    { "@type": "Offer", "name": "Pro",    "price": "29.90", "priceCurrency": "BRL" }
+    { "@type": "Offer", "name": "Basic",  "price": "24.90", "priceCurrency": "BRL" },
+    { "@type": "Offer", "name": "Pro",    "price": "49.90", "priceCurrency": "BRL" }
   ]
 }
 </script>
 </head>
-<body class="pagina-inicial">
+<body class="tema-mineral pagina-inicial">
 
 <div class="ceu" aria-hidden="true"></div>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -175,8 +175,22 @@
 
       <div class="lens-shutter" aria-hidden="true"></div>
       <div class="lens-greeting" aria-hidden="true">
-        <span>HELLO</span>
-        <small>role para revelar</small>
+        <!-- O hello escrito à mão: um traço só, do começo ao fim. A
+             ideia vem do "hello" da Apple; o desenho foi feito aqui,
+             em pé, e inclinado 14° ponto a ponto. Quem escreve é o
+             site.js, pelo stroke-dashoffset. -->
+        <svg class="hello" viewBox="19 11 494 208" width="680" height="286" focusable="false">
+          <defs>
+            <linearGradient id="hello-tinta" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#F5F0E9"/>
+              <stop offset=".35" stop-color="#F0DA9B"/>
+              <stop offset=".7" stop-color="#D8B45E"/>
+              <stop offset="1" stop-color="#B8912F"/>
+            </linearGradient>
+          </defs>
+          <path class="hello-traco" d="M35 196C64.5 190 97.5 162 120.4 122C138.4 90 152.9 56 148.9 40C145.4 26 124.9 28 116.4 46C105.9 72 86.5 150 75 200C80.5 178 89.5 154 104 140C119.5 126 142.4 122 150.5 134C157 144 150 168 145.5 182C141 196 146.3 203 158.8 201C180.5 198 204 184 218 164C228.5 150 230 128 215 128C198 128 181.5 154 178 176C175 196 189 204 209.8 201C233.7 197 264 176 285.5 138C302.9 108 322.4 62 319.4 42C317.4 26 298.9 28 289.9 48C280.4 74 261.5 150 255 184C252.5 198 262 204 277 200C301.2 195 330 176 351.5 138C368.9 108 388.4 62 385.4 42C383.4 26 364.9 28 355.9 48C346.4 74 327.5 150 321 184C318.5 198 328 204 343 200C363 196 385 172 398.5 150C405 140 410.5 134 417 132C406 128 382 136 374 160C366 184 373.5 202 392 200C410.5 198 424 176 425 156C426 140 419 132 410.5 134C419 140 434.5 142 451.7 137C469 132 484.7 125 498.4 118"/>
+        </svg>
+        <small><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>role para revelar</small>
       </div>
       <div class="lens-progress" aria-hidden="true"><i></i></div>
     </div>
@@ -327,7 +341,7 @@
         <p>O que fazemos com os seus dados, dito sem eufemismo.</p>
       </div>
 
-      <div class="grade grade-3">
+      <div class="grade grade-editorial">
         <article class="carta revela">
           <h3>Cada conta enxerga só a si mesma</h3>
           <p>O isolamento é feito no banco, por política de linha — não por uma verificação no aplicativo, que um erro de programação poderia contornar.</p>

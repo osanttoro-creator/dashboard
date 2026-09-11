@@ -67,6 +67,29 @@ for (const id of ['basic', 'pro']) {
   }
 }
 
+/* ---- 1b · os dados estruturados (JSON-LD) ----
+   O buscador lê o preço daqui, não do texto da página. Em 11/09/2026
+   o index.html ainda anunciava Basic 14.90 e Pro 29.90 no JSON-LD,
+   meses depois da troca -- e a conferência acima, que procura
+   "R$ 24,90", não enxergava "24.90". */
+{
+  const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
+  const bloco = (html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/) || [])[1];
+  if (!bloco) {
+    problemas.push('index.html: não achei o bloco JSON-LD');
+  } else {
+    for (const oferta of JSON.parse(bloco).offers || []) {
+      const plano = Planos.LISTA.find((p) => p.nome === oferta.name);
+      if (!plano) {
+        problemas.push('index.html: o JSON-LD anuncia um plano que não existe: ' + oferta.name);
+      } else if (oferta.price !== (plano.mensalCentavos / 100).toFixed(2)) {
+        problemas.push('index.html: o JSON-LD diz ' + oferta.name + ' a ' + oferta.price +
+          '; o preço vigente é ' + (plano.mensalCentavos / 100).toFixed(2));
+      }
+    }
+  }
+}
+
 /* ---- 2 · nenhum preço ANTIGO sobrou ----
    Encontrar o preço novo não basta: o antigo pode ter ficado numa
    outra seção da mesma página. Foi assim que a tabela de

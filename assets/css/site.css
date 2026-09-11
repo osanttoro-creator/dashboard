@@ -133,7 +133,9 @@ p.leve { color: var(--texto-2); }
 .pular {
   position: absolute; left: 12px; top: -60px; z-index: 200;
   padding: 12px 18px; border-radius: var(--raio-sm);
-  background: var(--violeta); color: #fff; font-weight: 600;
+  /* #5B3FE0 e não --violeta: branco sobre o violeta dava 4,3:1,
+     abaixo dos 4,5 que texto pequeno exige. */
+  background: #5B3FE0; color: #fff; font-weight: 600;
   transition: top .18s var(--curva);
 }
 .pular:focus { top: 12px; color: #fff; }
@@ -251,14 +253,6 @@ p.leve { color: var(--texto-2); }
 /* ---------------------------------------------------------------
    6 · hero
    --------------------------------------------------------------- */
-.hero { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(48px, 6vw, 80px); text-align: center; }
-.hero h1 { max-width: 18ch; margin-inline: auto; }
-.hero h1 em {
-  font-style: normal;
-  background: linear-gradient(120deg, var(--lilas), var(--agua));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: var(--lilas);
-}
 .hero-sub {
   max-width: 46ch; margin: 0 auto 30px;
   font-size: clamp(1.02rem, 1.7vw, 1.2rem); color: var(--texto-2);
@@ -670,7 +664,7 @@ p.leve { color: var(--texto-2); }
    ---------------------------------------------------------------
    A página inicial tem um mundo próprio: preto mineral, ouro e
    bronze. As demais páginas públicas continuam usando o sistema
-   acima, por isso tudo aqui está preso a .pagina-inicial.
+   acima, por isso tudo aqui está preso a .tema-mineral.
    =============================================================== */
 
 @font-face {
@@ -681,14 +675,14 @@ p.leve { color: var(--texto-2); }
   font-display: swap;
 }
 
-.pagina-inicial {
+.tema-mineral {
   --noite-0: #050505;
   --noite-1: #0a0a0a;
   --noite-2: #11100f;
   --branco: #f5f0e9;
   --texto: #e8e0d6;
   --texto-2: #b9aea1;
-  --texto-3: #8f8377;
+  --texto-3: #9d9185;
   --violeta: #a78b71;
   --lilas: #c9b8a0;
   --agua: #e8d5b7;
@@ -708,44 +702,72 @@ p.leve { color: var(--texto-2); }
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-.pagina-inicial ::selection { background: var(--ouro-claro, #c9b8a0); color: #0a0a0a; }
-.pagina-inicial .ceu { display: none; }
-.pagina-inicial .env { max-width: var(--largura); }
-.pagina-inicial h1,
-.pagina-inicial h2 { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-weight: 560; }
-.pagina-inicial h3 { font-weight: 620; }
-.pagina-inicial a { text-underline-offset: .22em; }
+.tema-mineral ::selection { background: var(--ouro-claro, #c9b8a0); color: #0a0a0a; }
+.tema-mineral .ceu { display: none; }
+.tema-mineral .env { max-width: var(--largura); }
+.tema-mineral h1,
+.tema-mineral h2 { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-weight: 560; }
+.tema-mineral h3 { font-weight: 620; }
+.tema-mineral a { text-underline-offset: .22em; }
 
-.pagina-inicial :focus-visible {
+.tema-mineral :focus-visible {
   outline-color: #e8d5b7;
   box-shadow: 0 0 0 6px rgba(10, 10, 10, .9);
 }
 
-.pagina-inicial .topo {
-  position: fixed; inset: 0 0 auto; z-index: 100;
-  background: rgba(10, 10, 10, .68);
-  border-bottom-color: rgba(255, 255, 255, .08);
-  backdrop-filter: blur(18px) saturate(120%);
-  -webkit-backdrop-filter: blur(18px) saturate(120%);
+/* ---- camada de navegação: vidro líquido ----
+   A regra do Liquid Glass da Apple, traduzida para a web: vidro só
+   na camada que flutua sobre o conteúdo -- navegação e controles.
+   Conteúdo (cartas, planos, perguntas) é superfície, não vidro:
+   vidro em tudo apaga a hierarquia, e cada backdrop-filter a mais é
+   uma cópia da tela sendo desfocada a cada quadro. */
+.pagina-inicial .topo { position: fixed; inset: 0 0 auto; }
+.tema-mineral .topo {
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(22, 20, 18, .66), rgba(10, 10, 10, .52));
+  border-bottom-color: rgba(255, 255, 255, .07);
+  /* o brilho especular: uma linha de luz na aresta de cima, como a
+     borda de uma lâmina de vidro */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 10px 30px -18px rgba(0, 0, 0, .9);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
 }
-.pagina-inicial .topo .env { max-width: min(1680px, calc(100% - 32px)); }
-.pagina-inicial .menu a:hover { background: rgba(255, 255, 255, .05); }
-.pagina-inicial .btn-principal {
-  background: linear-gradient(135deg, #c9b8a0, #8f7059);
+.tema-mineral .topo .env { max-width: min(1680px, calc(100% - 32px)); }
+
+/* Os links dividem UMA cápsula, como no GlassEffectContainer: vidro
+   não amostra vidro, então vizinhos compartilham a mesma peça em vez
+   de cada um ter a sua. A página atual ganha a seleção, como numa
+   barra de abas. */
+.tema-mineral .menu {
+  gap: 2px; padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .035);
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+.tema-mineral .menu a { padding: 8px 15px; border-radius: 999px; }
+.tema-mineral .menu a:hover { background: rgba(255, 255, 255, .06); }
+.tema-mineral .menu a[aria-current="page"] {
+  color: #f5f0e9;
+  background: rgba(232, 213, 183, .12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10), 0 0 0 1px rgba(232, 213, 183, .20);
+}
+.tema-mineral .btn-principal {
+  background: linear-gradient(135deg, #c9b8a0, #9a7a62);
   color: #0a0a0a;
   box-shadow: 0 14px 38px -20px rgba(232, 213, 183, .78);
 }
-.pagina-inicial .btn-principal:hover {
+.tema-mineral .btn-principal:hover {
   background: linear-gradient(135deg, #e8d5b7, #a78b71);
   color: #0a0a0a;
   transform: translateY(-2px);
 }
-.pagina-inicial .btn-fantasma {
+.tema-mineral .btn-fantasma {
   background: rgba(255, 255, 255, .035);
   color: var(--texto);
   border-color: rgba(255, 255, 255, .12);
 }
-.pagina-inicial .btn-fantasma:hover {
+.tema-mineral .btn-fantasma:hover {
   background: rgba(255, 255, 255, .07);
   border-color: rgba(232, 213, 183, .35);
 }
@@ -755,6 +777,7 @@ p.leve { color: var(--texto-2); }
   --lens-radius: 0px;
   --lens-progress: 0;
   --hello-opacity: 1;
+  --hello-scale: 1;
   position: relative;
   height: 230svh;
   background: #000;
@@ -802,7 +825,7 @@ p.leve { color: var(--texto-2); }
 }
 .lens-copy h1 em { color: #c9b8a0; font-weight: 430; }
 .lens-copy .hero-sub { max-width: 62ch; color: #c7bdb1; font-size: clamp(1rem, 1.25vw, 1.14rem); line-height: 1.72; }
-.lens-copy .hero-nota { color: #8f8377; }
+.lens-copy .hero-nota { color: #9d9185; }
 
 .lens-visual { position: relative; min-width: 0; perspective: 1200px; }
 .lens-glow {
@@ -820,19 +843,17 @@ p.leve { color: var(--texto-2); }
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-.pagina-inicial .demo-barra { background: rgba(255, 255, 255, .025); }
-.pagina-inicial .demo-ponto:first-child { background: #a78b71; }
-.pagina-inicial .demo-ponto:nth-child(2) { background: #c9b8a0; }
-.pagina-inicial .demo-ponto:nth-child(3) { background: #705442; }
-.pagina-inicial .demo-cartao,
-.pagina-inicial .demo-grafico {
+.tema-mineral .demo-barra { background: rgba(255, 255, 255, .025); }
+.tema-mineral .demo-ponto:first-child { background: #a78b71; }
+.tema-mineral .demo-ponto:nth-child(2) { background: #c9b8a0; }
+.tema-mineral .demo-ponto:nth-child(3) { background: #705442; }
+.tema-mineral .demo-cartao,
+.tema-mineral .demo-grafico {
   background: rgba(255, 255, 255, .03);
   border-color: rgba(255, 255, 255, .10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
-.pagina-inicial .demo-valor.entra { color: #e8d5b7; }
-.pagina-inicial .demo-valor.sai { color: #a78b71; }
+.tema-mineral .demo-valor.entra { color: #e8d5b7; }
+.tema-mineral .demo-valor.sai { color: #a78b71; }
 
 .lens-float {
   position: absolute; z-index: 2; display: grid; gap: 2px;
@@ -860,19 +881,41 @@ p.leve { color: var(--texto-2); }
   mask-image: radial-gradient(circle at 62% 51%, transparent 0, transparent var(--lens-radius), #000 calc(var(--lens-radius) + 1px));
 }
 .lens-js .lens-greeting {
-  display: grid; place-items: center; align-content: center; gap: 16px;
+  display: grid; place-items: center; align-content: center; gap: clamp(22px, 4vh, 40px);
   position: absolute; inset: 0; z-index: 4; pointer-events: none;
   opacity: var(--hello-opacity);
+  transform: scale(var(--hello-scale));
 }
-.lens-greeting span {
-  font-family: "Playfair Display", Georgia, serif; font-style: italic;
-  font-size: clamp(5rem, 15vw, 13rem); font-weight: 500;
-  line-height: .8; letter-spacing: -.035em; color: #f5f0e9;
+
+/* ---- o hello escrito à mão ----
+   Monolinha, cursivo, um traço só do começo ao fim -- a mesma ideia
+   do "hello" da Apple, desenhado do zero para o OAZE. A tinta é o
+   ouro do medalhão, clareando para o creme onde a caneta começa.
+   Quem escreve é o JavaScript (stroke-dashoffset); antes de ele
+   rodar o traço fica invisível, para não piscar inteiro e sumir. */
+.hello { width: min(74vw, 680px); height: auto; overflow: visible; }
+.hello-traco {
+  fill: none; stroke: url(#hello-tinta);
+  stroke-width: 15; stroke-linecap: round; stroke-linejoin: round;
 }
+.lens-js .hello { opacity: 0; }
+.lente-viva .hello { opacity: 1; }
+
+/* A dica só aparece quando a caneta termina. Ela é o único controle
+   na tela, então é a única peça com cara de vidro: uma cápsula. */
 .lens-greeting small {
-  color: #8f8377; font-size: .75rem; letter-spacing: .18em;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 9px 18px 9px 14px; border-radius: 999px;
+  color: #b9aea1; font-size: .72rem; font-weight: 600; letter-spacing: .18em;
   text-transform: uppercase;
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(255, 255, 255, .10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .7s var(--entrada), transform .7s var(--entrada);
 }
+.lens-greeting small svg { width: 14px; height: 14px; }
+.lens-greeting.escrito small { opacity: 1; transform: none; }
 .lens-js .lens-progress {
   display: block; position: absolute; z-index: 5;
   left: 50%; bottom: 24px; width: min(240px, 48vw); height: 1px;
@@ -884,8 +927,19 @@ p.leve { color: var(--texto-2); }
 }
 .lens-intro.keyboard-reveal { --lens-radius: 220vmax !important; --hello-opacity: 0 !important; }
 
+/* Rede de segurança. A classe .lens-js entra no <head>, antes do
+   script; se o site.js não rodar (bloqueado, erro, rede ruim),
+   ninguém abre a lente -- e o título e o botão ficariam presos atrás
+   do preto. Então a própria cortina se recolhe em 4 s, a menos que o
+   script avise que está vivo (.lente-viva). É a mesma regra do
+   .anima: conteúdo visível não pode depender de JavaScript. */
+@keyframes lente-recolhe { to { visibility: hidden; } }
+.lens-js:not(.lente-viva) .lens-shutter,
+.lens-js:not(.lente-viva) .lens-greeting,
+.lens-js:not(.lente-viva) .lens-progress { animation: lente-recolhe 0s 4s forwards; }
+
 @media (min-width: 1800px) {
-  .pagina-inicial { --largura: 1640px; }
+  .tema-mineral { --largura: 1640px; }
   .lens-layout { grid-template-columns: minmax(500px, .78fr) minmax(720px, 1.22fr); gap: 120px; }
   .lens-copy h1 { font-size: 6rem; }
   .lens-visual .demo { transform: rotateY(-3deg) scale(1.03); }
@@ -898,8 +952,14 @@ p.leve { color: var(--texto-2); }
 }
 
 @media (max-width: 820px) {
-  .pagina-inicial .topo.aberto .menu,
-  .pagina-inicial .topo.aberto .acoes-topo { background: rgba(10, 10, 10, .98); }
+  .tema-mineral .topo.aberto .menu,
+  .tema-mineral .topo.aberto .acoes-topo { background: rgba(10, 10, 10, .98); }
+  /* aberta, a cápsula vira folha: sem arredondar, sem aro */
+  .tema-mineral .topo.aberto .menu {
+    gap: 0; border-radius: 0; border: 0; box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+  }
+  .tema-mineral .topo.aberto .menu a { border-radius: var(--raio-sm); }
   .lens-intro { height: 205svh; }
   .lens-stage { min-height: 620px; }
   .lens-layout {
@@ -938,7 +998,7 @@ p.leve { color: var(--texto-2); }
   .lens-visual .demo-grafico { padding: 10px; }
   .lens-float { display: none; }
   .lens-greeting { padding-inline: 16px; }
-  .lens-greeting span { max-width: 100%; font-size: clamp(4rem, 21vw, 5.2rem); white-space: nowrap; }
+  .hello { width: 86vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -952,40 +1012,38 @@ p.leve { color: var(--texto-2); }
 }
 
 /* ---- o restante da narrativa ---- */
-.pagina-inicial main > .secao:not(.precos-cortina) {
+.tema-mineral main > .secao:not(.precos-cortina) {
   background:
     radial-gradient(circle, rgba(255, 255, 255, .055) 1px, transparent 1.2px),
     #0a0a0a;
   background-size: 32px 32px, auto;
 }
-.pagina-inicial .secao { padding: clamp(88px, 10vw, 150px) 0; }
-.pagina-inicial .secao-topo {
+.tema-mineral .secao { padding: clamp(88px, 10vw, 150px) 0; }
+.tema-mineral .secao-topo {
   max-width: 54rem; margin-left: 0; margin-right: 0;
   text-align: left; margin-bottom: clamp(42px, 5vw, 72px);
 }
-.pagina-inicial .secao-topo h2,
-.pagina-inicial .secao-uglez h2 {
+.tema-mineral .secao-topo h2,
+.tema-mineral .secao-uglez h2 {
   font-size: clamp(2.7rem, 5.2vw, 5.2rem);
   line-height: .98; letter-spacing: -.035em;
 }
-.pagina-inicial .secao-topo p { max-width: 58ch; font-size: 1.06rem; color: #a99d91; }
+.tema-mineral .secao-topo p { max-width: 58ch; font-size: 1.06rem; color: #a99d91; }
 
-.pagina-inicial .carta,
-.pagina-inicial .plano,
-.pagina-inicial .faq details {
+.tema-mineral .carta,
+.tema-mineral .plano,
+.tema-mineral .faq details {
   background: rgba(255, 255, 255, .03);
   border-color: rgba(255, 255, 255, .10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
-.pagina-inicial .carta:hover,
-.pagina-inicial .plano:hover {
+.tema-mineral .carta:hover,
+.tema-mineral .plano:hover {
   background: rgba(255, 255, 255, .05);
   border-color: rgba(232, 213, 183, .28);
   transform: translateY(-4px);
 }
-.pagina-inicial .carta p { color: #a99d91; font-size: 1rem; }
-.pagina-inicial .icone {
+.tema-mineral .carta p { color: #a99d91; font-size: 1rem; }
+.tema-mineral .icone {
   background: rgba(167, 139, 113, .11);
   border-color: rgba(201, 184, 160, .24);
   color: #c9b8a0;
@@ -1007,20 +1065,20 @@ p.leve { color: var(--texto-2); }
   border-block: 1px solid rgba(255, 255, 255, .07);
   background-color: #0d0c0b !important;
 }
-.pagina-inicial .passos { gap: 0; }
-.pagina-inicial .passo {
+.tema-mineral .passos { gap: 0; }
+.tema-mineral .passo {
   min-height: 250px; padding: 82px 34px 10px 0;
   border-top: 1px solid rgba(255, 255, 255, .14);
 }
-.pagina-inicial .passo + .passo { padding-left: 34px; border-left: 1px solid rgba(255, 255, 255, .09); }
-.pagina-inicial .passo::before {
+.tema-mineral .passo + .passo { padding-left: 34px; border-left: 1px solid rgba(255, 255, 255, .09); }
+.tema-mineral .passo::before {
   top: 22px; left: 0; width: auto; height: auto;
   border: 0; border-radius: 0; background: none;
   color: #c9b8a0; font-family: "Playfair Display", Georgia, serif;
   font-style: italic; font-size: 1.5rem; font-weight: 500;
 }
-.pagina-inicial .passo + .passo::before { left: 34px; }
-.pagina-inicial .passo p { color: #9f9387; }
+.tema-mineral .passo + .passo::before { left: 34px; }
+.tema-mineral .passo p { color: #9f9387; }
 
 .secao-uglez .grade { grid-template-columns: minmax(0, .88fr) minmax(480px, 1.12fr); }
 .secao-uglez .leve { max-width: 60ch; }
@@ -1037,14 +1095,19 @@ p.leve { color: var(--texto-2); }
   font-size: 8rem; line-height: 1;
 }
 
-.secao-seguranca .grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 54px; }
-.secao-seguranca .carta {
+/* ---- o padrão editorial (nasceu na seção Segurança) ----
+   Itens separados por um fio, sem caixa: título em ouro, texto
+   corrido embaixo. É o padrão das seções de leitura em todas as
+   páginas do tema -- Segurança, Recursos, Preços e Suporte. */
+.grade-editorial { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 54px; }
+.grade-editorial.grade-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; }
+.tema-mineral .grade-editorial > .carta {
   min-height: 190px; padding: 28px 0 34px;
   border: 0; border-top: 1px solid rgba(255, 255, 255, .13);
-  border-radius: 0; background: transparent; backdrop-filter: none;
+  border-radius: 0; background: transparent;
 }
-.secao-seguranca .carta:hover { background: transparent; border-color: rgba(232, 213, 183, .34); transform: none; }
-.secao-seguranca .carta h3 { max-width: 27ch; color: #e8d5b7; }
+.tema-mineral .grade-editorial > .carta:hover { background: transparent; border-color: rgba(232, 213, 183, .34); transform: none; }
+.grade-editorial > .carta h3 { max-width: 27ch; color: #e8d5b7; }
 
 /* ---- planos: a cortina da referência, com a verdade do OAZE ---- */
 .precos-cortina {
@@ -1096,13 +1159,13 @@ p.leve { color: var(--texto-2); }
 .precos-cortina .lista svg { color: #c9b8a0; }
 
 .secao-faq .secao-topo { margin-inline: auto; text-align: center; }
-.pagina-inicial .faq { max-width: 58rem; gap: 12px; }
-.pagina-inicial .faq details { border-radius: 18px; }
-.pagina-inicial .faq details[open] { border-color: rgba(232, 213, 183, .30); background: rgba(255, 255, 255, .045); }
-.pagina-inicial .faq summary { padding: 20px 24px; font-size: 1.02rem; }
+.tema-mineral .faq { max-width: 58rem; gap: 12px; }
+.tema-mineral .faq details { border-radius: 18px; }
+.tema-mineral .faq details[open] { border-color: rgba(232, 213, 183, .30); background: rgba(255, 255, 255, .045); }
+.tema-mineral .faq summary { padding: 20px 24px; font-size: 1.02rem; }
 
 .secao-fecho { padding-top: 30px !important; }
-.pagina-inicial .chamada {
+.tema-mineral .chamada {
   position: relative; overflow: hidden;
   padding: clamp(54px, 8vw, 104px) clamp(24px, 7vw, 96px);
   border-radius: 48px; border-color: rgba(232, 213, 183, .28);
@@ -1113,17 +1176,17 @@ p.leve { color: var(--texto-2); }
   background-size: auto, 32px 32px, auto;
   box-shadow: 0 0 100px rgba(167, 139, 113, .12);
 }
-.pagina-inicial .chamada h2 { font-size: clamp(2.6rem, 5vw, 5rem); line-height: .98; }
-.pagina-inicial .rodape { background: #070707; border-color: rgba(255, 255, 255, .08); }
+.tema-mineral .chamada h2 { font-size: clamp(2.6rem, 5vw, 5rem); line-height: .98; }
+.tema-mineral .rodape { background: #070707; border-color: rgba(255, 255, 255, .08); }
 
-.anima .pagina-inicial .revela {
+.anima .tema-mineral .revela {
   transform: translateY(22px); filter: blur(5px);
   transition: opacity .75s var(--entrada), transform .75s var(--entrada), filter .75s var(--entrada);
 }
-.anima .pagina-inicial .revela.visivel { transform: none; filter: none; }
+.anima .tema-mineral .revela.visivel { transform: none; filter: none; }
 
 @media (min-width: 1800px) {
-  .pagina-inicial .secao-topo { max-width: 64rem; }
+  .tema-mineral .secao-topo { max-width: 64rem; }
   .secao-beneficios .carta { min-height: 290px; }
   .secao-beneficios .carta:first-child { min-height: 360px; }
   .precos-cortina .planos { max-width: 1440px; }
@@ -1140,46 +1203,126 @@ p.leve { color: var(--texto-2); }
 }
 
 @media (max-width: 720px) {
-  .pagina-inicial .secao { padding: 84px 0; }
-  .pagina-inicial .secao-topo h2,
-  .pagina-inicial .secao-uglez h2 { font-size: clamp(2.45rem, 13vw, 3.7rem); }
+  .tema-mineral .secao { padding: 84px 0; }
+  .tema-mineral .secao-topo h2,
+  .tema-mineral .secao-uglez h2 { font-size: clamp(2.45rem, 13vw, 3.7rem); }
   .secao-beneficios .grade { grid-template-columns: 1fr; }
   .secao-beneficios .carta,
   .secao-beneficios .carta:first-child,
   .secao-beneficios .carta:nth-child(4),
   .secao-beneficios .carta:nth-child(5) { grid-column: auto; min-height: auto; }
-  .pagina-inicial .passos { grid-template-columns: 1fr; }
-  .pagina-inicial .passo,
-  .pagina-inicial .passo + .passo { min-height: auto; padding: 72px 0 30px; border-left: 0; }
-  .pagina-inicial .passo + .passo::before { left: 0; }
-  .secao-seguranca .grade { grid-template-columns: 1fr; }
-  .secao-seguranca .carta { min-height: auto; }
+  .tema-mineral .passos { grid-template-columns: 1fr; }
+  .tema-mineral .passo,
+  .tema-mineral .passo + .passo { min-height: auto; padding: 72px 0 30px; border-left: 0; }
+  .tema-mineral .passo + .passo::before { left: 0; }
+  .grade-editorial, .grade-editorial.grade-3 { grid-template-columns: 1fr; }
+  .tema-mineral .grade-editorial > .carta { min-height: auto; }
   .precos-cortina .planos > :last-child { grid-column: auto; }
   .precos-cortina .plano-destaque,
   .precos-cortina .plano-destaque:hover { transform: none; }
-  .pagina-inicial .chamada { border-radius: 30px; }
+  .tema-mineral .chamada { border-radius: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .anima .pagina-inicial .revela { filter: none !important; }
+  .anima .tema-mineral .revela { filter: none !important; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .pagina-inicial .carta,
-  .pagina-inicial .plano,
-  .pagina-inicial .faq details,
-  .pagina-inicial .chamada { background: #151311; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .tema-mineral .carta,
+  .tema-mineral .plano,
+  .tema-mineral .faq details,
+  .tema-mineral .chamada { background: #151311; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+/* ---- botões: cápsulas, como os controles do Liquid Glass ---- */
+.tema-mineral .btn { border-radius: 999px; }
+.tema-mineral .btn-fantasma { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08); }
+.tema-mineral .pular { background: #e8d5b7; color: #0a0a0a; }
+.tema-mineral .carta strong { color: #e8e0d6; }
+
+/* ---------------------------------------------------------------
+   15b · as outras páginas do tema: Recursos, Preços e Suporte
+   ---------------------------------------------------------------
+   Mesma matéria da página inicial -- preto mineral, ouro do
+   medalhão, títulos em Playfair itálico, seções de leitura no
+   padrão editorial -- sem a abertura em lente, que é só da porta de
+   entrada. */
+.tema-mineral .cabeca-pagina { padding: clamp(72px, 9vw, 128px) 0 clamp(40px, 5vw, 72px); }
+.cabeca-pagina .secao-topo { margin-bottom: 0; }
+.cabeca-pagina h1 {
+  max-width: 16ch; margin-bottom: 22px;
+  font-size: clamp(3rem, 6.4vw, 6rem);
+  line-height: .96; letter-spacing: -.035em;
+}
+.cabeca-pagina h1 em { color: #c9b8a0; font-weight: 430; }
+.tema-mineral .cabeca-pagina .secao-topo p { max-width: 60ch; font-size: clamp(1.02rem, 1.3vw, 1.16rem); }
+
+/* a etiqueta deixa de ser pílula violeta e vira sobrescrito editorial */
+.tema-mineral .etiqueta {
+  padding: 0; margin-bottom: 20px;
+  border: 0; border-radius: 0; background: none;
+  color: #c9b8a0; font-size: .74rem; letter-spacing: .2em;
+}
+.tema-mineral .etiqueta::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
+
+/* O aviso continua aviso, no idioma do tema: um fio de ouro à
+   esquerda em vez de uma caixa laranja que grita. */
+.tema-mineral .aviso {
+  padding: 4px 0 4px 22px;
+  border: 0; border-left: 2px solid rgba(232, 213, 183, .55); border-radius: 0;
+  background: none; color: #c7bdb1; font-size: .98rem;
+}
+.tema-mineral .aviso strong { color: #e8d5b7; }
+.tema-mineral .texto { max-width: 58rem; margin-left: 0; }
+.tema-mineral .texto p, .tema-mineral .texto li { color: #b9aea1; }
+.tema-mineral .texto strong { color: #f5f0e9; }
+
+.tema-mineral .recado {
+  max-width: 40rem; margin: 0 auto 26px; text-align: center;
+  border-radius: 999px; border-color: rgba(232, 213, 183, .24);
+  background: rgba(255, 255, 255, .04); color: #e8d5b7;
+}
+
+.tema-mineral .rolo-tabela { border-color: rgba(255, 255, 255, .10); border-radius: 24px; background: rgba(255, 255, 255, .02); }
+.tema-mineral .tabela-planos caption { padding: 20px 22px; color: #b9aea1; }
+.tema-mineral .tabela-planos th,
+.tema-mineral .tabela-planos td { padding: 14px 22px; border-bottom-color: rgba(255, 255, 255, .07); }
+.tema-mineral .tabela-planos thead th {
+  background: rgba(255, 255, 255, .03); color: #f5f0e9;
+  font-family: "Playfair Display", Georgia, serif; font-style: italic; font-weight: 560; font-size: 1.1rem;
+}
+.tema-mineral .tabela-planos tbody th { color: #b9aea1; }
+.tema-mineral .tabela-planos td { color: #e8e0d6; font-variant-numeric: tabular-nums; }
+.tema-mineral .tabela-planos .sim { color: #e8d5b7; }
+.tema-mineral .tabela-planos .nao { color: #9d9185; }
+.tema-mineral .tabela-planos tbody tr:hover > * { background: rgba(255, 255, 255, .025); }
+.tema-mineral .plano-alvo { color: #b9aea1; }
+
+@media (max-width: 980px) {
+  .grade-editorial.grade-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .cabeca-pagina h1 { font-size: clamp(2.6rem, 12vw, 3.8rem); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .tema-mineral .topo { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .tema-mineral .menu { background: #151311; }
+}
+@media (prefers-contrast: more) {
+  .tema-mineral .menu,
+  .tema-mineral .grade-editorial > .carta { border-color: rgba(255, 255, 255, .34); }
 }
 
 @media print {
-  .pagina-inicial { background: #fff !important; color: #111 !important; }
-  .pagina-inicial .topo { position: static; background: #fff; }
-  .pagina-inicial .lens-intro { height: auto; background: #fff; }
-  .pagina-inicial .lens-stage { position: relative; height: auto; min-height: 0; overflow: visible; background: #fff; }
-  .pagina-inicial .lens-world { position: relative; background: #fff; }
-  .pagina-inicial .lens-layout { min-height: 0; padding-block: 40px; }
-  .pagina-inicial .lens-shutter,
-  .pagina-inicial .lens-greeting,
-  .pagina-inicial .lens-progress,
-  .pagina-inicial .pricing-curtains { display: none !important; }
+  .tema-mineral { background: #fff !important; color: #111 !important; }
+  .tema-mineral .topo { position: static; background: #fff; }
+  .tema-mineral .lens-intro { height: auto; background: #fff; }
+  .tema-mineral .lens-stage { position: relative; height: auto; min-height: 0; overflow: visible; background: #fff; }
+  .tema-mineral .lens-world { position: relative; background: #fff; }
+  .tema-mineral .lens-layout { min-height: 0; padding-block: 40px; }
+  .tema-mineral .lens-shutter,
+  .tema-mineral .lens-greeting,
+  .tema-mineral .lens-progress,
+  .tema-mineral .pricing-curtains { display: none !important; }
 }
