@@ -34,6 +34,7 @@ const VERIFICACOES = [
   ['tools/varrer-segredos.js', 'nenhum segredo no que vai ao navegador'],
   ['tools/conferir-rls.js', 'toda tabela exposta tem RLS'],
   ['tools/auditar-cliques.js', 'nenhum botão ou link sem ação'],
+  ['tools/testes/navegacao-superior.js', 'Planejar e Mais abrem menus visíveis'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],

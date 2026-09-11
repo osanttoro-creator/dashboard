@@ -2104,10 +2104,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   /* A lupa é auto-explicativa; o rótulo custa 48px o tempo todo. */
   #btnSearch .pill-label { display: none; }
 
-  /* Rede de segurança: se um degrau ficar apertado por causa de fonte
-     ou idioma, o menu corta em vez de escorregar por baixo dos
-     controles. Corte é feio; sobreposição esconde um destino. */
-  .topnav-menu { overflow: hidden; }
+  /* Os painéis de Planejar e Mais são posicionados fora da altura da
+     fita. O ancestral precisa deixar esse conteúdo transbordar; com
+     overflow:hidden o botão mudava para "aberto", mas o menu inteiro
+     era recortado e parecia não ter ação. Os degraus abaixo continuam
+     responsáveis por evitar colisões horizontais. */
+  .topnav-menu { overflow: visible; }
   .topbar-gap { min-width: 12px; }
 }
 
