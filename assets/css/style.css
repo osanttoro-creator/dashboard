@@ -2975,26 +2975,60 @@ canvas.uglez-particulas {
 
 [data-dica] { position: relative; }
 
+/* ESCONDIDA É display:none, NÃO opacity:0 — e isto corrigiu uma
+   regressão em produção.
+   A primeira versão escondia a dica com opacity:0. Invisível, mas
+   ainda no layout: a do botão "Ajustes", colado na borda direita,
+   era um balão de 115px centralizado em x=1224 que terminava em
+   1281 — 16px além da viewport. Resultado: TODAS as páginas do app
+   rolavam de lado no desktop, com uma dica que ninguém via.
+   Os testes locais não pegaram porque viewport emulado usa barra de
+   rolagem sobreposta; só a barra clássica do Windows revelou.
+   Com display:none a dica não existe até ser pedida, e não há o que
+   transbordar. O custo é trocar a transição por uma animação de
+   entrada — que é o único momento em que o movimento aparece. */
 [data-dica]::after {
   content: attr(data-dica);
+  display: none;
   position: absolute; top: calc(100% + 8px); left: 50%;
-  transform: translateX(-50%) translateY(-4px);
+  translate: -50% 0;
   padding: 5px 9px; border-radius: 7px;
   background: var(--tip-bg); border: 1px solid var(--tip-line);
   color: var(--ink); font-size: 11.5px; font-weight: 560;
   white-space: pre; letter-spacing: normal;
   box-shadow: var(--shadow);
-  opacity: 0; pointer-events: none;
-  transition: opacity .14s var(--ease-out), transform .14s var(--ease-out);
+  pointer-events: none;
   z-index: 120;
 }
 [data-dica]:hover::after,
 [data-dica]:focus-visible::after {
-  opacity: 1; transform: translateX(-50%) translateY(0);
+  display: block;
+  animation: dica-entra .14s var(--ease-out);
 }
+@keyframes dica-entra {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Controles do lado DIREITO do cabeçalho: a dica se ancora pela
+   borda direita do botão e cresce para a esquerda. Mesmo visível,
+   um balão centralizado no último botão passaria da viewport e
+   faria a página piscar uma barra de rolagem a cada hover. */
+.topbar-gap ~ [data-dica]::after,
+.topbar-gap ~ * [data-dica]::after {
+  left: auto; right: 0;
+  translate: none;
+}
+
 /* Painel aberto: a tooltip sai de cena. Ela ficaria por cima do
    próprio painel que o botão acabou de abrir. */
-[data-dica][aria-expanded="true"]::after { opacity: 0; }
+[data-dica][aria-expanded="true"]:hover::after,
+[data-dica][aria-expanded="true"]:focus-visible::after { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-dica]:hover::after,
+  [data-dica]:focus-visible::after { animation: none; }
+}
 
 /* Alvo de toque. 44px é o mínimo que se acerta com o polegar; os
    controles do cabeçalho ficam a 8px uns dos outros, e abaixo
@@ -3005,8 +3039,14 @@ canvas.uglez-particulas {
 @media (pointer: coarse) {
   .pill-btn, .pill-ico, .pill-hoje { min-width: 44px; min-height: 44px; }
   /* Sem hover em tela de toque, a tooltip só atrapalharia: ela
-     apareceria presa depois do toque, cobrindo o que foi aberto. */
-  [data-dica]::after { display: none; }
+     apareceria presa depois do toque, cobrindo o que foi aberto.
+     Os seletores com :hover e :focus-visible são obrigatórios aqui:
+     no toque o :hover "gruda" depois do tap, e a regra que mostra a
+     dica tem especificidade maior do que [data-dica]::after sozinho
+     — sem eles, esta regra perderia e a dica apareceria presa. */
+  [data-dica]::after,
+  [data-dica]:hover::after,
+  [data-dica]:focus-visible::after { display: none; }
 }
 
 /* Estado ativo do controle que abriu um painel. Já existia para
