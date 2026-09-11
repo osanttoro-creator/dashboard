@@ -11,8 +11,8 @@
 
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#080D18",
-  "theme_color": "#080D18",
+  "background_color": "#071822",
+  "theme_color": "#071822",
 
   "icons": [
     { "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },

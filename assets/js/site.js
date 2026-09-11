@@ -77,8 +77,12 @@
       var progresso = Math.max(0, Math.min(1, percorrido / faixa));
       var suavizado = 1 - Math.pow(1 - progresso, 4); /* power4.out */
       var raio = Math.max(window.innerWidth, window.innerHeight) * 1.5 * suavizado;
-      /* o hello atravessa a tela nos primeiros 20% da rolagem */
-      var passagem = Math.min(1, progresso / .2);
+      /* O hello some nos primeiros 10% da rolagem. Com mais que isso,
+         a lente (que abre rápido no começo) já mostrava a página
+         enquanto ainda sobrava um pedaço do hello na tela. A máscara
+         no CSS garante que ele nunca fica POR CIMA da página; este
+         prazo curto garante que ele nem divide a tela com ela. */
+      var passagem = Math.min(1, progresso / .1);
 
       lente.style.setProperty('--lens-radius', raio.toFixed(1) + 'px');
       lente.style.setProperty('--lens-progress', suavizado.toFixed(4));

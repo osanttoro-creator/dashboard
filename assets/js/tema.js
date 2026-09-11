@@ -91,7 +91,7 @@
     /* A barra do sistema no celular acompanha. Sem isto, o topo do
        navegador fica claro sobre um app escuro — e é a primeira
        coisa que se vê ao abrir. */
-    const cor = efetivo === 'dark' ? '#081A24' : '#F2EDE4';
+    const cor = efetivo === 'dark' ? '#071822' : '#F4EFE6';
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
       /* As duas <meta> com media continuam valendo para quem segue o
          sistema; quando há escolha explícita, uma terceira sem media

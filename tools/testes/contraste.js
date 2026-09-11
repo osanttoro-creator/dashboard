@@ -3,12 +3,17 @@
    -------------------------------------------------------------
    Contraste é uma das poucas coisas de interface que tem resposta
    numérica. "Parece legível" é opinião; 1,13:1 é um fato — e foi
-   exatamente esse o valor do cartão "Saldo do mês" antes desta
-   correção: tinta marrom escura (#2A1D12) sobre um gradiente azul
-   escuro (#17394C → #0F2C3D).
+   exatamente esse o valor do cartão "Saldo do mês" em 2026: tinta
+   marrom escura (#2A1D12) sobre um gradiente azul escuro
+   (#17394C → #0F2C3D). O número mais importante da tela era, na
+   prática, invisível.
 
-   Como o gradiente tem duas pontas, cada par é medido nas DUAS, e
-   vale a pior. Medir só no meio esconde a ponta ruim.
+   Desde a identidade visual v1 (setembro de 2026) o cartão em
+   destaque é do mesmo material dos outros — Cal no tema claro,
+   Petróleo no escuro — e as cores de texto são as da paleta
+   travada. Cada par é medido contra os DOIS fundos de cada tema
+   (a superfície e o fundo atrás dela, porque o material é
+   translúcido), e vale o pior.
 
    Referência: WCAG 2.2, contraste mínimo
      4,5:1  texto normal
@@ -44,56 +49,85 @@ function razao(a, b) {
 }
 
 /* ---------------------------------------------------------------
-   o que medir
-   ---------------------------------------------------------------
-   O cartão em destaque do Financeiro e da Visão geral. O fundo é um
-   gradiente, e há um gradiente diferente em cada tema.
-
-   As TRÊS pontas entram: duas do tema claro e a do tema escuro, que
-   é a mais clara de todas e portanto a pior para texto claro. Medir
-   só um tema deixa o outro sem cobertura — e quem escolhe o tema é
-   o usuário. */
-const FUNDOS = [
-  { nome: "claro, ponta A", cor: "#17394C" },
-  { nome: "claro, ponta B", cor: "#0F2C3D" },
-  { nome: "escuro, ponta A", cor: "#2D4F56" }
+   o que medir — os mesmos valores do style.css
+   --------------------------------------------------------------- */
+const TEMAS = [
+  {
+    nome: 'claro',
+    fundos: [
+      { nome: 'Cal (cartão)', cor: '#FBF8F2' },
+      { nome: 'Areia (fundo)', cor: '#F4EFE6' }
+    ],
+    casos: [
+      { nome: 'valor do saldo',           cor: '#11262F', minimo: 4.5 },
+      { nome: 'rótulo e texto de apoio',  cor: '#4E6068', minimo: 4.5 },
+      { nome: 'receita / positivo',       cor: '#1F6B4F', minimo: 4.5 },
+      { nome: 'despesa',                  cor: '#9C5029', minimo: 4.5 },
+      { nome: 'crítico / negativo',       cor: '#A33A22', minimo: 4.5 },
+      { nome: 'acento como texto',        cor: '#7E601A', minimo: 4.5 },
+      { nome: 'UGLEZ como texto',         cor: '#2842BE', minimo: 4.5 }
+    ]
+  },
+  {
+    nome: 'escuro',
+    fundos: [
+      { nome: 'Petróleo (cartão)', cor: '#0F2A38' },
+      { nome: 'Raso (elevado)',    cor: '#16384A' }
+    ],
+    casos: [
+      { nome: 'valor do saldo',           cor: '#F1ECE3', minimo: 4.5 },
+      { nome: 'rótulo e texto de apoio',  cor: '#9FB2B8', minimo: 4.5 },
+      { nome: 'receita / positivo',       cor: '#86CFA4', minimo: 4.5 },
+      { nome: 'despesa',                  cor: '#E9A178', minimo: 4.5 },
+      { nome: 'crítico / negativo',       cor: '#F09070', minimo: 4.5 },
+      { nome: 'acento (ouro)',            cor: '#D8B45E', minimo: 4.5 },
+      { nome: 'UGLEZ como texto',         cor: '#9FB4FF', minimo: 4.5 }
+    ]
+  }
 ];
 
-const casos = [
-  { nome: 'valor do saldo (28px, negrito)', cor: '#F4F1EA', minimo: 3.0, grande: true },
-  { nome: 'rótulo "Saldo do mês"',          cor: '#BCCBD3', minimo: 4.5 },
-  { nome: 'texto de apoio (delta)',         cor: '#BCCBD3', minimo: 4.5 },
-  { nome: 'valor positivo',                 cor: '#8BE0B4', minimo: 4.5 },
-  { nome: 'valor negativo',                 cor: '#FFB09A', minimo: 4.5 },
-  { nome: 'selo (badge) sobre o herói',     cor: '#E9F0F3', minimo: 3.0 }
+/* Os botões: tinta sobre a cor da ação, nos dois temas. */
+const BOTOES = [
+  { nome: 'primário: petróleo sobre ouro', texto: '#071822', fundo: '#D8B45E', minimo: 4.5 },
+  { nome: 'UGLEZ claro: branco sobre royal', texto: '#FFFFFF', fundo: '#2842BE', minimo: 4.5 },
+  { nome: 'UGLEZ escuro: branco sobre royal', texto: '#FFFFFF', fundo: '#4669F0', minimo: 4.5 },
+  { nome: 'despesa: branco sobre terracota', texto: '#FFFFFF', fundo: '#9C5029', minimo: 4.5 },
+  { nome: 'receita: branco sobre verde', texto: '#FFFFFF', fundo: '#1F6B4F', minimo: 4.5 },
+  { nome: 'investimento: branco sobre água', texto: '#FFFFFF', fundo: '#276070', minimo: 4.5 }
 ];
 
 /* ---------------------------------------------------------------
    roda
    --------------------------------------------------------------- */
-console.log('');
-console.log('  contraste — cartao em destaque, nos dois temas');
-console.log('  fundos: ' + FUNDOS.map((f) => f.cor).join('  '));
-console.log('  ' + '-'.repeat(64));
-
 let falhas = 0;
-
-casos.forEach((c) => {
-  const pior = Math.min.apply(null, FUNDOS.map((f) => razao(c.cor, f.cor)));
-  const ok = pior >= c.minimo;
+const linha = (ok, nome, cor, valor, minimo) => {
   if (!ok) falhas++;
-  console.log('    ' + (ok ? 'ok   ' : 'FALHA') + ' ' +
-    c.nome.padEnd(32) + c.cor + '  ' +
-    pior.toFixed(2).padStart(6) + ':1  (minimo ' + c.minimo.toFixed(1) + ')' +
-    (c.grande ? '  [texto grande]' : ''));
-});
+  console.log('    ' + (ok ? 'ok   ' : 'FALHA') + ' ' + nome.padEnd(34) + cor + '  ' +
+    valor.toFixed(2).padStart(6) + ':1  (minimo ' + minimo.toFixed(1) + ')');
+};
 
-/* A regressão que este arquivo existe para impedir. Deixá-la aqui,
-   medida e nomeada, é mais útil do que um comentário dizendo "não
-   use tinta escura no herói": o número mostra o tamanho do erro. */
-const antes = Math.min.apply(null, FUNDOS.map((f) => razao("#2A1D12", f.cor)));
-console.log('  ' + '-'.repeat(64));
-console.log('    para referencia, a cor ANTERIOR (#2A1D12): ' +
+console.log('');
+for (const t of TEMAS) {
+  console.log('  contraste — tema ' + t.nome + ', contra ' + t.fundos.map((f) => f.nome + ' ' + f.cor).join(' e '));
+  console.log('  ' + '-'.repeat(66));
+  for (const c of t.casos) {
+    const pior = Math.min.apply(null, t.fundos.map((f) => razao(c.cor, f.cor)));
+    linha(pior >= c.minimo, c.nome, c.cor, pior, c.minimo);
+  }
+  console.log('');
+}
+console.log('  contraste — texto dos botões');
+console.log('  ' + '-'.repeat(66));
+for (const b of BOTOES) {
+  const r = razao(b.texto, b.fundo);
+  linha(r >= b.minimo, b.nome, b.texto, r, b.minimo);
+}
+
+/* A regressão que este arquivo nasceu para impedir. Deixá-la aqui,
+   medida e nomeada, mostra o tamanho do erro. */
+const antes = Math.min(razao('#2A1D12', '#17394C'), razao('#2A1D12', '#0F2C3D'));
+console.log('  ' + '-'.repeat(66));
+console.log('    para referencia, a tinta de 2026 no herói antigo (#2A1D12): ' +
   antes.toFixed(2) + ':1 — abaixo de qualquer minimo');
 
 if (falhas) {
@@ -102,5 +136,5 @@ if (falhas) {
   console.log('');
   process.exit(1);
 }
-console.log('  todos os pares passam nas tres pontas, nos dois temas');
+console.log('  todos os pares passam, nos dois temas');
 console.log('');

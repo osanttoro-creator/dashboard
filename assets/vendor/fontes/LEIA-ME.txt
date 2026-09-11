@@ -1,0 +1,22 @@
+Fontes da identidade visual do OAZE (setembro de 2026)
+======================================================
+
+Todas sob a SIL Open Font License 1.1 — uso, embutimento e
+redistribuição livres, inclusive em produto comercial.
+
+  ibm-plex-sans-latin.woff2       IBM Plex Sans, variável (pesos 400–600)
+                                  interface: site, app e páginas de conta
+  newsreader-latin.woff2          Newsreader, variável (pesos 400–600)
+                                  títulos
+  newsreader-italico-latin.woff2  Newsreader itálico, variável (400–500)
+                                  ênfase de conceito nos títulos do site
+  ibm-plex-mono-400-latin.woff2   IBM Plex Mono 400
+                                  rótulos e códigos
+
+Subconjunto "latin" do Google Fonts: cobre todos os acentos do
+português (U+0000-00FF) e o sinal de menos (U+2212).
+
+O site carrega estes arquivos por URL (site.css). O app os recebe
+embutidos em base64 por assets/vendor/fonte.css, gerado por
+tools/gen-fonte.js — ele roda em file:// e como arquivo único no
+iPhone, onde fonte em arquivo separado é bloqueada.

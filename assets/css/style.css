@@ -1,45 +1,60 @@
 /* ============================================================
    OAZE — folha de estilo única
    ------------------------------------------------------------
-   Paleta do oásis: areia, terracota, argila, sálvia e terra.
+   Identidade visual v1 (setembro de 2026): a mesma do site
+   público. Petróleo do medalhão como base, ouro como acento
+   único, IBM Plex Sans / Newsreader / IBM Plex Mono.
    Todos os contrastes de texto foram medidos compondo o alfa
    sobre o fundo real do painel (ver README) — não confie no
    hex isolado ao mexer aqui.
    ============================================================ */
 
 /* ------------------------------------------------------------
-   1 · TOKENS — OAZE 1.0
+   1 · TOKENS — IDENTIDADE VISUAL V1 (setembro de 2026)
    ------------------------------------------------------------
-   Sete cores, e só elas:
+   Conceito: "água calma deixa ver o fundo". O azul-petróleo
+   #23394D do medalhão é a base; o acento é UM só — o ouro do
+   medalhão #D8B45E, em ação primária, seleção e selo; a única luz
+   é o azul-royal do UGLEZ.
 
-     Midnight   #0F2C3D   o céu, e o painel no escuro
-     Deep Teal  #2D4F56   apoio e controle
-     Oasis      #547A6E   crescimento, positivo
-     Sage       #A6B7A1   verde de leitura no escuro
-     Sand       #D4C8B5   tinta secundária, superfície no claro
-     Terracotta #C4936A   UGLEZ, acento, atenção
-     Earth      #6E4E3D   profundidade, sombra quente
-
-   A sensação a entregar é calma + controle + patrimônio. Por isso
-   o fundo é fundo, a cor mora no dado, e o único brilho do sistema
-   é o âmbar do UGLEZ — sutil, nunca neon.
+   Regra 70/20/10: 70% neutro (Areia no claro, Noite de Oásis no
+   escuro — fundo é fundo) · 20% estrutura e dado (água funda,
+   verde-oásis, terracota — a cor mora no dado) · 10% acento e
+   UGLEZ. Calma + nitidez + patrimônio.
    ------------------------------------------------------------ */
 :root {
   color-scheme: light;
 
-  /* a paleta crua — referência de tudo abaixo */
-  --midnight:  #0F2C3D;
-  --teal:      #2D4F56;
-  --oasis:     #547A6E;
-  --sage:      #A6B7A1;
-  --sand:      #D4C8B5;
-  --terracotta:#C4936A;
-  --earth:     #6E4E3D;
+  /* marca */
+  --ouro:        #D8B45E;   /* acento único */
+  --ouro-claro:  #F0DA9B;
+  --ouro-fundo:  #B8912F;
+  --ouro-tinta:  #7E601A;   /* o acento como TEXTO: só no claro · 5,5:1 */
+  --ancora:      #23394D;   /* petróleo do medalhão */
+  --on-accent:   #071822;   /* texto sobre o ouro · 9,1:1 */
+  --uglez:       #2842BE;
+  --uglez-luz:   #6084E2;
+  --uglez-texto: #2842BE;
 
-  --bg:            #F2EDE4;   /* Sand lavado */
-  --bg-deep:       #E8E1D4;
-  --text-primary:  #12222B;
-  --text-muted:    #5E6E6B;
+  /* os nomes antigos continuam (várias regras os usam), apontando
+     para a paleta nova */
+  --midnight:  #0F2A38;   /* Petróleo */
+  --teal:      #16384A;   /* Raso */
+  --oasis:     #3B6558;   /* Folha */
+  --sage:      #8FA98A;   /* Sálvia */
+  --sand:      #DBD2C1;   /* Borda de areia */
+  --terracotta:#C07B48;   /* Terracota */
+  --earth:     #6E4E3D;   /* Terra */
+  /* Estes dois eram usados nos selos de débito e crédito e nunca
+     tinham sido definidos: o color-mix ficava inválido e o fundo do
+     selo simplesmente não aparecia. */
+  --salvia:    var(--sage);
+  --terracota: var(--terracotta);
+
+  --bg:            #F4EFE6;   /* Areia */
+  --bg-deep:       #EAE3D6;   /* Areia funda */
+  --text-primary:  #11262F;   /* Tinta escura · 13,6:1 */
+  --text-muted:    #4E6068;   /* Ardósia · 5,7:1 */
 
   /* ----------------------------------------------------------
      TRÊS NÍVEIS DE MATERIAL
@@ -48,64 +63,74 @@
      N3 controle — vidro. Sidebar, top bar, menus: a camada que
                    flutua. Nunca sobre conteúdo, sempre acima.
      ---------------------------------------------------------- */
-  --n1:       rgba(255, 255, 255, .96);
+  --n1:       rgba(251, 248, 242, .96);   /* Cal */
   --n1-blur:  10px;
-  --n2:       rgba(255, 255, 255, .74);
+  --n2:       rgba(251, 248, 242, .74);
   --n2-blur:  20px;
-  --n3:       rgba(255, 255, 255, .56);
+  --n3:       rgba(251, 248, 242, .56);
   --n3-blur:  34px;
 
   --glass:      var(--n2);
   --glass-2:    var(--n1);
-  --glass-edge: rgba(255, 255, 255, .95);
-  --glass-line: rgba(15, 44, 61, .12);
+  --glass-edge: rgba(255, 255, 255, .9);
+  --glass-line: rgba(17, 38, 47, .12);
   --glass-blur: var(--n2-blur);
 
   --surface:       var(--glass);
   --surface-2:     var(--glass-2);
   --plane:         var(--bg);
-  --plane-2:       rgba(15, 44, 61, .06);
+  --plane-2:       rgba(17, 38, 47, .06);
   --ink:           var(--text-primary);
-  --ink-2:         #33454A;
+  --ink-2:         #2F444C;
   --muted:         var(--text-muted);
-  --grid:          rgba(15, 44, 61, .09);
-  --axis:          rgba(15, 44, 61, .20);
+  --grid:          rgba(17, 38, 47, .09);
+  --axis:          rgba(17, 38, 47, .20);
   --border:        var(--glass-line);
-  --border-strong: rgba(15, 44, 61, .22);
-  --shadow:        0 1px 2px rgba(15, 44, 61, .06), 0 10px 30px -14px rgba(15, 44, 61, .26);
-  --shadow-lift:   0 2px 6px rgba(15, 44, 61, .10), 0 26px 50px -22px rgba(15, 44, 61, .38);
+  --border-strong: rgba(17, 38, 47, .22);
+  --shadow:        0 1px 2px rgba(17, 38, 47, .06), 0 10px 30px -14px rgba(17, 38, 47, .22);
+  --shadow-lift:   0 2px 6px rgba(17, 38, 47, .10), 0 26px 50px -22px rgba(17, 38, 47, .34);
 
-  --surface-hero:   linear-gradient(135deg, #17394C, #0F2C3D);
-  --surface-accent: linear-gradient(135deg, #C4936A, #8A5A38);
-  /* o glow do UGLEZ: âmbar, e propositalmente quase invisível */
-  --uglez-glow:     0 0 0 1px rgba(196, 147, 106, .28), 0 8px 30px -8px rgba(196, 147, 106, .35);
+  /* O cartão em destaque é do MESMO material dos outros: o destaque
+     é o tamanho do número, não um fundo próprio. */
+  --surface-hero:   var(--n1);
+  --surface-accent: var(--ouro);
+  /* o halo do UGLEZ: azul-royal, no máximo 30% de opacidade */
+  --uglez-glow:     0 0 0 1px rgba(40, 66, 190, .22), 0 8px 26px -8px rgba(40, 66, 190, .30);
 
-  /* série categórica — é dado, logo pode ter cor */
-  --s1: #2E6E7E; --s2: #A85A32; --s3: #3B6558; --s4: #7B5A8E; --s5: #1F6B4F;
-  --s6: #B07C3E; --s7: #34557A; --s8: #8A5A38; --s9: #4C6B33; --s10: #6E4E3D;
+  /* série categórica — 8 cores, alternando matiz e claridade para
+     continuarem separáveis em deuteranopia, protanopia e cinza */
+  --s1: #276070; --s2: #C07B48; --s3: #3B6558; --s4: #B08A3A; --s5: #34557A;
+  --s6: #7B5A8E; --s7: #8FA98A; --s8: #6E4E3D; --s9: #9C5029; --s10: #4E6068;
 
-  /* papéis semânticos */
-  --income:         #1F6B4F;
-  --expense:        #A85A32;
+  /* papéis semânticos — sempre com seta, sinal ou ícone */
+  --income:         #1F6B4F;   /* verde-oásis · 5,6:1 */
+  --expense:        #9C5029;   /* terracota, não vermelho · 5,1:1 */
   --income-strong:  #1F6B4F;
-  --expense-strong: #A85A32;
-  --accent:         #8A5A38;
-  --accent-strong:  #6E4E3D;
-  --invest:         #3B6558;
+  --expense-strong: #9C5029;
+  --accent:         #7E601A;   /* no claro o acento vira tinta */
+  --accent-strong:  #B8912F;
+  --invest:         #276070;   /* água funda */
+  --invest-strong:  #276070;
 
   --good:      #1F6B4F;
   --good-text: #1F6B4F;
   --warning:   #7A5518;
   --warning-text: #5E4111;
-  --serious:   #A85A32;
+  --serious:   #9C5029;
   --critical:  #A33A22;
+  --ok:        var(--good);      /* usados como var(--ok, …) e */
+  --danger:    var(--critical);  /* var(--danger, …) e nunca definidos */
+  --on-critical: #FFFFFF;        /* texto sobre o vermelho crítico */
   --tip-bg:    #FFFFFF;
-  --tip-line:  rgba(15, 44, 61, .14);
+  --tip-line:  rgba(17, 38, 47, .14);
 
-  --radius:     16px;
-  --radius-sm:  10px;
-  --radius-lg:  24px;
-  --font: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* raios pequenos: campo 4, cartão 5–6, prancha 8 */
+  --radius:     6px;
+  --radius-sm:  4px;
+  --radius-lg:  8px;
+  --font:        "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-titulo: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono:   "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --ease-in:  cubic-bezier(.64, 0, .78, 0);
@@ -115,60 +140,68 @@
 
 /* ------------------------------------------------------------
    2 · TOKENS — tema escuro (o principal)
-   Midnight como painel, Deep Teal como controle, Sand como tinta.
+   Noite de Oásis como fundo, Petróleo como conteúdo, Âncora como
+   vidro da navegação, Tinta clara como texto.
    ------------------------------------------------------------ */
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg:            #081A24;   /* um passo abaixo do Midnight */
-  --bg-deep:       #05121A;
-  --text-primary:  #EFE9DF;
-  --text-muted:    #9DAFA9;
+  --bg:            #071822;   /* Noite de Oásis */
+  --bg-deep:       #050F16;   /* Poço */
+  --text-primary:  #F1ECE3;   /* Tinta clara · 15,3:1 */
+  --text-muted:    #9FB2B8;   /* Bruma · 8,4:1 */
 
-  --n1:       rgba(15, 44, 61, .94);
+  --n1:       rgba(15, 42, 56, .94);   /* Petróleo */
   --n1-blur:  10px;
-  --n2:       rgba(45, 79, 86, .55);
+  --n2:       rgba(22, 56, 74, .55);   /* Raso */
   --n2-blur:  22px;
-  --n3:       rgba(45, 79, 86, .38);
-  --n3-blur:  36px;
+  --n3:       rgba(35, 57, 77, .55);   /* Âncora: o vidro da navegação */
+  --n3-blur:  16px;
 
   --glass:      var(--n2);
   --glass-2:    var(--n1);
-  --glass-edge: rgba(212, 200, 181, .12);
-  --glass-line: rgba(212, 200, 181, .12);
+  --glass-edge: rgba(241, 236, 227, .08);
+  --glass-line: rgba(241, 236, 227, .10);
   --glass-blur: var(--n2-blur);
 
-  --plane-2:       rgba(212, 200, 181, .08);
-  --ink-2:         #D4C8B5;
-  --grid:          rgba(212, 200, 181, .09);
-  --axis:          rgba(212, 200, 181, .20);
-  --border-strong: rgba(212, 200, 181, .22);
+  --plane-2:       rgba(241, 236, 227, .07);
+  --ink-2:         #D5DCDC;
+  --grid:          rgba(241, 236, 227, .09);
+  --axis:          rgba(241, 236, 227, .20);
+  --border-strong: rgba(241, 236, 227, .22);
   --shadow:        0 1px 2px rgba(0, 0, 0, .5), 0 14px 36px -18px rgba(0, 0, 0, .9);
   --shadow-lift:   0 4px 10px rgba(0, 0, 0, .55), 0 30px 60px -24px rgba(0, 0, 0, 1);
 
-  --surface-hero:   linear-gradient(135deg, #2D4F56, #0F2C3D);
-  --surface-accent: linear-gradient(135deg, #C4936A, #8A5A38);
-  --uglez-glow:     0 0 0 1px rgba(196, 147, 106, .34), 0 10px 40px -10px rgba(196, 147, 106, .42);
+  --surface-hero:   var(--n1);
+  --surface-accent: var(--ouro);
+  --uglez:          #4669F0;
+  --uglez-luz:      #D6E4FF;
+  --uglez-texto:    #9FB4FF;   /* o royal como texto no escuro · 9:1 */
+  --uglez-glow:     0 0 0 1px rgba(70, 105, 240, .30), 0 0 26px rgba(70, 105, 240, .30);
 
-  --s1: #6FB6C6; --s2: #E9A178; --s3: #9FC4B4; --s4: #C0A2D4; --s5: #8FD1A8;
-  --s6: #E4B77C; --s7: #8FB0DC; --s8: #C4936A; --s9: #AFC98C; --s10: #C6A98F;
+  /* a mesma série, na claridade que o escuro pede */
+  --s1: #74C3D4; --s2: #E9A178; --s3: #9FC4B4; --s4: #E4B77C; --s5: #8FB0DC;
+  --s6: #C0A2D4; --s7: #AFC98C; --s8: #C6A98F; --s9: #F09070; --s10: #9FB2B8;
 
-  --income:         #8FD1A8;
-  --expense:        #E9A178;
+  --income:         #86CFA4;   /* 8,2:1 */
+  --expense:        #E9A178;   /* 6,9:1 */
   --income-strong:  #1F6B4F;
-  --expense-strong: #A85A32;
-  --accent:         #C4936A;
-  --accent-strong:  #8A5A38;
-  --invest:         #9FC4B4;
+  --expense-strong: #9C5029;
+  --accent:         #D8B45E;   /* no escuro o ouro é texto também */
+  --accent-strong:  #B8912F;
+  --ouro-tinta:     #D8B45E;
+  --invest:         #74C3D4;
+  --invest-strong:  #276070;
 
-  --good:      #8FD1A8;
-  --good-text: #8FD1A8;
+  --good:      #86CFA4;
+  --good-text: #86CFA4;
   --warning:   #E4B77C;
   --warning-text: #E4B77C;
   --serious:   #E9A178;
   --critical:  #F09070;
-  --tip-bg:    #102E3F;
-  --tip-line:  rgba(212, 200, 181, .16);
+  --on-critical: #071822;   /* no escuro o crítico é claro: tinta escura · 7,7:1 */
+  --tip-bg:    #0F2A38;
+  --tip-line:  rgba(241, 236, 227, .16);
 }
 
 /* ------------------------------------------------------------
@@ -190,10 +223,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
-  /* A Inter tem o "1" sem serifa e o "l" reto por padrão, o que confunde
-     em coluna de valores. `cv05`/`ss03` trazem a variante com cauda no
-     "l" e o "1" com base — em fonte financeira isso não é enfeite. */
-  font-feature-settings: 'cv05' 1, 'ss03' 1;
+  /* Algarismos tabulares em tudo: é um painel de dinheiro, e as
+     colunas precisam alinhar na vírgula. A IBM Plex Sans já traz o
+     "1" com base e o "l" com cauda, que não se confundem. */
+  font-variant-numeric: tabular-nums;
   font-optical-sizing: auto;
   font-synthesis-weight: none;   /* a variável cobre 100-900; não invente peso */
 }
@@ -201,6 +234,14 @@ body {
    único de letter-spacing está errado em algum tamanho — daí os passos. */
 .kpi-label, .field-label, .cc-holder .k, .cc-invoice .k, .hero-label,
 .table thead th, .icon-group-label { letter-spacing: .05em; }
+/* Rótulos em IBM Plex Mono, caixa alta e espaçados: o que é nome de
+   campo não compete com o que é valor. */
+.kpi-label, .field-label, .hero-label, .nav-group, .popover-head h3, .search-group,
+.insight-tag, .fig-big .k, .inv-fig .k, .table thead th, .uglez-name, .score-faixa {
+  font-family: var(--font-mono); font-weight: 400; letter-spacing: .14em;
+}
+/* Títulos de página e de destaque na Newsreader. */
+.pu-titulo, .uglez-hero-name { font-family: var(--font-titulo); font-weight: 500; letter-spacing: -.01em; }
 .badge, .cat-tile-pct, .hint, .card-note, .tx-meta { letter-spacing: .005em; }
 h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
@@ -229,8 +270,8 @@ table { border-collapse: collapse; width: 100%; }
   width: 84vmax; height: 84vmax; transform: translateX(-50%);
   border-radius: 50%;
   background: radial-gradient(circle,
-    color-mix(in srgb, var(--terracotta) 26%, transparent) 0%,
-    color-mix(in srgb, var(--terracotta) 8%, transparent) 45%,
+    color-mix(in srgb, var(--ouro) 22%, transparent) 0%,
+    color-mix(in srgb, var(--ouro) 6%, transparent) 45%,
     transparent 68%);
   filter: blur(40px);
   opacity: .5;
@@ -308,7 +349,7 @@ table { border-collapse: collapse; width: 100%; }
   }
   [data-theme="dark"] .n1, [data-theme="dark"] .n2, [data-theme="dark"] .n3,
   [data-theme="dark"] .glass, [data-theme="dark"] .card, [data-theme="dark"] .kpi,
-  [data-theme="dark"] .sidebar, [data-theme="dark"] .pill { background: #102A38; }
+  [data-theme="dark"] .sidebar, [data-theme="dark"] .pill { background: #0F2A38; }
   .ambient-blob, .ambient-sun { display: none; }
 }
 @media (prefers-contrast: more) {
@@ -336,11 +377,11 @@ table { border-collapse: collapse; width: 100%; }
 }
 .brand-mark {
   width: 34px; height: 34px; flex: none;
-  display: grid; place-items: center; border-radius: 11px;
-  background: var(--surface-accent); color: #fff;
-  box-shadow: var(--uglez-glow);
+  display: grid; place-items: center; border-radius: 50%;
+  /* o medalhão já é dourado: fundo atrás dele seria moldura */
+  background: none; color: inherit;
 }
-.brand-name { font-weight: 680; letter-spacing: .16em; font-size: 14px; }
+.brand-name { font-weight: 600; letter-spacing: .3em; font-size: 13.5px; }
 
 .nav { display: flex; flex-direction: column; gap: 2px; flex: 1; min-height: 0; overflow-y: auto; }
 .nav::-webkit-scrollbar { width: 0; }
@@ -415,7 +456,7 @@ table { border-collapse: collapse; width: 100%; }
 .pill-avatar {
   width: 26px; height: 26px; flex: none; border-radius: 50%;
   display: grid; place-items: center; overflow: hidden;
-  background: var(--surface-accent); color: #fff;
+  background: var(--ouro); color: var(--on-accent);
   font-size: 11.5px; font-weight: 700;
 }
 .pill-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -430,7 +471,7 @@ table { border-collapse: collapse; width: 100%; }
 .notif-count {
   min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px;
   display: grid; place-items: center;
-  background: var(--critical); color: #fff;
+  background: var(--critical); color: var(--on-critical);
   font-size: 10.5px; font-weight: 700; line-height: 1;
 }
 
@@ -502,7 +543,8 @@ table { border-collapse: collapse; width: 100%; }
 
 .page-head { margin-bottom: 4px; }
 .page-hello { font-size: 13px; color: var(--muted); }
-.page-head h1 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 620; letter-spacing: -.026em; line-height: 1.12; }
+/* Título 1 da identidade: Newsreader 500, até 34/40, −1% */
+.page-head h1 { font-family: var(--font-titulo); font-size: clamp(26px, 2.8vw, 34px); font-weight: 500; letter-spacing: -.01em; line-height: 1.18; }
 .page-sub { font-size: 13px; color: var(--muted); }
 
 /* grid-template-columns explícito: sem ele a coluna implícita é
@@ -568,14 +610,13 @@ table { border-collapse: collapse; width: 100%; }
 [data-theme="dark"] .btn:hover { filter: brightness(1.18); }
 .btn:active { transform: scale(.97); }
 .btn-sm { padding: 6px 11px; font-size: 12.5px; }
-.btn-primary { background: var(--accent-strong); color: #fff; }
+/* A ação primária é o ouro do medalhão, com tinta de petróleo. */
+.btn-primary { background: var(--ouro); color: var(--on-accent); }
 .btn-danger  { background: var(--expense-strong); color: #fff; }
 .btn-income  { background: var(--income-strong); color: #fff; }
-.btn-invest  { background: var(--invest); color: #fff; }
-.btn-ai {
-  background: linear-gradient(rgba(20, 12, 6, .16), rgba(20, 12, 6, .16)), var(--surface-accent);
-  color: #fff;
-}
+.btn-invest  { background: var(--invest-strong); color: #fff; }
+/* O botão do UGLEZ é da cor dele: o azul-royal, a única luz. */
+.btn-ai { background: var(--uglez); color: #fff; }
 .btn-ai:hover { filter: brightness(1.08); }
 .btn-outline { background: transparent; border-color: var(--border-strong); }
 .btn-ghost   { background: transparent; color: var(--ink-2); }
@@ -677,7 +718,8 @@ select.input { cursor: pointer; }
   border-radius: var(--radius); padding: 14px 15px;
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-edge);
   display: grid; gap: 3px; align-content: start;
-  border-top: 3px solid var(--accent, var(--axis));
+  /* Sem traço colorido no topo: com o acento virando ouro, cada KPI
+     ganharia uma barra dourada -- acento em tudo é acento em nada. */
   min-width: 0;
 }
 .kpi-label { font-size: 11.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
@@ -706,23 +748,17 @@ select.input { cursor: pointer; }
 
    A direção (alta/baixa) continua nas setas e no sinal — a cor
    nunca carrega o sentido sozinha. */
+/* Desde a identidade v1 o cartão em destaque é do MESMO material dos
+   outros (Cal no claro, Petróleo no escuro): o destaque é o tamanho
+   do número. Todas as cores vêm das variáveis do tema, e o
+   tools/testes/contraste.js mede os pares nos dois temas. */
 .kpi-hero {
   background: var(--surface-hero);
-  border-color: transparent; border-top-color: transparent;
-  color: #F4F1EA;
-  -webkit-backdrop-filter: none; backdrop-filter: none;
+  color: var(--ink);
 }
-.kpi-hero .kpi-label { color: #BCCBD3; }              /* 5,34:1 */
 .kpi-hero .kpi-value,
 .kpi-hero .kpi-value.val-pos,
-.kpi-hero .kpi-value.val-neg { color: #F4F1EA; }      /* 7,87:1 */
-.kpi-hero .kpi-delta, .kpi-hero .muted { color: #BCCBD3; }
-.kpi-hero .up, .kpi-hero .val-pos { color: #8BE0B4; } /* 5,68:1 */
-.kpi-hero .down, .kpi-hero .val-neg { color: #FFB09A; } /* 5,05:1 */
-.kpi-hero .badge { background: rgba(255, 255, 255, .18); color: #E9F0F3; }
-/* O foco precisa aparecer sobre o gradiente escuro, onde o anel da
-   cor de acento do tema claro sumiria. */
-.kpi-hero :focus-visible { outline-color: #F4F1EA; }
+.kpi-hero .kpi-value.val-neg { color: var(--ink); }
 .kpi-delta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .up   { color: var(--good-text); font-weight: 600; }
 .down { color: var(--critical); font-weight: 600; }
@@ -984,9 +1020,9 @@ select.input { cursor: pointer; }
   display: grid; grid-template-rows: auto 1fr auto; gap: 6px;
   color: #fff;
   background:
-    linear-gradient(rgba(10, 7, 5, .18), rgba(10, 7, 5, .18)),
+    linear-gradient(rgba(5, 15, 22,.18), rgba(5, 15, 22,.18)),
     linear-gradient(140deg, var(--cc-a, #C9794A), var(--cc-b, #8E4E2A));
-  box-shadow: 0 2px 6px rgba(20, 12, 6, .3), 0 16px 32px -18px rgba(20, 12, 6, .6);
+  box-shadow: 0 2px 6px rgba(5, 15, 22,.3), 0 16px 32px -18px rgba(5, 15, 22,.6);
   transition: transform .28s var(--ease-out), box-shadow .28s var(--ease-out);
   will-change: transform;
 }
@@ -1001,7 +1037,7 @@ select.input { cursor: pointer; }
 .wallet-card:active { transform: translateY(-6px) scale(.985); }
 .wallet-card.is-focused {
   transform: translateY(-14px); z-index: 4;
-  box-shadow: 0 4px 10px rgba(20, 12, 6, .34), 0 30px 50px -20px rgba(20, 12, 6, .75);
+  box-shadow: 0 4px 10px rgba(5, 15, 22,.34), 0 30px 50px -20px rgba(5, 15, 22,.75);
 }
 .wallet-card.is-focused::before {
   content: ''; position: absolute; inset: -2px; border-radius: 20px;
@@ -1058,7 +1094,7 @@ select.input { cursor: pointer; }
 .cc-invoice { margin-left: auto; text-align: right; }
 .cc-invoice .v { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; display: block; letter-spacing: -.015em; }
 .cc-status { position: absolute; top: 13px; right: 15px; }
-.wallet-card .badge { background: rgba(20, 12, 6, .46); color: #fff; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.wallet-card .badge { background: rgba(5, 15, 22,.46); color: #fff; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .wallet-card .badge-late { background: rgba(163, 57, 42, .9); color: #fff; }
 .wallet-card .badge-ok { background: rgba(63, 82, 48, .9); color: #fff; }
 
@@ -1139,7 +1175,7 @@ select.input { cursor: pointer; }
 }
 .account-avatar.is-generic {
   display: grid; place-items: center;
-  background: var(--surface-accent); color: #fff;
+  background: var(--ancora); color: #F1ECE3;
   font-weight: 700; font-size: 12px;
 }
 .account-id { min-width: 0; display: grid; }
@@ -1222,7 +1258,7 @@ select.input { cursor: pointer; }
    17 · MODAL & TOASTS
    ------------------------------------------------------------ */
 .modal-root { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; }
-.modal-backdrop { position: absolute; inset: 0; background: rgba(20, 12, 6, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(5, 15, 22,.5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .modal {
   position: relative; width: min(620px, 100%); max-height: 88vh;
   /* fundo de N1 (tem formulario dentro) com o blur espesso de N3 */
@@ -1599,7 +1635,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   background: var(--n3);
   -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
   backdrop-filter: blur(var(--n3-blur)) saturate(180%);
-  border: 1px solid color-mix(in srgb, var(--terracotta) 26%, var(--glass-line));
+  border: 1px solid color-mix(in srgb, var(--uglez) 30%, var(--glass-line));
   box-shadow: var(--uglez-glow);
   display: grid; gap: 12px;
 }
@@ -1611,14 +1647,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .uglez-orb {
   width: 40px; height: 40px; flex: none; border-radius: 50%;
   display: grid; place-items: center; position: relative;
-  background: var(--surface-accent); color: #fff;
-  box-shadow: var(--uglez-glow), inset 0 1px 0 rgba(255, 255, 255, .35);
+  background: var(--uglez); color: #fff;
+  box-shadow: var(--uglez-glow), inset 0 1px 0 rgba(255, 255, 255, .25);
 }
 .uglez-orb.is-big { width: 56px; height: 56px; }
 /* halo respirando devagar: sinal de "vivo", não de "carregando" */
 .uglez-orb::before {
   content: ''; position: absolute; inset: -5px; border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--terracotta) 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--uglez) 50%, transparent);
   animation: orb-breathe 4.5s ease-in-out infinite;
 }
 @keyframes orb-breathe {
@@ -1862,8 +1898,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .fab {
   width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
   display: grid; place-items: center;
-  background: var(--surface-accent); color: #fff;
-  box-shadow: var(--uglez-glow), 0 6px 20px -6px rgba(20, 12, 6, .4),
+  background: var(--ouro); color: var(--on-accent);
+  box-shadow: 0 0 0 1px rgba(216, 180, 94, .35), 0 6px 20px -6px rgba(5, 15, 22, .45),
               inset 0 1px 0 rgba(255, 255, 255, .3);
   transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
 }
@@ -2013,8 +2049,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .topnav-menu .nav-long { display: inline; }
 
   /* UGLEZ tem identidade própria — é o único destino com cor. */
-  .topnav-menu .nav-item.is-uglez { color: var(--terracotta); font-weight: 620; }
-  .topnav-menu .nav-item.is-uglez .nav-ico { color: var(--terracotta); }
+  .topnav-menu .nav-item.is-uglez { color: var(--uglez-texto); font-weight: 600; }
+  .topnav-menu .nav-item.is-uglez .nav-ico { color: var(--uglez-texto); }
   .topnav-menu .nav-item.is-uglez:hover {
     background: color-mix(in srgb, var(--terracotta) 14%, transparent);
   }
@@ -2286,8 +2322,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
    vez que muda de página. */
 .pular-conteudo {
   position: fixed; top: -100px; left: 12px; z-index: 200;
-  padding: 10px 16px; border-radius: 0 0 12px 12px;
-  background: var(--accent); color: #fff;
+  padding: 10px 16px; border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  background: var(--ouro); color: var(--on-accent);
   font-size: 13px; font-weight: 620; text-decoration: none;
   transition: top .16s var(--ease-out);
 }
@@ -2402,7 +2438,7 @@ input[type="checkbox"], input[type="radio"] {
   position: absolute; top: -10px; left: 22px;
   padding: 4px 11px; border-radius: 999px;
   font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  background: var(--accent); color: #fff;
+  background: var(--ouro); color: var(--on-accent);
 }
 .plano-selo.is-atual { background: var(--ok, #4C6B33); left: auto; right: 22px; }
 .plano-nome { font-size: 18px; font-weight: 680; }
@@ -2453,7 +2489,7 @@ input[type="checkbox"], input[type="radio"] {
 .uso-linha { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
 .uso-rotulo { font-size: 12.5px; color: var(--ink-2); }
 .uso-num { font-size: 12.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
-.uso-num.is-cheio { color: var(--terracotta); }
+.uso-num.is-cheio { color: var(--warning-text); }
 .uso-barra {
   grid-column: 1 / -1; height: 5px; border-radius: 999px;
   background: var(--plane-2); overflow: hidden;
@@ -2462,7 +2498,7 @@ input[type="checkbox"], input[type="radio"] {
   display: block; height: 100%; border-radius: 999px;
   background: var(--accent); transition: width .3s var(--ease-out);
 }
-.uso-barra.is-cheio > i { background: var(--terracotta); }
+.uso-barra.is-cheio > i { background: var(--warning); }
 
 .plano-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
 .lista-check { display: grid; gap: 6px; padding: 0; list-style: none; }
@@ -2586,7 +2622,7 @@ input[type="checkbox"], input[type="radio"] {
 .fila-chip.is-sincronizando { color: var(--accent); }
 .fila-chip.is-sincronizado { color: var(--good, #1F6B4F); }
 .fila-chip.is-erro {
-  color: #fff; background: color-mix(in srgb, var(--danger, #B3402F) 78%, transparent);
+  color: var(--on-critical); background: var(--danger, #A33A22);
   border-color: transparent;
 }
 
@@ -2776,7 +2812,7 @@ canvas.uglez-particulas {
   /* O crescimento de verdade acontece nas partículas (máx. 8%).
      Aqui é só a moldura acompanhando — 3% para não brigar. */
   transform: scale(1.03);
-  border-color: color-mix(in srgb, #4669F0 45%, var(--border));
+  border-color: color-mix(in srgb, var(--uglez) 45%, var(--border));
   box-shadow: var(--shadow-lift);
 }
 .uglez-flut-botao:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
