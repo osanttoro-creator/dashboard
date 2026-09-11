@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-09-11T18:24:51.148Z",
+        "reason": "PRODUCT.md registra a direção confirmada da landing: títulos em Playfair Display Italic, interface em Inter"
+      }
+    ]
+  }
+}

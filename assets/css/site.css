@@ -1265,11 +1265,13 @@ p.leve { color: var(--texto-2); }
 }
 .tema-mineral .etiqueta::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
 
-/* O aviso continua aviso, no idioma do tema: um fio de ouro à
-   esquerda em vez de uma caixa laranja que grita. */
+/* O aviso continua aviso, no idioma do tema: o mesmo fio fino por
+   cima que separa os itens editoriais, só que em ouro. Nem a caixa
+   laranja que gritava, nem barra lateral grossa -- o tique mais
+   reconhecível de interface gerada por IA. */
 .tema-mineral .aviso {
-  padding: 4px 0 4px 22px;
-  border: 0; border-left: 2px solid rgba(232, 213, 183, .55); border-radius: 0;
+  padding: 18px 0 0;
+  border: 0; border-top: 1px solid rgba(232, 213, 183, .38); border-radius: 0;
   background: none; color: #c7bdb1; font-size: .98rem;
 }
 .tema-mineral .aviso strong { color: #e8d5b7; }
