@@ -22,6 +22,51 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------------------------------------------------------------
+     0 · abertura com lente
+     ---------------------------------------------------------------
+     O mundo colorido existe inteiro desde o primeiro byte. Uma
+     camada preta por cima recebe um furo circular cujo raio cresce
+     de 0 a 150% do maior lado da tela conforme o scroll. Sem JS ou
+     com movimento reduzido, a camada nem aparece e o conteúdo segue
+     imediatamente legível e clicável. */
+  var lente = document.querySelector('[data-lens]');
+
+  if (lente && !menosMovimento) {
+    var quadroLentePendente = false;
+
+    var atualizarLente = function () {
+      var faixa = Math.max(1, lente.offsetHeight - window.innerHeight);
+      var percorrido = window.scrollY - lente.offsetTop;
+      var progresso = Math.max(0, Math.min(1, percorrido / faixa));
+      var suavizado = 1 - Math.pow(1 - progresso, 4); /* power4.out */
+      var raio = Math.max(window.innerWidth, window.innerHeight) * 1.5 * suavizado;
+      var hello = 1 - Math.min(1, progresso / .16);
+
+      lente.style.setProperty('--lens-radius', raio.toFixed(1) + 'px');
+      lente.style.setProperty('--lens-progress', suavizado.toFixed(4));
+      lente.style.setProperty('--hello-opacity', hello.toFixed(3));
+      quadroLentePendente = false;
+    };
+
+    var pedirQuadroLente = function () {
+      if (quadroLentePendente) return;
+      quadroLentePendente = true;
+      window.requestAnimationFrame(atualizarLente);
+    };
+
+    window.addEventListener('scroll', pedirQuadroLente, { passive: true });
+    window.addEventListener('resize', pedirQuadroLente);
+    lente.addEventListener('focusin', function (e) {
+      if (e.target.closest && e.target.closest('a, button, input, select, textarea')) {
+        lente.classList.add('keyboard-reveal');
+      }
+    });
+    atualizarLente();
+  } else if (lente) {
+    document.documentElement.classList.remove('lens-js');
+  }
+
+  /* ---------------------------------------------------------------
      1 · menu no celular
      --------------------------------------------------------------- */
   var topo = document.querySelector('.topo');
@@ -131,7 +176,8 @@
         /* O link leva o ciclo para o checkout. O PREÇO não vai
            junto, nem aqui nem em lugar nenhum do frontend: o
            servidor é quem descobre quanto custa. */
-        a.href = a.dataset.linkPlano + '?ciclo=' + ciclo;
+        var separador = a.dataset.linkPlano.indexOf('?') === -1 ? '?' : '&';
+        a.href = a.dataset.linkPlano + separador + 'ciclo=' + ciclo;
       });
     };
 

@@ -29,7 +29,7 @@
 <meta property="og:image:alt" content="OAZE — painel de finanças pessoais">
 <meta name="twitter:card" content="summary_large_image">
 
-<meta name="theme-color" content="#080D18">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -40,7 +40,7 @@
      ela -- script bloqueado, erro, navegador antigo -- a pagina
      aparece inteira, que e o comportamento certo para um site que
      precisa ser lido e indexado. -->
-<script>document.documentElement.classList.add("anima");</script>
+<script>document.documentElement.classList.add("anima", "lens-js");</script>
 
 <script type="application/ld+json">
 {
@@ -59,7 +59,7 @@
 }
 </script>
 </head>
-<body>
+<body class="pagina-inicial">
 
 <div class="ceu" aria-hidden="true"></div>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -94,78 +94,96 @@
 
 <main id="conteudo">
 
-  <!-- ============================ hero ============================ -->
-  <section class="secao hero">
-    <div class="env">
-      <p class="etiqueta">Finanças pessoais</p>
-      <h1>Seu dinheiro faz sentido <em>quando você o vê inteiro</em></h1>
-      <p class="hero-sub">
-        Contas, cartões, orçamentos e metas num painel só — com a leitura do
-        seu mês pronta antes de você perguntar. Sem planilha, sem fórmula
-        quebrada, sem começar de novo todo janeiro.
-      </p>
-      <div class="hero-botoes">
-        <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
-        <a class="btn btn-fantasma btn-grande" href="/recursos">Ver os recursos</a>
-      </div>
-      <p class="hero-nota">Não pedimos cartão de crédito. O plano grátis não expira.</p>
+  <!-- ============================ abertura com lente ============================ -->
+  <section class="lens-intro" data-lens aria-labelledby="hero-titulo">
+    <div class="lens-stage">
+      <div class="lens-world">
+        <div class="lens-curtain lens-curtain-esq" aria-hidden="true"></div>
+        <div class="lens-curtain lens-curtain-dir" aria-hidden="true"></div>
 
-      <!-- ---- demonstração do painel ----
-           Desenhada em HTML e SVG, não capturada de tela. Captura
-           envelhece no primeiro deploy e ninguém lembra de trocar;
-           isto acompanha o código. -->
-      <div class="demo revela" role="img"
-           aria-label="Demonstração do painel do OAZE: saldo do mês de 4.182 reais e 30 centavos, entradas de 7.400 reais, saídas de 3.217 reais e 70 centavos, e um gráfico de barras comparando entradas e saídas nos últimos seis meses.">
-        <div class="demo-barra" aria-hidden="true">
-          <span class="demo-ponto"></span><span class="demo-ponto"></span><span class="demo-ponto"></span>
-          <span class="demo-url">app.oaze.com.br</span>
-        </div>
-        <div class="demo-corpo" aria-hidden="true">
-          <div class="demo-cartoes">
-            <div class="demo-cartao">
-              <p class="demo-rotulo">Saldo do mês</p>
-              <p class="demo-valor">R$ 4.182,30</p>
+        <div class="env lens-layout">
+          <div class="lens-copy">
+            <h1 id="hero-titulo">Seu dinheiro faz sentido <em>quando você o vê inteiro</em></h1>
+            <p class="hero-sub">
+              Contas, cartões, orçamentos e metas num painel só — com a leitura do
+              seu mês pronta antes de você perguntar. Sem planilha, sem fórmula
+              quebrada, sem começar de novo todo janeiro.
+            </p>
+            <div class="hero-botoes">
+              <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
+              <a class="btn btn-fantasma btn-grande" href="/recursos">Ver os recursos</a>
             </div>
-            <div class="demo-cartao">
-              <p class="demo-rotulo">Entradas</p>
-              <p class="demo-valor entra">R$ 7.400,00</p>
-            </div>
-            <div class="demo-cartao">
-              <p class="demo-rotulo">Saídas</p>
-              <p class="demo-valor sai">R$ 3.217,70</p>
-            </div>
+            <p class="hero-nota">Sem cartão de crédito. O plano grátis não expira.</p>
           </div>
-          <div class="demo-grafico">
-            <svg viewBox="0 0 640 190" width="640" height="190" aria-hidden="true" style="width:100%;height:auto">
-              <g fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1">
-                <path d="M0 40h640M0 80h640M0 120h640M0 160h640"/>
-              </g>
-              <g>
-                <rect x="26"  y="66"  width="26" height="94"  rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="58"  y="104" width="26" height="56"  rx="5" fill="#FF9E7D" opacity=".75"/>
-                <rect x="128" y="52"  width="26" height="108" rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="160" y="112" width="26" height="48"  rx="5" fill="#FF9E7D" opacity=".75"/>
-                <rect x="230" y="72"  width="26" height="88"  rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="262" y="94"  width="26" height="66"  rx="5" fill="#FF9E7D" opacity=".75"/>
-                <rect x="332" y="44"  width="26" height="116" rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="364" y="118" width="26" height="42"  rx="5" fill="#FF9E7D" opacity=".75"/>
-                <rect x="434" y="60"  width="26" height="100" rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="466" y="100" width="26" height="60"  rx="5" fill="#FF9E7D" opacity=".75"/>
-                <rect x="536" y="36"  width="26" height="124" rx="5" fill="#6FE3B0" opacity=".85"/>
-                <rect x="568" y="122" width="26" height="38"  rx="5" fill="#FF9E7D" opacity=".75"/>
-              </g>
-              <path d="M0 168h640" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
-            </svg>
+
+          <div class="lens-visual">
+            <div class="lens-glow" aria-hidden="true"></div>
+            <div class="demo" role="img"
+                 aria-label="Demonstração ilustrativa do painel do OAZE: saldo do mês de 4.182 reais e 30 centavos, entradas de 7.400 reais, saídas de 3.217 reais e 70 centavos, e um gráfico comparando os últimos seis meses.">
+              <div class="demo-barra" aria-hidden="true">
+                <span class="demo-ponto"></span><span class="demo-ponto"></span><span class="demo-ponto"></span>
+                <span class="demo-url">app.oaze.com.br</span>
+              </div>
+              <div class="demo-corpo" aria-hidden="true">
+                <div class="demo-cartoes">
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Saldo do mês</p>
+                    <p class="demo-valor">R$ 4.182,30</p>
+                  </div>
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Entradas</p>
+                    <p class="demo-valor entra">R$ 7.400,00</p>
+                  </div>
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Saídas</p>
+                    <p class="demo-valor sai">R$ 3.217,70</p>
+                  </div>
+                </div>
+                <div class="demo-grafico">
+                  <svg viewBox="0 0 640 190" width="640" height="190" aria-hidden="true" style="width:100%;height:auto">
+                    <g fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1">
+                      <path d="M0 40h640M0 80h640M0 120h640M0 160h640"/>
+                    </g>
+                    <g>
+                      <rect x="26"  y="66"  width="26" height="94"  rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="58"  y="104" width="26" height="56"  rx="5" fill="#7B5944" opacity=".82"/>
+                      <rect x="128" y="52"  width="26" height="108" rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="160" y="112" width="26" height="48"  rx="5" fill="#7B5944" opacity=".82"/>
+                      <rect x="230" y="72"  width="26" height="88"  rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="262" y="94"  width="26" height="66"  rx="5" fill="#7B5944" opacity=".82"/>
+                      <rect x="332" y="44"  width="26" height="116" rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="364" y="118" width="26" height="42"  rx="5" fill="#7B5944" opacity=".82"/>
+                      <rect x="434" y="60"  width="26" height="100" rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="466" y="100" width="26" height="60"  rx="5" fill="#7B5944" opacity=".82"/>
+                      <rect x="536" y="36"  width="26" height="124" rx="5" fill="#C9B8A0" opacity=".92"/>
+                      <rect x="568" y="122" width="26" height="38"  rx="5" fill="#7B5944" opacity=".82"/>
+                    </g>
+                    <path d="M0 168h640" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="lens-float lens-float-projecao" aria-hidden="true">
+              <span>Projeção do mês</span><strong>R$ 5.040</strong><small>+8,4% de margem</small>
+            </div>
+            <div class="lens-float lens-float-uglez" aria-hidden="true">
+              <span>UGLEZ</span><strong>Seu gasto com transporte caiu 12%.</strong>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="lens-shutter" aria-hidden="true"></div>
+      <div class="lens-greeting" aria-hidden="true">
+        <span>HELLO</span>
+        <small>role para revelar</small>
+      </div>
+      <div class="lens-progress" aria-hidden="true"><i></i></div>
     </div>
   </section>
 
-  <hr class="horizonte" style="position:static" aria-hidden="true">
-
   <!-- ============================ benefícios ============================ -->
-  <section class="secao" id="beneficios">
+  <section class="secao secao-beneficios" id="beneficios">
     <div class="env">
       <div class="secao-topo revela">
         <h2>O que muda no seu mês</h2>
@@ -237,7 +255,7 @@
   </section>
 
   <!-- ============================ como funciona ============================ -->
-  <section class="secao" id="como-funciona">
+  <section class="secao secao-processo" id="como-funciona">
     <div class="env">
       <div class="secao-topo revela">
         <h2>Como funciona</h2>
@@ -262,11 +280,10 @@
   </section>
 
   <!-- ============================ UGLEZ ============================ -->
-  <section class="secao" id="uglez">
+  <section class="secao secao-uglez" id="uglez">
     <div class="env">
       <div class="grade grade-2" style="align-items:center;gap:clamp(28px,4vw,56px)">
         <div class="revela">
-          <p class="etiqueta">UGLEZ</p>
           <h2>A leitura do seu mês, em português</h2>
           <p class="leve">
             A UGLEZ olha os seus números e diz o que eles significam: onde o gasto
@@ -285,7 +302,7 @@
           </p>
         </div>
 
-        <div class="carta revela" style="background:linear-gradient(180deg,rgba(124,92,255,.12),var(--carta))">
+        <div class="carta uglez-leitura revela">
           <p class="demo-rotulo" style="margin-bottom:14px">Exemplo de leitura</p>
           <p style="color:var(--branco);font-size:1.04rem;line-height:1.6">
             “Em setembro você gastou <strong>R$ 3.217,70</strong>, 12% a menos que em
@@ -303,7 +320,7 @@
   </section>
 
   <!-- ============================ segurança ============================ -->
-  <section class="secao" id="seguranca">
+  <section class="secao secao-seguranca" id="seguranca">
     <div class="env">
       <div class="secao-topo revela">
         <h2>Segurança e privacidade</h2>
@@ -340,11 +357,14 @@
   </section>
 
   <!-- ============================ planos ============================ -->
-  <section class="secao" id="planos">
+  <section class="secao precos-cortina" id="planos">
+    <div class="pricing-curtains" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
     <div class="env">
       <div class="secao-topo revela">
-        <h2>Planos</h2>
-        <p>Comece no grátis. Ele não expira e não pede cartão.</p>
+        <h2>Planos que crescem com você</h2>
+        <p>Comece no grátis. Ele não expira, não pede cartão e você muda quando fizer sentido.</p>
       </div>
 
       <div style="text-align:center">
@@ -415,7 +435,7 @@
   </section>
 
   <!-- ============================ perguntas ============================ -->
-  <section class="secao" id="perguntas">
+  <section class="secao secao-faq" id="perguntas">
     <div class="env">
       <div class="secao-topo revela">
         <h2>Perguntas frequentes</h2>
@@ -424,7 +444,7 @@
       <div class="faq">
         <details class="revela">
           <summary>O plano grátis expira?</summary>
-          <div class="resposta"><p>Não. Ele não tem prazo e não pede cartão de crédito. Tem limites — 1 espaço, 2 contas, 1 cartão, histórico de 6 meses — mas lançamentos são ilimitados e ele continua funcionando indefinidamente.</p></div>
+          <div class="resposta"><p>Não. Ele não tem prazo e não pede cartão de crédito. Tem limites — 1 espaço, 2 contas, 1 cartão, até 100 movimentações por mês e histórico de 3 meses — mas continua funcionando indefinidamente.</p></div>
         </details>
 
         <details class="revela">
@@ -464,7 +484,7 @@
   </section>
 
   <!-- ============================ chamada final ============================ -->
-  <section class="secao">
+  <section class="secao secao-fecho">
     <div class="env">
       <div class="chamada revela">
         <h2>Comece a enxergar o seu mês hoje</h2>

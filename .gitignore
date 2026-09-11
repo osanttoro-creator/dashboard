@@ -36,6 +36,10 @@ node_modules/
 supabase/functions/.env
 supabase/.temp/
 
+# Capturas e perfis temporários usados na revisão visual local.
+# O sistema de design em .impeccable/design.json continua versionado.
+.impeccable/review/
+
 # Pacote gerado para a Hostinger. É derivado — reconstruído por
 # deploy/hostinger/montar-pacote.ps1 a qualquer momento.
 deploy/hostinger/public_html/
