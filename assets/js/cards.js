@@ -226,15 +226,20 @@
   };
 
   /**
-   * Leque de cartões. `limit` corta a quantidade (a visão do Início
-   * mostra 2). Devolve o elemento pronto.
+   * Base única do baralho. Crédito, débito e a carteira do Início passam
+   * por aqui para não ganharem interações, tamanhos ou acessibilidade
+   * diferentes em cada página.
    */
-  Cards.deck = function (cards, baseYM, opts) {
+  function collectionDeck(items, renderItem, opts) {
     const o = opts || {};
-    const list = o.limit ? cards.slice(0, o.limit) : cards;
+    const list = o.limit ? items.slice(0, o.limit) : items;
+    const stacked = o.stacked !== false;
     const deck = el('div', {
-      class: 'wallet-deck' + (o.stacked ? ' wallet-deck-stack' : ''),
-      style: o.stacked ? {
+      class: 'wallet-deck' + (stacked ? ' wallet-deck-stack' : ''),
+      role: 'group',
+      'aria-label': o.label || 'Carteira de cartões',
+      'data-wallet-surface': o.surface || 'wallet',
+      style: stacked ? {
         '--deck-count': String(list.length),
         '--deck-depth': String(Math.max(0, list.length - 1))
       } : null
@@ -242,48 +247,80 @@
     let troca = null;
     let proximoSlot = 1;
 
-    list.forEach((card, index) => {
-      const ref = o.refFor ? o.refFor(card) : Calc.currentInvoiceRef(card, baseYM);
-      const cartao = Cards.render(card, ref, {
-        focused: o.focusedId === card.id,
-        onClick: (escolhido) => {
-          if (!o.stacked) { if (o.onClick) o.onClick(escolhido); return; }
-          if (deck.dataset.focusedId === escolhido.id) return;
+    list.forEach((item, index) => {
+      const itemId = String(o.itemId ? o.itemId(item) : item.id);
+      const cartao = renderItem(item, {
+        focused: o.focusedId === itemId,
+        onClick: () => {
+          if (!stacked) { if (o.onClick) o.onClick(item); return; }
+          if (deck.dataset.focusedId === itemId) return;
 
-          deck.dataset.focusedId = escolhido.id;
+          deck.dataset.focusedId = itemId;
           let slot = 1;
-          deck.querySelectorAll('.wallet-card').forEach((item) => {
-            const ativo = item.dataset.cardId === escolhido.id;
-            item.classList.toggle('is-focused', ativo);
-            item.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-            item.style.setProperty('--deck-slot', String(ativo ? 0 : slot++));
+          deck.querySelectorAll('.wallet-card').forEach((node) => {
+            const ativo = node.dataset.walletItemId === itemId;
+            node.classList.toggle('is-focused', ativo);
+            node.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+            node.style.setProperty('--deck-slot', String(ativo ? 0 : slot++));
           });
 
           clearTimeout(troca);
-          troca = setTimeout(() => { if (o.onClick) o.onClick(escolhido); }, 280);
+          troca = setTimeout(() => { if (o.onClick) o.onClick(item); }, 280);
         }
       });
-      if (o.stacked) {
+      cartao.dataset.walletItemId = itemId;
+      cartao.dataset.walletKind = o.itemKind ? o.itemKind(item) : (o.surface || 'card');
+      cartao.setAttribute('aria-posinset', String(index + 1));
+      cartao.setAttribute('aria-setsize', String(list.length));
+      if (stacked) {
         cartao.classList.add('is-decked');
-        cartao.dataset.cardId = card.id;
         cartao.style.setProperty('--deck-i', String(index));
-        cartao.style.setProperty('--deck-slot', String(o.focusedId === card.id ? 0 : proximoSlot++));
+        cartao.style.setProperty('--deck-slot', String(o.focusedId === itemId ? 0 : proximoSlot++));
       }
       deck.appendChild(cartao);
     });
-    if (o.stacked) deck.dataset.focusedId = o.focusedId || '';
+    if (stacked) deck.dataset.focusedId = o.focusedId || '';
     return deck;
+  }
+
+  /** Baralho de cartões de crédito. */
+  Cards.deck = function (cards, baseYM, opts) {
+    const o = opts || {};
+    return collectionDeck(cards, (card, state) => {
+      const ref = o.refFor ? o.refFor(card) : Calc.currentInvoiceRef(card, baseYM);
+      return Cards.render(card, ref, state);
+    }, Object.assign({
+      label: 'Cartões de crédito',
+      surface: 'credit'
+    }, o));
   };
 
-  /** Leque de contas de débito, no mesmo formato do leque de cartões. */
+  /** Baralho de contas de débito, no mesmo formato do crédito. */
   Cards.accountDeck = function (accounts, upto, opts) {
     const o = opts || {};
-    const deck = el('div', { class: 'wallet-deck' });
-    const list = o.limit ? accounts.slice(0, o.limit) : accounts;
-    list.forEach((a) => {
-      deck.appendChild(Cards.account(a, upto, { focused: o.focusedId === a.id, onClick: o.onClick }));
-    });
-    return deck;
+    return collectionDeck(accounts, (account, state) => Cards.account(account, upto, state), Object.assign({
+      label: 'Contas de débito',
+      surface: 'debit'
+    }, o));
+  };
+
+  /**
+   * Carteira integrada da Visão geral: contas e cartões dividem o mesmo
+   * baralho, mas preservam tipo, cor, logo e os cálculos de cada origem.
+   */
+  Cards.walletDeck = function (accounts, cards, baseYM, upto, opts) {
+    const o = opts || {};
+    const items = accounts.map((data) => ({ key: 'account:' + data.id, kind: 'account', data }))
+      .concat(cards.map((data) => ({ key: 'card:' + data.id, kind: 'card', data })));
+
+    return collectionDeck(items, (item, state) => item.kind === 'account'
+      ? Cards.account(item.data, upto, state)
+      : Cards.render(item.data, Calc.currentInvoiceRef(item.data, baseYM), state), Object.assign({
+      label: 'Contas de débito e cartões de crédito',
+      surface: 'overview',
+      itemId: (item) => item.key,
+      itemKind: (item) => item.kind
+    }, o));
   };
 
   /**

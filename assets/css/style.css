@@ -2585,18 +2585,24 @@ input[type="checkbox"], input[type="radio"] {
 .wallet-deck .wallet-card:not(:first-child) { margin-left: 0; }
 .deck-hint { margin-top: 6px; margin-bottom: 0; }
 
-/* Baralho interativo da aba Cartões. O material de cada cartão não
-   muda; somente a forma como a carteira os organiza e seleciona. */
+/* Baralho interativo compartilhado por Início, Débito e Crédito. O
+   material de cada cartão não muda; só a carteira o organiza. */
 .wallet-deck-stack {
-  position: relative; display: block;
+  position: relative; display: block; isolation: isolate;
   min-height: calc(224px + var(--deck-depth, 0) * 26px);
   padding: 18px 12px 20px;
   overflow: visible;
   border: 1px solid var(--glass-line);
   border-radius: calc(var(--radius-lg) + 4px);
-  background: color-mix(in srgb, var(--plane-2) 72%, transparent);
-  box-shadow: inset 0 1px 0 var(--glass-edge);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--plane-2) 88%, transparent), color-mix(in srgb, var(--surface) 94%, transparent));
+  box-shadow: inset 0 1px 0 var(--glass-edge), var(--shadow);
   transition: min-height .42s var(--ease-out), box-shadow .32s var(--ease-out);
+}
+.wallet-deck-stack::before {
+  content: ''; position: absolute; inset: 9px; z-index: -1;
+  border: 1px dashed color-mix(in srgb, var(--ink-3) 22%, transparent);
+  border-radius: var(--radius-lg); pointer-events: none;
 }
 .wallet-deck-stack .wallet-card {
   position: absolute; top: 18px; left: 50%;
@@ -2623,6 +2629,9 @@ input[type="checkbox"], input[type="radio"] {
   transform: translate(-50%, 0);
   z-index: calc(var(--deck-count, 1) + 2);
 }
+.wallet-grid-deck { display: block; }
+.wallet-grid-deck .wallet-deck { width: 100%; }
+.wallet-deck-actions { justify-content: center; margin-top: 6px; }
 
 @media (hover: none) {
   .wallet-deck-stack,

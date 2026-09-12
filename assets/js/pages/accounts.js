@@ -43,25 +43,27 @@
 
     if (!prof.accounts.some((a) => a.id === App.accHistoryId)) App.accHistoryId = prof.accounts[0].id;
 
-    prof.accounts.forEach((a) => {
-      const wrap = el('div', { style: { display: 'grid', gap: '6px' } }, [
-        Cards.account(a, upto, {
-          focused: a.id === App.accHistoryId,
-          onClick: () => { App.accHistoryId = a.id; Acc.render(); }
-        }),
-        el('div', { class: 'row gap-6' }, [
-          el('button', {
-            class: 'btn btn-ghost btn-sm', text: 'Ver extrato',
-            onclick: () => {
-              App.accHistoryId = a.id; Acc.render();
-              document.getElementById('tableAccHistory').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-          }),
-          el('button', { class: 'btn btn-ghost btn-sm', text: '✎ Editar', onclick: () => Forms.openAccount(a.id) })
-        ])
-      ]);
-      grid.appendChild(wrap);
-    });
+    grid.appendChild(Cards.accountDeck(prof.accounts, upto, {
+      stacked: true,
+      focusedId: App.accHistoryId,
+      onClick: (account) => { App.accHistoryId = account.id; Acc.render(); }
+    }));
+
+    if (prof.accounts.length > 1) {
+      grid.appendChild(el('p', {
+        class: 'deck-hint',
+        text: 'Explore o baralho e escolha uma conta para abrir o extrato.'
+      }));
+    }
+
+    const ativa = Store.accounts.get(App.accHistoryId);
+    grid.appendChild(el('div', { class: 'row gap-6 wallet-deck-actions' }, [
+      el('button', {
+        class: 'btn btn-ghost btn-sm', text: 'Ver extrato',
+        onclick: () => document.getElementById('tableAccHistory').scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }),
+      el('button', { class: 'btn btn-ghost btn-sm', text: '✎ Editar', onclick: () => Forms.openAccount(ativa.id) })
+    ]));
 
     const total = Calc.totalAccountsBalance(upto);
     document.getElementById('accTotalLabel').innerHTML =
@@ -137,7 +139,7 @@
       }
     }));
     if (prof.cards.length > 1) {
-      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Passe pelo baralho para ver todos; escolha um cartão para abrir a fatura.' }));
+      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Explore o baralho e escolha um cartão para abrir a fatura.' }));
     }
 
     detail.appendChild(Cards.invoicePanel(card, App.invoiceRef, {

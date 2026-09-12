@@ -348,14 +348,26 @@
       ]));
       return;
     }
-    if (prof.accounts.length) {
-      box.appendChild(Cards.accountDeck(prof.accounts, upto, { limit: 2 }));
-    }
-    if (prof.cards.length) {
-      if (!prof.cards.some((c) => c.id === App.cardFocusId)) App.cardFocusId = prof.cards[0].id;
-      box.appendChild(Cards.deck(prof.cards, ym, {
-        limit: 2, focusedId: App.cardFocusId,
-        onClick: (c) => { App.cardFocusId = c.id; renderWallet(ym); }
+    const chaves = prof.accounts.map((a) => 'account:' + a.id)
+      .concat(prof.cards.map((c) => 'card:' + c.id));
+    const chavesVisiveis = chaves.slice(0, 4);
+    if (!chavesVisiveis.includes(App.walletFocusId)) App.walletFocusId = chavesVisiveis[0];
+
+    box.appendChild(Cards.walletDeck(prof.accounts, prof.cards, ym, upto, {
+      limit: 4,
+      focusedId: App.walletFocusId,
+      onClick: (item) => {
+        App.walletFocusId = item.key;
+        if (item.kind === 'account') App.accHistoryId = item.data.id;
+        else App.cardFocusId = item.data.id;
+        renderWallet(ym);
+      }
+    }));
+
+    if (chaves.length > 1) {
+      box.appendChild(el('p', {
+        class: 'deck-hint',
+        text: 'Explore o baralho e selecione um cartão para trazê-lo à frente.'
       }));
     }
   }

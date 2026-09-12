@@ -11,6 +11,7 @@
     txOnlyPending: false,
     txMethod: 'all',        // all | account (débito) | card (crédito)
     cardFocusId: null,      // cartão em foco no leque
+    walletFocusId: null,    // conta ou cartão em foco na Visão geral
     accFocusId: null,       // conta em foco na carteira
     invType: '',
     catRange: 'all',
@@ -361,7 +362,8 @@
     // perfil
     document.getElementById('profileSelect').addEventListener('change', (e) => {
       Store.setActiveProfile(e.target.value);
-      App.accHistoryId = null; App.cardFocusId = null; App.invoiceRef = null; App.importTarget = null;
+      App.accHistoryId = null; App.cardFocusId = null; App.walletFocusId = null;
+      App.invoiceRef = null; App.importTarget = null;
       UI.toast('Perfil alterado.');
     });
     document.getElementById('btnProfiles').addEventListener('click', () => Forms.openProfiles());
