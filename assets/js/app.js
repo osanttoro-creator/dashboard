@@ -174,10 +174,6 @@
       UI.toast('Algo deu errado ao desenhar esta página. Veja o console.', 'error');
     }
     if (global.Shell && Shell.renderNotifCount) Shell.renderNotifCount();
-    /* A cada render, não só na entrada: o excedente muda quando a
-       pessoa apaga uma conta para voltar a caber, e uma faixa que
-       continua acusando o que já foi resolvido treina a ignorá-la. */
-    if (global.Limites && Limites.pintarExcedente) Limites.pintarExcedente();
     renderFooter();
   };
 

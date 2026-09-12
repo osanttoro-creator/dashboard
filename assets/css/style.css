@@ -2602,8 +2602,7 @@ input[type="checkbox"], input[type="radio"] {
   position: absolute; top: 18px; left: 50%;
   width: min(340px, calc(100% - 32px));
   margin: 0;
-  transform: translate(-50%, calc(var(--deck-slot, 0) * 26px))
-             scale(calc(1 - var(--deck-slot, 0) * .012));
+  transform: translate(-50%, calc(var(--deck-slot, 0) * 26px));
   transform-origin: center top;
   z-index: calc(var(--deck-count, 1) - var(--deck-slot, 0));
   transition: transform .42s cubic-bezier(.22, 1, .36, 1),
@@ -2616,12 +2615,12 @@ input[type="checkbox"], input[type="radio"] {
 }
 .wallet-deck-stack:hover .wallet-card:not(.is-focused),
 .wallet-deck-stack:focus-within .wallet-card:not(.is-focused) {
-  transform: translate(-50%, calc(var(--deck-slot, 0) * 58px)) scale(.985);
+  transform: translate(-50%, calc(var(--deck-slot, 0) * 58px));
 }
 .wallet-deck-stack .wallet-card.is-focused,
 .wallet-deck-stack:hover .wallet-card.is-focused,
 .wallet-deck-stack:focus-within .wallet-card.is-focused {
-  transform: translate(-50%, -8px) scale(1.025);
+  transform: translate(-50%, 0);
   z-index: calc(var(--deck-count, 1) + 2);
 }
 
@@ -2632,7 +2631,7 @@ input[type="checkbox"], input[type="radio"] {
   }
   .wallet-deck-stack .wallet-card:not(.is-focused),
   .wallet-deck-stack:focus-within .wallet-card:not(.is-focused) {
-    transform: translate(-50%, calc(var(--deck-slot, 0) * 38px)) scale(.99);
+    transform: translate(-50%, calc(var(--deck-slot, 0) * 38px));
   }
 }
 
@@ -2647,7 +2646,7 @@ input[type="checkbox"], input[type="radio"] {
   .wallet-deck-stack .wallet-card.is-focused,
   .wallet-deck-stack:hover .wallet-card.is-focused,
   .wallet-deck-stack:focus-within .wallet-card.is-focused {
-    transform: translate(-50%, -8px);
+    transform: translate(-50%, 0);
   }
 }
 
@@ -2704,48 +2703,6 @@ input[type="checkbox"], input[type="radio"] {
    onde um anel da cor do texto sumiria. */
 .fila-chip.is-erro .fila-acao:focus-visible {
   outline: 2px solid #fff; outline-offset: 2px;
-}
-
-/* ==================================================================
-   FAIXA DE EXCEDENTE DE PLANO
-   ------------------------------------------------------------------
-   Aparece quando há mais itens do que o plano permite — na prática,
-   depois de descer de plano.
-
-   O TOM É DELIBERADO: aviso, não erro. Vermelho aqui diria "algo
-   está quebrado" e produziria exatamente o medo que a faixa existe
-   para evitar — o de ter perdido dados. Nada foi perdido; só a
-   criação parou.
-   ================================================================== */
-.faixa-excedente {
-  margin: 0 0 18px;
-  border-radius: var(--radius);
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
-  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
-  padding: 16px 18px;
-}
-.faixa-excedente[hidden] { display: none; }
-.faixa-excedente-corpo { display: grid; gap: 10px; }
-.faixa-excedente-titulo {
-  margin: 0; font-size: 14px; font-weight: 650; color: var(--ink);
-}
-.faixa-excedente-texto {
-  margin: 0; max-width: 72ch;
-  font-size: 13px; line-height: 1.6; color: var(--ink-2);
-}
-/* "Nada foi apagado" é a primeira coisa que precisa ser lida, e a
-   única em negrito: quem só bate o olho tem que sair com essa
-   informação. */
-.faixa-excedente-texto strong { color: var(--ink); }
-
-.faixa-excedente-usos {
-  display: grid; gap: 6px;
-  margin-top: 4px; padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-
-@media (max-width: 720px) {
-  .faixa-excedente { padding: 14px; }
 }
 
 /* ==================================================================
