@@ -53,12 +53,16 @@ Enquanto não houver domínio próprio, o subdomínio serve como
 
 **Esta é a única ordem que não pode ser invertida.**
 
-`oaze-checkout` lê o preço de `plan_prices` no banco e recusa preço
+A função de checkout lê o preço de `plan_prices` no banco e recusa preço
 vindo do corpo da requisição — o que está certo. Mas significa que,
 se o site subir antes da migração, a página anuncia um valor e o
-Mercado Pago cobra outro.
+provedor de pagamento cobra outro.
 
 Anunciar um preço e cobrar outro se descobre pelo estorno.
+
+> Hoje não há função de checkout: ela saiu com o Mercado Pago, em
+> 12/09/2026, e o Asaas ainda não entrou. A ordem acima volta a
+> valer no dia em que existir uma.
 
 Se `supabase/migrations/` tem arquivo que ainda não rodou:
 
@@ -226,7 +230,7 @@ silenciosa — o site parece funcionar e não está.
 ### Depois de uma mudança de preço
 
 - [ ] O preço da landing é o mesmo de `/precos`
-- [ ] O checkout mostra o **mesmo valor** antes de ir ao Mercado Pago
+- [ ] O checkout mostra o **mesmo valor** antes de ir ao provedor de pagamento
 
 ### Depois de mexer em autenticação
 
@@ -301,10 +305,11 @@ RLS. O que **nunca** sobe para a Hostinger é chave de IA ou
 
 ## O que ainda não está pronto
 
-**O checkout.** Para na borda, esperando os identificadores de preço
-do Mercado Pago. Ver `assets/js/checkout.js`. Nenhuma assinatura é
-ativada sem confirmação do webhook — não há simulação de pagamento
-aprovado.
+**O pagamento.** Não existe. A integração com o Mercado Pago foi
+removida em 12/09/2026 e o Asaas ainda não foi escrito: o botão de
+assinar diz isso na cara, em vez de abrir uma compra que não cobra
+ninguém. Nenhuma assinatura é ativada sem confirmação de webhook —
+não há, e nunca houve, simulação de pagamento aprovado.
 
 **Relatórios personalizados, backup agendado e colaboradores.** Os
 direitos existem no banco; as funções não. Não são anunciados nos

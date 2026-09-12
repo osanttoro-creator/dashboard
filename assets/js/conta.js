@@ -9,8 +9,8 @@
    O brief pede "rotas protegidas". O OAZE sempre funcionou sem
    conta, offline, e o mesmo brief manda preservar as funções
    existentes. Trancar o painel atrás de login resolveria uma
-   frase e quebraria a outra — e quebraria o app aberto do disco e
-   o arquivo único do iPhone, onde não existe servidor.
+   frase e quebraria a outra — e quebraria o app aberto do disco,
+   onde não existe servidor.
 
    Então a proteção é do que DEPENDE de conta, não do produto:
 

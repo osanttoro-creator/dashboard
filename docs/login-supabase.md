@@ -4,8 +4,9 @@ O OAZE tem conta própria: e-mail e senha, num formulário dentro do app. Antes
 só existia o botão "Entrar com Google", que abre um pop-up — e pop-up é
 justamente o que navegador de celular bloqueia com mais frequência.
 
-Nada foi removido. O Firebase continua funcionando, e quem já entrou com
-Google continua entrando com Google.
+O Firebase foi removido em 12/09/2026: nunca chegou a ser configurado, então
+o SDK jamais era baixado e aquele backend jamais era escolhido. O login com
+Google continua existindo — agora pelo Supabase, e sem pop-up.
 
 **Projeto ligado:** `gxwatircdhhetvzzlwwq` (OAZE, us-west-2, Postgres 17.6).
 Migração aplicada, RLS verificado em execução — os resultados estão no fim
@@ -77,8 +78,7 @@ primeiro **configurado**, na ordem de prioridade:
 
 | Provedor | Prioridade | Login | Configurado quando |
 |---|---|---|---|
-| Supabase | 10 | e-mail e senha, no app | `supabase-config.js` tem `url` e chave |
-| Firebase | 20 | Google, em pop-up | `firebase-config.js` tem `apiKey` e `databaseURL` |
+| Supabase | 10 | e-mail e senha, link mágico, Google | `supabase-config.js` tem `url` e chave |
 
 Se nenhum estiver preenchido, o app funciona só com o `localStorage` — offline,
 isolado por aparelho. O botão de login some e nada quebra. A nuvem é uma camada

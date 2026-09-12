@@ -48,10 +48,10 @@
      navegador sai do app, e o fallback de SPA no servidor não tem
      o que reescrever.
 
-     MAS SÓ ONDE HÁ SERVIDOR. Aberto do disco (file://) ou como
-     arquivo único no iPhone, a History API não funciona — e o app
-     precisa continuar funcionando nos dois. Por isso a troca de
-     URL é condicional; a navegação nunca depende dela.
+     MAS SÓ ONDE HÁ SERVIDOR. Aberto do disco (file://) a History
+     API não funciona — e o app precisa continuar funcionando ali.
+     Por isso a troca de URL é condicional; a navegação nunca
+     depende dela.
      ============================================================ */
   /* TODAS SOB /app, E ISSO NÃO É COSMÉTICO.
      Quando o site público tomou a raiz, estas rotas ficaram na

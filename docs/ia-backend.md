@@ -1,8 +1,8 @@
 # A IA do UGLEZ — onde a chave mora
 
 Regra única, e ela não tem exceção: **chave de IA é secreta e vive só no
-servidor**. Nenhuma delas pode aparecer em `assets/`, em `index.html`, no
-`financas.html` ou em qualquer arquivo que o navegador baixe.
+servidor**. Nenhuma delas pode aparecer em `assets/`, no `app.html` nem em
+qualquer outro arquivo que o navegador baixe.
 
 Uma chave `sk-proj-…` exposta é a sua conta sendo gasta por outra pessoa. Ao
 contrário da chave publicável do Supabase — que é pública por design e
@@ -56,17 +56,17 @@ para casar com o log.
 
 ### O outro caminho, e por que ele existe
 
-O app roda em três lugares: publicado na Hostinger, aberto direto do disco
-(`file://`) e como arquivo único no iPhone. **Nos dois últimos não existe
-servidor nenhum, e não há sessão do Supabase.**
+O app roda em dois lugares: publicado na Hostinger e aberto direto do disco
+(`file://`). **No segundo não existe servidor nenhum, e não há sessão do
+Supabase.**
 
 Quando a Edge Function não responde, o cliente cai para a chave que o próprio
 usuário guardou no `localStorage` dele. Essa não é um segredo do produto — é
 dele, no aparelho dele, sob a responsabilidade dele.
 
-**Esse caminho local fala com a Anthropic apenas.** Ou seja, no arquivo único
-do iPhone o UGLEZ só conversa se o usuário tiver uma chave Anthropic própria
-guardada. É uma limitação real, não um bug.
+**Esse caminho local fala com a Anthropic apenas.** Ou seja, aberto do disco o
+UGLEZ só conversa se o usuário tiver uma chave Anthropic própria guardada. É
+uma limitação real, não um bug.
 
 ## Verificação
 

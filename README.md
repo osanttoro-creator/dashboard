@@ -15,48 +15,23 @@ somem, com um aviso na tela.)
 > Em janela anônima alguns navegadores bloqueiam o `localStorage`. O app avisa quando
 > isso acontece — nesse caso, use **↓ Backup** antes de fechar a aba.
 
-## Abrir no iPhone
+## Abrir no celular
 
-O Safari do iOS, ao abrir um `.html` pelo app **Arquivos**, **não carrega CSS e JS de
-subpastas** — a página apareceria em preto e branco e sem funcionar. Por isso existe
-o `financas.html`: **o app inteiro em um arquivo só**, gerado por
-`build-arquivo-unico.ps1`. Rode o script sempre que mexer no CSS ou no JS.
+O app está publicado. No celular, abra o endereço do site e entre na sua conta — os
+dados chegam sozinhos, porque a sincronização é por conta e não por aparelho.
 
-> ⚠️ **Os dados não sincronizam entre aparelhos.** Cada navegador guarda os seus no
-> próprio `localStorage`. PC e iPhone são duas bases separadas. Para levar os dados de
-> um para o outro, use **↓ Backup** num e **↑ Restaurar** no outro. Pelo mesmo motivo,
-> se você trocar o endereço de acesso (de Wi-Fi local para um site hospedado, por
-> exemplo), os dados não vão junto — faça o backup antes.
+**Sem conta, cada navegador é uma ilha.** O que você registra fica no `localStorage`
+daquele navegador, e PC e celular são duas bases separadas. Para juntá-las sem criar
+conta, use **↓ Backup** num e **↑ Restaurar** no outro.
 
-### Opção 1 — pelo app Arquivos (offline, sem depender do PC)
-
-1. Copie **`financas.html`** para o iCloud Drive (ou mande por AirDrop / e-mail / WhatsApp para si mesmo).
-2. No iPhone, abra o app **Arquivos**, toque no arquivo.
-3. Toque em **Compartilhar → Abrir no Safari** (ou "Abrir em…").
-
-Funciona sem internet — Chart.js está embutido. É a opção mais independente,
-mas depende do Safari manter o armazenamento desse arquivo; **faça backup com
-frequência**.
-
-### Opção 2 — pelo Wi-Fi de casa (bom para testar rápido)
+### Testar pelo Wi-Fi de casa
 
 1. No PC, clique com o botão direito em **`servir-no-wifi.ps1`** → *Executar com o PowerShell*.
 2. Ele mostra um endereço, tipo `http://192.168.3.103:8777`.
-3. Com o iPhone no **mesmo Wi-Fi**, digite esse endereço no Safari.
+3. Com o celular no **mesmo Wi-Fi**, digite esse endereço.
 
-Na primeira vez o Windows pergunta se libera o acesso: marque **Redes privadas**.
-Só funciona com o PC ligado e o script rodando. Se o roteador trocar o IP do PC,
-o endereço muda — e, como o endereço é a "identidade" do armazenamento, os dados
-somem. Para uso diário, prefira a opção 1 ou 3.
-
-### Opção 3 — hospedar na Hostinger (melhor para uso diário)
-
-Um endereço fixo em HTTPS, funciona em qualquer lugar, sem o PC ligado. Já está
-no ar — veja **[Publicar](#publicar)** abaixo.
-
-Só o *código* do app fica público; **seus dados financeiros nunca saem do celular**,
-continuam no `localStorage` do Safari. Ainda assim, se preferir não deixar nada
-público, fique na opção 1.
+O login social não funciona nesse endereço: o Google só aceita origens autorizadas, e
+um IP de rede local não é uma delas. Para testar login, use o site publicado.
 
 ## Publicar
 
@@ -79,40 +54,33 @@ O que ele confere, e o caminho manual para rollback, estão em
 > A Hostinger intercepta o `robots.txt` no subdomínio temporário e serve o dela, que
 > bloqueia só o Googlebot. O nosso passa a valer quando o domínio próprio for apontado.
 
-**Endereços:** `/` abre o `index.html` (versão multiarquivo, a de uso normal) e
-`/financas` abre o arquivo único — útil para baixar direto no iPhone sem o PC.
+**Endereços:** `/` abre a landing e `/app` abre o aplicativo. O `.htaccess`
+reescreve as rotas sem extensão, então `/precos` e `/entrar` funcionam como páginas.
 
 ### Content-Security-Policy
 
-O `.htaccess` publica uma CSP que trava para onde o app pode **enviar** dados
-(`connect-src`). Isso importa num painel que guarda uma chave de API no navegador:
-mesmo que algo malicioso rodasse na página, não conseguiria mandar seus dados para
-um domínio qualquer. Os destinos liberados são exatamente os que o app usa:
+O `.htaccess` publica uma CSP que trava de onde o app pode **carregar** e para onde
+pode **enviar**. Num painel financeiro isso importa: mesmo que algo malicioso rodasse
+na página, não conseguiria mandar seus dados para um domínio qualquer.
 
-- `api.anthropic.com` — sugestões com IA
-- `*.googleapis.com` e `apis.google.com` — autenticação do Firebase
-- `*.firebaseio.com` e `*.firebasedatabase.app` (mais `wss://`) — Realtime Database
-- `cdn.jsdelivr.net` e `www.gstatic.com` — Chart.js e o SDK do Firebase
-- `*.googleusercontent.com` em `img-src` — foto do perfil da conta Google
+Os destinos liberados são exatamente os que o app usa:
 
-Duas regras existem por causa do **login com Google por popup**, e quebram o login se
-forem apertadas demais:
+- `*.supabase.co` (mais `wss://`) — banco, autenticação e tempo real
+- `accounts.google.com` — o "entrar num toque" do Google, que precisa de script,
+  estilo, conexão e iframe, os quatro
+- `cdn.jsdelivr.net` — Chart.js
+- `*.googleusercontent.com` em `img-src` — a foto do perfil na bolha do Google
 
-- `Cross-Origin-Opener-Policy: same-origin-allow-popups`. Com `same-origin` (o valor
-  mais restritivo) o navegador corta o `window.opener`, o popup não consegue devolver
-  o resultado do login, e o `signInWithPopup` **trava sem erro visível**.
-- `frame-src` precisa liberar `*.firebaseapp.com`, `accounts.google.com` e
-  `apis.google.com` — o Firebase Auth usa um iframe no domínio do seu projeto.
+**`api.anthropic.com` não está na lista, e é de propósito.** Quem fala com o modelo
+é a Edge Function `oaze-assistant`, que é `*.supabase.co`. A chave nunca passa pelo
+navegador; liberar o domínio aqui seria manter aberta uma porta que ninguém usa.
 
-> `script-src` precisa de `'unsafe-inline'` porque o `financas.html` é inteiramente
-> inline por construção — é o que permite abrir pelo app Arquivos no iPhone. Ou seja,
-> a CSP aqui **não** protege contra injeção de script; ela limita a exfiltração.
-> Se você adicionar uma integração nova e ela não conectar, o motivo provável é a
-> `connect-src` — inclua o domínio novo na lista.
+Quem confere que a política cobre o que o site carrega é
+`tools/testes/csp-cobre-o-que-carrega.js`, dentro do `verificar-tudo`. Ele existe
+porque um domínio faltando não dá erro em lugar nenhum: o navegador recusa calado.
 
-**Ao publicar, o app começa vazio.** O `localStorage` é por endereço: os dados que
-estão no `file://` ou no `http://192.168.x.x` **não** vão junto. Use **↓ Backup** no
-lugar antigo e **↑ Restaurar** no endereço novo.
+**Ao publicar, o app começa vazio se você não entrar na conta.** O `localStorage` é
+por endereço: o que está em `http://192.168.x.x` não vai junto.
 
 ### Adicionar à Tela de Início
 
@@ -123,35 +91,43 @@ o app já traz o ícone e as metatags para isso, e respeita o notch e a barra in
 ## Estrutura
 
 ```
-index.html                versão de trabalho (multiarquivo) — use no PC
-financas.html             gerado: o app todo em 1 arquivo — use no iPhone
-build-arquivo-unico.ps1   gera o financas.html a partir dos arquivos abaixo
-servir-no-wifi.ps1        publica a pasta na rede local para acessar do celular
-tools/                    scripts que regeram os ícones vendorizados
+index.html                a landing pública
+app.html                  o aplicativo
+entrar.html cadastro.html recuperar-senha.html redefinir-senha.html confirmar-email.html
+precos.html recursos.html suporte.html termos.html privacidade.html 404.html
+servir-no-wifi.ps1        publica a pasta na rede local, para testar do celular
+tools/                    verificações, auditorias e os geradores dos vendorizados
+deploy/hostinger/         .htaccess publicado e o script que monta o pacote
+supabase/                 migrações do banco e as Edge Functions
+docs/                     o que não cabe em comentário de código
 
-assets/vendor/chart.umd.min.js   cópia local do Chart.js (usada offline)
-assets/vendor/bancos.js          41 bancos brasileiros, vendorizado (GERADO)
-assets/vendor/fonte.css          Inter embutida em base64, vendorizada (GERADO)
-assets/vendor/icons.js           76 ícones Lucide, vendorizado (GERADO)
-assets/css/style.css
+assets/vendor/bancos.js   bancos brasileiros, vendorizado (GERADO)
+assets/vendor/icons.js    ícones Lucide, vendorizado (GERADO)
+assets/vendor/fontes/     Newsreader, IBM Plex Sans e Mono (OFL)
+assets/css/style.css      o aplicativo
+assets/css/site.css       o site público
 assets/js/
-  firebase-config.js  COLE AQUI as credenciais do seu Firebase (opcional)
   utils.js       formatação BRL, datas (sem armadilha de fuso), helpers de DOM
-  icons.js       resolve banco/categoria → ícone; selos de débito e crédito
-  cards.js       a carteira: contas e cartões desenhados no mesmo material
-  store.js       modelo de dados, persistência, perfis, backup, dados de exemplo
+  store.js       modelo de dados, persistência, perfis, backup
   calc.js        motor de cálculo: ocorrências, saldos, faturas, investimentos
-  charts.js      camada fina sobre o Chart.js, com os tokens de cor do tema
-  ui.js          modal, toasts, KPIs, selects, seletor de cor
-  forms.js       formulários de lançamento, conta, cartão, categoria, investimento
-  importer.js    CSV / OFX / texto colado / Registrato
-  sync.js        login Google + sincronização opcional (Realtime Database)
-  ai.js          sugestões via API da Anthropic (chave do próprio usuário)
+  repo.js        leitura e escrita no esquema normalizado do Postgres
+  dados.js       traz o estado do servidor sem atropelar o que está no aparelho
+  fila.js        o que ainda não subiu, e por isso não pode ser sobrescrito
+  migracao.js    do localStorage para o banco, uma vez só, com backup antes
+  sync.js        o contrato de sincronização (estado, mesclagem, envio)
+  supabase-auth.js  o backend que cumpre esse contrato
+  site-auth.js   autenticação das páginas públicas (leve, sem o app junto)
+  conta.js       chamadas às Edge Functions
+  planos.js limites.js  planos, direitos e limites de uso
+  ai.js          sugestões, via Edge Function — a chave nunca vem ao navegador
+  charts.js ui.js forms.js cards.js icons.js importer.js tema.js shell.js
+  onboarding.js estado-sync.js
+  uglez-*.js     a peça visual do UGLEZ (WebGL, com fallback 2D)
   pages/*.js     uma página por arquivo
   app.js         estado da interface, roteamento, eventos
 ```
 
-Os scripts são clássicos (sem `type="module"`), justamente para funcionar em `file://` —
+Os scripts são clássicos (sem `type="module"`), para funcionar também em `file://` —
 módulos ES são bloqueados por CORS quando abertos direto do disco.
 
 ## As cinco páginas
@@ -293,94 +269,22 @@ arquivo — pede confirmação antes e recusa arquivos que não sejam backup des
 | `Alt` + `←` / `→` | mês anterior / próximo |
 | `Esc` | fecha o modal ou o menu do "+" |
 
-## Sincronização entre dispositivos (opcional)
+## Sincronização entre dispositivos
 
-**O app funciona sem login.** Sem configurar nada, os dados ficam no `localStorage`,
-isolados por aparelho — exatamente como sempre foi. O login com Google existe só para
-quem quer ver os mesmos dados no PC e no celular.
+A sincronização é por **conta**, não por aparelho, e roda no Supabase. Entrar em
+`/entrar` é estar dentro em `/app`: os dois lados usam a mesma gaveta de sessão.
 
-A sincronização usa **o seu próprio** projeto Firebase gratuito: Authentication com o
-provedor Google, mais o Realtime Database.
+Entrar é possível por e-mail e senha, por link mágico, ou **com o Google** — inclusive
+pela bolha do "entrar num toque", que não tira a pessoa da página. A configuração de
+cada provedor está em **`docs/login-supabase.md`**, com o passo a passo dos painéis.
 
-### Configurar (uma vez)
+Sem conta o app funciona inteiro, só que isolado no aparelho. É uma promessa do
+produto, não uma limitação: ninguém é obrigado a criar conta para usar.
 
-No [console.firebase.google.com](https://console.firebase.google.com):
-
-1. Crie um projeto (plano **Spark**, gratuito).
-2. **Build → Authentication → Sign-in method** → ative **Google**.
-3. **Build → Realtime Database** → criar banco, "iniciar no modo bloqueado".
-4. Na aba **Regras** do Realtime Database, publique isto:
-
-```json
-{
-  "rules": {
-    "usuarios": {
-      "$uid": {
-        ".read":  "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    }
-  }
-}
-```
-
-5. **⚙ Configurações do projeto → Seus apps → Web** (`</>`) → registre um app e copie
-   o objeto `firebaseConfig` para **`assets/js/firebase-config.js`**.
-6. **Authentication → Settings → Authorized domains** → adicione o endereço onde o app
-   está publicado (o domínio da Hostinger). Sem isso o popup de login recusa com
-   `auth/unauthorized-domain`.
-7. Rode `build-arquivo-unico.ps1` de novo, para o `financas.html` levar a configuração.
-
-> ⚠️ **O passo 7 é fácil de esquecer.** O `financas.html` é um retrato do código no
-> momento em que foi gerado. Se você preencher o `firebase-config.js` e não rodar o
-> build, o PC (que usa `index.html`) sincroniza e o iPhone (que usa o arquivo único)
-> continua isolado — sem erro nenhum, só não sincroniza. Por isso o script agora
-> imprime, no fim, se a sincronização ficou ligada ou desligada naquele arquivo.
-
-Depois disso, clique em **Entrar com Google** na barra lateral. A sessão fica salva em
-cada aparelho — você entra uma vez por dispositivo.
-
-> As credenciais do `firebase-config.js` **podem ficar públicas**. Não são segredo: o
-> Firebase as embute no front-end de qualquer app web. Quem protege os dados são as
-> regras acima. O que **não** pode é publicar regras abertas (`".read": true`) — aí
-> qualquer pessoa com a `databaseURL` lê as suas finanças.
->
-> Como reforço, dá para restringir a chave em *console.cloud.google.com → APIs e
-> serviços → Credenciais → sua chave → Restrições de aplicativo → Sites*, listando só
-> o seu domínio. Isso impede que outra pessoa consuma a sua cota.
-
-### Como funciona
-
-Os dados vão para `/usuarios/{uid}/dados`, onde `uid` é o identificador da sua conta
-Google. As regras garantem que só essa conta lê e escreve ali.
-
-**O que sincroniza:** só os perfis — contas, cartões, categorias, lançamentos,
-investimentos e faturas. Tema e perfil ativo são preferências de cada aparelho e ficam
-de fora. Toda alteração local grava no `localStorage` na hora e sobe para o Firebase
-com um atraso de 1,5 s (debounce), para não gravar a cada tecla.
-
-**Conflito:** cada perfil carrega um carimbo de última alteração; vence o mais recente,
-**perfil a perfil**. Ou seja, editar o perfil Pessoal no celular não desfaz o que você
-mudou no perfil PJ no PC.
-
-**Estados do indicador**, na barra lateral:
-
-| Estado | O que significa |
-|---|---|
-| *Sincronização não configurada* | `firebase-config.js` está vazio — nada além do localStorage |
-| *Não logado — só neste aparelho* | Configurado, mas sem login. O app funciona normal |
-| *Sincronizando…* | Há alterações locais indo para a nuvem |
-| *Sincronizado* | Tudo enviado |
-| *Sem conexão — usando dados locais* | Rede caiu ou as regras recusaram. O app continua funcionando |
-
-> ⚠️ **No primeiro login, os dois lados se somam.** Se este aparelho já tem perfis e a
-> sua conta na nuvem também, você fica com todos — nada é apagado, mas pode aparecer
-> duplicata (dois "Pessoal", por exemplo), porque os perfis criados separadamente em
-> cada aparelho têm identificadores diferentes. Apague os que sobrarem em **⚙ Perfis**.
-> Daí em diante cada perfil é reconhecido pelo mesmo identificador nos dois lugares.
-
-**Backup/Restaurar em JSON continuam funcionando** com ou sem login — inclusive para
-trazer dados de antes de você ter conta, ou para migrar entre endereços.
+> **Duas fontes da verdade convivem hoje**, e isso é dívida conhecida: o documento
+> `dados` (jsonb) e o esquema normalizado (`workspaces`, `transactions`…). A ponte
+> entre eles é a migração em Configurações → "Dados antigos deste navegador". Enquanto
+> ela não roda numa conta, metade do app lê um lugar vazio. Ver `docs/o-que-falta.md`.
 
 ## Sugestões com IA (opcional)
 
@@ -482,9 +386,9 @@ roda offline.
 eixo de peso 100–900, **embutida em base64**.
 
 Por que base64 e não um `.woff2` ao lado: o app roda em `file://` e como arquivo
-único no iPhone, e fonte em arquivo separado é bloqueada por CORS em `file://` na
-maioria dos navegadores — o texto cairia para a fonte do sistema justamente no
-cenário offline. Embutida, ela também entra sozinha no `financas.html`. Custo: 47 KB
+aberto em `file://`, e fonte em arquivo separado é bloqueada por CORS nesse
+esquema na maioria dos navegadores — o texto cairia para a fonte do sistema
+justamente no cenário offline. Custo: 47 KB
 de woff2, 64 KB depois do base64.
 
 A fonte do sistema segue na fila de fallback de propósito: setas e símbolos
