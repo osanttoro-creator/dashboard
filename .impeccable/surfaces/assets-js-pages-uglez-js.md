@@ -17,10 +17,10 @@ OWN-WORLD: OAZE midnight petroleum is the chamber, royal-blue particles form an 
 
 STORY: The user immediately sees which month is being read, how much real data exists, whether UGLEZ is ready, and where to ask. The animated field responds to receiving, thinking, answering, success, and error; the written state carries the same meaning accessibly.
 
-FIRST VIEWPORT: Inside the existing app shell, the page header recedes. A large interactive erosion sphere occupies the left half of a deep framed stage with UGLEZ and live month/data labels over it. The right half is the working conversation console: state, history, answer, suggested questions, quota, and the primary prompt field are all visible without a marketing detour.
+FIRST VIEWPORT: The entire UGLEZ task is one bounded screen with no page scroll and no follow-up section below it. Desktop and tablet keep the erosion sphere and conversation console side by side. Mobile turns the sphere into a compact data banner, reduces the app controls to one row, and keeps state, context, suggestions, prompt, action, and the active conversation inside the remaining viewport.
 
 FORM: User-pinned cosmic interface reference translated into the established OAZE system; direct extension, seed user-reference-recursive-erosion.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
-Constraints: preserve the existing UGLEZ data logic, authenticated server mode, quota rules, local calculation labels, global app navigation, responsive behavior, reduced motion, and the current OAZE logo and palette.
+Constraints: preserve the existing UGLEZ data logic, authenticated server mode, quota rules, local calculation labels, global app navigation, responsive behavior, reduced motion, and the current OAZE logo and palette. The page itself must never scroll; exceptionally long answers stay contained inside the conversation viewport rather than creating a second vertical section.

@@ -146,10 +146,10 @@
     const alvo = document.getElementById('uglezPeriodo');
     const mes = U.smartCase(U.monthLabel(App.ym));
     if (alvo) {
-      alvo.textContent = mes + ' · contexto do mês selecionado';
+      alvo.textContent = mes;
     }
     const orbita = document.getElementById('uglezMesOrbita');
-    if (orbita) orbita.textContent = mes;
+    if (orbita) orbita.textContent = U.smartCase(U.monthLabel(App.ym, true));
 
     const cota = document.getElementById('uglezCota');
     const limite = document.getElementById('uglezLimite');
@@ -260,12 +260,11 @@
     const movimentos = document.getElementById('uglezMovimentos');
     const fonteLocal = document.getElementById('uglezFonteLocal');
     if (movimentos) movimentos.textContent = totalMovimentos +
-      (totalMovimentos === 1 ? ' movimentação' : ' movimentações');
+      (totalMovimentos === 1 ? ' lançamento' : ' lançamentos');
     if (fonteLocal) fonteLocal.textContent = temDado
-      ? 'Pronta no navegador'
-      : 'Aguardando dados';
+      ? 'Local'
+      : 'Sem dados';
     const semDados = document.getElementById('uglezSemDados');
-    const leitura = document.getElementById('uglezLeitura');
     const campo = document.getElementById('aiQuestion');
     const botao = document.getElementById('btnAiAsk');
 
@@ -281,9 +280,6 @@
       ? 'Pergunte sobre o mês que você está vendo…'
       : 'Sem lançamentos neste mês — as respostas vão ser genéricas.';
     void botao;
-
-    if (leitura) leitura.hidden = !temDado;
-    if (temDado) renderInsights();
 
     const alvo = document.getElementById('uglezMode');
     if (alvo) {

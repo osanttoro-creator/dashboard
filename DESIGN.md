@@ -93,7 +93,7 @@ UGLEZ habita esse mesmo mundo como matéria de dados viva: uma formação abstra
 - Ouro raro para ação, seleção e identidade; azul-real reservado à inteligência UGLEZ.
 - Tipografia editorial nos títulos, tipografia técnica e tabular na operação.
 - Divisórias finas, vidro moderado e profundidade ambiental, nunca ornamental.
-- Densidade responsiva que preserva contexto e ação no primeiro viewport.
+- Câmara UGLEZ integralmente contida em uma tela, sem rolagem da página.
 
 ## Colors
 
@@ -137,7 +137,7 @@ A paleta alterna um mundo claro de areia com um mundo escuro de petróleo; a câ
 
 ### Hierarchy
 
-- **Display** (590, `clamp(42px, 5vw, 78px)`, 0.92): assinatura UGLEZ; no celular reduz para `clamp(36px, 12vw, 52px)`.
+- **Display** (590, `clamp(42px, 5vw, 78px)`, 0.92): assinatura UGLEZ; no celular reduz para `clamp(28px, 8vw, 38px)` e chega a 27px em telas de pouca altura.
 - **Headline** (500, `clamp(26px, 2.8vw, 34px)`, 1.18): títulos editoriais de página.
 - **Title** (630, 15px, compacta): cabeçalhos operacionais como “Conversa financeira”.
 - **Body** (400, 14px, 1.5): explicações e conteúdo; textos auxiliares extensos usam até 1.65.
@@ -151,9 +151,11 @@ A paleta alterna um mundo claro de areia com um mundo escuro de petróleo; a câ
 
 ## Layout
 
-O aplicativo usa uma faixa superior de destinos em telas a partir de 821px e uma ilha de navegação inferior com cinco destinos no celular. O conteúdo desktop fica centralizado até 1440px; a câmara UGLEZ pode avançar até 1920px e organiza presença visual e console em duas colunas assimétricas, com mínimos de 370px e 500px.
+O aplicativo usa uma faixa superior de destinos em telas a partir de 821px e uma ilha de navegação inferior com cinco destinos no celular. O conteúdo desktop fica centralizado até 1440px; a rota UGLEZ pode avançar até 1920px e ocupa exatamente `100dvh`, sem rolagem da página nem seção posterior. A câmara usa toda a altura restante após os controles globais.
 
-A 1120px, a câmara vira uma pilha: formação primeiro, console depois. A 700px, o compositor sobe antes do histórico para manter a pergunta no primeiro viewport; métricas passam de três colunas para linhas compactas. A 430px, paddings e altura do campo reduzem sem remover estado, sugestões ou ação.
+Desktop e tablet mantêm presença visual e console lado a lado: a grade parte de mínimos de 300px e 440px e, abaixo de 1120px, comprime para 250px e 410px. Até 1120px, as três métricas compactas viram linhas dentro da presença. A 820px, a presença se torna uma faixa de 132px sobre o console, as métricas voltam a três colunas e espaço/período permanecem em uma única linha. A faixa reduz para 124px abaixo de 430px e para 112px quando a altura disponível não passa de 700px.
+
+No celular, o console ordena cabeçalho, compositor e corpo. Estado, Mês/Base/Leitura, sugestões, campo e ação permanecem na mesma tela; apenas histórico e respostas extensas rolam dentro de `.uglez-console-corpo`, com overscroll contido e barra visualmente oculta.
 
 O ritmo combina intervalos de 4 e 8px dentro de controles, 14px em campos e 18–24px entre blocos; as áreas de toque crescem para pelo menos 40–44px onde não há hover.
 
@@ -173,7 +175,7 @@ A profundidade é híbrida: tonalidade e transparência organizam três materiai
 
 ## Shapes
 
-Campos e botões usam cantos firmes e pequenos (4px); cartões comuns avançam por 6–8px; contexto interno do UGLEZ usa 12–16px; navegação e estado usam cápsulas completas. A câmara é uma exceção de grande escala com canto generoso (30px, 22px abaixo de 700px e 19px abaixo de 430px). Bordas de 1px, translúcidas e frias definem os planos sem criar molduras pesadas.
+Campos e botões usam cantos firmes e pequenos (4px); cartões comuns avançam por 6–8px; contexto interno do UGLEZ usa 12–16px; navegação e estado usam cápsulas completas. A câmara é uma exceção de grande escala com canto generoso (30px no desktop/tablet, 18px até 820px e 16px abaixo de 430px). Bordas de 1px, translúcidas e frias definem os planos sem criar molduras pesadas.
 
 Formas circulares ficam reservadas a ícones, pontos de estado, medalhão e partículas. A formação UGLEZ é uma esfera erodida, não um avatar figurativo.
 
@@ -185,7 +187,7 @@ Os componentes são precisos e contidos: estados mudam por cor, borda, brilho e 
 
 - **Shape:** cantos firmes (4px), peso 560 e padding de 8px por 14px.
 - **Primary:** ouro do medalhão com tinta de oásis; usado para ações financeiras principais.
-- **UGLEZ:** azul de ação próprio com texto branco; na câmara ocupa no mínimo 104px no desktop e vira uma linha de pelo menos 42–44px no celular.
+- **UGLEZ:** azul de ação próprio com texto branco; na câmara ocupa no mínimo 104px no desktop e 76–82px de largura no celular, acompanhando o campo com 54px de altura ou 48px em telas baixas.
 - **Hover / Focus:** brilho muda de forma breve; o ativo comprime para 97%; foco permanece visível e o movimento é retirado em preferência reduzida.
 - **Outline / Ghost:** fundo transparente; outline mantém borda fria, ghost ganha apenas um véu tonal no hover.
 
@@ -206,7 +208,7 @@ Os componentes são precisos e contidos: estados mudam por cor, borda, brilho e 
 
 - **Style:** campo escuro translúcido, borda fria de 1px, canto de 4px e texto IBM Plex Sans.
 - **Focus:** borda azul-real e halo de 3px com baixa opacidade.
-- **Responsive:** prompt de 82px no desktop, 68px abaixo de 700px e 62px abaixo de 430px; fonte sobe para 16px no celular para evitar zoom do Safari.
+- **Responsive:** prompt de 82px no desktop, 68px abaixo de 1120px, 54px até 820px e 48px em telas móveis com até 700px de altura; fonte sobe para 16px no celular para evitar zoom do Safari.
 
 ### Navigation
 
@@ -215,7 +217,7 @@ Os componentes são precisos e contidos: estados mudam por cor, borda, brilho e 
 
 ### UGLEZ Chamber
 
-A assinatura é uma prancha escura dividida entre esfera de partículas e console. A esfera responde aos mesmos estados escritos — repouso, foco, recebendo, pensando, respondendo, sucesso e erro — e preserva um fallback 2D. No celular, o compositor precede o histórico; com movimento reduzido, a interação por ponteiro sai sem remover o feedback textual.
+A assinatura é uma prancha escura, sem conteúdo posterior, que divide a única tela entre esfera de partículas e console. Desktop e tablet mantêm os dois lados em paralelo; no celular, a esfera vira uma faixa compacta e o console ordena cabeçalho, compositor e corpo rolável internamente. As métricas são sempre Mês, Base e Leitura. A esfera responde aos mesmos estados escritos — repouso, foco, recebendo, pensando, respondendo, sucesso e erro — e preserva um fallback 2D; com movimento reduzido, a interação por ponteiro sai sem remover o feedback textual.
 
 ## Do's and Don'ts
 
@@ -225,7 +227,8 @@ A assinatura é uma prancha escura dividida entre esfera de partículas e consol
 - **Do** preserve o azul-real para a matéria e os estados do UGLEZ.
 - **Do** mantenha estado textual acessível junto de qualquer mudança visual da esfera.
 - **Do** priorize legibilidade de números com superfícies mais sólidas e algarismos tabulares.
-- **Do** preserve o compositor no primeiro viewport móvel e os alvos de toque de 40–44px.
+- **Do** preserve toda a tarefa UGLEZ em `100dvh`, com controles essenciais na mesma tela e rolagem restrita ao corpo da conversa.
+- **Do** preserve os alvos de toque de 40–44px nos controles globais móveis.
 
 ### Don't:
 
@@ -233,4 +236,5 @@ A assinatura é uma prancha escura dividida entre esfera de partículas e consol
 - **Don't** substitua petróleo, areia e ouro por uma identidade roxa ou por novos acentos decorativos.
 - **Don't** aplique vidro intenso sobre números ou respostas que precisem de leitura precisa.
 - **Don't** dependa apenas da animação para comunicar recebimento, pensamento, sucesso ou erro.
+- **Don't** adicione uma seção inferior ou permita que histórico e respostas aumentem a altura da página UGLEZ.
 - **Don't** remova logo, navegação global, safe areas ou alternativas de movimento reduzido ao estender a câmara.

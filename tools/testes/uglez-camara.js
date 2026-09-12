@@ -3,7 +3,8 @@
    -------------------------------------------------------------
    Mantém a peça visual ligada ao produto: os dados e os estados
    precisam existir em texto, WebGL precisa ter fallback e o layout
-   precisa continuar explícito para desktop e celular.
+   precisa continuar explícito para desktop e celular, sempre dentro
+   de uma única tela e sem uma segunda seção abaixo da câmara.
    ============================================================= */
 'use strict';
 
@@ -41,8 +42,17 @@ if (!/prefers-reduced-motion:\s*reduce/.test(erosao)) falhas.push('WebGL ignora 
 if (!/body\[data-page="uglez"\]\s+\.page-head\s*\{\s*display:\s*none/.test(css)) {
   falhas.push('câmara não assume o primeiro plano na rota UGLEZ');
 }
-if (!/@media\s*\(max-width:\s*700px\)[\s\S]*?\.uglez-stage\s*\{[^}]*border-radius/.test(css)) {
+if (!/body\[data-page="uglez"\]\s*\{[^}]*height:\s*100dvh[^}]*overflow:\s*hidden/.test(css)) {
+  falhas.push('rota UGLEZ não bloqueia a rolagem da página');
+}
+if (!/\.uglez-page\s*\{[^}]*height:\s*100%[^}]*overflow:\s*hidden/.test(css)) {
+  falhas.push('câmara UGLEZ não ocupa somente a área disponível');
+}
+if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-stage\s*\{[^}]*grid-template-rows:\s*132px\s+minmax\(0,\s*1fr\)/.test(css)) {
   falhas.push('layout móvel da câmara não está declarado');
+}
+if (/id=["']uglez(?:Leitura|Insights)["']/.test(html)) {
+  falhas.push('uma seção de sinais ainda existe abaixo da câmara');
 }
 if (/(?:purple|violet|magenta|#8b5cf6|#7c3aed|#9333ea)/i.test(
   css.slice(css.indexOf('UGLEZ — câmara de análise'), css.indexOf('IDENTIFICAÇÃO DOS CONTROLES'))
@@ -56,4 +66,4 @@ if (falhas.length) {
   process.exit(1);
 }
 
-console.log('OK — UGLEZ mantém estados acessíveis, fallback e layout responsivo.');
+console.log('OK — UGLEZ mantém estados, fallback e experiência responsiva em tela única.');

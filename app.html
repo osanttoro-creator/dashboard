@@ -789,16 +789,16 @@
 
             <dl class="uglez-metricas" aria-label="Contexto da análise">
               <div>
-                <dt>Mês em foco</dt>
+                <dt>Mês</dt>
                 <dd id="uglezMesOrbita">—</dd>
               </div>
               <div>
-                <dt>Base disponível</dt>
-                <dd id="uglezMovimentos">0 movimentações</dd>
+                <dt>Base</dt>
+                <dd id="uglezMovimentos">0 lançamentos</dd>
               </div>
               <div>
-                <dt>Leitura local</dt>
-                <dd id="uglezFonteLocal">Pronta no navegador</dd>
+                <dt>Leitura</dt>
+                <dd id="uglezFonteLocal">Local</dd>
               </div>
             </dl>
 
@@ -817,15 +817,14 @@
 
           <div class="uglez-console-corpo">
             <div class="uglez-vazio" id="uglezSemDados" hidden>
-              <p class="empty-title">Ainda não há movimentação em <span id="uglezMesVazio"></span></p>
+              <p class="empty-title">Sem dados em <span id="uglezMesVazio"></span></p>
               <p class="empty-sub">
-                O UGLEZ lê os seus lançamentos. Sem dados no mês exibido, a análise
-                financeira seria genérica — registre uma movimentação ou consulte outro mês.
+                Adicione uma movimentação para receber uma análise financeira real.
               </p>
               <div class="uglez-vazio-acoes">
-                <button class="btn btn-primary btn-sm" data-quick="expense">Registrar uma despesa</button>
-                <button class="btn btn-outline btn-sm" data-quick="income">Registrar uma receita</button>
-                <button class="btn btn-ghost btn-sm" id="btnUglezOutroMes">Ver outro mês</button>
+                <button class="btn btn-primary btn-sm" data-quick="expense">Despesa</button>
+                <button class="btn btn-outline btn-sm" data-quick="income">Receita</button>
+                <button class="btn btn-ghost btn-sm" id="btnUglezOutroMes">Mês anterior</button>
               </div>
             </div>
 
@@ -841,7 +840,7 @@
 
           <div class="uglez-compositor">
             <div class="uglez-sugestoes">
-              <span class="uglez-sugestoes-titulo">Perguntas que o UGLEZ pode responder agora</span>
+              <span class="uglez-sugestoes-titulo">Sugestões para agora</span>
               <div class="uglez-chips" id="uglezChipsFull" aria-label="Perguntas sugeridas"></div>
             </div>
 
@@ -856,29 +855,13 @@
               <p class="uglez-rodape">
                 <span id="uglezMode"></span>
                 <span class="dot-sep">·</span>
-                <span>Orientação financeira, não consultoria.</span>
+                <span class="uglez-orientacao">Orientação financeira, não consultoria.</span>
                 <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
               </p>
             </div>
           </div>
         </section>
       </div>
-
-      <!-- ============================================================
-           LEITURA DO MÊS — cálculo local, e é dito em voz alta
-           Aparece SÓ quando há movimentação. Os números daqui saem
-           do Calc, neste navegador, e nenhum dado sai daqui para
-           produzi-los — o selo existe porque uma conta verificável
-           e uma frase de modelo não valem a mesma coisa, e a tela
-           precisa dizer qual é qual.
-           ============================================================ -->
-      <section class="uglez-leitura" id="uglezLeitura" hidden>
-        <h3 class="uglez-leitura-t">
-          Sinais encontrados nos seus dados
-          <span class="uglez-selo uglez-selo-local">Cálculo local</span>
-        </h3>
-        <div class="grid grid-2" id="uglezInsights"></div>
-      </section>
 
     </section>
 

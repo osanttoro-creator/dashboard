@@ -2946,20 +2946,27 @@ canvas.uglez-particulas {
    ============================================================= */
 
 body[data-page="uglez"] .main {
-  max-width: 1920px;
+  width: 100%; max-width: 1920px; height: 100dvh; min-height: 0;
+  margin-inline: auto; overflow: hidden;
 }
+body[data-page="uglez"] { height: 100dvh; overflow: hidden; }
 body[data-page="uglez"] .page-head { display: none; }
-body[data-page="uglez"] .topbar { margin-bottom: 14px; }
+body[data-page="uglez"] .topbar { flex: none; margin-bottom: 10px; }
+body[data-page="uglez"] .content {
+  width: 100%; max-width: none; min-height: 0;
+  padding-bottom: 10px; overflow: hidden; align-content: stretch;
+}
+body[data-page="uglez"] .app-foot { display: none; }
 /* Na própria câmara, as ações de lançamento já aparecem quando
    faltam dados; o FAB sobrepunha o diálogo no celular. */
 body[data-page="uglez"] .fab-wrap { display: none; }
 
-.uglez-page { gap: 26px; }
+.uglez-page { height: 100%; min-height: 0; gap: 0; overflow: hidden; }
 .uglez-stage {
   position: relative; isolation: isolate; overflow: hidden;
-  min-height: clamp(650px, 74vh, 820px);
+  height: 100%; min-height: 0;
   display: grid;
-  grid-template-columns: minmax(370px, .92fr) minmax(500px, 1.08fr);
+  grid-template-columns: minmax(300px, .82fr) minmax(440px, 1.18fr);
   border: 1px solid rgba(168, 187, 209, .16);
   border-radius: 30px;
   color: #f4f6f8;
@@ -2978,7 +2985,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 
 /* ---------- presença / campo visual ---------- */
 .uglez-presenca {
-  position: relative; z-index: 1; min-width: 0; min-height: 100%; overflow: hidden;
+  position: relative; z-index: 1; min-width: 0; min-height: 0; overflow: hidden;
   border-right: 1px solid rgba(168, 187, 209, .13);
   background:
     radial-gradient(circle at 54% 43%, rgba(50, 85, 232, .17), transparent 38%),
@@ -2997,7 +3004,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
     linear-gradient(180deg, rgba(5, 13, 19, .04), rgba(5, 13, 19, .22) 56%, #050d13 100%);
 }
 .uglez-presenca-conteudo {
-  position: relative; z-index: 2; min-height: 100%;
+  position: relative; z-index: 2; height: 100%; min-height: 0;
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: clamp(26px, 3vw, 42px);
   pointer-events: none;
@@ -3039,8 +3046,8 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 
 /* ---------- console financeiro ---------- */
 .uglez-console {
-  position: relative; z-index: 1; min-width: 0; min-height: 100%;
-  display: grid; grid-template-rows: auto minmax(180px, 1fr) auto;
+  position: relative; z-index: 1; min-width: 0; min-height: 0; overflow: hidden;
+  display: grid; grid-template-rows: auto minmax(100px, 1fr) auto;
   background: rgba(5, 13, 19, .82);
   -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
 }
@@ -3073,8 +3080,9 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 .uglez-console-corpo {
   min-height: 0; overflow: auto; padding: 24px;
   display: flex; flex-direction: column; gap: 12px;
-  scrollbar-width: thin; scrollbar-color: rgba(139, 161, 180, .22) transparent;
+  overscroll-behavior: contain; scrollbar-width: none;
 }
+.uglez-console-corpo::-webkit-scrollbar { display: none; }
 .uglez-vazio { margin: auto 0; padding: 20px 0; text-align: left; }
 .uglez-vazio .empty-title { color: #f3f5f7; }
 .uglez-vazio .empty-sub {
@@ -3159,86 +3167,154 @@ body[data-page="uglez"] .fab-wrap { display: none; }
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   margin: 10px 0 0; color: rgba(196, 208, 217, .64); font-size: 11px;
 }
+.uglez-rodape #uglezMode {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .uglez-rodape .btn { margin-left: auto; }
 
-/* ---------- sinais locais ---------- */
-.uglez-leitura { margin-top: 2px; }
-.uglez-leitura-t {
-  display: flex; align-items: center; gap: 10px;
-  margin: 0 0 13px; font-size: 15px; font-weight: 620;
-}
-.uglez-leitura[hidden] { display: none; }
-.uglez-page #uglezInsights { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.uglez-page .insight-card { border-left-width: 1px; }
-.uglez-page .insight-card.is-atencao { border-top-color: var(--warning); }
-.uglez-page .insight-card.is-risco { border-top-color: var(--critical); }
-.uglez-page .insight-card.is-oportunidade { border-top-color: var(--good); }
-.uglez-page .insight-card.is-previsao { border-top-color: var(--accent); }
-
 @media (max-width: 1120px) {
-  body[data-page="uglez"] .main { max-width: none; }
-  .uglez-stage { grid-template-columns: 1fr; min-height: 0; }
-  .uglez-presenca {
-    min-height: 430px; border-right: 0;
-    border-bottom: 1px solid rgba(168, 187, 209, .13);
-  }
-  .uglez-campo { inset: -18% 12% 4%; }
-  .uglez-identidade { margin-bottom: auto; }
-  .uglez-console { min-height: 590px; }
-}
-
-@media (max-width: 700px) {
-  body[data-page="uglez"] .topbar { margin-bottom: 10px; }
-  .uglez-page { gap: 20px; }
-  .uglez-stage { border-radius: 22px; }
-  .uglez-presenca { min-height: 280px; }
-  .uglez-campo { inset: -28% -8% -4%; }
-  .uglez-presenca-conteudo { padding: 20px 21px 17px; }
-  .uglez-identidade h2 { font-size: clamp(36px, 12vw, 52px); }
-  .uglez-identidade p { margin-top: 10px; font-size: 13px; }
+  .uglez-stage { grid-template-columns: minmax(250px, .72fr) minmax(410px, 1.28fr); }
+  .uglez-presenca-conteudo { padding: 24px; }
+  .uglez-identidade h2 { font-size: clamp(38px, 5vw, 60px); }
   .uglez-metricas { grid-template-columns: 1fr; gap: 0; }
   .uglez-metricas > div {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
-    padding: 9px 12px; border-bottom: 1px solid rgba(182, 200, 216, .09);
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 9px 11px; border-bottom: 1px solid rgba(182, 200, 216, .09);
   }
   .uglez-metricas > div:last-child { border-bottom: 0; }
   .uglez-metricas dt { margin: 0; }
   .uglez-metricas dd { text-align: right; }
   .uglez-interacao { display: none; }
-  /* No celular, perguntar vem antes do histórico: a ação principal
-     aparece no primeiro viewport e as respostas continuam logo
-     abaixo, na ordem natural de leitura. */
-  .uglez-console { min-height: 0; display: flex; flex-direction: column; }
-  .uglez-console-topo { order: 0; flex: none; }
-  .uglez-compositor { order: 1; flex: none; }
-  .uglez-console-corpo { order: 2; flex: 1; min-height: 320px; }
-  .uglez-console-topo { align-items: flex-start; padding: 18px; }
-  .uglez-estado { min-height: 28px; padding: 5px 9px; }
-  .uglez-console-corpo { padding: 18px; }
-  .uglez-compositor { padding: 14px 18px 17px; }
-  .uglez-envio { padding-top: 12px; }
-  .uglez-page .ai-ask { grid-template-columns: 1fr; }
-  .uglez-page .ai-ask textarea { min-height: 68px; height: 68px; }
-  .uglez-page .btn-ai { min-height: 44px; }
-  .uglez-rodape .btn { margin-left: 0; }
+  .uglez-console-topo { padding: 17px 19px; }
+  .uglez-console-corpo { padding: 18px 19px; }
+  .uglez-compositor { padding: 15px 19px 17px; }
+  .uglez-page .ai-ask textarea { min-height: 68px; height: 68px; resize: none; }
+}
+
+@media (max-width: 820px) {
+  body[data-page="uglez"] .main {
+    height: 100dvh; padding: max(8px, env(safe-area-inset-top)) 10px
+      calc(86px + env(safe-area-inset-bottom, 0px));
+  }
+  body[data-page="uglez"] .content { padding: 0; }
+  body[data-page="uglez"] .topbar {
+    position: relative; top: 0; z-index: 50; min-height: 40px;
+    flex-wrap: nowrap; gap: 6px; margin-bottom: 6px; padding-top: 0;
+  }
+  body[data-page="uglez"] .topbar-gap,
+  body[data-page="uglez"] #btnSearch,
+  body[data-page="uglez"] #btnNotif,
+  body[data-page="uglez"] #btnSettings,
+  body[data-page="uglez"] #btnProfiles,
+  body[data-page="uglez"] .pill-espaco-ico,
+  body[data-page="uglez"] .pill-hoje { display: none; }
+  body[data-page="uglez"] .pill-espaco {
+    flex: 0 0 104px; min-width: 0; min-height: 40px; padding: 4px 5px;
+  }
+  body[data-page="uglez"] .pill-espaco .pill-select-wrap,
+  body[data-page="uglez"] .pill-espaco .pill-select-wrap select { width: 100%; min-width: 0; }
+  body[data-page="uglez"] .pill-period {
+    flex: 1 1 auto; min-width: 0; min-height: 40px; padding: 4px;
+  }
+  body[data-page="uglez"] .pill-period .pill-ico {
+    width: 30px; height: 30px; min-width: 30px; min-height: 30px;
+  }
+  body[data-page="uglez"] .pill-select-month { flex: 1 1 88px; min-width: 0; }
+  body[data-page="uglez"] .pill-select-year { flex: 0 0 64px; min-width: 0; }
+  body[data-page="uglez"] .pill-select-month select,
+  body[data-page="uglez"] .pill-select-year select { width: 100%; min-width: 0; padding-inline: 7px 20px; }
+
+  .uglez-stage {
+    grid-template-columns: 1fr; grid-template-rows: 132px minmax(0, 1fr);
+    border-radius: 18px;
+  }
+  .uglez-presenca {
+    min-height: 0; border-right: 0;
+    border-bottom: 1px solid rgba(168, 187, 209, .13);
+  }
+  .uglez-campo { inset: -95% -2% -75% 34%; }
+  .uglez-campo.is-fallback { inset: -78% 0 -60% 38%; }
+  .uglez-presenca-sombra {
+    background:
+      linear-gradient(90deg, rgba(5, 13, 19, .18), rgba(5, 13, 19, .64) 78%),
+      linear-gradient(180deg, rgba(5, 13, 19, .02), #050d13 112%);
+  }
+  .uglez-presenca-conteudo { padding: 12px 14px 11px; }
+  .uglez-identidade { margin-bottom: auto; max-width: 58%; }
+  .uglez-identidade h2 { font-size: clamp(28px, 8vw, 38px); letter-spacing: .18em; }
+  .uglez-identidade p { display: none; }
+  .uglez-metricas { grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 12px; }
+  .uglez-metricas > div {
+    display: block; padding: 6px 8px; border-right: 1px solid rgba(182, 200, 216, .09);
+    border-bottom: 0;
+  }
+  .uglez-metricas > div:last-child { border-right: 0; }
+  .uglez-metricas dt { margin: 0 0 2px; font-size: 10.5px; }
+  .uglez-metricas dd { font-size: 11px; text-align: left; }
+  .uglez-interacao { display: none; }
+
+  .uglez-console {
+    grid-template-areas: "head" "compose" "body";
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+  .uglez-console-topo { grid-area: head; align-items: center; padding: 9px 12px; gap: 8px; }
+  .uglez-console-topo h3 { font-size: 13.5px; }
+  .uglez-console-topo p { margin-top: 2px; font-size: 11px; }
+  .uglez-estado { min-height: 26px; max-width: 45%; padding: 4px 8px; font-size: 11px; }
+  .uglez-console-corpo { grid-area: body; padding: 10px 12px; gap: 8px; }
+  .uglez-compositor { grid-area: compose; padding: 9px 12px 10px; }
+  .uglez-sugestoes { gap: 6px; }
+  .uglez-sugestoes-titulo { font-size: 11px; }
+  .uglez-chips { gap: 5px; flex-wrap: nowrap; overflow: hidden; }
+  .uglez-page .ai-chip {
+    flex: 0 1 auto; min-width: 0; min-height: 28px; padding: 4px 8px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px;
+  }
+  .uglez-envio { padding-top: 8px; }
+  .uglez-cota { margin-bottom: 6px; font-size: 11px; }
+  .uglez-page .ai-ask { grid-template-columns: minmax(0, 1fr) 82px; gap: 7px; }
+  .uglez-page .ai-ask textarea {
+    min-height: 54px; height: 54px; padding: 8px 10px; resize: none; line-height: 1.35;
+    scrollbar-width: none;
+  }
+  .uglez-page .ai-ask textarea::-webkit-scrollbar { display: none; }
+  .uglez-page .btn-ai { min-width: 0; min-height: 54px; padding-inline: 10px; }
+  .uglez-rodape { flex-wrap: nowrap; gap: 6px; margin-top: 6px; font-size: 11px; }
+  .uglez-rodape .uglez-orientacao,
+  .uglez-rodape .dot-sep { display: none; }
+  .uglez-rodape .btn { flex: none; min-height: 28px; margin-left: auto; padding: 4px 8px; font-size: 11px; }
+  .uglez-vazio { margin: auto 0; padding: 4px 0; }
+  .uglez-vazio .empty-title { margin-bottom: 4px; font-size: 13px; }
+  .uglez-vazio .empty-sub { margin: 0; font-size: 12px; line-height: 1.42; }
+  .uglez-vazio-acoes {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px; margin-top: 9px;
+  }
+  .uglez-vazio-acoes .btn { min-width: 0; min-height: 36px; padding: 5px 6px; font-size: 11.5px; }
 }
 
 @media (max-width: 430px) {
-  .uglez-stage { margin-inline: -3px; border-radius: 19px; }
-  .uglez-presenca { min-height: 260px; }
-  .uglez-presenca-conteudo { padding: 17px 18px 15px; }
-  .uglez-identidade p { max-width: 28ch; line-height: 1.5; }
-  .uglez-metricas > div { padding: 7px 10px; }
-  .uglez-console-topo { flex-direction: column; gap: 8px; padding: 15px 17px; }
-  .uglez-estado { align-self: flex-start; }
-  .uglez-compositor { padding: 13px 17px 15px; }
-  .uglez-sugestoes { gap: 7px; }
-  .uglez-page .ai-ask { gap: 8px; }
-  .uglez-page .ai-ask textarea { min-height: 62px; height: 62px; padding: 10px 12px; }
-  .uglez-page .btn-ai { min-height: 42px; }
-  .uglez-rodape { margin-top: 8px; }
-  .uglez-vazio-acoes .btn { width: 100%; }
-  .uglez-rodape .dot-sep { display: none; }
+  body[data-page="uglez"] .main { padding-inline: 8px; }
+  .uglez-stage { grid-template-rows: 124px minmax(0, 1fr); border-radius: 16px; }
+  .uglez-presenca-conteudo { padding: 10px 11px 9px; }
+  .uglez-identidade h2 { font-size: 28px; }
+  .uglez-metricas > div { padding: 5px 6px; }
+  .uglez-console-topo { padding-inline: 10px; }
+  .uglez-console-corpo { padding-inline: 10px; }
+  .uglez-compositor { padding-inline: 10px; }
+  .uglez-page .ai-ask { grid-template-columns: minmax(0, 1fr) 76px; }
+  .uglez-page .btn-ai { padding-inline: 7px; font-size: 11.5px; }
+}
+
+@media (max-width: 820px) and (max-height: 700px) {
+  .uglez-stage { grid-template-rows: 112px minmax(0, 1fr); }
+  .uglez-identidade h2 { font-size: 27px; }
+  .uglez-metricas > div { padding-block: 4px; }
+  .uglez-console-topo { padding-block: 7px; }
+  .uglez-compositor { padding-block: 7px 8px; }
+  .uglez-page .ai-ask textarea,
+  .uglez-page .btn-ai { min-height: 48px; height: 48px; }
+  .uglez-rodape { margin-top: 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
