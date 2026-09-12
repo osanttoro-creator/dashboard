@@ -251,7 +251,7 @@
     ].filter(Boolean));
 
     UI.openModal({
-      title: 'Levar seus dados para a conta',
+      title: 'Copiar dados deste navegador',
       wide: true,
       body: corpo,
       buttons: [
@@ -470,8 +470,8 @@
        responder "na dúvida" assim que houver certeza. */
     Mig.decisao().then((d) => { decisaoCache = d; })
       .catch(() => { /* segue na dúvida, que é o lado seguro */ });
-
-    setTimeout(() => { Mig.oferecer().catch((e) => console.error('Migração:', e)); }, 1200);
+    /* A migração continua disponível em Configurações > Dados,
+       mas não interrompe mais a entrada com uma mensagem automática. */
   };
 
   /* ---------------- reabrir na mão ----------------

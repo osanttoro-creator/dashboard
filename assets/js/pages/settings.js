@@ -19,6 +19,7 @@
     dados();
     conta();
     plano();
+    navegacao();
   };
 
   /** Uma linha de configuração: rótulo, explicação e o controle. */
@@ -217,6 +218,30 @@
       'O que é enviado',
       'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
       el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
+    ));
+  }
+
+  /* Planos e ajuda saíram do menu genérico "Mais". Configurações é
+     a casa permanente destes recursos, inclusive para quem ainda
+     não entrou numa conta. */
+  function navegacao() {
+    const box = document.getElementById('setNavigation');
+    if (!box) return;
+    U.clear(box);
+
+    box.appendChild(linha(
+      'Planos',
+      'Consulte recursos, limites e opções de assinatura.',
+      el('button', {
+        class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
+        onclick: () => App.goTo('precos')
+      })
+    ));
+
+    box.appendChild(linha(
+      'Ajuda e suporte',
+      'Abra a central de ajuda do OAZE.',
+      el('a', { class: 'btn btn-outline btn-sm', href: '/suporte', text: 'Abrir ajuda' })
     ));
   }
 

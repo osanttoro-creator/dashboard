@@ -112,6 +112,7 @@
     U.$$('.page').forEach((s) => s.classList.toggle('is-active', s.dataset.page === page));
     document.getElementById('pageTitle').textContent = PAGES[page].title;
     App.render();
+    if (global.UglezFlutuante && UglezFlutuante.aoNavegar) UglezFlutuante.aoNavegar(page);
     global.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -367,21 +368,6 @@
       UI.toast('Perfil alterado.');
     });
     document.getElementById('btnProfiles').addEventListener('click', () => Forms.openProfiles());
-
-    /* A conta é um controle próprio agora, e leva para onde a conta
-       vive: Configurações. Antes o avatar era decoração dentro do
-       seletor de espaços, e clicar nele não fazia nada — um alvo do
-       tamanho de um botão que não era botão. */
-    document.getElementById('btnConta').addEventListener('click', () => {
-      App.goTo('settings');
-      /* O foco vai para o bloco da conta. Sem isso, quem clicou no
-         avatar cai no topo de uma página longa e precisa procurar
-         a informação que pediu. */
-      setTimeout(() => {
-        const alvo = document.getElementById('setConta');
-        if (alvo && alvo.scrollIntoView) alvo.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      }, 60);
-    });
 
     // backup
     document.getElementById('btnExport').addEventListener('click', () => {

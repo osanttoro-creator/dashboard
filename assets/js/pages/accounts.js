@@ -127,6 +127,7 @@
     if (!App.invoiceRef) App.invoiceRef = Calc.currentInvoiceRef(card, App.ym);
 
     deckBox.appendChild(Cards.deck(prof.cards, App.ym, {
+      stacked: true,
       focusedId: App.cardFocusId,
       refFor: (c) => (c.id === App.cardFocusId ? App.invoiceRef : Calc.currentInvoiceRef(c, App.ym)),
       onClick: (c) => {
@@ -136,7 +137,7 @@
       }
     }));
     if (prof.cards.length > 1) {
-      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Clique em um cartão para ver a fatura dele abaixo.' }));
+      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Passe pelo baralho para ver todos; escolha um cartão para abrir a fatura.' }));
     }
 
     detail.appendChild(Cards.invoicePanel(card, App.invoiceRef, {
@@ -151,4 +152,3 @@
 
   global.Acc = Acc;
 })(window);
-

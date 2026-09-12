@@ -46,10 +46,37 @@
   }
 
   /* ============================================================
-     2 · NOTIFICAÇÕES — derivadas, nunca armazenadas
+     2 · NOTIFICAÇÕES
      ------------------------------------------------------------
-     Some sozinho quando o motivo some. Nada de "marcar como lida".
+     O motivo continua derivado dos dados. A leitura, por outro
+     lado, vale durante a sessão: ao abrir o painel a pessoa já viu
+     o aviso, então o contador não deve reaparecer a cada render.
      ============================================================ */
+
+  const CHAVE_LIDAS = 'oaze:notificacoes-lidas';
+  let lidasMemoria = new Set();
+
+  function lidasDaSessao() {
+    try {
+      const salvo = JSON.parse(sessionStorage.getItem(CHAVE_LIDAS) || '{}');
+      if (salvo.dia !== U.todayISO() || !Array.isArray(salvo.chaves)) return lidasMemoria;
+      return new Set(salvo.chaves);
+    } catch (e) { return lidasMemoria; }
+  }
+
+  function guardarLidas(chaves) {
+    lidasMemoria = new Set(chaves);
+    try {
+      sessionStorage.setItem(CHAVE_LIDAS, JSON.stringify({
+        dia: U.todayISO(), chaves: Array.from(lidasMemoria)
+      }));
+    } catch (e) { /* sessão privada: a memória desta aba já resolve */ }
+  }
+
+  function notificacoesNovas() {
+    const lidas = lidasDaSessao();
+    return Shell.notificacoes().filter((n) => !lidas.has(n.chave));
+  }
 
   const dias = (a, b) => Math.round((Date.parse(b + 'T00:00:00') - Date.parse(a + 'T00:00:00')) / 86400000);
 
@@ -130,7 +157,7 @@
     const n = document.getElementById('notifCount');
     if (!n) return;
     let qtd = 0;
-    try { qtd = Shell.notificacoes().length; } catch (e) { console.error('Notificações:', e); }
+    try { qtd = notificacoesNovas().length; } catch (e) { console.error('Notificações:', e); }
     n.hidden = qtd === 0;
     n.textContent = String(qtd);
     const b = document.getElementById('btnNotif');
@@ -139,7 +166,7 @@
 
   function pintaNotificacoes() {
     const lista = U.clear(document.getElementById('notifList'));
-    const itens = Shell.notificacoes();
+    const itens = notificacoesNovas();
     if (!itens.length) {
       lista.appendChild(el('p', {
         class: 'empty-note', style: { padding: '10px 12px 16px' },
@@ -159,6 +186,14 @@
         ])
       ]));
     });
+
+    /* Abrir é ler: conserva os itens nesta abertura para que possam
+       ser consultados, mas remove imediatamente o contador e evita
+       que eles voltem ao reabrir o painel na mesma sessão. */
+    const lidas = lidasDaSessao();
+    itens.forEach((n) => lidas.add(n.chave));
+    guardarLidas(lidas);
+    Shell.renderNotifCount();
   }
 
   /* ============================================================

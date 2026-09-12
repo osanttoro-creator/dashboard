@@ -282,20 +282,24 @@
    * pessoa acabou de pagar e não vê diferença nenhuma.
    */
   F.sincronizar = function () {
-    const pode = temDireito();
-    if (pode && !ligado) {
-      construir();
-      ligado = true;
-      raiz.hidden = false;
-    } else if (!pode && ligado) {
-      /* Downgrade: some, sem drama e sem apagar nada. */
-      F.fechar(false);
-      ligado = false;
-      if (raiz) raiz.hidden = true;
-    } else if (pode && raiz) {
-      raiz.hidden = false;
-    }
+    F.aoNavegar(global.App ? App.page : 'home');
     if (ligado && aberto) F.renderContexto();
+  };
+
+  /* Na Visão geral o launcher substitui o painel largo que ocupava
+     o fluxo da página. Continua fixo como o botão de adição rápida,
+     mas ganha o rótulo e o brilho já próprios do UGLEZ. */
+  F.aoNavegar = function (page) {
+    /* Na Visão geral ele é parte estrutural do painel em todos os
+       planos. Fora dela continua obedecendo ao recurso do plano. */
+    const mostrar = page === 'home' || temDireito();
+    if (mostrar && !raiz) construir();
+    if (!raiz) return;
+    if (!mostrar) F.fechar(false);
+    ligado = mostrar;
+    raiz.hidden = !mostrar;
+    document.body.classList.toggle('tem-uglez-flutuante', mostrar);
+    raiz.classList.toggle('is-destaque', page === 'home');
   };
 
   F.init = function () {
@@ -315,6 +319,7 @@
     if (particulas) { particulas.destruir(); particulas = null; }
     if (particulasPainel) { particulasPainel.destruir(); particulasPainel = null; }
     document.body.classList.remove('uglez-aberto');
+    document.body.classList.remove('tem-uglez-flutuante');
     if (raiz && raiz.parentNode) raiz.parentNode.removeChild(raiz);
     raiz = botao = painel = campo = caixaResposta = enviar = null;
     ligado = false; aberto = false;

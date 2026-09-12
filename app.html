@@ -78,6 +78,10 @@
         <span class="nav-ico" data-ico="calendar"></span>
         <span class="nav-long">Calendário</span><span class="nav-short">Agenda</span>
       </button>
+      <button class="nav-item" data-page="categories">
+        <span class="nav-ico" data-ico="tag"></span>
+        <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+      </button>
 
       <p class="nav-group">Crescer</p>
       <button class="nav-item" data-page="investments">
@@ -90,17 +94,13 @@
       </button>
 
       <p class="nav-group">Sistema</p>
-      <button class="nav-item" data-page="uglez">
-        <span class="nav-ico" data-ico="sparkles"></span>
-        <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
-      </button>
-      <button class="nav-item" data-page="categories">
-        <span class="nav-ico" data-ico="tag"></span>
-        <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-      </button>
       <button class="nav-item" data-page="settings">
         <span class="nav-ico" data-ico="settings"></span>
-        <span class="nav-long">Configurações</span><span class="nav-short">Mais</span>
+        <span class="nav-long">Configurações</span><span class="nav-short">Config.</span>
+      </button>
+      <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+        <span class="nav-ico" data-ico="sparkles"></span>
+        <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
       </button>
     </nav>
 
@@ -165,6 +165,10 @@
           <span class="nav-ico" data-ico="calendar"></span>
           <span class="nav-long">Calendário</span><span class="nav-short">Calendário</span>
         </button>
+        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
+          <span class="nav-ico" data-ico="tag"></span>
+          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
+        </button>
         </div>
       </div>
 
@@ -186,70 +190,29 @@
         </div>
       </div>
 
-        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
-          <span class="nav-ico" data-ico="sparkles"></span>
-          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
-        </button>
-
-      <div class="topnav-group" data-group="mais">
-        <button class="topnav-trigger" id="trg-mais" aria-label="Mais" aria-expanded="false" aria-controls="drop-mais" aria-haspopup="true">
-          <span class="nav-ico" data-ico="ellipsis"></span>
-          <span class="topnav-trigger-txt">Mais</span>
-          <span class="topnav-caret" aria-hidden="true"></span>
-        </button>
-        <div class="topnav-drop n1" id="drop-mais" role="group" aria-labelledby="trg-mais" hidden>
-        <button class="nav-item" data-page="precos" title="Planos" aria-label="Planos">
-          <span class="nav-ico" data-ico="sparkles"></span>
-          <span class="nav-long">Planos</span><span class="nav-short">Planos</span>
-        </button>
-        <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
-          <span class="nav-ico" data-ico="tag"></span>
-          <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-        </button>
         <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
           <span class="nav-ico" data-ico="settings"></span>
           <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
         </button>
-        <!-- Ajuda é uma ROTA DE VERDADE (/suporte), servida pelo
-             .htaccess como página própria. Está aqui como <a> e não
-             como data-page porque não é uma tela do aplicativo: é
-             outro documento, com título e descrição próprios. O
-             brief pede "Ajuda ou suporte, caso exista uma rota
-             real" — existe, então entra; se não existisse, não
-             haveria item nenhum. -->
-        <a class="nav-item" href="/suporte" title="Ajuda e suporte" aria-label="Ajuda e suporte">
-          <span class="nav-ico" data-ico="circle-help"></span>
-          <span class="nav-long">Ajuda</span><span class="nav-short">Ajuda</span>
-        </a>
-        </div>
-      </div>
+
+        <!-- O assistente fecha a fita: é o único destino que mantém
+             apenas o símbolo visual, com nome acessível e tooltip. -->
+        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
+          <span class="nav-ico" data-ico="sparkles"></span>
+          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
       </nav>
 
       <span class="topbar-gap"></span>
 
-      <!-- ══════ TRÊS CONTROLES, TRÊS COISAS DIFERENTES ══════
-           Antes eram dois, e o primeiro misturava duas ideias: o
-           avatar da PESSOA colado ao seletor de ESPAÇO FINANCEIRO,
-           dentro da mesma cápsula e sob o rótulo "Perfil ativo".
-           Ler aquilo como "meu perfil é Pessoal / Empresa" é a
-           leitura óbvia — e é errada: são espaços de dados, não
-           identidades.
-
-           Agora:
-             1. sua CONTA        quem está logado
-             2. o ESPAÇO         de qual conjunto de dados se fala
-             3. o PERÍODO        de qual mês se fala
-
-           Três perguntas distintas, três controles distintos. -->
-
-      <button class="pill pill-btn pill-conta" id="btnConta"
-              aria-label="Sua conta" data-dica="Sua conta">
-        <span class="pill-avatar" id="profileAvatar" aria-hidden="true"></span>
-      </button>
-
+      <!-- Espaço e período são controles do painel. A conta vive em
+           Configurações, onde também estão todos os seus recursos. -->
       <span class="pill pill-espaco">
         <span class="pill-espaco-ico" data-ico="wallet-cards" data-ico-size="15" aria-hidden="true"></span>
-        <select id="profileSelect" aria-label="Espaço financeiro"></select>
+        <span class="pill-context">Espaço</span>
+        <span class="pill-select-wrap">
+          <select id="profileSelect" aria-label="Espaço financeiro"></select>
+        </span>
         <!-- Era o caractere "⚙" digitado como texto: tamanho e
              desenho variavam por sistema operacional, e em alguns
              saía colorido no meio de uma barra monocromática. -->
@@ -261,8 +224,13 @@
 
       <span class="pill pill-period" id="periodPicker">
         <button class="pill-ico" id="btnPrevMonth" aria-label="Mês anterior">‹</button>
-        <select id="monthSelect" aria-label="Mês"></select>
-        <select id="yearSelect" aria-label="Ano"></select>
+        <span class="pill-context">Período</span>
+        <span class="pill-select-wrap pill-select-month">
+          <select id="monthSelect" aria-label="Mês"></select>
+        </span>
+        <span class="pill-select-wrap pill-select-year">
+          <select id="yearSelect" aria-label="Ano"></select>
+        </span>
         <button class="pill-ico" id="btnNextMonth" aria-label="Próximo mês">›</button>
         <button class="pill-hoje" id="btnToday">Mês atual</button>
       </span>
@@ -927,6 +895,10 @@
           <div class="card-head"><h2>UGLEZ</h2></div>
           <div id="setUglez"></div>
         </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Planos e suporte</h2></div>
+        <div id="setNavigation"></div>
       </div>
       <div class="card">
         <div class="card-head"><h2>Dados</h2>

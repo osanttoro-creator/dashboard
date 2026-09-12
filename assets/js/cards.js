@@ -231,15 +231,47 @@
    */
   Cards.deck = function (cards, baseYM, opts) {
     const o = opts || {};
-    const deck = el('div', { class: 'wallet-deck' });
     const list = o.limit ? cards.slice(0, o.limit) : cards;
-    list.forEach((card) => {
-      const ref = o.refFor ? o.refFor(card) : Calc.currentInvoiceRef(card, baseYM);
-      deck.appendChild(Cards.render(card, ref, {
-        focused: o.focusedId === card.id,
-        onClick: o.onClick
-      }));
+    const deck = el('div', {
+      class: 'wallet-deck' + (o.stacked ? ' wallet-deck-stack' : ''),
+      style: o.stacked ? {
+        '--deck-count': String(list.length),
+        '--deck-depth': String(Math.max(0, list.length - 1))
+      } : null
     });
+    let troca = null;
+    let proximoSlot = 1;
+
+    list.forEach((card, index) => {
+      const ref = o.refFor ? o.refFor(card) : Calc.currentInvoiceRef(card, baseYM);
+      const cartao = Cards.render(card, ref, {
+        focused: o.focusedId === card.id,
+        onClick: (escolhido) => {
+          if (!o.stacked) { if (o.onClick) o.onClick(escolhido); return; }
+          if (deck.dataset.focusedId === escolhido.id) return;
+
+          deck.dataset.focusedId = escolhido.id;
+          let slot = 1;
+          deck.querySelectorAll('.wallet-card').forEach((item) => {
+            const ativo = item.dataset.cardId === escolhido.id;
+            item.classList.toggle('is-focused', ativo);
+            item.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+            item.style.setProperty('--deck-slot', String(ativo ? 0 : slot++));
+          });
+
+          clearTimeout(troca);
+          troca = setTimeout(() => { if (o.onClick) o.onClick(escolhido); }, 280);
+        }
+      });
+      if (o.stacked) {
+        cartao.classList.add('is-decked');
+        cartao.dataset.cardId = card.id;
+        cartao.style.setProperty('--deck-i', String(index));
+        cartao.style.setProperty('--deck-slot', String(o.focusedId === card.id ? 0 : proximoSlot++));
+      }
+      deck.appendChild(cartao);
+    });
+    if (o.stacked) deck.dataset.focusedId = o.focusedId || '';
     return deck;
   };
 
