@@ -122,6 +122,27 @@
      Sem rede a resposta não vem, nenhum botão aparece, e o e-mail
      continua ali: a página nunca fica esperando por esta chamada. */
   var provedoresPromessa = null;
+  var GAVETA_PROV = 'oaze.provedores';
+
+  /* O QUE SE SABIA DA ÚLTIMA VEZ
+     ---------------------------------------------------------------
+     /auth/v1/settings leva perto de três segundos para responder. A
+     página fica pronta em meio segundo e passa os outros dois e meio
+     sem o botão -- e quem clicou em "Entrar" já olhou, não viu porta
+     nenhuma e concluiu que não existe.
+
+     A resposta muda no máximo quando alguém mexe no painel do
+     Supabase. Guardá-la e desenhar a tela com ela na visita seguinte
+     é honesto: se a memória estiver velha, a rede corrige em
+     segundos -- e corrigir para MENOS (esconder um botão que saiu)
+     é o caso raro, enquanto esperar é o caso de todo dia. */
+  A.provedoresLembrados = function () {
+    try {
+      var bruto = global.localStorage.getItem(GAVETA_PROV);
+      var p = bruto ? JSON.parse(bruto) : null;
+      return (p && typeof p === 'object') ? p : null;
+    } catch (e) { return null; }
+  };
 
   A.provedores = function () {
     if (provedoresPromessa) return provedoresPromessa;
@@ -130,8 +151,14 @@
     if (!c || !c.url || !chave) return Promise.resolve({});
     provedoresPromessa = fetch(c.url + '/auth/v1/settings', { headers: { apikey: chave } })
       .then(function (r) { return r.ok ? r.json() : {}; })
-      .then(function (j) { return (j && j.external) || {}; })
-      .catch(function () { return {}; });
+      .then(function (j) {
+        var ext = (j && j.external) || {};
+        try { global.localStorage.setItem(GAVETA_PROV, JSON.stringify(ext)); } catch (e) {}
+        return ext;
+      })
+      /* Sem rede, o que se lembra vale mais que nada: o botão abre e
+         o próprio provedor dirá que não dá. Tela sem porta seria pior. */
+      .catch(function () { return A.provedoresLembrados() || {}; });
     return provedoresPromessa;
   };
 

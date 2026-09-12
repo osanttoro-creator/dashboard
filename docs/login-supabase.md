@@ -339,3 +339,24 @@ e-mail sem ter o que pôr no lugar deixaria a tela sem porta.
 Uma consequência a saber: com o e-mail recolhido, "Esqueci a senha" fica a um
 clique de distância, dentro do bloco. Quem chega para recuperar senha precisa
 abrir o e-mail primeiro.
+
+### A espera de três segundos, e a memória
+
+`/auth/v1/settings` responde em 1,7 a 3,8 segundos. A página fica pronta em
+meio segundo e passava o resto do tempo sem botão nenhum — quem clicava em
+"Entrar" olhava, não via porta e concluía que não existia.
+
+A resposta é guardada em `localStorage`, na gaveta `oaze.provedores`. Na visita
+seguinte a tela é desenhada com o que já se sabia, **junto com o DOM** (medido:
+674–710 ms), e a resposta da rede corrige depois se algo mudou. Na primeira
+visita não há o que lembrar e a espera continua.
+
+`montarSocial` roda, portanto, **duas vezes** — uma pela memória, outra pela
+rede — e precisa ser idempotente: `ligados` evita ouvinte de clique dobrado (um
+clique, dois logins) e `recolheu` evita recolher de novo um e-mail que a pessoa
+já abriu. As duas são declaradas **antes** da primeira chamada: com `var`, a
+atribuição só acontece quando a execução passa pela linha, e deixá-las depois
+fazia a chamada pela memória ler `undefined` e matar o resto do script.
+
+Se a memória estiver velha e o provedor tiver saído, a rede esconde o botão e
+devolve o formulário de e-mail à tela.

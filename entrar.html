@@ -135,9 +135,39 @@
   /* Já logado? Não faz sentido mostrar o formulário. replace, e não
      href: senão o "voltar" do navegador traz de volta para cá e a
      pessoa fica presa num pingue-pongue. */
+  /* Pergunta JÁ, antes de qualquer outra coisa: é a resposta mais
+     lenta da página e é ela que decide o que aparece. */
+  /* montarSocial roda duas vezes: uma com a memória, outra com a
+     resposta da rede. Estas travas evitam ouvinte de clique dobrado
+     e evitam recolher de novo um e-mail que a pessoa já abriu.
+     Declaradas AQUI, antes da primeira chamada: com var, a atribuição
+     só acontece quando a execução passa pela linha -- deixá-las
+     depois faria a chamada pela memória ler undefined e morrer. */
+  var ligados = {};
+  var recolheu = false;
+
+  var perguntou = A.provedores();
+
+  /* E desenha agora com o que se sabia da última visita, sem esperar
+     a rede. Na primeira visita não há o que lembrar e a tela espera,
+     como antes. */
+  var lembrado = A.provedoresLembrados();
+  if (lembrado) montarSocial(lembrado);
+
   A.quemEsta().then(function (u) {
     if (u) { location.replace(A.destino()); return; }
-    return A.provedores().then(montarSocial);
+    return perguntou.then(function (p) {
+      montarSocial(p);
+      /* O toque único só depois de saber que ninguém está logado --
+         a bolha aparecendo para quem já entrou seria ruído antes do
+         redirecionamento. Por isso ele não vem da memória. */
+      if (p.google) {
+        A.umToque(function (err) {
+          if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
+          location.replace(A.destino());
+        });
+      }
+    });
   });
 
   /* Entrada social: cada botão só aparece se o provedor estiver
@@ -152,11 +182,15 @@
     var algum = false;
 
     [['google', 'btn-google'], ['apple', 'btn-apple']].forEach(function (par) {
-      if (!p[par[0]]) return;
       var b = document.getElementById(par[1]);
       if (!b) return;
+      /* A resposta da rede manda: se o provedor saiu, o botão que a
+         memória tinha posto na tela sai junto. */
+      if (!p[par[0]]) { b.hidden = true; return; }
       b.hidden = false;
       algum = true;
+      if (ligados[par[0]]) return;
+      ligados[par[0]] = true;
       b.addEventListener('click', function () {
         A.diz(recado, '');
         A.ocupado(b, true, 'Abrindo…');
@@ -172,10 +206,16 @@
 
     caixa.hidden = !algum;
     separa.hidden = !algum;
-    /* Sem provedor nenhum, recolher o e-mail deixaria a página sem
-       porta. A tela fica exatamente como sempre foi. */
-    if (!algum) return;
 
+    if (!algum) {
+      /* A memória mentiu e não há mais provedor nenhum: devolve o
+         e-mail à tela, senão a página fica sem porta. */
+      if (recolheu) { via.hidden = false; abrir.hidden = true; recolheu = false; }
+      return;
+    }
+
+    if (recolheu) return;
+    recolheu = true;
     via.hidden = true;
     abrir.hidden = false;
     abrir.addEventListener('click', function () {
@@ -184,13 +224,6 @@
       var campo = via.querySelector('input');
       if (campo) campo.focus();
     });
-
-    if (p.google) {
-      A.umToque(function (err) {
-        if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
-        location.replace(A.destino());
-      });
-    }
   }
 
   function valida() {
