@@ -33,6 +33,7 @@ const RAIZ = path.join(__dirname, '..');
 const VERIFICACOES = [
   ['tools/varrer-segredos.js', 'nenhum segredo no que vai ao navegador'],
   ['tools/conferir-rls.js', 'toda tabela exposta tem RLS'],
+  ['tools/testes/csp-cobre-o-que-carrega.js', 'a CSP libera o que o site carrega'],
   ['tools/auditar-cliques.js', 'nenhum botão ou link sem ação'],
   ['tools/testes/navegacao-superior.js', 'navegação superior direta e Planejar visível'],
   ['tools/testes/limites-contextuais.js', 'limites só aparecem durante a ação'],
