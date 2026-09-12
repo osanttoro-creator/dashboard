@@ -210,3 +210,82 @@ traduzidas — mas o primeiro cadastro de verdade é seu.
 
 Para testar: abra o app, "Não tenho conta", use um e-mail real, confirme pelo
 link e entre. Se algo falhar, o erro aparece traduzido no próprio formulário.
+
+---
+
+## Entrar com Google e com a Apple
+
+O site tem os dois botões em `/entrar` e `/cadastro` desde 12/09/2026. Eles
+**não aparecem sozinhos**: o script pergunta ao projeto, em `/auth/v1/settings`,
+quais provedores estão ligados, e mostra só os que existem. Botão que leva a
+"provider is not enabled" promete uma porta que não há — pior do que botão
+nenhum. É a mesma regra que o painel já usava para o Google.
+
+Estado de hoje neste projeto: `google: false`, `apple: false`. Enquanto estiver
+assim, as duas páginas ficam exatamente como eram, só com e-mail.
+
+A sessão que vem do Google ou da Apple **fica salva** igual à do e-mail: mesma
+gaveta (`oaze.supabase.auth`), `persistSession`, renovação automática e PKCE.
+Entrar em `/entrar` é estar dentro em `/app`, e fechar o navegador não desloga.
+
+### 1 · Google
+
+1. `console.cloud.google.com` → crie ou escolha um projeto.
+2. **APIs e serviços → Tela de permissão OAuth**: tipo **Externo**, nome do app
+   `OAZE`, e-mail de suporte e e-mail do desenvolvedor. Publique.
+3. **Credenciais → Criar credenciais → ID do cliente OAuth → Aplicativo da Web**:
+   - Origem JavaScript autorizada:
+     `https://mediumvioletred-viper-277230.hostingersite.com`
+   - URI de redirecionamento autorizado:
+     `https://gxwatircdhhetvzzlwwq.supabase.co/auth/v1/callback`
+4. Copie o **Client ID** e o **Client secret**.
+5. Supabase → **Authentication → Providers → Google**: cole os dois, ligue e
+   salve.
+
+### 2 · Apple
+
+Exige conta paga no **Apple Developer Program** (US$ 99 por ano). Sem ela, o
+provedor não existe — e o botão continua escondido, sem quebrar nada.
+
+1. `developer.apple.com` → **Certificates, Identifiers & Profiles**.
+2. **Identifiers → App ID**, com *Sign in with Apple* habilitado.
+3. **Identifiers → Services ID** (por exemplo `com.oaze.web`): habilite
+   *Sign in with Apple* e clique em *Configure*:
+   - Domains: `gxwatircdhhetvzzlwwq.supabase.co`
+   - Return URLs: `https://gxwatircdhhetvzzlwwq.supabase.co/auth/v1/callback`
+4. **Keys → +**: habilite *Sign in with Apple*, baixe o arquivo `.p8` (ele só
+   pode ser baixado uma vez) e anote o **Key ID**. O **Team ID** fica no canto
+   superior direito do portal.
+5. Supabase → **Authentication → Providers → Apple**: o **Services ID** vai no
+   campo *Client ID*, mais Team ID, Key ID e o conteúdo do `.p8`. Ligue e salve.
+
+> A Apple envia o nome da pessoa **só na primeira autorização**, e o e-mail pode
+> chegar mascarado (`@privaterelay.appleid.com`). É o comportamento dela, não um
+> defeito do OAZE — e o painel usa o que vier.
+
+### 3 · Endereços de volta (vale para os dois)
+
+Supabase → **Authentication → URL Configuration**:
+
+- **Site URL**: `https://mediumvioletred-viper-277230.hostingersite.com`
+- **Redirect URLs**: `https://mediumvioletred-viper-277230.hostingersite.com/**`
+  — e `http://localhost:4173/**` se for testar no servidor local.
+
+Sem o endereço na lista, o provedor devolve para a Site URL e a pessoa cai na
+página errada, sem erro nenhum na tela.
+
+### 4 · Conferir que ligou
+
+```bash
+curl -s -H "apikey: SUA_CHAVE_PUBLICAVEL" \
+  https://gxwatircdhhetvzzlwwq.supabase.co/auth/v1/settings \
+  | grep -o '"google":[a-z]*\|"apple":[a-z]*'
+```
+
+`true` quer dizer que o botão passa a aparecer sozinho no site, **sem novo
+deploy** — a página pergunta isso a cada carregamento.
+
+### O que ainda não existe
+
+O modal de conta do painel (`supabase-auth.js`) oferece só o Google. A Apple
+ainda não foi acrescentada lá — o site é que tem os dois.

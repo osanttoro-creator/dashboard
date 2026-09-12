@@ -111,6 +111,54 @@
   };
 
   /* ---------------------------------------------------------------
+     entrada social
+     ---------------------------------------------------------------
+     /auth/v1/settings é público e diz quais provedores estão LIGADOS
+     no projeto. O botão só existe se a porta existir: um "Continuar
+     com a Apple" que responde "provider is not enabled" promete uma
+     porta que não há — pior do que botão nenhum. O painel já faz
+     assim (supabase-auth.js); aqui é a mesma regra.
+
+     Sem rede a resposta não vem, nenhum botão aparece, e o e-mail
+     continua ali: a página nunca fica esperando por esta chamada. */
+  var provedoresPromessa = null;
+
+  A.provedores = function () {
+    if (provedoresPromessa) return provedoresPromessa;
+    var c = global.SupabaseConfig;
+    var chave = c && (c.publishableKey || c.anonKey);
+    if (!c || !c.url || !chave) return Promise.resolve({});
+    provedoresPromessa = fetch(c.url + '/auth/v1/settings', { headers: { apikey: chave } })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { return (j && j.external) || {}; })
+      .catch(function () { return {}; });
+    return provedoresPromessa;
+  };
+
+  /* Entrar com Google ou Apple — e criar conta é a mesma porta: na
+     primeira vez o Supabase cria o usuário sozinho.
+
+     A volta cai em /app (ou no ?destino= que trouxe a pessoa até
+     aqui) com ?code= na URL, e o SDK troca o código pela sessão
+     sozinho (detectSessionInUrl). A SESSÃO FICA SALVA: vai para o
+     localStorage na mesma gaveta do resto do produto, sobrevive a
+     fechar o navegador e se renova sozinha enquanto valer.
+
+     O endereço de volta precisa estar em Authentication → URL
+     Configuration → Redirect URLs no painel do Supabase. Fora da
+     lista, o provedor devolve para a Site URL e a pessoa cai na
+     página errada, sem erro nenhum na tela. */
+  A.entrarCom = function (provedor) {
+    var c = A.cliente();
+    if (!c) return Promise.reject(new Error('config'));
+    var opcoes = { redirectTo: A.voltarPara(A.destino()) };
+    /* Sem isto, quem tem mais de uma conta Google entra sempre na
+       última usada, sem chance de escolher qual. */
+    if (provedor === 'google') opcoes.queryParams = { prompt: 'select_account' };
+    return c.auth.signInWithOAuth({ provider: provedor, options: opcoes });
+  };
+
+  /* ---------------------------------------------------------------
      operações
      --------------------------------------------------------------- */
   A.cadastrar = function (email, senha, nome) {
@@ -210,13 +258,17 @@
 
   A.ocupado = function (botao, sim, textoOcupado) {
     if (!botao) return;
+    /* Botão com ícone guarda o texto num <span data-rotulo>. Trocar o
+       textContent do botão inteiro apagaria o SVG junto — e o botão
+       voltaria sem marca nenhuma depois do "Aguarde…". */
+    var alvo = botao.querySelector('[data-rotulo]') || botao;
     if (sim) {
-      botao.dataset.textoAntes = botao.textContent;
-      botao.textContent = textoOcupado || 'Aguarde…';
+      alvo.dataset.textoAntes = alvo.textContent;
+      alvo.textContent = textoOcupado || 'Aguarde…';
       botao.disabled = true;
       botao.setAttribute('aria-busy', 'true');
     } else {
-      if (botao.dataset.textoAntes) botao.textContent = botao.dataset.textoAntes;
+      if (alvo.dataset.textoAntes) alvo.textContent = alvo.dataset.textoAntes;
       botao.disabled = false;
       botao.removeAttribute('aria-busy');
     }

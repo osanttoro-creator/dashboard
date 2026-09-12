@@ -111,6 +111,13 @@
    --------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* O atributo hidden precisa ganhar de qualquer classe. Sem esta
+   linha, `.btn { display: inline-flex }` e `.separa { display: flex }`
+   passam por cima do `[hidden]` do navegador -- mesma especificidade,
+   e a nossa regra vem depois -- e um elemento marcado como escondido
+   aparece na tela mesmo assim. hidden não é sugestão. */
+[hidden] { display: none !important; }
+
 html {
   /* Sem isto, clicar num link de âncora joga o alvo debaixo do
      cabeçalho fixo -- o título chega cortado. */
@@ -527,6 +534,12 @@ p.leve { color: var(--bruma); }
 }
 .painel-conta h1 { font-size: clamp(1.7rem, 3vw, 2.1rem); font-weight: 500; margin-bottom: 8px; }
 .painel-conta > p:first-of-type { color: var(--bruma); margin-bottom: 26px; }
+
+/* ---- entrada social ----
+   Um botão por provedor ligado, cada um com a sua marca. */
+.social { display: grid; gap: 10px; margin-bottom: 20px; }
+.btn-social { gap: 10px; font-weight: 500; }
+.marca-social { width: 18px; height: 18px; flex: none; }
 
 .campo { margin-bottom: 18px; }
 .campo label { display: block; margin-bottom: 8px; font: 400 .7rem/1.4 var(--fonte-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bruma); }
