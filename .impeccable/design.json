@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-12T10:10:24.4469099-03:00",
+  "title": "Design System: OAZE",
+  "extensions": {
+    "colorMeta": {
+      "oasis-night": { "role": "neutral", "displayName": "Noite de Oásis", "canonical": "#071822", "tonalRamp": ["oklch(15% 0.028 236)", "oklch(26% 0.028 236)", "oklch(38% 0.026 236)", "oklch(50% 0.023 236)", "oklch(62% 0.019 236)", "oklch(74% 0.014 236)", "oklch(86% 0.009 236)", "oklch(95% 0.004 236)"] },
+      "well-deep": { "role": "neutral", "displayName": "Poço", "canonical": "#050F16", "tonalRamp": ["oklch(15% 0.019 239)", "oklch(26% 0.019 239)", "oklch(38% 0.018 239)", "oklch(50% 0.016 239)", "oklch(62% 0.013 239)", "oklch(74% 0.010 239)", "oklch(86% 0.006 239)", "oklch(95% 0.003 239)"] },
+      "petroleum": { "role": "neutral", "displayName": "Petróleo", "canonical": "#0F2A38", "tonalRamp": ["oklch(15% 0.035 231)", "oklch(26% 0.039 231)", "oklch(38% 0.038 231)", "oklch(50% 0.034 231)", "oklch(62% 0.028 231)", "oklch(74% 0.020 231)", "oklch(86% 0.012 231)", "oklch(95% 0.005 231)"] },
+      "anchor-glass": { "role": "neutral", "displayName": "Âncora de Vidro", "canonical": "#23394D", "tonalRamp": ["oklch(15% 0.032 247)", "oklch(26% 0.040 247)", "oklch(38% 0.042 247)", "oklch(50% 0.038 247)", "oklch(62% 0.031 247)", "oklch(74% 0.023 247)", "oklch(86% 0.014 247)", "oklch(95% 0.006 247)"] },
+      "sand": { "role": "neutral", "displayName": "Areia", "canonical": "#F4EFE6", "tonalRamp": ["oklch(15% 0.018 82)", "oklch(26% 0.021 82)", "oklch(38% 0.024 82)", "oklch(50% 0.025 82)", "oklch(62% 0.024 82)", "oklch(74% 0.021 82)", "oklch(86% 0.016 82)", "oklch(95% 0.010 82)"] },
+      "ink-light": { "role": "neutral", "displayName": "Tinta Clara", "canonical": "#F1ECE3", "tonalRamp": ["oklch(15% 0.015 78)", "oklch(26% 0.017 78)", "oklch(38% 0.019 78)", "oklch(50% 0.020 78)", "oklch(62% 0.019 78)", "oklch(74% 0.017 78)", "oklch(86% 0.013 78)", "oklch(95% 0.008 78)"] },
+      "mist": { "role": "neutral", "displayName": "Bruma", "canonical": "#9FB2B8", "tonalRamp": ["oklch(15% 0.018 216)", "oklch(26% 0.022 216)", "oklch(38% 0.025 216)", "oklch(50% 0.026 216)", "oklch(62% 0.024 216)", "oklch(74% 0.020 216)", "oklch(86% 0.013 216)", "oklch(95% 0.006 216)"] },
+      "medallion-gold": { "role": "primary", "displayName": "Ouro do Medalhão", "canonical": "#D8B45E", "tonalRamp": ["oklch(15% 0.062 84)", "oklch(26% 0.092 84)", "oklch(38% 0.112 84)", "oklch(50% 0.126 84)", "oklch(62% 0.132 84)", "oklch(74% 0.119 84)", "oklch(86% 0.075 84)", "oklch(95% 0.035 84)"] },
+      "uglez-royal": { "role": "secondary", "displayName": "Azul-real UGLEZ", "canonical": "#4669F0", "tonalRamp": ["oklch(15% 0.090 267)", "oklch(26% 0.145 267)", "oklch(38% 0.195 267)", "oklch(50% 0.224 267)", "oklch(62% 0.212 267)", "oklch(74% 0.164 267)", "oklch(86% 0.092 267)", "oklch(95% 0.038 267)"] },
+      "uglez-action": { "role": "secondary", "displayName": "Ação UGLEZ", "canonical": "#354EDE", "tonalRamp": ["oklch(15% 0.092 270)", "oklch(26% 0.150 270)", "oklch(38% 0.205 270)", "oklch(50% 0.233 270)", "oklch(62% 0.220 270)", "oklch(74% 0.170 270)", "oklch(86% 0.095 270)", "oklch(95% 0.040 270)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Assinatura UGLEZ", "purpose": "Nome amplo e geométrico da inteligência dentro da câmara." },
+      "headline": { "displayName": "Título Editorial", "purpose": "Títulos de página do aplicativo." },
+      "body": { "displayName": "Interface e Leitura", "purpose": "Controles, conversa, números e explicações." },
+      "label": { "displayName": "Rótulo Técnico", "purpose": "Campos e métricas, separados visualmente dos valores." }
+    },
+    "shadows": [
+      { "name": "ambient-low-dark", "value": "0 1px 2px rgba(0, 0, 0, .5), 0 14px 36px -18px rgba(0, 0, 0, .9)", "purpose": "Separação normal de superfícies no tema escuro." },
+      { "name": "lifted-control-dark", "value": "0 4px 10px rgba(0, 0, 0, .55), 0 30px 60px -24px rgba(0, 0, 0, 1)", "purpose": "Navegação, menus e controles elevados." },
+      { "name": "uglez-glow-dark", "value": "0 0 0 1px rgba(70, 105, 240, .30), 0 0 26px rgba(70, 105, 240, .30)", "purpose": "Presença ou seleção própria da inteligência UGLEZ." },
+      { "name": "chamber-depth", "value": "0 24px 42px rgba(2, 9, 14, .28), inset 0 1px 0 rgba(255, 255, 255, .06)", "purpose": "Profundidade da prancha UGLEZ contra o fundo do aplicativo." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(.22, 1, .36, 1)", "purpose": "Entrada e resposta padrão de controles e superfícies." },
+      { "name": "ease-in", "value": "cubic-bezier(.64, 0, .78, 0)", "purpose": "Saídas deliberadas." },
+      { "name": "uglez-cycle", "value": "11.5s", "purpose": "Ciclo base da formação WebGL; os parâmetros variam com o estado escrito." }
+    ],
+    "breakpoints": [
+      { "name": "compact-phone", "value": "430px" },
+      { "name": "phone", "value": "700px" },
+      { "name": "app-navigation", "value": "821px" },
+      { "name": "uglez-stack", "value": "1120px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação financeira principal em ouro do medalhão.",
+      "html": "<button class=\"ds-btn-primary\">Registrar uma despesa</button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; border:1px solid transparent; border-radius:4px; background:var(--ouro, #D8B45E); color:var(--on-accent, #071822); font:560 13px/1.5 var(--font, 'IBM Plex Sans', sans-serif); cursor:pointer; transition:filter .14s cubic-bezier(.22,1,.36,1), transform .1s cubic-bezier(.22,1,.36,1); } .ds-btn-primary:hover { filter:brightness(1.08); } .ds-btn-primary:focus-visible { outline:2px solid var(--accent, #D8B45E); outline-offset:2px; } .ds-btn-primary:active { transform:scale(.97); }"
+    },
+    {
+      "name": "UGLEZ Analyze Button",
+      "kind": "button",
+      "refersTo": "button-uglez",
+      "description": "Ação de enviar uma pergunta à inteligência UGLEZ.",
+      "html": "<button class=\"ds-btn-uglez\">Analisar</button>",
+      "css": ".ds-btn-uglez { display:inline-flex; align-items:center; justify-content:center; min-width:104px; min-height:42px; padding:8px 14px; border:1px solid rgba(121,145,255,.34); border-radius:4px; background:#354EDE; color:#fff; font:560 13px/1.5 var(--font, 'IBM Plex Sans', sans-serif); cursor:pointer; transition:filter .14s cubic-bezier(.22,1,.36,1), transform .1s cubic-bezier(.22,1,.36,1); } .ds-btn-uglez:hover { filter:brightness(1.08); } .ds-btn-uglez:focus-visible { outline:2px solid #9FB4FF; outline-offset:2px; } .ds-btn-uglez:active { transform:scale(.97); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação financeira secundária dentro da câmara.",
+      "html": "<button class=\"ds-btn-outline\">Registrar uma receita</button>",
+      "css": ".ds-btn-outline { display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; border:1px solid rgba(177,197,214,.22); border-radius:4px; background:transparent; color:#E5EAEE; font:560 13px/1.5 var(--font, 'IBM Plex Sans', sans-serif); cursor:pointer; transition:background .14s cubic-bezier(.22,1,.36,1), transform .1s cubic-bezier(.22,1,.36,1); } .ds-btn-outline:hover { background:rgba(159,183,202,.08); color:#F5F7F8; } .ds-btn-outline:focus-visible { outline:2px solid #D8B45E; outline-offset:2px; } .ds-btn-outline:active { transform:scale(.97); }"
+    },
+    {
+      "name": "UGLEZ Prompt",
+      "kind": "input",
+      "refersTo": "prompt-uglez",
+      "description": "Campo principal de pergunta, com foco azul e fundo de petróleo translúcido.",
+      "html": "<textarea class=\"ds-prompt-uglez\" aria-label=\"Sua pergunta para o UGLEZ\" placeholder=\"Pergunte sobre o mês que você está vendo…\"></textarea>",
+      "css": ".ds-prompt-uglez { width:100%; min-height:82px; resize:vertical; padding:13px 14px; border:1px solid rgba(173,194,211,.17); border-radius:4px; background:rgba(139,164,184,.05); color:#F4F6F8; font:400 13px/1.5 var(--font, 'IBM Plex Sans', sans-serif); } .ds-prompt-uglez::placeholder { color:rgba(199,211,220,.35); } .ds-prompt-uglez:hover { border-color:rgba(173,194,211,.3); } .ds-prompt-uglez:focus-visible { outline:none; border-color:rgba(72,103,240,.72); box-shadow:0 0 0 3px rgba(61,93,231,.12); }"
+    },
+    {
+      "name": "UGLEZ Suggestion Chip",
+      "kind": "chip",
+      "refersTo": "chip-uglez",
+      "description": "Atalho de pergunta em cápsula discreta que acende no foco.",
+      "html": "<button class=\"ds-chip-uglez\">Resumo do mês</button>",
+      "css": ".ds-chip-uglez { min-height:31px; padding:5px 11px; border:1px solid rgba(172,192,209,.17); border-radius:999px; background:rgba(151,176,197,.045); color:rgba(225,231,235,.68); font:400 12px/1.5 var(--font, 'IBM Plex Sans', sans-serif); cursor:pointer; transition:border-color .14s cubic-bezier(.22,1,.36,1), background .14s cubic-bezier(.22,1,.36,1), color .14s cubic-bezier(.22,1,.36,1); } .ds-chip-uglez:hover, .ds-chip-uglez:focus-visible { outline:none; border-color:rgba(75,106,242,.65); color:#F7F8F9; background:rgba(57,86,221,.12); } .ds-chip-uglez:active { transform:scale(.97); }"
+    },
+    {
+      "name": "UGLEZ State",
+      "kind": "custom",
+      "description": "Estado escrito que espelha acessivelmente o comportamento da esfera.",
+      "html": "<span class=\"ds-state-uglez\"><i aria-hidden=\"true\"></i>Pronto para analisar</span>",
+      "css": ".ds-state-uglez { display:inline-flex; align-items:center; gap:8px; min-height:31px; padding:6px 11px; border:1px solid rgba(154,177,198,.14); border-radius:999px; background:rgba(146,169,188,.06); color:rgba(223,230,235,.72); font:400 11.5px/1.5 var(--font, 'IBM Plex Sans', sans-serif); } .ds-state-uglez i { width:6px; height:6px; flex:none; border-radius:50%; background:#D1B36B; } .ds-state-uglez:hover { border-color:rgba(210,179,107,.28); } .ds-state-uglez:focus-visible { outline:2px solid #D8B45E; outline-offset:2px; }"
+    },
+    {
+      "name": "UGLEZ Context Metrics",
+      "kind": "card",
+      "description": "Três leituras compactas do mês sobre vidro escuro; empilham como linhas no celular.",
+      "html": "<dl class=\"ds-metrics-uglez\"><div><dt>Mês em foco</dt><dd>Setembro de 2026</dd></div><div><dt>Base disponível</dt><dd>0 movimentações</dd></div><div><dt>Leitura local</dt><dd>Aguardando dados</dd></div></dl>",
+      "css": ".ds-metrics-uglez { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin:0; overflow:hidden; border:1px solid rgba(182,200,216,.14); border-radius:16px; background:rgba(173,196,216,.12); backdrop-filter:blur(14px); } .ds-metrics-uglez div { min-width:0; padding:13px 14px; background:rgba(5,15,22,.75); } .ds-metrics-uglez dt { margin:0 0 5px; color:rgba(206,216,225,.66); font:650 11px/1.5 var(--font, 'IBM Plex Sans', sans-serif); letter-spacing:.065em; text-transform:uppercase; } .ds-metrics-uglez dd { margin:0; overflow:hidden; color:rgba(247,248,249,.9); font:570 12px/1.35 var(--font, 'IBM Plex Sans', sans-serif); text-overflow:ellipsis; white-space:nowrap; } .ds-metrics-uglez:hover { border-color:rgba(182,200,216,.24); } .ds-metrics-uglez:focus-visible { outline:2px solid #D8B45E; outline-offset:2px; } @media(max-width:700px){ .ds-metrics-uglez { grid-template-columns:1fr; } .ds-metrics-uglez div { display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:9px 12px; border-bottom:1px solid rgba(182,200,216,.09); } .ds-metrics-uglez div:last-child { border-bottom:0; } .ds-metrics-uglez dt { margin:0; } .ds-metrics-uglez dd { text-align:right; } }"
+    },
+    {
+      "name": "UGLEZ Chamber",
+      "kind": "custom",
+      "description": "Prancha escura que une presença abstrata e console financeiro em um único instrumento.",
+      "html": "<section class=\"ds-chamber\"><div class=\"ds-chamber-presence\"><strong>UGLEZ</strong><p>Inteligência financeira que lê o contexto antes de responder.</p></div><div class=\"ds-chamber-console\"><b>Conversa financeira</b><span>Pronto para analisar</span></div></section>",
+      "css": ".ds-chamber { min-height:360px; display:grid; grid-template-columns:minmax(280px,.92fr) minmax(320px,1.08fr); overflow:hidden; border:1px solid rgba(168,187,209,.16); border-radius:30px; background:#07121A; color:#F4F6F8; box-shadow:0 24px 42px rgba(2,9,14,.28), inset 0 1px 0 rgba(255,255,255,.06); } .ds-chamber-presence { display:flex; flex-direction:column; justify-content:space-between; padding:32px; border-right:1px solid rgba(168,187,209,.13); background:radial-gradient(circle at 54% 43%,rgba(50,85,232,.17),transparent 38%),linear-gradient(155deg,#081A26 0%,#07131C 58%,#050D13 100%); } .ds-chamber-presence strong { font:590 clamp(42px,5vw,78px)/.92 var(--font, 'IBM Plex Sans', sans-serif); letter-spacing:.23em; } .ds-chamber-presence p { max-width:31ch; color:rgba(229,236,241,.76); font:400 14px/1.65 var(--font, 'IBM Plex Sans', sans-serif); } .ds-chamber-console { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px 24px; background:rgba(5,13,19,.82); font:400 14px/1.5 var(--font, 'IBM Plex Sans', sans-serif); } .ds-chamber-console span { padding:6px 11px; border:1px solid rgba(154,177,198,.14); border-radius:999px; color:rgba(223,230,235,.72); font-size:11.5px; } .ds-chamber:hover { box-shadow:0 28px 50px rgba(2,9,14,.34), inset 0 1px 0 rgba(255,255,255,.06); } .ds-chamber:focus-visible { outline:2px solid #D8B45E; outline-offset:3px; } @media(max-width:700px){ .ds-chamber { grid-template-columns:1fr; border-radius:22px; } .ds-chamber-presence { min-height:260px; border-right:0; border-bottom:1px solid rgba(168,187,209,.13); padding:20px 21px 17px; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Câmara Financeira do Oásis",
+    "overview": "OAZE transforma finanças pessoais em uma sala de leitura calma e precisa. A base é petróleo profundo; areia e tinta clara garantem legibilidade; ouro sinaliza decisões e valor. A interface permanece instrumental e contida, com números à frente da decoração.\n\nUGLEZ habita esse mesmo mundo como matéria de dados viva: uma formação abstrata de partículas azul-real, atravessada por poucos pontos quentes. A conversa continua sendo uma ferramenta financeira com estado escrito, contexto do mês e ação explícita — não um mascote ou um cartão genérico de chatbot.",
+    "keyCharacteristics": [
+      "Fundo de oásis noturno e painéis de petróleo em camadas.",
+      "Ouro raro para ação, seleção e identidade; azul-real reservado à inteligência UGLEZ.",
+      "Tipografia editorial nos títulos, tipografia técnica e tabular na operação.",
+      "Divisórias finas, vidro moderado e profundidade ambiental, nunca ornamental.",
+      "Densidade responsiva que preserva contexto e ação no primeiro viewport."
+    ],
+    "rules": [
+      { "name": "Ouro Único", "body": "O ouro é o acento global para ação, seleção e identidade; não se distribuem novas cores decorativas pela interface.", "section": "colors" },
+      { "name": "Luz UGLEZ", "body": "O azul-real pertence aos estados, partículas, foco e ação da inteligência UGLEZ; ele não substitui a marca OAZE.", "section": "colors" },
+      { "name": "Números Estáveis", "body": "Valores financeiros usam algarismos tabulares para que colunas e mudanças de estado não saltem.", "section": "typography" },
+      { "name": "Escala de Tracking", "body": "Texto pequeno recebe tracking positivo; títulos grandes recebem tracking negativo, exceto a assinatura deliberadamente espaçada do UGLEZ.", "section": "typography" },
+      { "name": "Dados Antes do Vidro", "body": "Quanto mais importante a leitura financeira, mais sólida a superfície; transparência pertence a contexto e controles.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do mantenha o ouro raro e use-o em ação, seleção, identidade e estados quentes confirmados.",
+      "Do preserve o azul-real para a matéria e os estados do UGLEZ.",
+      "Do mantenha estado textual acessível junto de qualquer mudança visual da esfera.",
+      "Do priorize legibilidade de números com superfícies mais sólidas e algarismos tabulares.",
+      "Do preserve o compositor no primeiro viewport móvel e os alvos de toque de 40–44px."
+    ],
+    "donts": [
+      "Don't transforme UGLEZ em avatar, mascote ou cartão genérico de chatbot.",
+      "Don't substitua petróleo, areia e ouro por uma identidade roxa ou por novos acentos decorativos.",
+      "Don't aplique vidro intenso sobre números ou respostas que precisem de leitura precisa.",
+      "Don't dependa apenas da animação para comunicar recebimento, pensamento, sucesso ou erro.",
+      "Don't remova logo, navegação global, safe areas ou alternativas de movimento reduzido ao estender a câmara."
+    ]
+  }
+}

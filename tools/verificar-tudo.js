@@ -36,6 +36,7 @@ const VERIFICACOES = [
   ['tools/auditar-cliques.js', 'nenhum botão ou link sem ação'],
   ['tools/testes/navegacao-superior.js', 'navegação superior direta e Planejar visível'],
   ['tools/testes/limites-contextuais.js', 'limites só aparecem durante a ação'],
+  ['tools/testes/uglez-camara.js', 'UGLEZ preserva estados, fallback e responsividade'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],

@@ -92,6 +92,7 @@
   App.goTo = function (page, opts) {
     if (!PAGES[page]) return;
     App.page = page;
+    document.body.dataset.page = page;
 
     /* replace quando é o próprio endereço (evita entrada duplicada
        no histórico ao abrir a página direto), push quando é

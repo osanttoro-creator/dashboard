@@ -774,77 +774,94 @@
          O UGLEZ NÃO TEM MASCOTE. A identidade visual aqui é a
          formação de partículas, desenhada em canvas. Nenhum rosto,
          robô, personagem ou logotipo próprio. -->
-    <section class="page" data-page="uglez">
+    <section class="page uglez-page" data-page="uglez">
 
-      <!-- cabeçalho simples: quem está falando e sobre qual mês -->
-      <header class="uglez-topo">
-        <span class="uglez-formacao" id="uglezFormacao" aria-hidden="true"></span>
-        <div class="uglez-topo-id">
-          <h2 class="uglez-topo-nome">UGLEZ</h2>
-          <p class="uglez-topo-sub" id="uglezPeriodo"></p>
-        </div>
-        <span class="uglez-estado" id="uglezEstadoTexto" role="status" aria-live="polite"></span>
-      </header>
+      <div class="uglez-stage">
+        <section class="uglez-presenca" aria-labelledby="uglezNome">
+          <div class="uglez-campo" id="uglezFormacao" aria-hidden="true"></div>
+          <div class="uglez-presenca-sombra" aria-hidden="true"></div>
 
-      <!-- ============================================================
-           A CONVERSA
-           Um bloco só. O que estiver dentro dele é o que aconteceu
-           nesta sessão: estado vazio, histórico, resposta atual,
-           limite atingido ou erro — nunca dois ao mesmo tempo.
-           ============================================================ -->
-      <div class="card uglez-conversa">
+          <div class="uglez-presenca-conteudo">
+            <div class="uglez-identidade">
+              <h2 id="uglezNome">UGLEZ</h2>
+              <p>Inteligência financeira que lê o contexto antes de responder.</p>
+            </div>
 
-        <!-- sem dados no mês: explica em vez de inventar número -->
-        <div class="uglez-vazio" id="uglezSemDados" hidden>
-          <p class="empty-title">Ainda não há movimentação em <span id="uglezMesVazio"></span></p>
-          <p class="empty-sub">
-            O UGLEZ lê os seus lançamentos. Sem nenhum no mês exibido, qualquer
-            resposta seria invenção — então ele prefere não responder.
-          </p>
-          <div class="uglez-vazio-acoes">
-            <button class="btn btn-primary btn-sm" data-quick="expense">Registrar uma despesa</button>
-            <button class="btn btn-outline btn-sm" data-quick="income">Registrar uma receita</button>
-            <button class="btn btn-ghost btn-sm" id="btnUglezOutroMes">Ver outro mês</button>
+            <dl class="uglez-metricas" aria-label="Contexto da análise">
+              <div>
+                <dt>Mês em foco</dt>
+                <dd id="uglezMesOrbita">—</dd>
+              </div>
+              <div>
+                <dt>Base disponível</dt>
+                <dd id="uglezMovimentos">0 movimentações</dd>
+              </div>
+              <div>
+                <dt>Leitura local</dt>
+                <dd id="uglezFonteLocal">Pronta no navegador</dd>
+              </div>
+            </dl>
+
+            <p class="uglez-interacao">Mova o cursor sobre a formação para observar o campo de análise.</p>
           </div>
-        </div>
+        </section>
 
-        <!-- limite do plano atingido -->
-        <div class="uglez-aviso is-limite" id="uglezLimite" hidden>
-          <p class="uglez-aviso-t" id="uglezLimiteTitulo"></p>
-          <p class="uglez-aviso-s" id="uglezLimiteTexto"></p>
-          <button class="btn btn-primary btn-sm" data-goto="precos">Ver planos</button>
-        </div>
+        <section class="uglez-console" aria-labelledby="uglezConversaTitulo">
+          <header class="uglez-console-topo">
+            <div>
+              <h3 id="uglezConversaTitulo">Conversa financeira</h3>
+              <p id="uglezPeriodo"></p>
+            </div>
+            <span class="uglez-estado" id="uglezEstadoTexto" role="status" aria-live="polite">Pronto para analisar</span>
+          </header>
 
-        <!-- histórico da conversa desta sessão -->
-        <div class="uglez-historico" id="uglezHistorico"></div>
+          <div class="uglez-console-corpo">
+            <div class="uglez-vazio" id="uglezSemDados" hidden>
+              <p class="empty-title">Ainda não há movimentação em <span id="uglezMesVazio"></span></p>
+              <p class="empty-sub">
+                O UGLEZ lê os seus lançamentos. Sem dados no mês exibido, a análise
+                financeira seria genérica — registre uma movimentação ou consulte outro mês.
+              </p>
+              <div class="uglez-vazio-acoes">
+                <button class="btn btn-primary btn-sm" data-quick="expense">Registrar uma despesa</button>
+                <button class="btn btn-outline btn-sm" data-quick="income">Registrar uma receita</button>
+                <button class="btn btn-ghost btn-sm" id="btnUglezOutroMes">Ver outro mês</button>
+              </div>
+            </div>
 
-        <!-- a resposta em construção / a última resposta -->
-        <div class="ai-answer" id="aiAnswer" hidden></div>
+            <div class="uglez-aviso is-limite" id="uglezLimite" hidden>
+              <p class="uglez-aviso-t" id="uglezLimiteTitulo"></p>
+              <p class="uglez-aviso-s" id="uglezLimiteTexto"></p>
+              <button class="btn btn-primary btn-sm" data-goto="precos">Ver planos</button>
+            </div>
 
-        <!-- sugestões: só o que o produto REALMENTE faz -->
-        <div class="uglez-chips" id="uglezChipsFull" aria-label="Perguntas sugeridas"></div>
-
-        <!-- ------------------------------------------------------
-             O CAMPO FICA NO PÉ DO CARTÃO, e é o último elemento.
-             Antes ele vinha antes da resposta, então cada resposta
-             empurrava o campo para baixo e a pessoa perdia de vista
-             onde digitar.
-             ------------------------------------------------------ -->
-        <div class="uglez-envio">
-          <p class="uglez-cota" id="uglezCota" hidden></p>
-          <div class="ai-ask">
-            <textarea class="input textarea-plain" id="aiQuestion" rows="2"
-              aria-label="Sua pergunta para o UGLEZ"
-              placeholder="Pergunte sobre o mês que você está vendo…"></textarea>
-            <button class="btn btn-ai" id="btnAiAsk">Perguntar</button>
+            <div class="uglez-historico" id="uglezHistorico"></div>
+            <div class="ai-answer" id="aiAnswer" hidden></div>
           </div>
-          <p class="uglez-rodape">
-            <span id="uglezMode"></span>
-            <span class="dot-sep">·</span>
-            <span>Respostas orientativas. Não são consultoria financeira.</span>
-            <button class="btn btn-ghost btn-sm" id="btnAiConfig">O que é enviado</button>
-          </p>
-        </div>
+
+          <div class="uglez-compositor">
+            <div class="uglez-sugestoes">
+              <span class="uglez-sugestoes-titulo">Perguntas que o UGLEZ pode responder agora</span>
+              <div class="uglez-chips" id="uglezChipsFull" aria-label="Perguntas sugeridas"></div>
+            </div>
+
+            <div class="uglez-envio">
+              <p class="uglez-cota" id="uglezCota" hidden></p>
+              <div class="ai-ask">
+                <textarea class="input textarea-plain" id="aiQuestion" rows="3"
+                  aria-label="Sua pergunta para o UGLEZ"
+                  placeholder="Pergunte sobre o mês que você está vendo…"></textarea>
+                <button class="btn btn-ai" id="btnAiAsk">Analisar</button>
+              </div>
+              <p class="uglez-rodape">
+                <span id="uglezMode"></span>
+                <span class="dot-sep">·</span>
+                <span>Orientação financeira, não consultoria.</span>
+                <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
 
       <!-- ============================================================
@@ -857,7 +874,7 @@
            ============================================================ -->
       <section class="uglez-leitura" id="uglezLeitura" hidden>
         <h3 class="uglez-leitura-t">
-          Leitura do mês
+          Sinais encontrados nos seus dados
           <span class="uglez-selo uglez-selo-local">Cálculo local</span>
         </h3>
         <div class="grid grid-2" id="uglezInsights"></div>
@@ -1054,6 +1071,7 @@
 <script src="/assets/js/conta.js"></script>
 <script src="/assets/js/checkout.js"></script>
 <script src="/assets/js/uglez-particulas.js"></script>
+<script src="/assets/js/uglez-erosao.js"></script>
 <script src="/assets/js/ai.js"></script>
 <script src="/assets/js/uglez-flutuante.js"></script>
 <script src="/assets/js/shell.js"></script>

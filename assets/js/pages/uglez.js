@@ -33,7 +33,16 @@
     if (formacao) return formacao;
     const caixa = document.getElementById('uglezFormacao');
     if (!caixa) return null;
-    formacao = UglezParticulas.montar(caixa, { qtd: 64 });
+    /* A esfera WebGL é a presença principal desta página. A
+       formação 2D continua como fallback deliberado para aparelhos
+       sem WebGL — a análise não pode depender do efeito visual. */
+    formacao = global.UglezErosao && UglezErosao.montar
+      ? UglezErosao.montar(caixa)
+      : null;
+    if (!formacao && global.UglezParticulas && UglezParticulas.montar) {
+      caixa.classList.add('is-fallback');
+      formacao = UglezParticulas.montar(caixa, { qtd: 96 });
+    }
     return formacao;
   }
 
@@ -54,8 +63,8 @@
     const alvo = document.getElementById('uglezEstadoTexto');
     if (!alvo) return;
     const FRASES = {
-      repouso: '',
-      foco: '',
+      repouso: 'Pronto para analisar',
+      foco: 'Pronto para analisar',
       recebendo: 'Reunindo os dados do mês…',
       pensando: 'Analisando…',
       respondendo: 'Escrevendo a resposta…',
@@ -65,7 +74,7 @@
     alvo.textContent = FRASES[estado] || '';
     alvo.className = 'uglez-estado' + (estado === 'erro' ? ' is-erro' : '');
     if (estado === 'sucesso') setTimeout(() => {
-      if (alvo.textContent === FRASES.sucesso) alvo.textContent = '';
+      if (alvo.textContent === FRASES.sucesso) alvo.textContent = FRASES.repouso;
     }, 2600);
   };
 
@@ -135,9 +144,12 @@
 
   function renderContexto() {
     const alvo = document.getElementById('uglezPeriodo');
+    const mes = U.smartCase(U.monthLabel(App.ym));
     if (alvo) {
-      alvo.textContent = 'Analisando ' + U.smartCase(U.monthLabel(App.ym));
+      alvo.textContent = mes + ' · contexto do mês selecionado';
     }
+    const orbita = document.getElementById('uglezMesOrbita');
+    if (orbita) orbita.textContent = mes;
 
     const cota = document.getElementById('uglezCota');
     const limite = document.getElementById('uglezLimite');
@@ -233,7 +245,8 @@
 
   Ug.render = function () {
     ligarUmaVez();
-    garantirFormacao();
+    const visual = garantirFormacao();
+    if (visual && visual.medir) visual.medir();
     renderContexto();
     renderHistorico();
     renderChips('uglezChipsFull');
@@ -243,6 +256,14 @@
        análise. O que aparece é o motivo e o caminho de saída. */
     const t = Calc.monthTotals(App.ym);
     const temDado = !!(t.entries && t.entries.length);
+    const totalMovimentos = t.entries ? t.entries.length : 0;
+    const movimentos = document.getElementById('uglezMovimentos');
+    const fonteLocal = document.getElementById('uglezFonteLocal');
+    if (movimentos) movimentos.textContent = totalMovimentos +
+      (totalMovimentos === 1 ? ' movimentação' : ' movimentações');
+    if (fonteLocal) fonteLocal.textContent = temDado
+      ? 'Pronta no navegador'
+      : 'Aguardando dados';
     const semDados = document.getElementById('uglezSemDados');
     const leitura = document.getElementById('uglezLeitura');
     const campo = document.getElementById('aiQuestion');
