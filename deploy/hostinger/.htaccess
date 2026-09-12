@@ -54,7 +54,7 @@
   # -----------------------------------------------------------
   # 3 · rotas do aplicativo → app.html
   # -----------------------------------------------------------
-  # /app, /onboarding e /checkout são estados do aplicativo, não
+  # /app e /onboarding são estados do aplicativo, não
   # arquivos. O Apache entrega o app.html e o JavaScript decide o
   # que mostrar — inclusive se a pessoa pode estar ali.
   #
@@ -75,9 +75,6 @@
   RewriteRule ^app(/.*)?$         /app.html [L]
   RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
   RewriteRule ^onboarding(/.*)?$  /app.html [L]
-  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
-  RewriteRule ^checkout(/.*)?$    /app.html [L]
-
   # -----------------------------------------------------------
   # 4 · fallback da raiz
   # -----------------------------------------------------------

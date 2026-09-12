@@ -103,7 +103,7 @@
             <b data-mensal="R$ 24,90" data-anual="R$ 19,99">R$ 24,90</b> <span>por mês</span>
           </p>
           <p class="plano-nota"><span data-so-anual hidden>R$ 239,90 por ano · economia de R$ 58,90</span></p>
-          <a class="btn btn-principal btn-largo" href="/checkout?plano=basic" data-link-plano="/checkout?plano=basic">Assinar o Basic</a>
+          <span class="btn btn-principal btn-largo" aria-disabled="true">Em breve</span>
           <ul class="lista">
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 contas e 5 cartões</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Movimentações, orçamentos e recorrências ilimitados</li>
@@ -121,7 +121,7 @@
             <b data-mensal="R$ 49,90" data-anual="R$ 39,99">R$ 49,90</b> <span>por mês</span>
           </p>
           <p class="plano-nota"><span data-so-anual hidden>R$ 479,90 por ano · economia de R$ 118,90</span></p>
-          <a class="btn btn-fantasma btn-largo" href="/checkout?plano=pro" data-link-plano="/checkout?plano=pro">Assinar o Pro</a>
+          <span class="btn btn-fantasma btn-largo" aria-disabled="true">Em breve</span>
           <ul class="lista">
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 5 espaços financeiros</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Contas, cartões e movimentações ilimitados</li>
@@ -209,92 +209,14 @@
     </div>
   </section>
 
-  <!-- ============================ cobrança ============================
-       Padrão editorial da seção Segurança da página inicial. Os ids
-       ficam em cada item: são âncoras que outras páginas usam. -->
-  <section class="secao" style="padding-top:0">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2>Como a cobrança funciona</h2>
-        <p>Pagamento, renovação, troca de plano, cancelamento e reembolso — sem letra miúda.</p>
-      </div>
-
-      <div class="grade grade-editorial">
-        <article class="carta revela" id="pagamento">
-          <h3>Formas de pagamento</h3>
-          <p>O pagamento é processado por um <strong>provedor externo de pagamentos</strong>,
-          identificado na tela de compra. As formas aceitas — cartão, Pix e boleto — dependem
-          do que esse provedor oferecer no momento.</p>
-          <p><strong>O OAZE não recebe nem guarda os dados do seu cartão.</strong> Eles são
-          digitados no ambiente do provedor, e o que volta para nós é apenas a
-          confirmação de que o pagamento aconteceu.</p>
-        </article>
-
-        <article class="carta revela" id="anual">
-          <h3>Como funciona a cobrança anual</h3>
-          <p>No plano anual o ano inteiro é cobrado de uma vez, com desconto. O Basic sai
-          por R$ 239,90 em vez de R$ 298,80 — economia de R$ 58,90. O Pro, por R$ 479,90
-          em vez de R$ 598,80 — economia de R$ 118,90.</p>
-          <p>A renovação é automática na data de aniversário da assinatura, pelo preço
-          vigente na época. Avisamos por e-mail antes de cada renovação.</p>
-        </article>
-
-        <article class="carta revela" id="mudanca">
-          <h3>Upgrade e downgrade</h3>
-          <p><strong>Upgrade</strong> vale na hora: assim que o pagamento é confirmado, os
-          limites novos passam a valer.</p>
-          <p><strong>Downgrade</strong> vale no fim do período já pago. Até lá nada muda —
-          você não perde o que já pagou.</p>
-        </article>
-
-        <article class="carta revela" id="dados-downgrade">
-          <h3>O que acontece com os dados ao descer de plano</h3>
-          <p><strong>Nada é apagado.</strong> Se você tinha 8 contas no Basic e volta para o
-          Grátis, que permite 2, as 8 continuam existindo.</p>
-          <p>O que passa do limite entra em <strong>modo de visualização</strong>: continua
-          aparecendo, continua entrando nos relatórios de períodos passados e continua
-          podendo ser exportado — mas você não cria novos registros até ficar dentro do
-          limite, e escolhe quais quer manter ativos.</p>
-          <p>Essa escolha é sua e não tem prazo. O OAZE nunca decide sozinho o que apagar.</p>
-        </article>
-
-        <article class="carta revela" id="cancelamento">
-          <h3>Cancelamento</h3>
-          <p>Você cancela pela própria tela de configurações, sem falar com ninguém e sem
-          justificar. O acesso continua <strong>até o fim do período já pago</strong> —
-          cancelar não corta no meio.</p>
-          <p>Depois disso a conta volta ao plano Grátis. Ela não é apagada, e seus dados
-          continuam lá. Detalhes em <a href="/termos#cancelamento">Termos de uso</a>.</p>
-        </article>
-
-        <article class="carta revela" id="reembolso">
-          <h3>Reembolso</h3>
-          <p>Compras feitas pela internet têm <strong>7 dias de arrependimento</strong> pelo
-          Código de Defesa do Consumidor, contados da contratação. Nesse prazo, devolvemos
-          o valor integral. Veja <a href="/termos#reembolso">a política completa</a>.</p>
-        </article>
-
-        <article class="carta revela" id="seguranca-pagamento">
-          <h3>Segurança do pagamento</h3>
-          <p>O plano que vale para a sua conta é o que está no <strong>nosso servidor</strong>,
-          liberado apenas quando o provedor de pagamentos confirma o pagamento por uma notificação
-          assinada. A tela de “compra concluída” não libera nada sozinha — ela é só uma
-          tela.</p>
-          <p>O valor cobrado também é decidido no servidor, a partir do plano e do ciclo. O
-          navegador nunca envia preço.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <!-- ============================ FAQ ============================ -->
   <section class="secao secao-faq" style="padding-top:0">
     <div class="env">
       <div class="secao-topo revela"><h2>Perguntas sobre os planos</h2></div>
       <div class="faq">
         <details>
-          <summary>Posso trocar de plano depois?</summary>
-          <div class="resposta"><p>Sim, quantas vezes quiser. Subir vale na hora; descer vale no fim do período já pago.</p></div>
+          <summary>Quando Basic e Pro estarão disponíveis?</summary>
+          <div class="resposta"><p>Depois que a nova integração de assinaturas estiver concluída e validada. Até lá, só o plano Grátis pode ser contratado.</p></div>
         </details>
         <details>
           <summary>Existe período de teste do Basic ou do Pro?</summary>
@@ -307,10 +229,6 @@
         <details>
           <summary>Preciso assinar para usar em mais de um aparelho?</summary>
           <div class="resposta"><p>Não. A sincronização entre aparelhos vem com a conta, inclusive no Grátis. Os planos pagos aumentam limites, não liberam a sincronização.</p></div>
-        </details>
-        <details>
-          <summary>Vocês emitem nota fiscal?</summary>
-          <div class="resposta"><p>O comprovante de pagamento é emitido pelo provedor de pagamentos e chega no seu e-mail. Para nota fiscal, fale com o <a href="/suporte">suporte</a>.</p></div>
         </details>
       </div>
     </div>
@@ -348,7 +266,6 @@
         <li><a href="/recuperar-senha">Recuperar senha</a></li></ul></div>
       <div><h4>Legal</h4><ul>
         <li><a href="/termos">Termos de uso</a></li><li><a href="/privacidade">Política de privacidade</a></li>
-        <li><a href="/termos#cancelamento">Cancelamento</a></li><li><a href="/termos#reembolso">Reembolso</a></li>
         <li><a href="/suporte">Suporte</a></li></ul></div>
     </div>
     <div class="rodape-fim">
@@ -377,20 +294,14 @@ window.addEventListener('load', function () {
     if (!u) return;
     try {
       var r = await A.cliente().from('subscriptions')
-        .select('plan_id,status,billing_cycle,current_period_end')
+        .select('plan_id,status')
         .eq('user_id', u.id).maybeSingle();
       if (r.error || !r.data) return;
 
       var nomes = { free: 'Grátis', basic: 'Basic', pro: 'Pro' };
       var s = r.data;
-      var txt = 'Você está no plano ' + (nomes[s.plan_id] || s.plan_id);
-      if (s.status === 'active' && s.current_period_end) {
-        txt += ', ' + (s.billing_cycle === 'annual' ? 'anual' : 'mensal') +
-          ', renovando em ' + new Date(s.current_period_end).toLocaleDateString('pt-BR');
-      } else if (s.status === 'past_due') {
-        txt += '. Há um pagamento pendente.';
-      }
-      A.diz(faixa, txt + '.', 'ok');
+      var plano = ['active', 'past_due', 'canceled'].includes(s.status) ? s.plan_id : 'free';
+      A.diz(faixa, 'Você está no plano ' + (nomes[plano] || plano) + '.', 'ok');
     } catch (e) { /* a faixa é cortesia; sem ela a página está inteira */ }
   });
 });

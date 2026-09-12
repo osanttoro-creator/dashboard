@@ -11,10 +11,9 @@
 -- inteiro em centavos, sempre, e a divisão só acontece na hora de
 -- escrever na tela.
 --
--- UMA ASSINATURA POR PESSOA
--- user_id é UNIQUE. "Evitar duas assinaturas simultâneas" deixa de
--- ser cuidado do código e passa a ser impossível — mudar de plano
--- altera a linha, e o histórico vive em subscription_events.
+-- UM PLANO POR PESSOA
+-- user_id é UNIQUE. Ter duas linhas de plano simultâneas deixa de
+-- ser cuidado do código e passa a ser impossível.
 -- =============================================================
 
 -- -------------------------------------------------------------
@@ -56,15 +55,11 @@ create table if not exists public.plan_prices (
   moeda             text        not null default 'BRL',
   versao            int         not null default 1,
   vigente           boolean     not null default true,
-  external_price_id text,
   created_at        timestamptz not null default now(),
   constraint plan_prices_ciclo_ck check (ciclo in ('monthly', 'annual')),
   constraint plan_prices_centavos_ck check (centavos >= 0),
   constraint plan_prices_moeda_ck check (moeda = 'BRL')
 );
-
-comment on column public.plan_prices.external_price_id is
-  'Id do preço no provedor de pagamento. Configurado por ambiente, NUNCA inventado: sem ele o checkout para antes de cobrar.';
 
 create unique index if not exists plan_prices_vigente_idx
   on public.plan_prices (plan_id, ciclo) where vigente;
@@ -185,9 +180,6 @@ create table public.subscriptions (
   plan_id                  text        not null default 'free' references public.plans (id),
   billing_cycle            text        not null default 'monthly',
   status                   text        not null default 'free',
-  provider                 text,
-  external_customer_id     text,
-  external_subscription_id text,
   current_period_start     timestamptz,
   current_period_end       timestamptz,
   cancel_at_period_end     boolean     not null default false,
@@ -203,9 +195,6 @@ create table public.subscriptions (
 
 comment on table public.subscriptions is
   'Uma linha por usuário — user_id é UNIQUE. Duas assinaturas simultâneas não são evitadas por cuidado do código: são impossíveis.';
-
-create index if not exists subscriptions_externo_idx
-  on public.subscriptions (external_subscription_id) where external_subscription_id is not null;
 
 -- -------------------------------------------------------------
 -- 5 · consumo, contado de forma atômica
@@ -227,30 +216,3 @@ create table if not exists public.usage_counters (
 
 comment on column public.usage_counters.periodo is
   'YYYY-MM no fuso do OAZE (America/Sao_Paulo), não em UTC: virar o mês às 21h do dia 30 seria surpresa.';
-
--- -------------------------------------------------------------
--- 6 · histórico de mudanças
--- -------------------------------------------------------------
--- É também a defesa contra webhook duplicado: o provedor reenvia o
--- mesmo evento quando não recebe confirmação, e sem esta chave
--- única o reenvio aplicaria a mudança duas vezes.
-create table if not exists public.subscription_events (
-  id                uuid primary key default gen_random_uuid(),
-  user_id           uuid        not null references auth.users (id) on delete cascade,
-  tipo              text        not null,
-  de_plano          text,
-  para_plano        text,
-  de_status         text,
-  para_status       text,
-  provider          text,
-  external_event_id text,
-  dados             jsonb       not null default '{}'::jsonb,
-  created_at        timestamptz not null default now()
-);
-
-create unique index if not exists subscription_events_externo_idx
-  on public.subscription_events (provider, external_event_id)
-  where external_event_id is not null;
-
-create index if not exists subscription_events_user_idx
-  on public.subscription_events (user_id, created_at desc);

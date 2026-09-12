@@ -226,15 +226,9 @@
     if (antiga) antiga.remove();
   }
 
-  Charts.descrever = descrever;
-
   Charts.destroy = function (canvasId) {
     const c = registry.get(canvasId);
     if (c) { c.destroy(); registry.delete(canvasId); }
-  };
-  Charts.destroyAll = function () {
-    registry.forEach((c) => c.destroy());
-    registry.clear();
   };
 
   /* ============================================================

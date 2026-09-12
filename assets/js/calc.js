@@ -203,11 +203,6 @@
     const c = Calc.categoryById(id, profile);
     return c ? c.name : 'Sem categoria';
   };
-  Calc.categoryColor = function (id, profile) {
-    const c = Calc.categoryById(id, profile);
-    return c ? c.color : '#9AA0AC';
-  };
-
   /**
    * Totais por categoria no intervalo.
    * -> [{ id, name, color, total, count, pct }] ordenado desc.
@@ -395,22 +390,6 @@
      5 · CARTÕES E FATURAS
      ============================================================ */
 
-  /**
-   * Referência (mês de VENCIMENTO) da fatura que captura uma compra.
-   * Se o dia da compra passou do fechamento, cai no ciclo seguinte.
-   * Se o vencimento é ANTES do fechamento no calendário, a fatura
-   * vence no mês seguinte ao do fechamento.
-   */
-  Calc.invoiceRefForDate = function (card, iso) {
-    const d = U.parseISO(iso);
-    if (!d) return U.todayYM();
-    const y = d.getFullYear(), m = d.getMonth(), day = d.getDate();
-    const closeDayThis = U.clampDay(y, m, card.closingDay);
-    const closeMonth = day > closeDayThis ? m + 1 : m;
-    const dueOffset = card.dueDay > card.closingDay ? 0 : 1;
-    return U.ymKey(y, closeMonth + dueOffset);
-  };
-
   /** { openDate, closeDate, dueDate } da fatura de referência `ref`. */
   Calc.invoiceDates = function (card, ref) {
     const p = U.ymParts(ref);
@@ -538,32 +517,6 @@
     return out;
   };
   Calc.yearRateToMonth = (annualPct) => Math.pow(1 + (+annualPct || 0) / 100, 1 / 12) - 1;
-
-  /* ============================================================
-     7 · RESUMO DO ANO
-     ============================================================ */
-
-  Calc.yearSummary = function (year, profile) {
-    const prof = profile || P();
-    const series = Calc.monthlySeries(`${year}-01`, `${year}-12`, prof);
-    const invested = {};
-    prof.investments.forEach((iv) => {
-      const y = +iv.date.slice(0, 4);
-      if (y === year) {
-        const m = iv.date.slice(0, 7);
-        invested[m] = U.round2((invested[m] || 0) + (+iv.amount || 0));
-      }
-    });
-    series.forEach((r) => { r.invested = invested[r.ym] || 0; });
-    return {
-      year, series,
-      income: U.round2(U.sum(series, (r) => r.income)),
-      expense: U.round2(U.sum(series, (r) => r.expense)),
-      balance: U.round2(U.sum(series, (r) => r.balance)),
-      invested: U.round2(U.sum(series, (r) => r.invested)),
-      endCumulative: series.length ? series[series.length - 1].cumulative : 0
-    };
-  };
 
   /** Anos que possuem qualquer movimento. */
   Calc.yearsWithData = function (profile) {

@@ -258,6 +258,7 @@ p.leve { color: var(--bruma); }
   transition: background .16s var(--curva), border-color .16s var(--curva), color .16s var(--curva);
 }
 .btn:active { transform: translateY(1px); }
+.btn[aria-disabled="true"] { opacity: .58; cursor: default; pointer-events: none; }
 .btn-principal { background: var(--ouro); color: var(--acento-tinta); }
 .btn-principal:hover { background: var(--ouro-claro); color: var(--acento-tinta); }
 .btn-fantasma { background: transparent; color: var(--tinta); border-color: var(--borda-forte); }

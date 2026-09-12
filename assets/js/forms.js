@@ -49,20 +49,6 @@
     return wrap;
   }
 
-  /** Pré-visualização do logo do banco, atualizada conforme a escolha. */
-  function bankPreview(getName) {
-    const box = el('div', { class: 'bank-preview' });
-    box.update = () => {
-      U.clear(box);
-      const nome = getName();
-      const known = Icons.hasBank(nome);
-      box.appendChild(Icons.bankTile(nome, 32));
-      box.appendChild(el('span', { text: known ? 'Logo e cor da marca encontrados' : 'Sem logo — usando ícone genérico' }));
-    };
-    box.update();
-    return box;
-  }
-
   /**
    * Seletor de cor do cartão de carteira. Serve ao cartão de crédito e à
    * conta de débito — as duas coisas são desenhadas com o mesmo material.

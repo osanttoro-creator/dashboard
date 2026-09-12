@@ -10,7 +10,6 @@ User-agent: *
 Allow: /
 Disallow: /app
 Disallow: /onboarding
-Disallow: /checkout
 Disallow: /entrar
 Disallow: /cadastro
 Disallow: /recuperar-senha

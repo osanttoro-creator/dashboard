@@ -15,7 +15,6 @@
      · OPENAI_API_KEY e chaves sk-… da OpenAI
      · a service_role do Supabase (JWT com esse papel, e sb_secret_)
      · chaves privadas em PEM
-     · segredos de webhook do provedor de pagamento
 
    O QUE NÃO É SEGREDO, e por isso não é acusado
    A chave publicável do Supabase (sb_publishable_… / a anon em
@@ -52,7 +51,6 @@ const PADROES = [
   { nome: 'service_role do Supabase (JWT em base64)', re: /eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]*c2VydmljZV9yb2xl/ },
   { nome: 'segredo do Supabase (sb_secret_)', re: /\bsb_secret_[A-Za-z0-9_-]+/ },
   { nome: 'chave privada em PEM', re: /-----BEGIN (RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/ },
-  { nome: 'segredo de webhook com valor', re: /WEBHOOK_SECRET\s*[:=]\s*['"][^'"]{8,}/ }
 ];
 
 const achados = [];

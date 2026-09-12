@@ -241,7 +241,7 @@ body {
   font-family: var(--font-mono); font-weight: 400; letter-spacing: .14em;
 }
 /* Títulos de página e de destaque na Newsreader. */
-.pu-titulo, .uglez-hero-name { font-family: var(--font-titulo); font-weight: 500; letter-spacing: -.01em; }
+.pu-titulo { font-family: var(--font-titulo); font-weight: 500; letter-spacing: -.01em; }
 .badge, .cat-tile-pct, .hint, .card-note, .tx-meta { letter-spacing: .005em; }
 h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
@@ -453,13 +453,6 @@ table { border-collapse: collapse; width: 100%; }
   padding: 4px 10px; font: inherit; font-size: 12px; font-weight: 560; cursor: pointer;
 }
 .pill-hoje:hover { background: var(--plane-2); color: var(--ink); }
-.pill-avatar {
-  width: 26px; height: 26px; flex: none; border-radius: 50%;
-  display: grid; place-items: center; overflow: hidden;
-  background: var(--ouro); color: var(--on-accent);
-  font-size: 11.5px; font-weight: 700;
-}
-.pill-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .pill-btn {
   cursor: pointer; padding: 7px 12px;
   transition: transform .16s var(--ease-out), background .16s var(--ease-out);
@@ -614,7 +607,6 @@ table { border-collapse: collapse; width: 100%; }
 .btn-primary { background: var(--ouro); color: var(--on-accent); }
 .btn-danger  { background: var(--expense-strong); color: #fff; }
 .btn-income  { background: var(--income-strong); color: #fff; }
-.btn-invest  { background: var(--invest-strong); color: #fff; }
 /* O botão do UGLEZ é da cor dele: o azul-royal, a única luz. */
 .btn-ai { background: var(--uglez); color: #fff; }
 .btn-ai:hover { filter: brightness(1.08); }
@@ -679,7 +671,6 @@ select.input { cursor: pointer; }
   background: var(--plane-2); color: var(--ink-2);
 }
 .badge-fix   { background: color-mix(in srgb, var(--invest) 11%, transparent); color: var(--invest); }
-.badge-card  { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
 .badge-pend  { background: color-mix(in srgb, var(--warning) 16%, transparent); color: var(--warning-text); }
 [data-theme="dark"] .badge-pend { background: color-mix(in srgb, var(--warning) 24%, transparent); }
 .badge-ok    { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good-text); }
@@ -882,20 +873,6 @@ select.input { cursor: pointer; }
   .cat-tile-split { max-height: 24px; opacity: 1; }
 }
 
-/* lista ranqueada ao lado/abaixo da pizza */
-.rank-list { display: grid; gap: 9px; margin-top: 14px; }
-.rank-list li { display: grid; grid-template-columns: 22px 1fr auto auto; gap: 9px; align-items: center; font-size: 12.5px; }
-.rank-bar {
-  grid-column: 2 / -1; height: 6px; border-radius: 3px; background: var(--plane-2);
-  overflow: hidden; display: flex; gap: 2px;
-}
-.rank-bar > i { display: block; height: 100%; border-radius: 3px; }
-/* crédito recebe hachura: a diferença não fica só na cor */
-.rank-bar > i.is-credit {
-  background-image: repeating-linear-gradient(135deg,
-    rgba(255, 255, 255, .55) 0 2px, rgba(255, 255, 255, 0) 2px 5px);
-}
-.rank-legend { gap: 0 !important; }
 .legend-icons .swatch-solid, .legend-icons .swatch-hatch {
   width: 16px; height: 6px; border-radius: 3px; background: var(--muted); display: inline-block;
 }
@@ -903,9 +880,6 @@ select.input { cursor: pointer; }
   background-image: repeating-linear-gradient(135deg,
     rgba(255, 255, 255, .55) 0 2px, rgba(255, 255, 255, 0) 2px 5px);
 }
-.rank-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rank-val { font-variant-numeric: tabular-nums; font-weight: 600; }
-.rank-pct { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
 
 /* ------------------------------------------------------------
    10 · TABELAS
@@ -1061,19 +1035,6 @@ select.input { cursor: pointer; }
   background: rgba(255, 255, 255, .2); color: #fff;
   -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
 }
-.cc-chip {
-  width: 32px; height: 24px; border-radius: 5px; flex: none;
-  background: linear-gradient(145deg, #EBD08A 0%, #C9A45B 55%, #E4C480 100%);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2);
-  position: relative;
-}
-.cc-chip::before, .cc-chip::after {
-  content: ''; position: absolute; left: 4px; right: 4px; height: 1px;
-  background: rgba(0, 0, 0, .22);
-}
-.cc-chip::before { top: 8px; }
-.cc-chip::after { top: 15px; }
-
 .cc-number {
   font-size: 15px; letter-spacing: .14em; font-weight: 600;
   font-variant-numeric: tabular-nums; align-self: end;
@@ -1121,9 +1082,6 @@ select.input { cursor: pointer; }
 .cc-detail-head h3 { font-size: 15px; font-weight: 640; }
 .cc-detail-head .row-actions { margin-left: auto; }
 
-.cc-amount { font-size: 21px; font-weight: 660; letter-spacing: -.022em; font-variant-numeric: tabular-nums; }
-.cc-dates { display: flex; gap: 14px; font-size: 12px; color: var(--ink-2); flex-wrap: wrap; }
-.cc-dates b { font-weight: 640; }
 .meter { height: 7px; border-radius: 4px; background: color-mix(in srgb, var(--accent) 18%, var(--plane-2)); overflow: hidden; }
 .meter > i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
 .meter.is-warning > i { background: var(--warning); }
@@ -1135,12 +1093,6 @@ select.input { cursor: pointer; }
 .inv-fig { display: grid; gap: 2px; }
 .inv-fig .k { font-size: 11.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
 .inv-fig .v { font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; }
-
-/* visão rápida da carteira no Início */
-.home-cards { display: grid; grid-template-columns: auto minmax(220px, 1fr); gap: 20px; align-items: center; }
-.home-card-side { display: grid; gap: 8px; align-content: center; min-width: 0; }
-.home-card-side .cc-amount { color: var(--ink); }
-@media (max-width: 820px) { .home-cards { grid-template-columns: 1fr; } }
 
 /* ------------------------------------------------------------
    13 · CATEGORIAS
@@ -1207,7 +1159,6 @@ select.input { cursor: pointer; }
    ------------------------------------------------------------ */
 .ai-ask { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; }
 .ai-ask textarea { min-height: 42px; }
-.ai-examples { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
 .ai-chip {
   padding: 5px 12px; border-radius: 999px; font-size: 12px; cursor: pointer;
   border: 1px solid var(--border-strong); background: transparent; color: var(--ink-2);
@@ -1308,7 +1259,6 @@ select.input { cursor: pointer; }
    sabe onde chegou. */
 .seg-ico button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-.bank-preview { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--ink-2); }
 .color-picker { display: flex; gap: 6px; flex-wrap: wrap; }
 .color-opt { width: 24px; height: 24px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; padding: 0; }
 .color-opt.is-active { border-color: var(--ink); }
@@ -1662,9 +1612,6 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   50%      { transform: scale(1.14); opacity: .12; }
 }
 .uglez-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.uglez-hero { display: flex; align-items: center; gap: 16px; padding: 4px 2px 0; }
-.uglez-hero-name { font-size: 22px; font-weight: 680; letter-spacing: .1em; }
-.uglez-hero-sub { font-size: 13.5px; color: var(--muted); }
 
 .insight-card {
   border-radius: var(--radius); padding: 16px;
@@ -2354,32 +2301,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 /* ------------------------------------------------------------
-   22.10 · AVISO DE CONTA
-   ------------------------------------------------------------
-   Faixa acima do conteúdo quando a assinatura precisa de atenção.
-   Fica acima porque é sobre o acesso à ferramenta, não sobre o
-   mês exibido — colocá-la dentro da página faria a mensagem
-   desaparecer ao trocar de seção.
-   ------------------------------------------------------------ */
-.aviso-conta {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-  margin-bottom: 16px; padding: 14px 18px;
-  border-radius: var(--radius);
-  border: 1px solid color-mix(in srgb, var(--terracotta) 42%, transparent);
-  background: color-mix(in srgb, var(--terracotta) 12%, var(--n1));
-}
-.aviso-conta strong { font-size: 13.5px; font-weight: 660; }
-.aviso-conta p { font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin-top: 3px; max-width: 68ch; }
-.aviso-conta .btn { flex: none; }
-
-@media (max-width: 560px) {
-  .aviso-conta { padding: 12px 14px; }
-  .aviso-conta .btn { width: 100%; justify-content: center; }
-}
-
-/* ------------------------------------------------------------
-   22.11 · PLANOS
+   22.10 · PLANOS
    ------------------------------------------------------------
    Três cartões que precisam ser comparáveis num relance. O do
    meio é o destacado — não por ser o mais caro, mas por ser o que
@@ -2487,15 +2409,9 @@ input[type="checkbox"], input[type="radio"] {
 }
 .uso-barra.is-cheio > i { background: var(--warning); }
 
-.plano-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
-.lista-check { display: grid; gap: 6px; padding: 0; list-style: none; }
-.lista-check li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.5; }
-.lista-passos { padding-left: 20px; display: grid; gap: 5px; font-size: 13px; line-height: 1.55; }
-
 @media (max-width: 560px) {
   .plano-card { padding: 22px 18px; }
   .plano-valor { font-size: 26px; }
-  .plano-acoes .btn { flex: 1 1 100%; justify-content: center; }
 }
 
 /* ============================================================
@@ -2712,44 +2628,6 @@ input[type="checkbox"], input[type="radio"] {
    onde um anel da cor do texto sumiria. */
 .fila-chip.is-erro .fila-acao:focus-visible {
   outline: 2px solid #fff; outline-offset: 2px;
-}
-
-/* ==================================================================
-   UGLEZ — de onde vem cada informação
-   ------------------------------------------------------------------
-   Duas naturezas convivem nesta tela: aritmética feita no navegador
-   e frase gerada por um modelo. Um número calculado aqui é
-   verificável; uma frase de modelo não é. Misturar as duas sem
-   marcação faz a segunda herdar a credibilidade da primeira.
-   ================================================================== */
-.uglez-contexto {
-  display: grid; gap: 6px;
-  margin: 0 0 16px; padding: 12px 14px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--plane-2);
-}
-.uglez-contexto-linha {
-  margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  font-size: 13px; color: var(--ink);
-}
-.uglez-contexto-nota { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); max-width: 70ch; }
-
-.uglez-selo {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px; border-radius: 999px;
-  font-size: 11px; font-weight: 650; letter-spacing: .02em;
-  border: 1px solid transparent; white-space: nowrap;
-}
-.uglez-selo-local {
-  background: color-mix(in srgb, var(--invest) 16%, transparent);
-  border-color: color-mix(in srgb, var(--invest) 40%, transparent);
-  color: var(--invest);
-}
-.uglez-selo-ia {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
-  color: var(--accent-strong);
 }
 
 /* A cota fica onde é gasta. O tom sobe conforme ela acaba — mas
@@ -3443,23 +3321,13 @@ body[data-page="uglez"] .fab-wrap { display: none; }
    sobrevive à redução.
    ============================================================= */
 
-/* 1 · a conta: um círculo, e só. É a pessoa. */
-.pill-conta {
-  padding: 4px; border-radius: 999px;
-  /* 36px de alvo mesmo com avatar de 26: a área clicável não pode
-     ser do tamanho do desenho. */
-  min-width: 36px; min-height: 36px;
-  display: inline-grid; place-items: center;
-}
-.pill-conta .pill-avatar { pointer-events: none; }
-
-/* 2 · o espaço financeiro: cápsula com carteira. É o conjunto de
+/* O espaço financeiro é uma cápsula com carteira. É o conjunto de
    dados — contas, cartões e lançamentos de UM espaço. */
 .pill-espaco { padding-left: 10px; }
 .pill-espaco-ico { display: inline-flex; color: var(--muted); flex: none; }
 .pill-espaco select { font-weight: 560; }
 
-/* 3 · o período mantém as setas, que já o distinguem. */
+/* O período mantém as setas, que já o distinguem. */
 
 /* Os seletores deixam de parecer controles nativos soltos. Cada um
    usa o mesmo material, raio e tipografia dos demais campos do OAZE. */
@@ -3505,10 +3373,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 }
 
 @media (max-width: 820px) {
-  /* No celular a barra tem três linhas de controles e pouca
-     largura. A conta encolhe primeiro: ela é a menos usada das
-     três, e continua alcançável por Configurações. */
-  .pill-conta { min-width: 34px; min-height: 34px; }
+  /* No celular a barra tem três linhas de controles e pouca largura. */
   .pill-espaco { padding-left: 8px; }
   .pill-context { display: none; }
   .pill-espaco .pill-select-wrap select { width: 104px; min-width: 0; }

@@ -320,24 +320,16 @@
     ]
   };
 
-  /* Perguntas que a pessoa faz antes de assinar — e que, sem
-     resposta, viram e-mail de suporte ou desistência. */
+  /* Perguntas que continuam válidas enquanto só o Grátis pode ser
+     contratado. As regras comerciais entram junto com o Asaas. */
   Planos.FAQ = [
     {
-      p: 'Posso cancelar quando quiser?',
-      r: 'Sim. O plano continua valendo até o fim do período que você já pagou, e depois volta para o Grátis. Não há multa nem fidelidade.'
+      p: 'Quando Basic e Pro estarão disponíveis?',
+      r: 'Depois que a nova integração de assinaturas estiver concluída e validada. Até lá, só o plano Grátis pode ser contratado.'
     },
     {
       p: 'O que acontece com meus dados se eu voltar para o Grátis?',
       r: 'Nada é apagado. Se você tiver mais contas ou cartões do que o Grátis permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.'
-    },
-    {
-      p: 'Como funciona a troca de plano?',
-      r: 'O upgrade vale assim que o pagamento é confirmado. O downgrade vale no fim do período já pago, para você não perder dias que já comprou.'
-    },
-    {
-      p: 'A cobrança anual é um pagamento só?',
-      r: 'Sim, um pagamento que cobre doze meses. É por isso que sai mais barato por mês.'
     },
     {
       p: 'Meus dados financeiros são enviados para a inteligência artificial?',

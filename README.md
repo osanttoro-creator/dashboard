@@ -382,7 +382,8 @@ roda offline.
 
 ## Tipografia
 
-**Inter Variable**, vendorizada em `assets/vendor/fonte.css` — subconjunto latin,
+**IBM Plex Sans**, **Newsreader** e **IBM Plex Mono**, vendorizadas em
+`assets/vendor/fonte.css` — subconjunto latin,
 eixo de peso 100–900, **embutida em base64**.
 
 Por que base64 e não um `.woff2` ao lado: o app roda em `file://` e como arquivo
@@ -392,7 +393,7 @@ justamente no cenário offline. Custo: 47 KB
 de woff2, 64 KB depois do base64.
 
 A fonte do sistema segue na fila de fallback de propósito: setas e símbolos
-(▲ ▼ ⇄ ✎ ⚙ 🗑) estão fora do subconjunto latin e a Inter não os tem.
+(▲ ▼ ⇄ ✎ ⚙ 🗑) estão fora do subconjunto latin e usam a fonte do sistema.
 
 ```css
 font-feature-settings: 'cv05' 1, 'ss03' 1;

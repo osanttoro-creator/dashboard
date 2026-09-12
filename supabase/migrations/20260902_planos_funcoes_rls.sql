@@ -7,8 +7,8 @@
 -- Não é rigor por rigor. Se houvesse política de UPDATE em
 -- subscriptions, virar "pro" seria uma linha de DevTools; se
 -- houvesse em usage_counters, zerar a cota da IA seria outra.
--- Escrever nestas tabelas é privilégio de quem roda no servidor:
--- a Edge Function e o webhook.
+-- Escrever nestas tabelas é privilégio do código autenticado que
+-- roda no servidor.
 -- =============================================================
 
 -- -------------------------------------------------------------
@@ -58,7 +58,11 @@ set search_path = ''
 as $$
   with assinatura as (
     select
-      case when s.status in ('active', 'pending') then s.plan_id else 'free' end as plano,
+      case
+        when s.status in ('active', 'past_due', 'canceled')
+         and (s.current_period_end is null or s.current_period_end > now())
+        then s.plan_id else 'free'
+      end as plano,
       s.status, s.billing_cycle, s.current_period_end, s.cancel_at_period_end,
       s.plan_id as plano_contratado
     from public.subscriptions s
@@ -161,7 +165,7 @@ do $$
 declare t text;
 begin
   foreach t in array array['plans','plan_prices','plan_entitlements',
-                           'subscriptions','usage_counters','subscription_events']
+                           'subscriptions','usage_counters']
   loop
     execute format('revoke all on public.%I from anon, authenticated', t);
     execute format('grant select on public.%I to authenticated', t);
@@ -185,7 +189,7 @@ drop policy if exists "logado lê os direitos" on public.plan_entitlements;
 create policy "logado lê os direitos" on public.plan_entitlements
   for select to authenticated using (true);
 
--- A assinatura, o consumo e o histórico são de quem é.
+-- O plano e o consumo são de quem é.
 drop policy if exists "dono lê a assinatura" on public.subscriptions;
 create policy "dono lê a assinatura" on public.subscriptions
   for select to authenticated using ((select auth.uid()) = user_id);
@@ -194,9 +198,5 @@ drop policy if exists "dono lê o consumo" on public.usage_counters;
 create policy "dono lê o consumo" on public.usage_counters
   for select to authenticated using ((select auth.uid()) = user_id);
 
-drop policy if exists "dono lê o histórico" on public.subscription_events;
-create policy "dono lê o histórico" on public.subscription_events
-  for select to authenticated using ((select auth.uid()) = user_id);
-
--- Nenhuma política de INSERT, UPDATE ou DELETE em nenhuma das seis.
+-- Nenhuma política de INSERT, UPDATE ou DELETE nestas tabelas.
 -- Repetindo porque parece falta: é o mecanismo.

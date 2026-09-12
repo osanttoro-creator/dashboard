@@ -82,15 +82,16 @@
         preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
       }
 
+      const indisponivel = p.id !== 'free' && !eAtual;
       const botao = el('button', {
         class: 'btn ' + (eAtual ? 'btn-outline' : p.destaque ? 'btn-primary' : 'btn-outline'),
         type: 'button',
-        disabled: eAtual ? '' : null,
+        disabled: eAtual || indisponivel ? '' : null,
         text: eAtual ? 'Seu plano atual'
-          : p.id === 'free' ? 'Começar grátis' : 'Assinar ' + p.nome,
-        onclick: () => Precos.escolher(p, ciclo)
+          : p.id === 'free' ? 'Começar grátis' : 'Em breve',
+        onclick: p.id === 'free' ? () => Precos.escolher(p) : null
       });
-      if (eAtual) botao.disabled = true;
+      if (eAtual || indisponivel) botao.disabled = true;
 
       box.appendChild(el('article', {
         class: 'card plano-card' + (p.destaque ? ' is-destaque' : '') + (eAtual ? ' is-atual' : ''),
@@ -177,7 +178,7 @@
 
   /* ---------------- escolher um plano ---------------- */
 
-  Precos.escolher = function (plano, cicloEscolhido) {
+  Precos.escolher = function (plano) {
     if (plano.id === 'free') {
       if (global.Sync && Sync.currentUser()) {
         UI.toast('Você já tem uma conta. O Grátis é o plano padrão.', 'success');
@@ -187,32 +188,6 @@
       return;
     }
 
-    if (!(global.Sync && Sync.currentUser())) {
-      UI.openModal({
-        title: 'Antes de assinar',
-        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } },
-          el('p', { text: 'Crie sua conta primeiro — é ela que vai guardar a assinatura e os seus dados.' })),
-        buttons: [
-          { label: 'Agora não', class: 'btn-outline', onClick: UI.closeModal },
-          { label: 'Criar conta', class: 'btn-primary', onClick: () => { UI.closeModal(); Sync.signIn(); } }
-        ]
-      });
-      return;
-    }
-
-    /* O provedor de pagamento saiu com o Mercado Pago e o Asaas
-       ainda não entrou. Até lá o botão diz a verdade em vez de abrir
-       uma compra que não cobra ninguém -- tela de "pagamento
-       aprovado" sem pagamento é a mentira mais cara que um produto
-       financeiro pode contar. */
-    UI.openModal({
-      title: 'Assinatura ainda não disponível',
-      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-        el('p', { text: 'Estamos trocando o meio de pagamento. Enquanto a troca não termina, não é possível assinar por aqui.' }),
-        el('p', { text: 'O plano Grátis continua funcionando inteiro, e nada do que você já registrou muda.' })
-      ]),
-      buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
-    });
   };
 
   global.Precos = Precos;

@@ -249,7 +249,7 @@
     ));
   }
 
-  /* ---------------- plano e assinatura ---------------- */
+  /* ---------------- plano ---------------- */
 
   function plano() {
     const box = document.getElementById('setPlano');
@@ -260,18 +260,9 @@
     const d = Limites.direitos();
     const p = Planos.get(d.plano);
 
-    /* --- o plano, o ciclo e o valor --- */
-    const centavos = d.ciclo === 'annual' ? p.anualCentavos : p.mensalCentavos;
-    const descricaoValor = p.id === 'free'
-      ? 'Sem cobrança.'
-      : Planos.moeda(centavos) + (d.ciclo === 'annual' ? ' por ano' : ' por mês');
-
     box.appendChild(linha(
       'Plano atual',
-      descricaoValor + (d.fimPeriodo
-        ? ' · ' + (d.cancelaNoFim ? 'termina em ' : 'renova em ') +
-          U.fmtDateBR(String(d.fimPeriodo).slice(0, 10))
-        : ''),
+      p.id === 'free' ? 'Sem cobrança.' : 'Acesso já registrado na sua conta.',
       el('span', { class: 'badge ' + (p.id === 'free' ? '' : 'badge-ok'), text: p.nome })
     ));
 
@@ -279,13 +270,6 @@
       box.appendChild(el('p', { class: 'hint', style: { padding: '0 2px 8px' },
         text: 'Sem conta, o app usa os limites do plano Grátis neste aparelho.' }));
       return;
-    }
-
-    /* --- situação do pagamento, quando há o que dizer --- */
-    const pend = Conta.pendencia && Conta.pendencia();
-    if (pend) {
-      box.appendChild(linha('Situação do pagamento', pend.texto,
-        el('span', { class: 'badge badge-late', text: pend.titulo })));
     }
 
     /* --- consumo --- */
@@ -303,104 +287,14 @@
     box.appendChild(linha('Consumo do plano',
       'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', caixa));
 
-    /* --- mudar de plano --- */
-    const acoes = el('div', { class: 'plano-acoes' }, [
+    box.appendChild(linha(
+      'Planos Basic e Pro',
+      'As novas assinaturas ainda não estão disponíveis.',
       el('button', {
-        class: 'btn btn-primary btn-sm', type: 'button',
-        text: p.id === 'pro' ? 'Ver planos' : 'Fazer upgrade',
+        class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
         onclick: () => App.goTo('precos')
-      }),
-      p.id !== 'free'
-        ? el('button', {
-          class: 'btn btn-outline btn-sm', type: 'button', text: 'Cancelar assinatura',
-          /* Chama a função de assinatura direto. Ela é nossa e não
-             conhece provedor de pagamento -- por isso sobreviveu à
-             saída do Mercado Pago, e por isso cancelar continua
-             possível enquanto o novo meio não entra. */
-          onclick: () => UI.openModal({
-            title: 'Cancelar assinatura',
-            body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } },
-              el('p', { text: 'O acesso continua até o fim do período já pago. Nada é cobrado depois disso.' })),
-            buttons: [
-              { label: 'Manter', class: 'btn-outline', onClick: UI.closeModal },
-              {
-                label: 'Cancelar assinatura', class: 'btn-primary',
-                onClick: async () => {
-                  UI.closeModal();
-                  try {
-                    const r = await Conta.chamarFuncao('oaze-assinatura', { acao: 'cancelar' });
-                    UI.toast(r && r.erro ? (r.mensagem || 'Não foi possível cancelar agora.') : 'Assinatura cancelada. O acesso vale até o fim do período pago.');
-                  } catch (e) {
-                    UI.toast('Não foi possível cancelar agora. Tente de novo em instantes.');
-                  }
-                }
-              }
-            ]
-          })
-        })
-        : null
-    ].filter(Boolean));
-
-    box.appendChild(linha(
-      'Mudar de plano',
-      p.id === 'free'
-        ? 'O upgrade vale assim que o pagamento é confirmado.'
-        : 'O downgrade e o cancelamento valem no fim do período já pago — você não perde dias que já comprou, e nenhum dado é apagado.',
-      acoes
-    ));
-
-    /* --- histórico --- */
-    box.appendChild(linha(
-      'Histórico de alterações',
-      'Cada mudança de plano ou status fica registrada.',
-      el('button', {
-        class: 'btn btn-outline btn-sm', text: 'Ver histórico',
-        onclick: () => mostrarHistorico()
       })
     ));
-  }
-
-  async function mostrarHistorico() {
-    const corpo = el('div', { style: { fontSize: '13px', lineHeight: '1.6' } },
-      el('p', { class: 'hint', text: 'Carregando…' }));
-    UI.openModal({
-      title: 'Histórico da assinatura', wide: true, body: corpo,
-      buttons: [{ label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }]
-    });
-
-    try {
-      const c = SupabaseBackend.cliente();
-      const u = Sync.currentUser();
-      const { data } = await c.from('subscription_events')
-        .select('tipo, de_plano, para_plano, de_status, para_status, created_at')
-        .eq('user_id', u.uid).order('created_at', { ascending: false }).limit(30);
-
-      U.clear(corpo);
-      if (!data || !data.length) {
-        corpo.appendChild(UI.emptyState({
-          ico: 'clock',
-          titulo: 'Nenhuma alteração ainda',
-          sub: 'Quando você mudar de plano, cada passo aparece aqui com data e hora.'
-        }));
-        return;
-      }
-      const t = el('table', { class: 'table' }, [
-        el('thead', {}, el('tr', {}, [
-          el('th', { scope: 'col', text: 'Quando' }),
-          el('th', { scope: 'col', text: 'O que mudou' })
-        ])),
-        el('tbody', {}, data.map((e) => el('tr', {}, [
-          el('td', { text: U.fmtDateBR(String(e.created_at).slice(0, 10)) }),
-          el('td', { text: (e.de_plano && e.para_plano && e.de_plano !== e.para_plano)
-            ? 'Plano: ' + e.de_plano + ' → ' + e.para_plano
-            : 'Status: ' + (e.de_status || '—') + ' → ' + (e.para_status || '—') })
-        ])))
-      ]);
-      corpo.appendChild(t);
-    } catch (e) {
-      U.clear(corpo);
-      corpo.appendChild(el('p', { class: 'hint', text: 'Não foi possível carregar agora: ' + e.message }));
-    }
   }
 
   /* ---------------- conta ---------------- */
@@ -444,19 +338,15 @@
 
     /* O plano vem do banco. O navegador não tem como alterá-lo:
        não existe política de escrita em subscriptions. */
-    const a = Conta.assinatura();
     const plano = Conta.plano();
-    const pend = Conta.pendencia();
     box.appendChild(linha(
       'Plano',
-      pend ? pend.texto
-        : plano === 'free'
+      plano === 'free'
           ? 'Plano gratuito. Todos os recursos disponíveis hoje estão liberados.'
-          : 'Assinatura ativa' + (a && a.current_period_end
-            ? ' até ' + U.fmtDateBR(String(a.current_period_end).slice(0, 10)) : '') + '.',
+          : 'Plano ' + U.smartCase(plano) + ' ativo na sua conta.',
       el('span', {
-        class: 'badge ' + (pend ? 'badge-late' : plano === 'free' ? '' : 'badge-ok'),
-        text: pend ? pend.titulo : plano === 'free' ? 'Gratuito' : U.smartCase(plano)
+        class: 'badge ' + (plano === 'free' ? '' : 'badge-ok'),
+        text: plano === 'free' ? 'Gratuito' : U.smartCase(plano)
       })
     ));
 

@@ -215,13 +215,6 @@
       document.querySelectorAll('[data-so-anual]').forEach(function (el) {
         el.hidden = ciclo !== 'anual';
       });
-      document.querySelectorAll('[data-link-plano]').forEach(function (a) {
-        /* O link leva o ciclo para o checkout. O PREÇO não vai
-           junto, nem aqui nem em lugar nenhum do frontend: o
-           servidor é quem descobre quanto custa. */
-        var separador = a.dataset.linkPlano.indexOf('?') === -1 ? '?' : '&';
-        a.href = a.dataset.linkPlano + separador + 'ciclo=' + ciclo;
-      });
     };
 
     alternador.addEventListener('click', function (e) {

@@ -9,8 +9,8 @@
 -- Por isso o desenho é assimétrico: política de SELECT para o
 -- dono, e NENHUMA política de INSERT, UPDATE ou DELETE. Sem
 -- política aplicável, a operação é negada — a escrita fica
--- exclusiva de quem ignora o RLS por natureza: a Edge Function
--- com a chave de serviço, no servidor, e o webhook de pagamento.
+-- exclusiva de quem ignora o RLS por natureza: uma Edge Function
+-- autenticada, com a chave de serviço, no servidor.
 --
 -- Isso é o contrário de um esquecimento. É o mecanismo.
 -- =============================================================
@@ -18,15 +18,11 @@
 -- -------------------------------------------------------------
 -- 1 · assinatura
 -- -------------------------------------------------------------
--- Uma linha por usuário. Preenchida pelo webhook do provedor de
--- pagamento — nunca pelo app. Enquanto não existe linha, o plano
--- efetivo é 'free', decidido no servidor.
+-- Uma linha por usuário, nunca escrita pelo app. Enquanto não
+-- existe linha, o plano efetivo é 'free', decidido no servidor.
 create table if not exists public.subscriptions (
   user_id                  uuid primary key references auth.users (id) on delete cascade,
   plan                     text        not null default 'free',
-  provider                 text,
-  external_customer_id     text,
-  external_subscription_id text,
   status                   text        not null default 'active',
   started_at               timestamptz,
   current_period_end       timestamptz,
@@ -39,7 +35,7 @@ create table if not exists public.subscriptions (
 );
 
 comment on table public.subscriptions is
-  'Assinatura por usuário. Escrita SÓ pelo webhook de pagamento; o cliente apenas lê a sua.';
+  'Plano por usuário. O cliente apenas lê a própria linha.';
 
 -- -------------------------------------------------------------
 -- 2 · limites de IA por plano

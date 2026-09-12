@@ -2,7 +2,7 @@
    conta.js — a conta como objeto de primeira classe
    ------------------------------------------------------------
    Reúne o que o brief pede sobre identidade e acesso: perfil do
-   usuário, recuperação de senha, status da assinatura, controle
+   usuário, recuperação de senha, plano efetivo, controle
    de acesso e exclusão da conta.
 
    UMA DECISÃO QUE PRECISA FICAR EXPLÍCITA
@@ -23,7 +23,7 @@
    fechada sem explicação.
 
    O PLANO NUNCA VEM DO NAVEGADOR
-   Acesso.plano() lê a tabela `subscriptions`, que só o webhook
+   Acesso.plano() lê a tabela `subscriptions`, que o navegador não
    escreve. O cliente não tem política de INSERT nem UPDATE ali —
    se tivesse, "assinante" seria uma linha de DevTools.
    ============================================================= */
@@ -33,15 +33,6 @@
   const Conta = {};
   const el = U.el;
 
-  /* Enquanto não há planos definidos, tudo que existe é gratuito.
-     Este mapa é o único lugar que decide — quando os planos forem
-     definidos, muda aqui e em lugar nenhum mais. */
-  const RECURSOS = {
-    sincronizar: 'conta',
-    uglez: 'conta',
-    multiaparelho: 'conta'
-  };
-
   let assinatura = null;      // cache da sessão
   let perfil = null;
 
@@ -50,7 +41,6 @@
       return (global.SupabaseBackend && SupabaseBackend.cliente && SupabaseBackend.cliente()) || null;
     } catch (e) { return null; }
   }
-  const logado = () => !!(global.Sync && Sync.currentUser());
 
   /* ============================================================
      1 · ASSINATURA E ACESSO
@@ -63,7 +53,7 @@
     if (!c || !u) return null;
     try {
       const { data } = await c.from('subscriptions')
-        .select('plan, status, current_period_end, canceled_at, trial_ends_at')
+        .select('plan_id, status, current_period_end, canceled_at')
         .eq('user_id', u.uid).maybeSingle();
       assinatura = data || null;
     } catch (e) { /* offline: segue sem */ }
@@ -73,72 +63,9 @@
   /** O plano efetivo. Sem linha ou sem status ativo, é 'free'. */
   Conta.plano = function () {
     if (!assinatura) return 'free';
-    return ['active', 'trialing'].includes(assinatura.status) ? assinatura.plan : 'free';
-  };
-
-  Conta.assinatura = () => assinatura;
-
-  /**
-   * A assinatura está em situação que exige atenção? Devolve null
-   * quando está tudo bem — assim quem chama não precisa conhecer
-   * os nomes dos status.
-   */
-  Conta.pendencia = function () {
-    if (!assinatura) return null;
-    const s = assinatura.status;
-    if (s === 'past_due') {
-      return {
-        titulo: 'Pagamento pendente',
-        texto: 'Não conseguimos confirmar o último pagamento. Seus dados continuam aqui e nada foi apagado — regularize para voltar a usar os recursos do plano.',
-        acao: 'Regularizar'
-      };
-    }
-    if (s === 'canceled') {
-      return {
-        titulo: 'Assinatura encerrada',
-        texto: 'Sua assinatura foi encerrada. O painel continua funcionando com seus dados; os recursos do plano ficam indisponíveis até você reativar.',
-        acao: 'Reativar'
-      };
-    }
-    if (s === 'incomplete') {
-      return {
-        titulo: 'Assinatura incompleta',
-        texto: 'A confirmação do pagamento não chegou. Isso pode levar alguns minutos; se persistir, refaça a assinatura.',
-        acao: 'Ver detalhes'
-      };
-    }
-    return null;
-  };
-
-  /** Este recurso está disponível agora? */
-  Conta.pode = function (recurso) {
-    const exige = RECURSOS[recurso];
-    if (!exige) return true;                       // não catalogado é livre
-    if (exige === 'conta') return logado();
-    return Conta.plano() === exige;
-  };
-
-  /**
-   * Explica a falta em vez de simplesmente negar. Um recurso que
-   * some sem dizer por quê é indistinguível de um recurso quebrado.
-   */
-  Conta.exigir = function (recurso, oQueEra) {
-    if (Conta.pode(recurso)) return true;
-    const exige = RECURSOS[recurso];
-    if (exige === 'conta') {
-      UI.openModal({
-        title: 'Precisa de uma conta',
-        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-          el('p', { text: oQueEra + ' precisa de uma conta OAZE.' }),
-          el('p', { style: { marginTop: '10px' }, text: 'Não é uma trava comercial: é assim que seus dados sabem para onde ir. O painel continua funcionando neste aparelho sem conta nenhuma.' })
-        ]),
-        buttons: [
-          { label: 'Agora não', class: 'btn-outline', onClick: UI.closeModal },
-          { label: 'Entrar', class: 'btn-primary', onClick: () => { UI.closeModal(); Sync.signIn(); } }
-        ]
-      });
-    }
-    return false;
+    return ['active', 'past_due', 'canceled'].includes(assinatura.status)
+      && (!assinatura.current_period_end || new Date(assinatura.current_period_end) > new Date())
+      ? assinatura.plan_id : 'free';
   };
 
   /* ============================================================
@@ -406,45 +333,17 @@
   };
 
   /* ============================================================
-     6 · AVISO DE PENDÊNCIA
-     ============================================================ */
-
-  /** Faixa no topo quando a assinatura precisa de atenção. */
-  Conta.pintarAviso = function () {
-    const alvo = document.getElementById('avisoConta');
-    if (!alvo) return;
-    const p = Conta.pendencia();
-    U.clear(alvo);
-    alvo.hidden = !p;
-    if (!p) return;
-
-    alvo.setAttribute('role', 'status');
-    alvo.appendChild(el('div', { class: 'aviso-conta' }, [
-      el('div', {}, [
-        el('strong', { text: p.titulo }),
-        el('p', { text: p.texto })
-      ]),
-      el('button', {
-        class: 'btn btn-primary btn-sm', type: 'button', text: p.acao,
-        onclick: () => App.goTo('settings')
-      })
-    ]));
-  };
-
-  /* ============================================================
-     7 · CICLO
+     6 · CICLO
      ============================================================ */
 
   Conta.aoEntrar = async function () {
     await Conta.carregarPerfil();
     await Conta.carregarAssinatura();
-    Conta.pintarAviso();
     if (App.page === 'settings') Cfg.render();
   };
 
   Conta.aoSair = function () {
     assinatura = null; perfil = null;
-    Conta.pintarAviso();
   };
 
   Conta.init = function () {

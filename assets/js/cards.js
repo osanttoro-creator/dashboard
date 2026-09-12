@@ -149,8 +149,6 @@
       onclick: o.onClick || null
     }, filhos);
   }
-  Cards.shell = shell;
-
   /* ---------------- cartão de crédito ---------------- */
 
   /**

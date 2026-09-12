@@ -38,6 +38,7 @@ const VERIFICACOES = [
   ['tools/testes/navegacao-superior.js', 'navegação superior direta e Planejar visível'],
   ['tools/testes/limites-contextuais.js', 'limites só aparecem durante a ação'],
   ['tools/testes/cartoes-integrados.js', 'mesmo baralho na Visão geral, Débito e Crédito'],
+  ['tools/testes/sem-provedor-pagamento.js', 'nenhum provedor de pagamento antigo no produto'],
   ['tools/testes/uglez-camara.js', 'UGLEZ preserva estados, fallback e responsividade'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
