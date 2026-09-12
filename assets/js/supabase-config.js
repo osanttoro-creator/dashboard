@@ -40,6 +40,20 @@ window.SupabaseConfig = {
   anonKey: '',
 
   /* ============================================================
+     CLIENT ID DO GOOGLE — público, e precisa ser
+     ------------------------------------------------------------
+     Só o "num toque" usa este valor: para desenhar a bolha com a
+     conta, o script da Google precisa saber de quem é o site antes
+     de qualquer redirecionamento. O botão comum não usa nada disto
+     -- ele sai para o Supabase, que guarda o par id+secret.
+
+     Este é o identificador, não o segredo. Ele aparece na URL de
+     qualquer site do mundo que tenha login do Google; o que nunca
+     pode encostar aqui é o *client secret*, que fica só no painel
+     do Supabase. Vazio desliga o num toque e não quebra nada. */
+  googleClientId: '791319482863-rqbdu0mudbiepdiadggc59513lvp7db7.apps.googleusercontent.com',
+
+  /* ============================================================
      ONDE A SESSÃO MORA — UMA CHAVE SÓ, E ESTA É A LINHA MAIS
      IMPORTANTE DESTE ARQUIVO
      ------------------------------------------------------------

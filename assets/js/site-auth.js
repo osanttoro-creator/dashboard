@@ -148,14 +148,100 @@
      Configuration → Redirect URLs no painel do Supabase. Fora da
      lista, o provedor devolve para a Site URL e a pessoa cai na
      página errada, sem erro nenhum na tela. */
-  A.entrarCom = function (provedor) {
+  A.entrarCom = function (provedor, caminho) {
     var c = A.cliente();
     if (!c) return Promise.reject(new Error('config'));
-    var opcoes = { redirectTo: A.voltarPara(A.destino()) };
+    var opcoes = { redirectTo: A.voltarPara(caminho || A.destino()) };
     /* Sem isto, quem tem mais de uma conta Google entra sempre na
        última usada, sem chance de escolher qual. */
     if (provedor === 'google') opcoes.queryParams = { prompt: 'select_account' };
     return c.auth.signInWithOAuth({ provider: provedor, options: opcoes });
+  };
+
+  /* ---------------------------------------------------------------
+     o Google num toque
+     ---------------------------------------------------------------
+     A diferença para o botão: aqui NÃO se sai da página. A Google
+     desenha uma bolha no canto com a conta de quem já está logado no
+     navegador, e um clique devolve um token de identidade que o
+     Supabase troca por sessão na hora. É a entrada mais curta que
+     existe -- e some sozinha para quem não tem conta Google ativa.
+
+     O NONCE, que é a parte fácil de errar: a Google recebe o RESUMO
+     (SHA-256) e o Supabase recebe o valor CRU. Ele confere que o
+     token que chegou foi emitido para este pedido, e não interceptado
+     de outro. Trocar a ordem dos dois faz o login falhar com uma
+     mensagem que não explica nada.
+
+     Tudo aqui falha calado, de propósito: sem conta no navegador, com
+     a bolha dispensada há pouco, com o script bloqueado ou sem
+     crypto.subtle, a pessoa simplesmente não vê a bolha. O botão
+     continua no lugar, e ninguém fica sem porta. */
+  var gsiPromessa = null;
+
+  function carregarGSI() {
+    if (gsiPromessa) return gsiPromessa;
+    gsiPromessa = new Promise(function (ok, falha) {
+      if (global.google && global.google.accounts && global.google.accounts.id) return ok();
+      var s = document.createElement('script');
+      s.src = 'https://accounts.google.com/gsi/client';
+      s.async = true;
+      s.onload = function () { ok(); };
+      s.onerror = function () { falha(new Error('gsi')); };
+      document.head.appendChild(s);
+    });
+    return gsiPromessa;
+  }
+
+  function parDeNonce() {
+    var bytes = new Uint8Array(32);
+    global.crypto.getRandomValues(bytes);
+    var cru = btoa(String.fromCharCode.apply(null, bytes));
+    return global.crypto.subtle.digest('SHA-256', new TextEncoder().encode(cru))
+      .then(function (buf) {
+        var resumo = Array.prototype.map.call(new Uint8Array(buf), function (b) {
+          return ('0' + b.toString(16)).slice(-2);
+        }).join('');
+        return { cru: cru, resumo: resumo };
+      });
+  }
+
+  /* Devolve true se a bolha chegou a ser pedida. O callback recebe um
+     erro, ou null quando a sessão já está de pé. */
+  A.umToque = function (aoEntrar) {
+    var c = global.SupabaseConfig;
+    var id = c && c.googleClientId;
+    var sb = A.cliente();
+    if (!id || !sb) return Promise.resolve(false);
+    /* crypto.subtle só existe em contexto seguro (https ou
+       localhost). Em http comum, nada de nonce e nada de bolha. */
+    if (!global.crypto || !global.crypto.subtle) return Promise.resolve(false);
+
+    return Promise.all([carregarGSI(), parDeNonce()]).then(function (r) {
+      var n = r[1];
+      global.google.accounts.id.initialize({
+        client_id: id,
+        nonce: n.resumo,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        use_fedcm_for_prompt: true,
+        /* Sem isto a bolha não aparece no Safari, que corta o cookie
+           de terceiro por padrão (a proteção contra rastreamento). */
+        itp_support: true,
+        callback: function (resposta) {
+          sb.auth.signInWithIdToken({
+            provider: 'google',
+            token: resposta.credential,
+            nonce: n.cru
+          }).then(function (r2) {
+            if (r2.error) throw r2.error;
+            aoEntrar(null);
+          }).catch(function (e) { aoEntrar(e); });
+        }
+      });
+      global.google.accounts.id.prompt();
+      return true;
+    }).catch(function () { return false; });
   };
 
   /* ---------------------------------------------------------------

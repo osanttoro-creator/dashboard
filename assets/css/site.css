@@ -541,6 +541,17 @@ p.leve { color: var(--bruma); }
 .btn-social { gap: 10px; font-weight: 500; }
 .marca-social { width: 18px; height: 18px; flex: none; }
 
+/* Com provedor ligado, o Google é a porta principal: fundo claro,
+   que é o padrão da própria Google e o que mais salta num painel
+   escuro. O ouro não vem para cá de propósito -- ele é a ação de
+   e-mail, e dois botões cheios disputando a mesma tela não ajudam
+   ninguém a decidir. */
+.btn-social-forte {
+  background: var(--tinta); color: var(--poco); border-color: var(--tinta);
+  min-height: 52px; font-size: 1rem; font-weight: 600;
+}
+.btn-social-forte:hover { background: #fff; border-color: #fff; color: var(--poco); }
+
 .campo { margin-bottom: 18px; }
 .campo label { display: block; margin-bottom: 8px; font: 400 .7rem/1.4 var(--fonte-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bruma); }
 .campo input {

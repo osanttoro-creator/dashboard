@@ -41,7 +41,7 @@
            só os que existem. Com nenhum ligado, esta página fica
            exatamente como era. -->
       <div class="social" id="social" hidden>
-        <button class="btn btn-fantasma btn-largo btn-social" type="button" id="btn-google" hidden>
+        <button class="btn btn-largo btn-social btn-social-forte" type="button" id="btn-google" hidden>
           <svg class="marca-social" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
             <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.71-1.57 2.69-3.89 2.69-6.62z"/>
             <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.33A9 9 0 0 0 9 18z"/>
@@ -57,8 +57,12 @@
           <span data-rotulo>Criar conta com a Apple</span>
         </button>
       </div>
-      <div class="separa" id="separa-social" hidden>ou com e-mail</div>
+      <div class="separa" id="separa-social" hidden>ou</div>
+      <button class="btn btn-fantasma btn-largo" type="button" id="abrir-email" hidden>
+        Criar conta com e-mail
+      </button>
 
+      <div id="via-email">
       <form id="form-cadastro" novalidate>
         <div class="campo">
           <label for="nome">Como quer ser chamado</label>
@@ -87,6 +91,7 @@
 
         <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar">Criar minha conta</button>
       </form>
+      </div><!-- /via-email -->
 
       <p class="legalzinho">
         Ao criar a conta você concorda com os
@@ -117,15 +122,22 @@
 
   if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); return; }
 
-  A.quemEsta().then(function (u) { if (u) location.replace('/app'); });
+  A.quemEsta().then(function (u) {
+    if (u) { location.replace('/app'); return; }
+    return A.provedores().then(montarSocial);
+  });
 
-  /* Entrada social: cada botão só aparece se o provedor estiver
-     ligado no projeto. Quem clica sai daqui para o Google ou para a
-     Apple e volta já com sessão — que fica salva, como a do e-mail. */
-  A.provedores().then(function (p) {
+  /* Entrada social: criar conta pelo Google é a MESMA porta de
+     entrar -- na primeira vez o Supabase cria o usuário sozinho. Por
+     isso a volta cai em /onboarding, como a do formulário quando a
+     confirmação de e-mail está desligada. */
+  function montarSocial(p) {
     var caixa = document.getElementById('social');
     var separa = document.getElementById('separa-social');
+    var via = document.getElementById('via-email');
+    var abrir = document.getElementById('abrir-email');
     var algum = false;
+
     [['google', 'btn-google'], ['apple', 'btn-apple']].forEach(function (par) {
       if (!p[par[0]]) return;
       var b = document.getElementById(par[1]);
@@ -135,7 +147,7 @@
       b.addEventListener('click', function () {
         A.diz(recado, '');
         A.ocupado(b, true, 'Abrindo…');
-        A.entrarCom(par[0]).then(function (r) {
+        A.entrarCom(par[0], '/onboarding').then(function (r) {
           if (r && r.error) throw r.error;
           /* deu certo: o navegador sai desta página para o provedor */
         }).catch(function (err) {
@@ -144,9 +156,27 @@
         });
       });
     });
+
     caixa.hidden = !algum;
     separa.hidden = !algum;
-  });
+    if (!algum) return;
+
+    via.hidden = true;
+    abrir.hidden = false;
+    abrir.addEventListener('click', function () {
+      via.hidden = false;
+      abrir.hidden = true;
+      var campo = via.querySelector('input');
+      if (campo) campo.focus();
+    });
+
+    if (p.google) {
+      A.umToque(function (err) {
+        if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
+        location.replace('/onboarding');
+      });
+    }
+  }
 
   function valida() {
     var ok = true;

@@ -289,3 +289,53 @@ deploy** — a página pergunta isso a cada carregamento.
 
 O modal de conta do painel (`supabase-auth.js`) oferece só o Google. A Apple
 ainda não foi acrescentada lá — o site é que tem os dois.
+
+---
+
+## O Google num toque (One Tap)
+
+Desde 12/09/2026 o site tem **duas** entradas pelo Google, e elas convivem:
+
+1. **O botão** "Continuar com Google". Sai da página, passa pelo Google, volta
+   com `?code=` e o SDK troca por sessão. É o caminho que sempre funciona.
+2. **A bolha**, no canto superior direito. Não sai da página: a Google entrega
+   um token de identidade e o Supabase troca por sessão ali mesmo
+   (`signInWithIdToken`). É a entrada mais curta que existe.
+
+A bolha some sozinha para quem não está logado numa conta Google no navegador,
+para quem a dispensou há pouco (a Google impõe um descanso) e para quem bloqueia
+scripts de terceiro. Nesses casos o botão continua no lugar — ninguém fica sem
+porta. Por isso todo o caminho da bolha falha **calado**: um aviso de erro para
+algo que a pessoa nem pediu seria pior do que o silêncio.
+
+### O nonce, que é a parte fácil de errar
+
+A Google recebe o **resumo** (SHA-256 em hexadecimal) e o Supabase recebe o
+valor **cru**. Inverter os dois faz o login falhar com uma mensagem que não
+explica nada. Está em `site-auth.js`, em `parDeNonce()`, e segue a receita da
+documentação do Supabase.
+
+### O que precisa estar ligado para a bolha aparecer
+
+- **`googleClientId` em `supabase-config.js`.** É o identificador público do
+  cliente OAuth — o mesmo que aparece na URL para onde o botão manda. Nunca o
+  *client secret*, que vive só no painel do Supabase. Vazio desliga a bolha e
+  não quebra nada.
+- **A origem do site em "Origens JavaScript autorizadas"**, no Google Cloud.
+  Sem isso a Google recusa em silêncio e só a bolha some; o botão segue
+  funcionando. É por isso que a bolha não aparece em `localhost:4173`: aquela
+  origem não está autorizada.
+- **`accounts.google.com` na CSP**, em `script-src` e `connect-src`. Ela vive em
+  `deploy/hostinger/.htaccess` (o `public_html/.htaccess` é cópia gerada). Sem a
+  liberação, o navegador bloqueia o script e não sobra nem erro visível.
+
+### A porta principal
+
+Havendo qualquer provedor ligado, o Google vira a ação de cima — botão claro,
+52px — e o formulário de e-mail recolhe atrás de "Entrar com e-mail". Sem
+provedor nenhum, a página fica **exatamente** como sempre foi: recolher o
+e-mail sem ter o que pôr no lugar deixaria a tela sem porta.
+
+Uma consequência a saber: com o e-mail recolhido, "Esqueci a senha" fica a um
+clique de distância, dentro do bloco. Quem chega para recuperar senha precisa
+abrir o e-mail primeiro.
