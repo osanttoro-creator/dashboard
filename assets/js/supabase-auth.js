@@ -1,10 +1,9 @@
 /* =============================================================
    supabase-auth.js — backend Supabase para o Sync
    ------------------------------------------------------------
-   Registra-se em sync.js pelo contrato descrito lá. A diferença
-   para o Firebase é o login: aqui ele acontece DENTRO do app —
-   e-mail e senha num formulário nosso, sem pop-up do Google, que
-   navegador em celular bloqueia com frequência.
+   Registra-se em sync.js pelo contrato descrito lá. O login
+   acontece DENTRO do app — e-mail e senha num formulário nosso,
+   sem pop-up, que navegador em celular bloqueia com frequência.
 
    Três caminhos de entrada, todos opcionais no seu projeto:
      1. e-mail + senha        (Auth → Providers → Email)
@@ -323,7 +322,7 @@
 
   const SB = {
     nome: 'supabase',
-    prioridade: 10,                 // vem antes do Firebase quando os dois existem
+    prioridade: 10,                 // hoje é o único; a ordem existe para o dia em que não for
     rotuloEntrar: 'Entrar',
     marca: () => null,
     isConfigured: () => !!cfg(),

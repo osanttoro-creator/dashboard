@@ -15,9 +15,9 @@
        → ⚙ Project Settings → API
        → "Project URL" e "Publishable key"
 
-   Deixe vazio para NÃO usar o Supabase: o app cai no Firebase (se
-   configurado) ou funciona só com o localStorage, isolado por
-   aparelho. Nada quebra.
+   Deixe vazio para NÃO sincronizar: o app funciona só com o
+   localStorage, isolado por aparelho. Nada quebra — e o botão de
+   entrar simplesmente não aparece.
 
    ------------------------------------------------------------
    A CHAVE PUBLICÁVEL É PÚBLICA POR PROJETO — não é segredo. O

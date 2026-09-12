@@ -3,12 +3,10 @@
    ------------------------------------------------------------
    Por que embutir em base64 em vez de apontar para um .woff2:
 
-   · o app roda em file:// e como arquivo único no iPhone. Fonte
-     em arquivo separado é bloqueada por CORS em file:// na
-     maioria dos navegadores — o texto cairia para a fonte do
-     sistema justamente no cenário offline;
-   · o build-arquivo-unico.ps1 inlina CSS, então a fonte vai
-     junto sem nenhum passo extra.
+   · o app precisa funcionar aberto em file://, e fonte em arquivo
+     separado é bloqueada por CORS nesse esquema na maioria dos
+     navegadores — o texto cairia para a fonte do sistema
+     justamente no cenário offline.
 
    As fontes vêm de assets/vendor/fontes/ (subconjunto "latin",
    que cobre todos os acentos do português). O site público usa os

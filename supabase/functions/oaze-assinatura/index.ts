@@ -8,8 +8,9 @@
      retomar    → desfaz um cancelamento ainda não efetivado
 
    SUBIR DE PLANO NÃO ESTÁ AQUI. Upgrade envolve cobrança, e
-   cobrança é o oaze-checkout: ela vale quando o pagamento é
-   confirmado, não quando alguém clica.
+   cobrança é da função de checkout do provedor de pagamento —
+   que saiu junto com o Mercado Pago e ainda não foi reescrita.
+   Vale quando o pagamento é confirmado, não quando alguém clica.
 
    POR QUE CANCELAR NÃO CORTA NA HORA
    Porque foi pago até uma data. Cortar antes seria ficar com

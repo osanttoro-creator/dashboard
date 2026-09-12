@@ -200,7 +200,19 @@
       return;
     }
 
-    Checkout.iniciar(plano.id, cicloEscolhido);
+    /* O provedor de pagamento saiu com o Mercado Pago e o Asaas
+       ainda não entrou. Até lá o botão diz a verdade em vez de abrir
+       uma compra que não cobra ninguém -- tela de "pagamento
+       aprovado" sem pagamento é a mentira mais cara que um produto
+       financeiro pode contar. */
+    UI.openModal({
+      title: 'Assinatura ainda não disponível',
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: 'Estamos trocando o meio de pagamento. Enquanto a troca não termina, não é possível assinar por aqui.' }),
+        el('p', { text: 'O plano Grátis continua funcionando inteiro, e nada do que você já registrou muda.' })
+      ]),
+      buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
+    });
   };
 
   global.Precos = Precos;

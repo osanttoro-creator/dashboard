@@ -42,8 +42,7 @@ const VERIFICACOES = [
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],
   ['tools/testes/ida-e-volta.js', 'dados voltam iguais do banco'],
-  ['tools/testes/trava-sobrescrita.js', 'o banco não apaga o aparelho'],
-  ['tools/testes/assinatura-webhook.js', 'webhook rejeita assinatura inválida']
+  ['tools/testes/trava-sobrescrita.js', 'o banco não apaga o aparelho']
 ];
 
 const SQL_MANUAIS = [

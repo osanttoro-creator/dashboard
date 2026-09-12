@@ -31,18 +31,13 @@ const path = require('path');
 
 const RAIZ = path.join(__dirname, '..');
 
-/* financas.html é o build de arquivo único (build-arquivo-unico.ps1):
-   HTML, CSS e JS de todo o app numa página só, com as bibliotecas
-   minificadas embutidas. Auditar um artefato gerado é auditar duas
-   vezes a mesma fonte — e o JavaScript minificado dentro dele produz
-   dezenas de falsos positivos: expressões minificadas como
-   "for(o=0;o<a;++o)" casam com a busca por tags de abertura. A
-   fonte é que vale. */
-const GERADOS = ['financas.html'];
-
-const PAGINAS = fs.readdirSync(RAIZ)
-  .filter((f) => f.endsWith('.html'))
-  .filter((f) => !GERADOS.includes(f));
+/* A lista de gerados existia por causa do financas.html, o build de
+   arquivo único. Ele saiu do repositório, e com ele a exceção --
+   toda página aqui é fonte. Se algum dia voltar a haver artefato
+   gerado na raiz, ele precisa ser excluído daqui: JavaScript
+   minificado produz dezenas de falsos positivos, porque expressões
+   como "for(o=0;o<a;++o)" casam com a busca por tags. */
+const PAGINAS = fs.readdirSync(RAIZ).filter((f) => f.endsWith('.html'));
 
 const FONTES = ['assets/js', 'assets/js/pages']
   .flatMap((d) => fs.readdirSync(path.join(RAIZ, d))

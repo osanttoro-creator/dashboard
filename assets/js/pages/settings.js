@@ -164,12 +164,16 @@
 
   function sinc() {
     const box = U.clear(document.getElementById('setSync'));
-    const ligado = !!(global.FirebaseConfig && FirebaseConfig.apiKey);
+    /* Antes isto perguntava pelo FirebaseConfig -- e como o Firebase
+       saiu, a resposta era sempre "não configurada", mesmo com a
+       sincronização funcionando. Quem responde é quem sincroniza. */
+    const ligado = !!(global.SupabaseConfig && SupabaseConfig.url &&
+                      (SupabaseConfig.publishableKey || SupabaseConfig.anonKey));
 
     box.appendChild(linha(
       'Entre aparelhos',
       ligado
-        ? 'Entre com a conta Google para que este perfil apareça também no celular.'
+        ? 'Entre na sua conta para que este perfil apareça também no celular.'
         : 'Não configurada neste arquivo. O app funciona normalmente, só não sincroniza.',
       el('span', { id: 'syncBoxSettings' })
     ));
@@ -309,7 +313,30 @@
       p.id !== 'free'
         ? el('button', {
           class: 'btn btn-outline btn-sm', type: 'button', text: 'Cancelar assinatura',
-          onclick: () => Checkout.cancelar()
+          /* Chama a função de assinatura direto. Ela é nossa e não
+             conhece provedor de pagamento -- por isso sobreviveu à
+             saída do Mercado Pago, e por isso cancelar continua
+             possível enquanto o novo meio não entra. */
+          onclick: () => UI.openModal({
+            title: 'Cancelar assinatura',
+            body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } },
+              el('p', { text: 'O acesso continua até o fim do período já pago. Nada é cobrado depois disso.' })),
+            buttons: [
+              { label: 'Manter', class: 'btn-outline', onClick: UI.closeModal },
+              {
+                label: 'Cancelar assinatura', class: 'btn-primary',
+                onClick: async () => {
+                  UI.closeModal();
+                  try {
+                    const r = await Conta.chamarFuncao('oaze-assinatura', { acao: 'cancelar' });
+                    UI.toast(r && r.erro ? (r.mensagem || 'Não foi possível cancelar agora.') : 'Assinatura cancelada. O acesso vale até o fim do período pago.');
+                  } catch (e) {
+                    UI.toast('Não foi possível cancelar agora. Tente de novo em instantes.');
+                  }
+                }
+              }
+            ]
+          })
         })
         : null
     ].filter(Boolean));

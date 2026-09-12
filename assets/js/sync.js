@@ -6,12 +6,14 @@
    login ou sem rede, o app funciona exatamente como antes —
    offline, isolado por aparelho.
 
-   DOIS PROVEDORES. Este arquivo guarda o que não muda entre eles
-   (estado, indicador na barra lateral, mesclagem, envio com
-   debounce) e o backend do Firebase. O do Supabase está em
-   supabase-auth.js e se registra aqui pelo mesmo contrato.
+   O CONTRATO, NÃO O PROVEDOR. Este arquivo guarda o que não muda
+   entre backends (estado, indicador na barra lateral, mesclagem,
+   envio com debounce). O do Supabase está em supabase-auth.js e se
+   registra aqui.
 
-   Escolhe-se UM: o de menor `prioridade` entre os configurados.
+   Hoje há um só. O registro continua por contrato, e não por
+   chamada direta, porque foi ele que permitiu tirar o Firebase sem
+   tocar em nada daqui -- e é o que permitirá pôr outro.
    O Supabase vem na frente porque faz login dentro da própria
    plataforma — e-mail e senha, sem depender de pop-up do Google.
 
@@ -384,7 +386,7 @@
   function profilesPayload() {
     const map = {};
     Store.state().profiles.forEach((p) => {
-      // JSON puro: undefined não sobrevive nem ao Firebase nem ao Postgres
+      // JSON puro: undefined não sobrevive ao Postgres
       map[p.id] = JSON.parse(JSON.stringify(p));
     });
     return map;
@@ -422,13 +424,7 @@
         ? backend.ajuda()
         : el('div', {}, [
           el('p', { style: { fontSize: '13.5px', lineHeight: '1.65', marginTop: '12px' } },
-            'Nenhum provedor está configurado. Você pode usar qualquer um dos dois — escolha um:'),
-          el('ul', { style: { paddingLeft: '20px', listStyle: 'disc', fontSize: '13px', lineHeight: '1.8', marginTop: '8px' } }, [
-            el('li', { html: '<strong>Supabase</strong> — login com e-mail e senha dentro do próprio app. Cole a URL e a chave anon em <code>assets/js/supabase-config.js</code> e rode <code>docs/supabase.sql</code>.' }),
-            el('li', { html: '<strong>Firebase</strong> — login com Google, em pop-up. Cole o <code>firebaseConfig</code> em <code>assets/js/firebase-config.js</code>.' })
-          ]),
-          el('p', { class: 'hint', style: { marginTop: '10px' } },
-            'Se os dois estiverem configurados, o Supabase é usado — ele não depende de pop-up, que muitos navegadores bloqueiam.')
+            'A sincronização não está configurada neste build. Cole a URL e a chave publicável em <code>assets/js/supabase-config.js</code> e rode <code>docs/supabase.sql</code>.')
         ]),
       el('div', { class: 'parse-info is-warn', style: { marginTop: '14px' } }, el('div', {
         html: '<strong>No primeiro login, os dois lados se somam.</strong> Se este aparelho já tem perfis e a ' +
@@ -452,146 +448,6 @@
       ].filter(Boolean)
     });
   };
-
-  /* =============================================================
-     BACKEND: Firebase (Google, em pop-up)
-     ------------------------------------------------------------
-     Caminho no banco: /usuarios/{uid}/dados
-     ============================================================= */
-
-  const FB = (function () {
-    const SDK = [
-      'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js',
-      'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js',
-      'https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js'
-    ];
-    let app = null, auth = null, db = null, ref = null, sdkPromise = null;
-
-    function cfg() {
-      const c = global.FirebaseConfig;
-      if (!c || typeof c !== 'object') return null;
-      if (!c.apiKey || !c.databaseURL) return null;
-      return c;
-    }
-
-    function loadSDK() {
-      if (global.firebase && global.firebase.database) return Promise.resolve();
-      if (!sdkPromise) {
-        sdkPromise = (async () => {
-          for (const src of SDK) await Sync.loadScript(src);
-          if (!global.firebase) throw new Error('SDK do Firebase indisponível.');
-        })().catch((e) => { sdkPromise = null; throw e; });
-      }
-      return sdkPromise;
-    }
-
-    function mapUser(u) {
-      return u ? { uid: u.uid, email: u.email, displayName: u.displayName, photoURL: u.photoURL } : null;
-    }
-
-    function erroLogin(e) {
-      const code = (e && e.code) || '';
-      if (code === 'auth/popup-blocked') return 'O navegador bloqueou a janela de login. Libere pop-ups para este site e tente de novo.';
-      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return 'Login cancelado.';
-      if (code === 'auth/unauthorized-domain') return 'Este endereço não está autorizado no Firebase. Adicione-o em Authentication → Settings → Authorized domains.';
-      if (code === 'auth/operation-not-allowed') return 'O login com Google não está ativado no seu projeto Firebase (Authentication → Sign-in method).';
-      if (code === 'auth/network-request-failed') return 'Sem conexão para completar o login.';
-      return 'Não foi possível entrar: ' + ((e && e.message) || 'erro desconhecido');
-    }
-
-    const REGRAS = `{
-  "rules": {
-    "usuarios": {
-      "$uid": {
-        ".read":  "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    }
-  }
-}`;
-
-    return {
-      nome: 'firebase',
-      prioridade: 20,
-      rotuloEntrar: 'Entrar com Google',
-      marca: () => googleMark(),
-      isConfigured: () => !!cfg(),
-
-      async conectar() {
-        const c = cfg();
-        if (!c) throw new Error('Firebase não configurado.');
-        await loadSDK();
-        if (app) return;
-        app = global.firebase.apps.length ? global.firebase.app() : global.firebase.initializeApp(c);
-        auth = global.firebase.auth();
-        db = global.firebase.database();
-        // mantém a sessão entre aberturas do app
-        try { await auth.setPersistence(global.firebase.auth.Auth.Persistence.LOCAL); } catch (e) { /* segue */ }
-        auth.onAuthStateChanged((u) => Sync._onUser(mapUser(u)));
-        db.ref('.info/connected').on('value', (snap) => {
-          const st = Sync.status();
-          if (snap.val() === false && st.user) Sync._setState('offline', 'Sem conexão com o Firebase.');
-          else if (snap.val() === true && st.user && st.state === 'offline') Sync._setState('ok');
-        });
-      },
-
-      async entrar() {
-        const provider = new global.firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        try {
-          await auth.signInWithPopup(provider);
-        } catch (e) {
-          const err = new Error(erroLogin(e));
-          err.silencioso = (e && e.code) === 'auth/popup-closed-by-user';
-          throw err;
-        }
-      },
-
-      sair: () => auth.signOut(),
-
-      observar(u) {
-        ref = db.ref('usuarios/' + u.uid + '/dados');
-        ref.child('profiles').on('value', (snap) => {
-          Sync._onRemote(snap.val());
-        }, (e) => {
-          console.error('Sync/leitura:', e);
-          Sync._setState('offline', e.code === 'PERMISSION_DENIED'
-            ? 'Sem permissão: confira as regras do Realtime Database (veja o README).'
-            : e.message);
-        });
-      },
-
-      publicar: (payload) => ref.update(payload),
-
-      soltar() {
-        if (ref) { try { ref.child('profiles').off(); } catch (e) { /* ignora */ } }
-        ref = null;
-      },
-
-      ajuda() {
-        return el('div', {}, [
-          el('p', { style: { fontSize: '13.5px', lineHeight: '1.65', marginTop: '12px' } },
-            'Este app está ligado a um projeto Firebase. Basta entrar com a sua conta Google.'),
-          el('ol', { style: { paddingLeft: '20px', listStyle: 'decimal', fontSize: '13px', lineHeight: '1.75', marginTop: '10px' } }, [
-            el('li', { html: 'Crie um projeto em <strong>console.firebase.google.com</strong>.' }),
-            el('li', { html: 'Em <strong>Build → Authentication → Sign-in method</strong>, ative <strong>Google</strong>.' }),
-            el('li', { html: 'Em <strong>Build → Realtime Database</strong>, crie o banco no modo bloqueado.' }),
-            el('li', { html: 'Na aba <strong>Regras</strong>, publique as regras abaixo.' }),
-            el('li', { html: 'Em <strong>⚙ Configurações do projeto → Seus apps → Web</strong>, copie o <code>firebaseConfig</code> para <code>assets/js/firebase-config.js</code>.' }),
-            el('li', { html: 'Em <strong>Authentication → Settings → Authorized domains</strong>, adicione o endereço onde o app está publicado.' })
-          ]),
-          el('textarea', { class: 'input textarea', rows: 11, readonly: true, style: { marginTop: '10px' }, text: REGRAS }),
-          el('p', {
-            class: 'hint',
-            html: 'Essas regras são a proteção de verdade: cada conta só lê e escreve em <code>/usuarios/{o próprio uid}</code>. ' +
-              'As credenciais do <code>firebase-config.js</code> podem ser públicas — o que não pode é deixar as regras abertas.'
-          })
-        ]);
-      }
-    };
-  })();
-
-  Sync.registerBackend(FB);
 
   /* ---------------- inicialização ---------------- */
 
