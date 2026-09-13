@@ -166,12 +166,17 @@
 
   function pintaNotificacoes() {
     const lista = U.clear(document.getElementById('notifList'));
+    const meta = document.getElementById('notifMeta');
     const itens = notificacoesNovas();
+    if (meta) meta.textContent = itens.length ? itens.length + (itens.length === 1 ? ' aviso' : ' avisos') : '';
     if (!itens.length) {
-      lista.appendChild(el('p', {
-        class: 'empty-note', style: { padding: '10px 12px 16px' },
-        text: 'Nada pendente. Faturas em dia, orçamento dentro do limite.'
-      }));
+      /* Vazio é boa notícia, e merece parecer uma: marca, título e
+         uma frase — não uma linha cinza solta embaixo do cabeçalho. */
+      lista.appendChild(el('div', { class: 'aviso-vazio' }, [
+        el('span', { class: 'aviso-vazio-ico', 'aria-hidden': 'true' }, Icons.lucide('check', 18)),
+        el('strong', { text: 'Tudo em dia' }),
+        el('span', { text: 'Faturas, saldos e orçamentos sem pendência.' })
+      ]));
       return;
     }
     itens.forEach((n) => {
@@ -179,11 +184,12 @@
         class: 'notif-item is-' + n.tipo, type: 'button',
         onclick: () => { fecha(); n.ir(); }
       }, [
-        el('span', { class: 'ico' }, Icons.lucide(n.icone, 17)),
+        el('span', { class: 'ico', 'aria-hidden': 'true' }, Icons.lucide(n.icone, 16)),
         el('span', {}, [
           el('span', { class: 't', text: n.titulo }),
           el('span', { class: 's', text: n.sub })
-        ])
+        ]),
+        el('span', { class: 'seta', 'aria-hidden': 'true' }, Icons.lucide('chevron-right', 14))
       ]));
     });
 
@@ -262,22 +268,49 @@
     return grupos;
   };
 
+  /* O que a busca alcança, mostrado antes de digitar. "Digite ao
+     menos duas letras" dizia a regra e escondia a utilidade. */
+  const ESCOPOS = [
+    ['arrow-left-right', 'Lançamentos'], ['landmark', 'Contas'], ['credit-card', 'Cartões'],
+    ['target', 'Metas'], ['tag', 'Categorias']
+  ];
+
+  function tecla(t) { return el('kbd', { text: t }); }
+
   function pintaBusca(termo) {
     const caixa = U.clear(document.getElementById('searchResults'));
     if (U.norm(termo).length < 2) {
-      caixa.appendChild(el('p', { class: 'empty-note', style: { padding: '18px 12px' }, text: 'Digite ao menos duas letras.' }));
+      caixa.appendChild(el('div', { class: 'busca-inicio' }, [
+        el('p', { class: 'search-group', text: 'Encontre pelo nome' }),
+        el('div', { class: 'busca-escopos' }, ESCOPOS.map(([ico, rotulo]) =>
+          el('span', { class: 'busca-escopo' }, [Icons.lucide(ico, 14), el('span', { text: rotulo })]))),
+        el('p', { class: 'busca-dicas' }, [
+          el('span', {}, [tecla('↑'), tecla('↓'), ' percorre']),
+          el('span', {}, [tecla('↵'), ' abre']),
+          el('span', {}, [tecla('/'), ' busca de qualquer tela'])
+        ])
+      ]));
       return;
     }
     const grupos = Shell.buscar(termo);
     if (!grupos.length) {
-      caixa.appendChild(el('p', { class: 'empty-note', style: { padding: '18px 12px' }, text: `Nada encontrado para "${termo}".` }));
+      caixa.appendChild(el('div', { class: 'busca-vazia' }, [
+        el('span', { class: 'busca-vazia-ico', 'aria-hidden': 'true' }, Icons.lucide('search', 18)),
+        el('strong', { text: 'Nada encontrado para “' + termo.trim() + '”' }),
+        el('span', { text: 'Tente o nome da conta, da categoria ou parte da descrição.' })
+      ]));
       return;
     }
+    let primeiro = true;
     grupos.forEach((g) => {
       caixa.appendChild(el('div', { class: 'search-group', text: g.nome }));
       g.itens.forEach((i) => {
+        /* O primeiro resultado vem marcado: é o que o Enter abre, e a
+           marca diz isso antes de a pessoa descobrir apertando. */
+        const classe = 'search-item' + (primeiro ? ' is-ativo' : '');
+        primeiro = false;
         caixa.appendChild(el('button', {
-          class: 'search-item', type: 'button',
+          class: classe, type: 'button',
           onclick: () => { fechaBusca(); i.ir(); }
         }, [
           el('span', {
@@ -325,9 +358,27 @@
     U.$$('[data-close-search]').forEach((b) => b.addEventListener('click', fechaBusca));
     document.getElementById('searchInput').addEventListener('input', U.debounce((e) => pintaBusca(e.target.value), 160));
     document.getElementById('searchInput').addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowDown') {
+        const primeiro = document.querySelector('#searchResults .search-item');
+        if (primeiro) { ev.preventDefault(); primeiro.focus(); }
+        return;
+      }
       if (ev.key !== 'Enter') return;
       const primeiro = document.querySelector('#searchResults .search-item');
       if (primeiro) { ev.preventDefault(); primeiro.click(); }
+    });
+    /* Setas entre os resultados. Sair do primeiro para cima volta ao
+       campo, que é de onde a pessoa veio. */
+    document.getElementById('searchResults').addEventListener('keydown', (ev) => {
+      if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
+      const itens = U.$('#searchResults .search-item');
+      const i = itens.indexOf(document.activeElement);
+      if (i < 0) return;
+      ev.preventDefault();
+      if (ev.key === 'ArrowUp' && i === 0) { document.getElementById('searchInput').focus(); return; }
+      const alvo = itens[Math.max(0, Math.min(itens.length - 1, i + (ev.key === 'ArrowDown' ? 1 : -1)))];
+      itens.forEach((b) => b.classList.toggle('is-ativo', b === alvo));
+      alvo.focus();
     });
 
     document.addEventListener('click', (ev) => {
