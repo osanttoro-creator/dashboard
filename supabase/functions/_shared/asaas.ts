@@ -14,9 +14,19 @@
    ============================================================= */
 
 export class AsaasErro extends Error {
-  constructor(public status: number, public codigo: string) {
+  constructor(public status: number, public codigo: string, public descricao = '') {
     super('asaas ' + status + ' ' + codigo);
   }
+}
+
+/* A descrição do erro ajuda a diagnosticar ("o domínio não confere"),
+   mas pode repetir o que foi enviado. Sai sem dígitos nem e-mail —
+   CPF e contato não chegam ao log. */
+function semDadoPessoal(t: unknown): string {
+  return String(t || '')
+    .replace(/[^\s@]+@[^\s@]+/g, '[email]')
+    .replace(/\d/g, '#')
+    .slice(0, 160);
 }
 
 export function asaasConfigurado(): boolean {
@@ -48,9 +58,8 @@ export async function asaas(metodo: string, caminho: string, corpo?: unknown): P
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) {
-      /* Só o CÓDIGO do erro sobe; a descrição pode repetir dado
-         pessoal que veio no pedido. */
-      throw new AsaasErro(r.status, String(j?.errors?.[0]?.code || 'http_' + r.status));
+      throw new AsaasErro(r.status, String(j?.errors?.[0]?.code || 'http_' + r.status),
+        semDadoPessoal(j?.errors?.[0]?.description));
     }
     return j;
   } finally {

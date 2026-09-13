@@ -193,17 +193,30 @@ Deno.serve(async (req: Request) => {
     }).select('id').single();
     if (erroIntencao || !intencao) throw new Error('intencao');
 
-    const retorno = Deno.env.get('OAZE_RETORNO_URL');
-    const assinatura = await asaas('POST', '/subscriptions', {
+    const retorno = (Deno.env.get('OAZE_RETORNO_URL') ?? '').trim();
+    const pedido = {
       customer: cliente.customer_id,
       billingType: 'CREDIT_CARD',
       value: preco.centavos / 100,
       nextDueDate: hojeSP(),
       cycle: ciclo === 'annual' ? 'YEARLY' : 'MONTHLY',
-      description: 'OAZE ' + NOMES[plano] + (ciclo === 'annual' ? ' — anual' : ' — mensal'),
-      externalReference: intencao.id,
-      ...(retorno ? { callback: { successUrl: retorno, autoRedirect: true } } : {})
-    });
+      description: 'OAZE ' + NOMES[plano] + (ciclo === 'annual' ? ' - anual' : ' - mensal'),
+      externalReference: intencao.id
+    };
+    /* O retorno à fatura é conforto, não requisito. Se o Asaas recusar
+       a URL (domínio diferente do cadastrado na conta, por exemplo), a
+       assinatura sai sem ela: a pessoa paga do mesmo jeito e o plano é
+       liberado pelo aviso do Asaas. */
+    let assinatura: any;
+    try {
+      assinatura = await asaas('POST', '/subscriptions', retorno
+        ? { ...pedido, callback: { successUrl: retorno, autoRedirect: true } }
+        : pedido);
+    } catch (e) {
+      if (!(retorno && e instanceof AsaasErro && e.status === 400)) throw e;
+      log('retorno_recusado', { codigo: e.codigo, descricao: e.descricao });
+      assinatura = await asaas('POST', '/subscriptions', pedido);
+    }
 
     await admin.from('asaas_intencoes')
       .update({ asaas_subscription_id: assinatura.id, updated_at: new Date().toISOString() })
@@ -216,10 +229,15 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, url: fatura }, 200, origem);
   } catch (e) {
     const codigo = e instanceof AsaasErro ? e.codigo : 'interno';
-    log('falhou', { codigo, status: e instanceof AsaasErro ? e.status : null });
+    log('falhou', {
+      codigo, status: e instanceof AsaasErro ? e.status : null,
+      descricao: e instanceof AsaasErro ? e.descricao : (e instanceof Error ? e.message : '')
+    });
     const mensagem = codigo === 'invalid_cpfCnpj'
       ? 'O Asaas não aceitou este CPF.'
-      : 'Não foi possível falar com o sistema de pagamento agora. Nada foi cobrado.';
+      : e instanceof AsaasErro && e.status === 400 && e.descricao
+        ? 'O Asaas recusou o pedido: ' + e.descricao + ' Nada foi cobrado.'
+        : 'Não foi possível falar com o sistema de pagamento agora. Nada foi cobrado.';
     return json({ erro: 'falhou', mensagem, request_id: requestId }, 502, origem);
   }
 });
