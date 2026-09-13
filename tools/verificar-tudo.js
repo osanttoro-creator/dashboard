@@ -32,6 +32,7 @@ const RAIZ = path.join(__dirname, '..');
 
 const VERIFICACOES = [
   ['tools/varrer-segredos.js', 'nenhum segredo no que vai ao navegador'],
+  ['tools/varrer-historico-segredos.js', 'nenhum segredo conhecido no histórico do Git'],
   ['tools/conferir-rls.js', 'toda tabela exposta tem RLS'],
   ['tools/testes/csp-cobre-o-que-carrega.js', 'a CSP libera o que o site carrega'],
   ['tools/auditar-cliques.js', 'nenhum botão ou link sem ação'],
@@ -40,7 +41,8 @@ const VERIFICACOES = [
   ['tools/testes/limites-contextuais.js', 'limites só aparecem durante a ação'],
   ['tools/testes/cartoes-integrados.js', 'mesmo baralho na Visão geral, Débito e Crédito'],
   ['tools/testes/sem-provedor-pagamento.js', 'nenhum provedor de pagamento antigo no produto'],
-  ['tools/testes/asaas-seguro.js', 'cobrança pelo Asaas com as travas no lugar'],
+  ['tools/testes/stripe-seguro.js', 'Stripe preparada com as travas no lugar'],
+  ['tools/testes/seguranca-lancamento.js', 'proteções de lançamento cobertas por teste'],
   ['tools/testes/uglez-camara.js', 'UGLEZ preserva estados, fallback e responsividade'],
   ['tools/testes/uglez-openai.js', 'UGLEZ chama a OpenAI pelo servidor e envia só agregados'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],

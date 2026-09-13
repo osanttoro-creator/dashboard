@@ -321,7 +321,7 @@
   Planos.FAQ = [
     {
       p: 'Como funciona a cobrança?',
-      r: 'No cartão de crédito, pelo Asaas. O cartão é digitado na página segura do Asaas — o OAZE não vê nem guarda os dados dele. A assinatura renova sozinha a cada mês ou ano, e o plano é liberado assim que o pagamento é confirmado.'
+      r: 'No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova a cada mês ou ano, e o plano é liberado quando o pagamento é confirmado.'
     },
     {
       p: 'Posso cancelar quando quiser?',

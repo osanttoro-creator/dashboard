@@ -48,5 +48,6 @@ deploy do site e precisam de uma migração compensatória.
 
 ## Limite atual
 
-Somente o plano Grátis pode ser contratado. A integração comercial será
-implementada com Asaas; até lá não existe checkout nem renovação automática.
+O site está preparado para o Checkout da Stripe, mas a cobrança permanece
+fechada enquanto as chaves, o webhook, os testes em modo de teste e a aprovação
+dos contratos não forem concluídos. Sem essa configuração, nada é cobrado.

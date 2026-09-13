@@ -1,4 +1,8 @@
-# Cobrança pelo Asaas
+# Histórico da cobrança pelo Asaas
+
+> Transição em 13/09/2026: novas assinaturas foram movidas para a Stripe. Este
+> documento permanece apenas para encerrar ou migrar assinaturas antigas sem
+> deixar cobrança órfã. Para o fluxo atual, veja `STRIPE-CONFIGURACAO.md`.
 
 Planos v3 (13/09/2026): **Semente** grátis · **Coqueiro** R$ 14,90/mês ou R$ 149,90/ano ·
 **Oásis** R$ 29,90/mês ou R$ 299,90/ano. Só cartão de crédito, recorrente.

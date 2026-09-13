@@ -45,7 +45,10 @@ const IGNORAR = new Set([
 const EXTENSOES = ['.html', '.js', '.css', '.json', '.webmanifest', '.txt', '.xml'];
 
 const PADROES = [
-  { nome: 'chave da OpenAI', re: /\bsk-[A-Za-z0-9_-]{20,}/ },
+  { nome: 'chave da OpenAI', re: /\bsk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{20,}/ },
+  { nome: 'chave secreta da Stripe', re: /\b[rs]k_(?:live|test)_[A-Za-z0-9]{20,}/ },
+  { nome: 'segredo de webhook da Stripe', re: /\bwhsec_[A-Za-z0-9]{20,}/ },
+  { nome: 'chave do Asaas', re: /\$aact_[A-Za-z0-9_-]{20,}/ },
   { nome: 'variável OPENAI_API_KEY com valor', re: /OPENAI_API_KEY\s*[:=]\s*['"][^'"]{8,}/ },
   { nome: 'service_role do Supabase (JWT)', re: /"role"\s*:\s*"service_role"/ },
   { nome: 'service_role do Supabase (JWT em base64)', re: /eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]*c2VydmljZV9yb2xl/ },

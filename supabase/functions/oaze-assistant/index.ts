@@ -30,6 +30,7 @@
    ============================================================= */
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
 
 /* ---------------- configuração ---------------- */
 
@@ -153,6 +154,7 @@ function erro(codigo: string, status: number, origem: string | null, requestId: 
     pergunta_vazia: 'Escreva uma pergunta.',
     pergunta_longa: 'Pergunta muito longa.',
     contexto_grande: 'Há dados demais neste período para analisar de uma vez.',
+    ritmo: 'Muitas perguntas em pouco tempo. Espere um pouco e tente novamente.',
     limite: 'Você atingiu o limite de perguntas do seu plano.',
     indisponivel: 'O assistente está temporariamente indisponível.',
     provedor: 'O assistente não conseguiu responder agora. Tente de novo em instantes.',
@@ -290,6 +292,7 @@ Deno.serve(async (req: Request) => {
   if (origem && !origensPermitidas().includes(origem)) {
     return erro('origem', 403, origem, requestId);
   }
+  if (!corpoCabeNoLimite(req, 32_768)) return erro('corpo', 413, origem, requestId);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
   const chaveServico = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
@@ -346,6 +349,22 @@ Deno.serve(async (req: Request) => {
 
   const plano = String(direitos.plano || 'free');
   const perfil = PERFIL[plano] ?? PERFIL.free;
+
+  /* Duas janelas curtas protegem a chave da OpenAI contra rajadas.
+     A cota mensal continua separada: ela é regra do plano; estas
+     duas são proteção operacional. */
+  const { data: regraRitmo } = await admin.from('ai_rate_limits')
+    .select('por_minuto,por_dia').eq('plan', plano).maybeSingle();
+  const porMinuto = Number(regraRitmo?.por_minuto || (plano === 'pro' ? 10 : plano === 'basic' ? 6 : 3));
+  const porDia = Number(regraRitmo?.por_dia || (plano === 'pro' ? 200 : plano === 'basic' ? 100 : 20));
+  try {
+    const minuto = await reservarRateLimit(admin, 'assistente:minuto', userId, porMinuto, 60);
+    const dia = await reservarRateLimit(admin, 'assistente:dia', userId, porDia, 86_400);
+    if (!minuto.permitido || !dia.permitido) return erro('ritmo', 429, origem, requestId);
+  } catch {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'rate_limit_indisponivel' }));
+    return erro('indisponivel', 503, origem, requestId);
+  }
 
   /* O teto vem do mesmo objeto. null significa ilimitado; nesse
      caso a reserva ainda acontece (para contar o uso), mas com um
@@ -503,12 +522,12 @@ Deno.serve(async (req: Request) => {
 /** A Responses API traz output_text quando o SDK monta; no REST cru
     o texto vem dentro de output[].content[]. Aceitamos os dois. */
 function extrairTexto(d: any): string {
-  if (typeof d?.output_text === 'string' && d.output_text.trim()) return d.output_text.trim();
+  if (typeof d?.output_text === 'string' && d.output_text.trim()) return d.output_text.trim().slice(0, 12_000);
   const partes: string[] = [];
   for (const item of d?.output ?? []) {
     for (const c of item?.content ?? []) {
       if (c?.type === 'output_text' && typeof c.text === 'string') partes.push(c.text);
     }
   }
-  return partes.join('\n').trim();
+  return partes.join('\n').trim().slice(0, 12_000);
 }

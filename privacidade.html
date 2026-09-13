@@ -55,7 +55,7 @@
   <div class="env">
     <div class="texto">
       <h1>Política de privacidade</h1>
-      <p class="atualizado">Última atualização: 12 de setembro de 2026</p>
+      <p class="atualizado">Última atualização: 13 de setembro de 2026</p>
 
       <div class="aviso">
         <p><strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o
@@ -79,15 +79,17 @@
       nenhum: tudo chega porque você digitou ou importou um arquivo que você mesmo baixou
       do seu banco.</p>
       <p><strong>Dados do plano.</strong> Plano, limites e situação da assinatura associados à
-      conta, com o identificador da cobrança no Asaas.</p>
-      <p><strong>Dados de pagamento.</strong> Ao assinar, seu nome e CPF são enviados ao
-      <strong>Asaas</strong>, que os exige para emitir a cobrança; o OAZE não os guarda. Os dados
-      do cartão são digitados na página do Asaas e <strong>nunca passam pelo OAZE</strong>.</p>
+      conta, com os identificadores da sessão e da assinatura na Stripe.</p>
+      <p><strong>Dados de pagamento.</strong> Ao assinar, o OAZE envia à <strong>Stripe</strong>
+      seu e-mail, o plano e o valor escolhidos. Os dados do cartão são digitados na página da
+      Stripe e <strong>nunca passam pelo OAZE</strong>.</p>
       <p><strong>Dados técnicos mínimos.</strong> Registros de erro do servidor, com
       identificador de requisição e horário. Eles não incluem conteúdo financeiro.</p>
       <p><strong>Não coletamos:</strong> sua localização, sua lista de contatos, seu
       histórico de navegação em outros sites, nem dados de terceiros. Não usamos cookies
-      de publicidade nem rastreadores de rede social.</p>
+      de publicidade nem rastreadores de rede social. Usamos apenas armazenamento essencial
+      para sessão, preferências e funcionamento local. Se você escolher entrar com Google,
+      o Google pode usar os próprios cookies durante essa autenticação.</p>
 
       <h2 id="bases">3. Para que usamos, e com que base legal</h2>
       <ul>
@@ -131,7 +133,7 @@
       <h2 id="compartilha">6. Com quem compartilhamos</h2>
       <p>Apenas com operadores necessários para o serviço funcionar: Supabase (banco e
       autenticação), Hostinger (hospedagem), OpenAI (modelo de linguagem; só o que o §5
-      descreve) e Asaas (processamento das assinaturas; nome, CPF e e-mail de quem assina).</p>
+      descreve) e Stripe (processamento das assinaturas e dos dados de pagamento).</p>
       <p><strong>Não vendemos seus dados. Não os cedemos para publicidade. Não os cruzamos
       com outras bases.</strong></p>
       <p>Podemos fornecer dados por ordem judicial. Nesse caso avisamos você, salvo quando
@@ -213,5 +215,6 @@
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/cookies.js" defer></script>
 </body>
 </html>

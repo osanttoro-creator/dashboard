@@ -1,30 +1,20 @@
 /* =============================================================
-   oaze-pagamento — assinar e cancelar pelo Asaas
-   -------------------------------------------------------------
-   acao 'assinar'  { plano, ciclo, nome, cpf }
-     → devolve { ok, url }: a fatura do Asaas, onde a pessoa digita o
-       cartão. Daí em diante o Asaas cobra sozinho a cada ciclo.
-   acao 'cancelar' {}
-     → encerra a renovação no Asaas; o acesso segue até o fim do
-       período já pago.
+   oaze-pagamento — Checkout e cancelamento pela Stripe
 
-   O QUE O NAVEGADOR NÃO DECIDE
-   Preço, plano liberado e confirmação. O valor sai de plan_prices,
-   lido AQUI. O plano só muda quando o aviso do Asaas chega em
-   oaze-asaas-webhook e o pagamento é conferido na API do Asaas.
-   Esta função nunca escreve plano pago em subscriptions.
+   O navegador escolhe apenas plano e ciclo. Preço, moeda, versão,
+   usuário e estado da assinatura vêm do token e do banco. O plano
+   pago só é liberado pelo webhook assinado.
 
-   CPF
-   O Asaas exige CPF para cobrar. Ele passa por aqui a caminho do
-   Asaas e não é guardado, nem registrado em log.
-
-   SEGREDOS: ASAAS_API_KEY, ASAAS_AMBIENTE, OAZE_ALLOWED_ORIGINS e,
-   opcional, OAZE_RETORNO_URL (para onde a fatura devolve a pessoa;
-   o domínio precisa estar cadastrado na conta Asaas).
+   Assinaturas antigas do Asaas continuam canceláveis durante a
+   migração. Nenhuma assinatura nova é criada lá.
    ============================================================= */
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
-import { asaas, asaasConfigurado, AsaasErro, hojeSP } from '../_shared/asaas.ts';
+import { asaas, AsaasErro } from '../_shared/asaas.ts';
+import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
+import { stripe, stripeConfigurada, StripeErro } from '../_shared/stripe.ts';
+
+const NOMES: Record<string, string> = { basic: 'Coqueiro', pro: 'Oásis' };
 
 function origensPermitidas(): string[] {
   return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
@@ -32,35 +22,36 @@ function origensPermitidas(): string[] {
 }
 
 function cors(origem: string | null): Record<string, string> {
-  const ok = origem && origensPermitidas().includes(origem);
+  const ok = !!origem && origensPermitidas().includes(origem);
   return {
     'Access-Control-Allow-Origin': ok ? origem! : 'null',
     'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Max-Age': '3600',
     Vary: 'Origin'
   };
 }
 
-function json(corpo: unknown, status: number, origem: string | null) {
+function json(corpo: unknown, status: number, origem: string | null, extras: Record<string, string> = {}) {
   return new Response(JSON.stringify(corpo), {
     status,
-    headers: { ...cors(origem), 'content-type': 'application/json; charset=utf-8' }
+    headers: { ...cors(origem), ...extras, 'content-type': 'application/json; charset=utf-8' }
   });
 }
 
-/** Dígitos verificadores do CPF. Recusar aqui poupa uma ida ao Asaas. */
-function cpfValido(cpf: string): boolean {
-  if (!/^\d{11}$/.test(cpf) || /^(\d)\1{10}$/.test(cpf)) return false;
-  const dv = (n: number) => {
-    let s = 0;
-    for (let i = 0; i < n; i++) s += Number(cpf[i]) * (n + 1 - i);
-    const r = (s * 10) % 11;
-    return r === 10 ? 0 : r;
-  };
-  return dv(9) === Number(cpf[9]) && dv(10) === Number(cpf[10]);
+function siteUrl(): string | null {
+  const valor = (Deno.env.get('OAZE_SITE_URL') ?? 'https://oaze.site').trim().replace(/\/+$/, '');
+  try {
+    const u = new URL(valor);
+    return u.protocol === 'https:' ? u.origin : null;
+  } catch { return null; }
 }
 
-const NOMES: Record<string, string> = { basic: 'Coqueiro', pro: 'Oásis' };
+function corpoPermitido(corpo: unknown, acao: string): boolean {
+  if (!corpo || typeof corpo !== 'object' || Array.isArray(corpo)) return false;
+  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo']) : new Set(['acao']);
+  return Object.keys(corpo as Record<string, unknown>).every((k) => permitidos.has(k));
+}
 
 Deno.serve(async (req: Request) => {
   const origem = req.headers.get('Origin');
@@ -73,66 +64,86 @@ Deno.serve(async (req: Request) => {
   if (origem && !origensPermitidas().includes(origem)) {
     return json({ erro: 'origem', mensagem: 'Origem não autorizada.' }, 403, origem);
   }
+  if (!corpoCabeNoLimite(req, 4096)) {
+    return json({ erro: 'corpo', mensagem: 'Requisição inválida.' }, 413, origem);
+  }
 
   const url = Deno.env.get('SUPABASE_URL') ?? '';
   const servico = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-  if (!url || !servico || !asaasConfigurado()) {
+  const retorno = siteUrl();
+  if (!url || !servico || !retorno || !stripeConfigurada()) {
     log('config_incompleta');
     return json({ erro: 'indisponivel', mensagem: 'As assinaturas ainda não estão abertas.' }, 503, origem);
   }
 
   const autorizacao = req.headers.get('Authorization') ?? '';
+  if (!autorizacao.startsWith('Bearer ')) {
+    return json({ erro: 'sem_sessao', mensagem: 'Sua sessão expirou. Entre novamente.' }, 401, origem);
+  }
   const userClient = createClient(url, Deno.env.get('SUPABASE_ANON_KEY') ?? '', {
     global: { headers: { Authorization: autorizacao } },
     auth: { persistSession: false, autoRefreshToken: false }
   });
-  const { data: auth } = await userClient.auth.getUser();
+  const { data: auth, error: erroAuth } = await userClient.auth.getUser();
   const usuario = auth?.user;
-  if (!usuario) return json({ erro: 'sem_sessao', mensagem: 'Sua sessão expirou. Entre novamente.' }, 401, origem);
+  if (erroAuth || !usuario?.id || !usuario.email) {
+    return json({ erro: 'sem_sessao', mensagem: 'Sua sessão expirou. Entre novamente.' }, 401, origem);
+  }
 
   const admin = createClient(url, servico, { auth: { persistSession: false, autoRefreshToken: false } });
+  try {
+    const curto = await reservarRateLimit(admin, 'pagamento:minuto', usuario.id, 10, 60);
+    const diario = await reservarRateLimit(admin, 'pagamento:dia', usuario.id, 50, 86_400);
+    if (!curto.permitido || !diario.permitido) {
+      const tentarEm = !curto.permitido ? curto.tentarEm : diario.tentarEm;
+      return json({ erro: 'limite', mensagem: 'Muitas tentativas seguidas. Tente novamente mais tarde.' }, 429, origem,
+        { 'Retry-After': String(tentarEm) });
+    }
+  } catch {
+    log('rate_limit_indisponivel');
+    return json({ erro: 'indisponivel', mensagem: 'Operação indisponível no momento.' }, 503, origem);
+  }
 
-  let corpo: any = null;
-  try { corpo = await req.json(); } catch { /* segue nulo */ }
-  const acao = String(corpo?.acao || '');
+  let corpo: Record<string, unknown> = {};
+  try { corpo = await req.json(); } catch { /* validado abaixo */ }
+  const acao = typeof corpo.acao === 'string' ? corpo.acao : '';
+  if (!['assinar', 'cancelar'].includes(acao) || !corpoPermitido(corpo, acao)) {
+    return json({ erro: 'acao', mensagem: 'Ação inválida.' }, 400, origem);
+  }
 
   const { data: atual } = await admin.from('subscriptions')
-    .select('plan_id, status, current_period_end, cancel_at_period_end, asaas_subscription_id')
+    .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
     .eq('user_id', usuario.id).maybeSingle();
 
   try {
-    /* ======================== cancelar ======================== */
     if (acao === 'cancelar') {
-      if (!atual?.asaas_subscription_id || atual.plan_id === 'free') {
+      if (atual?.stripe_subscription_id) {
+        const p = new URLSearchParams({ cancel_at_period_end: 'true' });
+        const s = await stripe('POST', '/subscriptions/' + encodeURIComponent(atual.stripe_subscription_id), p,
+          'cancelar-' + usuario.id + '-' + atual.stripe_subscription_id);
+        await admin.from('subscriptions').update({
+          status: 'canceled', cancel_at_period_end: true,
+          canceled_at: new Date().toISOString(), updated_at: new Date().toISOString()
+        }).eq('user_id', usuario.id).eq('stripe_subscription_id', s.id);
+      } else if (atual?.asaas_subscription_id) {
+        try { await asaas('DELETE', '/subscriptions/' + atual.asaas_subscription_id); }
+        catch (e) { if (!(e instanceof AsaasErro && e.status === 404)) throw e; }
+        await admin.from('subscriptions').update({
+          status: 'canceled', cancel_at_period_end: true,
+          canceled_at: new Date().toISOString(), updated_at: new Date().toISOString()
+        }).eq('user_id', usuario.id);
+      } else {
         return json({ erro: 'sem_assinatura', mensagem: 'Não há assinatura paga para cancelar.' }, 400, origem);
       }
-      try {
-        await asaas('DELETE', '/subscriptions/' + atual.asaas_subscription_id);
-      } catch (e) {
-        /* 404: já não existe no Asaas — o resultado que queríamos. */
-        if (!(e instanceof AsaasErro && e.status === 404)) throw e;
-      }
-      await admin.from('subscriptions').update({
-        status: 'canceled', cancel_at_period_end: true,
-        canceled_at: new Date().toISOString(), updated_at: new Date().toISOString()
-      }).eq('user_id', usuario.id);
       log('assinatura_cancelada');
       return json({ ok: true, acesso_ate: atual.current_period_end }, 200, origem);
     }
 
-    if (acao !== 'assinar') return json({ erro: 'acao', mensagem: 'Ação desconhecida.' }, 400, origem);
-
-    /* ======================== assinar ======================== */
-    const plano = String(corpo?.plano || '');
-    const ciclo = String(corpo?.ciclo || '');
-    const nome = String(corpo?.nome || '').trim().replace(/\s+/g, ' ').slice(0, 100);
-    const cpf = String(corpo?.cpf || '').replace(/\D/g, '');
-
+    const plano = typeof corpo.plano === 'string' ? corpo.plano : '';
+    const ciclo = typeof corpo.ciclo === 'string' ? corpo.ciclo : '';
     if (!NOMES[plano] || !['monthly', 'annual'].includes(ciclo)) {
       return json({ erro: 'plano', mensagem: 'Plano inválido.' }, 400, origem);
     }
-    if (nome.length < 3) return json({ erro: 'nome', mensagem: 'Informe o nome como está no cartão ou documento.' }, 400, origem);
-    if (!cpfValido(cpf)) return json({ erro: 'cpf', mensagem: 'CPF inválido.' }, 400, origem);
 
     const vigente = atual && atual.plan_id !== 'free'
       && ['active', 'past_due'].includes(atual.status) && !atual.cancel_at_period_end
@@ -140,111 +151,81 @@ Deno.serve(async (req: Request) => {
     if (vigente) {
       return json({
         erro: 'ja_assina',
-        mensagem: 'Você já tem uma assinatura ativa. Para trocar de plano, cancele a atual em Configurações; o acesso segue até o fim do período pago.'
+        mensagem: 'Você já tem uma assinatura ativa. Para trocar de plano, cancele a atual em Configurações.'
       }, 409, origem);
     }
 
-    /* o preço é o do banco, nunca o da tela */
     const { data: preco } = await admin.from('plan_prices')
-      .select('id, centavos, versao').eq('plan_id', plano).eq('ciclo', ciclo).eq('vigente', true)
+      .select('id,centavos,versao,moeda').eq('plan_id', plano).eq('ciclo', ciclo).eq('vigente', true)
       .maybeSingle();
-    if (!preco || !preco.centavos) {
+    if (!preco || !Number.isInteger(preco.centavos) || preco.centavos < 1 || preco.moeda !== 'BRL') {
       log('preco_ausente', { plano, ciclo });
       return json({ erro: 'indisponivel', mensagem: 'Plano indisponível no momento.' }, 503, origem);
     }
 
-    /* Clique duplo ou volta da fatura: a intenção aguardando do mesmo
-       preço, nas últimas 24 h, é reaproveitada. Outra intenção
-       aguardando é encerrada no Asaas, para não sobrar assinatura
-       pendurada gerando cobrança. */
-    const { data: pendentes } = await admin.from('asaas_intencoes')
-      .select('id, price_id, asaas_subscription_id, created_at')
+    const { data: pendentes } = await admin.from('stripe_intencoes')
+      .select('id,price_id,checkout_session_id,created_at')
       .eq('user_id', usuario.id).eq('status', 'aguardando');
     for (const p of pendentes ?? []) {
-      const recente = Date.now() - new Date(p.created_at).getTime() < 24 * 3600 * 1000;
-      if (p.price_id === preco.id && recente && p.asaas_subscription_id) {
-        const fatura = await primeiraFatura(p.asaas_subscription_id);
-        if (fatura) return json({ ok: true, url: fatura }, 200, origem);
+      const recente = Date.now() - new Date(p.created_at).getTime() < 30 * 60 * 1000;
+      if (recente && p.price_id === preco.id && p.checkout_session_id) {
+        const sessao = await stripe('GET', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id));
+        if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))) {
+          return json({ ok: true, url: sessao.url }, 200, origem);
+        }
       }
-      if (p.asaas_subscription_id) {
-        await asaas('DELETE', '/subscriptions/' + p.asaas_subscription_id).catch(() => null);
-      }
-      await admin.from('asaas_intencoes').update({ status: 'cancelada', updated_at: new Date().toISOString() }).eq('id', p.id);
+      await admin.from('stripe_intencoes').update({
+        status: 'expirada', updated_at: new Date().toISOString()
+      }).eq('id', p.id).eq('status', 'aguardando');
     }
 
-    /* cliente do Asaas: um por pessoa */
-    let { data: cliente } = await admin.from('asaas_clientes')
-      .select('customer_id').eq('user_id', usuario.id).maybeSingle();
-    if (cliente) {
-      /* o nome e o CPF podem ter mudado; o Asaas guarda, nós não */
-      await asaas('PUT', '/customers/' + cliente.customer_id, { name: nome, cpfCnpj: cpf });
-    } else {
-      const c = await asaas('POST', '/customers', {
-        name: nome, cpfCnpj: cpf, email: usuario.email,
-        externalReference: usuario.id, notificationDisabled: false
-      });
-      await admin.from('asaas_clientes').insert({ user_id: usuario.id, customer_id: c.id });
-      cliente = { customer_id: c.id };
-    }
-
-    const { data: intencao, error: erroIntencao } = await admin.from('asaas_intencoes').insert({
+    const { data: intencao, error: erroIntencao } = await admin.from('stripe_intencoes').insert({
       user_id: usuario.id, plan_id: plano, ciclo, price_id: preco.id,
       centavos: preco.centavos, versao: preco.versao
     }).select('id').single();
     if (erroIntencao || !intencao) throw new Error('intencao');
 
-    const retorno = (Deno.env.get('OAZE_RETORNO_URL') ?? '').trim();
-    const pedido = {
-      customer: cliente.customer_id,
-      billingType: 'CREDIT_CARD',
-      value: preco.centavos / 100,
-      nextDueDate: hojeSP(),
-      cycle: ciclo === 'annual' ? 'YEARLY' : 'MONTHLY',
-      description: 'OAZE ' + NOMES[plano] + (ciclo === 'annual' ? ' - anual' : ' - mensal'),
-      externalReference: intencao.id
-    };
-    /* O retorno à fatura é conforto, não requisito. Se o Asaas recusar
-       a URL (domínio diferente do cadastrado na conta, por exemplo), a
-       assinatura sai sem ela: a pessoa paga do mesmo jeito e o plano é
-       liberado pelo aviso do Asaas. */
-    let assinatura: any;
+    const parametros = new URLSearchParams();
+    parametros.set('mode', 'subscription');
+    parametros.set('client_reference_id', intencao.id);
+    parametros.set('customer_email', usuario.email);
+    parametros.set('success_url', retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}');
+    parametros.set('cancel_url', retorno + '/app/planos?pagamento=cancelado');
+    parametros.set('locale', 'pt-BR');
+    parametros.set('line_items[0][quantity]', '1');
+    parametros.set('line_items[0][price_data][currency]', 'brl');
+    parametros.set('line_items[0][price_data][unit_amount]', String(preco.centavos));
+    parametros.set('line_items[0][price_data][recurring][interval]', ciclo === 'annual' ? 'year' : 'month');
+    parametros.set('line_items[0][price_data][product_data][name]', 'OAZE ' + NOMES[plano]);
+    parametros.set('metadata[oaze_intencao_id]', intencao.id);
+    parametros.set('subscription_data[metadata][oaze_intencao_id]', intencao.id);
+    parametros.set('subscription_data[metadata][oaze_plan_id]', plano);
+    parametros.set('subscription_data[metadata][oaze_price_id]', preco.id);
+
+    let sessao: any;
     try {
-      assinatura = await asaas('POST', '/subscriptions', retorno
-        ? { ...pedido, callback: { successUrl: retorno, autoRedirect: true } }
-        : pedido);
+      sessao = await stripe('POST', '/checkout/sessions', parametros, 'checkout-' + intencao.id);
     } catch (e) {
-      if (!(retorno && e instanceof AsaasErro && e.status === 400)) throw e;
-      log('retorno_recusado', { codigo: e.codigo, descricao: e.descricao });
-      assinatura = await asaas('POST', '/subscriptions', pedido);
+      await admin.from('stripe_intencoes').update({ status: 'falhou', updated_at: new Date().toISOString() })
+        .eq('id', intencao.id);
+      throw e;
     }
+    if (!sessao?.id || !/^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))) {
+      throw new Error('sessao_invalida');
+    }
+    await admin.from('stripe_intencoes').update({
+      checkout_session_id: sessao.id, updated_at: new Date().toISOString()
+    }).eq('id', intencao.id);
 
-    await admin.from('asaas_intencoes')
-      .update({ asaas_subscription_id: assinatura.id, updated_at: new Date().toISOString() })
-      .eq('id', intencao.id);
-
-    const fatura = await primeiraFatura(assinatura.id);
-    if (!fatura) throw new Error('sem_fatura');
-
-    log('assinatura_criada', { plano, ciclo });
-    return json({ ok: true, url: fatura }, 200, origem);
+    log('checkout_criado', { plano, ciclo });
+    return json({ ok: true, url: sessao.url }, 200, origem);
   } catch (e) {
-    const codigo = e instanceof AsaasErro ? e.codigo : 'interno';
-    log('falhou', {
-      codigo, status: e instanceof AsaasErro ? e.status : null,
-      descricao: e instanceof AsaasErro ? e.descricao : (e instanceof Error ? e.message : '')
-    });
-    const mensagem = codigo === 'invalid_cpfCnpj'
-      ? 'O Asaas não aceitou este CPF.'
-      : e instanceof AsaasErro && e.status === 400 && e.descricao
-        ? 'O Asaas recusou o pedido: ' + e.descricao + ' Nada foi cobrado.'
-        : 'Não foi possível falar com o sistema de pagamento agora. Nada foi cobrado.';
-    return json({ erro: 'falhou', mensagem, request_id: requestId }, 502, origem);
+    const codigo = e instanceof StripeErro ? e.codigo : e instanceof AsaasErro ? e.codigo : 'interno';
+    log('falhou', { codigo, status: e instanceof StripeErro || e instanceof AsaasErro ? e.status : null });
+    return json({
+      erro: 'falhou',
+      mensagem: 'Não foi possível abrir o pagamento agora. Nada foi cobrado.',
+      request_id: requestId
+    }, 502, origem);
   }
 });
-
-/** A fatura em aberto da assinatura: é nela que o cartão é digitado. */
-async function primeiraFatura(subscriptionId: string): Promise<string | null> {
-  const r = await asaas('GET', '/subscriptions/' + subscriptionId + '/payments?limit=1');
-  const p = r?.data?.[0];
-  return p && p.invoiceUrl ? String(p.invoiceUrl) : null;
-}

@@ -83,6 +83,9 @@ Write-Host "  Conferindo segredos no que vai ser servido..." -ForegroundColor Cy
 $padroes = @(
   @{ nome = 'chave OpenAI';      re = 'sk-(proj|svcacct)-[A-Za-z0-9_-]{40,}' },
   @{ nome = 'chave Anthropic';   re = 'sk-ant-api\d{2}-[A-Za-z0-9_-]{40,}' },
+  @{ nome = 'chave Stripe';      re = '(sk|rk)_(live|test)_[A-Za-z0-9]{20,}' },
+  @{ nome = 'webhook Stripe';    re = 'whsec_[A-Za-z0-9]{20,}' },
+  @{ nome = 'chave Asaas';       re = '\$aact_[A-Za-z0-9_-]{20,}' },
   @{ nome = 'segredo Supabase';  re = 'sb_secret_[A-Za-z0-9_-]{20,}' },
   @{ nome = 'service_role JWT';  re = 'eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]*(c2VydmljZV9yb2xl|cm9sZSI6InNlcnZpY2U)' }
 )

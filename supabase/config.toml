@@ -10,3 +10,14 @@ project_id = "gxwatircdhhetvzzlwwq"
 # redundância inútil — é a diferença entre "o token é válido" e
 # "este é o usuário, e é dele que vamos ler o plano".
 verify_jwt = true
+
+[functions.oaze-pagamento]
+verify_jwt = true
+
+[functions.oaze-conta]
+verify_jwt = true
+
+[functions.oaze-stripe-webhook]
+# A Stripe não possui sessão do Supabase. A função valida o corpo
+# cru com STRIPE_WEBHOOK_SECRET antes de interpretar o evento.
+verify_jwt = false

@@ -343,18 +343,19 @@
     aguardarConfirmacao();
   };
 
-  /* A fatura do Asaas devolve a pessoa com ?assinatura=ok. O plano
-     só muda quando o aviso do Asaas chega ao servidor — segundos,
+  /* O Checkout da Stripe devolve a pessoa com ?pagamento=sucesso. O plano
+     só muda quando o webhook da Stripe chega ao servidor — segundos,
      às vezes um minuto —, então o app pergunta de novo algumas vezes
      em vez de mostrar o plano antigo como se nada tivesse acontecido. */
   function aguardarConfirmacao() {
     const params = new URLSearchParams(location.search);
-    if (params.get('assinatura') !== 'ok') return;
-    params.delete('assinatura');
+    if (params.get('pagamento') !== 'sucesso') return;
+    params.delete('pagamento');
+    params.delete('sessao');
     const resto = params.toString();
     history.replaceState(null, '', location.pathname + (resto ? '?' + resto : '') + location.hash);
 
-    UI.toast('Pagamento enviado. Seu plano é liberado assim que o Asaas confirmar.', 'success', 6000);
+    UI.toast('Pagamento enviado. Seu plano é liberado assim que a Stripe confirmar.', 'success', 6000);
     let tentativas = 0;
     const perguntar = async () => {
       tentativas++;
@@ -368,7 +369,7 @@
         return;
       }
       if (tentativas < 12) setTimeout(perguntar, 5000);
-      else UI.toast('A confirmação está demorando. Quando o Asaas aprovar, o plano aparece ao abrir o app de novo.', 'info', 7000);
+      else UI.toast('A confirmação está demorando. Quando a Stripe aprovar, o plano aparece ao abrir o app de novo.', 'info', 7000);
     };
     setTimeout(perguntar, 3000);
   }

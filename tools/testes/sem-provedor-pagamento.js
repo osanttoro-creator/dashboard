@@ -16,7 +16,7 @@ const arquivos = [
   'supabase/migrations/20260902_planos_funcoes_rls.sql'
 ];
 const proibidos = [
-  /mercado\s*pago/i, /mercadopago/i, /\/checkout\b/i,
+  /mercado\s*pago/i, /mercadopago/i,
   /data-link-plano/i, /oaze-(checkout|mp-webhook|assinatura)/i,
   /external_(price|customer|subscription|event)_id/i,
   /provedor\s+(externo\s+)?de\s+pagamento/i

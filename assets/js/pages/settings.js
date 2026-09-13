@@ -246,7 +246,7 @@
     box.appendChild(linha(
       'Assinatura',
       (d.status === 'past_due'
-        ? 'O último pagamento não passou. Atualize o cartão pelo e-mail do Asaas'
+        ? 'O último pagamento não passou. Atualize o cartão pelo aviso da Stripe'
         : 'Renova no cartão ' + (d.ciclo === 'annual' ? 'todo ano' : 'todo mês'))
         + (ate ? ' · período atual até ' + ate + '.' : '.'),
       el('button', {

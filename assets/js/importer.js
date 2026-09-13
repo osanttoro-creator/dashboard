@@ -199,6 +199,12 @@
      Interface
      ============================================================ */
 
+  const MAX_ARQUIVO_BYTES = 2 * 1024 * 1024;
+  const MAX_TEXTO_CHARS = 2_000_000;
+  const EXTENSOES_ACEITAS = new Set(['csv', 'ofx', 'qfx', 'txt']);
+  const TIPOS_ACEITOS = new Set(['', 'text/csv', 'text/plain', 'application/csv',
+    'application/x-ofx', 'application/ofx']);
+
   Importer.renderTargets = function () {
     const prof = Store.profile();
     const opts = prof.accounts.map((a) => ({ value: 'acc:' + a.id, label: 'Conta · ' + a.name }))
@@ -209,9 +215,27 @@
 
   Importer.readFile = function (file) {
     if (!file) return;
+    const nome = String(file.name || '');
+    const ext = nome.includes('.') ? nome.split('.').pop().toLowerCase() : '';
+    if (!EXTENSOES_ACEITAS.has(ext) || !TIPOS_ACEITOS.has(String(file.type || '').toLowerCase())) {
+      UI.toast('Arquivo recusado. Use CSV, OFX, QFX ou TXT.', 'error', 6000);
+      document.getElementById('importFile').value = '';
+      return;
+    }
+    if (!Number.isFinite(file.size) || file.size < 1 || file.size > MAX_ARQUIVO_BYTES) {
+      UI.toast('Arquivo recusado. O limite por importação é 2 MB.', 'error', 6000);
+      document.getElementById('importFile').value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
-      document.getElementById('importText').value = String(reader.result || '');
+      const conteudo = String(reader.result || '');
+      if (conteudo.length > MAX_TEXTO_CHARS || conteudo.includes('\u0000')) {
+        UI.toast('O conteúdo do arquivo não é um extrato de texto válido.', 'error', 6000);
+        document.getElementById('importFile').value = '';
+        return;
+      }
+      document.getElementById('importText').value = conteudo;
       UI.toast(`Arquivo "${file.name}" carregado. Clique em "Analisar conteúdo".`, 'success');
     };
     reader.onerror = () => UI.toast('Não foi possível ler o arquivo.', 'error');
@@ -225,6 +249,10 @@
 
     if (!text.trim()) {
       box.appendChild(info('Cole o conteúdo ou selecione um arquivo antes de analisar.', 'is-warn'));
+      return;
+    }
+    if (text.length > MAX_TEXTO_CHARS || text.includes('\u0000')) {
+      box.appendChild(info('O conteúdo excede o limite de 2 MB ou não é texto válido.', 'is-error'));
       return;
     }
 

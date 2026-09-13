@@ -32,6 +32,8 @@
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { asaas, AsaasErro } from '../_shared/asaas.ts';
+import { stripe, StripeErro } from '../_shared/stripe.ts';
+import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
 
 function origensPermitidas(): string[] {
   return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
@@ -67,6 +69,9 @@ Deno.serve(async (req: Request) => {
   if (origem && !origensPermitidas().includes(origem)) {
     return json({ erro: 'origem', mensagem: 'Origem não autorizada.' }, 403, origem);
   }
+  if (!corpoCabeNoLimite(req, 4096)) {
+    return json({ erro: 'corpo', mensagem: 'Requisição inválida.' }, 413, origem);
+  }
 
   const url = Deno.env.get('SUPABASE_URL') ?? '';
   const servico = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
@@ -92,6 +97,20 @@ Deno.serve(async (req: Request) => {
   }
   const usuario = auth.user;
 
+  const admin = createClient(url, servico, {
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+  try {
+    const hora = await reservarRateLimit(admin, 'conta:excluir:hora', usuario.id, 3, 3600);
+    const dia = await reservarRateLimit(admin, 'conta:excluir:dia', usuario.id, 6, 86_400);
+    if (!hora.permitido || !dia.permitido) {
+      return json({ erro: 'limite', mensagem: 'Muitas tentativas seguidas. Tente novamente mais tarde.' }, 429, origem);
+    }
+  } catch {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'rate_limit_indisponivel' }));
+    return json({ erro: 'indisponivel', mensagem: 'Operação indisponível no momento.' }, 503, origem);
+  }
+
   /* ---- corpo ---- */
   let corpo: any = null;
   try { corpo = await req.json(); } catch { /* segue nulo */ }
@@ -112,10 +131,6 @@ Deno.serve(async (req: Request) => {
       mensagem: 'O e-mail digitado não confere com o da conta.'
     }, 400, origem);
   }
-
-  const admin = createClient(url, servico, {
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
 
   /* Antes de apagar, conta o que existe. É esse número que volta
      para o usuário — "apagamos 412 lançamentos" é uma confirmação
@@ -150,11 +165,40 @@ Deno.serve(async (req: Request) => {
   }
 
   /* ---- a cobrança para antes da conta ----
-     Apagar o usuário sem encerrar a assinatura no Asaas deixaria o
+     Apagar o usuário sem encerrar a assinatura no provedor deixaria o
      cartão sendo cobrado por uma conta que não existe mais. Se o
-     Asaas não confirmar, NADA é apagado: a pessoa tenta de novo. */
+     provedor não confirmar, NADA é apagado: a pessoa tenta de novo. */
   const { data: assinatura } = await admin.from('subscriptions')
-    .select('asaas_subscription_id').eq('user_id', usuario.id).maybeSingle();
+    .select('stripe_subscription_id,asaas_subscription_id').eq('user_id', usuario.id).maybeSingle();
+  const stripePendentes = await admin.from('stripe_intencoes')
+    .select('checkout_session_id,stripe_subscription_id')
+    .eq('user_id', usuario.id).eq('status', 'aguardando');
+  const stripeAssinaturas = new Set<string>(
+    [assinatura?.stripe_subscription_id, ...(stripePendentes.data ?? []).map((p: any) => p.stripe_subscription_id)]
+      .filter(Boolean) as string[]);
+  try {
+    for (const id of stripeAssinaturas) {
+      await stripe('DELETE', '/subscriptions/' + encodeURIComponent(id), undefined,
+        'excluir-conta-' + usuario.id + '-' + id);
+    }
+    for (const p of stripePendentes.data ?? []) {
+      if (p.checkout_session_id && !p.stripe_subscription_id) {
+        await stripe('POST', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id) + '/expire',
+          new URLSearchParams(), 'expirar-conta-' + usuario.id + '-' + p.checkout_session_id);
+      }
+    }
+  } catch (e) {
+    /* 404 é o estado desejado: a assinatura ou sessão já não existe. */
+    if (!(e instanceof StripeErro && e.status === 404)) {
+      console.error(JSON.stringify({ request_id: requestId, evento: 'cancelar_stripe_falhou' }));
+      return json({
+        erro: 'falhou',
+        mensagem: 'Não foi possível encerrar sua assinatura agora, então a conta não foi excluída. Tente novamente mais tarde.',
+        request_id: requestId
+      }, 502, origem);
+    }
+  }
+
   const pendentes = await admin.from('asaas_intencoes')
     .select('asaas_subscription_id').eq('user_id', usuario.id).eq('status', 'aguardando');
   const paraEncerrar = new Set<string>(
