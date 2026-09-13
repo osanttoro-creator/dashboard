@@ -61,6 +61,16 @@
         <span class="nav-long">Contas e cartões</span><span class="nav-short">Carteira</span>
       </button>
 
+      <p class="nav-group">Crescer</p>
+      <button class="nav-item" data-page="investments">
+        <span class="nav-ico" data-ico="trending-up"></span>
+        <span class="nav-long">Investimentos</span><span class="nav-short">Investir</span>
+      </button>
+      <button class="nav-item" data-page="reports">
+        <span class="nav-ico" data-ico="chart-line"></span>
+        <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+      </button>
+
       <p class="nav-group">Planejar</p>
       <button class="nav-item" data-page="budget">
         <span class="nav-ico" data-ico="target"></span>
@@ -81,16 +91,6 @@
       <button class="nav-item" data-page="categories">
         <span class="nav-ico" data-ico="tag"></span>
         <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-      </button>
-
-      <p class="nav-group">Crescer</p>
-      <button class="nav-item" data-page="investments">
-        <span class="nav-ico" data-ico="trending-up"></span>
-        <span class="nav-long">Investimentos</span><span class="nav-short">Investir</span>
-      </button>
-      <button class="nav-item" data-page="reports">
-        <span class="nav-ico" data-ico="chart-line"></span>
-        <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
       </button>
 
       <p class="nav-group">Sistema</p>
@@ -142,6 +142,24 @@
           <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
         </button>
 
+      <div class="topnav-group" data-group="crescer">
+        <button class="topnav-trigger" id="trg-crescer" aria-label="Crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="topnav-trigger-txt">Crescer</span>
+          <span class="topnav-caret" aria-hidden="true"></span>
+        </button>
+        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
+        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
+          <span class="nav-ico" data-ico="trending-up"></span>
+          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
+        </button>
+        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
+          <span class="nav-ico" data-ico="chart-line"></span>
+          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
+        </button>
+        </div>
+      </div>
+
       <div class="topnav-group" data-group="planejar">
         <button class="topnav-trigger" id="trg-planejar" aria-label="Planejar" aria-expanded="false" aria-controls="drop-planejar" aria-haspopup="true">
           <span class="nav-ico" data-ico="target"></span>
@@ -168,24 +186,6 @@
         <button class="nav-item" data-page="categories" title="Categorias" aria-label="Categorias">
           <span class="nav-ico" data-ico="tag"></span>
           <span class="nav-long">Categorias</span><span class="nav-short">Categorias</span>
-        </button>
-        </div>
-      </div>
-
-      <div class="topnav-group" data-group="crescer">
-        <button class="topnav-trigger" id="trg-crescer" aria-label="Crescer" aria-expanded="false" aria-controls="drop-crescer" aria-haspopup="true">
-          <span class="nav-ico" data-ico="trending-up"></span>
-          <span class="topnav-trigger-txt">Crescer</span>
-          <span class="topnav-caret" aria-hidden="true"></span>
-        </button>
-        <div class="topnav-drop n1" id="drop-crescer" role="group" aria-labelledby="trg-crescer" hidden>
-        <button class="nav-item" data-page="investments" title="Investimentos" aria-label="Investimentos">
-          <span class="nav-ico" data-ico="trending-up"></span>
-          <span class="nav-long">Investimentos</span><span class="nav-short">Investimentos</span>
-        </button>
-        <button class="nav-item" data-page="reports" title="Análises" aria-label="Análises">
-          <span class="nav-ico" data-ico="chart-line"></span>
-          <span class="nav-long">Análises</span><span class="nav-short">Análises</span>
         </button>
         </div>
       </div>
@@ -249,9 +249,10 @@
              · pill-label — texto visível onde há espaço
              · aria-expanded nos que abrem painel
 
-           A engrenagem virou controle deslizante: este botão abre
-           um menu curto de ajustes e backup, e não a página de
-           Configurações. Ícone diferente para destino diferente. -->
+           O terceiro ícone — "Ajustes", com o menu de backup — saiu.
+           Ele repetia Configurações, que já está na navegação, e o
+           backup por arquivo deixou de existir: os dados vão e voltam
+           pela conta, e de nenhuma outra forma. -->
       <button class="pill pill-btn" id="btnSearch"
               aria-label="Buscar em todo o app" data-dica="Buscar   /">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>
@@ -262,12 +263,6 @@
         <span class="pill-label">Avisos</span>
         <span class="notif-count" id="notifCount" hidden>0</span>
       </button>
-      <button class="pill pill-btn" id="btnSettings" aria-expanded="false"
-              aria-label="Ajustes rápidos e backup" data-dica="Ajustes e backup">
-        <span data-ico="sliders-horizontal"></span>
-        <span class="pill-label">Ajustes</span>
-      </button>
-      <input type="file" id="fileRestore" aria-label="Arquivo de backup para restaurar" accept="application/json,.json" hidden>
     </header>
 
     <main class="content" id="content" tabindex="-1">
@@ -875,24 +870,9 @@
           <div id="setAppearance"></div>
         </div>
       </div>
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head"><h2>Sincronização</h2></div>
-          <div id="setSync"></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>UGLEZ</h2></div>
-          <div id="setUglez"></div>
-        </div>
-      </div>
       <div class="card">
         <div class="card-head"><h2>Planos e suporte</h2></div>
         <div id="setNavigation"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2>Dados</h2>
-          <span class="card-note">Tudo fica neste navegador. O backup é a sua rede de segurança.</span></div>
-        <div id="setData"></div>
       </div>
     </section>
 
@@ -968,18 +948,6 @@
   <div id="notifList"></div>
 </div>
 
-<div class="popover n3" id="settingsPop" hidden role="menu" aria-label="Menu de configurações">
-  <button class="pop-item" role="menuitem" data-goto="settings">
-    <span class="pop-ico" data-ico="settings"></span><span>Todas as configurações</span>
-  </button>
-  <div class="pop-sep"></div>
-  <button class="pop-item" role="menuitem" id="btnExport">
-    <span class="pop-ico" data-ico="download"></span><span>Baixar backup (JSON)</span>
-  </button>
-  <button class="pop-item" role="menuitem" id="btnImport">
-    <span class="pop-ico" data-ico="upload"></span><span>Restaurar backup</span>
-  </button>
-</div>
 
 <!-- ação principal flutuante: os quatro lançamentos, em qualquer página -->
 <div class="fab-wrap" id="fabWrap">

@@ -578,26 +578,6 @@
     }, null, 2);
   };
 
-  Store.importJSON = function (text) {
-    const parsed = JSON.parse(text);
-    const raw = parsed && parsed.data ? parsed.data : parsed;
-    // Sem esta checagem, um arquivo qualquer viraria "estado inicial" e
-    // apagaria os dados do usuário em silêncio.
-    if (!raw || typeof raw !== 'object' || !Array.isArray(raw.profiles) || !raw.profiles.length) {
-      throw new Error('não parece um backup deste app (nenhum perfil encontrado).');
-    }
-    const next = normalizeState(raw);
-    if (!next.profiles.length) throw new Error('Arquivo sem perfis válidos.');
-    state = next;
-    /* O tema NÃO vem do arquivo. Restaurar um backup feito por
-       outra pessoa (ou noutro aparelho) trocaria a aparência de
-       quem restaura por uma preferência que não é dele — e a
-       escolha de tema desta conta está em tema.js, não aqui. */
-    if (global.Tema && Tema.efetivo) state.theme = Tema.efetivo();
-    Store.commit('import');
-    return state;
-  };
-
   Store.resetAll = function () {
     state = makeInitialState();
     Store.commit('reset');

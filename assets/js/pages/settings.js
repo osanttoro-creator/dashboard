@@ -1,9 +1,19 @@
 /* =============================================================
    pages/settings.js — Configurações
    ------------------------------------------------------------
-   Reúne numa página o que antes estava espalhado em botões da
-   barra: perfil, tema, sincronização, UGLEZ e backup. Nenhuma
-   funcionalidade nova — só um lugar previsível para achá-las.
+   Conta, plano, perfil, aparência, planos e ajuda.
+
+   O QUE SAIU, E POR QUÊ (12/09/2026)
+     · Espaço ativo e conteúdo do espaço: repetiam o seletor de
+       espaço do cabeçalho, que é onde se troca e se gerencia.
+     · UGLEZ: mostrava como o assistente é servido e o resumo
+       enviado. É configuração interna do produto, não da pessoa.
+       Nenhuma chave de IA existe no navegador — a da IA vive só na
+       Edge Function —, mas a tela não precisava falar disso.
+     · Sincronização: estado repetido do indicador da barra, com
+       explicação que não levava a nenhuma ação.
+     · Dados (baixar, restaurar e trazer dados antigos): os dados
+       vão e voltam pela conta, e de nenhuma outra forma.
    ============================================================= */
 (function (global) {
   'use strict';
@@ -14,9 +24,6 @@
   Cfg.render = function () {
     perfil();
     aparencia();
-    sinc();
-    uglez();
-    dados();
     conta();
     plano();
     navegacao();
@@ -77,7 +84,6 @@
 
   function perfil() {
     const box = U.clear(document.getElementById('setProfile'));
-    const st = Store.state();
 
     box.appendChild(linha(
       'Nome na saudação',
@@ -89,18 +95,6 @@
       })
     ));
 
-    box.appendChild(linha(
-      'Espaço financeiro ativo',
-      `${st.profiles.length} espaço(s). Cada um tem contas, cartões, lançamentos e categorias próprios — separar pessoal de trabalho, por exemplo.`,
-      el('button', { class: 'btn btn-outline btn-sm', text: 'Gerenciar espaços', onclick: () => Forms.openProfiles() })
-    ));
-
-    const prof = Store.profile();
-    box.appendChild(linha(
-      'Conteúdo deste espaço',
-      `${prof.transactions.length} lançamentos · ${prof.accounts.length} contas · ${prof.cards.length} cartões · ${prof.goals.length} metas`,
-      el('span', { class: 'muted', text: prof.name })
-    ));
   }
 
   /* ============================================================
@@ -159,69 +153,6 @@
       'Movimento',
       'O sistema respeita a preferência do seu aparelho por menos movimento e menos transparência.',
       el('span', { class: 'muted', text: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'Reduzido pelo sistema' : 'Normal' })
-    ));
-  }
-
-  function sinc() {
-    const box = U.clear(document.getElementById('setSync'));
-    /* Antes isto perguntava pelo FirebaseConfig -- e como o Firebase
-       saiu, a resposta era sempre "não configurada", mesmo com a
-       sincronização funcionando. Quem responde é quem sincroniza. */
-    const ligado = !!(global.SupabaseConfig && SupabaseConfig.url &&
-                      (SupabaseConfig.publishableKey || SupabaseConfig.anonKey));
-
-    box.appendChild(linha(
-      'Entre aparelhos',
-      ligado
-        ? 'Entre na sua conta para que este perfil apareça também no celular.'
-        : 'Não configurada neste arquivo. O app funciona normalmente, só não sincroniza.',
-      el('span', { id: 'syncBoxSettings' })
-    ));
-
-    // o sync.js escreve no #syncBox da sidebar; espelhamos o estado aqui
-    const origem = document.getElementById('syncBox');
-    const destino = document.getElementById('syncBoxSettings');
-    if (origem && destino) destino.appendChild(el('span', { class: 'muted', text: origem.textContent.trim() || '—' }));
-
-    /* A frase muda conforme a situação REAL da conta, e não é
-       decorativa: ela é a diferença entre "se eu limpar o navegador,
-       perco tudo" e "não perco". Antes dizia sempre que a
-       sincronização era uma cópia e o navegador o original -- o que
-       deixou de ser verdade quando o banco virou a fonte, e
-       continuar dizendo faria alguém tratar como descartável o
-       único lugar onde os dados dele existem. */
-    const comConta = global.Dados && Dados.estado() !== 'local';
-    box.appendChild(linha(
-      'Onde os dados ficam',
-      comConta
-        ? 'No servidor, na sua conta — é lá que eles existem de verdade e é de lá que ' +
-          'vêm ao abrir em qualquer aparelho. Este navegador guarda uma cópia local para ' +
-          'a tela abrir rápido e para você continuar trabalhando sem internet.'
-        : 'Só neste navegador (localStorage). Não há cópia em lugar nenhum: limpar os ' +
-          'dados do site, trocar de aparelho ou usar uma janela anônima apaga tudo. ' +
-          'Com uma conta, eles passam a viver no servidor.',
-      el('span', { class: 'muted', text: Store.storageOK ? 'Armazenamento disponível' : 'BLOQUEADO neste navegador' })
-    ));
-  }
-
-  function uglez() {
-    const box = U.clear(document.getElementById('setUglez'));
-    const modo = AI.modo();
-
-    box.appendChild(linha(
-      'Como o UGLEZ responde',
-      modo.chave === 'servidor'
-        ? 'Por um servidor autenticado. Nenhuma chave de IA existe neste navegador.'
-        : modo.chave === 'sem-sessao'
-          ? 'Entre na sua conta para conversar. As leituras da página UGLEZ continuam funcionando: são calculadas aqui, sem rede.'
-          : 'Assistente não configurado neste ambiente. As leituras da página UGLEZ continuam funcionando.',
-      el('span', { class: 'badge ' + (modo.chave === 'servidor' ? 'badge-ok' : ''), text: modo.rotulo })
-    ));
-
-    box.appendChild(linha(
-      'O que é enviado',
-      'Um resumo agregado do mês exibido. Nunca a lista de lançamentos nem dados de outro perfil.',
-      el('button', { class: 'btn btn-outline btn-sm', text: 'Ver exatamente', onclick: () => AI.mostrarDados() })
     ));
   }
 
@@ -355,68 +286,6 @@
       'Apaga a conta e todos os dados do servidor, em todos os aparelhos. Não tem volta.',
       el('button', { class: 'btn btn-outline btn-sm danger', text: 'Excluir conta…', onclick: () => Conta.excluir() })
     ));
-  }
-
-  function dados() {
-    const box = U.clear(document.getElementById('setData'));
-
-    box.appendChild(linha(
-      'Configuração inicial',
-      'Refazer as etapas de configuração. Nada é apagado — os campos vêm preenchidos com o que já existe.',
-      el('button', {
-        class: 'btn btn-outline btn-sm', text: 'Reabrir configuração',
-        onclick: () => Ob.reabrir()
-      })
-    ));
-
-    box.appendChild(linha(
-      'Backup',
-      'Baixa um JSON com TODOS os perfis. Guarde antes de mexer em algo grande.',
-      el('button', {
-        class: 'btn btn-primary btn-sm', text: '↓ Baixar backup',
-        onclick: () => {
-          U.download(`oaze-backup-${U.todayISO()}.json`, Store.exportJSON());
-          UI.toast('Backup baixado.', 'success');
-        }
-      })
-    ));
-
-    box.appendChild(linha(
-      'Restaurar',
-      'Substitui todos os dados atuais pelo conteúdo do arquivo. Pede confirmação.',
-      el('button', {
-        class: 'btn btn-outline btn-sm', text: '↑ Restaurar backup',
-        onclick: () => document.getElementById('fileRestore').click()
-      })
-    ));
-
-    /* ============================================================
-       TRAZER OS DADOS ANTIGOS — a porta de volta
-       ------------------------------------------------------------
-       O convite automático agora aparece uma vez e respeita o "não".
-       Esta linha é a contrapartida obrigatória disso: uma decisão
-       que o sistema guarda para sempre e o usuário não pode revisar
-       não é uma decisão, é uma porta que trancou.
-
-       Só aparece quando há de fato dado antigo neste navegador.
-       Um botão que só sabe dizer "não há nada para trazer" é ruído
-       permanente em Configurações.
-       ============================================================ */
-    if (global.Mig && Mig.temDadoAntigo && Mig.temDadoAntigo()) {
-      const decisao = Mig.decisaoConhecida && Mig.decisaoConhecida();
-      const concluida = decisao && decisao.status === 'concluida';
-      box.appendChild(linha(
-        'Dados antigos deste navegador',
-        concluida
-          ? 'Já copiados para a sua conta e conferidos no servidor. O que está aqui continua aqui — nada foi apagado.'
-          : 'Este navegador guarda dados de antes da sua conta. Copiá-los é idempotente: rodar de novo não duplica nada.',
-        el('button', {
-          class: 'btn btn-outline btn-sm',
-          text: concluida ? 'Ver situação' : 'Trazer para a conta',
-          onclick: () => Mig.reabrir()
-        })
-      ));
-    }
   }
 
   /* Mesmo motivo da página do UGLEZ: quem desenhou "Verificando

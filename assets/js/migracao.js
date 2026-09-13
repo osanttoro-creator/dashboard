@@ -462,61 +462,15 @@
       decisaoCache.status === 'dispensada'));
   };
 
-  /** A decisão já conhecida nesta sessão, sem ir à rede. */
-  Mig.decisaoConhecida = () => decisaoCache;
-
   Mig.aoEntrar = function () {
     /* Descobre o quanto antes, para que Mig.pendente() pare de
        responder "na dúvida" assim que houver certeza. */
     Mig.decisao().then((d) => { decisaoCache = d; })
       .catch(() => { /* segue na dúvida, que é o lado seguro */ });
-    /* A migração continua disponível em Configurações > Dados,
-       mas não interrompe mais a entrada com uma mensagem automática. */
-  };
-
-  /* ---------------- reabrir na mão ----------------
-     A contrapartida obrigatória de "não perguntar de novo". Uma
-     decisão que o sistema respeita para sempre e o usuário não pode
-     revisar não é uma decisão: é uma porta que trancou.
-
-     Diferente de oferecer(), esta função IGNORA a decisão gravada —
-     porque quem clicou aqui está justamente desfazendo-a. O que ela
-     não ignora é a idempotência: executar() confere de novo antes
-     de gravar, e o legacy_id impede duplicata mesmo assim. */
-  Mig.reabrir = async function () {
-    if (!global.Sync || !Sync.currentUser()) {
-      UI.toast('Entre na sua conta para trazer estes dados.', 'error');
-      return;
-    }
-    if (!Mig.temDadoAntigo()) {
-      UI.openModal({
-        title: 'Nada para trazer',
-        body: el('p', { style: { fontSize: '13.5px', lineHeight: '1.65' },
-          text: 'Não há dados antigos guardados neste navegador. ' +
-            'Se eles estavam em outro aparelho, abra o OAZE por lá e entre na mesma conta.' }),
-        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
-      });
-      return;
-    }
-
-    let st;
-    try { st = JSON.parse(localStorage.getItem(CHAVE_LOCAL)); }
-    catch (e) { UI.toast('Os dados antigos deste navegador estão ilegíveis.', 'error'); return; }
-
-    const jaEsta = await Mig.jaMigrou();
-    if (jaEsta) {
-      UI.openModal({
-        title: 'Estes dados já estão na conta',
-        body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-          el('p', { text: 'A cópia foi concluída e conferida. O que está neste navegador é a mesma coisa que está no servidor.' }),
-          el('p', { style: { marginTop: '10px' }, text: 'Copiar de novo não duplicaria nada — cada registro é reconhecido pelo identificador antigo —, mas também não mudaria nada.' })
-        ]),
-        buttons: [{ label: 'Entendi', class: 'btn-primary', onClick: UI.closeModal }]
-      });
-      return;
-    }
-
-    Mig.oferecerAgora(st);
+    /* A porta manual (Configurações > Dados) saiu em 12/09/2026: os
+       dados vão e voltam pela conta. A cópia do localStorage para o
+       banco precisa passar a acontecer sozinha, na entrada — é
+       bloqueio de lançamento, em docs/o-que-falta.md. */
   };
 
   global.Mig = Mig;

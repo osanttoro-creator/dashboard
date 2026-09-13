@@ -368,37 +368,6 @@
     });
     document.getElementById('btnProfiles').addEventListener('click', () => Forms.openProfiles());
 
-    // backup
-    document.getElementById('btnExport').addEventListener('click', () => {
-      U.download(`financas-backup-${U.todayISO()}.json`, Store.exportJSON());
-      UI.toast('Backup baixado.', 'success');
-    });
-    document.getElementById('btnImport').addEventListener('click', () => document.getElementById('fileRestore').click());
-    document.getElementById('fileRestore').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      e.target.value = '';
-      if (!file) return;
-      const ok = await UI.confirm({
-        title: 'Restaurar backup',
-        message: 'Restaurar <strong>substitui todos os dados atuais</strong> (todos os perfis) pelo conteúdo do arquivo. Faça um backup antes se tiver dúvida. Continuar?',
-        confirmLabel: 'Restaurar', danger: true
-      });
-      if (!ok) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          Store.importJSON(String(reader.result));
-          App.ym = U.todayYM();
-          syncProfileSelect(); syncPeriodPicker();
-          UI.toast('Backup restaurado.', 'success');
-        } catch (err) {
-          console.error(err);
-          UI.toast('Arquivo inválido: ' + err.message, 'error');
-        }
-      };
-      reader.readAsText(file, 'utf-8');
-    });
-
     // ações rápidas (delegação — funciona em qualquer página)
     document.addEventListener('click', (ev) => {
       const q = ev.target.closest('[data-quick]');

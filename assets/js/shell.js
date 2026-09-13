@@ -320,8 +320,6 @@
 
   Shell.init = function () {
     document.getElementById('btnNotif').addEventListener('click', () => alterna('notifPop', 'btnNotif', pintaNotificacoes));
-    document.getElementById('btnSettings').addEventListener('click', () => alterna('settingsPop', 'btnSettings'));
-    U.$$('#settingsPop .pop-item').forEach((b) => b.addEventListener('click', fecha));
 
     document.getElementById('btnSearch').addEventListener('click', abreBusca);
     U.$$('[data-close-search]').forEach((b) => b.addEventListener('click', fechaBusca));
