@@ -2,10 +2,8 @@
 # O aplicativo, não: não há conteúdo para buscador em /app, e as
 # telas de sessão já vêm com noindex no próprio HTML.
 #
-# ATENÇÃO: no subdomínio *.hostingersite.com a Hostinger INTERCEPTA
-# este arquivo e serve o dela. Este passa a valer só quando o domínio
-# próprio for apontado. Confira por HTTP, não olhando o arquivo no
-# servidor — o disco mostra este, a requisição mostra o outro.
+# O domínio oaze.site serve este arquivo. No subdomínio temporário da
+# Hostinger ele era interceptado e trocado pelo dela.
 User-agent: *
 Allow: /
 Disallow: /app
@@ -16,4 +14,4 @@ Disallow: /recuperar-senha
 Disallow: /redefinir-senha
 Disallow: /confirmar-email
 
-Sitemap: https://mediumvioletred-viper-277230.hostingersite.com/sitemap.xml
+Sitemap: https://oaze.site/sitemap.xml

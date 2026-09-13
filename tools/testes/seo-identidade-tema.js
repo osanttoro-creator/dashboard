@@ -40,7 +40,7 @@ if (!index.includes('Controle financeiro pessoal')) falhas.push('index.html: ter
 
 const sitemap = ler('sitemap.xml');
 for (const rota of ['/app', '/entrar', '/cadastro', '/recuperar-senha', '/redefinir-senha', '/confirmar-email']) {
-  if (sitemap.includes(`<loc>${rota}`) || sitemap.includes(`hostingersite.com${rota}</loc>`)) falhas.push(`sitemap.xml: rota privada incluída (${rota})`);
+  if (sitemap.includes(`<loc>${rota}`) || sitemap.includes(`oaze.site${rota}</loc>`)) falhas.push(`sitemap.xml: rota privada incluída (${rota})`);
 }
 if (!ler('deploy/hostinger/montar-pacote.ps1').includes("'llms.txt'")) {
   falhas.push('deploy Hostinger: llms.txt ficaria fora da publicação');

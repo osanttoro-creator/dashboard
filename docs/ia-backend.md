@@ -24,7 +24,7 @@ Exemplo pela CLI, digitado apenas no seu terminal:
 ```powershell
 supabase secrets set OPENAI_API_KEY="SUA_CHAVE"
 supabase secrets set OPENAI_MODEL="gpt-4o-mini"
-supabase secrets set OAZE_ALLOWED_ORIGINS="https://mediumvioletred-viper-277230.hostingersite.com"
+supabase secrets set OAZE_ALLOWED_ORIGINS="https://oaze.site"
 ```
 
 Não salve a chave em `.env` dentro do repositório nem a envie por chat. Se uma

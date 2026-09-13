@@ -236,7 +236,7 @@ Entrar em `/entrar` é estar dentro em `/app`, e fechar o navegador não desloga
    `OAZE`, e-mail de suporte e e-mail do desenvolvedor. Publique.
 3. **Credenciais → Criar credenciais → ID do cliente OAuth → Aplicativo da Web**:
    - Origem JavaScript autorizada:
-     `https://mediumvioletred-viper-277230.hostingersite.com`
+     `https://oaze.site`
    - URI de redirecionamento autorizado:
      `https://gxwatircdhhetvzzlwwq.supabase.co/auth/v1/callback`
 4. Copie o **Client ID** e o **Client secret**.
@@ -268,8 +268,8 @@ provedor não existe — e o botão continua escondido, sem quebrar nada.
 
 Supabase → **Authentication → URL Configuration**:
 
-- **Site URL**: `https://mediumvioletred-viper-277230.hostingersite.com`
-- **Redirect URLs**: `https://mediumvioletred-viper-277230.hostingersite.com/**`
+- **Site URL**: `https://oaze.site`
+- **Redirect URLs**: `https://oaze.site/**`
   — e `http://localhost:4173/**` se for testar no servidor local.
 
 Sem o endereço na lista, o provedor devolve para a Site URL e a pessoa cai na

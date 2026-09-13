@@ -62,7 +62,7 @@ concurrency:
 env:
   HOSTINGER_API: https://developers.hostinger.com
   HOSTINGER_USER: u231435333
-  SITE_DOMAIN: mediumvioletred-viper-277230.hostingersite.com
+  SITE_DOMAIN: oaze.site
   ZIP_NOME: oaze-public_html.zip
 
 jobs:
