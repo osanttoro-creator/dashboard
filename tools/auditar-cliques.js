@@ -61,8 +61,12 @@ const CLASSES_COM_ACAO = [
   'ai-chip', 'seg', 'hamburguer'
 ];
 
+/* Aceita com e sem valor: data-close-search é HTML válido e o JS o
+   seleciona por [data-close-search]. Exigir o '=' reprovava um botão
+   correto, e só não aparecia antes porque o antigo tinha uma classe
+   liberada na lista acima. */
 function temDataComAcao(tag) {
-  return DADOS_COM_ACAO.some((d) => tag.includes('data-' + d + '='));
+  return DADOS_COM_ACAO.some((d) => new RegExp('\\sdata-' + d + '(=|\\s|>)').test(tag));
 }
 
 function temClasseComAcao(tag) {
