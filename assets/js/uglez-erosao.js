@@ -239,7 +239,11 @@
     ]);
   }
 
-  E.montar = function (container) {
+  /* opcoes.qtd: menos pontos para caixas pequenas. A esfera de 2.600
+     pontos num botão de 56 px vira mancha, não formação — e o limite
+     de cada caso (movimento reduzido, toque) continua valendo por
+     cima, como teto. */
+  E.montar = function (container, opcoes) {
     if (!container) return null;
     const canvas = document.createElement('canvas');
     canvas.className = 'uglez-erosao-canvas';
@@ -256,7 +260,8 @@
 
     const reduzido = global.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarse = global.matchMedia && matchMedia('(pointer: coarse)').matches;
-    const qtd = reduzido ? 1150 : coarse ? 1550 : 2600;
+    const teto = reduzido ? 1150 : coarse ? 1550 : 2600;
+    const qtd = opcoes && opcoes.qtd ? Math.min(opcoes.qtd, teto) : teto;
     const malha = pontos(qtd);
 
     function atributo(nome, dados, tamanho) {

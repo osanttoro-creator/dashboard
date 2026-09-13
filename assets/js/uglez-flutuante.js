@@ -39,6 +39,7 @@
   let enviar = null;
   let particulas = null;
   let particulasPainel = null;
+  let neon = null;
   let aberto = false;
   let ligado = false;
   let ultimoFoco = null;
@@ -73,6 +74,10 @@
 
     enviar = el('button', { class: 'btn btn-ai', type: 'button', text: 'Perguntar', onclick: perguntar });
 
+    /* O balão diz só o necessário: quem é, as sugestões e onde
+       perguntar. O período saiu (o seletor do cabeçalho já o diz), a
+       cota só aparece quando está acabando, e a ressalva legal ficou
+       em quatro palavras — curta, mas não some. */
     const cota = el('p', { class: 'uglez-cota', id: 'uglezFlutCota', hidden: true });
 
     painel = el('div', {
@@ -82,8 +87,7 @@
       el('div', { class: 'uglez-flut-topo' }, [
         el('span', { class: 'uglez-flut-marca', id: 'uglezFlutMarca', 'aria-hidden': 'true' }),
         el('div', { class: 'uglez-flut-id' }, [
-          el('strong', { text: 'UGLEZ' }),
-          el('span', { class: 'uglez-flut-periodo', id: 'uglezFlutPeriodo' })
+          el('strong', { text: 'UGLEZ' })
         ]),
         el('button', {
           class: 'icon-btn', type: 'button', 'aria-label': 'Fechar UGLEZ',
@@ -99,7 +103,7 @@
       el('div', { class: 'uglez-flut-pe' }, [
         cota,
         el('div', { class: 'ai-ask' }, [campo, enviar]),
-        el('p', { class: 'hint', text: 'Respostas orientativas, sobre o mês exibido. Não são consultoria financeira.' })
+        el('p', { class: 'hint', text: 'Orientação, não consultoria.' })
       ])
     ]);
 
@@ -133,9 +137,24 @@
 
     document.addEventListener('keydown', aoTeclar);
 
-    particulas = UglezParticulas.montar(botao, { qtd: qtdBotao() });
-    particulasPainel = UglezParticulas.montar(
-      painel.querySelector('#uglezFlutMarca'), { qtd: 18 });
+    const celular = global.innerWidth < 768;
+    particulas = formacao(botao, qtdBotao(), celular ? 360 : 480);
+    particulasPainel = formacao(painel.querySelector('#uglezFlutMarca'), 18, 260);
+    neon = global.UglezNeon ? UglezNeon.montar(painel) : null;
+  }
+
+  /**
+   * A mesma esfera da página do UGLEZ, em miniatura. A formação 2D
+   * fica como recuo: sem WebGL, o botão continua sendo o UGLEZ.
+   * Antes, o botão da Visão geral era sempre 2D enquanto a página
+   * mostrava a esfera — dois desenhos para o mesmo assistente.
+   */
+  function formacao(caixa, qtd2d, qtd3d) {
+    const esfera = global.UglezErosao && UglezErosao.montar
+      ? UglezErosao.montar(caixa, { qtd: qtd3d })
+      : null;
+    if (esfera) { caixa.classList.add('tem-esfera'); return esfera; }
+    return UglezParticulas.montar(caixa, { qtd: qtd2d });
   }
 
   /**
@@ -170,6 +189,7 @@
        mas ele dispara no quadro seguinte — remedir aqui evita o
        piscar de um quadro errado. */
     if (particulasPainel) particulasPainel.medir();
+    if (neon) neon.estado('repouso').ligar();
     F.renderContexto();
     renderChips();
     setTimeout(() => campo && campo.focus(), 60);
@@ -191,6 +211,7 @@
     painel.hidden = true;
     raiz.classList.remove('is-aberto');
     document.body.classList.remove('uglez-aberto');
+    if (neon) neon.desligar();
     botao.setAttribute('aria-expanded', 'false');
     botao.setAttribute('aria-label', 'Abrir UGLEZ');
     botao.title = 'Abrir UGLEZ';
@@ -226,7 +247,7 @@
     /* As MESMAS sugestões da página. Duas listas diferentes para o
        mesmo assistente ensinariam que ele responde coisas
        diferentes em cada lugar. */
-    (Ug.sugestoes ? Ug.sugestoes() : Ug.SUGESTOES).forEach((s) => {
+    (Ug.sugestoes ? Ug.sugestoes() : Ug.SUGESTOES).slice(0, 2).forEach((s) => {
       box.appendChild(el('button', {
         class: 'ai-chip', type: 'button', text: s.rotulo,
         onclick: () => { campo.value = s.q; perguntar(); }
@@ -235,8 +256,6 @@
   }
 
   F.renderContexto = function () {
-    const p = painel && painel.querySelector('#uglezFlutPeriodo');
-    if (p) p.textContent = U.smartCase(U.monthLabel(App.ym));
     F.renderCota();
   };
 
@@ -246,6 +265,8 @@
     const c = Limites.consumoIA();
     if (c.limite === null || c.limite === undefined) { alvo.hidden = true; return; }
     const resta = Math.max(0, c.limite - c.usado);
+    /* Com folga, a cota não é notícia. */
+    if (resta > 2) { alvo.hidden = true; return; }
     alvo.hidden = false;
     alvo.className = 'uglez-cota' + (resta === 0 ? ' is-esgotada' : resta <= 2 ? ' is-pouca' : '');
     alvo.textContent = resta === 0
@@ -268,6 +289,10 @@
         if (particulasPainel) {
           if (e === 'sucesso' || e === 'erro') particulasPainel.pulsar(e, 1.1);
           else particulasPainel.estado(e);
+        }
+        if (neon) {
+          neon.estado(e);
+          if (e === 'sucesso' || e === 'erro') setTimeout(() => neon && neon.estado('repouso'), 1100);
         }
       }
     });
@@ -318,6 +343,7 @@
     document.removeEventListener('keydown', aoTeclar);
     if (particulas) { particulas.destruir(); particulas = null; }
     if (particulasPainel) { particulasPainel.destruir(); particulasPainel = null; }
+    if (neon) { neon.destruir(); neon = null; }
     document.body.classList.remove('uglez-aberto');
     document.body.classList.remove('tem-uglez-flutuante');
     if (raiz && raiz.parentNode) raiz.parentNode.removeChild(raiz);
