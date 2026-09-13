@@ -199,7 +199,7 @@
 
     if (!u) {
       box.appendChild(el('p', { class: 'hint', style: { padding: '0 2px 8px' },
-        text: 'Sem conta, o app usa os limites do plano Grátis neste aparelho.' }));
+        text: 'Sem conta, o app usa os limites do plano Semente neste aparelho.' }));
       return;
     }
 
@@ -218,14 +218,82 @@
     box.appendChild(linha('Consumo do plano',
       'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', caixa));
 
+    if (p.id === 'free') {
+      box.appendChild(linha(
+        'Coqueiro e Oásis',
+        'Mais contas, histórico e consultas ao UGLEZ. No cartão, cancele quando quiser.',
+        el('button', {
+          class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
+          onclick: () => App.goTo('precos')
+        })
+      ));
+      return;
+    }
+
+    const ate = d.fimPeriodo ? new Date(d.fimPeriodo).toLocaleDateString('pt-BR') : null;
+    if (d.cancelaNoFim) {
+      box.appendChild(linha(
+        'Assinatura cancelada',
+        ate ? 'Não renova. Você continua com o ' + p.nome + ' até ' + ate + '.' : 'Não renova.',
+        el('button', {
+          class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
+          onclick: () => App.goTo('precos')
+        })
+      ));
+      return;
+    }
+
     box.appendChild(linha(
-      'Planos Basic e Pro',
-      'As novas assinaturas ainda não estão disponíveis.',
+      'Assinatura',
+      (d.status === 'past_due'
+        ? 'O último pagamento não passou. Atualize o cartão pelo e-mail do Asaas'
+        : 'Renova no cartão ' + (d.ciclo === 'annual' ? 'todo ano' : 'todo mês'))
+        + (ate ? ' · período atual até ' + ate + '.' : '.'),
       el('button', {
-        class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
-        onclick: () => App.goTo('precos')
+        class: 'btn btn-outline btn-sm danger', type: 'button', text: 'Cancelar assinatura…',
+        onclick: () => cancelarAssinatura(p, ate)
       })
     ));
+  }
+
+  function cancelarAssinatura(p, ate) {
+    const aviso = el('p', { class: 'hint', role: 'status', style: { minHeight: '18px' } });
+    let enviando = false;
+    UI.openModal({
+      title: 'Cancelar o ' + p.nome,
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', { text: 'A renovação para agora e nada mais é cobrado.' + (ate ? ' Você continua com o ' + p.nome + ' até ' + ate + '.' : '') }),
+        el('p', { style: { marginTop: '10px' }, text: 'Depois, a conta volta ao Semente. Nenhum dado é apagado.' }),
+        aviso
+      ]),
+      buttons: [
+        { label: 'Manter assinatura', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Cancelar assinatura', class: 'btn-danger',
+          onClick: async () => {
+            if (enviando) return;
+            enviando = true;
+            aviso.textContent = 'Cancelando…';
+            try {
+              const r = await Conta.chamarFuncao('oaze-pagamento', { acao: 'cancelar' });
+              if (r.ok !== true) {
+                aviso.textContent = r.mensagem || 'Não foi possível cancelar agora. Tente de novo.';
+                enviando = false;
+                return;
+              }
+              UI.closeModal();
+              UI.toast('Assinatura cancelada. Nada mais será cobrado.', 'success', 5000);
+              await Limites.carregar();
+              await Conta.carregarAssinatura();
+              Cfg.render();
+            } catch (e) {
+              aviso.textContent = 'Falha ao falar com o servidor. Nada mudou.';
+              enviando = false;
+            }
+          }
+        }
+      ]
+    });
   }
 
   /* ---------------- conta ---------------- */
@@ -267,23 +335,11 @@
       el('button', { class: 'btn btn-outline btn-sm', text: 'Editar perfil', onclick: () => Conta.editarPerfil() })
     ));
 
-    /* O plano vem do banco. O navegador não tem como alterá-lo:
-       não existe política de escrita em subscriptions. */
-    const plano = Conta.plano();
-    box.appendChild(linha(
-      'Plano',
-      plano === 'free'
-          ? 'Plano gratuito. Todos os recursos disponíveis hoje estão liberados.'
-          : 'Plano ' + U.smartCase(plano) + ' ativo na sua conta.',
-      el('span', {
-        class: 'badge ' + (plano === 'free' ? '' : 'badge-ok'),
-        text: plano === 'free' ? 'Gratuito' : U.smartCase(plano)
-      })
-    ));
+    /* O plano aparece uma vez só, no cartão Plano. */
 
     box.appendChild(linha(
       'Excluir a conta',
-      'Apaga a conta e todos os dados do servidor, em todos os aparelhos. Não tem volta.',
+      'Apaga a conta e todos os dados do servidor, em todos os aparelhos, e encerra a assinatura. Não tem volta.',
       el('button', { class: 'btn btn-outline btn-sm danger', text: 'Excluir conta…', onclick: () => Conta.excluir() })
     ));
   }

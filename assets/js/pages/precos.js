@@ -82,16 +82,14 @@
         preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
       }
 
-      const indisponivel = p.id !== 'free' && !eAtual;
       const botao = el('button', {
         class: 'btn ' + (eAtual ? 'btn-outline' : p.destaque ? 'btn-primary' : 'btn-outline'),
         type: 'button',
-        disabled: eAtual || indisponivel ? '' : null,
         text: eAtual ? 'Seu plano atual'
-          : p.id === 'free' ? 'Começar grátis' : 'Em breve',
-        onclick: p.id === 'free' ? () => Precos.escolher(p) : null
+          : p.id === 'free' ? 'Começar grátis' : 'Assinar o ' + p.nome,
+        onclick: eAtual ? null : () => Precos.escolher(p)
       });
-      if (eAtual || indisponivel) botao.disabled = true;
+      if (eAtual) botao.disabled = true;
 
       box.appendChild(el('article', {
         class: 'card plano-card' + (p.destaque ? ' is-destaque' : '') + (eAtual ? ' is-atual' : ''),
@@ -149,9 +147,9 @@
 
     const nota = document.getElementById('precosNota');
     if (nota) {
-      nota.textContent = 'Backup em JSON, lançamentos manuais e o painel completo estão em todos os planos, '
-        + 'inclusive no Grátis. Colaboração, relatórios personalizados e exportação em PDF ainda não existem '
-        + 'no produto e por isso não aparecem aqui.';
+      nota.textContent = 'Lançamentos manuais, sincronização entre aparelhos e o painel completo estão em todos '
+        + 'os planos, inclusive no Semente. Colaboração e relatórios personalizados ainda não existem no produto '
+        + 'e por isso não aparecem aqui.';
     }
   }
 
@@ -181,13 +179,98 @@
   Precos.escolher = function (plano) {
     if (plano.id === 'free') {
       if (global.Sync && Sync.currentUser()) {
-        UI.toast('Você já tem uma conta. O Grátis é o plano padrão.', 'success');
+        UI.toast('Você já tem uma conta. O Semente é o plano padrão.', 'success');
       } else {
         Sync.signIn();
       }
       return;
     }
 
+    const u = global.Sync && Sync.currentUser();
+    if (!u) {
+      UI.toast('Entre na sua conta para assinar.', 'info');
+      Sync.signIn();
+      return;
+    }
+
+    /* Troca de plano pago exige cancelar antes — o servidor recusa
+       de qualquer jeito; aqui só se explica antes de pedir o CPF. */
+    const d = Limites.direitos();
+    if (d.plano !== 'free' && !d.cancelaNoFim) {
+      UI.openModal({
+        title: 'Você já assina o ' + Planos.get(d.plano).nome,
+        body: el('p', { style: { fontSize: '13.5px', lineHeight: '1.65' },
+          text: 'Para trocar de plano, cancele a assinatura atual em Configurações. Você continua com ela até o fim do período pago e pode assinar o ' + plano.nome + ' em seguida.' }),
+        buttons: [
+          { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal },
+          { label: 'Abrir Configurações', class: 'btn-primary', onClick: () => { UI.closeModal(); App.goTo('settings'); } }
+        ]
+      });
+      return;
+    }
+
+    const centavos = Planos.preco(plano, ciclo);
+    const valor = Planos.moeda(centavos) + (ciclo === 'annual' ? ' por ano' : ' por mês');
+    const nome = el('input', { class: 'input', type: 'text', autocomplete: 'name', maxlength: '100' });
+    const cpf = el('input', {
+      class: 'input', type: 'text', inputmode: 'numeric', autocomplete: 'off',
+      placeholder: '000.000.000-00', maxlength: '14'
+    });
+    cpf.addEventListener('input', () => {
+      const n = cpf.value.replace(/\D/g, '').slice(0, 11);
+      cpf.value = n.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    });
+    const aviso = el('p', { class: 'hint', role: 'status', style: { minHeight: '18px' } });
+    const diz = (t, erro) => { aviso.textContent = t || ''; aviso.style.color = erro ? 'var(--critical)' : ''; };
+
+    let enviando = false;
+    UI.openModal({
+      title: 'Assinar o ' + plano.nome,
+      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
+        el('p', {}, [
+          el('strong', { text: valor }),
+          el('span', { text: ', no cartão de crédito. Renova sozinho; cancele quando quiser em Configurações.' })
+        ]),
+        el('label', { class: 'field', style: { marginTop: '14px' } }, [
+          el('span', { class: 'field-label', text: 'Nome completo' }), nome
+        ]),
+        el('label', { class: 'field', style: { marginTop: '10px' } }, [
+          el('span', { class: 'field-label', text: 'CPF' }), cpf
+        ]),
+        el('p', { class: 'hint', style: { marginTop: '8px' },
+          text: 'O Asaas exige nome e CPF para emitir a cobrança. Eles vão direto para ele, e o cartão você digita na página segura do Asaas. O OAZE não guarda nenhum dos três.' }),
+        aviso
+      ]),
+      buttons: [
+        { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Continuar para o pagamento', class: 'btn-primary',
+          onClick: async () => {
+            if (enviando) return;
+            if (nome.value.trim().length < 3) { diz('Informe o nome completo.', true); nome.focus(); return; }
+            if (cpf.value.replace(/\D/g, '').length !== 11) { diz('Informe os 11 dígitos do CPF.', true); cpf.focus(); return; }
+            enviando = true;
+            diz('Preparando o pagamento…');
+            try {
+              const r = await Conta.chamarFuncao('oaze-pagamento', {
+                acao: 'assinar', plano: plano.id, ciclo, nome: nome.value, cpf: cpf.value
+              });
+              if (r.ok === true && /^https:\/\//.test(r.url || '')) {
+                diz('Abrindo a página do Asaas…');
+                location.assign(r.url);
+                return;
+              }
+              diz(r.mensagem || 'Não foi possível abrir o pagamento agora. Nada foi cobrado.', true);
+            } catch (e) {
+              diz('Falha ao falar com o servidor. Nada foi cobrado.', true);
+            }
+            enviando = false;
+          }
+        }
+      ]
+    });
+    setTimeout(() => nome.focus(), 50);
   };
 
   global.Precos = Precos;

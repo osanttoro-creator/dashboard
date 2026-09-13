@@ -26,11 +26,13 @@ tratar o OAZE como um sistema de produção completo.
    chegarem. A adoção de dados locais também precisa de confirmação explícita em
    navegadores compartilhados.
 
-5. **Implementar o Asaas do zero.**
-   Checkout no servidor, criação de cliente/cobrança, webhook autenticado e
-   idempotente, atualização do plano, cancelamento, reembolso, conciliação e
-   segredos somente no servidor. Nenhum valor ou confirmação pode ser aceito do
-   navegador.
+5. **Ativar e testar o Asaas.**
+   O código existe (13/09): `oaze-pagamento`, `oaze-asaas-webhook` e o
+   cancelamento na exclusão da conta — ver `docs/pagamentos-asaas.md`. Falta o
+   dono cadastrar chave, webhook e segredos, rodar o roteiro no sandbox
+   (principalmente a renovação automática no cartão) e só então ir para produção.
+   Reembolso dentro dos 7 dias é feito no painel do Asaas; o webhook devolve o
+   plano ao Semente.
 
 6. **Finalizar os documentos legais.**
    Preencher razão social, CNPJ, endereço e encarregado de dados; revisar Termos

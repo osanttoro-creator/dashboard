@@ -36,7 +36,9 @@ if (!/<button[^>]*class="nav-item"[^>]*data-page="settings"[^>]*>[\s\S]*?Configu
 }
 const posConfig = html.indexOf('data-page="settings"', html.indexOf('id="topnavMenu"'));
 const posUglez = html.indexOf('class="nav-item is-uglez"', html.indexOf('id="topnavMenu"'));
-if (posConfig < 0 || posUglez < posConfig) falhas.push('UGLEZ não fecha a navegação superior');
+if (posConfig < 0 || posUglez < 0 || posUglez > posConfig) {
+  falhas.push('UGLEZ não aparece imediatamente antes de Configurações');
+}
 
 const regrasMenu = [...css.matchAll(/\.topnav-menu\s*\{([^}]*)\}/g)].map((m) => m[1]);
 if (regrasMenu.some((corpo) => /overflow\s*:\s*hidden\b/.test(corpo))) {
@@ -58,4 +60,4 @@ if (falhas.length) {
   process.exit(1);
 }
 
-console.log('OK — Planejar abre visível; Categorias, Configurações e UGLEZ estão na ordem certa.');
+console.log('OK — Planejar abre visível; Categorias, UGLEZ e Configurações estão na ordem certa.');

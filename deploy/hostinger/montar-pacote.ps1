@@ -40,7 +40,7 @@ $arquivos = @(
   # aplicativo
   'app.html',
   # apoio
-  'robots.txt', 'sitemap.xml', 'manifest.webmanifest', '404.html'
+  'robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', '404.html'
 )
 $pastas   = @('assets')
 

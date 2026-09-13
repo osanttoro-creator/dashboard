@@ -26,14 +26,14 @@ const path = require('path');
 
 const raiz = path.resolve(__dirname, '..', '..');
 
-/* ---- retrato do banco, em 2026-09 (migração 20260909_planos_revisao) ---- */
+/* ---- retrato do banco, em 2026-09 (migração 20260913_planos_v3_e_asaas) ---- */
 const ESPERADO = {
   free: {
-    mensal: 0, anual: 0,
+    nome: 'Semente', mensal: 0, anual: 0,
     limites: {
-      workspaces: 1, accounts: 2, credit_cards: 1, transactions_per_month: 100,
+      workspaces: 1, accounts: 2, credit_cards: 3, transactions_per_month: 100,
       custom_categories: 10, budgets: 1, goals: 1, recurring_items: 3,
-      ai_queries_per_month: 5, history_months: 3, comparison_months: 1, collaborators: 0
+      ai_queries_per_month: 10, history_months: 3, comparison_months: 1, collaborators: 0
     },
     recursos: {
       import_csv: false, import_ofx: false, export_csv: false, export_pdf: false,
@@ -44,11 +44,11 @@ const ESPERADO = {
     }
   },
   basic: {
-    mensal: 2490, anual: 23990,
+    nome: 'Coqueiro', mensal: 1490, anual: 14990,
     limites: {
-      workspaces: 1, accounts: 10, credit_cards: 5, transactions_per_month: null,
-      custom_categories: null, budgets: null, goals: 10, recurring_items: null,
-      ai_queries_per_month: 30, history_months: 24, comparison_months: 24, collaborators: 0
+      workspaces: 1, accounts: 10, credit_cards: 10, transactions_per_month: 1000,
+      custom_categories: 50, budgets: 20, goals: 10, recurring_items: 30,
+      ai_queries_per_month: 60, history_months: 24, comparison_months: 24, collaborators: 0
     },
     recursos: {
       import_csv: true, import_ofx: true, export_csv: true, export_pdf: true,
@@ -59,11 +59,11 @@ const ESPERADO = {
     }
   },
   pro: {
-    mensal: 4990, anual: 47990,
+    nome: 'Oásis', mensal: 2990, anual: 29990,
     limites: {
-      workspaces: 5, accounts: null, credit_cards: null, transactions_per_month: null,
-      custom_categories: null, budgets: null, goals: null, recurring_items: null,
-      ai_queries_per_month: 120, history_months: null, comparison_months: null, collaborators: 3
+      workspaces: 5, accounts: 50, credit_cards: null, transactions_per_month: null,
+      custom_categories: 200, budgets: 100, goals: 50, recurring_items: 150,
+      ai_queries_per_month: 200, history_months: null, comparison_months: null, collaborators: 3
     },
     recursos: {
       import_csv: true, import_ofx: true, export_csv: true, export_pdf: true,
@@ -92,6 +92,7 @@ console.log('\n=== o JS bate com o banco? ===');
 Object.keys(ESPERADO).forEach((id) => {
   const js = P.get(id);
   const db = ESPERADO[id];
+  ok(id + ' · nome', js.nome === db.nome, js.nome + ' vs ' + db.nome);
   ok(id + ' · preço mensal', js.mensalCentavos === db.mensal, js.mensalCentavos + ' vs ' + db.mensal);
   ok(id + ' · preço anual', js.anualCentavos === db.anual, js.anualCentavos + ' vs ' + db.anual);
 
@@ -118,6 +119,7 @@ function anda(dir) {
     if (f.includes(path.join('tools', 'testes'))) return;
     const c = fs.readFileSync(f, 'utf8');
     [/R\$\s?14[.,]90/, /R\$\s?29[.,]90/, /R\$\s?149[.,]90/, /R\$\s?299[.,]90/,
+      /R\$\s?24[.,]90/, /R\$\s?49[.,]90/, /\b2490\b/, /\b4990\b/,
       /\b1490\b/, /\b2990\b/, /\b14990\b/, /\b29990\b/].forEach((re) => {
       const m = c.match(re);
       if (m) suspeitos.push(path.relative(raiz, f) + ': ' + m[0]);

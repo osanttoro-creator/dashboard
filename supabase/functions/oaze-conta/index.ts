@@ -31,6 +31,7 @@
    ============================================================= */
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { asaas, AsaasErro } from '../_shared/asaas.ts';
 
 function origensPermitidas(): string[] {
   return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
@@ -146,6 +147,31 @@ Deno.serve(async (req: Request) => {
   } catch (e) {
     /* Contar é cortesia, não requisito: a exclusão segue. */
     console.error(JSON.stringify({ request_id: requestId, evento: 'contagem_falhou' }));
+  }
+
+  /* ---- a cobrança para antes da conta ----
+     Apagar o usuário sem encerrar a assinatura no Asaas deixaria o
+     cartão sendo cobrado por uma conta que não existe mais. Se o
+     Asaas não confirmar, NADA é apagado: a pessoa tenta de novo. */
+  const { data: assinatura } = await admin.from('subscriptions')
+    .select('asaas_subscription_id').eq('user_id', usuario.id).maybeSingle();
+  const pendentes = await admin.from('asaas_intencoes')
+    .select('asaas_subscription_id').eq('user_id', usuario.id).eq('status', 'aguardando');
+  const paraEncerrar = new Set<string>(
+    [assinatura?.asaas_subscription_id, ...(pendentes.data ?? []).map((p: any) => p.asaas_subscription_id)]
+      .filter(Boolean) as string[]);
+  for (const id of paraEncerrar) {
+    try {
+      await asaas('DELETE', '/subscriptions/' + id);
+    } catch (e) {
+      if (e instanceof AsaasErro && e.status === 404) continue;
+      console.error(JSON.stringify({ request_id: requestId, evento: 'cancelar_cobranca_falhou' }));
+      return json({
+        erro: 'falhou',
+        mensagem: 'Não foi possível encerrar sua assinatura agora, então a conta não foi excluída. Tente de novo em alguns minutos.',
+        request_id: requestId
+      }, 502, origem);
+    }
   }
 
   /* ---- a exclusão ----

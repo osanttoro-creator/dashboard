@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>OAZE — Gestão Financeira</title>
+<meta name="description" content="Área autenticada do OAZE para organizar contas, cartões, gastos, orçamentos, metas e análises financeiras.">
+<meta name="robots" content="noindex, nofollow">
 
 
 <!-- iOS: "Adicionar à Tela de Início" vira app em tela cheia -->
@@ -13,8 +15,22 @@
 <meta name="apple-mobile-web-app-title" content="OAZE">
 <meta name="theme-color" content="#F4EFE6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#071822" media="(prefers-color-scheme: dark)">
+<script>
+/* Aplica a preferência local antes do CSS: evita a primeira pintura
+   clara e mantém a tela estável enquanto a sessão é restaurada. */
+(function () {
+  try {
+    var salvo = localStorage.getItem('oaze.tema');
+    var tema = salvo === 'light' || salvo === 'dark'
+      ? salvo
+      : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', tema);
+  } catch (e) { /* data-theme="dark" continua como fallback seguro */ }
+})();
+</script>
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/assets/img/favicon.svg">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 
 <!-- fontes vendorizadas (IBM Plex Sans, Newsreader, IBM Plex Mono — embutidas
      em base64 por tools/gen-fonte.js): sem CDN, funciona em file:// -->
@@ -94,13 +110,13 @@
       </button>
 
       <p class="nav-group">Sistema</p>
-      <button class="nav-item" data-page="settings">
-        <span class="nav-ico" data-ico="settings"></span>
-        <span class="nav-long">Configurações</span><span class="nav-short">Config.</span>
-      </button>
       <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
         <span class="nav-ico" data-ico="sparkles"></span>
         <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <span class="nav-ico" data-ico="settings"></span>
+        <span class="nav-long">Configurações</span><span class="nav-short">Config.</span>
       </button>
     </nav>
 
@@ -190,16 +206,15 @@
         </div>
       </div>
 
-        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
-          <span class="nav-ico" data-ico="settings"></span>
-          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
-        </button>
-
-        <!-- O assistente fecha a fita: é o único destino que mantém
-             apenas o símbolo visual, com nome acessível e tooltip. -->
+        <!-- O assistente vem imediatamente antes das configurações:
+             primeiro o recurso, depois os ajustes do sistema. -->
         <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
           <span class="nav-ico" data-ico="sparkles"></span>
           <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        </button>
+        <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
+          <span class="nav-ico" data-ico="settings"></span>
+          <span class="nav-long">Configurações</span><span class="nav-short">Configurações</span>
         </button>
       </nav>
 

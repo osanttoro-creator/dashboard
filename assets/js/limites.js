@@ -35,7 +35,7 @@
   const Limites = {};
   const el = U.el;
 
-  /* Direitos do plano Grátis, embutidos. Servem quando não há
+  /* Direitos do plano Semente (free), embutidos. Servem quando não há
      sessão ou rede — e é a escolha conservadora certa: na dúvida,
      o menor plano, nunca o maior. */
   const PADRAO = {
@@ -46,7 +46,7 @@
   };
 
   let direitos = PADRAO;
-  let consumoIA = { usado: 0, limite: 5 };
+  let consumoIA = { usado: 0, limite: PADRAO.limites.ai_queries_per_month };
 
   function sb() {
     try {
@@ -86,7 +86,7 @@
       }
       await Limites.carregarConsumo();
     } catch (e) {
-      console.warn('Limites: usando o plano Grátis por precaução —', e.message);
+      console.warn('Limites: usando o plano Semente por precaução —', e.message);
       direitos = PADRAO;
     }
     return direitos;
@@ -222,7 +222,7 @@
     const planoAtual = Planos.get(direitos.plano);
 
     const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-      el('p', [
+      el('p', {}, [
         el('strong', { text: 'Você está usando ' + teto + ' de ' + teto + ' ' + plural }),
         el('span', { text: ' disponíveis no plano ' + planoAtual.nome + '.' })
       ]),
@@ -320,7 +320,7 @@
   Limites.aoSair = function () {
     direitos = PADRAO;
     if (global.UglezFlutuante) UglezFlutuante.sincronizar();
-    consumoIA = { usado: 0, limite: 5 };
+    consumoIA = { usado: 0, limite: PADRAO.limites.ai_queries_per_month };
   };
 
   global.Limites = Limites;

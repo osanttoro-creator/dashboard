@@ -1,0 +1,33 @@
+# OAZE
+
+> Aplicativo brasileiro de controle financeiro pessoal para organizar contas, cartões, gastos, orçamentos e metas em um único painel.
+
+O OAZE é um software web em português do Brasil. O UGLEZ é o assistente financeiro do produto: ele interpreta dados financeiros agregados e apresenta leituras objetivas, sem substituir orientação profissional.
+
+## Páginas públicas
+
+- [Página inicial](https://mediumvioletred-viper-277230.hostingersite.com/): apresentação do OAZE e acesso ao produto.
+- [Recursos](https://mediumvioletred-viper-277230.hostingersite.com/recursos): contas, cartões, lançamentos, orçamentos, metas, importação e UGLEZ.
+- [Planos](https://mediumvioletred-viper-277230.hostingersite.com/precos): comparação dos planos Semente, Coqueiro e Oásis.
+- [Suporte](https://mediumvioletred-viper-277230.hostingersite.com/suporte): ajuda e canais de atendimento.
+- [Privacidade](https://mediumvioletred-viper-277230.hostingersite.com/privacidade): tratamento de dados e direitos previstos na LGPD.
+- [Termos](https://mediumvioletred-viper-277230.hostingersite.com/termos): regras de uso do serviço.
+
+## Escopo do produto
+
+- Controle de contas e cartões de crédito.
+- Registro e categorização de receitas, despesas e transferências.
+- Planejamento por orçamentos, metas, recorrências e calendário.
+- Importação de extratos financeiros.
+- Análises financeiras e assistência por IA com o UGLEZ.
+
+## Limites de acesso
+
+As rotas `/app`, `/entrar`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha` e `/confirmar-email` são interfaces privadas ou transacionais. Elas não devem ser indexadas nem tratadas como documentação pública.
+
+## Identidade
+
+- Nome oficial: OAZE
+- Idioma: português do Brasil (`pt-BR`)
+- Categoria: controle financeiro pessoal
+- Site: https://mediumvioletred-viper-277230.hostingersite.com/

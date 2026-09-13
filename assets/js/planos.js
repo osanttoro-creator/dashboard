@@ -44,8 +44,8 @@
      afastem em silêncio.
 
      O QUE MUDOU DE FATO NESTA REVISÃO, E POR QUÊ
-     · transactions_per_month entrou. O Grátis passa a ter teto de
-       lançamentos (100/mês); Basic e Pro, ilimitado. Sem esta
+     · transactions_per_month entrou. O Semente passa a ter teto de
+       lançamentos (100/mês). Sem esta
        chave o "até 100 movimentações" do brief não existiria em
        lugar nenhum a não ser no texto de marketing.
      · uglez_assistente_flutuante entrou como RECURSO, não como
@@ -55,15 +55,15 @@
      · comparacao_anual saiu de dentro de comparison_months. Eram
        duas perguntas diferentes ("quantos meses eu comparo" e "eu
        comparo anos") respondidas pelo mesmo número.
-     · analises_avancadas continua, e agora é anunciada: o Pro faz
+     · analises_avancadas continua, e agora é anunciada: o Oásis faz
        tendências, simulações e projeções, e isso está na tela.
      ============================================================ */
 
   Planos.LISTA = [
     {
       id: 'free',
-      nome: 'Grátis',
-      descricao: 'Para organizar o essencial e entender para onde vai o dinheiro.',
+      nome: 'Semente',
+      descricao: 'Plante o hábito de olhar o mês.',
       moeda: 'BRL',
       mensalCentavos: 0,
       anualCentavos: 0,
@@ -71,13 +71,13 @@
       limites: {
         workspaces: 1,
         accounts: 2,
-        credit_cards: 1,
+        credit_cards: 3,
         transactions_per_month: 100,
         custom_categories: 10,
         budgets: 1,
         goals: 1,
         recurring_items: 3,
-        ai_queries_per_month: 5,
+        ai_queries_per_month: 10,
         history_months: 3,
         comparison_months: 1,
         collaborators: 0
@@ -95,22 +95,22 @@
     },
     {
       id: 'basic',
-      nome: 'Basic',
-      descricao: 'Para quem já tem mais de uma conta e quer o histórico inteiro.',
+      nome: 'Coqueiro',
+      descricao: 'Raiz firme: contas, cartões e histórico.',
       moeda: 'BRL',
-      mensalCentavos: 2490,
-      anualCentavos: 23990,
+      mensalCentavos: 1490,
+      anualCentavos: 14990,
       destaque: true,
       limites: {
         workspaces: 1,
         accounts: 10,
-        credit_cards: 5,
-        transactions_per_month: null,
-        custom_categories: null,
-        budgets: null,
+        credit_cards: 10,
+        transactions_per_month: 1000,
+        custom_categories: 50,
+        budgets: 20,
         goals: 10,
-        recurring_items: null,
-        ai_queries_per_month: 30,
+        recurring_items: 30,
+        ai_queries_per_month: 60,
         history_months: 24,
         comparison_months: 24,
         collaborators: 0
@@ -128,22 +128,22 @@
     },
     {
       id: 'pro',
-      nome: 'Pro',
-      descricao: 'Para quem separa finanças por espaço e quer análise a fundo.',
+      nome: 'Oásis',
+      descricao: 'Tudo o que o OAZE faz, sem teto no dia a dia.',
       moeda: 'BRL',
-      mensalCentavos: 4990,
-      anualCentavos: 47990,
+      mensalCentavos: 2990,
+      anualCentavos: 29990,
       destaque: false,
       limites: {
         workspaces: 5,
-        accounts: null,
+        accounts: 50,
         credit_cards: null,
         transactions_per_month: null,
-        custom_categories: null,
-        budgets: null,
-        goals: null,
-        recurring_items: null,
-        ai_queries_per_month: 120,
+        custom_categories: 200,
+        budgets: 100,
+        goals: 50,
+        recurring_items: 150,
+        ai_queries_per_month: 200,
         history_months: null,
         comparison_months: null,
         collaborators: 3
@@ -287,53 +287,53 @@
     { chave: 'export_csv',             rotulo: 'Exportar em CSV',                tipo: 'recurso' },
     { chave: 'export_pdf',             rotulo: 'Exportar em PDF',                tipo: 'recurso' },
     { chave: 'acesso_antecipado',      rotulo: 'Acesso antecipado a novidades',  tipo: 'recurso' },
-    { chave: 'suporte_prioritario',    rotulo: 'Atendimento prioritário',        tipo: 'recurso' },
-    { chave: 'backup',                 rotulo: 'Backup em JSON',                 tipo: 'fixo', valor: 'Sempre' }
+    { chave: 'suporte_prioritario',    rotulo: 'Atendimento prioritário',        tipo: 'recurso' }
   ];
 
   /** Destaques do cartão de cada plano, na ordem em que convencem. */
   Planos.DESTAQUES = {
     free: [
-      '1 espaço financeiro, 2 contas e 1 cartão',
+      '1 espaço financeiro, 2 contas e 3 cartões',
       'Até 100 movimentações por mês',
-      '1 orçamento e 1 meta ativos',
-      'Até 3 recorrências',
+      '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
-      '5 consultas ao UGLEZ por mês, na página do UGLEZ'
+      '10 consultas ao UGLEZ por mês, na página do UGLEZ'
     ],
     basic: [
-      '10 contas e 5 cartões',
-      'Movimentações, orçamentos e recorrências ilimitados',
-      'Até 10 metas e histórico de 24 meses',
-      'Importar CSV e OFX, exportar CSV e PDF',
-      'Calendário financeiro e comparação entre meses',
-      '30 consultas ao UGLEZ por mês, com assistente flutuante'
+      '10 contas e 10 cartões',
+      'Até 1.000 movimentações por mês',
+      '20 orçamentos, 10 metas e 30 recorrências',
+      'Histórico de 24 meses e comparação entre meses',
+      'Importar CSV e OFX, exportar CSV e PDF, calendário',
+      '60 consultas ao UGLEZ por mês, com assistente flutuante'
     ],
     pro: [
-      'Até 5 espaços financeiros',
-      'Contas, cartões e movimentações ilimitados',
-      'Metas, orçamentos e recorrências ilimitados',
+      'Até 5 espaços financeiros e 50 contas',
+      'Cartões e movimentações sem limite',
+      '100 orçamentos, 50 metas e 150 recorrências',
       'Histórico completo e comparação anual',
       'Tendências, simulações e projeções do UGLEZ',
-      '120 consultas ao UGLEZ por mês, com assistente flutuante',
+      '200 consultas ao UGLEZ por mês, com assistente flutuante',
       'Acesso antecipado e atendimento prioritário'
     ]
   };
 
-  /* Perguntas que continuam válidas enquanto só o Grátis pode ser
-     contratado. As regras comerciais entram junto com o Asaas. */
   Planos.FAQ = [
     {
-      p: 'Quando Basic e Pro estarão disponíveis?',
-      r: 'Depois que a nova integração de assinaturas estiver concluída e validada. Até lá, só o plano Grátis pode ser contratado.'
+      p: 'Como funciona a cobrança?',
+      r: 'No cartão de crédito, pelo Asaas. O cartão é digitado na página segura do Asaas — o OAZE não vê nem guarda os dados dele. A assinatura renova sozinha a cada mês ou ano, e o plano é liberado assim que o pagamento é confirmado.'
     },
     {
-      p: 'O que acontece com meus dados se eu voltar para o Grátis?',
-      r: 'Nada é apagado. Se você tiver mais contas ou cartões do que o Grátis permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.'
+      p: 'Posso cancelar quando quiser?',
+      r: 'Sim, em Configurações. A renovação para na hora e você continua com o plano até o fim do período que já pagou.'
+    },
+    {
+      p: 'O que acontece com meus dados se eu voltar para o Semente?',
+      r: 'Nada é apagado. Se você tiver mais contas ou cartões do que o Semente permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.'
     },
     {
       p: 'Meus dados financeiros são enviados para a inteligência artificial?',
-      r: 'Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. Dá para ver exatamente o que sai, em Configurações.'
+      r: 'Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela do UGLEZ mostra o que segue junto antes de você enviar.'
     },
     {
       p: 'Preciso de conta para usar o OAZE?',

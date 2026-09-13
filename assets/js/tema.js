@@ -40,6 +40,7 @@
      init, para que ninguém leia antes de haver resposta. */
   let escolha = null;
   let consultaSO = null;
+  let revisaoEscolha = 0;
   const ouvintes = [];
 
   function sb() {
@@ -126,6 +127,7 @@
    * isso que a falha aparece como aviso em vez de sumir.
    */
   Tema.definir = function (valor) {
+    revisaoEscolha++;
     escolha = VALIDOS.indexOf(valor) >= 0 ? valor : null;
     gravarLocal(escolha);
     pintar();
@@ -174,9 +176,15 @@
     const c = sb();
     const u = global.Sync && Sync.currentUser();
     if (!c || !u) return;
+    /* Se a pessoa trocar o tema enquanto esta leitura está em voo,
+       o clique mais recente vence. Sem esta revisão, uma resposta
+       lenta do servidor podia recolocar o tema antigo na tela. */
+    const revisaoAoComecar = revisaoEscolha;
     try {
       const { data } = await c.from('user_settings')
         .select('tema').eq('user_id', u.uid).maybeSingle();
+
+      if (revisaoAoComecar !== revisaoEscolha) return;
 
       if (data && VALIDOS.indexOf(data.tema) >= 0) {
         escolha = data.tema;

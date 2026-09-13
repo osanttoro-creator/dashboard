@@ -13,24 +13,28 @@
      Arquivos afetados: index, recursos, precos, entrar, cadastro,
      recuperar-senha, privacidade, termos, suporte, 404.
      ============================================================= -->
-<title>OAZE — organize seu dinheiro sem planilha</title>
-<meta name="description" content="Painel de finanças pessoais com contas, cartões, orçamentos, metas e leitura automática do seu mês. Comece grátis, sem cartão de crédito.">
+<title>OAZE | Controle financeiro pessoal sem planilhas</title>
+<meta name="description" content="Organize contas, cartões, gastos, orçamentos e metas no OAZE, um controle financeiro pessoal com assistente de IA. Comece grátis.">
 <link rel="canonical" href="https://mediumvioletred-viper-277230.hostingersite.com/">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OAZE">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="OAZE — organize seu dinheiro sem planilha">
-<meta property="og:description" content="Contas, cartões, orçamentos e metas num painel só. Comece grátis, sem cartão de crédito.">
+<meta property="og:title" content="OAZE | Controle financeiro pessoal sem planilhas">
+<meta property="og:description" content="Organize contas, cartões, gastos, orçamentos e metas em um só painel, com o assistente financeiro UGLEZ.">
 <meta property="og:url" content="https://mediumvioletred-viper-277230.hostingersite.com/">
 <meta property="og:image" content="https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="OAZE — painel de finanças pessoais">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OAZE | Controle financeiro pessoal sem planilhas">
+<meta name="twitter:description" content="Contas, cartões, gastos, orçamentos e metas em um só painel.">
+<meta name="twitter:image" content="https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-og.png">
 
 <meta name="theme-color" content="#071822">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/site.css">
@@ -45,16 +49,39 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "OAZE",
-  "applicationCategory": "FinanceApplication",
-  "operatingSystem": "Web",
-  "inLanguage": "pt-BR",
-  "description": "Painel de finanças pessoais com contas, cartões, orçamentos, metas e leitura automática do mês.",
-  "offers": [
-    { "@type": "Offer", "name": "Grátis", "price": "0.00", "priceCurrency": "BRL" },
-    { "@type": "Offer", "name": "Basic",  "price": "24.90", "priceCurrency": "BRL" },
-    { "@type": "Offer", "name": "Pro",    "price": "49.90", "priceCurrency": "BRL" }
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mediumvioletred-viper-277230.hostingersite.com/#organization",
+      "name": "OAZE",
+      "url": "https://mediumvioletred-viper-277230.hostingersite.com/",
+      "logo": "https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-512.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mediumvioletred-viper-277230.hostingersite.com/#website",
+      "name": "OAZE",
+      "alternateName": "OAZE Finanças",
+      "url": "https://mediumvioletred-viper-277230.hostingersite.com/",
+      "inLanguage": "pt-BR",
+      "publisher": { "@id": "https://mediumvioletred-viper-277230.hostingersite.com/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "OAZE",
+      "url": "https://mediumvioletred-viper-277230.hostingersite.com/",
+      "image": "https://mediumvioletred-viper-277230.hostingersite.com/assets/img/oaze-og.png",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "pt-BR",
+      "description": "Controle financeiro pessoal com contas, cartões, gastos, orçamentos, metas e o assistente financeiro UGLEZ.",
+      "publisher": { "@id": "https://mediumvioletred-viper-277230.hostingersite.com/#organization" },
+      "offers": [
+        { "@type": "Offer", "name": "Semente",  "price": "0.00",  "priceCurrency": "BRL" },
+        { "@type": "Offer", "name": "Coqueiro", "price": "14.90", "priceCurrency": "BRL" },
+        { "@type": "Offer", "name": "Oásis",    "price": "29.90", "priceCurrency": "BRL" }
+      ]
+    }
   ]
 }
 </script>
@@ -105,9 +132,9 @@
           <div class="lens-copy">
             <h1 id="hero-titulo">Seu dinheiro faz sentido <em>quando você o vê inteiro</em></h1>
             <p class="hero-sub">
-              Contas, cartões, orçamentos e metas num painel só — com a leitura do
-              seu mês pronta antes de você perguntar. Sem planilha, sem fórmula
-              quebrada, sem começar de novo todo janeiro.
+              Controle financeiro pessoal com contas, cartões, orçamentos e metas
+              num painel só — com a leitura do seu mês pronta antes de você perguntar.
+              Sem planilha, sem fórmula quebrada, sem começar de novo todo janeiro.
             </p>
             <div class="hero-botoes">
               <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
@@ -291,8 +318,8 @@
       </p>
       <dl class="numeros">
         <div><dt>até <b data-conta="41">41</b></dt><dd>bancos com marca própria<sup><a href="#nota-1" id="ref-1">1</a></sup></dd></div>
-        <div><dt>até <b data-conta="10">10</b></dt><dd>contas no Basic, 5× o Grátis<sup><a href="#nota-2" id="ref-2">2</a></sup></dd></div>
-        <div><dt>até <b data-conta="5">5</b></dt><dd>espaços no Pro, 5× o Grátis<sup><a href="#nota-3" id="ref-3">3</a></sup></dd></div>
+        <div><dt>até <b data-conta="10">10</b></dt><dd>contas no Coqueiro, 5× o Semente<sup><a href="#nota-2" id="ref-2">2</a></sup></dd></div>
+        <div><dt>até <b data-conta="5">5</b></dt><dd>espaços no Oásis, 5× o Semente<sup><a href="#nota-3" id="ref-3">3</a></sup></dd></div>
       </dl>
     </div>
 
@@ -358,7 +385,7 @@
       </p>
       <dl class="numeros">
         <div><dt>até <b data-conta="4">4</b></dt><dd>formas de trazer o extrato<sup><a href="#nota-4" id="ref-4">4</a></sup></dd></div>
-        <div><dt>até <b data-conta="100">100</b></dt><dd>lançamentos por mês no Grátis. Sem limite no Basic<sup><a href="#nota-5" id="ref-5">5</a></sup></dd></div>
+        <div><dt>até <b data-conta="100">100</b></dt><dd>lançamentos por mês no Semente. Sem limite no Oásis<sup><a href="#nota-5" id="ref-5">5</a></sup></dd></div>
       </dl>
     </div>
   </section>
@@ -388,8 +415,8 @@
         fatura chega, o valor bate com o que o banco cobra.
       </p>
       <dl class="numeros">
-        <div><dt>até <b data-conta="5">5</b></dt><dd>cartões no Basic, 5× o Grátis<sup><a href="#nota-6" id="ref-6">6</a></sup></dd></div>
-        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de fatura lado a lado, 24× o Grátis<sup><a href="#nota-7" id="ref-7">7</a></sup></dd></div>
+        <div><dt>até <b data-conta="10">10</b></dt><dd>cartões no Coqueiro. Sem limite no Oásis<sup><a href="#nota-6" id="ref-6">6</a></sup></dd></div>
+        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de fatura lado a lado, 24× o Semente<sup><a href="#nota-7" id="ref-7">7</a></sup></dd></div>
       </dl>
     </div>
   </section>
@@ -431,8 +458,8 @@
         projetar.
       </p>
       <dl class="numeros">
-        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de histórico no Basic, 8× o Grátis<sup><a href="#nota-8" id="ref-8">8</a></sup></dd></div>
-        <div><dt>até <b data-conta="10">10</b></dt><dd>metas com prazo no Basic, 10× o Grátis<sup><a href="#nota-9" id="ref-9">9</a></sup></dd></div>
+        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de histórico no Coqueiro, 8× o Semente<sup><a href="#nota-8" id="ref-8">8</a></sup></dd></div>
+        <div><dt>até <b data-conta="10">10</b></dt><dd>metas com prazo no Coqueiro, 10× o Semente<sup><a href="#nota-9" id="ref-9">9</a></sup></dd></div>
       </dl>
     </div>
   </section>
@@ -460,8 +487,8 @@
         inventar.
       </p>
       <dl class="numeros">
-        <div><dt>até <b data-conta="120">120</b></dt><dd>leituras por mês no Pro, 24× o Grátis<sup><a href="#nota-10" id="ref-10">10</a></sup></dd></div>
-        <div><dt>até <b data-conta="30">30</b></dt><dd>leituras por mês no Basic, 6× o Grátis<sup><a href="#nota-10">10</a></sup></dd></div>
+        <div><dt>até <b data-conta="200">200</b></dt><dd>leituras por mês no Oásis, 20× o Semente<sup><a href="#nota-10" id="ref-10">10</a></sup></dd></div>
+        <div><dt>até <b data-conta="60">60</b></dt><dd>leituras por mês no Coqueiro, 6× o Semente<sup><a href="#nota-10">10</a></sup></dd></div>
       </dl>
     </div>
   </section>
@@ -548,59 +575,59 @@
       <div style="text-align:center">
         <div class="alternador" data-alternador role="group" aria-label="Ciclo de cobrança">
           <button type="button" data-ciclo="mensal" aria-pressed="true">Mensal</button>
-          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−19%</span></button>
+          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−16%</span></button>
         </div>
       </div>
 
       <div class="planos">
         <article class="plano revela">
-          <h3>Grátis</h3>
-          <p class="plano-alvo">Para começar a enxergar o mês</p>
+          <h3>Semente</h3>
+          <p class="plano-alvo">Plante o hábito de olhar o mês</p>
           <p class="plano-preco"><b>R$ 0</b> <span>para sempre</span></p>
           <p class="plano-nota">Sem cartão de crédito</p>
           <a class="btn btn-fantasma btn-largo" href="/cadastro">Criar conta grátis</a>
           <ul class="lista">
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 espaço financeiro</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 2 contas e 1 cartão</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 espaço financeiro, 2 contas e 3 cartões</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 100 movimentações por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 orçamento, 1 meta e 3 recorrências</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico dos últimos 3 meses</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 5 consultas ao UGLEZ por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 consultas ao UGLEZ por mês</li>
           </ul>
         </article>
 
         <article class="plano plano-destaque revela">
           <span class="selo">Mais escolhido</span>
-          <h3>Basic</h3>
-          <p class="plano-alvo">Para quem já organiza e quer histórico</p>
+          <h3>Coqueiro</h3>
+          <p class="plano-alvo">Raiz firme: contas, cartões e histórico</p>
           <p class="plano-preco">
-            <b data-mensal="R$ 24,90" data-anual="R$ 19,99">R$ 24,90</b>
-            <span>por mês</span>
+            <b data-mensal="R$ 14,90" data-anual="R$ 12,49">R$ 14,90</b> <span>por mês</span>
           </p>
-          <p class="plano-nota"><span data-so-anual hidden>R$ 239,90 por ano · economia de R$ 58,90</span></p>
-          <span class="btn btn-principal btn-largo" aria-disabled="true">Em breve</span>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 149,90 por ano · economia de R$ 28,90</span></p>
+          <a class="btn btn-principal btn-largo" href="/app/planos">Assinar o Coqueiro</a>
           <ul class="lista">
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 contas e 5 cartões</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Movimentações e orçamentos ilimitados</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 10 metas e histórico de 24 meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 contas e 10 cartões</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 1.000 movimentações por mês</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 20 orçamentos, 10 metas e 30 recorrências</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico de 24 meses e comparação entre meses</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importar CSV e OFX, exportar CSV e PDF</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 30 consultas ao UGLEZ por mês, com assistente flutuante</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 60 consultas ao UGLEZ por mês, com assistente flutuante</li>
           </ul>
         </article>
 
         <article class="plano revela">
-          <h3>Pro</h3>
-          <p class="plano-alvo">Para quem separa pessoal de trabalho</p>
+          <h3>Oásis</h3>
+          <p class="plano-alvo">Tudo o que o OAZE faz, sem teto no dia a dia</p>
           <p class="plano-preco">
-            <b data-mensal="R$ 49,90" data-anual="R$ 39,99">R$ 49,90</b>
-            <span>por mês</span>
+            <b data-mensal="R$ 29,90" data-anual="R$ 24,99">R$ 29,90</b> <span>por mês</span>
           </p>
-          <p class="plano-nota"><span data-so-anual hidden>R$ 479,90 por ano · economia de R$ 118,90</span></p>
-          <span class="btn btn-fantasma btn-largo" aria-disabled="true">Em breve</span>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 299,90 por ano · economia de R$ 58,90</span></p>
+          <a class="btn btn-fantasma btn-largo" href="/app/planos">Assinar o Oásis</a>
           <ul class="lista">
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 5 espaços financeiros</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Contas, cartões e movimentações ilimitados</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Comparação anual, tendências e projeções</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 120 consultas ao UGLEZ por mês, com assistente flutuante</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 5 espaços financeiros e 50 contas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Cartões e movimentações sem limite</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico completo e comparação anual</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Tendências, simulações e projeções do UGLEZ</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 200 consultas ao UGLEZ por mês, com assistente flutuante</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Acesso antecipado e atendimento prioritário</li>
           </ul>
         </article>
@@ -660,8 +687,8 @@
     <ul class="motivos">
       <li class="revela">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        <strong>Grátis, sem prazo.</strong>
-        <span>O plano Grátis não expira.</span>
+        <strong>Semente, sem prazo.</strong>
+        <span>O plano Semente é grátis e não expira.</span>
       </li>
       <li class="revela">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M4 4l16 16"/></svg>
@@ -722,15 +749,15 @@
 
     <ol class="notas" aria-label="Notas">
       <li id="nota-1">Instituições com logotipo próprio no OAZE em setembro de 2026. Bancos fora da lista entram com ícone genérico. <a href="#ref-1" aria-label="Voltar à nota 1">↩</a></li>
-      <li id="nota-2">Contas: até 2 no Grátis, até 10 no Basic, sem limite no Pro. <a href="#ref-2" aria-label="Voltar à nota 2">↩</a></li>
-      <li id="nota-3">Espaços financeiros separados, como Pessoal e PJ: 1 no Grátis e no Basic, até 5 no Pro. <a href="#ref-3" aria-label="Voltar à nota 3">↩</a></li>
+      <li id="nota-2">Contas: até 2 no Semente, até 10 no Coqueiro, até 50 no Oásis. <a href="#ref-2" aria-label="Voltar à nota 2">↩</a></li>
+      <li id="nota-3">Espaços financeiros separados, como Pessoal e PJ: 1 no Semente e no Coqueiro, até 5 no Oásis. <a href="#ref-3" aria-label="Voltar à nota 3">↩</a></li>
       <li id="nota-4">CSV, OFX, texto colado e Registrato, o relatório de contas do Banco Central. Disponibilidade por plano na <a href="/precos">página de preços</a>. <a href="#ref-4" aria-label="Voltar à nota 4">↩</a></li>
-      <li id="nota-5">Movimentações por mês: até 100 no Grátis; sem limite no Basic e no Pro. <a href="#ref-5" aria-label="Voltar à nota 5">↩</a></li>
-      <li id="nota-6">Cartões de crédito: 1 no Grátis, até 5 no Basic, sem limite no Pro. <a href="#ref-6" aria-label="Voltar à nota 6">↩</a></li>
-      <li id="nota-7">Comparação entre meses: 1 mês no Grátis, até 24 no Basic, sem limite no Pro. <a href="#ref-7" aria-label="Voltar à nota 7">↩</a></li>
-      <li id="nota-8">Histórico guardado: 3 meses no Grátis, até 24 no Basic, sem limite no Pro. <a href="#ref-8" aria-label="Voltar à nota 8">↩</a></li>
-      <li id="nota-9">Metas: 1 no Grátis, até 10 no Basic, sem limite no Pro. <a href="#ref-9" aria-label="Voltar à nota 9">↩</a></li>
-      <li id="nota-10">Leituras da UGLEZ por mês: 5 no Grátis, até 30 no Basic, até 120 no Pro. <a href="#ref-10" aria-label="Voltar à nota 10">↩</a></li>
+      <li id="nota-5">Movimentações por mês: até 100 no Semente, até 1.000 no Coqueiro, sem limite no Oásis. <a href="#ref-5" aria-label="Voltar à nota 5">↩</a></li>
+      <li id="nota-6">Cartões de crédito: até 3 no Semente, até 10 no Coqueiro, sem limite no Oásis. <a href="#ref-6" aria-label="Voltar à nota 6">↩</a></li>
+      <li id="nota-7">Comparação entre meses: 1 mês no Semente, até 24 no Coqueiro, sem limite no Oásis. <a href="#ref-7" aria-label="Voltar à nota 7">↩</a></li>
+      <li id="nota-8">Histórico guardado: 3 meses no Semente, até 24 no Coqueiro, sem limite no Oásis. <a href="#ref-8" aria-label="Voltar à nota 8">↩</a></li>
+      <li id="nota-9">Metas: 1 no Semente, até 10 no Coqueiro, até 50 no Oásis. <a href="#ref-9" aria-label="Voltar à nota 9">↩</a></li>
+      <li id="nota-10">Leituras da UGLEZ por mês: 10 no Semente, até 60 no Coqueiro, até 200 no Oásis. <a href="#ref-10" aria-label="Voltar à nota 10">↩</a></li>
       <li id="nota-11">Texto principal <code>#F1ECE3</code> sobre o fundo <code>#071822</code>, pela fórmula da WCAG 2.2. O nível AAA pede 7:1. <a href="#ref-11" aria-label="Voltar à nota 11">↩</a></li>
     </ol>
   </section>

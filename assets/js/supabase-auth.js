@@ -325,6 +325,10 @@
     prioridade: 10,                 // hoje é o único; a ordem existe para o dia em que não for
     rotuloEntrar: 'Entrar',
     marca: () => null,
+    /* Preferências pequenas, como o tema, usam o mesmo cliente já
+       autenticado. Antes ele ficava fechado neste módulo e tema.js
+       nunca conseguia ler ou salvar user_settings. */
+    cliente: () => cliente,
     isConfigured: () => !!cfg(),
 
     async conectar() {
