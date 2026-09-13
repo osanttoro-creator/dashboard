@@ -71,7 +71,7 @@ Os destinos liberados são exatamente os que o app usa:
 - `cdn.jsdelivr.net` — Chart.js
 - `*.googleusercontent.com` em `img-src` — a foto do perfil na bolha do Google
 
-**`api.anthropic.com` não está na lista, e é de propósito.** Quem fala com o modelo
+**`api.openai.com` não está na lista, e é de propósito.** Quem fala com o modelo
 é a Edge Function `oaze-assistant`, que é `*.supabase.co`. A chave nunca passa pelo
 navegador; liberar o domínio aqui seria manter aberta uma porta que ninguém usa.
 
@@ -286,29 +286,21 @@ produto, não uma limitação: ninguém é obrigado a criar conta para usar.
 > entre eles é a migração em Configurações → "Dados antigos deste navegador". Enquanto
 > ela não roda numa conta, metade do app lê um lugar vazio. Ver `docs/o-que-falta.md`.
 
-## Sugestões com IA (opcional)
+## UGLEZ com OpenAI
 
-O card na página Início manda uma pergunta sua, junto de um resumo do perfil e do
-mês selecionados, para a API da Anthropic e mostra a resposta formatada.
+A conversa do UGLEZ passa pela Edge Function autenticada `oaze-assistant`, que
+chama a Responses API da OpenAI. A chave secreta fica no Supabase e nunca chega
+ao navegador.
 
-**Como habilitar:** crie uma chave em
-[console.anthropic.com → API Keys](https://console.anthropic.com) e cole em
-*⚙ Configurar chave*. É **cobrado por uso**, conforme a tabela de preços da
-Anthropic. Sem chave, o card fica inerte e o resto do painel funciona igual.
+O servidor recebe a pergunta e um resumo agregado do período: totais,
+categorias, metas, histórico permitido pelo plano e despesas previstas agrupadas
+por dia. Não recebe descrições de lançamentos, nomes de contas ou cartões,
+e-mail ou identificadores internos. A tela **O que é enviado** mostra o objeto
+exato antes da chamada.
 
-**O que é enviado:** apenas o resumo do **perfil e mês ativos** — saldos, totais por
-categoria (com comparação ao mês anterior), fixas × variáveis, últimos 6 meses,
-contas, faturas de cartão e investimentos. Nenhum outro perfil entra, e os números
-respeitam as convenções acima (só confirmado conta; cartão pela data da compra).
-O botão *"Ver o resumo exato que seria enviado"* mostra o texto literal antes de
-qualquer chamada.
-
-**A chave fica só no `localStorage` deste navegador** e vai direto para
-`api.anthropic.com` — não passa por nenhum outro servidor.
-
-> ⚠️ Quem tiver acesso a este navegador consegue ler a chave. Se hospedar o painel
-> na internet, use uma chave com limite de gasto baixo e revogue-a se desconfiar de
-> vazamento.
+A cota mensal é aplicada atomicamente no banco e erros do provedor não consomem
+consulta. A requisição é stateless e usa `store: false`. Configuração e contrato
+completo: `docs/ia-backend.md`.
 
 ## A carteira — contas e cartões
 
@@ -446,8 +438,8 @@ não ficar ambíguo.
 **Assistente.** A leitura do topo — *"Você gastou 15% a menos com Alimentação que
 em jul/26"* — é **aritmética local sobre o `Calc`, não uma resposta de modelo**.
 Isso importa por dois motivos: ela aparece para quem nunca configurou chave
-nenhuma, e nada sai do navegador para produzi-la. Só a caixa "Pedir sugestão"
-chama a API da Anthropic.
+nenhuma, e nada sai do navegador para produzi-la. Só a conversa do UGLEZ chama a
+Edge Function protegida que acessa a OpenAI.
 
 **Ação principal.** Os quatro lançamentos (despesa, receita, transferência,
 aporte) saem de um botão "+" flutuante, disponível em qualquer página. O menu

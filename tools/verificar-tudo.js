@@ -40,6 +40,7 @@ const VERIFICACOES = [
   ['tools/testes/cartoes-integrados.js', 'mesmo baralho na Visão geral, Débito e Crédito'],
   ['tools/testes/sem-provedor-pagamento.js', 'nenhum provedor de pagamento antigo no produto'],
   ['tools/testes/uglez-camara.js', 'UGLEZ preserva estados, fallback e responsividade'],
+  ['tools/testes/uglez-openai.js', 'UGLEZ chama a OpenAI pelo servidor e envia só agregados'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],

@@ -17,8 +17,9 @@
 
    O QUE ESTE ARQUIVO MANDA
    A pergunta, o mês e um resumo AGREGADO — totais, categorias
-   consolidadas, metas e compromissos do período. Nunca a lista de
-   lançamentos, nunca identificador interno, nunca outro perfil.
+   consolidadas, metas e compromissos agrupados por dia. Nunca a
+   lista de lançamentos, suas descrições, identificador interno ou
+   outro perfil.
 
    O QUE ELE NÃO DECIDE
    Modelo, prompt de sistema e teto de tokens. Isso é do servidor.
@@ -69,7 +70,7 @@
     'Total de receitas, despesas e saldo',
     'Gastos consolidados por categoria',
     'Metas e quanto já foi guardado',
-    'Compromissos previstos do período'
+    'Compromissos previstos, agrupados por dia'
   ];
 
   /* ============================================================
@@ -113,7 +114,8 @@
          nomes de conta quebraria essa promessa em silêncio.
 
      Então este é o contrato, e ele é curto de propósito: totais,
-     categorias consolidadas, metas e compromissos. Mais nada.
+     categorias consolidadas, metas e compromissos agrupados por
+     dia. Mais nada.
      ============================================================ */
 
   /**
@@ -183,42 +185,24 @@
     } catch (e) { /* idem */ }
 
     try {
-      /* Compromissos = o que está previsto e ainda não confirmado
-         no mês exibido. É a informação que responde "o que ainda vai
-         sair", e ela não aparece nos totais justamente por não ter
-         acontecido. Vai só o dia, nunca a data inteira: o dia basta
-         para o modelo falar de fim de mês apertado, e a data cheia
-         seria um passo a mais de identificação sem ganho nenhum. */
-      resumo.compromissos = (t.entries || [])
-        .filter((e) => !e.confirmed && e.kind !== 'transfer')
-        .map((e) => ({
-          titulo: String(e.description || 'Sem descrição').slice(0, 60),
-          valor: U.round2(e.amount),
-          dia: +String(e.date).slice(8, 10) || 1
-        }));
+      /* Compromissos = despesas previstas ainda não confirmadas,
+         agregadas por dia. O modelo recebe quantidade e total, mas
+         nunca a descrição nem a data completa de um lançamento. */
+      const porDia = new Map();
+      (t.entries || [])
+        .filter((e) => !e.confirmed && e.kind === 'expense')
+        .forEach((e) => {
+          const dia = +String(e.date).slice(8, 10) || 1;
+          const atual = porDia.get(dia) || { dia: dia, quantidade: 0, total: 0 };
+          atual.quantidade += 1;
+          atual.total = U.round2(atual.total + (+e.amount || 0));
+          porDia.set(dia, atual);
+        });
+      resumo.compromissos = Array.from(porDia.values()).sort((a, b) => a.dia - b.dia);
     } catch (e) { /* idem */ }
 
     return resumo;
   };
-
-  const SYSTEM = [
-    'Você ajuda uma pessoa a organizar as próprias finanças pessoais. Ela usa um painel financeiro',
-    'e envia abaixo um resumo dos dados de UM perfil e UM mês.',
-    '',
-    'Convenções dos dados (respeite-as ao interpretar):',
-    '· Só lançamentos CONFIRMADOS entram nos totais. "Previstos" foram lançados mas ainda não confirmados.',
-    '· Despesa no cartão de crédito conta na data da compra, não na data de pagamento da fatura.',
-    '· "Saldo do mês" é receitas menos despesas. "Saldo em contas" é o caixa real das contas bancárias.',
-    '· Aporte em investimento não é despesa: é dinheiro que mudou de lugar.',
-    '· Todos os valores estão em reais (R$), formato brasileiro.',
-    '',
-    'Responda em português do Brasil, em markdown simples (títulos com ##, listas com -, **negrito**).',
-    'Use os números concretos do resumo — cite valores e categorias em vez de falar em termos genéricos.',
-    'Seja direto e prático: comece pela resposta, depois o raciocínio. Se os dados não sustentam uma conclusão,',
-    'diga o que falta em vez de supor. Se a pergunta pedir recomendação de investimento específico,',
-    'explique que isso depende de perfil e objetivos que os dados não mostram, e volte ao que dá para dizer:',
-    'organização, orçamento e padrões de gasto.'
-  ].join('\n');
 
   /* ============================================================
      2 · CHAMADA À API

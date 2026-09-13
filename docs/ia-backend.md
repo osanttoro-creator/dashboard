@@ -1,100 +1,64 @@
-# A IA do UGLEZ — onde a chave mora
+# API da OpenAI no UGLEZ
 
-Regra única, e ela não tem exceção: **chave de IA é secreta e vive só no
-servidor**. Nenhuma delas pode aparecer em `assets/`, no `app.html` nem em
-qualquer outro arquivo que o navegador baixe.
+O UGLEZ usa um único caminho:
 
-Uma chave `sk-proj-…` exposta é a sua conta sendo gasta por outra pessoa. Ao
-contrário da chave publicável do Supabase — que é pública por design e
-protegida pelo RLS — aqui não existe nada atrás dela. Quem tem a chave, gasta.
+```text
+navegador autenticado -> Edge Function oaze-assistant -> Responses API da OpenAI
+```
 
----
+A chave da OpenAI fica nos Secrets das Edge Functions do Supabase. Ela nunca
+entra em `assets/`, `app.html`, `localStorage`, resposta HTTP ou log.
 
-## Como configurar
+## Configuração
 
-Painel do Supabase → *Edge Functions* → *Secrets*. É o único lugar: não há
-camada de servidor neste repositório, e por isso não há `.env` de produção.
+No Supabase, abra **Edge Functions -> Secrets** e configure:
 
-| Variável | Para quê |
+| variável | finalidade |
 |---|---|
-| `OPENAI_API_KEY` | chave da OpenAI (`sk-proj-…`) |
-| `ANTHROPIC_API_KEY` | chave da Anthropic |
-| `IA_PROVEDOR` | `openai` ou `anthropic`, para forçar um |
-| `OPENAI_MODEL` | padrão `gpt-4o-mini` |
-| `ANTHROPIC_MODEL` | padrão `claude-opus-5` |
+| `OPENAI_API_KEY` | chave secreta do projeto OpenAI |
+| `OPENAI_MODEL` | modelo usado; se omitido, `gpt-4o-mini` |
+| `OAZE_ALLOWED_ORIGINS` | origens públicas separadas por vírgula |
 
-Preencha **uma** chave. Com as duas configuradas e sem `IA_PROVEDOR`, vale a
-OpenAI. Trocar de modelo não exige mexer no código — só a variável e um
-redeploy.
+Exemplo pela CLI, digitado apenas no seu terminal:
 
----
+```powershell
+supabase secrets set OPENAI_API_KEY="SUA_CHAVE"
+supabase secrets set OPENAI_MODEL="gpt-4o-mini"
+supabase secrets set OAZE_ALLOWED_ORIGINS="https://mediumvioletred-viper-277230.hostingersite.com"
+```
 
-## Como funciona
+Não salve a chave em `.env` dentro do repositório nem a envie por chat. Se uma
+chave já foi exposta, revogue-a e gere outra.
 
-O front chama a Edge Function `oaze-assistant` do Supabase, com a sessão do
-usuário no cabeçalho `Authorization`. A chave da OpenAI nunca sai do servidor:
-vai no cabeçalho da chamada ao provedor e nada mais.
+## Contrato de segurança e privacidade
 
-Quatro defesas na função, e cada uma existe por um motivo:
-
-- **A rota exige sessão.** Ao contrário de um endpoint público, aqui cada
-  chamada tem dono — é o que torna possível cobrar cota de alguém.
-- **A pergunta é cortada em 500 caracteres, e o contexto em 4.000 (plano
-  grátis) ou 8.000.** Token custa; sem limite, uma chamada vira uma conta
-  aberta.
-- **O que chega ao modelo depende do plano.** O mapa `PERFIL` decide quantas
-  categorias, quantos meses de histórico e quantos tokens de resposta. Não é
-  só preço: é menos dado saindo do banco para quem pediu menos.
-- **A cota é reservada antes da chamada e estornada em qualquer erro.** A
-  reserva é um `INSERT … ON CONFLICT DO UPDATE … WHERE usado < limite`: duas
-  abas simultâneas não conseguem gastar a mesma última pergunta.
-
-O corpo de erro do provedor **nunca é repassado cru** — em alguns erros ele
-ecoa parte do cabeçalho enviado. O navegador recebe só um código curto
-(`limite`, `provedor`, `contexto_grande`…), uma frase pronta e o `request_id`
-para casar com o log.
-
-### O outro caminho, e por que ele existe
-
-O app roda em dois lugares: publicado na Hostinger e aberto direto do disco
-(`file://`). **No segundo não existe servidor nenhum, e não há sessão do
-Supabase.**
-
-Quando a Edge Function não responde, o cliente cai para a chave que o próprio
-usuário guardou no `localStorage` dele. Essa não é um segredo do produto — é
-dele, no aparelho dele, sob a responsabilidade dele.
-
-**Esse caminho local fala com a Anthropic apenas.** Ou seja, aberto do disco o
-UGLEZ só conversa se o usuário tiver uma chave Anthropic própria guardada. É
-uma limitação real, não um bug.
+- A plataforma exige JWT e a função confirma o usuário com `getUser()`.
+- Plano e cota vêm do banco; o navegador não escolhe modelo nem limite.
+- A OpenAI recebe a pergunta e somente um resumo agregado: totais do mês,
+  categorias, metas, histórico permitido pelo plano e despesas previstas
+  agrupadas por dia.
+- Não são enviados descrições de lançamentos, contas, cartões, e-mail ou IDs.
+- A requisição usa `store: false`; a conversa não depende de respostas salvas.
+- A cota é reservada atomicamente antes da chamada e devolvida se o provedor
+  falhar ou responder vazio.
+- Um limite da conta OpenAI é reportado como indisponibilidade do serviço, não
+  como se o usuário tivesse esgotado o próprio plano.
+- `ai_usage` guarda apenas modelo, contagem de tokens, estado e `request_id`;
+  nunca prompt, resposta ou dado financeiro.
 
 ## Verificação
 
-Rodado com `fetch` substituído por um espião, sem nenhuma chave real e sem
-nenhuma requisição saindo da máquina:
+```powershell
+node tools/verificar-tudo.js
+```
 
-| Cenário | Resultado |
-|---|---|
-| Só OpenAI configurada | ✅ 200, chama a OpenAI, `gpt-4o-mini` |
-| Só Anthropic configurada | ✅ 200, chama a Anthropic, `claude-opus-5` |
-| As duas | ✅ OpenAI ganha |
-| As duas + `IA_PROVEDOR=anthropic` | ✅ Anthropic ganha |
-| `OPENAI_MODEL=gpt-4.1` | ✅ modelo trocado sem tocar no código |
-| Nenhuma chave | ✅ 501, nenhuma chamada externa |
-| Pergunta vazia / corpo inválido | ✅ 400, nenhuma chamada externa |
-| Chave na resposta ao navegador | ✅ **nunca**, em nenhum cenário |
-| Chave no corpo enviado à API | ✅ não — só no cabeçalho `authorization` |
-| Pergunta de 900 e resumo de 9.000 chars | ✅ cortados em 500 e 6.000 |
+A bateria valida o contrato estático, mas o teste completo ainda exige uma
+sessão real e o secret `OPENAI_API_KEY` configurado. Depois do deploy, entre no
+OAZE, abra UGLEZ, envie uma pergunta e confirme no banco uma linha `ok` em
+`ai_usage`, sem conteúdo financeiro.
 
----
+Referências oficiais:
 
-## Se uma chave vazar
-
-Não tente "tirar do lugar errado". **Revogue e gere outra**, sempre:
-
-- OpenAI → platform.openai.com/api-keys
-- Anthropic → console.anthropic.com/settings/keys
-
-Uma chave que passou por chat, print, log ou commit está comprometida mesmo
-que pareça não ter sido usada. Rotacionar custa um minuto; descobrir a fatura
-depois, não.
+- <https://developers.openai.com/api/reference/resources/responses/methods/create>
+- <https://supabase.com/docs/guides/functions/secrets>
+- <https://supabase.com/docs/guides/functions/auth-headers>

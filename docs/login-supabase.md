@@ -55,8 +55,9 @@ Em **dois** lugares, porque servem a dois consumidores diferentes:
 | `.env` | nada mais — os valores de servidor vivem nos secrets do Supabase | não |
 | `.env.example` | ninguém; documenta o formato | sim |
 
-O `.env` está no `.gitignore` porque é onde uma chave secreta de verdade vai
-acabar caindo um dia — a `ANTHROPIC_API_KEY` já está prevista lá.
+O `.env` está no `.gitignore` porque é onde uma chave secreta de verdade pode
+acabar caindo. Em produção, `OPENAI_API_KEY` vive somente nos Secrets das Edge
+Functions; `.env.example` documenta o nome sem conter valor.
 
 **Ao trocar de projeto Supabase, troque nos dois lugares.**
 

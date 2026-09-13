@@ -103,19 +103,20 @@
       <p>Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio
       navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.</p>
       <p>Quando você <em>conversa</em> com a UGLEZ, a pergunta e um resumo dos seus números
-      vão para um servidor nosso, que fala com o provedor do modelo. A tela mostra
+      vão para um servidor nosso, que chama a Responses API da OpenAI. A tela mostra
       <strong>quais categorias de dado seguem junto antes de você enviar</strong>.</p>
       <p>O que <strong>não</strong> é enviado: descrições de lançamento, nomes de
       estabelecimento, números de conta ou cartão, e o seu e-mail.</p>
       <p><strong>Seus dados não são usados para treinar modelos.</strong> Eles são enviados
-      apenas para gerar a sua resposta.</p>
+      apenas para gerar a sua resposta. A chamada não solicita que a API armazene a
+      resposta gerada (<code>store: false</code>).</p>
       <p>A chave de acesso ao provedor fica no servidor. <strong>Ela nunca chega ao seu
       navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.</p>
 
       <h2 id="compartilha">6. Com quem compartilhamos</h2>
       <p>Apenas com operadores necessários para o serviço funcionar: Supabase (banco e
-      autenticação), Hostinger (hospedagem) e o provedor do modelo de linguagem (só o que
-      o §5 descreve).</p>
+      autenticação), Hostinger (hospedagem) e OpenAI (modelo de linguagem; só o que o §5
+      descreve).</p>
       <p><strong>Não vendemos seus dados. Não os cedemos para publicidade. Não os cruzamos
       com outras bases.</strong></p>
       <p>Podemos fornecer dados por ordem judicial. Nesse caso avisamos você, salvo quando
