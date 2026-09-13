@@ -220,7 +220,12 @@ p.leve { color: var(--bruma); }
   border-bottom: 1px solid var(--borda);
 }
 /* Na página inicial ele flutua sobre a abertura em lente. */
-.pagina-inicial .topo { position: fixed; inset: 0 0 auto; }
+.pagina-inicial .topo { position: fixed; inset: 0 0 auto; transition: background-color .35s var(--curva); }
+/* Sobre um capítulo claro da narrativa, o vidro a 55% mistura com a
+   Areia e vira uma faixa cinza, onde os links somem. Enquanto passa
+   por cima de um deles, o cabeçalho engrossa para a Noite; sobre os
+   escuros, continua vidro. Quem liga a classe é o narrativa.js. */
+.topo.sobre-claro { background: rgba(7, 24, 34, .92); }
 .topo .env { display: flex; align-items: center; gap: 18px; height: 68px; max-width: min(1480px, calc(100% - 16px)); }
 
 .marca {
@@ -369,18 +374,6 @@ p.leve { color: var(--bruma); }
 }
 .grade-editorial > .carta:hover { border-top-color: var(--ouro); }
 .grade-editorial > .carta h3 { max-width: 30ch; }
-
-/* ---- passos numerados ---- */
-.passos { counter-reset: passo; display: grid; grid-template-columns: repeat(3, 1fr); }
-.passo { position: relative; min-height: 230px; padding: 72px 32px 10px 0; border-top: 1px solid var(--borda-forte); }
-.passo + .passo { padding-left: 32px; border-left: 1px solid var(--borda); }
-.passo::before {
-  counter-increment: passo; content: counter(passo, decimal-leading-zero);
-  position: absolute; top: 24px; left: 0;
-  font: 400 .8rem/1 var(--fonte-mono); letter-spacing: .12em; color: var(--ouro);
-}
-.passo + .passo::before { left: 32px; }
-.passo p { color: var(--bruma); }
 
 /* ---------------------------------------------------------------
    7 · planos (resumo na landing e página cheia)
@@ -779,32 +772,431 @@ p.leve { color: var(--bruma); }
 .lens-js:not(.lente-viva) .lens-greeting,
 .lens-js:not(.lente-viva) .lens-progress { animation: lente-recolhe 0s 4s forwards; }
 
-/* ---- o restante da narrativa ---- */
-.pagina-inicial .secao-topo h2,
-.secao-uglez h2 { font-size: clamp(2.1rem, 3.6vw, 3.1rem); }
+/* ---- títulos das seções que sobraram (planos, perguntas) ---- */
+.pagina-inicial .secao-topo h2 { font-size: clamp(2.1rem, 3.6vw, 3.1rem); }
 
-/* A primeira passagem é bento, não seis caixas idênticas. */
-.secao-beneficios .grade { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: dense; gap: 16px; }
-.secao-beneficios .carta { grid-column: span 4; min-height: 240px; padding: clamp(24px, 2.8vw, 34px); }
-.secao-beneficios .carta:first-child { grid-column: span 8; min-height: 290px; }
-.secao-beneficios .carta:nth-child(4) { grid-column: span 5; }
-.secao-beneficios .carta:nth-child(5) { grid-column: span 7; }
-.secao-beneficios .carta:first-child h3 { max-width: 20ch; font: 400 clamp(1.6rem, 2.6vw, 2.3rem)/1.12 var(--fonte-titulo); }
-.secao-beneficios .carta:first-child p { max-width: 58ch; }
-
-.secao-processo { background: var(--poco); border-block: 1px solid var(--borda); }
-
-.secao-uglez .grade { grid-template-columns: minmax(0, .9fr) minmax(460px, 1.1fr); }
-.secao-uglez .leve { max-width: 60ch; }
-.secao-uglez .uglez-leitura {
-  position: relative; padding: clamp(28px, 4vw, 52px);
-  background: var(--raso); border-color: rgba(70, 105, 240, .35);
+/* ---- narrativa v3: capítulos ----
+   Modelo de página de produto da Apple, na identidade v1. Cada
+   capítulo ocupa a tela; o visual entra antes do texto; o fundo
+   alterna entre Areia e Noite para marcar a virada — o "branco e
+   preto" da Apple traduzido para as duas pontas da paleta travada. */
+.cap {
+  position: relative;
+  min-height: 100svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(36px, 5vw, 64px);
+  padding: clamp(88px, 11vw, 150px) var(--gutter);
+  overflow-x: clip;
 }
-.secao-uglez .uglez-leitura > p:first-of-type { color: #9FB4FF; }
-.secao-uglez .uglez-leitura::before {
-  content: "“"; position: absolute; top: 8px; right: 26px;
-  color: rgba(216, 180, 94, .22); font: 400 7rem/1 var(--fonte-titulo);
+.cap-noite { background: var(--noite); }
+.cap-poco  { background: var(--poco); }
+
+/* Areia: a paleta clara da identidade, trocada por variável. Os
+   componentes do site leem --tinta, --bruma e --borda; mudar os
+   valores aqui é o que faz botão, título e link funcionarem no claro
+   sem uma regra nova para cada um. */
+.cap-areia {
+  --tinta: #11262F;
+  --bruma: #4E6068;          /* 5,7:1 sobre a Areia */
+  --bruma-2: #5A6B72;        /* 4,8:1 */
+  --borda: rgba(17, 38, 47, .12);
+  --borda-forte: rgba(17, 38, 47, .24);
+  --borda-ouro: rgba(126, 96, 26, .38);
+  --petroleo: #FBF8F2;       /* Cal: superfície de conteúdo */
+  --raso: #EAE3D6;           /* Areia funda */
+  --receita: #1F6B4F; --despesa: #9C5029; --investimento: #276070; --alerta: #7A5518;
+  --ouro-texto: #7E601A;     /* o acento como texto, 5,1:1 */
+  background: #F4EFE6;
+  color: var(--tinta);
 }
+.cap-areia h2 em { color: var(--ouro-texto); }
+.cap-areia a:not(.btn) { color: var(--ouro-texto); }
+.cap-noite, .cap-poco { --ouro-texto: var(--ouro); }
+
+.cap-texto { width: 100%; max-width: 700px; margin-inline: auto; text-align: center; }
+.cap-rotulo {
+  margin: 0 0 16px;
+  font: 400 .72rem/1.4 var(--fonte-mono); letter-spacing: .2em; text-transform: uppercase;
+  color: var(--bruma);
+}
+.cap h2 { font-size: clamp(2.5rem, 5.6vw, 4.5rem); line-height: 1.03; margin: 0 0 .28em; }
+.cap-sub { margin: 0 0 22px; font: 400 clamp(1.2rem, 2.1vw, 1.55rem)/1.35 var(--fonte-titulo); color: var(--tinta); }
+.cap-corpo { max-width: 60ch; margin: 0 auto; font-size: 1.06rem; line-height: 1.72; color: var(--bruma); }
+.cap-visual { position: relative; width: min(100%, 880px); margin-inline: auto; }
+.cap-cta { margin: 0; text-align: center; }
+
+/* Números soltos: o "até" pequeno em cima, o número grande, a legenda
+   curta embaixo. Nada de frase em volta. */
+.numeros {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(28px, 5vw, 64px);
+  margin: clamp(36px, 5vw, 56px) 0 0;
+}
+.numeros > div { min-width: 140px; max-width: 230px; }
+.numeros dt {
+  font: 400 .76rem/1 var(--fonte-mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--bruma);
+}
+.numeros dt b {
+  display: block; margin-top: 8px;
+  font: 500 clamp(3rem, 6.4vw, 4.8rem)/1 var(--fonte-titulo); letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; text-transform: none; color: var(--tinta);
+}
+.numeros dd { margin: 12px 0 0; font-size: .92rem; line-height: 1.45; color: var(--bruma); }
+.numeros sup a, .valor sup a { padding: 0 2px; font-size: .78em; text-decoration: none; }
+
+/* ---- cena 1 · contas ---- */
+.v-painel {
+  max-width: 520px; margin-inline: auto; padding: clamp(20px, 3vw, 30px);
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px; box-shadow: var(--sombra);
+}
+.v-total span, .v-espaco-nome, .v-fatura-mes, .v-rotulo-projecao span, .v-exemplo {
+  font: 400 .7rem/1.2 var(--fonte-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--bruma);
+}
+.v-total strong {
+  display: block; margin-top: 8px;
+  font: 500 clamp(1.8rem, 3.4vw, 2.4rem)/1 var(--fonte-titulo); font-variant-numeric: tabular-nums;
+}
+.v-lista { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 8px; }
+.v-lista li {
+  position: relative; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--raio); background: var(--raso);
+}
+.v-lista span { font-size: .95rem; color: var(--tinta); }
+.v-lista b { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--tinta); }
+.v-logo {
+  width: 38px; height: 38px; padding: 7px; border-radius: 9px;
+  display: grid; place-items: center; background: var(--fundo); color: var(--cor);
+}
+.v-logo svg { width: 100%; height: 100%; }
+/* Os desenhos do vendor não trazem cor: herdam fill="none" da raiz e
+   são pintados por quem os usa. */
+.v-logo svg path { fill: currentColor; }
+
+.cenas .v-lista li {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .6s var(--entrada), transform .6s var(--entrada);
+  transition-delay: calc(120ms + var(--i) * 110ms);
+}
+.cenas .em-cena .v-lista li { opacity: 1; transform: none; }
+.v-lista li::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--borda-ouro); opacity: 0; pointer-events: none;
+}
+.cenas .v-lista li::after {
+  animation: v-foco 8s var(--curva) infinite both paused;
+  animation-delay: calc(1.4s + var(--i) * 2s);
+}
+.cenas .em-cena .v-lista li::after { animation-play-state: running; }
+@keyframes v-foco { 0%, 100% { opacity: 0; } 6%, 18% { opacity: 1; } 26% { opacity: 0; } }
+
+/* A galeria de espaços: rolagem lateral nativa, com imã em cada item.
+   É o único controle, e é rolagem — não aba, não seta. */
+.galeria {
+  width: 100%; max-width: calc(var(--largura) + 2 * var(--gutter));
+  padding: 4px var(--gutter) 14px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.galeria::-webkit-scrollbar { display: none; }
+/* A galeria encosta nas bordas da tela: o item seguinte aparecendo
+   cortado é o que avisa que dá para arrastar. Presa ao recuo do
+   capítulo, ela parecia só um cartão largo. */
+.cap > .galeria { width: calc(100% + 2 * var(--gutter)); margin-inline: calc(-1 * var(--gutter)); }
+.galeria-trilho {
+  list-style: none; margin: 0 auto; padding: 0;
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 340px); gap: 16px;
+  width: max-content;
+}
+.galeria-item { scroll-snap-align: center; }
+.v-espaco {
+  min-height: 176px; padding: 22px; display: grid; gap: 10px; align-content: start;
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px; text-align: left;
+}
+.v-espaco strong { font: 500 1.9rem/1 var(--fonte-titulo); font-variant-numeric: tabular-nums; }
+.v-espaco-linha { height: 6px; border-radius: 3px; background: var(--raso); overflow: hidden; }
+.v-espaco-linha i { display: block; width: var(--w); height: 100%; border-radius: inherit; background: var(--c); }
+.v-espaco-rodape { font-size: .86rem; color: var(--bruma); }
+.galeria-legenda { margin: 12px 4px 0; font-size: .92rem; color: var(--bruma); text-align: left; }
+.galeria-legenda b { font-weight: 600; color: var(--tinta); }
+
+/* ---- cena 2 · importar ---- */
+.v-importar { max-width: 660px; display: flex; flex-direction: column; align-items: center; }
+.v-arquivo {
+  display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 10px 16px;
+  border-radius: 999px; background: var(--petroleo); border: 1px solid var(--borda-forte);
+  font: 400 .86rem/1 var(--fonte-mono); color: var(--tinta);
+}
+.v-arquivo svg { width: 18px; height: 18px; color: var(--ouro-texto); }
+.v-lanc {
+  list-style: none; margin: 0; padding: 0; width: 100%; overflow: hidden;
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(17, 38, 47, .06), 0 18px 36px -24px rgba(17, 38, 47, .35);
+}
+.v-lanc li {
+  display: grid; grid-template-columns: 58px minmax(0, 1fr) auto auto; align-items: center; gap: 12px;
+  padding: 14px 18px; border-top: 1px solid var(--borda); font-size: .92rem; text-align: left;
+}
+.v-lanc li:first-child { border-top: 0; }
+.v-lanc time { font: 400 .74rem/1 var(--fonte-mono); text-transform: uppercase; color: var(--bruma); }
+.v-lanc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 .8rem/1.3 var(--fonte-mono); color: var(--tinta); }
+.v-lanc em {
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+  font-style: normal; font-size: .76rem; color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
+}
+.v-lanc b { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.v-lanc .sai { color: var(--despesa); }
+.v-lanc .entra { color: var(--receita); }
+
+.cenas .v-arquivo { animation: imp-arquivo 8.5s var(--entrada) infinite both paused; }
+.cenas .v-lanc li { animation: imp-linha 8.5s var(--entrada) infinite both paused; animation-delay: calc(var(--i) * 350ms); }
+.cenas .v-lanc em { animation: imp-cat 8.5s var(--entrada) infinite both paused; animation-delay: calc(var(--i) * 350ms); }
+.cenas .em-cena .v-arquivo,
+.cenas .em-cena .v-lanc li,
+.cenas .em-cena .v-lanc em { animation-play-state: running; }
+@keyframes imp-arquivo { 0% { opacity: 0; transform: translateY(-18px); } 8%, 86% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: translateY(-6px); } }
+@keyframes imp-linha { 0%, 10% { opacity: 0; transform: translateY(8px); } 18%, 86% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+@keyframes imp-cat { 0%, 26% { opacity: 0; transform: scale(.85); } 32%, 86% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+
+/* ---- cena 3 · cartão ---- */
+.v-cartao { max-width: 780px; display: grid; justify-items: center; gap: 22px; }
+.v-compra {
+  display: inline-flex; align-items: center; gap: 12px; padding: 12px 18px;
+  border-radius: var(--raio-lg); background: var(--raso); border: 1px solid var(--borda-forte);
+}
+.v-compra span { font: 400 .74rem/1 var(--fonte-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--bruma); }
+.v-compra strong { font-weight: 600; }
+.v-faturas { width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.v-fatura {
+  min-height: 148px; padding: 14px; display: flex; flex-direction: column; gap: 12px; text-align: left;
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px;
+}
+.v-fatura-fechada { border-style: dashed; opacity: .6; }
+.v-fatura-estado { margin-top: auto; font-size: .82rem; color: var(--bruma-2); }
+.v-parcela {
+  margin-top: auto; padding: 8px 10px; border-radius: var(--raio);
+  font-style: normal; font-weight: 600; font-size: .88rem; font-variant-numeric: tabular-nums;
+  color: var(--tinta); background: rgba(216, 180, 94, .12); border: 1px solid var(--borda-ouro);
+}
+.cenas .v-compra { animation: cart-compra 8s var(--entrada) infinite both paused; }
+.cenas .v-parcela { animation: cart-parcela 8s var(--entrada) infinite both paused; animation-delay: calc(700ms + var(--i) * 450ms); }
+.cenas .em-cena .v-compra,
+.cenas .em-cena .v-parcela { animation-play-state: running; }
+@keyframes cart-compra { 0% { opacity: 0; transform: translateY(-10px); } 8%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; } }
+@keyframes cart-parcela { 0% { opacity: 0; transform: translateY(-40px) scale(.92); } 12%, 84% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; } }
+
+/* ---- cena 4 · mês ---- */
+.v-mes {
+  max-width: 780px; padding: clamp(18px, 3vw, 28px);
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(17, 38, 47, .06), 0 18px 36px -24px rgba(17, 38, 47, .35);
+}
+.v-grafico { display: block; width: 100%; height: auto; overflow: visible; }
+.v-grade path { fill: none; stroke: var(--borda); stroke-width: 1; }
+.v-eixo { stroke: var(--borda-forte); stroke-width: 1; }
+.v-barras rect { rx: 4px; transform-box: fill-box; transform-origin: 50% 100%; }
+.v-barras .e { fill: var(--receita); }
+.v-barras .s { fill: var(--despesa); }
+.v-projecao { fill: none; stroke: var(--ouro-texto); stroke-width: 2.5; stroke-dasharray: 6 7; stroke-linecap: round; }
+.v-projecao-ponto { fill: var(--ouro-texto); }
+.v-rotulo-projecao { position: absolute; top: clamp(14px, 3vw, 26px); right: clamp(14px, 3vw, 28px); text-align: right; }
+.v-rotulo-projecao strong { display: block; font: 500 1.6rem/1.15 var(--fonte-titulo); font-variant-numeric: tabular-nums; color: var(--tinta); }
+.v-meta { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+.v-meta > span:first-child { font-weight: 600; font-size: .92rem; }
+.v-meta-barra { height: 8px; border-radius: 4px; background: var(--raso); overflow: hidden; }
+.v-meta-barra i { display: block; width: 64%; height: 100%; border-radius: inherit; background: var(--investimento); transform-origin: left; }
+.v-meta-rodape { font-size: .84rem; color: var(--bruma); }
+
+.cenas .v-barras rect { animation: mes-barra 9s var(--entrada) infinite both paused; animation-delay: calc(var(--i) * 120ms); }
+.cenas .v-projecao { animation: mes-proj 9s var(--curva) infinite both paused; }
+.cenas .v-projecao-ponto,
+.cenas .v-rotulo-projecao { animation: mes-rotulo 9s var(--entrada) infinite both paused; }
+.cenas .v-meta-barra i { animation: mes-meta 9s var(--entrada) infinite both paused; }
+.cenas .em-cena .v-barras rect,
+.cenas .em-cena .v-projecao,
+.cenas .em-cena .v-projecao-ponto,
+.cenas .em-cena .v-rotulo-projecao,
+.cenas .em-cena .v-meta-barra i { animation-play-state: running; }
+@keyframes mes-barra { 0% { transform: scaleY(0); } 12%, 88% { transform: scaleY(1); } 96%, 100% { transform: scaleY(0); } }
+@keyframes mes-proj { 0%, 12% { clip-path: inset(0 100% 0 0); } 26%, 88% { clip-path: inset(0 0 0 0); } 96%, 100% { clip-path: inset(0 100% 0 0); } }
+@keyframes mes-rotulo { 0%, 20% { opacity: 0; } 28%, 88% { opacity: 1; } 96%, 100% { opacity: 0; } }
+@keyframes mes-meta { 0%, 24% { transform: scaleX(0); } 40%, 88% { transform: scaleX(1); } 96%, 100% { transform: scaleX(0); } }
+
+/* ---- cena 5 · UGLEZ ---- */
+.v-uglez { max-width: 720px; display: grid; justify-items: center; gap: 6px; }
+.v-uglez-orbe { position: relative; width: clamp(180px, 26vw, 260px); aspect-ratio: 1; }
+.v-uglez-orbe canvas { display: block; width: 100%; height: 100%; }
+.v-conversa { width: 100%; max-width: 560px; display: grid; gap: 12px; text-align: left; }
+.v-pergunta, .v-resposta { margin: 0; line-height: 1.55; color: var(--tinta); }
+.v-pergunta {
+  justify-self: end; max-width: 82%; padding: 12px 16px;
+  border-radius: 14px 14px 4px 14px; background: var(--raso);
+}
+.v-resposta {
+  justify-self: start; max-width: 94%; min-height: 4.8em; padding: 14px 18px;
+  border-radius: 14px 14px 14px 4px;
+  background: rgba(70, 105, 240, .1); border: 1px solid rgba(70, 105, 240, .38);
+}
+.v-exemplo { justify-self: start; margin: 2px 0 0; color: var(--bruma-2); }
+.cenas .v-pergunta,
+.cenas .v-resposta { opacity: 0; transform: translateY(8px); transition: opacity .5s var(--entrada), transform .5s var(--entrada); }
+.cenas .v-pergunta.visivel,
+.cenas .v-resposta.visivel { opacity: 1; transform: none; }
+
+/* ---- destaques: o MagicBento, contido ----
+   Luz que segue o ponteiro e contorno que acende — no ouro, baixo. A
+   poeira luminosa existe só no cartão do UGLEZ: na identidade v1, só
+   ele emite luz. */
+.bento {
+  list-style: none; margin: 0 auto; padding: 0; width: min(100%, 1040px);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(210px, auto); grid-auto-flow: dense; gap: 14px;
+}
+.bento-largo { grid-column: span 2; }
+.bento-alto { grid-row: span 2; }
+.bento-card > a {
+  position: relative; isolation: isolate; overflow: hidden;
+  height: 100%; min-height: 210px; padding: clamp(20px, 2.4vw, 28px);
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 8px;
+  border-radius: 8px; background: var(--petroleo); border: 1px solid var(--borda);
+  color: var(--tinta); text-decoration: none; text-align: left;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: border-color .3s var(--curva), box-shadow .35s var(--curva), transform .35s var(--curva);
+}
+.bento-card > a:hover { box-shadow: 0 1px 2px rgba(17, 38, 47, .06), 0 24px 44px -28px rgba(17, 38, 47, .5); }
+.bento-rotulo { font: 400 .7rem/1 var(--fonte-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ouro-texto); }
+.bento-card strong { max-width: 20ch; font: 500 clamp(1.3rem, 2vw, 1.7rem)/1.15 var(--fonte-titulo); color: var(--tinta); }
+.bento-largo strong { font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+.bento-apoio { max-width: 36ch; font-size: .92rem; color: var(--bruma); }
+.bento-luz {
+  position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  opacity: 0; transition: opacity .3s var(--curva);
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(216, 180, 94, .16), transparent 70%);
+}
+.bento-card > a::after {
+  content: ""; position: absolute; inset: 0; padding: 1px; border-radius: inherit; pointer-events: none;
+  opacity: 0; transition: opacity .3s var(--curva);
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(126, 96, 26, .8), transparent 45%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.bento-card > a:hover .bento-luz,
+.bento-card > a:hover::after,
+.bento-card > a:focus-visible .bento-luz { opacity: 1; }
+
+.bento-uglez > a { background: var(--poco); border-color: rgba(70, 105, 240, .3); color: #F1ECE3; }
+.bento-uglez strong { color: #F1ECE3; }
+.bento-uglez .bento-apoio { color: #9FB2B8; }
+.bento-uglez .bento-rotulo { color: #9FB4FF; }
+.bento-uglez .bento-luz { background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(70, 105, 240, .3), transparent 70%); }
+.bento-uglez > a::after { background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(96, 132, 226, .95), transparent 45%); }
+.bento-poeira { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.bento-poeira i {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  background: #6084E2; box-shadow: 0 0 8px rgba(70, 105, 240, .85); opacity: .5;
+}
+.bento-poeira i:nth-child(1) { left: 24%; top: 22%; }
+.bento-poeira i:nth-child(2) { left: 62%; top: 16%; }
+.bento-poeira i:nth-child(3) { left: 78%; top: 38%; background: #D8B45E; box-shadow: 0 0 8px rgba(216, 180, 94, .7); }
+.bento-poeira i:nth-child(4) { left: 40%; top: 44%; }
+.bento-poeira i:nth-child(5) { left: 16%; top: 58%; }
+.bento-poeira i:nth-child(6) { left: 70%; top: 60%; }
+.bento-poeira i:nth-child(7) { left: 52%; top: 30%; width: 3px; height: 3px; }
+.bento-poeira i:nth-child(8) { left: 32%; top: 34%; width: 3px; height: 3px; }
+.cenas .bento-poeira i { animation: poeira 6.4s ease-in-out infinite both paused; }
+.cenas .em-cena .bento-poeira i { animation-play-state: running; }
+.bento-poeira i:nth-child(2n) { animation-delay: -1.8s; }
+.bento-poeira i:nth-child(3n) { animation-delay: -3.4s; animation-duration: 7.8s; }
+.bento-uglez > a:hover .bento-poeira i { animation-duration: 3.2s; }
+@keyframes poeira { 0%, 100% { opacity: .18; transform: translate(0, 0); } 50% { opacity: .95; transform: translate(6px, -9px); } }
+.bento-onda {
+  position: absolute; width: 10px; height: 10px; border-radius: 50%; pointer-events: none;
+  background: rgba(216, 180, 94, .45); transform: translate(-50%, -50%) scale(0);
+  animation: bento-onda .7s var(--entrada) forwards;
+}
+.bento-uglez .bento-onda { background: rgba(96, 132, 226, .5); }
+@keyframes bento-onda { to { transform: translate(-50%, -50%) scale(46); opacity: 0; } }
+
+/* ---- comparador ----
+   Funciona sem JavaScript: três rádios, e o painel do marcado aparece.
+   Os rádios ficam fora da vista mas no teclado — as setas trocam. */
+.comparador { width: min(100%, 880px); margin-inline: auto; position: relative; }
+.comparador > input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.cmp-escolha {
+  width: max-content; max-width: 100%; margin: 0 auto 28px; padding: 4px; border: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px;
+  border-radius: 999px; background: var(--raso);
+}
+.cmp-escolha label {
+  min-height: 44px; padding: 10px 20px; border-radius: 999px;
+  display: inline-flex; align-items: center; cursor: pointer;
+  font-weight: 500; color: var(--bruma); transition: background .2s var(--curva), color .2s var(--curva);
+}
+#cmp-planilha:checked ~ .cmp-escolha label[for="cmp-planilha"],
+#cmp-banco:checked ~ .cmp-escolha label[for="cmp-banco"],
+#cmp-caderno:checked ~ .cmp-escolha label[for="cmp-caderno"] {
+  background: var(--petroleo); color: var(--tinta); box-shadow: 0 1px 2px rgba(17, 38, 47, .14);
+}
+#cmp-planilha:focus-visible ~ .cmp-escolha label[for="cmp-planilha"],
+#cmp-banco:focus-visible ~ .cmp-escolha label[for="cmp-banco"],
+#cmp-caderno:focus-visible ~ .cmp-escolha label[for="cmp-caderno"] {
+  outline: 2px solid var(--ouro-texto); outline-offset: 2px;
+}
+.cmp-painel { display: none; text-align: center; }
+#cmp-planilha:checked ~ .cmp-planilha,
+#cmp-banco:checked ~ .cmp-banco,
+#cmp-caderno:checked ~ .cmp-caderno { display: block; }
+.cmp-frase { max-width: 34ch; margin: 20px auto 0; font: 400 clamp(1.2rem, 2vw, 1.45rem)/1.4 var(--fonte-titulo); color: var(--tinta); }
+.cmp-visual { min-height: 120px; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 4vw, 40px); }
+.cmp-antes, .cmp-depois { position: relative; width: 150px; height: 104px; border-radius: 8px; }
+.cmp-antes { background: var(--petroleo); border: 1px solid var(--borda-forte); }
+.cmp-antes-planilha { display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); overflow: hidden; }
+.cmp-antes-planilha i { border-right: 1px solid var(--borda); border-bottom: 1px solid var(--borda); }
+.cmp-antes-banco { display: grid; grid-template: repeat(2, 1fr) / repeat(2, 1fr); gap: 8px; padding: 12px; background: transparent; border: 0; }
+.cmp-antes-banco i { border-radius: 10px; background: var(--raso); border: 1px solid var(--borda-forte); }
+.cmp-antes-caderno { background: repeating-linear-gradient(to bottom, transparent 0 17px, var(--borda-forte) 17px 18px), var(--petroleo); }
+.cmp-antes-caderno i { display: none; }
+.cmp-seta { position: relative; width: 38px; height: 1px; background: var(--borda-forte); }
+.cmp-seta::after {
+  content: ""; position: absolute; right: -1px; top: -4px; width: 8px; height: 8px;
+  border-top: 1px solid var(--borda-forte); border-right: 1px solid var(--borda-forte); transform: rotate(45deg);
+}
+.cmp-depois { display: grid; align-content: center; gap: 9px; padding: 16px; background: #071822; border: 1px solid #23394D; }
+.cmp-depois b { display: block; height: 8px; border-radius: 4px; transform-origin: left; }
+.cmp-depois b:nth-child(1) { width: 70%; background: #D8B45E; }
+.cmp-depois b:nth-child(2) { width: 92%; background: #86CFA4; }
+.cmp-depois b:nth-child(3) { width: 56%; background: #E9A178; }
+.cenas .cmp-depois b { animation: cmp-cresce .7s var(--entrada) both; }
+.cenas .cmp-depois b:nth-child(2) { animation-delay: .08s; }
+.cenas .cmp-depois b:nth-child(3) { animation-delay: .16s; }
+@keyframes cmp-cresce { from { transform: scaleX(0); } }
+
+/* ---- fechamento ---- */
+.motivos {
+  list-style: none; margin: 0 auto; padding: 0; width: min(100%, 1040px);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;
+}
+.motivos li { padding: 22px 4px 0; display: grid; gap: 8px; align-content: start; border-top: 1px solid var(--borda-forte); text-align: left; }
+.motivos svg { width: 26px; height: 26px; color: var(--ouro-texto); }
+.motivos strong { font: 500 1.2rem/1.2 var(--fonte-titulo); color: var(--tinta); }
+.motivos span { font-size: .92rem; color: var(--bruma); }
+.valores { width: min(100%, 1040px); margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.valor {
+  padding: clamp(22px, 3vw, 32px); text-align: left; scroll-margin-top: 96px;
+  background: var(--petroleo); border: 1px solid var(--borda); border-radius: 8px;
+}
+.valor-visual { width: 52px; height: 52px; margin-bottom: 14px; color: var(--ouro-texto); }
+.valor-visual svg { width: 100%; height: 100%; }
+.valor h3 { margin-bottom: 10px; font: 500 1.45rem/1.2 var(--fonte-titulo); color: var(--tinta); }
+.valor p { margin: 0; color: var(--bruma); }
+.notas {
+  width: min(100%, 880px); margin: clamp(12px, 3vw, 28px) auto 0; padding: 26px 0 0 1.4em;
+  display: grid; gap: 6px; border-top: 1px solid var(--borda);
+  font-size: .8rem; line-height: 1.6; color: var(--bruma-2); text-align: left;
+}
+.notas code { font: .92em var(--fonte-mono); }
+.notas li:target { color: var(--tinta); }
 
 /* ---------------------------------------------------------------
    14 · responsivo
@@ -824,17 +1216,15 @@ p.leve { color: var(--bruma); }
 }
 
 @media (max-width: 980px) {
-  .grade-3, .planos, .passos { grid-template-columns: repeat(2, 1fr); }
+  .grade-3, .planos { grid-template-columns: repeat(2, 1fr); }
   .grade-editorial.grade-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rodape-grade { grid-template-columns: 1fr 1fr; gap: 28px; }
   /* Numa grade de 2, o terceiro plano ficaria órfão embaixo. */
   .planos > :last-child { grid-column: 1 / -1; }
-  .secao-beneficios .carta,
-  .secao-beneficios .carta:first-child,
-  .secao-beneficios .carta:nth-child(4),
-  .secao-beneficios .carta:nth-child(5) { grid-column: span 6; min-height: 230px; }
-  .secao-uglez .grade { grid-template-columns: 1fr; }
-  .secao-uglez .uglez-leitura { max-width: 760px; }
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bento-alto { grid-row: span 1; grid-column: span 2; }
+  .motivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .valores { grid-template-columns: 1fr; max-width: 640px; }
 }
 
 @media (max-width: 820px) {
@@ -880,7 +1270,7 @@ p.leve { color: var(--bruma); }
 }
 
 @media (max-width: 720px) {
-  .grade-3, .grade-2, .planos, .passos { grid-template-columns: 1fr; }
+  .grade-3, .grade-2, .planos { grid-template-columns: 1fr; }
   .planos > :last-child { grid-column: auto; }
   .grade-editorial, .grade-editorial.grade-3 { grid-template-columns: 1fr; }
   .grade-editorial > .carta { min-height: auto; }
@@ -889,13 +1279,13 @@ p.leve { color: var(--bruma); }
   .hero-botoes .btn { width: 100%; }
   .secao { padding: 76px 0; }
   .cabeca-pagina h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); }
-  .secao-beneficios .grade { grid-template-columns: 1fr; }
-  .secao-beneficios .carta,
-  .secao-beneficios .carta:first-child,
-  .secao-beneficios .carta:nth-child(4),
-  .secao-beneficios .carta:nth-child(5) { grid-column: auto; min-height: auto; }
-  .passo, .passo + .passo { min-height: auto; padding: 64px 0 28px; border-left: 0; }
-  .passo + .passo::before { left: 0; }
+  .v-faturas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v-lanc li { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "desc valor" "data cat"; row-gap: 6px; }
+  .v-lanc time { grid-area: data; }
+  .v-lanc span { grid-area: desc; }
+  .v-lanc em { grid-area: cat; justify-self: end; }
+  .v-lanc b { grid-area: valor; }
+  .v-rotulo-projecao { position: static; margin-bottom: 10px; text-align: left; }
 }
 
 @media (max-width: 560px) {
@@ -915,6 +1305,14 @@ p.leve { color: var(--bruma); }
   .lens-float { display: none; }
   .lens-greeting { padding-inline: 16px; }
   .hello { width: 86vw; }
+  .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .bento-largo, .bento-alto { grid-column: auto; }
+  .bento-card > a { min-height: 132px; }
+  .bento-alto > a { min-height: 200px; }
+  .motivos { grid-template-columns: 1fr; }
+  .numeros > div { min-width: 120px; }
+  .cmp-escolha label { padding: 10px 14px; }
+  .cmp-antes, .cmp-depois { width: 118px; height: 86px; }
 }
 
 @media (max-width: 420px) {
@@ -948,6 +1346,14 @@ p.leve { color: var(--bruma); }
   .lens-intro { height: auto; }
   .lens-stage { position: relative; height: auto; min-height: 100svh; overflow: hidden; }
   .lens-shutter, .lens-greeting, .lens-progress { display: none !important; }
+  /* A narrativa v3 anima em ciclo, e o fim de cada ciclo é o visual
+     sumindo. Encurtar a duração, como a regra acima faz, pararia tudo
+     no quadro vazio. Aqui a animação sai inteira e fica o desenho. */
+  .cap-visual *, .cap-visual *::before, .cap-visual *::after,
+  .bento *, .bento *::before, .bento *::after,
+  .comparador * { animation: none !important; }
+  .cenas .v-lista li, .cenas .v-pergunta, .cenas .v-resposta { opacity: 1 !important; transform: none !important; }
+  .bento-card > a { transform: none !important; }
 }
 
 /* Menos transparência: o vidro da navegação vira superfície sólida. */
@@ -966,6 +1372,9 @@ p.leve { color: var(--bruma); }
 @media print {
   /* Ao imprimir não há rolagem: o observador nunca revelaria nada. */
   .anima .revela { opacity: 1 !important; transform: none !important; }
+  .cap-visual *, .bento *, .comparador * { animation: none !important; }
+  .cenas .v-lista li, .cenas .v-pergunta, .cenas .v-resposta { opacity: 1 !important; transform: none !important; }
+  .cap { min-height: 0; }
   .topo, .chamada, .hamburguer, .lens-shutter, .lens-greeting, .lens-progress { display: none !important; }
   body { background: #fff; color: #000; }
   h1, h2, h3, strong { color: #000; }

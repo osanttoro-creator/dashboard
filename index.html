@@ -196,178 +196,342 @@
     </div>
   </section>
 
-  <!-- ============================ benefícios ============================ -->
-  <section class="secao secao-beneficios" id="beneficios">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2>O que muda no seu mês</h2>
-        <p>Não é mais um lugar para digitar números. É o lugar onde eles finalmente respondem alguma coisa.</p>
-      </div>
+  <!-- =============================================================
+       NARRATIVA · v3
+       -------------------------------------------------------------
+       Modelo de página de produto da Apple, aplicado ao trecho entre a
+       abertura e o preço. A abertura (lente + hello) não muda.
 
-      <div class="grade grade-3">
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>
-            </svg>
-          </div>
-          <h3>Você vê o mês antes de ele acabar</h3>
-          <p>Entradas, saídas e o que sobra, atualizados a cada lançamento. O saldo de hoje e a projeção do fechamento na mesma tela.</p>
-        </article>
+       Regras que este trecho segue, e que valem para quem mexer nele:
+         · benefício antes da especificação; o número vem depois da
+           frase que explica por que ele importa;
+         · todo número quantitativo leva "até" e nota de rodapé;
+         · nenhuma seção sem visual; o visual entra primeiro;
+         · o fundo alterna entre Areia e Noite para marcar capítulo —
+           a tradução do "branco e preto" da Apple para a identidade v1;
+         · um CTA só, sempre igual: "Criar conta grátis".
+       ============================================================= -->
 
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/>
-            </svg>
-          </div>
-          <h3>Cartão de crédito que fecha certo</h3>
-          <p>Fatura por ciclo, não por mês do calendário. Parcelamento entra nos meses em que realmente cai — não todo no primeiro.</p>
-        </article>
-
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
-            </svg>
-          </div>
-          <h3>Recorrências que não somem</h3>
-          <p>Assinatura, aluguel, mensalidade: cadastrou uma vez, aparece todo mês, no dia certo, sem você lembrar.</p>
-        </article>
-
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/>
-            </svg>
-          </div>
-          <h3>Metas com prazo de verdade</h3>
-          <p>Quanto falta, quanto por mês, e em que data chega no ritmo atual. Sem promessa vaga de "guardar um pouco".</p>
-        </article>
-
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 20V10M10 20V4M16 20v-7M22 20v-4"/>
-            </svg>
-          </div>
-          <h3>Comparação com os meses anteriores</h3>
-          <p>Gastou mais em quê, e desde quando. A categoria que cresceu aparece sozinha, sem você ir procurar.</p>
-        </article>
-
-        <article class="carta revela">
-          <div class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3l7 4v5c0 4.4-3 8.2-7 9-4-.8-7-4.6-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/>
-            </svg>
-          </div>
-          <h3>Seus dados são seus</h3>
-          <p>Backup e exportação a qualquer momento, sem pedir permissão. Sai tudo, em formato aberto, quando você quiser.</p>
-        </article>
-      </div>
+  <!-- ============================ destaques ============================ -->
+  <section class="cap cap-areia cap-destaques" id="explorar" data-cena aria-labelledby="destaques-titulo">
+    <div class="cap-texto revela">
+      <p class="cap-rotulo">Como o OAZE funciona</p>
+      <h2 id="destaques-titulo">Cinco coisas. <em>Um mês inteiro à vista.</em></h2>
     </div>
+
+    <ul class="bento" data-bento>
+      <li class="bento-card bento-largo revela">
+        <a href="#cap-contas">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Contas</span>
+          <strong>Todos os bancos num painel só.</strong>
+          <span class="bento-apoio">Saldo de cada conta, lado a lado.</span>
+        </a>
+      </li>
+      <li class="bento-card revela">
+        <a href="#cap-importar">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Extrato</span>
+          <strong>O arquivo do banco vira lançamento.</strong>
+        </a>
+      </li>
+      <li class="bento-card bento-alto bento-uglez revela">
+        <a href="#uglez">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-poeira" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="bento-rotulo">UGLEZ</span>
+          <strong>Seu mês explicado em frases.</strong>
+          <span class="bento-apoio">Pergunte em português. A resposta vem com o número.</span>
+        </a>
+      </li>
+      <li class="bento-card revela">
+        <a href="#cap-cartao">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Cartão</span>
+          <strong>A fatura fecha no dia dela.</strong>
+        </a>
+      </li>
+      <li class="bento-card bento-largo revela">
+        <a href="#cap-mes">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Mês</span>
+          <strong>O fim do mês, visto do começo.</strong>
+          <span class="bento-apoio">Projeção do fechamento e metas com data.</span>
+        </a>
+      </li>
+    </ul>
   </section>
 
-  <!-- ============================ como funciona ============================ -->
-  <section class="secao secao-processo" id="como-funciona">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2>Como funciona</h2>
-        <p>Três passos. O primeiro leva um minuto; os outros dois acontecem enquanto você usa.</p>
-      </div>
-
-      <div class="passos">
-        <article class="passo revela">
-          <h3>Diga como é o seu dinheiro</h3>
-          <p>Suas contas, seus cartões, quanto entra. Uma configuração curta, que você pode parar no meio e continuar depois de onde parou.</p>
-        </article>
-        <article class="passo revela">
-          <h3>Registre o que acontece</h3>
-          <p>Lançamentos em segundos, ou importados do extrato do banco em CSV e OFX. O que se repete você cadastra uma vez só.</p>
-        </article>
-        <article class="passo revela">
-          <h3>Leia o que os números dizem</h3>
-          <p>O painel se monta sozinho: saldo, categorias, orçamento, metas. E a UGLEZ traduz tudo isso em frases, não em gráficos.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================ UGLEZ ============================ -->
-  <section class="secao secao-uglez" id="uglez">
-    <div class="env">
-      <div class="grade grade-2" style="align-items:center;gap:clamp(28px,4vw,56px)">
-        <div class="revela">
-          <h2>A leitura do seu mês, em português</h2>
-          <p class="leve">
-            A UGLEZ olha os seus números e diz o que eles significam: onde o gasto
-            cresceu, o que dá para cortar sem doer, se a reserva cobre quantos meses.
-          </p>
-          <p class="leve">
-            Boa parte do que ela mostra é <strong>aritmética feita no seu próprio
-            navegador</strong> — não sai dado nenhum para produzir aquilo, e aparece
-            mesmo para quem nunca configurou nada. Só a conversa passa por um
-            servidor autenticado, e a tela diz exatamente quais categorias de dado
-            seguem junto antes de você enviar.
-          </p>
-          <p class="leve">
-            Quando não há movimentação suficiente, ela diz isso — em vez de inventar
-            uma previsão de zero reais.
-          </p>
+  <!-- ============================ 1 · contas ============================ -->
+  <section class="cap cap-noite" id="cap-contas" data-cena aria-labelledby="contas-titulo">
+    <div class="cap-visual v-contas" role="img"
+         aria-label="Ilustração do painel de contas: saldo total de 12.480 reais e 90 centavos, somando Nubank, Banco do Brasil, Santander e PicPay, cada um com a própria marca.">
+      <div class="v-painel" aria-hidden="true">
+        <div class="v-total">
+          <span>Saldo em todas as contas</span>
+          <strong>R$ 12.480,90</strong>
         </div>
-
-        <div class="carta uglez-leitura revela">
-          <p class="demo-rotulo" style="margin-bottom:14px">Exemplo de leitura</p>
-          <p style="color:var(--branco);font-size:1.04rem;line-height:1.6">
-            “Em setembro você gastou <strong>R$ 3.217,70</strong>, 12% a menos que em
-            agosto. A queda veio quase toda de <strong>Delivery</strong>, que caiu de
-            R$ 640 para R$ 290. <strong>Transporte</strong> subiu 18% e é o único
-            grupo acima do orçamento.”
-          </p>
-          <p style="color:var(--texto-3);font-size:.85rem;margin:16px 0 0">
-            Período analisado: setembro de 2026 · gerado com dados de categorias e
-            totais, sem descrições de lançamento
-          </p>
-        </div>
+        <ul class="v-lista">
+          <li style="--i:0"><i class="v-logo" style="--fundo:#820AD1;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.4429 30.8247C22.8489 27.274 27.3669 25.2 32.6747 25.2C43.0148 25.2 49.8704 32.6912 51.1821 43.9135C51.6073 47.558 51.6034 52.696 51.5992 58.6473C51.5983 59.2576 51.5983 59.8765 51.5983 60.5032V82.7976H37.3787V66.308C37.3787 66.308 37.3497 52.1952 37.2628 49.5576C36.8812 38.0701 30.0274 30.8519 19.4416 30.8441C16.2478 34.1923 14.5365 38.2861 14.2841 44.5456C14.2494 45.4186 14.2581 48.5132 14.2696 52.5917C14.2756 54.7049 14.2823 57.0823 14.2841 59.5517C14.2946 70.2997 14.2841 82.8 14.2841 82.8H0.0643782V57.4227C0.0643782 56.5531 0.0483961 55.6762 0.0323772 54.7957C0.000127149 53.0248 -0.0323785 51.2401 0.0643782 49.473C0.225037 46.5272 0.738617 43.6312 2.12396 40.941C5.29499 34.7778 11.7925 30.8095 18.7193 30.8095C18.9612 30.8095 19.2034 30.8155 19.4429 30.8247Z" /><path d="M107.937 58.5317C108.032 56.7649 108 54.9804 107.969 53.2099C107.953 52.3297 107.937 51.4529 107.937 50.5835V25.2108H94.0476C94.0476 25.2108 94.0372 37.7087 94.0476 48.4547C94.0492 50.9236 94.0557 53.3004 94.0615 55.4132C94.0728 59.4912 94.0813 62.5852 94.0476 63.4581C93.8011 69.7166 92.1293 73.8096 89.0097 77.1572C78.6696 77.1499 71.975 69.9324 71.6021 58.4471C71.5172 55.81 71.4812 49.2659 71.4812 41.6866V25.2L57.6018 25.2129V47.5032C57.6018 48.1298 57.601 48.7485 57.601 49.3588C57.5966 55.309 57.593 60.4459 58.0084 64.0899C59.2869 75.3102 65.9834 82.8 76.0837 82.8C81.2685 82.8 85.6817 80.7263 89.0087 77.1763C89.2425 77.1855 89.4789 77.191 89.7152 77.191C96.4813 77.191 102.828 73.2236 105.926 67.0616C107.279 64.3716 107.78 61.4764 107.937 58.531L107.937 58.5317Z" /></svg></i><span>Nubank</span><b>R$ 3.210,40</b></li>
+          <li style="--i:1"><i class="v-logo" style="--fundo:#003D7A;--cor:#FFDD00"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.1451 85.5004L1 92.997V108L23.2903 92.997L12.1451 85.5004Z" /><path d="M96.8501 22.5044L107.995 15.0078V0L85.7049 15.0078L96.8501 22.5044Z" /><path d="M54.4976 108L107.995 71.9968L85.7049 56.9938L58.9537 75.0003L70.0989 82.5017L55.614 92.2522L24.4067 71.2519L75.6762 36.7529L64.5311 29.2514L1 71.9968L54.4976 108Z" /><path d="M54.5024 0.0145097L1 36.0081L23.2903 51.011L50.0415 33.0046L38.8963 25.5079L53.386 15.7575L84.5933 36.7529L33.3238 71.2519L44.4689 78.7534L108 36.0081L54.5024 0.0145097Z" /></svg></i><span>Banco do Brasil</span><b>R$ 6.905,00</b></li>
+          <li style="--i:2"><i class="v-logo" style="--fundo:#EC0000;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M77.6686 49.5639C77.4221 45.9855 76.4358 42.4072 74.4633 39.306L57.6967 10.9181C56.4639 8.77108 55.4776 6.38554 54.9845 4L54.2448 5.19277C50.0531 12.1108 50.0531 20.9373 54.2448 27.8554L67.8059 50.5181C71.9976 57.4361 71.9976 66.2627 67.8059 73.1807L67.0662 74.3735C66.5731 71.988 65.5868 69.6024 64.354 67.4554L52.0257 46.7012L44.1355 33.3422C42.9027 31.1952 41.9164 28.8096 41.4233 26.4241L40.6836 27.6169C36.4919 34.5349 36.4919 43.1229 40.6836 50.2795L54.2448 72.9422C58.4364 79.8602 58.4364 88.6867 54.2448 95.6048L53.5051 96.7976C53.0119 94.412 52.0257 92.0265 50.7928 89.8795L33.7797 61.4916C31.5606 57.6747 30.5743 53.3807 30.5743 49.0867C12.5749 53.6193 0 63.4 0 74.612C0 90.3566 24.1636 103 53.9982 103C83.8328 103 107.996 90.3566 107.996 74.612C108.243 63.8771 95.9146 54.0964 77.6686 49.5639Z" /></svg></i><span>Santander</span><b>R$ 1.842,10</b></li>
+          <li style="--i:3"><i class="v-logo" style="--fundo:#21C25E;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.658 36.9477V63.3512H34.7375C38.5084 63.3512 41.9541 61.8434 44.4411 59.3933C46.8308 57.0389 48.324 53.7801 48.324 50.1495C48.324 46.5186 46.8308 43.2598 44.4411 40.9054C41.9541 38.4555 38.5084 36.9477 34.7375 36.9477H17.658ZM0.269165 100.877V36.9477H17.6269V20.5915H34.7375C42.8523 20.5915 50.3084 23.8763 55.7259 29.2134C61.159 34.5662 64.5536 41.9485 64.5536 50.1495C64.5536 58.3504 61.159 65.7325 55.7259 71.0853C50.3084 76.4227 42.8523 79.7075 34.7375 79.7075H17.658V100.877H0.269165Z" /><path fill-rule="evenodd" clip-rule="evenodd" d="M80.0617 11.6723V34.2791H102.493V11.6723H80.0617ZM85.5681 17.2217H96.987V28.7297H85.5681V17.2217ZM74.5553 6.12296H108V39.8284H74.5553V6.12296Z" /></svg></i><span>PicPay</span><b>R$ 523,40</b></li>
+        </ul>
       </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="contas-titulo">Tudo em conta.</h2>
+      <p class="cap-sub">Cada banco que você usa, num painel só.</p>
+      <p class="cap-corpo">
+        Às oito da manhã, antes do café, você abre o OAZE e vê a conta-salário,
+        a poupança e os cartões lado a lado. Cada um com a marca do próprio banco,
+        reconhecida pelo nome. O saldo de hoje fica em cima. O que já saiu fica
+        embaixo. Sem abrir quatro aplicativos para somar de cabeça.
+      </p>
+      <dl class="numeros">
+        <div><dt>até <b data-conta="41">41</b></dt><dd>bancos com marca própria<sup><a href="#nota-1" id="ref-1">1</a></sup></dd></div>
+        <div><dt>até <b data-conta="10">10</b></dt><dd>contas no Basic, 5× o Grátis<sup><a href="#nota-2" id="ref-2">2</a></sup></dd></div>
+        <div><dt>até <b data-conta="5">5</b></dt><dd>espaços no Pro, 5× o Grátis<sup><a href="#nota-3" id="ref-3">3</a></sup></dd></div>
+      </dl>
+    </div>
+
+    <!-- galeria de modos: os espaços financeiros -->
+    <div class="galeria revela" role="region" aria-label="Galeria de espaços financeiros. Role para o lado para ver os outros." tabindex="0">
+      <ul class="galeria-trilho">
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">Pessoal</span>
+            <strong>R$ 4.182,30</strong>
+            <span class="v-espaco-linha"><i style="--w:72%;--c:var(--receita)"></i></span>
+            <span class="v-espaco-rodape">3 contas · 2 cartões</span>
+          </div>
+          <p class="galeria-legenda"><b>Pessoal.</b> Mercado, aluguel, a feira de sábado.</p>
+        </li>
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">PJ / Autônomo</span>
+            <strong>R$ 9.640,00</strong>
+            <span class="v-espaco-linha"><i style="--w:54%;--c:var(--investimento)"></i></span>
+            <span class="v-espaco-rodape">1 conta · imposto do mês separado</span>
+          </div>
+          <p class="galeria-legenda"><b>PJ.</b> A nota do cliente nunca se mistura com a casa.</p>
+        </li>
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">Casa</span>
+            <strong>R$ 1.230,75</strong>
+            <span class="v-espaco-linha"><i style="--w:38%;--c:var(--alerta)"></i></span>
+            <span class="v-espaco-rodape">contas divididas do mês</span>
+          </div>
+          <p class="galeria-legenda"><b>Casa.</b> O que é de todos, num lugar só.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <!-- ============================ segurança ============================ -->
-  <section class="secao secao-seguranca" id="seguranca">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2>Segurança e privacidade</h2>
-        <p>O que fazemos com os seus dados, dito sem eufemismo.</p>
+  <!-- ============================ 2 · importar ============================ -->
+  <section class="cap cap-areia" id="cap-importar" data-cena aria-labelledby="importar-titulo">
+    <div class="cap-visual v-importar" role="img"
+         aria-label="Ilustração da importação: o arquivo extrato-setembro.ofx vira quatro lançamentos, cada um com data, valor e categoria sugerida.">
+      <div class="v-arquivo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+        <span>extrato-setembro.ofx</span>
       </div>
+      <ul class="v-lanc" aria-hidden="true">
+        <li style="--i:0"><time>03 set</time><span>SUPERMERCADO SILVA</span><em style="--c:var(--despesa)">Alimentação</em><b class="sai">− R$ 238,90</b></li>
+        <li style="--i:1"><time>05 set</time><span>UBER *TRIP</span><em style="--c:var(--investimento)">Transporte</em><b class="sai">− R$ 24,50</b></li>
+        <li style="--i:2"><time>05 set</time><span>SALARIO EMPRESA</span><em style="--c:var(--receita)">Renda</em><b class="entra">+ R$ 5.400,00</b></li>
+        <li style="--i:3"><time>08 set</time><span>NETFLIX.COM</span><em style="--c:var(--alerta)">Assinaturas</em><b class="sai">− R$ 44,90</b></li>
+      </ul>
+    </div>
 
-      <div class="grade grade-editorial">
-        <article class="carta revela">
-          <h3>Cada conta enxerga só a si mesma</h3>
-          <p>O isolamento é feito no banco, por política de linha — não por uma verificação no aplicativo, que um erro de programação poderia contornar.</p>
-        </article>
-        <article class="carta revela">
-          <h3>Nenhuma chave no seu navegador</h3>
-          <p>As chamadas para a inteligência artificial saem de um servidor autenticado. Nenhuma chave de API existe no código que chega até você.</p>
-        </article>
-        <article class="carta revela">
-          <h3>Não vendemos e não cruzamos seus dados</h3>
-          <p>Sem venda para terceiros, sem perfil publicitário, sem cruzamento com outras bases. Seu extrato não vira produto de ninguém.</p>
-        </article>
-        <article class="carta revela">
-          <h3>Você leva embora quando quiser</h3>
-          <p>Exportação completa em formato aberto, a qualquer hora, sem falar com o suporte e sem período de carência.</p>
-        </article>
-        <article class="carta revela">
-          <h3>Exclusão apaga de verdade</h3>
-          <p>Pedir a exclusão da conta remove os registros financeiros junto, em cascata no banco. Não é um botão que só esconde.</p>
-        </article>
-        <article class="carta revela">
-          <h3>Sem conexão automática com banco</h3>
-          <p>O OAZE não pede a senha do seu banco e não usa Open Finance. Você importa o extrato quando quiser, no arquivo que o próprio banco te dá.</p>
-        </article>
+    <div class="cap-texto revela">
+      <h2 id="importar-titulo">Passado a limpo.</h2>
+      <p class="cap-sub">O arquivo do banco vira lançamento organizado.</p>
+      <p class="cap-corpo">
+        Domingo à noite, você baixa o extrato no aplicativo do banco e solta o
+        arquivo no OAZE. Cada linha vira um lançamento com data, valor e uma
+        categoria sugerida pela descrição. Mercado vai para Alimentação. Uber vai
+        para Transporte. Você só confere. OFX é o formato de extrato que quase todo
+        banco oferece para baixar.
+      </p>
+      <dl class="numeros">
+        <div><dt>até <b data-conta="4">4</b></dt><dd>formas de trazer o extrato<sup><a href="#nota-4" id="ref-4">4</a></sup></dd></div>
+        <div><dt>até <b data-conta="100">100</b></dt><dd>lançamentos por mês no Grátis. Sem limite no Basic<sup><a href="#nota-5" id="ref-5">5</a></sup></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 3 · cartão ============================ -->
+  <section class="cap cap-noite" id="cap-cartao" data-cena aria-labelledby="cartao-titulo">
+    <div class="cap-visual v-cartao" role="img"
+         aria-label="Ilustração do cartão: uma compra de 600 reais em 3 vezes, feita no dia 28, depois do fechamento do dia 25. As parcelas caem nas faturas que fecham em outubro, novembro e dezembro.">
+      <div class="v-compra" aria-hidden="true">
+        <span>28 set</span><strong>Fone · R$ 600 em 3×</strong>
+      </div>
+      <div class="v-faturas" aria-hidden="true">
+        <div class="v-fatura v-fatura-fechada"><span class="v-fatura-mes">Fecha 25 set</span><span class="v-fatura-estado">já fechou</span></div>
+        <div class="v-fatura" style="--i:0"><span class="v-fatura-mes">Fecha 25 out</span><em class="v-parcela">1/3 · R$ 200</em></div>
+        <div class="v-fatura" style="--i:1"><span class="v-fatura-mes">Fecha 25 nov</span><em class="v-parcela">2/3 · R$ 200</em></div>
+        <div class="v-fatura" style="--i:2"><span class="v-fatura-mes">Fecha 25 dez</span><em class="v-parcela">3/3 · R$ 200</em></div>
       </div>
     </div>
+
+    <div class="cap-texto revela">
+      <h2 id="cartao-titulo">Crédito onde é devido.</h2>
+      <p class="cap-sub">A compra entra na fatura em que ela realmente cai.</p>
+      <p class="cap-corpo">
+        Você compra um fone em três vezes no dia 28. O cartão fecha no dia 25. O
+        OAZE põe a primeira parcela na fatura que fecha no mês seguinte, não na que
+        acabou de fechar, e as outras duas nos meses em que vão cair. Quando a
+        fatura chega, o valor bate com o que o banco cobra.
+      </p>
+      <dl class="numeros">
+        <div><dt>até <b data-conta="5">5</b></dt><dd>cartões no Basic, 5× o Grátis<sup><a href="#nota-6" id="ref-6">6</a></sup></dd></div>
+        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de fatura lado a lado, 24× o Grátis<sup><a href="#nota-7" id="ref-7">7</a></sup></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 4 · mês ============================ -->
+  <section class="cap cap-areia" id="cap-mes" data-cena aria-labelledby="mes-titulo">
+    <div class="cap-visual v-mes" role="img"
+         aria-label="Ilustração do mês: barras de entradas e saídas dos últimos seis meses, uma linha tracejada projetando o fechamento em 5.040 reais, e a meta de reserva em 64 por cento, com chegada prevista para março de 2027.">
+      <svg class="v-grafico" viewBox="0 0 640 230" aria-hidden="true">
+        <g class="v-grade"><path d="M0 40h640M0 90h640M0 140h640M0 190h640"/></g>
+        <g class="v-barras">
+          <rect style="--i:0" class="e" x="24"  y="92"  width="26" height="98"/>  <rect style="--i:0" class="s" x="54"  y="128" width="26" height="62"/>
+          <rect style="--i:1" class="e" x="124" y="78"  width="26" height="112"/> <rect style="--i:1" class="s" x="154" y="134" width="26" height="56"/>
+          <rect style="--i:2" class="e" x="224" y="98"  width="26" height="92"/>  <rect style="--i:2" class="s" x="254" y="118" width="26" height="72"/>
+          <rect style="--i:3" class="e" x="324" y="70"  width="26" height="120"/> <rect style="--i:3" class="s" x="354" y="140" width="26" height="50"/>
+          <rect style="--i:4" class="e" x="424" y="86"  width="26" height="104"/> <rect style="--i:4" class="s" x="454" y="124" width="26" height="66"/>
+          <rect style="--i:5" class="e" x="524" y="120" width="26" height="70"/>  <rect style="--i:5" class="s" x="554" y="150" width="26" height="40"/>
+        </g>
+        <path class="v-projecao" d="M554 150 C580 138 604 104 632 64"/>
+        <circle class="v-projecao-ponto" cx="632" cy="64" r="5"/>
+        <path d="M0 190h640" class="v-eixo"/>
+      </svg>
+      <div class="v-rotulo-projecao" aria-hidden="true"><span>Projeção do fechamento</span><strong>R$ 5.040</strong></div>
+      <div class="v-meta" aria-hidden="true">
+        <span>Reserva de emergência</span>
+        <span class="v-meta-barra"><i></i></span>
+        <span class="v-meta-rodape">64% · chega em mar/27 no ritmo atual</span>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="mes-titulo">As contas batem.</h2>
+      <p class="cap-sub">O saldo de hoje e o do último dia, na mesma tela.</p>
+      <p class="cap-corpo">
+        No dia 12, você abre o painel e já sabe como o mês termina. Entradas,
+        saídas e o que ainda vai cair entram na conta. A meta mostra quanto falta
+        e em que mês chega. Se o delivery cresceu, a categoria aparece sozinha. Com
+        menos de três meses de histórico, o OAZE avisa que ainda não dá para
+        projetar.
+      </p>
+      <dl class="numeros">
+        <div><dt>até <b data-conta="24">24</b></dt><dd>meses de histórico no Basic, 8× o Grátis<sup><a href="#nota-8" id="ref-8">8</a></sup></dd></div>
+        <div><dt>até <b data-conta="10">10</b></dt><dd>metas com prazo no Basic, 10× o Grátis<sup><a href="#nota-9" id="ref-9">9</a></sup></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 5 · UGLEZ ============================ -->
+  <section class="cap cap-poco" id="uglez" data-cena aria-labelledby="uglez-titulo">
+    <div class="cap-visual v-uglez" role="img"
+         aria-label="Ilustração da UGLEZ: a pergunta 'Dá para trocar de celular em outubro?' e uma resposta com valores do mês. Exemplo ilustrativo.">
+      <div class="v-uglez-orbe" data-uglez-orbe aria-hidden="true"></div>
+      <div class="v-conversa" aria-hidden="true">
+        <p class="v-pergunta">Dá para trocar de celular em outubro?</p>
+        <p class="v-resposta">Dá, mantendo o ritmo. Sobram R$ 1.140 por mês e o celular custa R$ 2.800. Em outubro você terá R$ 3.420 guardados — a meta da reserva atrasa um mês.</p>
+        <p class="v-exemplo">Exemplo ilustrativo</p>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="uglez-titulo">Traduz sem trair.</h2>
+      <p class="cap-sub">Pergunte em português. A resposta vem com o número.</p>
+      <p class="cap-corpo">
+        No almoço, você pergunta se dá para trocar de celular em outubro. A UGLEZ
+        olha os totais do mês, as metas e as recorrências, e responde com os
+        valores. Ela recebe só o resumo, nunca a descrição dos seus lançamentos.
+        Quando o histórico é curto demais para prever, ela diz isso em vez de
+        inventar.
+      </p>
+      <dl class="numeros">
+        <div><dt>até <b data-conta="120">120</b></dt><dd>leituras por mês no Pro, 24× o Grátis<sup><a href="#nota-10" id="ref-10">10</a></sup></dd></div>
+        <div><dt>até <b data-conta="30">30</b></dt><dd>leituras por mês no Basic, 6× o Grátis<sup><a href="#nota-10">10</a></sup></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ comparador ============================ -->
+  <section class="cap cap-areia cap-comparador" id="comparar" aria-labelledby="comparar-titulo">
+    <div class="cap-texto revela">
+      <p class="cap-rotulo">Comparar</p>
+      <h2 id="comparar-titulo">O que você usa hoje?</h2>
+      <p class="cap-sub">Escolha. O ganho aparece em número.</p>
+    </div>
+
+    <!-- Funciona sem JavaScript: a escolha é um rádio, e o CSS mostra o
+         painel do rádio marcado. Não é aba — é um formulário de uma
+         pergunta só. -->
+    <div class="comparador revela">
+      <input type="radio" name="cmp" id="cmp-planilha" checked>
+      <input type="radio" name="cmp" id="cmp-banco">
+      <input type="radio" name="cmp" id="cmp-caderno">
+      <fieldset class="cmp-escolha">
+        <legend class="sr-only">O que você usa hoje para controlar o dinheiro</legend>
+        <label for="cmp-planilha">Planilha</label>
+        <label for="cmp-banco">App do banco</label>
+        <label for="cmp-caderno">Caderno</label>
+      </fieldset>
+
+      <div class="cmp-painel cmp-planilha">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-planilha"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">Na planilha, você digita cada linha e conserta a fórmula.</p>
+        <dl class="numeros">
+          <div><dt>até <b>4</b></dt><dd>formas de importar em vez de digitar<sup><a href="#nota-4">4</a></sup></dd></div>
+          <div><dt>até <b>24</b></dt><dd>meses comparados, sem fórmula<sup><a href="#nota-7">7</a></sup></dd></div>
+          <div><dt>até <b>5</b></dt><dd>cartões com fatura por ciclo<sup><a href="#nota-6">6</a></sup></dd></div>
+        </dl>
+      </div>
+
+      <div class="cmp-painel cmp-banco">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-banco"><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">No app do banco, você vê um banco de cada vez.</p>
+        <dl class="numeros">
+          <div><dt>até <b>41</b></dt><dd>bancos num painel só<sup><a href="#nota-1">1</a></sup></dd></div>
+          <div><dt>até <b>10</b></dt><dd>contas lado a lado<sup><a href="#nota-2">2</a></sup></dd></div>
+          <div><dt>até <b>5</b></dt><dd>espaços separados<sup><a href="#nota-3">3</a></sup></dd></div>
+        </dl>
+      </div>
+
+      <div class="cmp-painel cmp-caderno">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-caderno"><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">O caderno guarda o que passou. Não diz o que vem.</p>
+        <dl class="numeros">
+          <div><dt>até <b>10</b></dt><dd>metas com data de chegada<sup><a href="#nota-9">9</a></sup></dd></div>
+          <div><dt>até <b>24</b></dt><dd>meses de histórico<sup><a href="#nota-8">8</a></sup></dd></div>
+          <div><dt>até <b>120</b></dt><dd>leituras da UGLEZ por mês<sup><a href="#nota-10">10</a></sup></dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a></p>
   </section>
 
   <!-- ============================ planos ============================ -->
@@ -465,7 +629,7 @@
           <summary>Preciso de conta para usar?</summary>
           <div class="resposta">
             <p>Para experimentar, não: o painel funciona no seu navegador e os dados ficam no próprio aparelho. Mas aí eles existem só ali — trocar de celular ou limpar o navegador leva tudo junto.</p>
-            <p>Com conta, os registros passam a viver no servidor, sincronizam entre aparelhos e sobrevivem a qualquer coisa que aconteça com o navegador. Quando você cria a conta, oferecemos trazer o que já estava no aparelho, com confirmação antes de qualquer coisa ser apagada.</p>
+            <p>Com conta, os registros passam a viver no servidor e sobrevivem a qualquer coisa que aconteça com o navegador.</p>
           </div>
         </details>
 
@@ -476,7 +640,7 @@
 
         <details class="revela">
           <summary>Se eu voltar para o grátis, perco meus dados?</summary>
-          <div class="resposta"><p>Não. Nada é apagado numa mudança de plano. O que passar do limite do plano novo fica em modo de leitura: você continua vendo, exportando e escolhendo o que manter ativo — mas não cria mais até ficar dentro do limite.</p></div>
+          <div class="resposta"><p>Não. Nada é apagado numa mudança de plano. O que passar do limite do plano novo fica em modo de leitura: você continua vendo e escolhendo o que manter ativo — mas não cria mais até ficar dentro do limite.</p></div>
         </details>
 
         <details class="revela">
@@ -487,18 +651,88 @@
     </div>
   </section>
 
-  <!-- ============================ chamada final ============================ -->
-  <section class="secao secao-fecho">
-    <div class="env">
-      <div class="chamada revela">
-        <h2>Comece a enxergar o seu mês hoje</h2>
-        <p>Leva um minuto para criar a conta. Não pedimos cartão, e o plano grátis não expira.</p>
-        <div class="hero-botoes" style="margin-top:26px">
-          <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
-          <a class="btn btn-fantasma btn-grande" href="/precos">Comparar os planos</a>
-        </div>
-      </div>
+  <!-- ============================ fechamento ============================ -->
+  <section class="cap cap-areia cap-fechamento" aria-labelledby="fecho-titulo">
+    <div class="cap-texto revela">
+      <h2 id="fecho-titulo">Por que começar aqui.</h2>
     </div>
+
+    <ul class="motivos">
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <strong>Grátis, sem prazo.</strong>
+        <span>O plano Grátis não expira.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M4 4l16 16"/></svg>
+        <strong>Sem cartão para começar.</strong>
+        <span>Nenhum dado de pagamento no cadastro.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+        <strong>Nada para instalar.</strong>
+        <span>Abre no navegador do celular e do computador.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 11-3-6.2"/><path d="M20 4v5h-5"/></svg>
+        <strong>Experimente antes.</strong>
+        <span>O painel funciona antes do cadastro.</span>
+      </li>
+    </ul>
+
+    <div class="valores">
+      <article class="valor revela" id="seguranca">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6l20 8v14c0 13-8.5 24-20 28C20.5 52 12 41 12 28V14z"/><path d="M24 32l6 6 11-12"/></svg>
+        </div>
+        <h3>Privacidade</h3>
+        <p>
+          Seu extrato não vira produto. Cada conta enxerga só a si mesma, por regra
+          no próprio banco de dados. O OAZE não pede a senha do seu banco. A UGLEZ
+          recebe só totais, nunca a descrição dos lançamentos.
+        </p>
+      </article>
+
+      <article class="valor revela">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="24"/><path d="M32 8v48"/><path d="M32 8a24 24 0 010 48" fill="currentColor" stroke="none" opacity=".9"/></svg>
+        </div>
+        <h3>Acessibilidade</h3>
+        <p>
+          Legível para quem enxerga pouco. O texto chega a até 15,3:1 de contraste,
+          2× o nível mais alto da norma<sup><a href="#nota-11" id="ref-11">11</a></sup>. Quem pede menos movimento
+          no aparelho recebe a página parada. Cada controle mostra onde está o foco do teclado.
+        </p>
+      </article>
+
+      <article class="valor revela">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 44c10-2 18-10 22-22 2-6 8-12 14-12-2 8-4 16-10 24-6 8-16 12-26 10z"/><path d="M14 44l-4 10"/><path d="M26 34l6 6"/></svg>
+        </div>
+        <h3>Leveza</h3>
+        <p>
+          O cálculo do seu mês acontece no seu aparelho. Saldo, fatura e projeção não
+          esperam servidor nenhum para aparecer. Menos ida e volta de dados para
+          chegar ao mesmo número.
+        </p>
+      </article>
+    </div>
+
+    <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a></p>
+
+    <ol class="notas" aria-label="Notas">
+      <li id="nota-1">Instituições com logotipo próprio no OAZE em setembro de 2026. Bancos fora da lista entram com ícone genérico. <a href="#ref-1" aria-label="Voltar à nota 1">↩</a></li>
+      <li id="nota-2">Contas: até 2 no Grátis, até 10 no Basic, sem limite no Pro. <a href="#ref-2" aria-label="Voltar à nota 2">↩</a></li>
+      <li id="nota-3">Espaços financeiros separados, como Pessoal e PJ: 1 no Grátis e no Basic, até 5 no Pro. <a href="#ref-3" aria-label="Voltar à nota 3">↩</a></li>
+      <li id="nota-4">CSV, OFX, texto colado e Registrato, o relatório de contas do Banco Central. Disponibilidade por plano na <a href="/precos">página de preços</a>. <a href="#ref-4" aria-label="Voltar à nota 4">↩</a></li>
+      <li id="nota-5">Movimentações por mês: até 100 no Grátis; sem limite no Basic e no Pro. <a href="#ref-5" aria-label="Voltar à nota 5">↩</a></li>
+      <li id="nota-6">Cartões de crédito: 1 no Grátis, até 5 no Basic, sem limite no Pro. <a href="#ref-6" aria-label="Voltar à nota 6">↩</a></li>
+      <li id="nota-7">Comparação entre meses: 1 mês no Grátis, até 24 no Basic, sem limite no Pro. <a href="#ref-7" aria-label="Voltar à nota 7">↩</a></li>
+      <li id="nota-8">Histórico guardado: 3 meses no Grátis, até 24 no Basic, sem limite no Pro. <a href="#ref-8" aria-label="Voltar à nota 8">↩</a></li>
+      <li id="nota-9">Metas: 1 no Grátis, até 10 no Basic, sem limite no Pro. <a href="#ref-9" aria-label="Voltar à nota 9">↩</a></li>
+      <li id="nota-10">Leituras da UGLEZ por mês: 5 no Grátis, até 30 no Basic, até 120 no Pro. <a href="#ref-10" aria-label="Voltar à nota 10">↩</a></li>
+      <li id="nota-11">Texto principal <code>#F1ECE3</code> sobre o fundo <code>#071822</code>, pela fórmula da WCAG 2.2. O nível AAA pede 7:1. <a href="#ref-11" aria-label="Voltar à nota 11">↩</a></li>
+    </ol>
   </section>
 </main>
 
@@ -552,5 +786,7 @@
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/uglez-particulas.js" defer></script>
+<script src="/assets/js/narrativa.js" defer></script>
 </body>
 </html>
