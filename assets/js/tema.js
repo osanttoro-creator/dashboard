@@ -134,14 +134,27 @@
     salvarNoServidor(escolha);
   };
 
+  /* Escolha feita aqui e ainda não confirmada pelo servidor. Enquanto
+     existir, a escolha deste aparelho vence a do servidor ao entrar.
+     Sem isto, uma gravação que falhava (foi o caso até 14/09/2026:
+     o gatilho do banco recusava todo UPDATE) fazia o app voltar ao
+     tema antigo do servidor a cada visita. */
+  const PENDENTE = 'oaze.tema.pendente';
+  const marcarPendente = (sim) => {
+    try { if (sim) localStorage.setItem(PENDENTE, '1'); else localStorage.removeItem(PENDENTE); } catch (e) { /* segue */ }
+  };
+  const temPendente = () => { try { return localStorage.getItem(PENDENTE) === '1'; } catch (e) { return false; } };
+
   async function salvarNoServidor(valor) {
     const c = sb();
     const u = global.Sync && Sync.currentUser();
+    marcarPendente(true);
     if (!c || !u) return;
     try {
       const { error } = await c.from('user_settings')
         .upsert({ user_id: u.uid, tema: valor }, { onConflict: 'user_id' });
       if (error) throw error;
+      marcarPendente(false);
     } catch (e) {
       console.warn('Tema: a escolha ficou neste aparelho, mas não subiu —', e.message);
     }
@@ -180,6 +193,9 @@
        o clique mais recente vence. Sem esta revisão, uma resposta
        lenta do servidor podia recolocar o tema antigo na tela. */
     const revisaoAoComecar = revisaoEscolha;
+    /* A escolha deste aparelho ainda não subiu: ela é a mais recente,
+       então sobe agora em vez de ser trocada pela do servidor. */
+    if (temPendente()) { salvarNoServidor(escolha); return; }
     try {
       const { data } = await c.from('user_settings')
         .select('tema').eq('user_id', u.uid).maybeSingle();
