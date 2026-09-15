@@ -118,6 +118,17 @@
         <span class="nav-ico" data-ico="settings"></span>
         <span class="nav-long">Configurações</span><span class="nav-short">Config.</span>
       </button>
+
+      <!-- Só existe na barra inferior do celular. Cinco posições não
+           cabem treze destinos: esta abre o resto do app numa folha
+           que sobe da base, sem esconder nenhuma função. -->
+      <button type="button" class="nav-menu-movel" id="btnMenuMovel"
+              aria-expanded="false" aria-controls="menuMovel" aria-label="Abrir todas as seções">
+        <span class="nav-ico" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>
+        </span>
+        <span class="nav-short">Menu</span>
+      </button>
     </nav>
 
     <div class="sidebar-foot">
@@ -308,6 +319,28 @@
             <p class="hero-value" id="heroValue">—</p>
             <p class="hero-sub" id="heroSub"></p>
             <p class="hero-delta" id="heroDelta"></p>
+            <!-- Atalhos do polegar: no celular o "+" fica no centro da
+                 barra, e estes quatro trazem para o topo o que mais se
+                 faz depois de olhar o saldo. No computador ficam
+                 escondidos — lá a barra superior e o "+" já bastam. -->
+            <div class="hero-acoes" role="group" aria-label="Atalhos">
+              <button type="button" class="hero-acao" data-quick="income">
+                <span class="hero-acao-ico is-income" data-ico="arrow-up-right" data-ico-size="19"></span>
+                <span>Receita</span>
+              </button>
+              <button type="button" class="hero-acao" data-quick="expense">
+                <span class="hero-acao-ico is-expense" data-ico="arrow-down-right" data-ico-size="19"></span>
+                <span>Despesa</span>
+              </button>
+              <button type="button" class="hero-acao" data-quick="transfer">
+                <span class="hero-acao-ico" data-ico="arrow-left-right" data-ico-size="19"></span>
+                <span>Transferir</span>
+              </button>
+              <button type="button" class="hero-acao" data-goto="accounts" data-aba="cards">
+                <span class="hero-acao-ico" data-ico="credit-card" data-ico-size="19"></span>
+                <span>Cartões</span>
+              </button>
+            </div>
           </div>
           <div class="hero-spark" aria-hidden="true"><canvas id="chartHeroSpark"></canvas></div>
         </section>
@@ -562,9 +595,11 @@
     <!-- ─────────── PÁGINA 4 · CARTÕES E CONTAS ─────────── -->
     <section class="page" data-page="accounts">
       <div class="tabs" id="accTabs">
-        <button class="tab is-active" data-tab="accounts">Contas de débito</button>
-        <button class="tab" data-tab="cards">Cartões de crédito</button>
-        <button class="tab" data-tab="import">Importar extratos / Registrato</button>
+        <!-- O rótulo curto é o do celular: os três longos quebravam em
+             duas linhas a 390px e empurravam "Importar" para baixo. -->
+        <button class="tab is-active" data-tab="accounts"><span class="tab-longo">Contas de débito</span><span class="tab-curto">Contas</span></button>
+        <button class="tab" data-tab="cards"><span class="tab-longo">Cartões de crédito</span><span class="tab-curto">Cartões</span></button>
+        <button class="tab" data-tab="import"><span class="tab-longo">Importar extratos / Registrato</span><span class="tab-curto">Importar</span></button>
       </div>
 
       <!-- Aba contas -->
@@ -706,23 +741,66 @@
     </section>
 
     <!-- ─────────── CALENDÁRIO FINANCEIRO ─────────── -->
+    <!-- ─────────── CALENDÁRIO ───────────
+         Três escalas no mesmo lugar: a semana para o que vem já, o
+         mês como grade e o ano como painel de doze meses — cada um
+         com os lançamentos previstos, fixos e confirmados, e a soma
+         de cada período. Tudo sai de Calc: a página só organiza. -->
     <section class="page" data-page="calendar">
-      <div class="toolbar">
+      <div class="toolbar cal-toolbar">
         <div class="toolbar-left"><h2 class="cal-title" id="calTitle"></h2></div>
         <div class="toolbar-right">
-          <span class="legend-icons">
-            <span><i class="dot-in"></i>Entrada</span>
-            <span><i class="dot-out"></i>Saída</span>
-            <span><i class="dot-due"></i>Fatura</span>
-          </span>
+          <div class="seg cal-vistas" id="calVistas" role="group" aria-label="Escala do calendário">
+            <button type="button" data-vista="semana" aria-pressed="false">Semana</button>
+            <button type="button" data-vista="mes" aria-pressed="true" class="is-active">Mês</button>
+            <button type="button" data-vista="ano" aria-pressed="false">Ano</button>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="cal-grid" id="calGrid"></div>
+
+      <div class="cal-resumo" id="calResumo" aria-live="polite"></div>
+
+      <div class="cal-vista" data-cal-vista="semana" hidden>
+        <div class="card">
+          <div class="card-head cal-semana-head">
+            <h2 id="calSemanaTitulo">Semana</h2>
+            <div class="row gap-6 row-actions">
+              <button type="button" class="icon-btn" id="btnSemanaAnterior" aria-label="Semana anterior"><span data-ico="chevron-left"></span></button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btnSemanaAtual">Esta semana</button>
+              <button type="button" class="icon-btn" id="btnSemanaSeguinte" aria-label="Próxima semana"><span data-ico="chevron-right"></span></button>
+            </div>
+          </div>
+          <div class="cal-semana" id="calSemana"></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-head"><h2 id="calDayTitle">Selecione um dia</h2></div>
-        <div id="calDayList"></div>
+
+      <div class="cal-vista" data-cal-vista="mes">
+        <div class="card">
+          <div class="card-head">
+            <h2>Grade do mês</h2>
+            <span class="legend-icons cal-legenda">
+              <span><i class="dot-in"></i>Entrada</span>
+              <span><i class="dot-out"></i>Saída</span>
+              <span><i class="dot-due"></i>Fatura</span>
+            </span>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2 id="calDayTitle">Selecione um dia</h2></div>
+          <div id="calDayList"></div>
+        </div>
+      </div>
+
+      <div class="cal-vista" data-cal-vista="ano" hidden>
+        <div class="card">
+          <div class="card-head">
+            <h2 id="calAnoBarrasTitulo">Receitas e despesas do ano</h2>
+            <span class="card-note">Toque num mês para abrir a grade</span>
+          </div>
+          <div class="cal-ano-barras" id="calAnoBarras"></div>
+        </div>
+        <div class="cal-ano" id="calAno"></div>
       </div>
     </section>
 
@@ -814,14 +892,30 @@
 
         <section class="uglez-console" aria-labelledby="uglezConversaTitulo">
           <header class="uglez-console-topo">
-            <div>
-              <h3 id="uglezConversaTitulo">Conversa financeira</h3>
+            <div class="uglez-console-id">
+              <h3 id="uglezConversaTitulo">Conversa</h3>
               <p id="uglezPeriodo"></p>
             </div>
+            <!-- O alcance da leitura. "Mês" responde sobre o período do
+                 cabeçalho; "Ano" e "Tudo" levam os meses do ano e os
+                 anteriores — sempre agregados, nunca lançamento a
+                 lançamento. -->
+            <div class="seg uglez-escopo" id="uglezEscopo" role="group" aria-label="O que a UGLEZ considera">
+              <button type="button" data-escopo="mes" aria-pressed="true" class="is-active">Mês</button>
+              <button type="button" data-escopo="ano" aria-pressed="false">Ano</button>
+              <button type="button" data-escopo="geral" aria-pressed="false">Tudo</button>
+            </div>
+            <button type="button" class="icon-btn uglez-nova" id="btnUglezNova" aria-label="Começar nova conversa" title="Nova conversa" hidden><span data-ico="plus"></span></button>
             <span class="uglez-estado" id="uglezEstadoTexto" role="status" aria-live="polite">Pronto para analisar</span>
           </header>
 
-          <div class="uglez-console-corpo">
+          <div class="uglez-console-corpo" id="uglezCorpo">
+            <div class="uglez-boasvindas" id="uglezBoasVindas">
+              <p class="uglez-saudacao" id="uglezSaudacao">Sobre o que vamos conversar?</p>
+              <p class="uglez-saudacao-sub" id="uglezSaudacaoSub">Eu leio os totais do mês, do ano e dos meses anteriores — nunca a descrição de um lançamento.</p>
+              <div class="uglez-cartoes" id="uglezChipsFull" aria-label="Perguntas sugeridas"></div>
+            </div>
+
             <div class="uglez-vazio" id="uglezSemDados" hidden>
               <p class="empty-title">Sem dados em <span id="uglezMesVazio"></span></p>
               <p class="empty-sub">
@@ -840,31 +934,28 @@
               <button class="btn btn-primary btn-sm" data-goto="precos">Ver planos</button>
             </div>
 
-            <div class="uglez-historico" id="uglezHistorico"></div>
-            <div class="ai-answer" id="aiAnswer" hidden></div>
+            <!-- A conversa: pergunta à direita, resposta à esquerda com a
+                 marca da UGLEZ. role="log" anuncia cada mensagem nova
+                 sem que o leitor de tela precise ir procurar. -->
+            <div class="uglez-historico" id="uglezHistorico" role="log" aria-live="polite" aria-label="Mensagens da conversa"></div>
           </div>
 
           <div class="uglez-compositor">
-            <div class="uglez-sugestoes">
-              <span class="uglez-sugestoes-titulo">Sugestões para agora</span>
-              <div class="uglez-chips" id="uglezChipsFull" aria-label="Perguntas sugeridas"></div>
+            <p class="uglez-cota" id="uglezCota" hidden></p>
+            <div class="uglez-caixa">
+              <textarea class="uglez-campo-texto" id="aiQuestion" rows="1"
+                aria-label="Sua pergunta para a UGLEZ"
+                placeholder="Pergunte sobre o seu dinheiro…"></textarea>
+              <button type="button" class="uglez-enviar" id="btnAiAsk" aria-label="Enviar pergunta" data-icone="sim">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+              </button>
             </div>
-
-            <div class="uglez-envio">
-              <p class="uglez-cota" id="uglezCota" hidden></p>
-              <div class="ai-ask">
-                <textarea class="input textarea-plain" id="aiQuestion" rows="3"
-                  aria-label="Sua pergunta para o UGLEZ"
-                  placeholder="Pergunte sobre o mês que você está vendo…"></textarea>
-                <button class="btn btn-ai" id="btnAiAsk">Analisar</button>
-              </div>
-              <p class="uglez-rodape">
-                <span id="uglezMode"></span>
-                <span class="dot-sep">·</span>
-                <span class="uglez-orientacao">Orientação financeira, não consultoria.</span>
-                <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
-              </p>
-            </div>
+            <p class="uglez-rodape">
+              <span id="uglezMode"></span>
+              <span class="dot-sep">·</span>
+              <span class="uglez-orientacao">A UGLEZ pode errar. Orientação, não consultoria.</span>
+              <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
+            </p>
           </div>
         </section>
       </div>
@@ -971,6 +1062,44 @@
     <span class="popover-meta" id="notifMeta"></span>
   </div>
   <div id="notifList"></div>
+</div>
+
+<!-- ══════ MENU DO CELULAR ══════
+     Tudo o que não coube nas quatro posições da barra inferior. Os
+     botões são .nav-item com data-page, como os das outras duas
+     navegações: o roteador liga o clique e acende o ativo aqui
+     também, sem código próprio de navegação. -->
+<div class="menu-movel" id="menuMovel" hidden>
+  <div class="menu-movel-scrim" data-fechar-menu></div>
+  <div class="menu-movel-painel" role="dialog" aria-modal="true" aria-labelledby="menuMovelTitulo">
+    <div class="menu-movel-alca" aria-hidden="true"></div>
+    <div class="menu-movel-topo">
+      <h2 id="menuMovelTitulo">Seu OAZE</h2>
+      <button type="button" class="icon-btn" id="btnFecharMenuMovel" aria-label="Fechar menu"><span data-ico="x"></span></button>
+    </div>
+
+    <p class="menu-movel-grupo">Planejar</p>
+    <div class="menu-movel-grade">
+      <button class="nav-item" data-page="budget"><span class="nav-ico" data-ico="target" data-ico-size="19"></span><span class="nav-long">Orçamento</span><span class="menu-movel-desc">Limites do mês</span></button>
+      <button class="nav-item" data-page="goals"><span class="nav-ico" data-ico="flag" data-ico-size="19"></span><span class="nav-long">Metas</span><span class="menu-movel-desc">Onde quer chegar</span></button>
+      <button class="nav-item" data-page="calendar"><span class="nav-ico" data-ico="calendar" data-ico-size="19"></span><span class="nav-long">Calendário</span><span class="menu-movel-desc">Semana, mês e ano</span></button>
+      <button class="nav-item" data-page="recurring"><span class="nav-ico" data-ico="repeat" data-ico-size="19"></span><span class="nav-long">Recorrências</span><span class="menu-movel-desc">O que se repete</span></button>
+      <button class="nav-item" data-page="categories"><span class="nav-ico" data-ico="tag" data-ico-size="19"></span><span class="nav-long">Categorias</span><span class="menu-movel-desc">Organização</span></button>
+    </div>
+
+    <p class="menu-movel-grupo">Crescer</p>
+    <div class="menu-movel-grade">
+      <button class="nav-item" data-page="investments"><span class="nav-ico" data-ico="trending-up" data-ico-size="19"></span><span class="nav-long">Investimentos</span><span class="menu-movel-desc">Carteira e projeção</span></button>
+      <button class="nav-item" data-page="reports"><span class="nav-ico" data-ico="chart-line" data-ico-size="19"></span><span class="nav-long">Análises</span><span class="menu-movel-desc">O ano consolidado</span></button>
+    </div>
+
+    <p class="menu-movel-grupo">Sistema</p>
+    <div class="menu-movel-grade">
+      <button class="nav-item is-uglez" data-page="uglez"><span class="nav-ico" data-ico="sparkles" data-ico-size="19"></span><span class="nav-long">UGLEZ</span><span class="menu-movel-desc">Seu assistente</span></button>
+      <button class="nav-item" data-page="settings"><span class="nav-ico" data-ico="settings" data-ico-size="19"></span><span class="nav-long">Configurações</span><span class="menu-movel-desc">Conta e tema</span></button>
+      <button class="nav-item" data-page="precos"><span class="nav-ico" data-ico="star" data-ico-size="19"></span><span class="nav-long">Planos</span><span class="menu-movel-desc">Seu plano</span></button>
+    </div>
+  </div>
 </div>
 
 

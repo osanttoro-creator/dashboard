@@ -238,6 +238,59 @@
          · um CTA só, sempre igual: "Criar conta grátis".
        ============================================================= -->
 
+  <!-- ============================ em todas as telas ============================
+       Logo depois do hello, o app funcionando — e não um desenho dele.
+       As telas são capturas do próprio OAZE com dados de exemplo
+       (assets/img/telas). A rolagem abre o notebook, traz o tablet e o
+       celular e passa as telas; quem pede menos movimento, ou está sem
+       JavaScript, vê a composição final parada. -->
+  <section class="telas" id="telas" data-telas aria-labelledby="telas-titulo">
+    <div class="telas-palco">
+      <div class="telas-texto">
+        <p class="cap-rotulo">Computador · tablet · celular</p>
+        <h2 id="telas-titulo">O mesmo OAZE, <em>em qualquer tela.</em></h2>
+        <ol class="telas-passos">
+          <li data-passo="0"><strong>No computador,</strong> o painel inteiro de uma vez.</li>
+          <li data-passo="1"><strong>No tablet,</strong> o ano mês a mês, no claro ou no escuro.</li>
+          <li data-passo="2"><strong>No celular,</strong> a carteira e a UGLEZ no polegar.</li>
+        </ol>
+      </div>
+
+      <div class="telas-cena" role="img"
+           aria-label="O OAZE funcionando em três aparelhos com dados de exemplo: no notebook, o painel com patrimônio, gráfico do ano e gastos por categoria; no tablet, o calendário do ano e os lançamentos; no celular, a visão geral, a carteira de cartões e uma conversa com a UGLEZ.">
+        <div class="telas-luz" aria-hidden="true"></div>
+
+        <div class="aparelho notebook" aria-hidden="true">
+          <div class="notebook-tampa">
+            <span class="notebook-camera"></span>
+            <div class="aparelho-tela notebook-tela">
+              <img class="tela-rolante" src="/assets/img/telas/notebook-inicio.webp" alt="" width="1440" height="2300" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <div class="notebook-base"><span></span></div>
+        </div>
+
+        <div class="aparelho tablet" aria-hidden="true">
+          <div class="aparelho-tela tablet-tela">
+            <img class="tela-quadro is-ativo" data-quadro="0" src="/assets/img/telas/tablet-calendario.webp" alt="" width="1180" height="820" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="1" src="/assets/img/telas/tablet-financeiro.webp" alt="" width="1180" height="820" loading="lazy" decoding="async">
+          </div>
+        </div>
+
+        <div class="aparelho celular" aria-hidden="true">
+          <div class="aparelho-tela celular-tela">
+            <img class="tela-quadro is-ativo" data-quadro="0" src="/assets/img/telas/celular-inicio.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="1" src="/assets/img/telas/celular-carteira.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="2" src="/assets/img/telas/celular-uglez.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <span class="celular-ilha"></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="telas-nota">Telas reais do app, com dados de exemplo.</p>
+    </div>
+  </section>
+
   <!-- ============================ destaques ============================ -->
   <section class="cap cap-areia cap-destaques" id="explorar" data-cena aria-labelledby="destaques-titulo">
     <div class="cap-texto revela">

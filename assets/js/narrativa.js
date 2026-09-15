@@ -1,12 +1,13 @@
 /* =============================================================
    narrativa.js — o movimento da página inicial, capítulo a capítulo
    -------------------------------------------------------------
-   Quatro coisas, e nenhuma é necessária para ler a página:
+   Cinco coisas, e nenhuma é necessária para ler a página:
 
      1. CENAS      cada visual toca só enquanto aparece na tela;
      2. NÚMEROS    os números grandes contam até o valor real;
      3. UGLEZ      a pergunta, o pensamento e a resposta, em ciclo;
-     4. BENTO      luz e inclinação que seguem o ponteiro nos
+     4. TELAS      notebook, tablet e celular presos à rolagem;
+     5. BENTO      luz e inclinação que seguem o ponteiro nos
                    destaques — o MagicBento, contido.
 
    SEM ESTE ARQUIVO, A PÁGINA APARECE INTEIRA. O CSS só esconde o que
@@ -187,7 +188,60 @@
   }
 
   /* ---------------------------------------------------------------
-     4 · bento
+     4 · em todas as telas
+     ---------------------------------------------------------------
+     A seção fica presa enquanto a página rola por ela, e o quanto já
+     rolou vira quatro variáveis de CSS. As fases se sobrepõem de
+     propósito: o tablet chega enquanto o notebook termina de abrir,
+     para a cena nunca parar num quadro vazio.
+
+     Só calcula enquanto a seção está na tela. Com menos movimento, a
+     classe .is-viva nunca entra e a composição final fica parada. */
+  var telas = document.querySelector('[data-telas]');
+  if (telas && !menosMovimento) {
+    telas.classList.add('is-viva');
+    var passos = telas.querySelectorAll('[data-passo]');
+    var quadrosTablet = telas.querySelectorAll('.tablet .tela-quadro');
+    var quadrosCelular = telas.querySelectorAll('.celular .tela-quadro');
+    var fase = function (p, de, ate) { return Math.max(0, Math.min(1, (p - de) / (ate - de))); };
+    var suave = function (t) { return 1 - Math.pow(1 - t, 3); };
+    var ativa = function (lista, i) {
+      Array.prototype.forEach.call(lista, function (q, k) { q.classList.toggle('is-ativo', k === i); });
+    };
+    var pedidoTelas = 0;
+    var visivelTelas = false;
+
+    var desenhar = function () {
+      pedidoTelas = 0;
+      var r = telas.getBoundingClientRect();
+      var curso = r.height - window.innerHeight;
+      var p = curso > 0 ? Math.max(0, Math.min(1, -r.top / curso)) : 1;
+
+      telas.style.setProperty('--a', suave(fase(p, 0, 0.26)).toFixed(4));
+      telas.style.setProperty('--b', suave(fase(p, 0.2, 0.46)).toFixed(4));
+      telas.style.setProperty('--c', suave(fase(p, 0.34, 0.6)).toFixed(4));
+      telas.style.setProperty('--s', fase(p, 0.28, 0.95).toFixed(4));
+
+      var passo = p < 0.3 ? 0 : p < 0.52 ? 1 : 2;
+      Array.prototype.forEach.call(passos, function (li) {
+        li.classList.toggle('is-agora', +li.getAttribute('data-passo') === passo);
+      });
+      ativa(quadrosTablet, p < 0.66 ? 0 : 1);
+      ativa(quadrosCelular, p < 0.62 ? 0 : p < 0.82 ? 1 : 2);
+    };
+    var pedir = function () { if (visivelTelas && !pedidoTelas) pedidoTelas = requestAnimationFrame(desenhar); };
+
+    new IntersectionObserver(function (entradas) {
+      visivelTelas = entradas[0].isIntersecting;
+      if (visivelTelas) pedir();
+    }).observe(telas);
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir);
+    desenhar();
+  }
+
+  /* ---------------------------------------------------------------
+     5 · bento
      --------------------------------------------------------------- */
   var bento = document.querySelector('[data-bento]');
   if (bento && !semPonteiroFino && !menosMovimento) {

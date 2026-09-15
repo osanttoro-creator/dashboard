@@ -66,11 +66,14 @@
 
   /** As categorias de dado que saem daqui — mostradas ao usuário. */
   AI.CATEGORIAS_ENVIADAS = [
-    'Mês e ano selecionados',
-    'Total de receitas, despesas e saldo',
+    'Mês e ano selecionados, e o alcance escolhido (mês, ano ou tudo)',
+    'Total de receitas, despesas e saldo do mês',
     'Gastos consolidados por categoria',
     'Metas e quanto já foi guardado',
-    'Compromissos previstos, agrupados por dia'
+    'Compromissos previstos, agrupados por dia',
+    'Totais do ano: confirmado, previsto, média mensal e categorias que mais pesaram',
+    'Mês a mês: receitas, despesas, fixas e as cinco maiores categorias',
+    'As três últimas perguntas e respostas desta conversa'
   ];
 
   /* ============================================================
@@ -127,20 +130,108 @@
    * corte no servidor é o que impede um plano de ser destravado
    * pelo DevTools — se a poda fosse aqui, bastaria editar o número.
    */
-  AI.historico = function (ym, meses) {
-    const fim = ym || App.ym;
-    const inicio = U.addMonths(fim, -(meses || 11));
-    let serie = [];
-    try { serie = Calc.monthlySeries(inicio, U.addMonths(fim, -1)) || []; }
-    catch (e) { return []; }
-    return serie
-      .filter((m) => (m.income + m.expense) > 0)
-      .map((m) => ({
-        periodo: m.ym,
-        receitas: U.round2(m.income),
-        despesas: U.round2(m.expense),
-        saldo: U.round2(m.balance)
-      }));
+  /* ============================================================
+     A UGLEZ LÊ O ANO, NÃO SÓ O MÊS
+     ------------------------------------------------------------
+     Até 15/09/2026 o histórico eram onze meses ANTERIORES, só com
+     três totais, e o mês seguinte não existia para ela: perguntar
+     "como vai ser o resto do ano?" recebia de volta o mês corrente.
+
+     Agora cada mês leva também o que está PREVISTO (fixas e
+     lançamentos ainda não confirmados), o peso das fixas e as cinco
+     maiores categorias — tudo agregado, nenhuma descrição. A ordem
+     importa: o servidor corta pelo plano a partir do começo da lista,
+     então primeiro vêm os doze meses do ano exibido e depois os
+     anteriores, do mais recente para o mais antigo.
+     ============================================================ */
+  AI.historico = function (ym, mesesAntes) {
+    const base = ym || App.ym;
+    const ano = U.ymParts(base).y;
+    const doAno = U.monthRange(`${ano}-01`, `${ano}-12`);
+    const antes = U.monthRange(U.addMonths(`${ano}-01`, -(mesesAntes || 12)), U.addMonths(`${ano}-01`, -1)).reverse();
+
+    const mes = (periodo) => {
+      const t = Calc.monthTotals(periodo);
+      if (!t.entries.length) return null;
+      let categorias = [];
+      try {
+        categorias = Calc.categoryTotals('expense', U.monthStart(periodo), U.monthEnd(periodo))
+          .slice(0, 5).map((c) => ({ nome: c.name, total: U.round2(c.total) }));
+      } catch (e) { /* segue sem categorias */ }
+      const fixas = t.entries.filter((e) => e.recurring && e.kind === 'expense');
+      return {
+        periodo,
+        receitas: U.round2(t.income),
+        despesas: U.round2(t.expense),
+        saldo: U.round2(t.balance),
+        previstoReceitas: U.round2(t.plannedIncome),
+        previstoDespesas: U.round2(t.plannedExpense),
+        fixas: U.round2(U.sum(fixas, (e) => e.amount)),
+        categorias
+      };
+    };
+
+    try {
+      return doAno.concat(antes).map(mes).filter(Boolean);
+    } catch (e) { return []; }
+  };
+
+  /**
+   * O ano exibido inteiro, em poucos números. Vai para todos os
+   * planos: é um resumo, não uma série de comparação.
+   */
+  AI.resumoDoAno = function (ym) {
+    const ano = U.ymParts(ym || App.ym).y;
+    const meses = U.monthRange(`${ano}-01`, `${ano}-12`).map((periodo) => ({ periodo, t: Calc.monthTotals(periodo) }));
+    const comDado = meses.filter((m) => m.t.entries.length);
+    const r = {
+      ano,
+      receitas: U.round2(U.sum(meses, (m) => m.t.income)),
+      despesas: U.round2(U.sum(meses, (m) => m.t.expense)),
+      previstoReceitas: U.round2(U.sum(meses, (m) => m.t.plannedIncome)),
+      previstoDespesas: U.round2(U.sum(meses, (m) => m.t.plannedExpense)),
+      mesesComDados: comDado.length,
+      categorias: []
+    };
+    r.saldo = U.round2(r.receitas - r.despesas);
+    r.mediaDespesas = comDado.length ? U.round2(U.sum(comDado, (m) => m.t.plannedExpense) / comDado.length) : 0;
+    const porGasto = comDado.slice().sort((a, b) => b.t.plannedExpense - a.t.plannedExpense);
+    if (porGasto.length) {
+      r.maiorGasto = { periodo: porGasto[0].periodo, total: U.round2(porGasto[0].t.plannedExpense) };
+      const ultimo = porGasto[porGasto.length - 1];
+      r.menorGasto = { periodo: ultimo.periodo, total: U.round2(ultimo.t.plannedExpense) };
+    }
+    try {
+      r.categorias = Calc.categoryTotals('expense', `${ano}-01-01`, `${ano}-12-31`)
+        .slice(0, 8).map((c) => ({ nome: c.name, total: U.round2(c.total) }));
+    } catch (e) { /* segue sem categorias */ }
+    return r;
+  };
+
+  /* A conversa volta junto, curta: as três últimas trocas, cada
+     resposta cortada em 600 caracteres. Sem isso, "e no mês
+     seguinte?" não teria a que se referir. */
+  AI.conversaRecente = function () {
+    const lista = global.Ug && Ug.trocas ? Ug.trocas() : [];
+    return lista.filter((c) => c.resposta).slice(-3).map((c) => ({
+      pergunta: String(c.pergunta).slice(0, 500),
+      resposta: String(c.resposta).slice(0, 600)
+    }));
+  };
+
+  /** Tudo o que sai numa pergunta — a mesma função serve ao envio e à tela "Dados usados". */
+  AI.corpoDaPergunta = function (pergunta) {
+    return {
+      pergunta,
+      periodo: App.ym,
+      escopo: global.Ug && Ug.escopo ? Ug.escopo() : 'mes',
+      resumo: AI.resumoAgregado(),
+      ano: AI.resumoDoAno(),
+      /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
+         é a Edge Function, pelo plano. Ver AI.historico. */
+      historico: AI.historico(),
+      conversa: AI.conversaRecente()
+    };
   };
 
   /**
@@ -238,19 +329,27 @@
    *                                  — é o que move as partículas
    */
 
-  /** O destino padrão: a caixa da página do UGLEZ. */
-  function destinoDaPagina() {
-    const caixa = document.getElementById('aiAnswer');
-    if (!caixa) return null;
-    return {
-      caixa: caixa,
-      botao: document.getElementById('btnAiAsk'),
-      estado: (e) => { if (global.Ug && Ug.estadoParticulas) Ug.estadoParticulas(e); }
-    };
+  /** O destino padrão: uma mensagem nova na conversa da página. */
+  function destinoDaPagina(pergunta) {
+    if (global.Ug && Ug.novaResposta) {
+      const d = Ug.novaResposta(pergunta);
+      if (d) {
+        d.botao = document.getElementById('btnAiAsk');
+        d.estado = (e) => { if (Ug.estadoParticulas) Ug.estadoParticulas(e); };
+        return d;
+      }
+    }
+    return null;
   }
 
   AI.ask = function (question) {
-    return AI.perguntar(question, destinoDaPagina());
+    const q = String(question || '').trim();
+    if (!q || busy) return AI.perguntar(q, null);
+    /* Sem sessão, a pergunta nem entra na conversa: o modal explica
+       o motivo, e uma bolha órfã sem resposta pareceria defeito. */
+    const modo = AI.modo();
+    if (modo.chave !== 'servidor') { AI.explicarIndisponivel(modo); return Promise.resolve(); }
+    return AI.perguntar(q, destinoDaPagina(q));
   };
 
   /**
@@ -262,11 +361,6 @@
    * segunda por cima da primeira.
    */
   AI.perguntar = async function (question, destino) {
-    const d = destino || destinoDaPagina();
-    if (!d || !d.caixa) return;
-    const box = d.caixa;
-    const sinal = d.estado || function () {};
-
     const q = String(question || '').trim();
     if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
     if (busy) return;
@@ -274,10 +368,21 @@
     const modo = AI.modo();
     if (modo.chave !== 'servidor') { AI.explicarIndisponivel(modo); return; }
 
+    const d = destino || destinoDaPagina(q);
+    if (!d || !d.caixa) return;
+    const box = d.caixa;
+    const sinal = d.estado || function () {};
+
     busy = true;
     const btn = d.botao;
-    const rotuloAntes = btn ? btn.textContent : '';
-    if (btn) { btn.disabled = true; btn.textContent = 'Pensando…'; }
+    /* O botão de enviar da conversa é um ícone: trocar o texto dele
+       apagaria a seta. Ele ganha o estado por classe. */
+    const botaoIcone = !!(btn && btn.dataset.icone === 'sim');
+    const rotuloAntes = btn && !botaoIcone ? btn.textContent : '';
+    if (btn) {
+      btn.disabled = true;
+      if (botaoIcone) btn.classList.add('is-ocupado'); else btn.textContent = 'Pensando…';
+    }
 
     box.hidden = false;
     box.className = 'ai-answer is-loading';
@@ -285,7 +390,11 @@
        sem que a pessoa precise sair procurando. */
     box.setAttribute('aria-live', 'polite');
     box.setAttribute('aria-busy', 'true');
-    box.textContent = 'Analisando os dados de ' + U.monthLabel(App.ym);
+    const escopo = global.Ug && Ug.escopo ? Ug.escopo() : 'mes';
+    const lendo = escopo === 'mes'
+      ? 'Lendo ' + U.monthLabel(App.ym)
+      : escopo === 'ano' ? 'Lendo os meses de ' + U.ymParts(App.ym).y : 'Lendo o ano e os meses anteriores';
+    if (d.aoCarregar) d.aoCarregar(box, lendo); else box.textContent = lendo;
 
     /* As partículas contam a mesma história do texto, em outro
        canal: junta o material, pensa, responde. Quem não vê a
@@ -300,18 +409,15 @@
       sinal(comoTerminou);
       box.setAttribute('aria-busy', 'false');
       busy = false;
-      if (btn) { btn.disabled = false; btn.textContent = rotuloAntes || 'Perguntar'; }
+      if (btn) {
+        btn.disabled = false;
+        if (botaoIcone) btn.classList.remove('is-ocupado'); else btn.textContent = rotuloAntes || 'Perguntar';
+      }
+      if (d.aoTerminar) d.aoTerminar(comoTerminou);
     };
 
     try {
-      const r = await AI.chamarFuncao({
-        pergunta: q,
-        periodo: App.ym,
-        resumo: AI.resumoAgregado(),
-        /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
-           é a Edge Function, pelo plano. Ver AI.historico. */
-        historico: AI.historico()
-      });
+      const r = await AI.chamarFuncao(AI.corpoDaPergunta(q));
 
       if (r.erro === 'sem_sessao') {
         renderError(box, 'Sua sessão expirou. Entre de novo para continuar.');
@@ -357,13 +463,19 @@
            FUNÇÃO — não do que a tela achava que tinha pedido. Se os
            dois divergirem, é a resposta que manda, porque foi sobre
            ela que o modelo escreveu. */
-        r.periodo ? el('span', { text: 'Período analisado: ' + U.monthLabel(r.periodo) + '.' }) : null,
+        r.periodo ? el('span', {
+          text: escopo === 'mes'
+            ? 'Período analisado: ' + U.monthLabel(r.periodo) + '.'
+            : 'Alcance: ' + (escopo === 'ano' ? 'o ano de ' + U.ymParts(r.periodo).y : 'o ano e os meses anteriores') +
+              ', a partir de ' + U.monthLabel(r.periodo) + '.'
+        }) : null,
         el('span', { text: ' Orientativo, não é consultoria financeira.' }),
         /* Mensal, não diário. Mesma correção de nomes de campo. */
         r.uso && r.uso.limite != null
           ? el('span', { text: ' · ' + r.uso.usado + ' de ' + r.uso.limite + ' neste mês' })
           : null
       ].filter(Boolean)));
+      if (d.aoResponder) d.aoResponder(box, r.texto);
 
       /* A cota mudou; a faixa da página precisa refletir isso agora,
          e não só no próximo carregamento. */
@@ -447,14 +559,14 @@
 
   /** O que exatamente será enviado — o usuário tem direito de ver. */
   AI.mostrarDados = function () {
-    const r = AI.resumoAgregado();
+    const r = AI.corpoDaPergunta('(sua pergunta)');
     UI.openModal({
-      title: 'O que o UGLEZ recebe',
+      title: 'O que a UGLEZ recebe',
       body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-        el('p', { text: 'Ao perguntar, sai daqui um resumo agregado do mês exibido — e só ele:' }),
+        el('p', { text: 'Ao perguntar, sai daqui um resumo agregado — e só ele:' }),
         el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } },
           AI.CATEGORIAS_ENVIADAS.map((c) => el('li', { text: c }))),
-        el('p', { style: { marginTop: '10px' }, text: 'Não sai: a lista de lançamentos, nomes de contas ou cartões, identificadores internos, seu e-mail, nem qualquer dado de outro perfil ou de outro mês.' }),
+        el('p', { style: { marginTop: '10px' }, text: 'Não sai: a lista de lançamentos, a descrição de qualquer lançamento, nomes de contas ou cartões, identificadores internos, seu e-mail, nem dados de outro espaço. Quantos meses chegam ao modelo depende do seu plano — o servidor corta o resto.' }),
         el('p', { class: 'hint', style: { marginTop: '10px' }, text: 'Abaixo, exatamente o que seria enviado agora:' }),
         el('textarea', {
           class: 'input textarea', rows: 12, readonly: true,
@@ -524,6 +636,10 @@
     closeList();
     return out.join('');
   }
+  /* A conversa da página redesenha as próprias bolhas com o mesmo
+     markdown mínimo — e o texto continua escapado antes. */
+  AI.markdown = renderMarkdown;
+
   /* ---------------- ligação com a página ---------------- */
 
   AI.init = function () {
@@ -553,25 +669,32 @@
     const btnAsk = document.getElementById('btnAiAsk');
     const field = document.getElementById('aiQuestion');
 
-    /* Perguntar pela página guarda a pergunta no histórico da
-       sessão ANTES de enviar. Guardar só no sucesso perderia
-       justamente as que falharam — que são as que a pessoa quer
-       repetir. */
+    /* A pergunta entra na conversa ANTES da resposta chegar (ver
+       Ug.novaResposta). Guardar só no sucesso perderia justamente as
+       que falharam — que são as que a pessoa quer repetir. */
+    const cresce = () => {
+      if (!field) return;
+      field.style.height = 'auto';
+      field.style.height = Math.min(field.scrollHeight, 168) + 'px';
+      if (btnAsk) btnAsk.classList.toggle('tem-texto', !!field.value.trim());
+    };
     const perguntarDaPagina = () => {
       const q = field ? String(field.value || '').trim() : '';
-      if (!q) { UI.toast('Escreva uma pergunta primeiro.', 'error'); return; }
-      if (global.Ug && Ug.registrar) Ug.registrar(q);
+      if (!q) { field && field.focus(); return; }
+      if (busy) return;
       AI.ask(q);
-      if (field) field.value = '';
+      if (field && AI.modo().chave === 'servidor') { field.value = ''; cresce(); }
     };
 
     if (btnAsk && field) {
       btnAsk.addEventListener('click', perguntarDaPagina);
+      field.addEventListener('input', cresce);
       field.addEventListener('keydown', (ev) => {
         /* Enter envia, Shift+Enter quebra linha — a convenção de
-           todo campo de conversa. O atalho antigo (Ctrl/Cmd+Enter)
-           continua valendo para quem já o tinha no dedo. */
-        if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); perguntarDaPagina(); }
+           todo campo de conversa. No teclado virtual do celular não
+           há Shift: lá o Enter quebra a linha e a seta envia. */
+        const toque = global.matchMedia && global.matchMedia('(hover: none)').matches;
+        if (ev.key === 'Enter' && !ev.shiftKey && !toque && !ev.isComposing) { ev.preventDefault(); perguntarDaPagina(); }
       });
     }
   };

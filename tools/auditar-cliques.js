@@ -51,7 +51,8 @@ const FONTES = ['assets/js', 'assets/js/pages']
    precisa de id nem de ouvinte próprio. */
 const DADOS_COM_ACAO = [
   'page', 'goto', 'quick', 'newcat', 'ciclo', 'tab', 'rectab',
-  'method', 'close-search', 'close-modal', 'ai-q', 'novo'
+  'method', 'close-search', 'close-modal', 'ai-q', 'novo',
+  'vista', 'fechar-menu', 'escopo'
 ];
 
 /* Classes cujo comportamento é ligado em lote, pelo seletor. */

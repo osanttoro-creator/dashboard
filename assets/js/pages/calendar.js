@@ -1,9 +1,20 @@
 /* =============================================================
    pages/calendar.js — Calendário financeiro
    ------------------------------------------------------------
-   O mês como grade. Cada dia mostra pontos (entrada, saída,
-   fatura) e o saldo do dia; clicar abre a lista. Os eventos vêm
-   de Calc.calendarEvents — a página não sabe somar nada.
+   Três escalas no mesmo lugar, alternadas no topo da página:
+
+     Semana  os sete dias da semana escolhida, com o que entra,
+             sai e vence em cada um
+     Mês     a grade de sempre: pontos, saldo do dia e a lista do
+             dia selecionado
+     Ano     um painel por mês com TODOS os lançamentos — fixos,
+             previstos e confirmados — e a soma de cada mês, mais
+             as barras do ano inteiro para a visão geral
+
+   Os eventos vêm de Calc (calendarEvents e entriesForMonth): a
+   página não sabe somar nada além de juntar o que o Calc entregou.
+   Como App.render roda a cada mudança no Store, um lançamento novo
+   aparece nas três escalas no instante em que é salvo.
    ============================================================= */
 (function (global) {
   'use strict';
@@ -11,21 +22,115 @@
   const el = U.el;
   const Cal = {};
 
-  Cal.render = function () {
-    const ym = App.ym;
-    const p = U.ymParts(ym);
-    const eventos = Calc.calendarEvents(ym);
+  const CHAVE_VISTA = 'oaze.calendario.vista';
+  const VISTAS = ['semana', 'mes', 'ano'];
+  const DIAS_CURTOS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
 
-    document.getElementById('calTitle').textContent = U.smartCase(U.monthLabel(ym));
-    montaGrade(p, eventos, ym);
-    montaDia(eventos, ym);
+  /* A escala é uma conveniência de quem olha, não um dado: fica no
+     aparelho e, se o armazenamento falhar, a página abre no mês. */
+  function vistaSalva() {
+    try {
+      const v = localStorage.getItem(CHAVE_VISTA);
+      return VISTAS.includes(v) ? v : 'mes';
+    } catch (e) { return 'mes'; }
+  }
+  function guardaVista(v) {
+    try { localStorage.setItem(CHAVE_VISTA, v); } catch (e) { /* segue na memória */ }
+  }
+
+  Cal.render = function () {
+    if (!App.calVista) App.calVista = vistaSalva();
+    const vista = App.calVista;
+
+    U.$$('#calVistas [data-vista]').forEach((b) => {
+      const ativo = b.dataset.vista === vista;
+      b.classList.toggle('is-active', ativo);
+      b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+    });
+    U.$$('[data-cal-vista]').forEach((n) => { n.hidden = n.dataset.calVista !== vista; });
+
+    if (vista === 'semana') renderSemana();
+    else if (vista === 'ano') renderAno();
+    else renderMes();
   };
 
-  function montaGrade(p, eventos, ym) {
+  /** Liga os controles fixos da página. Chamado uma vez, no boot. */
+  Cal.init = function () {
+    U.$$('#calVistas [data-vista]').forEach((b) => b.addEventListener('click', () => {
+      App.calVista = b.dataset.vista;
+      guardaVista(App.calVista);
+      Cal.render();
+    }));
+    document.getElementById('btnSemanaAnterior').addEventListener('click', () => andaSemana(-7));
+    document.getElementById('btnSemanaSeguinte').addEventListener('click', () => andaSemana(7));
+    document.getElementById('btnSemanaAtual').addEventListener('click', () => {
+      irParaSemana(inicioDaSemana(U.todayISO()));
+    });
+  };
+
+  /* ============================================================
+     RESUMO — os mesmos quatro números nas três escalas
+     ============================================================ */
+
+  /**
+   * Soma lançamentos (não faturas: a compra no cartão já é a
+   * despesa, e somar a fatura de novo contaria o mesmo dinheiro
+   * duas vezes). "Previsto" é tudo o que está lançado; o que falta
+   * confirmar aparece à parte.
+   */
+  function totais(entradas) {
+    const t = { receitas: 0, despesas: 0, aConfirmar: 0, fixas: 0, qtdFixas: 0 };
+    entradas.forEach((e) => {
+      if (e.kind === 'transfer') return;
+      if (e.kind === 'income') t.receitas += e.amount; else t.despesas += e.amount;
+      if (!e.confirmed) t.aConfirmar += e.kind === 'income' ? 0 : e.amount;
+      if (e.recurring && e.kind === 'expense') { t.fixas += e.amount; t.qtdFixas++; }
+    });
+    t.receitas = U.round2(t.receitas);
+    t.despesas = U.round2(t.despesas);
+    t.aConfirmar = U.round2(t.aConfirmar);
+    t.fixas = U.round2(t.fixas);
+    t.saldo = U.round2(t.receitas - t.despesas);
+    return t;
+  }
+
+  function pintaResumo(t, rotuloPeriodo, extra) {
+    const box = U.clear(document.getElementById('calResumo'));
+    const fig = (k, v, cls, sub) => el('div', { class: 'cal-resumo-fig' }, [
+      el('span', { class: 'k', text: k }),
+      el('span', { class: 'v ' + (cls || ''), text: v }),
+      sub ? el('span', { class: 's', text: sub }) : null
+    ].filter(Boolean));
+
+    box.appendChild(fig('Receitas ' + rotuloPeriodo, U.fmtBRL(t.receitas), 'val-pos'));
+    box.appendChild(fig('Despesas ' + rotuloPeriodo, U.fmtBRL(t.despesas), 'val-neg',
+      t.aConfirmar > 0 ? U.fmtBRL(t.aConfirmar) + ' a confirmar' : 'tudo confirmado'));
+    box.appendChild(fig('Saldo previsto', (t.saldo < 0 ? '− ' : '') + U.fmtBRL(Math.abs(t.saldo)),
+      t.saldo < 0 ? 'val-neg' : ''));
+    box.appendChild(extra || fig('Despesas fixas', U.fmtBRL(t.fixas), '',
+      t.qtdFixas === 1 ? '1 lançamento' : t.qtdFixas + ' lançamentos'));
+  }
+
+  /* ============================================================
+     MÊS — a grade
+     ============================================================ */
+
+  function renderMes() {
+    const ym = App.ym;
+    const p = U.ymParts(ym);
+    const eventos = eventosComFixas(ym);
+
+    document.getElementById('calTitle').textContent = U.smartCase(U.monthLabel(ym));
+    pintaResumo(totais(Calc.entriesForMonth(ym)), 'do mês');
+    montaGrade(p, eventos);
+    montaDia(eventos, ym);
+  }
+
+  function montaGrade(p, eventos) {
     const grade = U.clear(document.getElementById('calGrid'));
 
     // cabeçalho da semana: domingo primeiro, como o calendário brasileiro
-    ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'].forEach((d) => {
+    DIAS_CURTOS.forEach((d) => {
       grade.appendChild(el('span', { class: 'cal-dow', text: d }));
     });
 
@@ -39,9 +144,7 @@
     for (let d = 1; d <= dias; d++) {
       const iso = U.isoOf(p.y, p.m, d);
       const evs = eventos[d] || [];
-      const entrada = U.sum(evs.filter((e) => e.tipo === 'in'), (e) => e.valor);
-      const saida = U.sum(evs.filter((e) => e.tipo === 'out' || e.tipo === 'due'), (e) => e.valor);
-      const liquido = U.round2(entrada - saida);
+      const liquido = liquidoDoDia(evs);
       const selecionado = App.calDay === d;
 
       const cell = el('button', {
@@ -55,13 +158,7 @@
         onclick: () => { App.calDay = d; Cal.render(); }
       }, [
         el('span', { class: 'cal-num', text: String(d) }),
-        evs.length
-          ? el('span', { class: 'cal-dots' }, [
-            evs.some((e) => e.tipo === 'in') ? el('i', { class: 'dot-in' }) : null,
-            evs.some((e) => e.tipo === 'out') ? el('i', { class: 'dot-out' }) : null,
-            evs.some((e) => e.tipo === 'due') ? el('i', { class: 'dot-due' }) : null
-          ].filter(Boolean))
-          : null,
+        evs.length ? pontos(evs) : null,
         evs.length
           ? el('span', {
             class: 'cal-sum ' + (liquido >= 0 ? 'val-pos' : 'val-neg'),
@@ -72,7 +169,20 @@
 
       grade.appendChild(cell);
     }
-    void ym;
+  }
+
+  function liquidoDoDia(evs) {
+    const entrada = U.sum(evs.filter((e) => e.tipo === 'in'), (e) => e.valor);
+    const saida = U.sum(evs.filter((e) => e.tipo === 'out' || e.tipo === 'due'), (e) => e.valor);
+    return U.round2(entrada - saida);
+  }
+
+  function pontos(evs) {
+    return el('span', { class: 'cal-dots' }, [
+      evs.some((e) => e.tipo === 'in') ? el('i', { class: 'dot-in' }) : null,
+      evs.some((e) => e.tipo === 'out') ? el('i', { class: 'dot-out' }) : null,
+      evs.some((e) => e.tipo === 'due') ? el('i', { class: 'dot-due' }) : null
+    ].filter(Boolean));
   }
 
   function montaDia(eventos, ym) {
@@ -81,7 +191,7 @@
 
     if (!App.calDay) {
       titulo.textContent = 'Selecione um dia';
-      box.appendChild(UI.empty('Clique em um dia da grade para ver o que acontece nele.'));
+      box.appendChild(UI.empty('Toque em um dia da grade para ver o que acontece nele.'));
       return;
     }
 
@@ -94,14 +204,17 @@
       box.appendChild(UI.empty('Nenhuma movimentação neste dia.'));
       return;
     }
+    box.appendChild(listaDeEventos(evs));
+  }
 
-    const ul = el('ul', { class: 'tx-list' });
+  function listaDeEventos(evs) {
+    const ul = el('ul', { class: 'tx-list cal-lista' });
     evs.forEach((e) => {
       const sinal = e.tipo === 'in' ? '+ ' : e.tipo === 'tr' ? '' : '− ';
       const classe = e.tipo === 'in' ? 'val-pos' : e.tipo === 'tr' ? '' : 'val-neg';
 
       ul.appendChild(el('li', {
-        class: 'tx-item' + (e.confirmado ? '' : ' is-pending')
+        class: 'tx-item cal-evento' + (e.confirmado ? '' : ' is-pending')
       }, [
         el('span', { class: 'cal-kind is-' + e.tipo, title: rotulo(e.tipo) },
           Icons.lucide(e.tipo === 'due' ? 'credit-card' : e.tipo === 'in' ? 'arrow-up-right' : e.tipo === 'tr' ? 'arrow-left-right' : 'arrow-down-right', 15)),
@@ -109,6 +222,7 @@
           el('div', { class: 'tx-name', text: e.titulo }),
           el('div', { class: 'tx-meta' }, [
             el('span', { text: e.categoria }),
+            e.fixa ? UI.badge('Fixa', 'fix') : null,
             !e.confirmado ? UI.badge(e.tipo === 'due' ? 'Em aberto' : 'Previsto', 'pend') : null
           ].filter(Boolean))
         ]),
@@ -126,12 +240,257 @@
         ])
       ]));
     });
-    box.appendChild(ul);
+    return ul;
   }
 
   function rotulo(tipo) {
     return tipo === 'in' ? 'Entrada' : tipo === 'out' ? 'Saída'
       : tipo === 'due' ? 'Vencimento de fatura' : 'Transferência';
+  }
+
+  /* ============================================================
+     SEMANA — sete dias, de domingo a sábado
+     ============================================================ */
+
+  function inicioDaSemana(iso) {
+    const d = U.parseISO(iso);
+    return U.addDaysISO(iso, -d.getDay());
+  }
+
+  /** A semana precisa tocar o mês do cabeçalho; senão, recomeça nele. */
+  function semanaValida() {
+    const ini = App.calSemana;
+    if (!ini) return false;
+    return U.ymOf(ini) === App.ym || U.ymOf(U.addDaysISO(ini, 6)) === App.ym;
+  }
+
+  function ancoraDaSemana() {
+    if (semanaValida()) return App.calSemana;
+    const p = U.ymParts(App.ym);
+    const base = App.calDay ? U.isoOf(p.y, p.m, U.clampDay(p.y, p.m, App.calDay))
+      : App.noMesAtual() ? U.todayISO() : U.monthStart(App.ym);
+    return inicioDaSemana(base);
+  }
+
+  function andaSemana(dias) {
+    irParaSemana(U.addDaysISO(ancoraDaSemana(), dias));
+  }
+
+  /* Uma semana que já não toca o mês do cabeçalho leva o cabeçalho
+     junto — o mês da quarta-feira dela —, para os dois nunca
+     discordarem sobre o período que está na tela. */
+  function irParaSemana(inicio) {
+    App.calSemana = inicio;
+    if (semanaValida()) { Cal.render(); return; }
+    App.setYM(U.ymOf(U.addDaysISO(inicio, 3)));
+  }
+
+  /** Os eventos do Calc, marcados quando vêm de um lançamento fixo. */
+  function eventosComFixas(ym) {
+    const fixas = new Set(Calc.entriesForMonth(ym).filter((e) => e.recurring).map((e) => e.txId));
+    const evs = Calc.calendarEvents(ym);
+    Object.keys(evs).forEach((d) => {
+      evs[d] = evs[d].map((e) => Object.assign({ fixa: !!(e.txId && fixas.has(e.txId)) }, e));
+    });
+    return evs;
+  }
+
+  /** Eventos de um intervalo de datas que pode atravessar dois meses. */
+  function eventosDoIntervalo(de, ate) {
+    const porData = {};
+    U.monthRange(U.ymOf(de), U.ymOf(ate)).forEach((ym) => {
+      const evs = eventosComFixas(ym);
+      const p = U.ymParts(ym);
+      Object.keys(evs).forEach((d) => {
+        const iso = U.isoOf(p.y, p.m, +d);
+        if (iso >= de && iso <= ate) porData[iso] = evs[d];
+      });
+    });
+    return porData;
+  }
+
+  function renderSemana() {
+    const ini = ancoraDaSemana();
+    App.calSemana = ini;
+    const fim = U.addDaysISO(ini, 6);
+    const hoje = U.todayISO();
+    const porData = eventosDoIntervalo(ini, fim);
+
+    const di = U.parseISO(ini), df = U.parseISO(fim);
+    const titulo = di.getMonth() === df.getMonth()
+      ? `${di.getDate()} a ${df.getDate()} de ${U.MONTHS[df.getMonth()].toLowerCase()}`
+      : `${di.getDate()} de ${U.MONTHS_SHORT[di.getMonth()]} a ${df.getDate()} de ${U.MONTHS_SHORT[df.getMonth()]}`;
+    document.getElementById('calTitle').textContent = 'Semana de ' + titulo;
+    document.getElementById('calSemanaTitulo').textContent = hoje >= ini && hoje <= fim ? 'Esta semana' : 'Semana';
+    document.getElementById('btnSemanaAtual').hidden = hoje >= ini && hoje <= fim;
+
+    pintaResumo(totais(Calc.entries(ini, fim)), 'da semana');
+
+    const box = U.clear(document.getElementById('calSemana'));
+    for (let i = 0; i < 7; i++) {
+      const iso = U.addDaysISO(ini, i);
+      const d = U.parseISO(iso);
+      const evs = porData[iso] || [];
+      const liquido = liquidoDoDia(evs);
+
+      box.appendChild(el('div', {
+        class: 'cal-semana-dia' + (iso === hoje ? ' is-today' : '') + (evs.length ? '' : ' is-quiet')
+          + (U.ymOf(iso) !== App.ym ? ' is-fora' : '')
+      }, [
+        el('div', { class: 'cal-semana-dia-topo' }, [
+          el('span', { class: 'cal-semana-dow', text: DIAS_CURTOS[d.getDay()] }),
+          el('span', { class: 'cal-semana-num', text: String(d.getDate()) }),
+          evs.length
+            ? el('span', {
+              class: 'cal-semana-soma ' + (liquido >= 0 ? 'val-pos' : 'val-neg'),
+              text: (liquido >= 0 ? '+ ' : '− ') + U.fmtBRL(Math.abs(liquido))
+            })
+            : el('span', { class: 'cal-semana-soma is-vazio', text: 'livre' })
+        ]),
+        evs.length ? listaCompacta(evs) : null
+      ].filter(Boolean)));
+    }
+  }
+
+  /** Linhas curtas: o que é, quanto, e se é fixo ou previsto. */
+  function listaCompacta(evs) {
+    return el('ul', { class: 'cal-mini' }, evs.map((e) => el('li', {
+      class: 'cal-mini-item is-' + e.tipo + (e.confirmado ? '' : ' is-pending'),
+      title: e.titulo + ' · ' + U.fmtBRL(e.valor)
+    }, [
+      el('span', { class: 'cal-mini-marca', 'aria-hidden': 'true' }),
+      el('span', { class: 'cal-mini-nome' }, [
+        document.createTextNode(e.titulo),
+        e.fixa ? el('span', { class: 'cal-mini-tag', text: 'fixa' }) : null,
+        !e.confirmado ? el('span', { class: 'cal-mini-tag is-pend', text: e.tipo === 'due' ? 'aberta' : 'prevista' }) : null
+      ].filter(Boolean)),
+      el('span', {
+        class: 'cal-mini-valor ' + (e.tipo === 'in' ? 'val-pos' : e.tipo === 'tr' ? '' : 'val-neg'),
+        text: (e.tipo === 'in' ? '+' : e.tipo === 'tr' ? '' : '−') + U.fmtBRL(e.valor)
+      })
+    ])));
+  }
+
+  /* ============================================================
+     ANO — doze painéis e as barras do ano
+     ============================================================ */
+
+  function renderAno() {
+    const ano = U.ymParts(App.ym).y;
+    const meses = U.monthRange(`${ano}-01`, `${ano}-12`);
+    const hojeYM = U.todayYM();
+
+    const dados = meses.map((ym) => {
+      const entradas = Calc.entriesForMonth(ym).filter((e) => e.kind !== 'transfer');
+      return { ym, entradas, t: totais(entradas) };
+    });
+
+    const doAno = totais([].concat(...dados.map((m) => m.entradas)));
+    document.getElementById('calTitle').textContent = 'Ano de ' + ano;
+
+    const comGasto = dados.filter((m) => m.t.despesas > 0);
+    const maior = comGasto.slice().sort((a, b) => b.t.despesas - a.t.despesas)[0];
+    const media = comGasto.length ? U.round2(doAno.despesas / comGasto.length) : 0;
+    const extra = el('div', { class: 'cal-resumo-fig' }, [
+      el('span', { class: 'k', text: 'Gasto médio por mês' }),
+      el('span', { class: 'v', text: U.fmtBRL(media) }),
+      el('span', { class: 's', text: maior ? 'maior em ' + U.MONTHS[U.ymParts(maior.ym).m].toLowerCase() : 'sem despesas no ano' })
+    ]);
+    pintaResumo(doAno, 'do ano', extra);
+
+    barrasDoAno(dados, hojeYM);
+
+    const box = U.clear(document.getElementById('calAno'));
+    dados.forEach((m) => box.appendChild(painelDoMes(m, hojeYM)));
+  }
+
+  function barrasDoAno(dados, hojeYM) {
+    const box = U.clear(document.getElementById('calAnoBarras'));
+    const teto = Math.max(1, ...dados.map((m) => Math.max(m.t.receitas, m.t.despesas)));
+
+    dados.forEach((m) => {
+      const p = U.ymParts(m.ym);
+      const hr = (m.t.receitas / teto) * 100;
+      const hd = (m.t.despesas / teto) * 100;
+      box.appendChild(el('button', {
+        type: 'button',
+        class: 'cal-barra' + (m.ym === App.ym ? ' is-sel' : '') + (m.ym === hojeYM ? ' is-hoje' : ''),
+        'aria-label': `${U.MONTHS[p.m]}: receitas ${U.fmtBRL(m.t.receitas)}, despesas ${U.fmtBRL(m.t.despesas)}`,
+        onclick: () => abreMes(m.ym)
+      }, [
+        el('span', { class: 'cal-barra-valor', text: m.t.despesas > 0 ? U.fmtCompact(m.t.despesas) : '' }),
+        el('span', { class: 'cal-barra-par' }, [
+          el('i', { class: 'is-in', style: { height: Math.max(hr > 0 ? 3 : 0, hr) + '%' } }),
+          el('i', { class: 'is-out', style: { height: Math.max(hd > 0 ? 3 : 0, hd) + '%' } })
+        ]),
+        el('span', { class: 'cal-barra-mes', text: U.MONTHS_SHORT[p.m] })
+      ]));
+    });
+  }
+
+  function abreMes(ym) {
+    App.calVista = 'mes';
+    guardaVista('mes');
+    App.setYM(ym);
+    global.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function painelDoMes(m, hojeYM) {
+    const p = U.ymParts(m.ym);
+    const t = m.t;
+    const maior = Math.max(t.receitas, t.despesas, 1);
+    const itens = m.entradas.slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : b.amount - a.amount));
+    const passado = m.ym < hojeYM;
+
+    return el('article', {
+      class: 'cal-mes' + (m.ym === hojeYM ? ' is-hoje' : '') + (m.ym === App.ym ? ' is-sel' : '')
+        + (itens.length ? '' : ' is-vazio')
+    }, [
+      el('header', { class: 'cal-mes-topo' }, [
+        el('h3', { text: U.MONTHS[p.m] }),
+        m.ym === hojeYM ? el('span', { class: 'cal-mes-selo', text: 'agora' })
+          : passado ? null : el('span', { class: 'cal-mes-selo is-futuro', text: 'previsto' }),
+        el('button', {
+          type: 'button', class: 'btn btn-ghost btn-sm cal-mes-abrir',
+          'aria-label': 'Abrir a grade de ' + U.MONTHS[p.m], onclick: () => abreMes(m.ym)
+        }, [document.createTextNode('Abrir'), Icons.lucide('chevron-right', 14)])
+      ].filter(Boolean)),
+
+      el('div', { class: 'cal-mes-somas' }, [
+        el('div', {}, [el('span', { class: 'k', text: 'Receitas' }), el('span', { class: 'v val-pos', text: U.fmtBRL(t.receitas) })]),
+        el('div', {}, [el('span', { class: 'k', text: 'Despesas' }), el('span', { class: 'v val-neg', text: U.fmtBRL(t.despesas) })]),
+        el('div', {}, [el('span', { class: 'k', text: 'Saldo' }), el('span', {
+          class: 'v' + (t.saldo < 0 ? ' val-neg' : ''), text: (t.saldo < 0 ? '− ' : '') + U.fmtBRL(Math.abs(t.saldo))
+        })])
+      ]),
+      el('div', { class: 'cal-mes-medidor', 'aria-hidden': 'true' }, [
+        el('i', { class: 'is-in', style: { width: (t.receitas / maior) * 100 + '%' } }),
+        el('i', { class: 'is-out', style: { width: (t.despesas / maior) * 100 + '%' } })
+      ]),
+
+      itens.length
+        ? el('ul', { class: 'cal-mes-lista' }, itens.map((e) => el('li', {
+          class: 'cal-mes-item' + (e.confirmed ? '' : ' is-pending'),
+          title: e.description
+        }, [
+          el('span', { class: 'cal-mes-dia', text: e.date.slice(8, 10) }),
+          el('span', { class: 'cal-mes-nome' }, [
+            el('span', { class: 't', text: e.description }),
+            e.recurring ? el('span', { class: 'cal-mini-tag', text: 'fixa' }) : null,
+            e.installment ? el('span', { class: 'cal-mini-tag', text: `${e.installment.index}/${e.installment.total}` }) : null,
+            !e.confirmed ? el('span', { class: 'cal-mini-tag is-pend', text: 'prevista' }) : null
+          ].filter(Boolean)),
+          el('span', {
+            class: 'cal-mes-valor ' + (e.kind === 'income' ? 'val-pos' : 'val-neg'),
+            text: (e.kind === 'income' ? '+' : '−') + U.fmtBRL(e.amount)
+          })
+        ])))
+        : el('p', { class: 'cal-mes-vazio', text: passado ? 'Nada lançado neste mês.' : 'Nada previsto ainda.' }),
+
+      t.qtdFixas
+        ? el('p', { class: 'cal-mes-rodape', text: `${t.qtdFixas} fixa(s) · ${U.fmtBRL(t.fixas)}` })
+        : null
+    ].filter(Boolean));
   }
 
   global.Cal = Cal;

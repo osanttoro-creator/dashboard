@@ -527,6 +527,95 @@
       const dentro = itensDo(g).some((b) => b.dataset.page === App.page);
       g.classList.toggle('has-active', dentro);
     });
+    /* O mesmo motivo no celular: quem está em Metas precisa ver o
+       "Menu" aceso, porque é por ele que se chega lá. */
+    const menuBtn = document.getElementById('btnMenuMovel');
+    if (menuBtn) {
+      menuBtn.classList.toggle('has-active',
+        U.$$('#menuMovel .nav-item').some((b) => b.dataset.page === App.page));
+    }
+  };
+
+  /* =============================================================
+     CELULAR — menu que sobe da base e cabeçalho que abre espaço
+     ------------------------------------------------------------
+     O CSS só mostra estas peças até 820px. O JavaScript roda em
+     qualquer largura porque não faz nada que se veja fora delas:
+     o botão do menu não existe no desktop, e a classe que recolhe
+     o cabeçalho só tem regra dentro da media query do celular.
+     ============================================================= */
+
+  Shell.wireCelular = function () {
+    const menu = document.getElementById('menuMovel');
+    const botao = document.getElementById('btnMenuMovel');
+    if (menu && botao) {
+      const abrir = () => {
+        fecha();
+        menu.hidden = false;
+        botao.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('menu-movel-aberto');
+        const ativo = menu.querySelector('.nav-item.is-active') || menu.querySelector('.nav-item');
+        if (ativo) ativo.focus({ preventScroll: true });
+      };
+      const fechar = (devolveFoco) => {
+        if (menu.hidden) return;
+        menu.hidden = true;
+        botao.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-movel-aberto');
+        if (devolveFoco) botao.focus({ preventScroll: true });
+      };
+      Shell.fecharMenuMovel = () => fechar(false);
+
+      botao.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (menu.hidden) abrir(); else fechar(true);
+      });
+      document.getElementById('btnFecharMenuMovel').addEventListener('click', () => fechar(true));
+      U.$$('[data-fechar-menu]', menu).forEach((n) => n.addEventListener('click', () => fechar(true)));
+      /* Escolher um destino fecha a folha — a página nova aparece
+         inteira, sem a folha pairando por cima. */
+      U.$$('.nav-item', menu).forEach((b) => b.addEventListener('click', () => fechar(false)));
+      document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && !menu.hidden) { ev.preventDefault(); fechar(true); }
+      });
+      /* Virar o celular para 900px de largura some com a barra de
+         baixo; a folha aberta ficaria órfã sobre a página. */
+      global.addEventListener('resize', () => { if (global.innerWidth > 820) fechar(false); });
+    }
+
+    /* Cabeçalho que sai da frente ao rolar para baixo e volta ao
+       primeiro gesto para cima. Rolando, o conteúdo é o que importa;
+       os controles voltam no instante em que a pessoa procura por
+       eles. Abaixo de 96px de rolagem ele nunca some: no topo da
+       página não há o que liberar. */
+    const barra = document.querySelector('.topbar');
+    if (!barra) return;
+    let ultimo = global.scrollY;
+    let pendente = false;
+    const atualiza = () => {
+      pendente = false;
+      const y = global.scrollY;
+      const delta = y - ultimo;
+      if (Math.abs(delta) < 6) return;
+      const recolher = delta > 0 && y > 96 && !aberto &&
+        document.getElementById('searchOverlay').hidden;
+      barra.classList.toggle('is-recolhida', recolher);
+      /* A esfera da UGLEZ mora no cabeçalho do celular, mas é fixa;
+         a classe no body a faz recolher junto. */
+      document.body.classList.toggle('cabecalho-recolhido', recolher);
+      ultimo = y;
+    };
+    global.addEventListener('scroll', () => {
+      if (pendente) return;
+      pendente = true;
+      global.requestAnimationFrame(atualiza);
+    }, { passive: true });
+    /* Foco de teclado dentro do cabeçalho o traz de volta: ninguém
+       deveria tabular para um controle invisível. */
+    barra.addEventListener('focusin', () => {
+      barra.classList.remove('is-recolhida');
+      document.body.classList.remove('cabecalho-recolhido');
+    });
   };
 
   global.Shell = Shell;

@@ -94,36 +94,76 @@
      ============================================================ */
 
   Ug.sugestoes = function () {
-    const lista = [
-      { rotulo: 'Onde posso economizar?',
+    const ano = U.ymParts(App.ym).y;
+    const mes = U.MONTHS[U.ymParts(App.ym).m].toLowerCase();
+    const escopo = Ug.escopo();
+    const pode = (r) => !!(global.Limites && Limites.pode(r));
+    const prof = Store.profile();
+    const temMetas = !!(prof && (prof.goals || []).length);
+
+    /* O resumo do ano e as fixas vão para todos os planos — são
+       totais do ano, não comparação entre meses. */
+    const doAno = [
+      { icone: 'calendar', rotulo: 'Resumo de ' + ano,
+        sub: 'Receitas, despesas e o que mais pesou',
+        q: `Faça um resumo do meu ano de ${ano}: quanto entrou, quanto saiu, o saldo e as categorias que mais pesaram.` },
+      { icone: 'repeat', rotulo: 'Fixas no ano',
+        sub: 'Quanto já está comprometido',
+        q: `Quanto das minhas despesas de ${ano} é fixo, e quanto isso compromete da minha receita até dezembro?` }
+    ];
+    const doMes = [
+      { icone: 'target', rotulo: 'Onde economizar',
+        sub: 'As maiores categorias de ' + mes,
         q: 'Onde posso cortar gastos este mês, olhando as maiores categorias?' },
-      { rotulo: 'Resumo do mês',
+      { icone: 'receipt', rotulo: 'Resumo de ' + mes,
+        sub: 'Entradas, saídas e o que pesou',
         q: 'Faça um resumo do meu mês: receitas, despesas e o que mais pesou.' }
     ];
+    const comparar = pode('monthlyComparison') ? [
+      { icone: 'chart-line', rotulo: 'Mês mais caro',
+        sub: 'E o que explica a diferença',
+        q: `Qual foi o mês mais caro de ${ano}, e quais categorias explicam a diferença para os outros meses?` },
+      { icone: 'trending-up', rotulo: 'Até dezembro',
+        sub: 'O que já está previsto',
+        q: `Olhando o que já está previsto, como devem ficar meus próximos meses até dezembro de ${ano}?` }
+    ] : [];
+    const metas = temMetas ? [{
+      icone: 'flag', rotulo: 'Minhas metas', sub: 'Ritmo e quanto falta',
+      q: 'Como está o andamento das minhas metas, e no ritmo do ano, quando chego lá?'
+    }] : [];
 
-    const pode = (r) => !!(global.Limites && Limites.pode(r));
-
-    if (pode('monthlyComparison')) {
-      lista.push({ rotulo: 'Comparar com o mês anterior',
-        q: 'Como estão minhas despesas comparadas ao mês passado, por categoria?' });
-    }
-
-    /* Metas só entram na lista quando existem metas. Sugerir
-       "como estão minhas metas?" para quem não tem nenhuma gasta
-       uma consulta para ouvir que não há metas. */
-    const prof = Store.profile();
-    if (prof && (prof.goals || []).length) {
-      lista.push({ rotulo: 'Como estão minhas metas?',
-        q: 'Como está o andamento das minhas metas e quanto falta para cada uma?' });
-    }
-
-    if (pode('advancedAnalytics')) {
-      lista.push({ rotulo: 'Tendências e projeção',
-        q: 'Que tendências aparecem nos meus últimos meses e o que elas projetam?' });
-    }
-
-    return lista;
+    const lista = escopo === 'mes'
+      ? doMes.concat(comparar.slice(0, 1), doAno.slice(0, 1), metas)
+      : doAno.concat(comparar, metas, doMes.slice(0, 1));
+    return lista.slice(0, 4);
   };
+
+  /* ============================================================
+     ALCANCE — mês, ano ou tudo
+     ------------------------------------------------------------
+     Muda o que a pergunta leva e a forma como a UGLEZ lê. Fica no
+     aparelho: é uma preferência de quem olha, não um dado da conta.
+     ============================================================ */
+  const CHAVE_ESCOPO = 'oaze.uglez.escopo';
+  let escopoAtual = null;
+
+  Ug.escopo = function () {
+    if (escopoAtual) return escopoAtual;
+    try {
+      const v = localStorage.getItem(CHAVE_ESCOPO);
+      escopoAtual = ['mes', 'ano', 'geral'].includes(v) ? v : 'ano';
+    } catch (e) { escopoAtual = 'ano'; }
+    return escopoAtual;
+  };
+
+  function pintaEscopo() {
+    const atual = Ug.escopo();
+    U.$$('#uglezEscopo [data-escopo]').forEach((b) => {
+      const ativo = b.dataset.escopo === atual;
+      b.classList.toggle('is-active', ativo);
+      b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+    });
+  }
 
   /* Mantido para quem ainda lê Ug.SUGESTOES. É uma leitura da mesma
      fonte, não uma segunda lista. */
@@ -146,7 +186,10 @@
     const alvo = document.getElementById('uglezPeriodo');
     const mes = U.smartCase(U.monthLabel(App.ym));
     if (alvo) {
-      alvo.textContent = mes;
+      const escopo = Ug.escopo();
+      alvo.textContent = escopo === 'mes' ? 'Lendo ' + mes
+        : escopo === 'ano' ? 'Lendo o ano de ' + U.ymParts(App.ym).y
+          : 'Lendo o ano e os meses anteriores';
     }
     const orbita = document.getElementById('uglezMesOrbita');
     if (orbita) orbita.textContent = U.smartCase(U.monthLabel(App.ym, true));
@@ -201,27 +244,110 @@
 
   const conversa = [];
 
-  Ug.registrar = function (pergunta) {
-    conversa.push({ pergunta: pergunta, quando: new Date() });
+  /** As trocas desta sessão — ai.js manda as últimas junto da pergunta. */
+  Ug.trocas = () => conversa.slice();
+
+  /* Mantido para quem ainda chama Ug.registrar: agora registrar é
+     abrir a troca na conversa, que é o que Ug.novaResposta faz. */
+  Ug.registrar = function () {};
+
+  const hora = (d) => d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  function rolaParaOFim() {
+    const corpo = document.getElementById('uglezCorpo');
+    if (!corpo) return;
+    const reduzir = global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    corpo.scrollTo({ top: corpo.scrollHeight, behavior: reduzir ? 'auto' : 'smooth' });
+  }
+
+  /**
+   * Abre uma troca na conversa: a bolha da pergunta e, logo abaixo,
+   * a mensagem da UGLEZ ainda "digitando". Devolve o destino que
+   * AI.perguntar preenche.
+   */
+  Ug.novaResposta = function (pergunta) {
+    const box = document.getElementById('uglezHistorico');
+    if (!box) return null;
+    const troca = { pergunta, resposta: null, quando: new Date() };
+    conversa.push(troca);
+
+    box.appendChild(el('div', { class: 'uglez-msg is-pessoa' }, [
+      el('div', { class: 'uglez-bolha', text: pergunta }),
+      el('span', { class: 'uglez-msg-hora', text: hora(troca.quando) })
+    ]));
+
+    const caixa = el('div', { class: 'ai-answer' });
+    const acoes = el('div', { class: 'uglez-msg-acoes', hidden: true });
+    box.appendChild(el('div', { class: 'uglez-msg is-uglez' }, [
+      el('span', { class: 'uglez-avatar', 'aria-hidden': 'true' }),
+      el('div', { class: 'uglez-msg-corpo' }, [
+        el('span', { class: 'uglez-msg-nome', text: 'UGLEZ' }),
+        caixa,
+        acoes
+      ])
+    ]));
     renderHistorico();
+    rolaParaOFim();
+
+    return {
+      caixa,
+      aoCarregar: (alvo, texto) => {
+        U.clear(alvo);
+        alvo.appendChild(el('span', { class: 'uglez-digitando', 'aria-hidden': 'true' }, [el('i'), el('i'), el('i')]));
+        alvo.appendChild(el('span', { class: 'uglez-digitando-texto', text: texto + '…' }));
+      },
+      aoResponder: (alvo, texto) => {
+        troca.resposta = texto;
+        U.clear(acoes);
+        acoes.hidden = false;
+        acoes.appendChild(el('button', {
+          type: 'button', class: 'uglez-acao', 'aria-label': 'Copiar resposta',
+          onclick: async (ev) => {
+            const b = ev.currentTarget;
+            try {
+              await navigator.clipboard.writeText(texto);
+              b.classList.add('is-feito');
+              b.lastChild.textContent = 'Copiado';
+              setTimeout(() => { b.classList.remove('is-feito'); b.lastChild.textContent = 'Copiar'; }, 1800);
+            } catch (e) { UI.toast('Não foi possível copiar.', 'error'); }
+          }
+        }, [
+          el('span', {
+            class: 'uglez-acao-ico', 'aria-hidden': 'true',
+            html: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
+          }),
+          el('span', { text: 'Copiar' })
+        ]));
+        acoes.appendChild(el('button', {
+          type: 'button', class: 'uglez-acao', 'aria-label': 'Perguntar de novo',
+          onclick: () => AI.ask(pergunta)
+        }, [Icons.lucide('repeat', 14), el('span', { text: 'Refazer' })]));
+        rolaParaOFim();
+      },
+      aoTerminar: () => { rolaParaOFim(); }
+    };
   };
 
+  /** Mostra as boas-vindas só enquanto a conversa está vazia. */
   function renderHistorico() {
     const box = document.getElementById('uglezHistorico');
-    if (!box) return;
-    U.clear(box);
-    if (!conversa.length) { box.hidden = true; return; }
-    box.hidden = false;
-    /* Só as perguntas: a resposta atual já está logo abaixo, e
-       repetir o texto inteiro de cada resposta transformaria a
-       página numa rolagem infinita de markdown. */
-    conversa.slice(-6).forEach((c) => {
-      box.appendChild(el('p', { class: 'uglez-pergunta' }, [
-        el('span', { class: 'uglez-pergunta-hora',
-          text: c.quando.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }),
-        el('span', { text: c.pergunta })
-      ]));
-    });
+    const boas = document.getElementById('uglezBoasVindas');
+    const nova = document.getElementById('btnUglezNova');
+    const vazia = !conversa.length;
+    if (box) box.hidden = vazia;
+    if (boas) boas.hidden = !vazia;
+    if (nova) nova.hidden = vazia;
+    const pagina = document.querySelector('.uglez-page');
+    if (pagina) pagina.classList.toggle('tem-conversa', !vazia);
+  }
+
+  function novaConversa() {
+    conversa.length = 0;
+    const box = document.getElementById('uglezHistorico');
+    if (box) U.clear(box);
+    renderHistorico();
+    const campo = document.getElementById('aiQuestion');
+    if (campo) campo.focus();
   }
 
   /* ---------------- render ---------------- */
@@ -241,15 +367,31 @@
          cabeçalho continua ali para quem quiser ir mais longe. */
       outro.addEventListener('click', () => App.setYM(U.addMonths(App.ym, -1)));
     }
+    U.$$('#uglezEscopo [data-escopo]').forEach((b) => b.addEventListener('click', () => {
+      escopoAtual = b.dataset.escopo;
+      try { localStorage.setItem(CHAVE_ESCOPO, escopoAtual); } catch (e) { /* fica na memória */ }
+      Ug.render();
+    }));
+    const nova = document.getElementById('btnUglezNova');
+    if (nova) nova.addEventListener('click', novaConversa);
   }
 
   Ug.render = function () {
     ligarUmaVez();
     const visual = garantirFormacao();
     if (visual && visual.medir) visual.medir();
+    pintaEscopo();
     renderContexto();
     renderHistorico();
-    renderChips('uglezChipsFull');
+    renderCartoes();
+
+    const saudacao = document.getElementById('uglezSaudacao');
+    if (saudacao) {
+      const nome = String(Store.ownerName() || '').trim().split(/\s+/)[0];
+      const h = new Date().getHours();
+      const periodo = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+      saudacao.textContent = (nome ? `${periodo}, ${nome}.` : `${periodo}.`) + ' Sobre o que vamos conversar?';
+    }
 
     /* ESTADO SEM DADOS. A regra é a mesma do resto do app: sem
        movimentação no mês, nada de número, nada de gráfico, nada de
@@ -276,9 +418,14 @@
     /* O campo continua HABILITADO mesmo sem dados: a pessoa pode
        perguntar sobre o produto, e desabilitar um campo sem dizer
        por quê é a forma mais rápida de parecer quebrado. */
-    if (campo) campo.placeholder = temDado
-      ? 'Pergunte sobre o mês que você está vendo…'
-      : 'Sem lançamentos neste mês — as respostas vão ser genéricas.';
+    const escopo = Ug.escopo();
+    if (campo) campo.placeholder = escopo !== 'mes'
+      ? 'Pergunte sobre o seu ano…'
+      : temDado ? 'Pergunte sobre ' + U.monthLabel(App.ym).toLowerCase() + '…'
+        : 'Sem lançamentos neste mês — escolha "Ano" para ler os outros meses.';
+    /* "Sem dados no mês" só faz sentido quando a leitura É o mês. Com
+       o ano no alcance, um mês vazio não impede a conversa. */
+    if (semDados && escopo !== 'mes') semDados.hidden = true;
     void botao;
 
     const alvo = document.getElementById('uglezMode');
@@ -303,7 +450,7 @@
     Sync.aoResolverSessao(() => { if (App.page === 'uglez') Ug.render(); });
   }
 
-  /** Chips de pergunta, reusados na home e na página. */
+  /** Chips de pergunta da home: levam para a conversa e perguntam. */
   function renderChips(id) {
     const box = document.getElementById(id);
     if (!box) return;
@@ -313,15 +460,29 @@
         class: 'ai-chip', type: 'button', text: s.rotulo,
         onclick: () => {
           App.goTo('uglez');
-          const campo = document.getElementById('aiQuestion');
-          if (campo) campo.value = s.q;
-          Ug.registrar(s.q);
           setTimeout(() => AI.ask(s.q), 60);
         }
       }));
     });
   }
   Ug.renderChips = renderChips;
+
+  /** Cartões de começo de conversa, como nos assistentes de IA. */
+  function renderCartoes() {
+    const box = document.getElementById('uglezChipsFull');
+    if (!box) return;
+    U.clear(box);
+    Ug.sugestoes().forEach((s) => {
+      box.appendChild(el('button', {
+        class: 'uglez-cartao', type: 'button',
+        onclick: () => AI.ask(s.q)
+      }, [
+        el('span', { class: 'uglez-cartao-ico' }, Icons.lucide(s.icone || 'sparkles', 16)),
+        el('span', { class: 'uglez-cartao-t', text: s.rotulo }),
+        el('span', { class: 'uglez-cartao-s', text: s.sub || '' })
+      ]));
+    });
+  }
 
   /* ============================================================
      INSIGHTS — quatro leituras, todas verificáveis
