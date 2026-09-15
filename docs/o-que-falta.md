@@ -32,10 +32,12 @@ tratar o OAZE como um sistema de produção completo.
    seguir `docs/STRIPE-CONFIGURACAO.md` e validar renovação, falha, cancelamento,
    estorno e exclusão antes de usar uma chave de produção.
 
-6. **Finalizar os documentos legais.**
-   Preencher razão social, CNPJ, endereço e encarregado de dados; revisar Termos
-   e Privacidade com advogado. Nomear a Stripe como operadora e
-   documentar cobrança, cancelamento e reembolso reais.
+6. **Finalizar os documentos legais e aceites.**
+   Termos, Privacidade, SLA, incidentes, fornecedores, cookies e acessibilidade
+   foram publicados como minuta em 15/09/2026. Ainda é preciso preencher razão
+   social, CNPJ, endereço e encarregado, confirmar regiões e retenções dos
+   fornecedores, obter revisão jurídica e implementar os três aceites no servidor
+   antes de bloquear o cadastro.
 
 7. **Fechar a configuração de produção.**
    Usar domínio próprio, verificar o domínio no Google OAuth, revisar URLs de

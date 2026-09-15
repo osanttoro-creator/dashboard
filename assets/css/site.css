@@ -1386,8 +1386,7 @@ p.leve { color: var(--bruma); }
   .lens-layout { min-height: 0; padding-block: 40px; }
 }
 
-/* Aviso pequeno, sem bloquear a página. Só armazenamento essencial
-   existe hoje; não há categoria de publicidade para consentir. */
+/* Preferências de cookies: aceitar e recusar têm o mesmo peso visual. */
 .aviso-cookies {
   position: fixed; z-index: 10000; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
   width: min(760px, calc(100% - 28px)); transform: translateX(-50%);
@@ -1398,14 +1397,18 @@ p.leve { color: var(--bruma); }
 }
 .aviso-cookies p { margin: 0; font-size: .84rem; line-height: 1.55; color: var(--bruma); }
 .aviso-cookies a { color: var(--ouro-texto); text-decoration: underline; text-underline-offset: 3px; }
-.aviso-cookies-aceitar {
-  flex: none; min-height: 42px; padding: 8px 18px; border: 0; border-radius: 7px;
-  color: #071822; background: var(--ouro); font: 700 .82rem/1 var(--fonte-corpo);
+.aviso-cookies-acoes { display: flex; flex: none; gap: 8px; }
+.aviso-cookies-botao {
+  min-height: 42px; padding: 8px 14px; border: 1px solid var(--ouro); border-radius: 7px;
+  font: 700 .78rem/1.15 var(--fonte-corpo);
   cursor: pointer;
 }
+.aviso-cookies-aceitar { color: #071822; background: var(--ouro); }
+.aviso-cookies-recusar { color: var(--ouro-texto); background: transparent; }
 .aviso-cookies-aceitar:hover { background: var(--ouro-claro); }
-.aviso-cookies-aceitar:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.aviso-cookies-recusar:hover { background: rgba(216, 180, 94, .1); }
+.aviso-cookies-botao:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 @media (max-width: 620px) {
   .aviso-cookies { align-items: stretch; flex-direction: column; gap: 12px; }
-  .aviso-cookies-aceitar { width: 100%; }
+  .aviso-cookies-acoes { display: grid; grid-template-columns: 1fr 1fr; }
 }

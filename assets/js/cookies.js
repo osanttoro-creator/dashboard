@@ -1,12 +1,32 @@
-/* Aviso de armazenamento essencial. O OAZE não ativa publicidade
-   nem analytics; por isso há ciência, não um falso botão de recusa
-   que quebraria sessão, tema e dados locais. */
+/* Preferências de cookies e tecnologias equivalentes.
+   Hoje o OAZE não carrega analytics, publicidade nem personalização
+   opcional. A escolha já fica pronta para impedir essas categorias
+   antes que qualquer integração futura seja iniciada. */
 (function () {
   'use strict';
-  var CHAVE = 'oaze.aviso-cookies.v1';
+  var CHAVE = 'oaze.cookies.v2';
+
+  function aplicar(valor) {
+    document.documentElement.setAttribute('data-oaze-cookies', valor);
+    window.dispatchEvent(new CustomEvent('oaze:preferencias-cookies', {
+      detail: { opcionais: valor === 'aceitos' }
+    }));
+  }
+
+  function salvar(valor, aviso) {
+    try { localStorage.setItem(CHAVE, valor); } catch (e) {}
+    aplicar(valor);
+    aviso.remove();
+  }
 
   function iniciar() {
-    try { if (localStorage.getItem(CHAVE) === 'aceito') return; } catch (e) {}
+    try {
+      var salvo = localStorage.getItem(CHAVE);
+      if (salvo === 'aceitos' || salvo === 'recusados') {
+        aplicar(salvo);
+        return;
+      }
+    } catch (e) {}
 
     var aviso = document.createElement('section');
     aviso.className = 'aviso-cookies';
@@ -15,24 +35,36 @@
 
     var texto = document.createElement('p');
     texto.appendChild(document.createTextNode(
-      'O OAZE usa cookies e armazenamento essenciais para manter sua sessão, preferências e dados locais. Não usamos cookies de publicidade. '
+      'O OAZE usa armazenamento necessário para sessão, segurança, preferências e funcionamento local. Hoje não usamos analytics nem publicidade. Escolha se futuras tecnologias opcionais poderão ser ativadas. '
     ));
     var politica = document.createElement('a');
-    politica.href = '/privacidade#local';
-    politica.textContent = 'Entenda o que fica no aparelho';
+    politica.href = '/privacidade#cookies';
+    politica.textContent = 'Ver política de cookies';
     texto.appendChild(politica);
 
-    var botao = document.createElement('button');
-    botao.type = 'button';
-    botao.className = 'aviso-cookies-aceitar';
-    botao.textContent = 'Entendi';
-    botao.addEventListener('click', function () {
-      try { localStorage.setItem(CHAVE, 'aceito'); } catch (e) {}
-      aviso.remove();
+    var acoes = document.createElement('div');
+    acoes.className = 'aviso-cookies-acoes';
+
+    var recusar = document.createElement('button');
+    recusar.type = 'button';
+    recusar.className = 'aviso-cookies-botao aviso-cookies-recusar';
+    recusar.textContent = 'Recusar opcionais';
+    recusar.addEventListener('click', function () {
+      salvar('recusados', aviso);
     });
 
+    var aceitar = document.createElement('button');
+    aceitar.type = 'button';
+    aceitar.className = 'aviso-cookies-botao aviso-cookies-aceitar';
+    aceitar.textContent = 'Aceitar opcionais';
+    aceitar.addEventListener('click', function () {
+      salvar('aceitos', aviso);
+    });
+
+    acoes.appendChild(recusar);
+    acoes.appendChild(aceitar);
     aviso.appendChild(texto);
-    aviso.appendChild(botao);
+    aviso.appendChild(acoes);
     document.body.appendChild(aviso);
   }
 

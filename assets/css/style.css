@@ -3568,7 +3568,7 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   #btnSettings .pill-label { display: none; }
 }
 
-/* Aviso de armazenamento essencial — também aparece dentro do app. */
+/* Preferências de cookies — também aparecem dentro do app. */
 .aviso-cookies {
   position: fixed; z-index: 10000; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
   width: min(760px, calc(100% - 28px)); transform: translateX(-50%);
@@ -3580,14 +3580,18 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
 }
 .aviso-cookies p { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
 .aviso-cookies a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
-.aviso-cookies-aceitar {
-  flex: none; min-height: 42px; padding: 8px 18px; border: 0; border-radius: 7px;
-  color: var(--button-ink, #071822); background: var(--accent); font: 700 12px/1 var(--font-body);
+.aviso-cookies-acoes { display: flex; flex: none; gap: 8px; }
+.aviso-cookies-botao {
+  min-height: 42px; padding: 8px 14px; border: 1px solid var(--accent); border-radius: 7px;
+  font: 700 12px/1.15 var(--font-body);
   cursor: pointer;
 }
+.aviso-cookies-aceitar { color: var(--button-ink, #071822); background: var(--accent); }
+.aviso-cookies-recusar { color: var(--accent-text); background: transparent; }
 .aviso-cookies-aceitar:hover { filter: brightness(1.08); }
-.aviso-cookies-aceitar:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.aviso-cookies-recusar:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.aviso-cookies-botao:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 @media (max-width: 620px) {
   .aviso-cookies { align-items: stretch; flex-direction: column; gap: 12px; }
-  .aviso-cookies-aceitar { width: 100%; }
+  .aviso-cookies-acoes { display: grid; grid-template-columns: 1fr 1fr; }
 }

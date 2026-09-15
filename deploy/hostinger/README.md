@@ -48,6 +48,9 @@ deploy do site e precisam de uma migração compensatória.
 
 ## Limite atual
 
-O site está preparado para o Checkout da Stripe, mas a cobrança permanece
-fechada enquanto as chaves, o webhook, os testes em modo de teste e a aprovação
-dos contratos não forem concluídos. Sem essa configuração, nada é cobrado.
+O webhook da Stripe foi validado em modo de teste e as páginas públicas de
+Termos e Privacidade foram autorizadas para publicação como minuta. A cobrança
+em produção permanece fechada até configurar as credenciais e o webhook live,
+validar o fluxo ponta a ponta e concluir a identificação legal, o canal do
+encarregado, a revisão jurídica e o registro server-side dos aceites. Sem essa
+configuração de produção, nada é cobrado.

@@ -55,20 +55,23 @@
   <div class="env">
     <div class="texto">
       <h1>Política de privacidade</h1>
-      <p class="atualizado">Última atualização: 13 de setembro de 2026</p>
+      <p class="atualizado">Última atualização: 15 de setembro de 2026</p>
 
       <div class="aviso">
         <p><strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o
         funcionamento real do produto, mas <strong>não foi revisado por advogado</strong>
         e faltam dados obrigatórios.</p>
         <p>Antes de publicar em definitivo: preencher a identificação do controlador
-        (§1), nomear o encarregado pelo tratamento de dados (§10, exigido pelo art. 41 da
+        (§1), nomear o encarregado pelo tratamento de dados (§11, exigido pelo art. 41 da
         LGPD) e revisar as bases legais do §3.</p>
       </div>
 
       <h2 id="controlador">1. Quem é o responsável</h2>
       <p>O OAZE é o <strong>controlador</strong> dos dados pessoais tratados aqui, nos
       termos da Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
+      <p>Você é o <strong>titular</strong> dos seus dados. O papel de controlador só muda
+      em uma futura contratação empresarial na qual o cliente decida como tratar dados
+      pessoais de outras pessoas; esse caso terá contrato e anexo próprios.</p>
       <p><em>A completar: razão social, CNPJ e endereço.</em></p>
 
       <h2 id="coleta">2. O que coletamos</h2>
@@ -112,9 +115,10 @@
       banco, não por uma verificação no aplicativo.</p>
       <p>O site é hospedado na <strong>Hostinger</strong>.</p>
       <p><strong>Transferência internacional:</strong> esses serviços podem manter
-      servidores fora do Brasil. A LGPD permite (art. 33), e nós escolhemos fornecedores
-      com cláusulas contratuais de proteção. <em>A confirmar na revisão jurídica: a região
-      exata do projeto Supabase.</em></p>
+      servidores fora do Brasil. Antes de cada transferência, o OAZE deve confirmar a
+      hipótese legal, o país, o importador e um mecanismo válido previsto na LGPD e na
+      Resolução CD/ANPD nº 19/2024. <em>A confirmar: região do projeto Supabase e países
+      usados por cada fornecedor.</em></p>
 
       <h2 id="ia">5. A UGLEZ e o uso de inteligência artificial</h2>
       <p>Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio
@@ -131,9 +135,25 @@
       navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.</p>
 
       <h2 id="compartilha">6. Com quem compartilhamos</h2>
-      <p>Apenas com operadores necessários para o serviço funcionar: Supabase (banco e
-      autenticação), Hostinger (hospedagem), OpenAI (modelo de linguagem; só o que o §5
-      descreve) e Stripe (processamento das assinaturas e dos dados de pagamento).</p>
+      <p>Compartilhamos somente o necessário para a operação escolhida. O papel de cada
+      fornecedor pode variar entre operador, suboperador e controlador independente:</p>
+      <ul>
+        <li><strong>Supabase:</strong> banco PostgreSQL, autenticação, Edge Functions e
+        backups disponíveis no plano contratado.</li>
+        <li><strong>Hostinger:</strong> hospedagem dos arquivos públicos e registros
+        técnicos necessários à entrega e à segurança do site.</li>
+        <li><strong>Stripe:</strong> Checkout, assinatura, fatura, cancelamento, estorno,
+        disputa e prevenção a fraude.</li>
+        <li><strong>OpenAI:</strong> resposta da UGLEZ, somente quando você escolhe enviar
+        uma pergunta, nos limites descritos no §5.</li>
+        <li><strong>Google e Apple:</strong> autenticação, somente quando o método estiver
+        habilitado e você o escolher.</li>
+        <li><strong>jsDelivr:</strong> fallback técnico para carregar a biblioteca pública
+        do Supabase se o arquivo local não estiver disponível.</li>
+      </ul>
+      <p>Cloudflare Turnstile, hCaptcha, analytics, SMTP externo e monitoramento de erros
+      só serão acrescentados a esta lista antes de sua ativação e depois da avaliação de
+      finalidade, dados, retenção, segurança e transferência internacional.</p>
       <p><strong>Não vendemos seus dados. Não os cedemos para publicidade. Não os cruzamos
       com outras bases.</strong></p>
       <p>Podemos fornecer dados por ordem judicial. Nesse caso avisamos você, salvo quando
@@ -145,15 +165,40 @@
       do que ainda não subiu quando você está sem internet.</p>
       <p>Isso é por aparelho e não chega até nós. Limpar os dados do navegador apaga essa
       parte — sem afetar o que está na sua conta.</p>
-      <p>Se você usa o OAZE <strong>sem conta</strong>, é só isso que existe: tudo fica no
-      aparelho, e nós não temos cópia nem como recuperar.</p>
+      <p>Se você usa o OAZE <strong>sem conta</strong>, seus registros financeiros ficam no
+      aparelho, e nós não temos cópia nem como recuperá-los. A hospedagem ainda pode gerar
+      os registros técnicos e de acesso descritos nesta política.</p>
 
-      <h2 id="prazo">8. Por quanto tempo guardamos</h2>
-      <p>Enquanto sua conta existir. Ao excluir a conta, os registros financeiros são
-      apagados junto, em cascata no banco.</p>
-      <p>Registros de erro são descartados em <strong>90 dias</strong>.</p>
+      <h2 id="cookies">8. Cookies e escolhas de privacidade</h2>
+      <p>O OAZE usa cookies ou tecnologias equivalentes estritamente necessários para
+      sessão, segurança, preferências solicitadas e funcionamento local. Eles não são
+      usados para publicidade.</p>
+      <p>O banner permite <strong>aceitar ou recusar tecnologias opcionais</strong>. Elas
+      ficam desligadas até a escolha e, se forem recusadas, analytics, marketing,
+      personalização não necessária e SDKs opcionais não poderão ser iniciados. Hoje o
+      OAZE não tem nenhuma dessas categorias ativa.</p>
+      <p>A decisão fica em <code>oaze.cookies.v2</code>, no seu navegador, para que o banner
+      respeite a escolha. Você pode apagar essa preferência nos dados do navegador e
+      escolher novamente.</p>
+      <p>Recusar opcionais não encerra a sessão nem desliga recursos necessários ao serviço
+      que você pediu. Se você não quiser o tratamento necessário para uma conta, use o
+      modo local sem conta; nesse modo, o OAZE não recebe seus registros financeiros.</p>
 
-      <h2 id="direitos">9. Seus direitos</h2>
+      <h2 id="prazo">9. Por quanto tempo guardamos e como excluímos</h2>
+      <p>Os registros financeiros permanecem enquanto sua conta existir. Ao excluir a
+      conta, o OAZE cancela a renovação, revoga as sessões e remove os dados do banco ativo.</p>
+      <p>Alguns registros podem ser conservados pelo prazo exigido por lei ou necessário
+      para exercício regular de direitos, incluindo cobrança, fraude, aceites e registros
+      de acesso. Quando o art. 15 do Marco Civil for aplicável, registros de acesso ficam
+      por 6 meses, sob sigilo e segurança.</p>
+      <p>Cópias residuais podem permanecer em backups protegidos pelo ciclo técnico do
+      fornecedor. Elas não ficam disponíveis para uso normal e devem voltar à fila de
+      exclusão se um backup for restaurado. <em>O prazo máximo será publicado depois da
+      confirmação contratual com o Supabase.</em></p>
+      <p>Registros de incidentes de segurança são mantidos por pelo menos 5 anos. Dados
+      conservados após a exclusão não serão reutilizados para marketing ou reativação.</p>
+
+      <h2 id="direitos">10. Seus direitos</h2>
       <p>A LGPD (art. 18) garante a você: confirmação de tratamento, acesso, correção,
       anonimização ou bloqueio, portabilidade, eliminação, informação sobre
       compartilhamento e revogação do consentimento.</p>
@@ -167,19 +212,41 @@
       <p>Para os demais, escreva para <a href="/suporte">o suporte</a>. Respondemos em até
       <strong>15 dias</strong>.</p>
 
-      <h2 id="encarregado">10. Encarregado (DPO)</h2>
+      <h2 id="encarregado">11. Encarregado (DPO)</h2>
       <p><em>A completar: nome e contato do encarregado, conforme o art. 41 da LGPD.</em></p>
 
-      <h2 id="menores">11. Crianças e adolescentes</h2>
+      <h2 id="menores">12. Crianças e adolescentes</h2>
       <p>O OAZE não se destina a menores de 18 anos sem autorização de responsável legal, e
       não coletamos dados de crianças conscientemente. Se isso acontecer, avise o suporte
       e apagamos.</p>
 
-      <h2 id="mudancas">12. Mudanças nesta política</h2>
+      <h2 id="incidentes">13. Incidentes e responsabilidades</h2>
+      <p>O OAZE adota medidas de segurança proporcionais ao risco e poderá responder quando
+      der causa ao dano por tratamento ilegal, falha evitável, instrução ilícita, demora na
+      contenção ou escolha e fiscalização negligentes de fornecedor.</p>
+      <p>Se um operador descumprir a LGPD ou nossas instruções lícitas, ou se um controlador
+      independente falhar em uma decisão própria, ele poderá responder pela participação no
+      evento. Isso não impede o OAZE de cooperar com a investigação e atender o titular.</p>
+      <p>O usuário poderá responder por fraude, ação ilícita, compartilhamento deliberado de
+      credenciais ou culpa exclusiva comprovada. Erro comum ou phishing não transferem toda
+      a responsabilidade automaticamente.</p>
+      <p>Incidente que possa causar risco ou dano relevante será comunicado à ANPD e aos
+      titulares afetados em até 3 dias úteis, salvo prazo legal específico. O aviso informará
+      natureza dos dados, riscos, medidas adotadas e canal de contato.</p>
+
+      <h2 id="acessibilidade">14. Acessibilidade e privacidade</h2>
+      <p>Esta política, as escolhas de cookies, os pedidos de direitos, a exportação e a
+      exclusão devem funcionar com teclado, leitores de tela, zoom e outras tecnologias
+      assistivas. A meta do OAZE é atender a WCAG 2.2 nível AA.</p>
+      <p>Se uma barreira impedir o exercício de um direito, escreva para
+      <a href="mailto:suporte@oaze.site">suporte@oaze.site</a>. Ofereceremos uma alternativa
+      equivalente sem custo e sem perda de prazo.</p>
+
+      <h2 id="mudancas">15. Mudanças nesta política</h2>
       <p>Se algo relevante mudar, avisamos por e-mail com <strong>30 dias</strong> de
       antecedência e atualizamos a data no topo desta página.</p>
 
-      <h2 id="contato">13. Contato</h2>
+      <h2 id="contato">16. Contato</h2>
       <p><a href="/suporte">Página de suporte</a> ou
       <a href="mailto:suporte@oaze.site">suporte@oaze.site</a>.</p>
     </div>
