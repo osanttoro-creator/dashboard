@@ -299,6 +299,13 @@
         <p class="page-sub" id="pageSub"></p>
       </div>
 
+      <!-- Aviso de conta. Quem abre o OAZE num aparelho sem entrar vê
+           só os dados daquele navegador — e, sem este aviso, não havia
+           onde perceber isso: o selo de estado mora na barra lateral,
+           que não existe no celular nem no computador. Desenhado por
+           estado-sync.js. -->
+      <div class="aviso-conta" id="avisoConta" role="region" aria-label="Conta e sincronização" hidden></div>
+
     <!-- ─────────── VISÃO GERAL ───────────
          Responde, de cima para baixo: quanto eu tenho, como estou,
          quanto entrou e saiu, o que vem aí, e onde o dinheiro foi.
@@ -1077,6 +1084,10 @@
       <h2 id="menuMovelTitulo">Seu OAZE</h2>
       <button type="button" class="icon-btn" id="btnFecharMenuMovel" aria-label="Fechar menu"><span data-ico="x"></span></button>
     </div>
+
+    <!-- A conta deste aparelho: com quem sincroniza, ou o convite para
+         entrar. Desenhado por estado-sync.js. -->
+    <div class="menu-movel-conta" id="menuMovelConta" aria-live="polite"></div>
 
     <p class="menu-movel-grupo">Planejar</p>
     <div class="menu-movel-grade">

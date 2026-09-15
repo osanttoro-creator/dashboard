@@ -104,11 +104,129 @@
     return { chave: 'sincronizado', texto: 'Sincronizado' };
   }
 
+  /* =============================================================
+     A CONTA À VISTA
+     -------------------------------------------------------------
+     O selo acima mora na barra lateral, que não aparece nem no
+     celular nem no computador desde a navegação nova. Resultado
+     medido em 15/09/2026: o celular estava sem sessão, o app
+     mostrava os dados só daquele navegador, e nada na tela dizia
+     isso — parecia que a sincronização não funcionava.
+
+     Dois lugares passam a dizer:
+       · o topo do Menu do celular: com quem sincroniza, e um
+         "Sincronizar agora"; ou o botão de entrar;
+       · um aviso acima do conteúdo, só SEM conta, que pode ser
+         fechado por 7 dias — o uso sem conta é legítimo e não deve
+         virar insistência.
+     ============================================================= */
+  const CHAVE_AVISO = 'oaze.aviso-conta.fechado';
+  const SETE_DIAS = 7 * 24 * 60 * 60 * 1000;
+
+  function avisoFechadoRecente() {
+    try { return Date.now() - (+localStorage.getItem(CHAVE_AVISO) || 0) < SETE_DIAS; }
+    catch (e) { return false; }
+  }
+
+  function botao(classe, texto, aoClicar) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = classe;
+    b.textContent = texto;
+    b.addEventListener('click', aoClicar);
+    return b;
+  }
+
+  function entrar() {
+    if (global.Shell && Shell.fecharMenuMovel) Shell.fecharMenuMovel();
+    if (global.Sync && Sync.signIn) Sync.signIn();
+    else global.location.href = '/entrar?destino=/app';
+  }
+
+  function pintarConta(s) {
+    const temSync = !!(global.Sync && Sync.isConfigured && Sync.isConfigured());
+    const restaurando = !!(global.Sync && Sync.restaurando && Sync.restaurando());
+    const u = temSync && Sync.currentUser ? Sync.currentUser() : null;
+
+    const menu = document.getElementById('menuMovelConta');
+    if (menu) {
+      menu.textContent = '';
+      menu.hidden = !temSync;
+      if (temSync) {
+        const inicial = document.createElement('span');
+        inicial.className = 'conta-inicial' + (u ? '' : ' is-vazia');
+        inicial.setAttribute('aria-hidden', 'true');
+        inicial.textContent = u ? String(u.displayName || u.email || '?').charAt(0).toUpperCase() : '·';
+
+        const textos = document.createElement('span');
+        textos.className = 'conta-textos';
+        const t = document.createElement('strong');
+        const sub = document.createElement('span');
+        if (restaurando) {
+          t.textContent = 'Verificando sua conta…';
+          sub.textContent = 'Um instante.';
+        } else if (u) {
+          t.textContent = u.email || u.displayName || 'Sua conta';
+          sub.textContent = s.chave === 'offline' ? s.texto
+            : s.chave === 'erro' ? s.texto
+              : s.chave === 'sincronizando' ? 'Sincronizando…'
+                : 'Sincronizado com seus outros aparelhos';
+          sub.className = 'is-' + s.chave;
+        } else {
+          t.textContent = 'Dados só neste aparelho';
+          sub.textContent = 'Entre com a mesma conta do computador para ver tudo aqui.';
+          sub.className = 'is-local';
+        }
+        textos.appendChild(t);
+        textos.appendChild(sub);
+        menu.appendChild(inicial);
+        menu.appendChild(textos);
+
+        if (!restaurando && u) {
+          menu.appendChild(botao('btn btn-ghost btn-sm conta-acao', 'Sincronizar agora', function (ev) {
+            const b = ev.currentTarget;
+            b.disabled = true;
+            b.textContent = 'Sincronizando…';
+            const fim = function () { b.disabled = false; b.textContent = 'Sincronizar agora'; ES.pintar(); };
+            Promise.resolve(Sync.atualizarAgora && Sync.atualizarAgora(true)).then(fim, fim);
+          }));
+        } else if (!restaurando) {
+          menu.appendChild(botao('btn btn-primary btn-sm conta-acao', 'Entrar', entrar));
+        }
+      }
+    }
+
+    const aviso = document.getElementById('avisoConta');
+    if (aviso) {
+      const mostrar = temSync && !restaurando && !u && !avisoFechadoRecente();
+      aviso.hidden = !mostrar;
+      aviso.textContent = '';
+      if (mostrar) {
+        const texto = document.createElement('p');
+        const forte = document.createElement('strong');
+        forte.textContent = 'Estes dados estão só neste aparelho. ';
+        texto.appendChild(forte);
+        texto.appendChild(document.createTextNode(
+          'Entre com a mesma conta do computador ou do tablet para ver tudo sincronizado aqui.'));
+        aviso.appendChild(texto);
+        const acoes = document.createElement('div');
+        acoes.className = 'aviso-conta-acoes';
+        acoes.appendChild(botao('btn btn-primary btn-sm', 'Entrar e sincronizar', entrar));
+        acoes.appendChild(botao('btn btn-ghost btn-sm', 'Agora não', function () {
+          try { localStorage.setItem(CHAVE_AVISO, String(Date.now())); } catch (e) { /* segue */ }
+          aviso.hidden = true;
+        }));
+        aviso.appendChild(acoes);
+      }
+    }
+  }
+
   ES.pintar = function () {
+    const s = decidir();
+    pintarConta(s);
+
     const alvo = document.getElementById('filaBox');
     if (!alvo) return;
-
-    const s = decidir();
     clearTimeout(sumir);
 
     alvo.className = 'fila-chip is-' + s.chave;

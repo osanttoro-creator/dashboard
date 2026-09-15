@@ -4552,3 +4552,40 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-page.tem-conversa .uglez-metricas { display: none; }
   .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 22px; }
 }
+
+/* =============================================================
+   26 · A CONTA À VISTA — aviso e topo do Menu
+   -------------------------------------------------------------
+   O estado da sincronização morava só na barra lateral, invisível
+   no celular e no computador. Ver estado-sync.js.
+   ============================================================= */
+.aviso-conta[hidden], .menu-movel-conta[hidden] { display: none; }
+.aviso-conta {
+  display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap;
+  padding: 12px 14px; border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--glass-line));
+  background: color-mix(in srgb, var(--accent) 10%, var(--n1));
+}
+.aviso-conta p { flex: 1 1 280px; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.aviso-conta strong { color: var(--ink); font-weight: 640; }
+.aviso-conta-acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.menu-movel-conta {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: center;
+  column-gap: 12px; row-gap: 10px;
+  margin: 10px 0 2px; padding: 12px;
+  border: 1px solid var(--glass-line); border-radius: 12px; background: var(--plane-2);
+}
+.conta-inicial {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 650; font-size: 16px; color: var(--on-accent, #071822);
+  background: var(--accent);
+}
+.conta-inicial.is-vazia { background: color-mix(in srgb, var(--ink) 12%, transparent); color: var(--muted); }
+.conta-textos { display: grid; gap: 2px; min-width: 0; }
+.conta-textos strong { font-size: 14px; font-weight: 620; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conta-textos span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.conta-textos .is-sincronizado { color: var(--good-text); }
+.conta-textos .is-offline, .conta-textos .is-erro { color: var(--warning-text); }
+.conta-acao { grid-column: 1 / -1; justify-self: stretch; }
