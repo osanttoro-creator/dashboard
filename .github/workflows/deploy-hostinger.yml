@@ -215,7 +215,10 @@ jobs:
           sleep 10
           falhou=0
           checar() {
-            real=$(curl -s -o /dev/null -w '%{http_code}' "https://$SITE_DOMAIN$1")
+            # O WAF da hospedagem bloqueia o User-Agent vazio/padrão do curl
+            # com 403, embora a página esteja pública. Identifique a sonda.
+            real=$(curl -sS -A 'OAZE-Deploy-Check/1.0 (+https://oaze.site)' \
+              -o /dev/null -w '%{http_code}' "https://$SITE_DOMAIN$1")
             if [ "$real" = "$2" ]; then
               printf '  ok    %-24s %s\n' "$1" "$real"
             else
