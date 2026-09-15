@@ -68,7 +68,7 @@ env:
 jobs:
   publicar:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 35
 
     steps:
       - uses: actions/checkout@v5
@@ -127,7 +127,13 @@ jobs:
             echo "::error::HOSTINGER_API_TOKEN nao esta configurado nos secrets do repositorio"
             exit 1
           fi
-          resp=$(curl -sS -w '\n%{http_code}' -X POST \
+          # A Hostinger pode responder 429/5xx durante manutenção. O curl
+          # repete apenas falhas transitórias, a cada 60 s, por até 25 min.
+          # Erros definitivos (por exemplo, token inválido) continuam falhando
+          # imediatamente e sem imprimir o corpo, que pode conter credenciais.
+          resp=$(curl -sS --retry 24 --retry-delay 60 --retry-max-time 1500 \
+            --retry-all-errors --connect-timeout 15 --max-time 30 \
+            -w '\n%{http_code}' -X POST \
             "$HOSTINGER_API/api/hosting/v1/files/upload-urls" \
             -H "Authorization: Bearer $TOKEN" \
             -H 'Content-Type: application/json' \
