@@ -599,7 +599,7 @@
              duas linhas a 390px e empurravam "Importar" para baixo. -->
         <button class="tab is-active" data-tab="accounts"><span class="tab-longo">Contas de débito</span><span class="tab-curto">Contas</span></button>
         <button class="tab" data-tab="cards"><span class="tab-longo">Cartões de crédito</span><span class="tab-curto">Cartões</span></button>
-        <button class="tab" data-tab="import"><span class="tab-longo">Importar extratos / Registrato</span><span class="tab-curto">Importar</span></button>
+        <button class="tab" data-tab="import"><span class="tab-longo">Importar extratos</span><span class="tab-curto">Importar</span></button>
       </div>
 
       <!-- Aba contas -->
@@ -640,17 +640,17 @@
         <div class="card">
           <div class="card-head">
             <h2>Importar lançamentos</h2>
-            <span class="card-note">CSV · OFX · texto colado de extrato, fatura ou Registrato</span>
+            <span class="card-note">CSV · OFX/QFX · TXT</span>
           </div>
           <div class="import-grid">
             <div class="field">
               <span class="field-label">1 · Envie um arquivo</span>
               <input type="file" class="input" id="importFile" aria-label="Arquivo de extrato para importar" accept=".csv,.ofx,.qfx,.txt,text/csv,text/plain">
-              <p class="hint">Aceita CSV, OFX/QFX e TXT. Nada é enviado para fora do navegador.</p>
+              <p class="hint">Aceita CSV, OFX/QFX e TXT. PDF não é aceito porque o layout visual pode alterar a leitura dos valores. Nada é enviado para fora do navegador.</p>
             </div>
             <div class="field">
               <span class="field-label">ou cole o conteúdo aqui</span>
-              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato, da fatura ou do relatório do Registrato…"></textarea>
+              <textarea class="input textarea" id="importText" aria-label="Colar o extrato em texto" rows="7" placeholder="Cole aqui as linhas do extrato ou da fatura…"></textarea>
             </div>
           </div>
           <div class="import-opts">

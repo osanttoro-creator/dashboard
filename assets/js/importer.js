@@ -176,25 +176,6 @@
     return { rows: out, skipped };
   }
 
-  /** Registrato (Relatório de Relacionamentos do BCB): lista de instituições. */
-  function detectRegistrato(text) {
-    const n = U.norm(text);
-    const hit = n.includes('registrato') || n.includes('relacionamentos com o sistema financeiro') ||
-      (n.includes('banco central') && n.includes('instituicao'));
-    if (!hit) return null;
-    const names = new Set();
-    // o cabeçalho do relatório não é uma instituição
-    const headerNoise = /banco central|registrato|relacionament|sistema financeiro|relatorio/i;
-    text.split(/\r?\n/).forEach((line) => {
-      const l = line.trim();
-      if (l.length < 4 || l.length > 80) return;
-      if (headerNoise.test(U.norm(l))) return;
-      const m = /(banco[^,;|\t]{2,50}|caixa econ[^,;|\t]{0,30}|nu pagamentos[^,;|\t]{0,20}|itau[^,;|\t]{0,30}|bradesco[^,;|\t]{0,30}|santander[^,;|\t]{0,30}|sicredi[^,;|\t]{0,30}|sicoob[^,;|\t]{0,30}|xp inv[^,;|\t]{0,30}|btg[^,;|\t]{0,30}|inter[^,;|\t]{0,20}|c6[^,;|\t]{0,20}|picpay[^,;|\t]{0,20}|mercado pago[^,;|\t]{0,20})/i.exec(l);
-      if (m) names.add(U.smartCase(m[1].trim()));
-    });
-    return { institutions: Array.from(names).slice(0, 30) };
-  }
-
   /* ============================================================
      Interface
      ============================================================ */
@@ -254,11 +235,6 @@
     if (text.length > MAX_TEXTO_CHARS || text.includes('\u0000')) {
       box.appendChild(info('O conteúdo excede o limite de 2 MB ou não é texto válido.', 'is-error'));
       return;
-    }
-
-    const reg = detectRegistrato(text);
-    if (reg && reg.institutions.length) {
-      box.appendChild(registratoPanel(reg));
     }
 
     if (/<OFX|<STMTTRN>/i.test(text)) {
@@ -542,55 +518,6 @@
     ]));
 
     box.appendChild(card);
-  }
-
-  /* ---------------- Registrato ---------------- */
-
-  function registratoPanel(reg) {
-    const card = el('div', { class: 'card' });
-    card.appendChild(el('div', { class: 'card-head' }, [
-      el('h2', { text: 'Relatório do Registrato detectado' }),
-      el('span', { class: 'card-note', text: `${reg.institutions.length} instituição(ões) identificada(s)` })
-    ]));
-    card.appendChild(info(
-      'O relatório de relacionamentos do Banco Central lista onde você tem conta, mas <strong>não traz lançamentos</strong>. ' +
-      'Dá para criar as contas a partir dele e depois importar os extratos de cada banco em CSV/OFX.'));
-
-    const list = el('div', { class: 'cat-list' });
-    const chosen = new Set(reg.institutions);
-    reg.institutions.forEach((name) => {
-      const cb = el('input', { type: 'checkbox' });
-      cb.checked = true;
-      cb.addEventListener('change', () => { if (cb.checked) chosen.add(name); else chosen.delete(name); });
-      list.appendChild(el('div', { class: 'cat-row' }, [
-        el('label', { class: 'check' }, cb),
-        el('div', { class: 'cat-name', text: name }),
-        el('span'), el('span')
-      ]));
-    });
-    card.appendChild(list);
-
-    card.appendChild(el('button', {
-      class: 'btn btn-primary btn-sm', style: { marginTop: '12px' },
-      text: 'Criar contas selecionadas',
-      onclick: () => {
-        if (!chosen.size) { UI.toast('Nenhuma instituição selecionada.', 'error'); return; }
-        let n = 0;
-        chosen.forEach((name) => {
-          if (Store.profile().accounts.some((a) => U.norm(a.name) === U.norm(name))) return;
-          const preset = Store.BANK_PRESETS.find((b) => U.norm(name).includes(U.norm(b.name)));
-          Store.accounts.add({
-            name, bank: preset ? preset.name : name, type: 'Conta corrente',
-            color: preset ? preset.color : '#9AA0AC',
-            openingBalance: 0, openedAt: U.todayISO(), archived: false
-          });
-          n++;
-        });
-        UI.toast(n ? `${n} conta(s) criadas — informe o saldo inicial de cada uma.` : 'Todas as contas já existiam.', n ? 'success' : null);
-        Importer.renderTargets();
-      }
-    }));
-    return card;
   }
 
   global.Importer = Importer;

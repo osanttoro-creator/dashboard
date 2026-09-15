@@ -215,8 +215,15 @@
       Limites.barra('Metas', Limites.contar('goals'), Limites.limite('goals')),
       Limites.barra('Recorrências', Limites.contar('recurring_items'), Limites.limite('recurring_items'))
     ]);
+    const detalhes = el('details', { class: 'uso-detalhes' }, [
+      el('summary', { class: 'uso-resumo' }, [
+        el('span', { text: 'Acompanhar recursos utilizados' }),
+        el('span', { class: 'uso-seta', 'aria-hidden': 'true' })
+      ]),
+      caixa
+    ]);
     box.appendChild(linha('Consumo do plano',
-      'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', caixa));
+      'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', detalhes));
 
     if (p.id === 'free') {
       box.appendChild(linha(

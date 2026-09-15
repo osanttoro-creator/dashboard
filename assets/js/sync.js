@@ -356,14 +356,43 @@
   /** Junta os perfis remotos com os locais. Vence o `updatedAt` maior. */
   function mergeProfiles(remoteMap) {
     const st = Store.state();
+    const remotos = Object.keys(remoteMap || {}).map((id) => {
+      const remoto = remoteMap[id];
+      if (!remoto || typeof remoto !== 'object') return null;
+      const normalizado = Store.normalizeProfile(remoto);
+      normalizado.id = id;
+      return normalizado;
+    }).filter(Boolean);
+
+    /* Um aparelho novo nasce com dois espaços demonstrativos vazios. Antes
+       eles continuavam ativos depois do login, enquanto os espaços reais
+       eram apenas anexados no fim. Os dados chegavam, mas a tela permanecia
+       no perfil vazio — parecia perda de sincronização. Somente esse estado
+       inicial, inequivocamente intocado, pode ser substituído por completo. */
+    const iniciais = st.profiles.length === 2 &&
+      st.profiles[0].name === 'Pessoal' && st.profiles[1].name === 'PJ / Autônomo';
+    const vazio = iniciais && st.profiles.every((p, indice) => {
+      const colecoesVazias = ['cards', 'goals', 'transactions', 'investments']
+        .every((chave) => !Array.isArray(p[chave]) || p[chave].length === 0);
+      const mapasVazios = ['budgets', 'invoices']
+        .every((chave) => !p[chave] || Object.keys(p[chave]).length === 0);
+      const contasIniciais = indice === 0
+        ? Array.isArray(p.accounts) && p.accounts.length === 1 &&
+          p.accounts[0].name === 'Conta corrente' && (+p.accounts[0].openingBalance || 0) === 0
+        : !Array.isArray(p.accounts) || p.accounts.length === 0;
+      return (+p.updatedAt || 0) === 0 && colecoesVazias && mapasVazios && contasIniciais;
+    });
+    if (vazio && remotos.length) {
+      st.profiles = remotos;
+      st.activeProfileId = remotos[0].id;
+      return true;
+    }
+
     const byId = new Map(st.profiles.map((p) => [p.id, p]));
     let changed = false;
 
-    Object.keys(remoteMap || {}).forEach((id) => {
-      const remote = remoteMap[id];
-      if (!remote || typeof remote !== 'object') return;
-      const normalized = Store.normalizeProfile(remote);
-      normalized.id = id;
+    remotos.forEach((normalized) => {
+      const id = normalized.id;
       const local = byId.get(id);
       if (!local) {
         st.profiles.push(normalized);

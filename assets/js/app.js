@@ -252,6 +252,134 @@
 
   /* ---------------- seletores de período e perfil ---------------- */
 
+  const seletoresContexto = new Map();
+  let seletorAberto = null;
+
+  function sincronizarSeletorContexto(select) {
+    const controle = seletoresContexto.get(select);
+    if (controle) controle.sincronizar();
+  }
+
+  /**
+   * O menu nativo de <select> é desenhado pelo sistema operacional e
+   * destoava de todos os painéis do app. Mantemos o select como fonte do
+   * valor, mas oferecemos um listbox próprio, navegável também por teclado.
+   */
+  function prepararSeletorContexto(select) {
+    if (!select || seletoresContexto.has(select)) return;
+    const wrap = select.closest('.pill-select-wrap');
+    if (!wrap) return;
+
+    const idMenu = 'menu-' + select.id;
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = 'oaze-select-button';
+    botao.setAttribute('aria-haspopup', 'listbox');
+    botao.setAttribute('aria-expanded', 'false');
+    botao.setAttribute('aria-controls', idMenu);
+    botao.setAttribute('aria-label', select.getAttribute('aria-label') || 'Selecionar');
+
+    const menu = document.createElement('div');
+    menu.id = idMenu;
+    menu.className = 'oaze-select-menu';
+    menu.setAttribute('role', 'listbox');
+    menu.setAttribute('aria-label', select.getAttribute('aria-label') || 'Opções');
+    menu.hidden = true;
+    document.body.appendChild(menu);
+
+    const fechar = (devolverFoco) => {
+      menu.hidden = true;
+      botao.setAttribute('aria-expanded', 'false');
+      if (seletorAberto && seletorAberto.fechar === fechar) seletorAberto = null;
+      if (devolverFoco) botao.focus();
+    };
+
+    const desenhar = () => {
+      menu.replaceChildren();
+      Array.from(select.options).forEach((opcao) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'oaze-select-option';
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', opcao.value === select.value ? 'true' : 'false');
+        item.disabled = opcao.disabled;
+        item.dataset.value = opcao.value;
+        item.textContent = opcao.textContent;
+        item.addEventListener('click', () => {
+          select.value = opcao.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          fechar(true);
+        });
+        menu.appendChild(item);
+      });
+    };
+
+    const abrir = (direcao) => {
+      if (seletorAberto && seletorAberto.fechar !== fechar) seletorAberto.fechar(false);
+      desenhar();
+      menu.hidden = false;
+      botao.setAttribute('aria-expanded', 'true');
+      seletorAberto = { fechar };
+      const r = botao.getBoundingClientRect();
+      menu.style.minWidth = Math.max(r.width, 136) + 'px';
+      const largura = menu.offsetWidth;
+      menu.style.left = Math.max(8, Math.min(r.left, innerWidth - largura - 8)) + 'px';
+      const altura = menu.offsetHeight;
+      const abaixo = r.bottom + 6;
+      menu.style.top = (abaixo + altura <= innerHeight - 8 ? abaixo : Math.max(8, r.top - altura - 6)) + 'px';
+      const itens = Array.from(menu.querySelectorAll('.oaze-select-option:not(:disabled)'));
+      const marcado = itens.findIndex((item) => item.getAttribute('aria-selected') === 'true');
+      const indice = direcao < 0 ? Math.max(0, marcado) : (marcado >= 0 ? marcado : 0);
+      if (itens[indice]) itens[indice].focus();
+    };
+
+    const sincronizar = () => {
+      const opcao = select.options[select.selectedIndex];
+      botao.textContent = opcao ? opcao.textContent : '';
+      botao.disabled = select.disabled;
+      if (!menu.hidden) desenhar();
+    };
+
+    botao.addEventListener('click', () => menu.hidden ? abrir(1) : fechar(false));
+    botao.addEventListener('keydown', (ev) => {
+      if (!['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(ev.key)) return;
+      ev.preventDefault();
+      abrir(ev.key === 'ArrowUp' ? -1 : 1);
+    });
+    menu.addEventListener('keydown', (ev) => {
+      const itens = Array.from(menu.querySelectorAll('.oaze-select-option:not(:disabled)'));
+      const atual = itens.indexOf(document.activeElement);
+      let proximo = atual;
+      if (ev.key === 'ArrowDown') proximo = Math.min(itens.length - 1, atual + 1);
+      else if (ev.key === 'ArrowUp') proximo = Math.max(0, atual - 1);
+      else if (ev.key === 'Home') proximo = 0;
+      else if (ev.key === 'End') proximo = itens.length - 1;
+      else if (ev.key === 'Escape') { ev.preventDefault(); fechar(true); return; }
+      else if (ev.key === 'Tab') { fechar(false); return; }
+      else return;
+      ev.preventDefault();
+      if (itens[proximo]) itens[proximo].focus();
+    });
+    document.addEventListener('pointerdown', (ev) => {
+      if (!menu.hidden && !menu.contains(ev.target) && !botao.contains(ev.target)) fechar(false);
+    });
+    global.addEventListener('resize', () => fechar(false));
+    select.addEventListener('change', sincronizar);
+
+    select.classList.add('oaze-select-native');
+    select.tabIndex = -1;
+    select.setAttribute('aria-hidden', 'true');
+    wrap.classList.add('is-custom');
+    wrap.appendChild(botao);
+    seletoresContexto.set(select, { sincronizar, fechar });
+    sincronizar();
+  }
+
+  function prepararSeletoresContexto() {
+    ['profileSelect', 'monthSelect', 'yearSelect']
+      .forEach((id) => prepararSeletorContexto(document.getElementById(id)));
+  }
+
   function syncPeriodPicker() {
     const monthSel = document.getElementById('monthSelect');
     const yearSel = document.getElementById('yearSelect');
@@ -271,12 +399,43 @@
     /* "Mês atual" só faz sentido quando não estamos nele. */
     const hoje = document.getElementById('btnToday');
     if (hoje) hoje.disabled = App.noMesAtual();
+    sincronizarSeletorContexto(monthSel);
+    sincronizarSeletorContexto(yearSel);
   }
 
   function syncProfileSelect() {
     const st = Store.state();
     UI.fillSelect(document.getElementById('profileSelect'),
       st.profiles.map((p) => ({ value: p.id, label: p.name })), st.activeProfileId);
+    sincronizarSeletorContexto(document.getElementById('profileSelect'));
+  }
+
+  function limitarEntradasNumericas() {
+    document.addEventListener('input', (ev) => {
+      const campo = ev.target;
+      if (!(campo instanceof HTMLInputElement)) return;
+      const decimal = campo.matches('[inputmode="decimal"]');
+      const inteiro = campo.matches('[inputmode="numeric"]');
+      if (!decimal && !inteiro) return;
+      const inicio = campo.selectionStart;
+      const anterior = campo.value;
+      const limpo = decimal
+        ? anterior.replace(/[^0-9,.]/g, '')
+        : anterior.replace(/\D/g, '');
+      if (limpo === anterior) return;
+      campo.value = limpo;
+      if (inicio != null) {
+        const antesDoCursor = anterior.slice(0, inicio);
+        const limpoAntes = decimal
+          ? antesDoCursor.replace(/[^0-9,.]/g, '')
+          : antesDoCursor.replace(/\D/g, '');
+        campo.setSelectionRange(limpoAntes.length, limpoAntes.length);
+      }
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.target instanceof HTMLInputElement && ev.target.type === 'number' &&
+          ['e', 'E', '+', '-'].includes(ev.key)) ev.preventDefault();
+    });
   }
 
   /* ---------------- ação principal flutuante ---------------- */
@@ -343,6 +502,7 @@
   /* ---------------- ligação de eventos ---------------- */
 
   function wire() {
+    limitarEntradasNumericas();
     // navegação
     U.$$('.nav-item').forEach((b) => b.addEventListener('click', () => App.goTo(b.dataset.page)));
 
@@ -499,6 +659,7 @@
     passo('ícones', paintIcons);
     passo('perfis', syncProfileSelect);
     passo('período', syncPeriodPicker);
+    passo('seletores de contexto', prepararSeletoresContexto);
     passo('eventos', wire);
     passo('calendário', () => Cal.init());
     passo('navegação superior', () => Shell.wireTopnav());

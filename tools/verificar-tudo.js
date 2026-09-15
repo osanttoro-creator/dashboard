@@ -50,7 +50,9 @@ const VERIFICACOES = [
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],
   ['tools/testes/ida-e-volta.js', 'dados voltam iguais do banco'],
-  ['tools/testes/trava-sobrescrita.js', 'o banco não apaga o aparelho']
+  ['tools/testes/trava-sobrescrita.js', 'o banco não apaga o aparelho'],
+  ['tools/testes/sincronizacao-entre-aparelhos.js', 'aparelho novo abre os dados reais da conta'],
+  ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos']
 ];
 
 const SQL_MANUAIS = [

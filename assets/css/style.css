@@ -454,19 +454,24 @@ table { border-collapse: collapse; width: 100%; }
 }
 .pill-hoje:hover { background: var(--plane-2); color: var(--ink); }
 .pill-btn {
-  cursor: pointer; padding: 7px 12px;
+  position: relative; cursor: pointer; padding: 7px 12px;
+  align-items: center; justify-content: center;
   transition: transform .16s var(--ease-out), background .16s var(--ease-out);
 }
+.pill-btn > [data-ico] { display: inline-grid; place-items: center; line-height: 0; }
 .pill-btn:hover { transform: translateY(-1px); }
 .pill-btn:active { transform: scale(.96); }
 .pill-btn[aria-expanded="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--n3)); color: var(--ink); }
 .pill-label { font-weight: 540; }
 .notif-count {
+  position: absolute; top: -6px; right: -6px;
   min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px;
   display: grid; place-items: center;
   background: var(--critical); color: var(--on-critical);
   font-size: 10.5px; font-weight: 700; line-height: 1;
+  box-shadow: 0 0 0 2px var(--bg); z-index: 2;
 }
+.notif-count[hidden] { display: none; }
 
 /* --- 6.4 popovers ---
    Raios da identidade v1 (prancha 8, item 6), entrada sem desfoque:
@@ -1158,9 +1163,10 @@ select.input { cursor: pointer; }
    ------------------------------------------------------------ */
 .cat-list { display: grid; gap: 5px; }
 .cat-row {
-  display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center;
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto auto; gap: 10px; align-items: center;
   padding: 8px 9px; border-radius: var(--radius-sm);
 }
+.cat-row > :first-child { justify-self: center; }
 .cat-row:hover { background: var(--plane-2); }
 .cat-swatch { width: 12px; height: 12px; border-radius: 4px; flex: none; }
 .cat-name { font-size: 13px; font-weight: 560; }
@@ -2580,6 +2586,22 @@ input[type="checkbox"], input[type="radio"] {
 
 /* --- barras de consumo --- */
 .uso-caixa { display: grid; gap: 10px; min-width: min(100%, 300px); }
+.uso-detalhes { width: min(100%, 360px); }
+.uso-resumo {
+  display: grid; grid-template-columns: 1fr 18px; gap: 9px; align-items: center;
+  min-height: 40px; padding: 8px 11px; cursor: pointer; list-style: none;
+  border: 1px solid var(--glass-line); border-radius: var(--radius-sm);
+  background: var(--plane-2); color: var(--ink-2); font-size: 12.5px; font-weight: 620;
+}
+.uso-resumo::-webkit-details-marker { display: none; }
+.uso-resumo:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.uso-seta {
+  justify-self: center; width: 7px; height: 7px; color: var(--muted);
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg); transition: transform .18s var(--ease-out);
+}
+.uso-detalhes[open] .uso-seta { transform: rotate(225deg); }
+.uso-detalhes .uso-caixa { margin-top: 12px; padding: 0 2px 2px; }
 .uso-linha { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
 .uso-rotulo { font-size: 12.5px; color: var(--ink-2); }
 .uso-num { font-size: 12.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
@@ -3630,7 +3652,7 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   min-height: 30px; border: 1px solid var(--glass-line);
   border-radius: 999px; background: var(--plane-2);
 }
-.pill-select-wrap::after {
+.pill-select-wrap:not(.is-custom)::after {
   content: ''; position: absolute; right: 9px; pointer-events: none;
   width: 0; height: 0;
   border-left: 3.5px solid transparent; border-right: 3.5px solid transparent;
@@ -3648,6 +3670,51 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .pill .pill-select-wrap select:focus-visible { outline: none; }
+.oaze-select-native {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  min-width: 1px !important; min-height: 1px !important; padding: 0 !important;
+  opacity: 0; pointer-events: none; overflow: hidden;
+}
+.oaze-select-button {
+  position: relative; min-height: 28px; padding: 4px 25px 4px 10px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink);
+  font: inherit; font-size: 12.5px; font-weight: 560; text-align: left;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.oaze-select-button::after {
+  content: ''; position: absolute; right: 9px; top: 50%; translate: 0 -35%;
+  width: 0; height: 0; border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent; border-top: 4px solid var(--muted);
+  transition: transform .16s var(--ease-out);
+}
+.oaze-select-button[aria-expanded="true"]::after { transform: rotate(180deg); }
+.oaze-select-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.pill-select-month .oaze-select-button { width: 96px; }
+.pill-select-year .oaze-select-button { width: 80px; }
+.pill-espaco .oaze-select-button { width: 108px; min-width: 82px; }
+.oaze-select-menu {
+  position: fixed; z-index: 140; display: grid; gap: 3px; padding: 6px;
+  max-width: min(280px, calc(100vw - 16px)); max-height: min(360px, calc(100vh - 24px));
+  overflow-y: auto; border: 1px solid var(--glass-line); border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg) 92%, var(--n3));
+  -webkit-backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  backdrop-filter: blur(var(--n3-blur)) saturate(180%);
+  box-shadow: var(--shadow-lift), inset 0 1px 0 var(--glass-edge);
+  animation: pop-in .16s var(--ease-out);
+}
+.oaze-select-menu[hidden] { display: none; }
+.oaze-select-option {
+  width: 100%; min-height: 38px; padding: 8px 10px; border: 0;
+  border-radius: var(--radius-sm); background: transparent; color: var(--ink-2);
+  font: inherit; font-size: 12.5px; font-weight: 560; text-align: left; cursor: pointer;
+}
+.oaze-select-option:hover, .oaze-select-option:focus-visible {
+  outline: none; background: var(--plane-2); color: var(--ink);
+}
+.oaze-select-option[aria-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--plane-2));
+  color: var(--ink); box-shadow: inset 2px 0 0 var(--accent);
+}
 
 /* O UGLEZ fecha a navegação e é o único destino deliberadamente
    só com símbolo. O nome continua no aria-label e na tooltip. */
@@ -3668,6 +3735,9 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   .pill-espaco .pill-select-wrap select { width: 104px; min-width: 0; }
   .pill-select-month select { width: 112px; }
   .pill-select-year select { width: 68px; }
+  .pill-espaco .oaze-select-button { width: 104px; min-width: 0; }
+  .pill-select-month .oaze-select-button { width: 112px; }
+  .pill-select-year .oaze-select-button { width: 76px; }
   .sidebar .nav-item.is-uglez .nav-short { display: none; }
 }
 
@@ -3800,6 +3870,11 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
     font-family: var(--font-titulo); font-size: 20px; font-weight: 500; letter-spacing: -.01em;
     color: var(--ink); text-overflow: ellipsis;
   }
+  .topbar .pill-espaco .oaze-select-button {
+    width: auto; max-width: 100%; min-width: 0; min-height: 40px;
+    padding: 4px 22px 4px 4px; font-family: var(--font-titulo);
+    font-size: 20px; font-weight: 500; letter-spacing: -.01em; color: var(--ink);
+  }
   .topbar .pill-espaco .pill-select-wrap::after { right: 6px; }
   .topbar #btnProfiles { min-width: 36px; min-height: 36px; width: 36px; height: 36px; color: var(--muted); }
 
@@ -3837,6 +3912,10 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   .topbar .pill-period .pill-select-wrap select {
     width: auto; min-height: 36px; font-size: 16px; font-weight: 620; color: var(--ink);
     padding: 4px 20px 4px 6px;
+  }
+  .topbar .pill-period .oaze-select-button {
+    width: auto; min-height: 36px; padding: 4px 20px 4px 6px;
+    font-size: 16px; font-weight: 620; color: var(--ink);
   }
   .topbar .pill-period .pill-select-wrap::after { right: 6px; }
   .topbar .pill-hoje {
