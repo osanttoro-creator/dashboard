@@ -191,11 +191,11 @@
 
     const onde = document.getElementById('footOnde');
     if (!onde) return;
-    const estado = global.Dados && Dados.estado ? Dados.estado() : 'local';
     const restaurando = global.Sync && Sync.restaurando && Sync.restaurando();
+    const conta = global.Sync && Sync.currentUser && Sync.currentUser();
     onde.textContent = restaurando
       ? 'Verificando sua conta…'
-      : estado === 'local'
+      : !conta
         ? 'Dados salvos apenas neste navegador — sem conta, não há cópia em outro lugar'
         : 'Dados na sua conta, no servidor. Este navegador guarda uma cópia para abrir rápido';
   }

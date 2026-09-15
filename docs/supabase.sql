@@ -33,12 +33,18 @@ create extension if not exists "pgcrypto";
 create table if not exists public.dados (
   user_id    uuid primary key references auth.users (id) on delete cascade,
   profiles   jsonb       not null default '{}'::jsonb,
+  removidos  jsonb       not null default '{}'::jsonb,
   meta       jsonb       not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
 
+-- Também atualiza projetos criados por uma versão anterior deste arquivo.
+alter table public.dados
+  add column if not exists removidos jsonb not null default '{}'::jsonb;
+
 comment on table  public.dados            is 'Perfis do OAZE, um documento por usuário. Espelho do localStorage.';
 comment on column public.dados.profiles   is 'Mapa id → perfil: contas, cartões, categorias, lançamentos, investimentos, faturas.';
+comment on column public.dados.removidos  is 'Mapa id → data da exclusão, para propagá-la entre aparelhos.';
 comment on column public.dados.meta       is 'Carimbo do último envio: quando e de qual aparelho.';
 
 -- -------------------------------------------------------------
@@ -145,7 +151,94 @@ create trigger dados_updated_at
   for each row execute function public.dados_toca_updated_at();
 
 -- -------------------------------------------------------------
--- 5 · Realtime — um aparelho avisando o outro
+-- 5 · mesclagem atômica entre aparelhos
+-- -------------------------------------------------------------
+create or replace function public.carimbo_perfil(p jsonb)
+returns bigint
+language sql
+immutable
+set search_path = ''
+as $$
+  select case
+    when jsonb_typeof(p) = 'number' and (p #>> '{}') ~ '^[0-9]{1,15}$' then (p #>> '{}')::bigint
+    when jsonb_typeof(p) = 'string' and (p #>> '{}') ~ '^[0-9]{1,15}$' then (p #>> '{}')::bigint
+    when jsonb_typeof(p) = 'object' and coalesce(p ->> 'updatedAt', '') ~ '^[0-9]{1,15}$' then (p ->> 'updatedAt')::bigint
+    else 0
+  end;
+$$;
+
+create or replace function public.mesclar_dados(
+  p_profiles jsonb,
+  p_removidos jsonb default '{}'::jsonb,
+  p_meta jsonb default '{}'::jsonb
+)
+returns table (profiles jsonb, removidos jsonb, updated_at timestamptz)
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+#variable_conflict use_column
+declare
+  v_user uuid := auth.uid();
+  v_perfis jsonb;
+  v_rem jsonb;
+  v_chave text;
+  v_valor jsonb;
+begin
+  if v_user is null then
+    raise exception 'sem_sessao' using errcode = '42501';
+  end if;
+  p_profiles := coalesce(p_profiles, '{}'::jsonb);
+  p_removidos := coalesce(p_removidos, '{}'::jsonb);
+  if jsonb_typeof(p_profiles) <> 'object' or jsonb_typeof(p_removidos) <> 'object' then
+    raise exception 'corpo_invalido' using errcode = '22023';
+  end if;
+  if octet_length(p_profiles::text) > 5242880 then
+    raise exception 'documento_grande' using errcode = '54000';
+  end if;
+
+  insert into public.dados (user_id, profiles, meta, removidos)
+  values (v_user, '{}'::jsonb, '{}'::jsonb, '{}'::jsonb)
+  on conflict (user_id) do nothing;
+
+  select d.profiles, d.removidos into v_perfis, v_rem
+    from public.dados d where d.user_id = v_user for update;
+  v_perfis := coalesce(v_perfis, '{}'::jsonb);
+  v_rem := coalesce(v_rem, '{}'::jsonb);
+
+  for v_chave, v_valor in select e.key, e.value from jsonb_each(p_removidos) e loop
+    if public.carimbo_perfil(v_valor) > public.carimbo_perfil(v_rem -> v_chave) then
+      v_rem := jsonb_set(v_rem, array[v_chave], to_jsonb(public.carimbo_perfil(v_valor)));
+    end if;
+  end loop;
+  for v_chave, v_valor in select e.key, e.value from jsonb_each(p_profiles) e loop
+    continue when jsonb_typeof(v_valor) <> 'object';
+    if not (v_perfis ? v_chave)
+       or public.carimbo_perfil(v_valor) > public.carimbo_perfil(v_perfis -> v_chave) then
+      v_perfis := jsonb_set(v_perfis, array[v_chave], v_valor);
+    end if;
+  end loop;
+  for v_chave, v_valor in select e.key, e.value from jsonb_each(v_rem) e loop
+    if (v_perfis ? v_chave)
+       and public.carimbo_perfil(v_valor) >= public.carimbo_perfil(v_perfis -> v_chave) then
+      v_perfis := v_perfis - v_chave;
+    end if;
+  end loop;
+
+  update public.dados d
+     set profiles = v_perfis, removidos = v_rem, meta = coalesce(p_meta, '{}'::jsonb)
+   where d.user_id = v_user;
+  return query select v_perfis, v_rem, now();
+end;
+$$;
+
+revoke all on function public.mesclar_dados(jsonb, jsonb, jsonb) from public, anon;
+grant execute on function public.mesclar_dados(jsonb, jsonb, jsonb) to authenticated;
+revoke all on function public.carimbo_perfil(jsonb) from public, anon;
+grant execute on function public.carimbo_perfil(jsonb) to authenticated;
+
+-- -------------------------------------------------------------
+-- 6 · Realtime — um aparelho avisando o outro
 -- -------------------------------------------------------------
 -- Opcional. Sem isto tudo funciona; só não chega atualização
 -- automática enquanto os dois aparelhos estão abertos.
@@ -166,7 +259,7 @@ $$;
 -- sessão só recebe as mudanças da própria linha.
 
 -- -------------------------------------------------------------
--- 6 · conferência
+-- 7 · conferência
 -- -------------------------------------------------------------
 -- Deve devolver rowsecurity = true e as quatro políticas.
 select relname, relrowsecurity as rls_ligado, relforcerowsecurity as rls_forcado

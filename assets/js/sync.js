@@ -58,6 +58,19 @@
   let detail = '';
   let applying = false;     // ignora o commit gerado ao aplicar dados remotos
   let pushTimer = null;
+  /* Nada sobe antes de a nuvem ser lida nesta sessão. Um aparelho
+     recém-aberto que enviasse primeiro mandaria seus espaços de
+     demonstração vazios para a conta — e, com a mescla no banco,
+     eles passariam a aparecer em todos os aparelhos. */
+  let leuRemoto = false;
+  let envioEsperando = false;
+  let pedeEnvio = false;     // a última mescla achou algo mais novo aqui do que lá
+  let envioEmAndamento = null;
+  let releituraEmAndamento = null;
+  let releituraPedida = false;
+  let geracaoEnvio = 0;
+  let geracaoSessao = 0;
+  const ouvintesEstado = [];
 
   /* ---------------- registro de backends ---------------- */
 
@@ -77,6 +90,9 @@
   Sync.backendAtivo = () => backend;
   Sync.status = () => ({ state, detail, user, backend: backend && backend.nome });
   Sync.currentUser = () => user;
+  Sync.pronto = () => leuRemoto;
+  Sync.temPendencia = () => envioEsperando || !!pushTimer || !!envioEmAndamento;
+  Sync.aoMudarEstado = (fn) => { ouvintesEstado.push(fn); };
 
   /* ============================================================
      "AINDA NÃO SEI" É UM ESTADO, E FALTAVA
@@ -140,6 +156,9 @@
     state = next;
     detail = msg || '';
     paintAccount();
+    ouvintesEstado.forEach((fn) => {
+      try { fn(Sync.status()); } catch (e) { console.error('Sync/estado:', e); }
+    });
   }
   Sync._setState = setState;
   Sync.refreshIndicator = () => setState(state, detail);
@@ -276,7 +295,14 @@
   };
 
   function solta() {
+    geracaoSessao += 1;
     clearTimeout(pushTimer);
+    pushTimer = null;
+    leuRemoto = false;
+    envioEsperando = false;
+    pedeEnvio = false;
+    releituraEmAndamento = null;
+    releituraPedida = false;
     if (backend) { try { backend.soltar(); } catch (e) { /* ignora */ } }
   }
 
@@ -285,15 +311,22 @@
   /** Chamado pelo backend quando a sessão muda. `u` = null ao sair. */
   Sync._onUser = function (u) {
     const anterior = user && user.uid;
+    const proximo = u && u.uid;
     user = u || null;
     /* Houve resposta: com sessão ou sem, a dúvida acabou. */
     const eraDuvida = restaurando;
     restaurando = false;
     if (eraDuvida) avisarSessao();
 
-    // A troca de sessão dispara também em renovação de token e re-login.
-    // Sem soltar o ouvinte antigo, cada disparo empilha outro e a
-    // mesclagem (e o toast) rodariam duplicadas.
+    /* INITIAL_SESSION e SIGNED_IN podem anunciar a mesma sessão. Isso não
+       é troca de conta: desmontar e remontar o canal aqui abria duas
+       leituras concorrentes e uma delas podia aplicar uma cópia antiga. */
+    if (anterior && proximo === anterior) {
+      if (state === 'offline') Sync.atualizarAgora(true);
+      return;
+    }
+
+    // Só uma troca real de usuário encerra o canal anterior.
     solta();
 
     if (!user) {
@@ -304,10 +337,10 @@
     }
 
     setState('connecting');
-    try { backend.observar(user); } catch (e) {
+    Promise.resolve(backend.observar(user)).catch((e) => {
       console.error('Sync/observar:', e);
       setState('offline', e.message);
-    }
+    });
 
     // só avisa quando a conta realmente muda — não a cada reabertura do app
     if (anterior !== user.uid) {
@@ -339,23 +372,70 @@
     if (global.Dados && Dados.carregarDoBanco) Dados.carregarDoBanco();
   };
 
-  /** Chamado pelo backend quando chegam perfis da nuvem. */
-  Sync._onRemote = function (remote) {
-    if (!remote || !Object.keys(remote).length) { pushNow(); return; }  // nuvem vazia: publica o que temos
-    if (mergeProfiles(remote)) {
+  /**
+   * Chamado pelo backend quando chegam perfis da nuvem — na abertura,
+   * pelo tempo real, ao voltar para o app e como resposta de um envio.
+   * `opcoes.resposta` = veio da própria gravação: não é "outro aparelho".
+   */
+  Sync._onRemote = function (remote, removidosRemotos, opcoes) {
+    const primeiraLeitura = !leuRemoto;
+    leuRemoto = true;
+    const vazio = !remote || !Object.keys(remote).length;
+    if (vazio && !Object.keys(removidosRemotos || {}).length) {
+      pushNow();                                // nuvem vazia: publica o que temos
+      return;
+    }
+    if (mergeProfiles(remote || {}, removidosRemotos)) {
       applying = true;
       Store.commit('sync-apply');               // não re-carimba updatedAt
       applying = false;
-      UI.toast('Dados atualizados a partir de outro dispositivo.');
+      if (!(opcoes && opcoes.resposta)) UI.toast('Dados atualizados a partir de outro dispositivo.');
     }
     setState('ok');
+    /* Este aparelho tem algo mais novo do que a nuvem (ou esperava a
+       leitura para enviar): sobe agora. Sem isso, o notebook ficava
+       com a versão certa só para ele. */
+    if (pedeEnvio || (primeiraLeitura && envioEsperando)) {
+      envioEsperando = false;
+      schedulePush();
+    }
   };
 
   /* ---------------- mesclagem ---------------- */
 
-  /** Junta os perfis remotos com os locais. Vence o `updatedAt` maior. */
-  function mergeProfiles(remoteMap) {
+  /**
+   * Espaço sem nada que a pessoa tenha feito: nenhum lançamento,
+   * cartão, meta, investimento, orçamento ou fatura, e no máximo a
+   * "Conta corrente" zerada que o app cria sozinho. Categorias não
+   * contam — todo espaço nasce com as padrão.
+   */
+  function semConteudo(p) {
+    const colecoesVazias = ['cards', 'goals', 'transactions', 'investments']
+      .every((chave) => !Array.isArray(p[chave]) || p[chave].length === 0);
+    const mapasVazios = ['budgets', 'invoices']
+      .every((chave) => !p[chave] || Object.keys(p[chave]).length === 0);
+    const contas = Array.isArray(p.accounts) ? p.accounts : [];
+    const contasIniciais = contas.every((a) =>
+      a && a.name === 'Conta corrente' && (+a.openingBalance || 0) === 0);
+    const padrao = (Store.CATEGORIAS_PADRAO || []).slice().sort();
+    const atuais = (Array.isArray(p.categories) ? p.categories : [])
+      .map((c) => c && c.name).filter(Boolean).sort();
+    const categoriasIniciais = atuais.length === padrao.length &&
+      atuais.every((nome, i) => nome === padrao[i]);
+    return colecoesVazias && mapasVazios && contasIniciais && categoriasIniciais;
+  }
+
+  /**
+   * Junta os perfis remotos com os locais. Vence o `updatedAt` maior,
+   * e uma exclusão mais nova que a última edição apaga o espaço.
+   * Devolve true quando o estado local mudou; deixa em `pedeEnvio` se
+   * este aparelho tem algo que a nuvem ainda não tem.
+   */
+  function mergeProfiles(remoteMap, removidosRemotos) {
     const st = Store.state();
+    pedeEnvio = false;
+    let changed = false;
+
     const remotos = Object.keys(remoteMap || {}).map((id) => {
       const remoto = remoteMap[id];
       if (!remoto || typeof remoto !== 'object') return null;
@@ -363,36 +443,37 @@
       normalizado.id = id;
       return normalizado;
     }).filter(Boolean);
+    const idsRemotos = new Set(remotos.map((p) => p.id));
 
-    /* Um aparelho novo nasce com dois espaços demonstrativos vazios. Antes
-       eles continuavam ativos depois do login, enquanto os espaços reais
-       eram apenas anexados no fim. Os dados chegavam, mas a tela permanecia
-       no perfil vazio — parecia perda de sincronização. Somente esse estado
-       inicial, inequivocamente intocado, pode ser substituído por completo. */
-    const iniciais = st.profiles.length === 2 &&
-      st.profiles[0].name === 'Pessoal' && st.profiles[1].name === 'PJ / Autônomo';
-    const vazio = iniciais && st.profiles.every((p, indice) => {
-      const colecoesVazias = ['cards', 'goals', 'transactions', 'investments']
-        .every((chave) => !Array.isArray(p[chave]) || p[chave].length === 0);
-      const mapasVazios = ['budgets', 'invoices']
-        .every((chave) => !p[chave] || Object.keys(p[chave]).length === 0);
-      const contasIniciais = indice === 0
-        ? Array.isArray(p.accounts) && p.accounts.length === 1 &&
-          p.accounts[0].name === 'Conta corrente' && (+p.accounts[0].openingBalance || 0) === 0
-        : !Array.isArray(p.accounts) || p.accounts.length === 0;
-      return (+p.updatedAt || 0) === 0 && colecoesVazias && mapasVazios && contasIniciais;
+    /* 1 · exclusões: a lembrança mais nova de cada id vence */
+    const removidos = st.removidos || (st.removidos = {});
+    const normalizar = Store.normalizarRemovidos || ((r) => r || {});
+    const chegaram = normalizar(removidosRemotos);
+    Object.keys(chegaram).forEach((id) => {
+      if (!(removidos[id] >= chegaram[id])) { removidos[id] = chegaram[id]; changed = true; }
     });
-    if (vazio && remotos.length) {
-      st.profiles = remotos;
-      st.activeProfileId = remotos[0].id;
-      return true;
+    Object.keys(removidos).forEach((id) => { if (!(chegaram[id] >= removidos[id])) pedeEnvio = true; });
+    const antes = st.profiles.length;
+    st.profiles = st.profiles.filter((p) => !(removidos[p.id] >= (+p.updatedAt || 0)));
+    if (st.profiles.length !== antes) changed = true;
+
+    /* 2 · aparelho novo. Só removemos o par exato de demonstração que
+       nasce com o app. Um espaço vazio criado de propósito pelo usuário
+       continua sendo um dado real e jamais é descartado por heurística. */
+    const iniciais = st.profiles.length === 2 &&
+      st.profiles[0].name === 'Pessoal' && st.profiles[1].name === 'PJ / Autônomo' &&
+      st.profiles.every(semConteudo);
+    if (remotos.length && iniciais) {
+      st.profiles = [];
+      st.activeProfileId = null;
+      changed = true;
     }
 
+    /* 3 · espaço a espaço, o mais novo vence */
     const byId = new Map(st.profiles.map((p) => [p.id, p]));
-    let changed = false;
-
     remotos.forEach((normalized) => {
       const id = normalized.id;
+      if (removidos[id] >= (+normalized.updatedAt || 0)) return;
       const local = byId.get(id);
       if (!local) {
         st.profiles.push(normalized);
@@ -401,8 +482,11 @@
       } else if ((+normalized.updatedAt || 0) > (+local.updatedAt || 0)) {
         Object.assign(local, normalized);
         changed = true;
+      } else if ((+local.updatedAt || 0) > (+normalized.updatedAt || 0)) {
+        pedeEnvio = true;
       }
     });
+    if (st.profiles.some((p) => !idsRemotos.has(p.id))) pedeEnvio = true;
 
     if (!st.profiles.some((p) => p.id === st.activeProfileId) && st.profiles.length) {
       st.activeProfileId = st.profiles[0].id;
@@ -425,20 +509,106 @@
 
   function schedulePush() {
     if (!backend || !user || applying) return;
+    envioEsperando = true;
+    geracaoEnvio += 1;
+    if (!leuRemoto || navigator.onLine === false) return;
     clearTimeout(pushTimer);
     setState('syncing');
-    pushTimer = setTimeout(pushNow, 1500);
+    pushTimer = setTimeout(pushNow, 500);
   }
 
   function pushNow() {
-    if (!backend || !user) return;
-    Promise.resolve(backend.publicar({
+    clearTimeout(pushTimer);
+    pushTimer = null;
+    if (!backend || !user || !leuRemoto || navigator.onLine === false) {
+      if (user && navigator.onLine === false) {
+        setState('offline', 'Alterações guardadas neste aparelho.');
+      }
+      return Promise.resolve(false);
+    }
+    if (envioEmAndamento) return envioEmAndamento;
+
+    const st = Store.state();
+    const geracao = geracaoEnvio;
+    const sessao = geracaoSessao;
+    setState('syncing');
+    envioEmAndamento = Promise.resolve(backend.publicar({
       profiles: profilesPayload(),
+      removidos: Object.assign({}, st.removidos || {}),
       meta: { updatedAt: Date.now(), device: navigator.userAgent.slice(0, 120) }
-    })).then(() => setState('ok'))
-      .catch((e) => setState('offline', 'Falha ao enviar: ' + e.message));
+    })).then((mesclado) => {
+      if (sessao !== geracaoSessao) return false;
+      /* O banco devolve o documento já mesclado com o que os outros
+         aparelhos gravaram: aplicar aqui é o que faz a edição de lá
+         aparecer mesmo sem o tempo real. */
+      if (mesclado && mesclado.profiles) {
+        Sync._onRemote(mesclado.profiles, mesclado.removidos, { resposta: true });
+      }
+      if (geracao === geracaoEnvio) envioEsperando = false;
+      setState('ok');
+      return true;
+    }).catch((e) => {
+      envioEsperando = true;
+      setState('offline', 'Falha ao enviar: ' + e.message);
+      return false;
+    }).finally(() => {
+      envioEmAndamento = null;
+      if (envioEsperando && geracao !== geracaoEnvio && navigator.onLine !== false) {
+        clearTimeout(pushTimer);
+        pushTimer = setTimeout(pushNow, 500);
+      }
+    });
+    return envioEmAndamento;
   }
-  Sync.pushNow = () => { clearTimeout(pushTimer); pushNow(); };
+  Sync.pushNow = pushNow;
+
+  /* ---------------- voltar para o app ----------------
+     O celular congela a aba em segundo plano e a conexão do tempo real
+     cai. Quando a pessoa volta, os avisos perdidos não são reenviados:
+     sem uma leitura nova, a tela mostrava a cópia de horas atrás. Aqui
+     o app relê a conta ao voltar à tela, ao ganhar foco, ao voltar a
+     rede e, por garantia, a cada minuto enquanto está aberto. */
+  Sync.atualizarAgora = function () {
+    if (!backend || !user || !backend.recarregar) return Promise.resolve();
+    if (releituraEmAndamento) {
+      /* Um novo aviso chegou enquanto a consulta estava no ar. Fazemos
+         mais uma passada depois dela para não perder a mudança mais nova. */
+      releituraPedida = true;
+      return releituraEmAndamento;
+    }
+    releituraEmAndamento = Promise.resolve()
+      /* A edição local sai antes da releitura. Assim uma retomada de rede
+         não troca a cópia recente deste aparelho por outra mais velha. */
+      .then(() => envioEsperando && leuRemoto ? pushNow() : true)
+      .then(() => backend.recarregar(user))
+      .catch((e) => {
+        console.warn('Sync/releitura:', e);
+        setState('offline', 'Não foi possível atualizar agora.');
+      })
+      .finally(() => {
+        releituraEmAndamento = null;
+        if (releituraPedida) {
+          releituraPedida = false;
+          setTimeout(() => Sync.atualizarAgora(true), 0);
+        }
+      });
+    return releituraEmAndamento;
+  };
+
+  function ligarReleituras() {
+    const visivel = () => !document.hidden;
+    document.addEventListener('visibilitychange', () => {
+      if (visivel()) Sync.atualizarAgora();
+      else if (envioEsperando) pushNow();
+    });
+    global.addEventListener('focus', () => Sync.atualizarAgora());
+    global.addEventListener('pageshow', () => Sync.atualizarAgora(true));
+    global.addEventListener('pagehide', () => { if (envioEsperando) pushNow(); });
+    global.addEventListener('online', () => Sync.atualizarAgora(true));
+    if (typeof global.setInterval === 'function') {
+      global.setInterval(() => { if (visivel()) Sync.atualizarAgora(); }, 60000);
+    }
+  }
 
   /* ---------------- ajuda ---------------- */
 
@@ -490,12 +660,13 @@
     } catch (e) { /* sem localStorage, segue */ }
 
     Store.onChange((reason) => {
-      if (reason === 'theme' || reason === 'sync-apply') return;
+      if (reason === 'theme' || reason === 'sync-apply' || reason === 'active-profile') return;
       schedulePush();
     });
 
     backend = escolher();
     if (!backend) { setState('off'); return; }
+    ligarReleituras();
 
     /* A partir daqui, e até o backend responder, a pergunta "tem
        conta neste aparelho" não tem resposta. Ver Sync.restaurando(). */

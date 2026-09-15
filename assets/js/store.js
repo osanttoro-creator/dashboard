@@ -156,7 +156,8 @@
       theme: 'dark',            // noite no deserto é o tema principal
       ownerName: '',            // quem é o dono do painel (saudação)
       activeProfileId: pessoal.id,
-      profiles: [pessoal, pj]
+      profiles: [pessoal, pj],
+      removidos: {}
     };
   }
 
@@ -276,6 +277,17 @@
     return prof;
   }
 
+  function normalizarRemovidos(raw) {
+    const out = {};
+    if (!raw || typeof raw !== 'object') return out;
+    Object.keys(raw).forEach((id) => {
+      const quando = +raw[id];
+      if (id && Number.isFinite(quando) && quando > 0) out[id] = Math.floor(quando);
+    });
+    return out;
+  }
+  Store.normalizarRemovidos = normalizarRemovidos;
+
   function normalizeState(raw) {
     if (!raw || typeof raw !== 'object' || !Array.isArray(raw.profiles) || !raw.profiles.length) {
       return makeInitialState();
@@ -285,7 +297,12 @@
       theme: raw.theme === 'dark' ? 'dark' : 'light',
       ownerName: String(raw.ownerName || '').trim().slice(0, 40),
       profiles: raw.profiles.map(normalizeProfile),
-      activeProfileId: raw.activeProfileId
+      activeProfileId: raw.activeProfileId,
+      /* Espaços apagados, {id: quando}. É o que impede um espaço
+         excluído neste aparelho de voltar pela cópia de outro — a
+         sincronização mescla, e sem a lembrança da exclusão a mescla
+         o traria de volta. */
+      removidos: normalizarRemovidos(raw.removidos)
     };
     if (!st.profiles.some((p) => p.id === st.activeProfileId)) st.activeProfileId = st.profiles[0].id;
     return st;
@@ -340,7 +357,7 @@
     // carimbo de última alteração — a sincronização decide conflitos por ele.
     // 'theme' é preferência do aparelho; 'sync-apply' vem do remoto (o carimbo
     // remoto já foi aplicado e re-carimbar criaria loop de push).
-    if (reason !== 'theme' && reason !== 'owner' && reason !== 'sync-apply') {
+    if (!['theme', 'owner', 'sync-apply', 'active-profile', 'profile-list'].includes(reason)) {
       const now = Date.now();
       if (reason === 'import' || reason === 'reset' || reason === 'seed') {
         state.profiles.forEach((p) => { p.updatedAt = now; });
@@ -372,25 +389,34 @@
   Store.setActiveProfile = function (id) {
     if (state.profiles.some((p) => p.id === id)) {
       state.activeProfileId = id;
-      Store.commit('profile');
+      /* O espaço ativo é preferência deste aparelho. Carimbar o perfil ao
+         apenas abri-lo faria uma cópia antiga parecer a edição mais nova. */
+      Store.commit('active-profile');
     }
   };
   Store.addProfile = function (name) {
     const p = makeProfile(name);
+    p.updatedAt = Date.now();
     state.profiles.push(p);
     state.activeProfileId = p.id;
-    Store.commit('profile');
+    Store.commit('profile-list');
     return p;
   };
   Store.renameProfile = function (id, name) {
     const p = state.profiles.find((x) => x.id === id);
-    if (p) { p.name = String(name || p.name).trim() || p.name; Store.commit('profile'); }
+    if (p) {
+      p.name = String(name || p.name).trim() || p.name;
+      p.updatedAt = Date.now();
+      Store.commit('profile-list');
+    }
   };
   Store.deleteProfile = function (id) {
     if (state.profiles.length <= 1) return false;
     state.profiles = state.profiles.filter((p) => p.id !== id);
+    state.removidos = state.removidos || {};
+    state.removidos[id] = Date.now();
     if (state.activeProfileId === id) state.activeProfileId = state.profiles[0].id;
-    Store.commit('profile');
+    Store.commit('profile-list');
     return true;
   };
 

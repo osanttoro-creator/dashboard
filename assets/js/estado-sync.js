@@ -34,6 +34,32 @@
     const eFila = global.Fila ? Fila.estado() : 'sincronizado';
     const eDados = global.Dados ? Dados.estado() : 'local';
     const pendentes = global.Fila ? Fila.pendentes() : 0;
+    const temSync = global.Sync && Sync.status;
+    const conta = temSync && Sync.currentUser();
+    const sSync = temSync ? Sync.status().state : 'off';
+    const legadoPendente = temSync && Sync.temPendencia && Sync.temPendencia();
+
+    if (temSync && Sync.restaurando && Sync.restaurando()) {
+      return { chave: 'sincronizando', texto: 'Verificando sua conta…' };
+    }
+
+    /* O app ainda persiste o painel usado na tabela `dados`; este é o
+       estado que descreve a sincronização que a pessoa realmente vê.
+       A camada normalizada abaixo continua como fallback de migração. */
+    if (conta) {
+      if (!navigator.onLine || sSync === 'offline') {
+        return {
+          chave: 'offline',
+          texto: legadoPendente
+            ? 'Sem conexão — alteração guardada neste aparelho'
+            : 'Sem conexão'
+        };
+      }
+      if (sSync === 'connecting' || sSync === 'syncing' || legadoPendente) {
+        return { chave: 'sincronizando', texto: 'Sincronizando…' };
+      }
+      if (sSync === 'ok') return { chave: 'sincronizado', texto: 'Sincronizado' };
+    }
 
     /* Sem conta: não há sincronização para relatar, e chamar isso de
        estado degradado seria mentira. É um modo de uso. */
@@ -119,7 +145,10 @@
       b.addEventListener('click', function () {
         b.disabled = true;
         b.textContent = 'Tentando…';
-        Promise.resolve(Dados.tentarNovamente()).then(ES.pintar, ES.pintar);
+        const tentativas = [];
+        if (global.Sync && Sync.atualizarAgora) tentativas.push(Sync.atualizarAgora(true));
+        if (global.Dados && Dados.tentarNovamente) tentativas.push(Dados.tentarNovamente());
+        Promise.all(tentativas).then(ES.pintar, ES.pintar);
       });
       alvo.appendChild(b);
     }
@@ -142,6 +171,7 @@
   ES.init = function () {
     if (global.Fila && Fila.aoMudar) Fila.aoMudar(ES.pintar);
     if (global.Dados && Dados.aoMudar) Dados.aoMudar(ES.pintar);
+    if (global.Sync && Sync.aoMudarEstado) Sync.aoMudarEstado(ES.pintar);
     global.addEventListener('online', ES.pintar);
     global.addEventListener('offline', ES.pintar);
     ES.pintar();

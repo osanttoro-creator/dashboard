@@ -102,6 +102,27 @@
     };
   }
 
+  /** Lê o documento inteiro. O tempo real é apenas o aviso para reler:
+      navegadores móveis podem suspender o WebSocket e perder eventos. */
+  async function lerDados(u) {
+    const { data, error } = await cliente
+      .from(TABELA).select('profiles, removidos').eq('user_id', u.uid).maybeSingle();
+
+    if (error) {
+      console.error('Sync/leitura:', error);
+      const falta = String(error.code || '') === '42P01';
+      Sync._setState('offline', falta
+        ? 'A tabela "dados" não existe no seu projeto. Rode docs/supabase.sql no SQL Editor.'
+        : traduz(error));
+      return false;
+    }
+
+    const atual = Sync.currentUser();
+    if (!atual || atual.uid !== u.uid) return false;
+    Sync._onRemote(data && data.profiles, data && data.removidos);
+    return true;
+  }
+
   /* ---------------- mensagens de erro ---------------- */
 
   /**
@@ -367,48 +388,42 @@
     sair: () => cliente.auth.signOut(),
 
     async observar(u) {
-      const { data, error } = await cliente
-        .from(TABELA).select('profiles').eq('user_id', u.uid).maybeSingle();
-
-      if (error) {
-        console.error('Sync/leitura:', error);
-        // 42P01 = relação não existe; PGRST116/42501 = barrado pelo RLS
-        const falta = String(error.code || '') === '42P01';
-        Sync._setState('offline', falta
-          ? 'A tabela "dados" não existe no seu projeto. Rode docs/supabase.sql no SQL Editor.'
-          : traduz(error));
-        return;
-      }
-
-      Sync._onRemote(data && data.profiles);
+      if (!await lerDados(u)) return;
+      if (canal) { try { await cliente.removeChannel(canal); } catch (e) { /* ignora */ } }
 
       canal = cliente.channel('oaze-dados-' + u.uid)
         .on('postgres_changes', {
           event: '*', schema: 'public', table: TABELA, filter: 'user_id=eq.' + u.uid
-        }, (msg) => {
-          const novo = msg && msg.new;
-          if (novo && novo.profiles) Sync._onRemote(novo.profiles);
+        }, () => {
+          /* Postgres Changes pode falhar ou perder mensagens quando a aba
+             fica em segundo plano. O evento só acorda uma leitura nova. */
+          Sync.atualizarAgora();
         })
         .subscribe((status) => {
           // Sem Realtime ligado na tabela o canal nunca abre. Não é
           // motivo para dizer que está offline: gravar e ler seguem
           // funcionando; só não chega aviso de outro aparelho sozinho.
-          if (status === 'CHANNEL_ERROR') {
+          if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
             console.info('Sync: tempo real indisponível — ative Realtime na tabela "dados" se quiser atualização automática.');
           }
         });
     },
 
+    recarregar: (u) => lerDados(u),
+
     async publicar(payload) {
       const u = Sync.currentUser();
       if (!u) return;
-      const { error } = await cliente.from(TABELA).upsert({
-        user_id: u.uid,
-        profiles: payload.profiles,
-        meta: payload.meta,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' });
+      /* O RPC trava a linha e mescla perfil a perfil no banco. Um upsert
+         do JSON inteiro deixava o último aparelho apagar a gravação do
+         outro mesmo quando ambos estavam corretos localmente. */
+      const { data, error } = await cliente.rpc('mesclar_dados', {
+        p_profiles: payload.profiles,
+        p_removidos: payload.removidos || {},
+        p_meta: payload.meta || {}
+      });
       if (error) throw new Error(traduz(error));
+      return Array.isArray(data) ? data[0] : data;
     },
 
     soltar() {

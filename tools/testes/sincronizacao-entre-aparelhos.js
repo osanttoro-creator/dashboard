@@ -46,8 +46,10 @@ const remoto = perfil('prf-remoto', 'Minha vida', 1700000000000, [
 ]);
 
 const novo = montar([
-  perfil('prf-local', 'Pessoal', 0, [contaInicial]),
-  perfil('prf-pj', 'PJ / Autônomo', 0)
+  /* O onboarding pode tocar no relógio sem criar conteúdo. Isso ainda é
+     o estado inicial e precisa dar lugar ao que já está na conta. */
+  perfil('prf-local', 'Pessoal', 42, [contaInicial]),
+  perfil('prf-pj', 'PJ / Autônomo', 43)
 ], 'prf-local');
 const mudouNovo = novo.Sync._merge({ 'prf-remoto': remoto });
 
@@ -69,6 +71,18 @@ if (existente.estado.profiles.length !== 2 || !existente.estado.profiles.some((p
 if (existente.estado.activeProfileId !== 'prf-usado')
   falhas.push('o perfil ativo do aparelho já usado foi trocado');
 
+const excluido = montar([
+  perfil('prf-fica', 'Casa', 1700000002000),
+  perfil('prf-apagado', 'Antigo', 1700000000000)
+], 'prf-apagado');
+excluido.Sync._merge({ 'prf-apagado': perfil('prf-apagado', 'Antigo', 1700000000000) }, {
+  'prf-apagado': 1700000003000
+});
+if (excluido.estado.profiles.some((p) => p.id === 'prf-apagado'))
+  falhas.push('uma exclusão mais nova não chegou ao outro aparelho');
+if (excluido.estado.activeProfileId !== 'prf-fica')
+  falhas.push('a exclusão remota deixou o app apontando para um espaço apagado');
+
 console.log('\n  sincronização entre aparelhos');
 if (falhas.length) {
   falhas.forEach((f) => console.log('  FALHA  ' + f));
@@ -76,3 +90,4 @@ if (falhas.length) {
 }
 console.log('  ok     aparelho novo abre os dados reais da conta');
 console.log('  ok     aparelho já usado conserva seus dados locais\n');
+console.log('  ok     exclusões também chegam aos demais aparelhos\n');
