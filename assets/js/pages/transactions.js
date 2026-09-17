@@ -184,7 +184,8 @@
       UI.toast(cb.checked ? 'Confirmado — entrou no saldo.' : 'Desmarcado — saiu do saldo.');
     });
 
-    const meta = [el('span', { text: U.fmtDayMonth(e.date) })];
+    /* No crédito, a fatura em que cai; no resto, o dia. */
+    const meta = [el('span', { text: Calc.dataDeExibicao(e) })];
     if (e.kind !== 'transfer') meta.push(el('span', { text: Calc.categoryName(e.categoryId) }));
     if (e.recurring) meta.push(UI.badge('Fixa', 'fix'));
     if (e.installment) meta.push(UI.badge(`${e.installment.index}/${e.installment.total}`, 'inst'));

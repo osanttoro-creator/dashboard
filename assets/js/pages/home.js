@@ -412,7 +412,7 @@
     const tbody = table.querySelector('tbody');
     entradas.slice(0, 8).forEach((e) => {
       tbody.appendChild(el('tr', { class: e.confirmed ? '' : 'is-pending' }, [
-        el('td', { text: U.fmtDayMonth(e.date) }),
+        el('td', { text: Calc.dataDeExibicao(e) }),
         el('td', {}, Icons.categoryBadge(e.categoryId, 24)),
         el('td', {}, [
           document.createTextNode(e.description + ' '),

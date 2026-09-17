@@ -178,7 +178,47 @@
       editing ? editing.accountId : d.accountId, prof.accounts.length ? null : 'Nenhuma conta'));
     const fCard = field('Cartão', select(cardOptions(),
       editing ? editing.cardId : d.cardId, prof.cards.length ? null : 'Nenhum cartão'));
+    /* ============================================================
+       NO CRÉDITO, A PESSOA ESCOLHE A FATURA — NÃO O DIA
+       ------------------------------------------------------------
+       Quem lança uma compra no cartão pensa em "cai na fatura de
+       janeiro", não em "foi dia 27 de dezembro". Pedir o dia obrigava
+       a fazer de cabeça a conta do fechamento — e errar de fatura.
+       Com Crédito marcado, o campo de data dá lugar a um seletor de
+       fatura (mês/ano). O dia continua existindo por baixo, porque é
+       por ele que o cálculo decide o ciclo: Calc.dateForInvoice
+       escolhe um dia dentro da fatura escolhida (o original, ao
+       editar; hoje, se hoje está nela).
+       ============================================================ */
+    const fFatura = field('Fatura *', el('select', { class: 'input' }));
     const faturaAviso = el('p', { class: 'hint hint-fatura span-2', role: 'status', hidden: true });
+    let refEscolhida = null;
+
+    function cartaoEscolhido() { return Store.cards.get(fCard._control.value) || null; }
+
+    function refInicial(card) {
+      const base = editing && editing.method === 'card' ? editing.date
+        : (d.date || App.selectedDateOrToday());
+      return Calc.invoiceRefOfDate(card, base);
+    }
+
+    function preencheFaturas() {
+      const card = cartaoEscolhido();
+      if (!card) return;
+      if (!refEscolhida) refEscolhida = refInicial(card);
+      const hojeRef = Calc.invoiceRefOfDate(card, U.todayISO());
+      const opcoes = [];
+      for (let k = -12; k <= 36; k++) {
+        const ref = U.addMonths(hojeRef, k);
+        opcoes.push({ value: ref, label: 'fatura de ' + U.monthLabel(ref, true) });
+      }
+      if (!opcoes.some((o) => o.value === refEscolhida)) {
+        opcoes.push({ value: refEscolhida, label: 'fatura de ' + U.monthLabel(refEscolhida, true) });
+        opcoes.sort((a, b) => (a.value < b.value ? -1 : 1));
+      }
+      UI.fillSelect(fFatura._control, opcoes, refEscolhida);
+    }
+    fFatura._control.addEventListener('change', () => { refEscolhida = fFatura._control.value; avisaFatura(); });
     const fToAccount = field('Conta de destino', select(accountOptions(),
       editing ? editing.toAccountId : d.toAccountId, 'Escolha…'));
 
@@ -218,7 +258,7 @@
 
     const grid = el('div', { class: 'form-grid' }, [
       el('div', { class: 'field span-2' }, [el('span', { class: 'field-label', text: 'Tipo' }), kindSeg]),
-      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fToAccount, faturaAviso,
+      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fFatura, fToAccount, faturaAviso,
       el('div', { class: 'field span-2' }, cbRecurring),
       fRecurEnd, fInstallments,
       el('div', { class: 'field span-2' }, cbConfirmed),
@@ -235,6 +275,9 @@
       if (!isExpense) method = 'account';
       fCard.hidden = !useCard;
       fAccount.hidden = useCard;
+      fDate.hidden = useCard;
+      fFatura.hidden = !useCard;
+      if (useCard) preencheFaturas();
       fAccount.querySelector('.field-label').textContent = isTransfer ? 'Conta de origem' : 'Conta';
       fToAccount.hidden = !isTransfer;
       fInstallments.hidden = !isExpense || cbRecurring._input.checked || !!editing;
@@ -242,8 +285,8 @@
 
       // deixa explícito o efeito contábil de cada forma de pagamento
       methodHint.textContent = useCard
-        ? 'Crédito: entra na fatura do cartão e não mexe no saldo da conta agora. '
-          + 'Conta como despesa na data da compra; o pagamento da fatura é só movimentação de caixa.'
+        ? 'Crédito: entra na fatura escolhida abaixo e não mexe no saldo da conta agora. '
+          + 'O dinheiro sai do caixa quando a fatura for paga.'
         : 'Débito: sai direto da conta bancária e reduz o saldo dela na hora.';
       avisaFatura();
     }
@@ -253,24 +296,24 @@
        mês seguinte — e é esse mês que a pessoa procura. */
     function avisaFatura() {
       const useCard = currentKind === 'expense' && method === 'card';
-      const card = useCard ? Store.cards.get(fCard._control.value) : null;
-      const data = fDate._control.value;
-      if (!card || !U.isValidISO(data)) { faturaAviso.hidden = true; return; }
-      const ref = Calc.invoiceRefOfDate(card, data);
-      const venc = Calc.invoiceDates(card, ref).dueDate;
+      const card = useCard ? cartaoEscolhido() : null;
+      if (!card || !refEscolhida) { faturaAviso.hidden = true; return; }
+      const venc = Calc.invoiceDates(card, refEscolhida).dueDate;
+      const n = Math.max(1, Math.min(72, parseInt(fInstallments._control.value, 10) || 1));
       faturaAviso.hidden = false;
-      faturaAviso.textContent = 'Cobrança na fatura de ' + U.monthLabel(ref, true)
-        + ', que vence em ' + U.fmtDateBR(venc) + '.';
+      faturaAviso.textContent = !fInstallments.hidden && n > 1
+        ? 'Parcelas da fatura de ' + U.monthLabel(refEscolhida, true) + ' à de '
+          + U.monthLabel(U.addMonths(refEscolhida, n - 1), true) + '. A primeira vence em ' + U.fmtDateBR(venc) + '.'
+        : 'Vence em ' + U.fmtDateBR(venc) + '.';
     }
-    fDate._control.addEventListener('change', avisaFatura);
-    fDate._control.addEventListener('input', avisaFatura);
-    fCard._control.addEventListener('change', avisaFatura);
+    fCard._control.addEventListener('change', () => { preencheFaturas(); avisaFatura(); });
+    fInstallments._control.addEventListener('input', avisaFatura);
     cbRecurring._input.addEventListener('change', syncVisibility);
     syncVisibility();
 
     /* --- salvar --- */
     function submit(closeAfter) {
-      const all = [fDesc, fAmount, fDate, fAccount, fCard, fToAccount, fInstallments];
+      const all = [fDesc, fAmount, fDate, fFatura, fAccount, fCard, fToAccount, fInstallments];
       clearErrors(all);
       let ok = true;
 
@@ -280,12 +323,18 @@
       const amount = U.parseMoney(fAmount._control.value);
       if (amount == null || Math.abs(amount) < 0.01) { setError(fAmount, 'Informe um valor maior que zero.'); ok = false; }
 
-      const date = fDate._control.value;
-      if (!U.isValidISO(date)) { setError(fDate, 'Data inválida.'); ok = false; }
-
       const useCard = currentKind === 'expense' && method === 'card';
       const accountId = fAccount._control.value || null;
       const cardId = fCard._control.value || null;
+
+      let date = fDate._control.value;
+      if (useCard) {
+        const cartao = Store.cards.get(cardId);
+        if (cartao && refEscolhida) {
+          const preferida = editing && editing.method === 'card' ? editing.date : (d.date || null);
+          date = Calc.dateForInvoice(cartao, refEscolhida, preferida);
+        } else if (!refEscolhida) { setError(fFatura, 'Escolha a fatura.'); ok = false; }
+      } else if (!U.isValidISO(date)) { setError(fDate, 'Data inválida.'); ok = false; }
       const toAccountId = fToAccount._control.value || null;
 
       if (useCard && !cardId) { setError(fCard, 'Escolha um cartão.'); ok = false; }

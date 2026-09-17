@@ -597,6 +597,35 @@
     return base;
   };
 
+  /**
+   * Como uma data de lançamento aparece nas listas. Compra no cartão
+   * não mostra o dia em que foi feita: mostra a fatura em que vai ser
+   * cobrada — "fatura jan/26" —, que é o que a pessoa procura. O dia
+   * da compra continua guardado e é por ele que o Calc calcula.
+   */
+  Calc.dataDeExibicao = function (e, completa, profile) {
+    if (e.kind === 'expense' && e.method === 'card' && e.cardId) {
+      const card = (profile || P()).cards.find((c) => c.id === e.cardId);
+      if (card) return 'fatura ' + U.monthLabel(Calc.invoiceRefOfDate(card, e.date), true);
+    }
+    return completa ? U.fmtDateBR(e.date) : U.fmtDayMonth(e.date);
+  };
+
+  /**
+   * A data a guardar quando a pessoa escolhe só a FATURA. O cálculo
+   * precisa de um dia (é por ele que a compra cai num ciclo); a
+   * pessoa não precisa dar um. Fica o dia preferido se ele já está
+   * no ciclo (o original, ao editar), senão hoje se hoje está nele,
+   * senão a ponta do ciclo mais perto de hoje.
+   */
+  Calc.dateForInvoice = function (card, ref, preferida) {
+    const d = Calc.invoiceDates(card, ref);
+    if (preferida && U.isValidISO(preferida) && preferida >= d.openDate && preferida <= d.closeDate) return preferida;
+    const hoje = U.todayISO();
+    if (hoje >= d.openDate && hoje <= d.closeDate) return hoje;
+    return hoje > d.closeDate ? d.closeDate : d.openDate;
+  };
+
   Calc.invoice = function (cardId, ref, profile) {
     const prof = profile || P();
     return lembrar(prof, 'iv|' + cardId + '|' + ref, () => calcularInvoice(cardId, ref, prof));

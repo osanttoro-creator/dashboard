@@ -258,7 +258,7 @@
       achados.sort((a, b) => (a.date < b.date ? 1 : -1));
       grupos.push({ nome: `Lançamentos de ${ano}`, itens: achados.slice(0, 10).map((e) => ({
         titulo: e.description,
-        sub: `${U.fmtDateBR(e.date)} · ${Calc.categoryName(e.categoryId)}` + (e.confirmed ? '' : ' · previsto'),
+        sub: `${Calc.dataDeExibicao(e, true)} · ${Calc.categoryName(e.categoryId)}` + (e.confirmed ? '' : ' · previsto'),
         valor: (e.kind === 'income' ? '+ ' : e.kind === 'expense' ? '− ' : '') + U.fmtBRL(e.amount),
         classe: e.kind === 'income' ? 'val-pos' : e.kind === 'expense' ? 'val-neg' : '',
         icone: Icons.forCategory(Calc.categoryById(e.categoryId)),
