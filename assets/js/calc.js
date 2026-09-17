@@ -44,14 +44,19 @@
      ============================================================ */
   let memoRev = -1;
   let memoPid = null;
+  let memoDia = null;
   let memo = new Map();
 
   function lembrar(prof, chave, calcular) {
     const ativo = P();
     if (!ativo || prof !== ativo) return calcular();
     const rev = (global.Store && Store.revisao) ? Store.revisao() : -1;
-    if (rev !== memoRev || ativo.id !== memoPid) {
-      memoRev = rev; memoPid = ativo.id; memo = new Map();
+    /* O dia entra na chave porque "confirmado" depende de hoje (ver
+       makeEntry): uma aba aberta de um dia para o outro não pode
+       continuar respondendo com o calendário de ontem. */
+    const dia = U.todayISO();
+    if (rev !== memoRev || ativo.id !== memoPid || dia !== memoDia) {
+      memoRev = rev; memoPid = ativo.id; memoDia = dia; memo = new Map();
     }
     if (memo.has(chave)) return memo.get(chave);
     const valor = calcular();
@@ -73,10 +78,23 @@
     return U.isoOf(p.y, p.m, U.clampDay(p.y, p.m, base ? base.getDate() : 1));
   }
 
+  /* =============================================================
+     SÓ CONTA O QUE FOI PAGO
+     -------------------------------------------------------------
+     Um lançamento fixo marcado como confirmado fazia TODAS as
+     ocorrências dele nascerem confirmadas — inclusive as de dezembro,
+     em setembro. O aluguel que ainda não foi pago já entrava no total
+     de gastos, e o saldo do mês dizia uma coisa que não aconteceu.
+
+     Agora a ocorrência de um fixo com data DEPOIS de hoje nasce
+     prevista, e só entra nos totais quando a pessoa marca como paga
+     (occ[mês].confirmed). As de hoje para trás mantêm a regra antiga:
+     mudar o passado sumiria com o histórico de quem já usa o app.
+     ============================================================= */
   function makeEntry(tx, ym, date) {
     const o = tx.recurring ? (tx.occ[ym] || {}) : null;
     const confirmed = tx.recurring
-      ? (o.confirmed === undefined ? !!tx.confirmed : !!o.confirmed)
+      ? (o.confirmed === undefined ? (!!tx.confirmed && date <= U.todayISO()) : !!o.confirmed)
       : !!tx.confirmed;
     return {
       key: tx.recurring ? tx.id + '#' + ym : tx.id,
@@ -484,6 +502,71 @@
       .reduce((s, a) => s + Calc.accountBalance(a.id, uptoISO, prof), 0));
   };
 
+  /* =============================================================
+     SALDO ATUAL E "SE TUDO SE CONFIRMAR"
+     -------------------------------------------------------------
+     O número em destaque do painel. Saldo atual é o que está nas
+     contas agora, com as receitas e despesas do mês que já foram
+     marcadas como recebidas ou pagas — nada previsto entra. Contas
+     marcadas "fora dos totais" não entram: o dinheiro da empresa ou
+     de terceiros não é saldo seu.
+
+     A projeção responde "e se tudo o que está lançado acontecer?":
+     parte do saldo no último dia do mês (confirmados com data futura
+     incluídos), soma as receitas previstas, tira as despesas
+     previstas no débito e o que ainda falta pagar das faturas que
+     vencem no mês. Compra no crédito não sai da conta: quem sai é a
+     fatura, e por isso ela entra pelo vencimento, uma vez só.
+     ============================================================= */
+  function contasConsideradas(prof) {
+    return prof.accounts.filter((a) => !a.archived && a.considerado !== false);
+  }
+
+  Calc.currentBalance = function (atISO, profile) {
+    const prof = profile || P();
+    const ate = atISO || U.todayISO();
+    return U.round2(contasConsideradas(prof)
+      .reduce((s, a) => s + Calc.accountBalance(a.id, ate, prof), 0));
+  };
+
+  Calc.monthProjection = function (ym, profile) {
+    const prof = profile || P();
+    return lembrar(prof, 'proj|' + ym, function () {
+      const fim = U.monthEnd(ym);
+      const ids = new Set(contasConsideradas(prof).map((a) => a.id));
+      let receber = 0, pagar = 0, faturas = 0;
+
+      Calc.entriesForMonth(ym, prof).forEach((e) => {
+        if (e.confirmed) return;
+        if (e.kind === 'income' && ids.has(e.accountId)) receber += e.amount;
+        else if (e.kind === 'expense' && e.method === 'account' && ids.has(e.accountId)) pagar += e.amount;
+        else if (e.kind === 'transfer') {
+          if (ids.has(e.accountId) && !ids.has(e.toAccountId)) pagar += e.amount;
+          if (!ids.has(e.accountId) && ids.has(e.toAccountId)) receber += e.amount;
+        }
+      });
+
+      prof.cards.forEach((c) => {
+        if (c.considerado === false) return;
+        for (let k = -1; k <= 2; k++) {
+          const ref = U.addMonths(ym, k);
+          const inv = Calc.invoice(c.id, ref, prof);
+          if (!inv || inv.paid || inv.restante <= 0) continue;
+          if (U.ymOf(inv.dueDate) === ym) faturas += inv.restante;
+        }
+      });
+
+      const base = Calc.currentBalance(fim, prof);
+      return {
+        base,
+        receber: U.round2(receber),
+        pagar: U.round2(pagar),
+        faturas: U.round2(faturas),
+        saldo: U.round2(base + receber - pagar - faturas)
+      };
+    });
+  };
+
   Calc.accountName = function (id, profile) {
     const a = (profile || P()).accounts.find((x) => x.id === id);
     return a ? a.name : '—';
@@ -667,8 +750,24 @@
     const ultimo = (rec && rec.pagamentos && rec.pagamentos.length)
       ? rec.pagamentos[rec.pagamentos.length - 1] : null;
 
+    /* Cartão internacional: a fatura também na moeda dele. Cada compra
+       guarda o valor original; as antigas, sem ele, entram pela cotação
+       atual do cartão. O que falta pagar segue a mesma proporção, porque
+       os pagamentos são registrados em reais. */
+    const moeda = card.moeda && card.moeda !== 'BRL' ? card.moeda : null;
+    let plannedMoeda = 0, restanteMoeda = 0;
+    if (moeda) {
+      items.forEach((e) => {
+        if (e.tx && e.tx.moeda === moeda && e.tx.valorMoeda) plannedMoeda += e.tx.valorMoeda;
+        else if (card.cotacao) plannedMoeda += e.amount / card.cotacao;
+      });
+      plannedMoeda = U.round2(plannedMoeda);
+      restanteMoeda = planned > 0 ? U.round2(plannedMoeda * restante / planned) : 0;
+    }
+
     return {
       card, ref, items,
+      moeda, plannedMoeda, restanteMoeda,
       openDate: dates.openDate, closeDate: dates.closeDate, dueDate: dates.dueDate,
       total, planned,
       pagamentos: (rec && rec.pagamentos) || [],

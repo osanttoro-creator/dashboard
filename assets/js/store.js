@@ -105,6 +105,17 @@
     { name: 'Outro', color: '#8A7A62' }
   ];
 
+  /* Moedas dos cartões internacionais, na ordem em que aparecem
+     para quem mora no Brasil e viaja ou tem conta fora. */
+  const MOEDAS = [
+    { code: 'USD', nome: 'Dólar americano' }, { code: 'EUR', nome: 'Euro' },
+    { code: 'GBP', nome: 'Libra esterlina' }, { code: 'CAD', nome: 'Dólar canadense' },
+    { code: 'AUD', nome: 'Dólar australiano' }, { code: 'CHF', nome: 'Franco suíço' },
+    { code: 'JPY', nome: 'Iene' }, { code: 'ARS', nome: 'Peso argentino' },
+    { code: 'CLP', nome: 'Peso chileno' }, { code: 'UYU', nome: 'Peso uruguaio' },
+    { code: 'MXN', nome: 'Peso mexicano' }, { code: 'CNY', nome: 'Yuan' }
+  ];
+
   const ACCOUNT_TYPES = ['Conta corrente', 'Conta poupança', 'Conta de pagamento', 'Carteira / dinheiro', 'Conta investimento'];
   const INVESTMENT_TYPES = ['Renda fixa', 'Tesouro Direto', 'CDB', 'Fundo de investimento', 'Ações', 'FIIs', 'ETF', 'Criptomoeda', 'Previdência', 'Poupança', 'Outro'];
 
@@ -129,7 +140,7 @@
     .concat(DEFAULT_INCOME_CATS.map((c) => c[0]));
 
   const Store = {
-    PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES,
+    PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES, MOEDAS,
     CATEGORIAS_PADRAO: NOMES_PADRAO
   };
 
@@ -207,6 +218,12 @@
       ? { total: +t.installment.total, index: +t.installment.index || 1, groupId: t.installment.groupId || null }
       : null;
     t.notes = String(t.notes || '');
+    /* Compra num cartão em outra moeda: `amount` continua em REAIS
+       (é ele que todos os totais somam), e o valor original fica ao
+       lado para a fatura mostrar o que o cartão cobrou de verdade. */
+    t.moeda = t.method === 'card' && /^[A-Z]{3}$/.test(t.moeda || '') && t.moeda !== 'BRL' ? t.moeda : null;
+    t.valorMoeda = t.moeda && Number.isFinite(+t.valorMoeda) ? U.round2(Math.abs(+t.valorMoeda)) : null;
+    if (!t.valorMoeda) t.moeda = null;
     t.source = t.source || 'manual';
     t.createdAt = t.createdAt || new Date().toISOString();
     return t;
@@ -310,6 +327,12 @@
       closingDay: Math.min(31, Math.max(1, +c.closingDay || 1)),
       dueDay: Math.min(31, Math.max(1, +c.dueDay || 10)),
       accountId: c.accountId || null,
+      /* Cartão internacional: limite e fatura na moeda dele, e a
+         cotação (reais por 1 unidade) que converte as compras novas
+         para os totais. Ausente = real, que é o que todo cartão antigo
+         é. */
+      moeda: /^[A-Z]{3}$/.test(c.moeda || '') ? c.moeda : 'BRL',
+      cotacao: +c.cotacao > 0 ? Math.round(+c.cotacao * 10000) / 10000 : null,
       /* Mesmo interruptor do débito: a fatura continua inteira, com
          limite e vencimento, mas as compras dele ficam fora das
          despesas do mês. */

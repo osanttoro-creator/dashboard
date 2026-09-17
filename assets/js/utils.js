@@ -16,6 +16,19 @@
   const nfInt = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
 
   U.fmtBRL = (n) => nfBRL.format(Number.isFinite(+n) ? +n : 0);
+  /* Moeda do cartão internacional. O formato continua o brasileiro
+     (vírgula nos centavos): quem lê é a mesma pessoa, só o símbolo
+     muda. Um formatador por moeda, guardado. */
+  const nfMoeda = {};
+  U.fmtMoeda = function (n, moeda) {
+    const m = /^[A-Z]{3}$/.test(moeda || '') ? moeda : 'BRL';
+    if (m === 'BRL') return U.fmtBRL(n);
+    if (!nfMoeda[m]) {
+      try { nfMoeda[m] = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: m }); }
+      catch (e) { nfMoeda[m] = { format: (v) => m + ' ' + nfNum.format(v) }; }
+    }
+    return nfMoeda[m].format(Number.isFinite(+n) ? +n : 0);
+  };
   U.fmtNum = (n) => nfNum.format(Number.isFinite(+n) ? +n : 0);
   U.fmtInt = (n) => nfInt.format(Number.isFinite(+n) ? +n : 0);
   U.fmtPct = (n, d = 1) => (Number.isFinite(+n) ? (+n).toFixed(d).replace('.', ',') : '0,0') + '%';

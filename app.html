@@ -346,10 +346,20 @@
         <!-- patrimônio líquido: o número que manda na página -->
         <section class="hero" aria-labelledby="heroLabel">
           <div class="hero-face">
-            <p class="hero-label" id="heroLabel">Patrimônio líquido</p>
+            <!-- O número grande é o SALDO ATUAL: o que está nas contas agora,
+                 com o que já foi recebido e pago no mês. Patrimônio líquido
+                 era o destaque e desceu para os indicadores — é um número
+                 de longo prazo, e quem abre o app no dia 17 quer saber
+                 quanto tem para o resto do mês. -->
+            <p class="hero-label" id="heroLabel">Saldo atual</p>
             <p class="hero-value" id="heroValue">—</p>
             <p class="hero-sub" id="heroSub"></p>
             <p class="hero-delta" id="heroDelta"></p>
+            <div class="hero-projecao" id="heroProjecao" hidden>
+              <span class="hero-projecao-k">Se tudo se confirmar</span>
+              <strong class="hero-projecao-v" id="heroProjecaoValor">—</strong>
+              <span class="hero-projecao-s" id="heroProjecaoDetalhe"></span>
+            </div>
             <!-- Atalhos do polegar: no celular o "+" fica no centro da
                  barra, e estes quatro trazem para o topo o que mais se
                  faz depois de olhar o saldo. No computador ficam

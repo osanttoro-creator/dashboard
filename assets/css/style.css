@@ -4776,3 +4776,52 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 /* ---- 27.6 · criar espaço pelo seletor de espaço ---- */
 .oaze-select-sep { height: 1px; margin: 4px 6px; background: var(--glass-line); }
 .oaze-select-option.is-acao { color: var(--accent); font-weight: 600; }
+
+/* ---- 27.7 · "se tudo se confirmar", logo abaixo do saldo atual ----
+   Uma segunda linha de leitura, menor que o saldo e maior que a
+   legenda: é a resposta à pergunta que vem logo depois de olhar o
+   número grande. Separada por um fio, para não parecer continuação
+   do texto de cima. */
+.hero-projecao {
+  display: grid; gap: 2px; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--glass-line); max-width: 520px;
+}
+.hero-projecao[hidden] { display: none; }
+.hero-projecao-k { font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.hero-projecao-v { font-size: clamp(1.35rem, 2.6vw, 1.75rem); font-weight: 640; letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: var(--ink); }
+.hero-projecao-s { font-size: 12.5px; color: var(--muted); }
+/* Barras do ano: a parte cheia é o pago; acima dela, o previsto vazado. */
+.cal-barra-par i.tem-previsto {
+  background: linear-gradient(to top,
+    var(--expense) var(--pago, 100%),
+    color-mix(in srgb, var(--expense) 28%, transparent) var(--pago, 100%));
+}
+.cal-barra-par i.is-in.tem-previsto {
+  background: linear-gradient(to top,
+    var(--income) var(--pago, 100%),
+    color-mix(in srgb, var(--income) 28%, transparent) var(--pago, 100%));
+}
+
+/* ---- 27.8 · cartão com a cara do banco ----
+   Bancos de cor clara (Banco do Brasil, PicPay, Wise, Nomad...) pedem
+   tinta escura: branco sobre amarelo não passa de 2:1. A película
+   escura de 18% também sai — ela existe para o texto branco, e sobre
+   a cor clara só deixaria o cartão sujo. */
+.wallet-card.is-do-banco {
+  background: linear-gradient(140deg, var(--cc-a), var(--cc-b));
+}
+.wallet-card.is-do-banco:not(.is-tinta-escura) {
+  background:
+    linear-gradient(rgba(5, 15, 22, .18), rgba(5, 15, 22, .18)),
+    linear-gradient(140deg, var(--cc-a), var(--cc-b));
+}
+.wallet-card.is-tinta-escura { color: #10161C; }
+.wallet-card.is-tinta-escura .cc-sub,
+.wallet-card.is-tinta-escura .cc-holder .k,
+.wallet-card.is-tinta-escura .cc-invoice .k { color: rgba(16, 22, 28, .86); }
+.wallet-card.is-tinta-escura .cc-kind { background: rgba(16, 22, 28, .12); color: #10161C; }
+.wallet-card.is-tinta-escura .cc-number { text-shadow: none; }
+.wallet-card.is-tinta-escura .cc-limit-bar { background: rgba(16, 22, 28, .18); }
+.wallet-card.is-tinta-escura .cc-limit-bar > i { background: #10161C; }
+.wallet-card.is-tinta-escura.is-focused::before { border-color: rgba(16, 22, 28, .5); }
+.wallet-card.is-tinta-escura:focus-visible { outline-color: #10161C; }

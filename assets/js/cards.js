@@ -57,12 +57,91 @@
 
   Cards.gradientByKey = (key) => Cards.GRADIENTS.find((g) => g.key === key) || null;
 
+  /* =============================================================
+     O CARTÃO COM A CARA DO BANCO
+     -------------------------------------------------------------
+     Um Nubank roxo, um Itaú laranja, um C6 preto: é assim que a
+     pessoa reconhece o cartão na carteira de verdade, e é assim que
+     ele aparece aqui. A cor deixou de ser escolha para todo banco
+     conhecido — sobra só para "Outro", onde não há marca a seguir.
+
+     A base é a cor de marca do pacote vendorizado (assets/vendor/
+     bancos.js). Alguns bancos têm marca branca, mas o cartão físico
+     não é branco (XP, C6, BTG, PayPal...): para esses a cor do
+     plástico está escrita à mão abaixo.
+
+     A TINTA É CALCULADA, NÃO ESCOLHIDA. Texto branco sobre o amarelo
+     do Banco do Brasil ou o verde do PicPay não passa de 2:1. Para
+     cada cartão o app mede o contraste do branco (com a película
+     escura de 18% do CSS) e o da tinta escura (sem película) sobre a
+     cor do meio do gradiente, e usa a que ler melhor.
+     ============================================================= */
+  const PLASTICO = {
+    xp: ['#2B2B2B', '#0A0A0A'],
+    c6: ['#2C2C2C', '#0B0B0B'],
+    btg: ['#0B2A5C', '#00123A'],
+    revolut: ['#262626', '#050505'],
+    ngcash: ['#262626', '#050505'],
+    iugu: ['#262626', '#050505'],
+    paypal: ['#253B80', '#142459'],
+    stone: ['#00A868', '#007A4C'],
+    sicredi: ['#3DAE2B', '#247A18'],
+    pan: ['#0098DA', '#006BA6'],
+    bv: ['#223AD2', '#142596'],
+    bancodobrasil: ['#FCE300', '#EFC000'],
+    mercadopago: ['#00AEEF', '#0077C8'],
+    safra: ['#1C2552', '#0A0F26'],
+    neon: ['#16235A', '#0A1233']
+  };
+
+  function hexRgb(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex || '').trim());
+    return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+  }
+  const paraHex = (c) => '#' + c.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  const mistura = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  function luz(c) {
+    const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+  }
+  const contraste = (x, y) => { const a = luz(x), b = luz(y); return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); };
+
+  const TINTA_ESCURA = [16, 22, 28];
+  const desenhos = {};
+
+  /** Desenho do cartão do banco, ou null quando o banco não é conhecido. */
+  Cards.bankDesign = function (bankName) {
+    if (!bankName || U.norm(bankName) === 'outro' || !global.Icons || !Icons.bankKey) return null;
+    const chave = Icons.bankKey(bankName);
+    if (!chave) return null;
+    if (desenhos[chave]) return desenhos[chave];
+
+    let a, b;
+    if (PLASTICO[chave]) [a, b] = PLASTICO[chave];
+    else {
+      const marca = Icons.bankBrand(bankName);
+      if (!marca) return null;
+      const base = hexRgb(marca.bg);
+      /* marca branca sem plástico conhecido: usa a cor do logo */
+      const fundo = luz(base) > 0.85 ? hexRgb(marca.fg) : base;
+      a = paraHex(fundo);
+      b = paraHex(mistura(fundo, [0, 0, 0], 0.3));
+    }
+    const meio = mistura(hexRgb(a), hexRgb(b), 0.5);
+    const comPelicula = mistura(meio, [5, 15, 22], 0.18);
+    const escura = contraste(TINTA_ESCURA, meio) > contraste([255, 255, 255], comPelicula) + 0.6;
+    return (desenhos[chave] = { key: 'banco:' + chave, name: bankName, a, b, tinta: escura ? 'escura' : 'clara' });
+  };
+
   /**
-   * Gradiente efetivo do cartão: o escolhido pelo usuário, senão um
-   * derivado da cor do banco, senão um estável pelo id (sem sorteio,
-   * para o cartão não trocar de cor a cada render).
+   * Gradiente efetivo do cartão. Banco conhecido: o desenho do banco,
+   * sempre. "Outro": o escolhido pela pessoa, senão um derivado da cor
+   * guardada, senão um estável pelo id (sem sorteio, para o cartão não
+   * trocar de cor a cada render).
    */
   Cards.gradientFor = function (card) {
+    const doBanco = Cards.bankDesign(card.bank);
+    if (doBanco) return doBanco;
     const chosen = Cards.gradientByKey(card.gradient);
     if (chosen) return chosen;
     const near = nearestGradient(card.color);
@@ -159,7 +238,8 @@
 
     return el('button', {
       type: 'button',
-      class: 'wallet-card' + (o.focused ? ' is-focused' : ''),
+      class: 'wallet-card' + (o.focused ? ' is-focused' : '') + (o.grad.tinta === 'escura' ? ' is-tinta-escura' : '')
+        + (o.grad.key && String(o.grad.key).indexOf('banco:') === 0 ? ' is-do-banco' : ''),
       style: { '--cc-a': o.grad.a, '--cc-b': o.grad.b },
       'aria-pressed': o.focused ? 'true' : 'false',
       title: o.hint || o.title,
@@ -187,10 +267,13 @@
       };
     })();
     const used = Store.cards.get(card.id) ? Calc.cardUsed(card.id) : 0;
-    const pct = card.limit > 0 ? Math.min(100, (used / card.limit) * 100) : 0;
+    const limiteEmReais = card.moeda && card.moeda !== 'BRL' && card.cotacao ? card.limit * card.cotacao : card.limit;
+    const pct = limiteEmReais > 0 ? Math.min(100, (used / limiteEmReais) * 100) : 0;
 
+    const moeda = card.moeda && card.moeda !== 'BRL' ? card.moeda : null;
+    const naMoeda = (brl) => (moeda && card.cotacao ? brl / card.cotacao : brl);
     return shell({
-      kind: 'Crédito',
+      kind: moeda ? 'Crédito · ' + moeda : 'Crédito',
       title: card.name,
       sub: card.bank || 'Cartão de crédito',
       bank: card.bank || card.name,
@@ -207,15 +290,15 @@
       number: Cards.maskedNumber(card),
       barPct: pct,
       footLeft: card.limit > 0
-        ? { k: 'Limite livre', v: U.fmtBRL(Math.max(0, card.limit - used)) }
+        ? { k: 'Limite livre', v: U.fmtMoeda(Math.max(0, card.limit - naMoeda(used)), moeda || 'BRL') }
         : { k: 'Vence', v: U.fmtDateBR(inv.dueDate) },
       /* O rodapé diz o MÊS DA COBRANÇA, não o dia da compra: é
          "fatura de jan/26" que a pessoa procura quando quer saber
          quando aquilo vai sair da conta. Com pagamento parcial, o
          número que importa passa a ser o que ainda falta. */
       footRight: inv.parcial
-        ? { k: 'Falta · fatura ' + U.monthLabel(ref, true), v: U.fmtBRL(inv.restante) }
-        : { k: 'Fatura ' + U.monthLabel(ref, true), v: U.fmtBRL(inv.planned) },
+        ? { k: 'Falta · fatura ' + U.monthLabel(ref, true), v: moeda ? U.fmtMoeda(inv.restanteMoeda, moeda) : U.fmtBRL(inv.restante) }
+        : { k: 'Fatura ' + U.monthLabel(ref, true), v: moeda ? U.fmtMoeda(inv.plannedMoeda, moeda) : U.fmtBRL(inv.planned) },
       onClick: () => { if (o.onClick) o.onClick(card, ref); }
     });
   };
@@ -386,14 +469,26 @@
        "fatura de jan/26" é como a pessoa se refere a ela. O período
        de compras vira uma linha discreta abaixo, porque explica o
        recorte sem competir com o valor. */
+    /* Cartão em outra moeda: o que o cartão cobra vem na moeda dele, e
+       o equivalente em reais (o que entra nos totais) logo ao lado. */
+    const moeda = inv.moeda;
+    const naMoeda = (brl) => (moeda && card.cotacao ? brl / card.cotacao : brl);
     box.appendChild(el('div', { class: 'inv-summary' }, [
       fig('Fatura de', U.smartCase(U.monthLabel(ref, true))),
-      fig('Total da fatura', U.fmtBRL(inv.planned)),
-      inv.pago > 0 ? fig('Já pago', U.fmtBRL(inv.pago)) : fig('Confirmado', U.fmtBRL(inv.total)),
-      fig('Falta pagar', inv.restante > 0 ? U.fmtBRL(inv.restante) : 'nada'),
+      fig('Total da fatura', moeda ? U.fmtMoeda(inv.plannedMoeda, moeda) : U.fmtBRL(inv.planned)),
+      moeda ? fig('Em reais', U.fmtBRL(inv.planned))
+        : (inv.pago > 0 ? fig('Já pago', U.fmtBRL(inv.pago)) : fig('Compras feitas', U.fmtBRL(inv.total))),
+      fig('Falta pagar', inv.restante > 0
+        ? (moeda ? U.fmtMoeda(inv.restanteMoeda, moeda) : U.fmtBRL(inv.restante)) : 'nada'),
       fig('Vencimento', U.fmtDateBR(inv.dueDate)),
-      fig('Limite disponível', card.limit > 0 ? U.fmtBRL(Math.max(0, card.limit - used)) : '—')
+      fig('Limite disponível', card.limit > 0
+        ? U.fmtMoeda(Math.max(0, card.limit - naMoeda(used)), moeda || 'BRL') : '—')
     ]));
+    if (moeda) {
+      box.appendChild(el('p', { class: 'hint inv-periodo', text: card.cotacao
+        ? `Cotação usada nas compras novas: ${U.fmtBRL(card.cotacao)} por 1 ${moeda}. Compras já lançadas guardam a conversão do dia em que foram feitas.`
+        : `Sem cotação cadastrada: informe no cadastro do cartão para converter as compras em reais.` }));
+    }
     box.appendChild(el('p', { class: 'hint inv-periodo' }, [
       document.createTextNode(`Entram nesta fatura as compras de ${U.fmtDayMonth(inv.openDate)} a ${U.fmtDayMonth(inv.closeDate)}.`),
       inv.pagoAdiantado > 0
@@ -469,7 +564,7 @@
     const tbody = table.querySelector('tbody');
 
     inv.items.forEach((e) => {
-      const cb = el('input', { type: 'checkbox', 'aria-label': 'Confirmar ' + e.description });
+      const cb = el('input', { type: 'checkbox', 'aria-label': 'Marcar compra como feita: ' + e.description, title: 'Compra feita' });
       cb.checked = e.confirmed;
       cb.addEventListener('change', () => Store.transactions.setConfirmed(e.txId, e.ym, cb.checked));
       const refDoItem = Calc.invoiceRefOfDate(card, e.date);
@@ -494,7 +589,11 @@
           e.adiantado ? UI.badge(restaDoItem > 0 ? 'Adiantada em parte' : 'Adiantada', 'ok') : null
         ].filter(Boolean)),
         el('td', { text: Calc.categoryName(e.categoryId) }),
-        el('td', { class: 'num', text: U.fmtBRL(e.amount) }),
+        el('td', {
+          class: 'num',
+          text: e.tx && e.tx.moeda && e.tx.valorMoeda ? U.fmtMoeda(e.tx.valorMoeda, e.tx.moeda) : U.fmtBRL(e.amount),
+          title: e.tx && e.tx.moeda ? '≈ ' + U.fmtBRL(e.amount) + ' nos totais' : null
+        }),
         el('td', {}, el('div', { class: 'row-actions' }, [
           e.adiantado
             ? el('button', {
@@ -520,13 +619,13 @@
 
     const rodape = el('tfoot', {}, el('tr', {}, [
       el('td', { colspan: 5, text: `Total da fatura (${inv.items.length} itens)` }),
-      el('td', { class: 'num', text: U.fmtBRL(inv.planned) }),
+      el('td', { class: 'num', text: inv.moeda ? U.fmtMoeda(inv.plannedMoeda, inv.moeda) : U.fmtBRL(inv.planned) }),
       el('td')
     ]));
     if (inv.pago > 0) {
       rodape.appendChild(el('tr', { class: 'is-quiet' }, [
         el('td', { colspan: 5, text: inv.restante > 0 ? 'Falta pagar' : 'Fatura quitada' }),
-        el('td', { class: 'num', text: U.fmtBRL(inv.restante) }),
+        el('td', { class: 'num', text: inv.moeda ? U.fmtMoeda(inv.restanteMoeda, inv.moeda) : U.fmtBRL(inv.restante) }),
         el('td')
       ]));
     }

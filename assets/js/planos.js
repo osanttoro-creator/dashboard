@@ -84,6 +84,7 @@
       },
       recursos: {
         export_csv: false, export_pdf: false,
+        cartoes_internacionais: false,
         calendario: false,
         uglez_assistente_flutuante: false,
         comparacao_mensal: false, comparacao_anual: false,
@@ -116,6 +117,7 @@
       },
       recursos: {
         export_csv: true, export_pdf: true,
+        cartoes_internacionais: true,
         calendario: true,
         uglez_assistente_flutuante: true,
         comparacao_mensal: true, comparacao_anual: false,
@@ -148,6 +150,7 @@
       },
       recursos: {
         export_csv: true, export_pdf: true,
+        cartoes_internacionais: true,
         calendario: true,
         uglez_assistente_flutuante: true,
         comparacao_mensal: true, comparacao_anual: true,
@@ -179,6 +182,7 @@
     uglezFloatingAssistant: 'uglez_assistente_flutuante',
     advancedAnalytics: 'analises_avancadas',
     csvExport: 'export_csv',
+    internationalCards: 'cartoes_internacionais',
     pdfExport: 'export_pdf',
     monthlyComparison: 'comparacao_mensal',
     annualComparison: 'comparacao_anual',
@@ -277,6 +281,7 @@
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },
     { chave: 'analises_avancadas',     rotulo: 'Tendências, simulações e projeções', tipo: 'recurso' },
     { chave: 'calendario',             rotulo: 'Calendário financeiro',          tipo: 'recurso' },
+    { chave: 'cartoes_internacionais', rotulo: 'Cartões em dólar, euro e outras moedas', tipo: 'recurso' },
     { chave: 'export_csv',             rotulo: 'Exportar em CSV',                tipo: 'recurso' },
     { chave: 'export_pdf',             rotulo: 'Exportar em PDF',                tipo: 'recurso' },
     { chave: 'acesso_antecipado',      rotulo: 'Acesso antecipado a novidades',  tipo: 'recurso' },
@@ -298,6 +303,7 @@
       '20 orçamentos, 10 metas e 30 recorrências',
       'Histórico de 24 meses e comparação entre meses',
       'Exportar em CSV e PDF, calendário financeiro',
+      'Cartões internacionais em dólar, euro e outras moedas',
       '60 consultas ao UGLEZ por mês, com assistente flutuante'
     ],
     pro: [

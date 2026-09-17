@@ -160,7 +160,29 @@
       value: editing ? editing.description : (d.description || '')
     }), { span2: true });
 
-    const fAmount = field('Valor (R$) *', moneyInput(editing ? editing.amount : d.amount));
+    const fAmount = field('Valor (R$) *', moneyInput(editing
+      ? (editing.moeda && editing.valorMoeda ? editing.valorMoeda : editing.amount) : d.amount));
+    /* Compra em cartão de outra moeda: o valor é digitado na moeda do
+       cartão, e o equivalente em reais aparece embaixo, já com a
+       cotação do cadastro. É esse equivalente que vai para os totais. */
+    const conversao = el('p', { class: 'hint', role: 'status', hidden: true });
+    fAmount.appendChild(conversao);
+    function cartaoEstrangeiro() {
+      if (!(currentKind === 'expense' && method === 'card')) return null;
+      const c = Store.cards.get(fCard._control.value);
+      return c && c.moeda && c.moeda !== 'BRL' ? c : null;
+    }
+    function syncMoedaDaCompra() {
+      const c = cartaoEstrangeiro();
+      fAmount.querySelector('.field-label').textContent = 'Valor (' + (c ? c.moeda : 'R$') + ') *';
+      conversao.hidden = !c;
+      if (!c) return;
+      const v = U.parseMoney(fAmount._control.value) || 0;
+      conversao.textContent = c.cotacao
+        ? '≈ ' + U.fmtBRL(v * c.cotacao) + ' nos totais, pela cotação de ' + U.fmtBRL(c.cotacao) + ' por 1 ' + c.moeda + '.'
+        : 'Este cartão não tem cotação: cadastre uma para converter em reais.';
+    }
+    fAmount._control.addEventListener('input', () => syncMoedaDaCompra());
     const fDate = field('Data *', input({ type: 'date', value: editing ? editing.date : (d.date || App.selectedDateOrToday()) }));
 
     const fCategory = field('Categoria', select(categoryOptions(currentKind),
@@ -232,8 +254,16 @@
       type: 'number', min: 1, max: 72, value: editing && editing.installment ? editing.installment.total : 1
     }), { hint: 'O valor informado é o TOTAL; será dividido nas parcelas.' });
 
-    const cbConfirmed = checkbox('Confirmado (entra nos totais do mês)',
-      editing ? editing.confirmed : (d.confirmed !== undefined ? d.confirmed : true));
+    /* "Confirmado" não dizia o que confirmava. Agora diz: pago,
+       recebido, compra feita. É esta marca, e só ela, que põe o
+       lançamento nos totais — e um lançamento com data futura nasce
+       desmarcado, porque ninguém pagou ainda a conta de daqui a um mês. */
+    const dataInicial = editing ? editing.date : (d.date || App.selectedDateOrToday());
+    const cbConfirmed = checkbox('Já foi pago (entra nos totais)',
+      editing ? editing.confirmed
+        : (d.confirmed !== undefined ? d.confirmed : dataInicial <= U.todayISO()));
+    let marcouAMao = !!editing || d.confirmed !== undefined;
+    cbConfirmed._input.addEventListener('change', () => { marcouAMao = true; });
 
     const fNotes = field('Observações', el('textarea', {
       class: 'input textarea textarea-plain', rows: 2,
@@ -269,6 +299,9 @@
       const isTransfer = currentKind === 'transfer';
       const isExpense = currentKind === 'expense';
       const useCard = isExpense && method === 'card';
+      cbConfirmed.querySelector('span').textContent = isTransfer ? 'Já foi feita (entra nos saldos)'
+        : currentKind === 'income' ? 'Já foi recebido (entra nos totais)'
+          : useCard ? 'Compra já feita (entra nos totais)' : 'Já foi pago (entra nos totais)';
 
       fCategory.hidden = isTransfer;
       fMethod.hidden = !isExpense || !prof.cards.length;
@@ -278,6 +311,7 @@
       fDate.hidden = useCard;
       fFatura.hidden = !useCard;
       if (useCard) preencheFaturas();
+      syncMoedaDaCompra();
       fAccount.querySelector('.field-label').textContent = isTransfer ? 'Conta de origem' : 'Conta';
       fToAccount.hidden = !isTransfer;
       fInstallments.hidden = !isExpense || cbRecurring._input.checked || !!editing;
@@ -306,7 +340,12 @@
           + U.monthLabel(U.addMonths(refEscolhida, n - 1), true) + '. A primeira vence em ' + U.fmtDateBR(venc) + '.'
         : 'Vence em ' + U.fmtDateBR(venc) + '.';
     }
-    fCard._control.addEventListener('change', () => { preencheFaturas(); avisaFatura(); });
+    fCard._control.addEventListener('change', () => { preencheFaturas(); avisaFatura(); syncMoedaDaCompra(); });
+    fDate._control.addEventListener('change', () => {
+      if (!marcouAMao && U.isValidISO(fDate._control.value)) {
+        cbConfirmed._input.checked = fDate._control.value <= U.todayISO();
+      }
+    });
     fInstallments._control.addEventListener('input', avisaFatura);
     cbRecurring._input.addEventListener('change', syncVisibility);
     syncVisibility();
@@ -363,10 +402,21 @@
       if (viraRecorrente && !jaEraRecorrente &&
           global.Limites && !Limites.exigirEspaco('recurring_items')) return false;
 
+      /* Em cartão de outra moeda, o digitado é o valor na moeda; o
+         `amount` guardado é o equivalente em reais, que é o que os
+         totais somam. Sem cotação não há como converter: pede antes. */
+      const estrangeiro = cartaoEstrangeiro();
+      if (estrangeiro && !estrangeiro.cotacao) {
+        setError(fAmount, 'Cadastre a cotação do cartão ' + estrangeiro.name + ' antes de lançar em ' + estrangeiro.moeda + '.');
+        return false;
+      }
+      const emReais = (v) => (estrangeiro ? U.round2(v * estrangeiro.cotacao) : v);
       const base = {
         kind: currentKind,
         description,
-        amount: Math.abs(amount),
+        amount: emReais(Math.abs(amount)),
+        moeda: estrangeiro ? estrangeiro.moeda : null,
+        valorMoeda: estrangeiro ? U.round2(Math.abs(amount)) : null,
         date,
         categoryId: currentKind === 'transfer' ? null : (fCategory._control.value || null),
         accountId: useCard ? null : accountId,
@@ -391,7 +441,8 @@
           const q = U.ymParts(U.addMonths(U.ymOf(date), k));
           const day = U.parseISO(date).getDate();
           list.push(Object.assign({}, base, {
-            amount: value,
+            amount: emReais(value),
+            valorMoeda: estrangeiro ? value : null,
             date: U.isoOf(q.y, q.m, U.clampDay(q.y, q.m, day)),
             description: `${description} (${k + 1}/${nInst})`,
             installment: { total: nInst, index: k + 1, groupId },
@@ -502,8 +553,9 @@
         name: fName._control.value.trim() || 'Conta',
         bank: nomeBanco(),
         type: fType._control.value,
-        color: picker.getValue(),
-        gradient: grads.getValue(),
+        color: bankSel.value === 'Outro' || !Cards.bankDesign(bankSel.value)
+          ? picker.getValue() : Cards.bankDesign(bankSel.value).a,
+        gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         considerado: cbConsiderado._input.checked
@@ -526,7 +578,19 @@
         }
       });
     }
-    function syncBank() { fCustomBank.hidden = bankSel.value !== 'Outro'; paintPreview(); }
+    /* A cor só existe para "Outro": banco conhecido usa o cartão do
+       banco (Cards.bankDesign), e oferecer cor ali seria oferecer uma
+       escolha que não muda nada. */
+    const avisoCor = el('p', { class: 'hint' });
+    fPreview.appendChild(avisoCor);
+    function syncBank() {
+      const outro = bankSel.value === 'Outro';
+      fCustomBank.hidden = !outro;
+      fColor.hidden = !outro;
+      fGrad.hidden = !outro;
+      avisoCor.textContent = outro ? '' : 'O cartão usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
+      paintPreview();
+    }
     bankSel.addEventListener('change', syncBank);
     const repaint = U.debounce(paintPreview, 200);
     [fName, fCustomBank, fLast4, fBalance].forEach((f) => f._control.addEventListener('input', repaint));
@@ -608,6 +672,38 @@
       value: editing ? editing.last4 : ''
     }), { hint: 'Só para identificar o cartão na tela. Opcional — nunca guarde o número completo.' });
     const fLimit = field('Limite total (R$)', moneyInput(editing ? editing.limit : 0));
+
+    /* ============================================================
+       CARTÃO EM OUTRA MOEDA — a partir do Coqueiro
+       ------------------------------------------------------------
+       Cartão de conta em dólar ou euro (Nomad, Wise, Avenue...) tem
+       limite e fatura na moeda dele. A cotação converte as compras
+       para reais, que é a moeda dos totais do app. Ela é da pessoa, e
+       não buscada na internet: a cotação que importa é a que o banco
+       dela aplicou, e nenhuma fonte pública sabe qual foi.
+       ============================================================ */
+    const moedaSel = select([{ value: 'BRL', label: 'Real (R$)' }]
+      .concat(Store.MOEDAS.map((m) => ({ value: m.code, label: m.nome + ' (' + m.code + ')' }))),
+    editing ? editing.moeda || 'BRL' : 'BRL');
+    const fMoeda = field('Moeda do cartão', moedaSel,
+      { hint: 'Para cartões de conta em dólar, euro e outras moedas.' });
+    const fCotacao = field('Cotação (R$ por 1 unidade) *', input({
+      type: 'text', inputmode: 'decimal', placeholder: '5,45',
+      value: editing && editing.cotacao ? String(editing.cotacao).replace('.', ',') : ''
+    }), { hint: 'A que o seu banco usa. Vale para as compras novas; as antigas guardam a do dia.' });
+    let moedaAnterior = moedaSel.value;
+    function syncMoeda() {
+      const m = moedaSel.value;
+      if (m !== 'BRL' && moedaAnterior === 'BRL' && global.Limites
+          && !Limites.exigirRecurso('cartoes_internacionais', 'Cartão em outra moeda')) {
+        moedaSel.value = 'BRL';
+      }
+      moedaAnterior = moedaSel.value;
+      const estrangeira = moedaSel.value !== 'BRL';
+      fCotacao.hidden = !estrangeira;
+      fLimit.querySelector('.field-label').textContent = 'Limite total (' + (estrangeira ? moedaSel.value : 'R$') + ')';
+    }
+    moedaSel.addEventListener('change', syncMoeda);
     const fClosing = field('Dia de fechamento *', input({ type: 'number', min: 1, max: 31, value: editing ? editing.closingDay : 28 }),
       { hint: 'Dia em que a fatura fecha.' });
     const fDue = field('Dia de vencimento *', input({ type: 'number', min: 1, max: 31, value: editing ? editing.dueDay : 8 }),
@@ -666,17 +762,30 @@
     paintPreview();
 
     const fGrad = field('Cor do cartão', gradWrap, { span2: true });
+    const avisoCorCartao = el('p', { class: 'hint' });
     const fPreview = el('div', { class: 'field span-2' }, [
-      el('span', { class: 'field-label', text: 'Prévia' }), cardPreview
+      el('span', { class: 'field-label', text: 'Prévia' }), cardPreview, avisoCorCartao
     ]);
+    /* Mesma regra da conta: cor só para "Outro". */
+    function syncCorCartao() {
+      const outro = bankSel.value === 'Outro';
+      fGrad.hidden = !outro;
+      avisoCorCartao.textContent = outro ? '' : 'O cartão usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
+    }
+    bankSel.addEventListener('change', syncCorCartao);
+    syncCorCartao();
 
     const grid = el('div', { class: 'form-grid' }, [
-      fName, fBank, fLast4, fLimit, fAccount, fClosing, fDue, fConsiderado, fGrad, fPreview
+      fName, fBank, fMoeda, fCotacao, fLast4, fLimit, fAccount, fClosing, fDue, fConsiderado, fGrad, fPreview
     ]);
+    syncMoeda();
 
     function submit() {
-      clearErrors([fName, fClosing, fDue]);
+      clearErrors([fName, fClosing, fDue, fCotacao]);
       const name = fName._control.value.trim();
+      const moeda = moedaSel.value;
+      const cotacao = moeda === 'BRL' ? null : U.parseMoney(fCotacao._control.value);
+      if (moeda !== 'BRL' && !(cotacao > 0)) { setError(fCotacao, 'Informe quantos reais vale 1 ' + moeda + '.'); return; }
       const closing = parseInt(fClosing._control.value, 10);
       const due = parseInt(fDue._control.value, 10);
       let ok = true;
@@ -686,15 +795,18 @@
       if (!ok) return;
 
       const preset = Store.BANK_PRESETS.find((b) => b.name === bankSel.value);
+      const desenho = Cards.bankDesign(bankSel.value);
       const data = {
         name, bank: bankSel.value,
-        color: preset ? preset.color : '#C9794A',
-        gradient: gradWrap.getValue(),
+        color: desenho ? desenho.a : (preset ? preset.color : '#C9794A'),
+        gradient: bankSel.value === 'Outro' ? gradWrap.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: closing, dueDay: due,
         accountId: fAccount._control.value || null,
-        considerado: cbConsiderado._input.checked
+        considerado: cbConsiderado._input.checked,
+        moeda,
+        cotacao
       };
       if (editing) { Store.cards.update(editing.id, data); UI.toast('Cartão atualizado.', 'success'); }
       else { const c = Store.cards.add(data); App.cardFocusId = c.id; UI.toast('Cartão criado.', 'success'); }

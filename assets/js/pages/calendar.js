@@ -75,8 +75,14 @@
   /**
    * Soma lançamentos (não faturas: a compra no cartão já é a
    * despesa, e somar a fatura de novo contaria o mesmo dinheiro
-   * duas vezes). "Previsto" é tudo o que está lançado; o que falta
-   * confirmar aparece à parte.
+   * duas vezes).
+   *
+   * SÓ O QUE FOI PAGO ENTRA EM RECEITAS E DESPESAS. Antes as duas
+   * somavam tudo o que estava lançado, pago ou não, e o total de
+   * gastos do mês incluía o aluguel que ainda não tinha saído. O que
+   * está lançado e não foi pago fica em "previsto", e o saldo com
+   * tudo aparece à parte, como "se tudo se confirmar" — o mesmo nome
+   * do painel inicial. Contas e cartões fora dos totais não entram.
    */
   function totais(entradas) {
     const t = {
@@ -89,9 +95,10 @@
       previstoReceitas: 0, previstoDespesas: 0, qtdPrevistos: 0
     };
     entradas.forEach((e) => {
-      if (e.kind === 'transfer') return;
-      if (e.kind === 'income') t.receitas += e.amount; else t.despesas += e.amount;
-      if (!e.confirmed) {
+      if (e.kind === 'transfer' || e.contaNosTotais === false) return;
+      if (e.confirmed) {
+        if (e.kind === 'income') t.receitas += e.amount; else t.despesas += e.amount;
+      } else {
         t.aConfirmar += e.kind === 'income' ? 0 : e.amount;
         t.qtdPrevistos++;
         if (e.kind === 'income') t.previstoReceitas += e.amount; else t.previstoDespesas += e.amount;
@@ -106,6 +113,7 @@
     t.previstoDespesas = U.round2(t.previstoDespesas);
     t.previstoSaldo = U.round2(t.previstoReceitas - t.previstoDespesas);
     t.saldo = U.round2(t.receitas - t.despesas);
+    t.seTudo = U.round2(t.saldo + t.previstoSaldo);
     return t;
   }
 
@@ -117,11 +125,13 @@
       sub ? el('span', { class: 's', text: sub }) : null
     ].filter(Boolean));
 
-    box.appendChild(fig('Receitas ' + rotuloPeriodo, U.fmtBRL(t.receitas), 'val-pos'));
-    box.appendChild(fig('Despesas ' + rotuloPeriodo, U.fmtBRL(t.despesas), 'val-neg',
-      t.aConfirmar > 0 ? U.fmtBRL(t.aConfirmar) + ' a confirmar' : 'tudo confirmado'));
-    box.appendChild(fig('Saldo previsto', (t.saldo < 0 ? '− ' : '') + U.fmtBRL(Math.abs(t.saldo)),
-      t.saldo < 0 ? 'val-neg' : ''));
+    const sinal = (v) => (v < 0 ? '− ' : '') + U.fmtBRL(Math.abs(v));
+    box.appendChild(fig('Recebido ' + rotuloPeriodo, U.fmtBRL(t.receitas), 'val-pos',
+      t.previstoReceitas > 0 ? U.fmtBRL(t.previstoReceitas) + ' ainda a receber' : 'nada pendente'));
+    box.appendChild(fig('Pago ' + rotuloPeriodo, U.fmtBRL(t.despesas), 'val-neg',
+      t.aConfirmar > 0 ? U.fmtBRL(t.aConfirmar) + ' ainda a pagar' : 'nada pendente'));
+    box.appendChild(fig('Saldo ' + rotuloPeriodo, sinal(t.saldo), t.saldo < 0 ? 'val-neg' : '',
+      'se tudo se confirmar: ' + sinal(t.seTudo)));
 
     /* A soma do que ainda não aconteceu, nas três escalas. Sem ela,
        "despesas do mês" misturava o que já saiu com o que talvez
@@ -434,22 +444,34 @@
 
   function barrasDoAno(dados, hojeYM) {
     const box = U.clear(document.getElementById('calAnoBarras'));
-    const teto = Math.max(1, ...dados.map((m) => Math.max(m.t.receitas, m.t.despesas)));
+    /* A barra tem a altura de TUDO o que está lançado; a parte cheia
+       é o que já foi pago ou recebido, e o resto fica vazado. Assim
+       os meses futuros continuam mostrando o que vem — só não se
+       passam por dinheiro que já se moveu. */
+    const recTotal = (m) => m.t.receitas + m.t.previstoReceitas;
+    const desTotal = (m) => m.t.despesas + m.t.previstoDespesas;
+    const teto = Math.max(1, ...dados.map((m) => Math.max(recTotal(m), desTotal(m))));
+    const barra = (classe, total, pago) => {
+      const h = (total / teto) * 100;
+      return el('i', {
+        class: classe + (total > pago + 0.005 ? ' tem-previsto' : ''),
+        style: { height: Math.max(total > 0 ? 3 : 0, h) + '%', '--pago': (total > 0 ? (pago / total) * 100 : 0) + '%' }
+      });
+    };
 
     dados.forEach((m) => {
       const p = U.ymParts(m.ym);
-      const hr = (m.t.receitas / teto) * 100;
-      const hd = (m.t.despesas / teto) * 100;
       box.appendChild(el('button', {
         type: 'button',
         class: 'cal-barra' + (m.ym === App.ym ? ' is-sel' : '') + (m.ym === hojeYM ? ' is-hoje' : ''),
-        'aria-label': `${U.MONTHS[p.m]}: receitas ${U.fmtBRL(m.t.receitas)}, despesas ${U.fmtBRL(m.t.despesas)}`,
+        'aria-label': `${U.MONTHS[p.m]}: recebido ${U.fmtBRL(m.t.receitas)}, pago ${U.fmtBRL(m.t.despesas)}`
+          + (m.t.qtdPrevistos ? `, previsto ${U.fmtBRL(m.t.previstoDespesas)} a pagar e ${U.fmtBRL(m.t.previstoReceitas)} a receber` : ''),
         onclick: () => abreMes(m.ym)
       }, [
         el('span', { class: 'cal-barra-valor', text: m.t.despesas > 0 ? U.fmtCompact(m.t.despesas) : '' }),
         el('span', { class: 'cal-barra-par' }, [
-          el('i', { class: 'is-in', style: { height: Math.max(hr > 0 ? 3 : 0, hr) + '%' } }),
-          el('i', { class: 'is-out', style: { height: Math.max(hd > 0 ? 3 : 0, hd) + '%' } })
+          barra('is-in', recTotal(m), m.t.receitas),
+          barra('is-out', desTotal(m), m.t.despesas)
         ]),
         el('span', { class: 'cal-barra-mes', text: U.MONTHS_SHORT[p.m] })
       ]));
@@ -485,8 +507,8 @@
       ].filter(Boolean)),
 
       el('div', { class: 'cal-mes-somas' }, [
-        el('div', {}, [el('span', { class: 'k', text: 'Receitas' }), el('span', { class: 'v val-pos', text: U.fmtBRL(t.receitas) })]),
-        el('div', {}, [el('span', { class: 'k', text: 'Despesas' }), el('span', { class: 'v val-neg', text: U.fmtBRL(t.despesas) })]),
+        el('div', {}, [el('span', { class: 'k', text: 'Recebido' }), el('span', { class: 'v val-pos', text: U.fmtBRL(t.receitas) })]),
+        el('div', {}, [el('span', { class: 'k', text: 'Pago' }), el('span', { class: 'v val-neg', text: U.fmtBRL(t.despesas) })]),
         el('div', {}, [el('span', { class: 'k', text: 'Saldo' }), el('span', {
           class: 'v' + (t.saldo < 0 ? ' val-neg' : ''), text: (t.saldo < 0 ? '− ' : '') + U.fmtBRL(Math.abs(t.saldo))
         })])

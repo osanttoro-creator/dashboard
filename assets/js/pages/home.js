@@ -35,21 +35,26 @@
     renderRecent(ym);
   };
 
-  /* ---------------- 1 · patrimônio líquido ---------------- */
+  /* ---------------- 1 · saldo atual e "se tudo se confirmar" ---------------- */
 
   function renderHero(ym) {
     const upto = App.balanceDate();
-    const total = Calc.netWorth(upto);
-    const antes = Calc.netWorth(U.monthEnd(U.addMonths(ym, -1)));
-    const dif = U.round2(total - antes);
+    const saldo = Calc.currentBalance(upto);
+    const fimAnterior = U.monthEnd(U.addMonths(ym, -1));
+    const antes = Calc.currentBalance(fimAnterior);
+    const dif = U.round2(saldo - antes);
     const pct = antes !== 0 ? (dif / Math.abs(antes)) * 100 : null;
+    const t = Calc.monthTotals(ym);
 
-    UI.setValue('heroValue', U.fmtBRL(total));
+    UI.setValue('heroValue', U.fmtBRL(saldo));
 
-    const disponivel = Calc.available(upto);
-    const investido = Calc.investedTotal(upto);
+    /* O que já passou pelas contas neste mês, em palavras: é o que
+       prova que o número acima está "calculado", não estimado. Pago
+       = débito + faturas pagas; compra no crédito só sai da conta
+       quando a fatura sai. */
+    const pagos = U.round2(t.expenseDebit + t.invoicesPaid);
     document.getElementById('heroSub').textContent =
-      `${U.fmtBRL(disponivel)} disponível · ${U.fmtBRL(investido)} investido · em ${U.fmtDateBR(upto)}`;
+      `${U.fmtBRL(t.income)} recebidos e ${U.fmtBRL(pagos)} pagos neste mês · em ${U.fmtDateBR(upto)}`;
 
     const dir = dif > 0.005 ? 'up' : dif < -0.005 ? 'down' : 'flat';
     const seta = dir === 'up' ? '▲' : dir === 'down' ? '▼' : '→';
@@ -60,11 +65,30 @@
       text: `${seta} ${dif >= 0 ? '+' : '−'}${U.fmtBRL(Math.abs(dif))}`
         + (pct != null ? ` (${dif >= 0 ? '+' : '−'}${U.fmtPct(Math.abs(pct), 1)})` : '')
     }));
-    delta.appendChild(el('span', { class: 'muted', text: 'desde ' + U.monthLabel(U.addMonths(ym, -1), true) }));
+    delta.appendChild(el('span', { class: 'muted', text: 'desde o fim de ' + U.monthLabel(U.addMonths(ym, -1), true) }));
+
+    /* Logo abaixo, a pergunta seguinte: e se tudo o que está lançado
+       acontecer? Só aparece quando há algo previsto — sem pendência,
+       ela repetiria o número de cima. */
+    const pr = Calc.monthProjection(ym);
+    const box = document.getElementById('heroProjecao');
+    const temPendencia = pr.receber > 0 || pr.pagar > 0 || pr.faturas > 0 || Math.abs(pr.base - saldo) > 0.005;
+    box.hidden = !temPendencia;
+    if (temPendencia) {
+      UI.setValue('heroProjecaoValor', U.fmtBRL(pr.saldo));
+      document.getElementById('heroProjecaoValor').className = 'hero-projecao-v ' + U.signClass(pr.saldo);
+      const partes = ['no fim de ' + U.MONTHS[U.ymParts(ym).m].toLowerCase()];
+      /* espaço sem quebra depois do sinal: "−" sozinho no fim da linha
+         e o valor na de baixo se lê como traço, não como subtração */
+      if (pr.receber > 0) partes.push('+ ' + U.fmtBRL(pr.receber) + ' a receber');
+      if (pr.pagar > 0) partes.push('− ' + U.fmtBRL(pr.pagar) + ' a pagar');
+      if (pr.faturas > 0) partes.push('− ' + U.fmtBRL(pr.faturas) + ' de fatura');
+      document.getElementById('heroProjecaoDetalhe').textContent = partes.join(' · ');
+    }
 
     const meses = [];
     for (let i = 11; i >= 0; i--) meses.push(U.monthEnd(U.addMonths(ym, -i)));
-    Charts.spark('chartHeroSpark', meses.map((m) => Calc.netWorth(m)));
+    Charts.spark('chartHeroSpark', meses.map((m) => Calc.currentBalance(m)));
   }
 
   /* ---------------- 2 · OAZE Score ---------------- */
@@ -130,12 +154,14 @@
     const disponivel = Calc.available(App.balanceDate());
 
     UI.renderKpis('homeKpis', [
+      /* Patrimônio líquido desceu do destaque para cá: continua
+         visível, mas deixa o topo para o saldo do dia a dia. */
       {
-        label: 'Saldo disponível',
-        value: U.fmtBRL(disponivel),
-        valueClass: U.signClass(disponivel),
+        label: 'Patrimônio líquido',
+        value: U.fmtBRL(Calc.netWorth(App.balanceDate())),
+        valueClass: U.signClass(Calc.netWorth(App.balanceDate())),
         accent: 'var(--accent)',
-        delta: '<span class="muted">Em contas, já descontadas as faturas em aberto</span>'
+        delta: `<span class="muted">${U.fmtBRL(disponivel)} disponível · ${U.fmtBRL(Calc.investedTotal(App.balanceDate()))} investido</span>`
       },
       {
         label: 'Receitas do mês',

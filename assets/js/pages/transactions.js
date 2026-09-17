@@ -177,11 +177,14 @@
 
   /** Uma linha de lançamento com a checkbox de confirmação. */
   function row(e, ym) {
-    const cb = el('input', { type: 'checkbox', 'aria-label': 'Confirmar ' + e.description });
+    const verbo = e.kind === 'income' ? 'recebido' : e.kind === 'transfer' ? 'feita' : 'pago';
+    const cb = el('input', { type: 'checkbox', 'aria-label': 'Marcar como ' + verbo + ': ' + e.description, title: 'Marcar como ' + verbo });
     cb.checked = e.confirmed;
     cb.addEventListener('change', () => {
       Store.transactions.setConfirmed(e.txId, e.ym, cb.checked);
-      UI.toast(cb.checked ? 'Confirmado — entrou no saldo.' : 'Desmarcado — saiu do saldo.');
+      UI.toast(cb.checked
+        ? (e.kind === 'income' ? 'Recebido' : 'Pago') + ' — entrou nos totais.'
+        : 'Voltou a previsto — saiu dos totais.');
     });
 
     /* No crédito, a fatura em que cai; no resto, o dia. */
@@ -189,6 +192,8 @@
     if (e.kind !== 'transfer') meta.push(el('span', { text: Calc.categoryName(e.categoryId) }));
     if (e.recurring) meta.push(UI.badge('Fixa', 'fix'));
     if (e.installment) meta.push(UI.badge(`${e.installment.index}/${e.installment.total}`, 'inst'));
+    /* compra em cartão de outra moeda: o valor que o cartão cobrou */
+    if (e.tx && e.tx.moeda && e.tx.valorMoeda) meta.push(UI.badge(U.fmtMoeda(e.tx.valorMoeda, e.tx.moeda), 'inst'));
     if (e.kind === 'expense') {
       const card = e.cardId ? Store.cards.get(e.cardId) : null;
       meta.push(Icons.methodBadge(e.method, card ? card.name : undefined));
