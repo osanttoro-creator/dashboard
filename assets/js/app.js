@@ -311,6 +311,26 @@
         });
         menu.appendChild(item);
       });
+
+      /* O seletor de espaço é o único lugar que existe em todas as
+         larguras. A engrenagem ao lado dele some no computador (falta
+         largura na barra), e com ela sumia a única forma de criar um
+         espaço novo: quem estava no desktop simplesmente não tinha
+         por onde. As ações moram aqui, no fim da lista. */
+      if (select.id === 'profileSelect') {
+        menu.appendChild(Object.assign(document.createElement('div'), { className: 'oaze-select-sep' }));
+        [['+ Novo espaço', () => Forms.openProfiles({ criar: true })],
+          ['Gerenciar espaços…', () => Forms.openProfiles()]].forEach(([texto, fazer]) => {
+          const acao = document.createElement('button');
+          acao.type = 'button';
+          acao.className = 'oaze-select-option is-acao';
+          acao.setAttribute('role', 'option');
+          acao.setAttribute('aria-selected', 'false');
+          acao.textContent = texto;
+          acao.addEventListener('click', () => { fechar(true); fazer(); });
+          menu.appendChild(acao);
+        });
+      }
     };
 
     const abrir = (direcao) => {
@@ -700,7 +720,11 @@
 
     // redesenha quando os dados mudam
     Store.onChange((reason) => {
-      if (reason === 'profile' || reason === 'import' || reason === 'reset' || reason === 'seed') {
+      /* 'profile-list' (criar, renomear, excluir espaço) e 'sync-apply'
+         (espaço que chegou de outro aparelho) também mudam a lista. Sem
+         eles, o espaço recém-criado abria mas o seletor continuava
+         mostrando o anterior — e parecia que nada tinha sido criado. */
+      if (['profile', 'profile-list', 'active-profile', 'sync-apply', 'import', 'reset', 'seed'].includes(reason)) {
         syncProfileSelect();
         syncPeriodPicker();
       }

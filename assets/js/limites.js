@@ -223,7 +223,9 @@
 
     const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
       el('p', {}, [
-        el('strong', { text: 'Você está usando ' + teto + ' de ' + teto + ' ' + plural }),
+        /* O uso real, não o teto repetido: quem tem 2 espaços num plano
+           que permite 1 lia "usando 1 de 1" e achava que o app errou. */
+        el('strong', { text: 'Você está usando ' + Math.max(teto, Limites.contar(tipo)) + ' de ' + teto + ' ' + plural }),
         el('span', { text: ' disponíveis no plano ' + planoAtual.nome + '.' })
       ]),
       prox

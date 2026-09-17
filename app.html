@@ -279,19 +279,6 @@
            Ele repetia Configurações, que já está na navegação, e o
            backup por arquivo deixou de existir: os dados vão e voltam
            pela conta, e de nenhuma outra forma. -->
-      <!-- ══════ SINCRONIZAÇÃO ══════
-           O estado da conta morava só na barra lateral, que não
-           existe no celular nem no computador desde a navegação
-           nova: quem abria o app no segundo aparelho não tinha como
-           saber que ele estava sozinho. Aqui ele fica ao lado da
-           busca, com três papéis no mesmo botão — dizer o estado,
-           puxar os dados agora e, sem conta, levar para entrar.
-           Desenhado por estado-sync.js. -->
-      <button class="pill pill-btn pill-sync" id="btnSync"
-              aria-label="Sincronização" data-dica="Sincronizar agora">
-        <span class="sync-ico" data-ico="repeat" aria-hidden="true"></span>
-        <span class="pill-label" id="btnSyncLabel">Sincronizar</span>
-      </button>
       <button class="pill pill-btn" id="btnSearch"
               aria-label="Buscar em todo o app" data-dica="Buscar   /">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>
@@ -307,9 +294,33 @@
     <main class="content" id="content" tabindex="-1">
 
       <div class="page-head">
-        <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
-        <h1 id="pageTitle">Visão geral</h1>
-        <p class="page-sub" id="pageSub"></p>
+        <div class="page-head-textos">
+          <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
+          <h1 id="pageTitle">Visão geral</h1>
+          <p class="page-sub" id="pageSub"></p>
+        </div>
+
+        <!-- ══════ SINCRONIZAÇÃO ══════
+             Duas tentativas anteriores puseram este botão entre os
+             ícones da barra de cima, e nas duas ele ficou espremido:
+             no computador, um "Entrar" dourado no meio da busca e dos
+             avisos; no celular, uma quarta bolinha que ninguém sabia
+             o que era. Aqui ele tem espaço para dizer o que acontece
+             em PALAVRAS — "Sincronizado · há 2 min" — e continua sendo
+             um botão só: toca, sincroniza; sem conta, leva para entrar.
+             No celular vira uma faixa inteira, do tamanho do polegar.
+             Desenhado por estado-sync.js. -->
+        <button type="button" class="sync-chip" id="btnSync" hidden>
+          <span class="sync-chip-sinal" aria-hidden="true"></span>
+          <span class="sync-chip-textos">
+            <strong id="btnSyncEstado">Sincronização</strong>
+            <span id="btnSyncQuando"></span>
+          </span>
+          <span class="sync-chip-acao">
+            <span class="sync-chip-ico" data-ico="repeat" data-ico-size="15" aria-hidden="true"></span>
+            <span id="btnSyncLabel">Sincronizar</span>
+          </span>
+        </button>
       </div>
 
       <!-- Aviso de conta. Quem abre o OAZE num aparelho sem entrar vê

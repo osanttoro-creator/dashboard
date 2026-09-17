@@ -986,7 +986,10 @@
      PERFIS
      ============================================================ */
 
-  Forms.openProfiles = function () {
+  /* Espaços financeiros (no código, "perfis"). Abre também direto no
+     campo de criar, que é o que o "+ Novo espaço" do seletor pede. */
+  Forms.openProfiles = function (opcoes) {
+    const o = opcoes || {};
     const body = el('div');
 
     function draw() {
@@ -1006,20 +1009,20 @@
             el('button', {
               class: 'icon-btn', title: 'Renomear', text: '✎',
               onclick: () => {
-                const nome = prompt('Novo nome do perfil:', p.name);
+                const nome = prompt('Novo nome do espaço:', p.name);
                 if (nome && nome.trim()) { Store.renameProfile(p.id, nome.trim()); draw(); }
               }
             }),
             el('button', {
               class: 'icon-btn danger', title: 'Excluir', text: '🗑',
               onclick: async () => {
-                if (st.profiles.length <= 1) { UI.toast('É preciso manter ao menos um perfil.', 'error'); return; }
+                if (st.profiles.length <= 1) { UI.toast('É preciso manter ao menos um espaço.', 'error'); return; }
                 const ok = await UI.confirm({
-                  title: 'Excluir perfil',
+                  title: 'Excluir espaço',
                   message: `Excluir <strong>${U.escape(p.name)}</strong> e TODOS os seus dados? Isso não pode ser desfeito.`,
-                  confirmLabel: 'Excluir perfil', danger: true
+                  confirmLabel: 'Excluir espaço', danger: true
                 });
-                if (ok) { Store.deleteProfile(p.id); UI.toast('Perfil excluído.'); Forms.openProfiles(); }
+                if (ok) { Store.deleteProfile(p.id); UI.toast('Espaço excluído.'); Forms.openProfiles(); }
               }
             })
           ])
@@ -1027,31 +1030,34 @@
       });
       body.appendChild(list);
 
-      const nameInput = input({ placeholder: 'Nome do novo perfil' });
+      const nameInput = input({ placeholder: 'Ex.: Casa, Empresa, Viagem', maxlength: 40 });
+      const criar = () => {
+        const n = nameInput.value.trim();
+        if (!n) { UI.toast('Dê um nome ao espaço.', 'error'); nameInput.focus(); return; }
+        if (global.Limites && !Limites.exigirEspaco('workspaces')) return;
+        Store.addProfile(n);
+        UI.toast(`Espaço "${n}" criado e aberto.`, 'success');
+        UI.closeModal();
+      };
+      nameInput.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); criar(); }
+      });
       body.appendChild(el('div', { style: { marginTop: '16px' } }, [
-        field('Adicionar perfil', el('div', { class: 'row gap-6' }, [
+        field('Novo espaço', el('div', { class: 'row gap-6' }, [
           nameInput,
-          el('button', {
-            class: 'btn btn-primary', type: 'button', text: 'Criar',
-            onclick: () => {
-              const n = nameInput.value.trim();
-              if (!n) { UI.toast('Informe um nome.', 'error'); return; }
-              if (global.Limites && !Limites.exigirEspaco('workspaces')) return;
-              Store.addProfile(n);
-              UI.toast(`Perfil "${n}" criado e selecionado.`, 'success');
-              draw();
-            }
-          })
-        ]))
+          el('button', { class: 'btn btn-primary', type: 'button', text: 'Criar', onclick: criar })
+        ]), { hint: 'Cada espaço tem suas próprias contas, cartões, categorias e orçamento.' })
       ]));
+      return nameInput;
     }
     draw();
 
     UI.openModal({
-      title: 'Perfis',
+      title: 'Espaços financeiros',
+      noAutofocus: !o.criar,
       body,
       buttons: [
-        { label: 'Fechar', class: 'btn-primary', onClick: UI.closeModal }
+        { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal }
       ]
     });
   };

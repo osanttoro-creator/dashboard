@@ -2332,8 +2332,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 
 /* ---- todo desktop: o que é redundante sai de saída ----
-   A engrenagem de perfis também vive em Configurações, e o botão de
-   mês compacto continua legível. Juntos devolvem 35px sem custo. */
+   A engrenagem de espaços sai da barra; criar e gerenciar espaços
+   ficam no fim da lista do próprio seletor de espaço (app.js). Este
+   comentário dizia que ela "também vivia em Configurações" — não
+   vivia, e o desktop ficou sem como criar espaço até 16/09/2026. */
 @media (min-width: 821px) {
   #btnProfiles { display: none; }
   .pill-hoje { font-size: 11.5px; padding: 5px 9px; }
@@ -3871,10 +3873,10 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
     display: grid;
     /* A terceira coluna fica vazia no HTML: é o lugar da esfera da
        UGLEZ, que é fixa e pousa exatamente ali (ver 24.3). */
-    grid-template-columns: auto minmax(0, 1fr) 42px 38px 38px 38px;
+    grid-template-columns: auto minmax(0, 1fr) 42px 42px 42px;
     grid-template-areas:
-      "marca espaco uglez sync busca avisos"
-      "periodo periodo periodo periodo periodo periodo";
+      "marca espaco uglez busca avisos"
+      "periodo periodo periodo periodo periodo";
     align-items: center; gap: 6px;
     margin: 0 calc(-1 * max(14px, env(safe-area-inset-right, 0px))) 6px calc(-1 * max(14px, env(safe-area-inset-left, 0px)));
     padding: calc(env(safe-area-inset-top, 0px) + 6px) max(14px, env(safe-area-inset-right, 0px)) 8px max(14px, env(safe-area-inset-left, 0px));
@@ -3922,11 +3924,10 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   .topbar .pill-espaco .pill-select-wrap::after { right: 6px; }
   .topbar #btnProfiles { min-width: 36px; min-height: 36px; width: 36px; height: 36px; color: var(--muted); }
 
-  .topbar #btnSync { grid-area: sync; }
   .topbar #btnSearch { grid-area: busca; }
   .topbar #btnNotif { grid-area: avisos; position: relative; }
   .topbar .pill-btn {
-    width: 38px; height: 38px; min-width: 38px; min-height: 38px; padding: 0;
+    width: 42px; height: 42px; min-width: 42px; min-height: 42px; padding: 0;
     justify-content: center; border-radius: 50%;
     background: var(--plane-2); border: 1px solid var(--glass-line); box-shadow: none;
     -webkit-backdrop-filter: none; backdrop-filter: none; color: var(--ink);
@@ -4039,10 +4040,10 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
     left: auto; bottom: auto;
     top: calc(env(safe-area-inset-top, 0px) + 6px);
     /* A esfera é fixa e pousa na coluna "uglez" da barra. O número
-       é a soma das colunas à direita dela: sincronizar, buscar e
-       avisos (38px cada) mais os três vãos de 6px. Mexeu na grade
-       da barra, refaça esta conta — senão a esfera cobre um botão. */
-    right: calc(max(14px, env(safe-area-inset-right, 0px)) + 132px);
+       é a soma das colunas à direita dela: buscar e avisos (42px
+       cada) mais os dois vãos de 6px. Mexeu na grade da barra,
+       refaça esta conta — senão a esfera cobre um botão. */
+    right: calc(max(14px, env(safe-area-inset-right, 0px)) + 96px);
     z-index: 75;
     transition: transform .3s var(--ease-out), opacity .2s var(--ease-out);
   }
@@ -4670,19 +4671,6 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
    quem for desfazer qualquer um deles vai querer ver os outros.
    ============================================================= */
 
-/* ---- 27.1 · botão de sincronizar ---- */
-.pill-sync .sync-ico { display: inline-flex; }
-.pill-sync .sync-ico svg { display: block; }
-.pill-sync.is-sincronizando .sync-ico { animation: sync-gira 1.1s linear infinite; }
-.pill-sync.is-local { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--glass-line)); }
-.pill-sync.is-offline, .pill-sync.is-erro { color: var(--warning-text); }
-.pill-sync.is-erro { border-color: color-mix(in srgb, var(--critical) 40%, var(--glass-line)); }
-.pill-sync[disabled] { opacity: .75; cursor: default; }
-@keyframes sync-gira { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) {
-  .pill-sync.is-sincronizando .sync-ico { animation: none; opacity: .6; }
-}
-
 /* ---- 27.2 · fora dos totais ---- */
 .badge-off {
   background: color-mix(in srgb, var(--muted) 16%, transparent);
@@ -4709,3 +4697,82 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 
 /* ---- 27.4 · previsto no calendário ---- */
 .cal-resumo-fig .v.val-neg { color: var(--critical); }
+
+/* ---- 27.5 · botão de sincronizar no cabeçalho da página ----
+   Duas tentativas o puseram entre os ícones da barra de cima e nas
+   duas ele ficou espremido e sem nome. Aqui ele diz o estado em
+   palavras. No computador, uma pílula à direita do título; no
+   celular, uma faixa inteira, alta o bastante para o polegar. */
+.page-head { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.page-head-textos { flex: 1 1 260px; min-width: 0; }
+
+.sync-chip {
+  display: inline-flex; align-items: center; gap: 10px; flex: none;
+  margin-bottom: 2px; padding: 6px 6px 6px 12px;
+  border: 1px solid var(--glass-line); border-radius: 999px;
+  background: var(--plane-2); color: var(--ink);
+  font: inherit; text-align: left; cursor: pointer;
+  transition: border-color .18s var(--ease-out), background .18s var(--ease-out);
+}
+.sync-chip[hidden] { display: none; }
+.sync-chip:hover:not(:disabled) { border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-line)); }
+.sync-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sync-chip:disabled { cursor: default; }
+
+.sync-chip-sinal {
+  width: 9px; height: 9px; flex: none; border-radius: 50%;
+  background: var(--good);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent);
+}
+.sync-chip.is-local .sync-chip-sinal,
+.sync-chip.is-offline .sync-chip-sinal {
+  background: var(--warning);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 22%, transparent);
+}
+.sync-chip.is-erro .sync-chip-sinal {
+  background: var(--critical);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--critical) 22%, transparent);
+}
+.sync-chip.is-sincronizando .sync-chip-sinal {
+  width: 12px; height: 12px; background: transparent; box-shadow: none;
+  border: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-top-color: var(--accent);
+  animation: sync-gira .8s linear infinite;
+}
+
+.sync-chip-textos { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.sync-chip-textos strong { font-size: 13px; font-weight: 620; white-space: nowrap; }
+.sync-chip-textos span { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.sync-chip-textos span::before { content: '· '; }
+
+.sync-chip-acao {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; white-space: nowrap;
+  background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--ink);
+}
+.sync-chip-ico { display: inline-flex; }
+.sync-chip.is-local .sync-chip-acao { background: var(--ouro); color: var(--on-accent); }
+.sync-chip.is-sincronizando .sync-chip-acao { opacity: .6; }
+.sync-chip.is-sincronizando .sync-chip-ico { animation: sync-gira 1.1s linear infinite; }
+@keyframes sync-gira { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .sync-chip.is-sincronizando .sync-chip-sinal,
+  .sync-chip.is-sincronizando .sync-chip-ico { animation: none; }
+}
+
+@media (max-width: 820px) {
+  .page-head { gap: 10px; }
+  .page-head-textos { flex-basis: 100%; }
+  .sync-chip {
+    width: 100%; min-height: 48px; margin: 0; padding: 6px 6px 6px 14px;
+    border-radius: 14px; justify-content: space-between;
+  }
+  .sync-chip-textos { flex: 1; }
+  .sync-chip-textos strong { font-size: 14px; }
+  .sync-chip-acao { padding: 9px 14px; font-size: 13px; }
+}
+
+/* ---- 27.6 · criar espaço pelo seletor de espaço ---- */
+.oaze-select-sep { height: 1px; margin: 4px 6px; background: var(--glass-line); }
+.oaze-select-option.is-acao { color: var(--accent); font-weight: 600; }

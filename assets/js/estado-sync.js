@@ -153,21 +153,21 @@
        com conta        puxa os dados agora
        ocupado/erro     diz o que está acontecendo, e não some
 
-     O rótulo muda com o estado em vez de dizer sempre
-     "Sincronizar": um botão que afirma a mesma coisa em todas as
-     situações não é informação, é enfeite. E o título carrega a
-     hora da última sincronização, que é o que responde "isso aqui
-     está velho?".
+     Mora no cabeçalho da página, não na barra de ícones: ali ele
+     tem espaço para dizer o estado em palavras e a hora da última
+     sincronização, que é o que responde "isso aqui está velho?".
+     Sem conta, enquanto o aviso grande de "dados só neste aparelho"
+     está na tela, ele se recolhe — os dois diriam a mesma coisa.
      ============================================================= */
   function quandoFoi(ms) {
     if (!ms) return '';
     const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
-    if (s < 60) return 'agora mesmo';
+    if (s < 60) return 'agora';
     const m = Math.round(s / 60);
-    if (m < 60) return 'há ' + m + (m === 1 ? ' minuto' : ' minutos');
+    if (m < 60) return 'há ' + m + ' min';
     const h = Math.round(m / 60);
-    if (h < 24) return 'há ' + h + (h === 1 ? ' hora' : ' horas');
-    return 'em ' + new Date(ms).toLocaleDateString('pt-BR');
+    if (h < 24) return 'há ' + h + ' h';
+    return 'em ' + new Date(ms).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   }
 
   let sincronizando = false;
@@ -175,41 +175,50 @@
   function pintarBotaoSync(s) {
     const btn = document.getElementById('btnSync');
     if (!btn) return;
-    const rot = document.getElementById('btnSyncLabel');
     const temSync = !!(global.Sync && Sync.isConfigured && Sync.isConfigured());
-    btn.hidden = !temSync;
-    if (!temSync) return;
-
     const restaurando = !!(global.Sync && Sync.restaurando && Sync.restaurando());
-    const u = global.Sync && Sync.currentUser ? Sync.currentUser() : null;
-    const ocupado = sincronizando || restaurando || s.chave === 'sincronizando';
+    const u = temSync && Sync.currentUser ? Sync.currentUser() : null;
+    const aviso = document.getElementById('avisoConta');
+    const avisoNaTela = !!(aviso && !aviso.hidden);
 
-    let texto, dica, classe;
+    btn.hidden = !temSync || (!u && !restaurando && avisoNaTela);
+    if (btn.hidden) return;
+
+    const ocupado = sincronizando || restaurando || s.chave === 'sincronizando';
+    let estado, quando = '', acao, classe, dica;
+
     if (restaurando) {
-      texto = 'Verificando'; dica = 'Verificando sua conta…'; classe = 'is-sincronizando';
+      estado = 'Verificando sua conta'; acao = 'Aguarde'; classe = 'is-sincronizando';
+      dica = 'Verificando sua conta…';
     } else if (!u) {
-      texto = 'Entrar'; classe = 'is-local';
-      dica = 'Estes dados estão só neste aparelho. Entrar para sincronizar.';
+      estado = 'Só neste aparelho'; acao = 'Entrar'; classe = 'is-local';
+      dica = 'Estes dados estão só neste aparelho. Entre para sincronizar com os outros.';
     } else if (ocupado) {
-      texto = 'Sincronizando'; dica = 'Sincronizando…'; classe = 'is-sincronizando';
+      estado = 'Sincronizando'; acao = 'Sincronizando'; classe = 'is-sincronizando';
+      dica = 'Sincronizando com seus outros aparelhos…';
     } else if (s.chave === 'offline') {
-      texto = 'Sem conexão'; classe = 'is-offline';
-      dica = 'Sem conexão. As alterações ficam guardadas e sobem quando a rede voltar.';
+      estado = 'Sem conexão'; quando = 'alterações guardadas aqui'; acao = 'Tentar';
+      classe = 'is-offline';
+      dica = 'Sem conexão. O que você fizer fica guardado e sobe quando a rede voltar.';
     } else if (s.chave === 'erro') {
-      texto = 'Erro'; classe = 'is-erro';
-      dica = s.texto + ' Toque para tentar de novo.';
+      estado = 'Não sincronizou'; acao = 'Tentar de novo'; classe = 'is-erro';
+      dica = s.texto + '. Toque para tentar de novo.';
     } else {
-      const quando = quandoFoi(global.Sync && Sync.ultimaSincronia ? Sync.ultimaSincronia() : 0);
-      texto = 'Sincronizar'; classe = 'is-ok';
-      dica = (quando ? 'Sincronizado ' + quando + '. ' : '') + 'Toque para atualizar agora.';
+      const ultima = global.Sync && Sync.ultimaSincronia ? Sync.ultimaSincronia() : 0;
+      estado = 'Sincronizado'; quando = quandoFoi(ultima); acao = 'Sincronizar'; classe = 'is-ok';
+      dica = 'Sincronizado com seus outros aparelhos' + (quando ? ' ' + quando : '') + '. Toque para atualizar agora.';
     }
 
-    if (rot) rot.textContent = texto;
-    btn.className = 'pill pill-btn pill-sync ' + classe;
+    btn.className = 'sync-chip ' + classe;
     btn.disabled = ocupado;
     btn.setAttribute('aria-label', dica);
-    btn.setAttribute('data-dica', dica);
     btn.title = dica;
+    const pinta = (id, t) => { const n = document.getElementById(id); if (n) n.textContent = t; };
+    pinta('btnSyncEstado', estado);
+    pinta('btnSyncQuando', quando);
+    pinta('btnSyncLabel', acao);
+    const q = document.getElementById('btnSyncQuando');
+    if (q) q.hidden = !quando;
   }
 
   function sincronizarAgora() {
@@ -296,6 +305,7 @@
         acoes.appendChild(botao('btn btn-ghost btn-sm', 'Agora não', function () {
           try { localStorage.setItem(CHAVE_AVISO, String(Date.now())); } catch (e) { /* segue */ }
           aviso.hidden = true;
+          ES.pintar();   // o botão de sincronizar reaparece no lugar do aviso
         }));
         aviso.appendChild(acoes);
       }
