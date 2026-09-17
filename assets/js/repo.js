@@ -219,12 +219,21 @@
       const cardId = idDe.cartoes[legacyCard];
       if (!cardId || !/^\d{4}-\d{2}$/.test(ref || '')) return;   // cartão apagado: a fatura perdeu o dono
       const v = perfil.invoices[k] || {};
+      /* O registro guarda movimentos (pagamentos e compras
+         adiantadas), não mais um booleano. A linha relacional
+         continua com uma data e um valor: a data é a do último
+         pagamento e o valor é tudo o que já saiu por esta fatura. */
+      const pagamentos = Array.isArray(v.pagamentos) ? v.pagamentos : [];
+      const adiant = (v.adiantamentos && typeof v.adiantamentos === 'object') ? v.adiantamentos : {};
+      const ultimo = pagamentos.length ? pagamentos[pagamentos.length - 1] : null;
+      const saiu = pagamentos.reduce((s, m) => s + num(m.amount), 0)
+        + Object.keys(adiant).reduce((s, c) => s + num(adiant[c].amount), 0);
       faturas.push({
         workspace_id: wsId, card_id: cardId, referencia: ref,
-        paga: v.paid !== false,
-        paga_em: U.isValidISO(v.paidAt) ? v.paidAt : null,
-        account_id: idDe.contas[v.accountId] || null,
-        valor: num(v.amount),
+        paga: !!v.quitada,
+        paga_em: ultimo && U.isValidISO(ultimo.at) ? ultimo.at : null,
+        account_id: (ultimo && idDe.contas[ultimo.accountId]) || null,
+        valor: num(saiu),
         origem: Repo.origem()
       });
     });
@@ -440,11 +449,19 @@
     faturas.forEach((f) => {
       const cartao = de[f.card_id];
       if (!cartao) return;   /* cartão apagado: a fatura perdeu o dono */
+      /* A linha relacional guarda um total e uma data; o app guarda
+         movimentos. A volta reconstrói UM pagamento com o que a
+         linha sabe — se houve dois, eles voltam somados, que é o
+         máximo que a tabela permite dizer sem mentir. */
+      const valor = +f.valor || 0;
       perfil.invoices[cartao + '|' + f.referencia] = {
-        paid: f.paga !== false,
-        paidAt: f.paga_em || null,
-        accountId: de[f.account_id] || null,
-        amount: +f.valor || 0
+        pagamentos: valor > 0 ? [{
+          at: f.paga_em || null,
+          amount: valor,
+          accountId: de[f.account_id] || null
+        }] : [],
+        adiantamentos: {},
+        quitada: !!f.paga
       };
     });
 

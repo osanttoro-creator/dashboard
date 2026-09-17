@@ -37,10 +37,30 @@
      cor: vem sempre com ícone e nome.
      ------------------------------------------------------------ */
   const PALETTE = ['#2E6E7E', '#A85A32', '#3B6558', '#7B5A8E', '#1F6B4F', '#B07C3E'];
-  /* extras do seletor — mesma família, outros passos */
+  /* extras do seletor — mesma família, outros passos.
+     A segunda linha entrou em 16/09/2026: com dez contas, dez
+     cartões e vinte categorias, dezesseis cores obrigavam a
+     repetir, e duas coisas da mesma cor na mesma tela é o mesmo
+     que nenhuma cor. Os doze novos abrem matizes que faltavam —
+     vinho, jade, oliva, ferrugem, orquídea — sem clarear a
+     família: todos passam 4,5:1 com texto branco por cima. */
   const PALETTE_EXTRA = ['#34557A', '#8A5A38', '#4C6B33', '#6E4E3D', '#0F2C3D', '#2D4F56',
-    '#547A6E', '#8A7A62', '#4E3A55', '#9A5F35'];
+    '#547A6E', '#8A7A62', '#4E3A55', '#9A5F35',
+    '#7A3B45', '#1E5E52', '#23324F', '#8C4A2F', '#6B6B3A', '#32363A',
+    '#17656B', '#5A4432', '#8E4A6B', '#3E6E8E', '#7A5A2E', '#1F4A5C'];
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
+
+  /* O nome existe para o leitor de tela e para a dica do seletor:
+     "Cor #7A3B45" não é um rótulo, é um número de série. */
+  const COLOR_NAMES = {
+    '#2E6E7E': 'Petróleo', '#A85A32': 'Terracota', '#3B6558': 'Oásis', '#7B5A8E': 'Ameixa',
+    '#1F6B4F': 'Pinho', '#B07C3E': 'Âmbar', '#34557A': 'Índigo', '#8A5A38': 'Couro',
+    '#4C6B33': 'Musgo', '#6E4E3D': 'Terra', '#0F2C3D': 'Midnight', '#2D4F56': 'Maré',
+    '#547A6E': 'Eucalipto', '#8A7A62': 'Areia', '#4E3A55': 'Uva', '#9A5F35': 'Cobre',
+    '#7A3B45': 'Vinho', '#1E5E52': 'Jade', '#23324F': 'Azul-noite', '#8C4A2F': 'Ferrugem',
+    '#6B6B3A': 'Oliva', '#32363A': 'Carvão', '#17656B': 'Lagoa', '#5A4432': 'Café',
+    '#8E4A6B': 'Orquídea', '#3E6E8E': 'Céu profundo', '#7A5A2E': 'Bronze', '#1F4A5C': 'Abissal'
+  };
 
   /* Migração: dados salvos com paletas anteriores ganham o equivalente
      nesta. Cores escolhidas à mão ficam como estão. */
@@ -109,11 +129,15 @@
     .concat(DEFAULT_INCOME_CATS.map((c) => c[0]));
 
   const Store = {
-    PALETTE, ALL_COLORS, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES,
+    PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES,
     CATEGORIAS_PADRAO: NOMES_PADRAO
   };
 
+  /** Nome da cor para rótulo e dica; o hex é o fallback honesto. */
+  Store.colorName = (hex) => COLOR_NAMES[String(hex || '').toUpperCase()] || String(hex || '');
+
   let state = null;
+  let revisao = 0;
   const listeners = [];
 
   /* ---------------- fábricas ---------------- */
@@ -188,6 +212,70 @@
     return t;
   };
 
+  /* =============================================================
+     FATURAS — de "paga/não paga" para quanto já saiu
+     -------------------------------------------------------------
+     O registro antigo tinha um booleano e um valor: ou a fatura
+     estava paga, ou não estava. Quem paga metade agora e o resto
+     na semana seguinte — ou adianta uma compra específica antes de
+     a fatura fechar — não tinha onde registrar isso, e acabava
+     marcando como paga uma fatura que ainda devia.
+
+     Agora o registro guarda MOVIMENTOS:
+       pagamentos    [{ at, amount, accountId }]   a fatura inteira
+       adiantamentos { chave: { at, amount, accountId } }  uma compra
+       quitada       a pessoa declarou encerrada, mesmo faltando
+
+     A chave do adiantamento é a da ocorrência (id, ou id#AAAA-MM
+     quando é um lançamento fixo), porque uma assinatura no cartão
+     pode ser adiantada num mês e não no outro.
+
+     O formato antigo continua sendo lido: um registro com `paid`
+     vira um pagamento único com o mesmo valor, data e conta. Nada
+     que já estava salvo se perde.
+     ============================================================= */
+  function normalizeMovimento(m) {
+    const valor = U.round2(+((m && m.amount)) || 0);
+    if (!(valor > 0)) return null;
+    return {
+      at: (m && U.isValidISO(m.at)) ? m.at : U.todayISO(),
+      amount: valor,
+      accountId: (m && m.accountId) || null
+    };
+  }
+
+  function normalizeInvoices(raw) {
+    const out = {};
+    if (!raw || typeof raw !== 'object') return out;
+    Object.keys(raw).forEach((k) => {
+      const r = raw[k];
+      if (!r || typeof r !== 'object') return;
+
+      let pagamentos = (Array.isArray(r.pagamentos) ? r.pagamentos : [])
+        .map(normalizeMovimento).filter(Boolean);
+
+      /* legado: { paid, paidAt, amount, accountId } */
+      if (!pagamentos.length && r.paid) {
+        const antigo = normalizeMovimento({ at: r.paidAt, amount: r.amount, accountId: r.accountId });
+        if (antigo) pagamentos = [antigo];
+      }
+
+      const adiantamentos = {};
+      const adi = (r.adiantamentos && typeof r.adiantamentos === 'object') ? r.adiantamentos : {};
+      Object.keys(adi).forEach((chave) => {
+        const m = normalizeMovimento(adi[chave]);
+        if (m) adiantamentos[chave] = m;
+      });
+
+      const quitada = r.quitada !== undefined ? !!r.quitada : !!r.paid;
+      if (!pagamentos.length && !Object.keys(adiantamentos).length && !quitada) return;
+
+      pagamentos.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+      out[k] = { pagamentos, adiantamentos, quitada };
+    });
+    return out;
+  }
+
   function normalizeProfile(p) {
     const prof = Object.assign(makeProfile(p && p.name), p || {});
     prof.id = prof.id || U.uid('prf');
@@ -202,7 +290,14 @@
       last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
       openingBalance: U.round2(+a.openingBalance || 0),
       openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
-      archived: !!a.archived
+      archived: !!a.archived,
+      /* Fora dos totais: a conta continua existindo, com extrato e
+         saldo, mas o que passa por ela não entra nas receitas e
+         despesas do mês. É para a conta da empresa, a conta de
+         terceiros, a poupança do filho — dinheiro que aparece no
+         banco e não é seu para gastar. Ausente = considerada, que
+         é o que todo dado antigo significa. */
+      considerado: a.considerado !== false
     }));
     prof.cards = (Array.isArray(prof.cards) ? prof.cards : []).map((c) => ({
       id: c.id || U.uid('card'),
@@ -214,7 +309,11 @@
       limit: U.round2(+c.limit || 0),
       closingDay: Math.min(31, Math.max(1, +c.closingDay || 1)),
       dueDay: Math.min(31, Math.max(1, +c.dueDay || 10)),
-      accountId: c.accountId || null
+      accountId: c.accountId || null,
+      /* Mesmo interruptor do débito: a fatura continua inteira, com
+         limite e vencimento, mas as compras dele ficam fora das
+         despesas do mês. */
+      considerado: c.considerado !== false
     }));
     prof.categories = (Array.isArray(prof.categories) && prof.categories.length ? prof.categories : makeCategories())
       .map((c) => ({
@@ -236,7 +335,7 @@
       accountId: i.accountId || null,
       notes: String(i.notes || '')
     }));
-    prof.invoices = (prof.invoices && typeof prof.invoices === 'object') ? prof.invoices : {};
+    prof.invoices = normalizeInvoices(prof.invoices);
 
     /* Orçamento: um limite mensal por categoria. Guardado como mapa
        porque a pergunta é sempre "qual o limite DESTA categoria". */
@@ -272,6 +371,18 @@
           day: Math.min(31, Math.max(1, parseInt(g.contribution.day, 10) || 1))
         }
         : null,
+      /* De onde o dinheiro saiu, a cada aporte. Sem isto, "guardar
+         numa meta" era um número que crescia sozinho: a reserva
+         subia e nenhuma conta baixava, e ninguém sabia dizer de
+         qual conta aquele dinheiro tinha vindo. Um aporte COM
+         conta sai do saldo dela (Calc.accountBalance) e volta no
+         patrimônio como reserva — o dinheiro mudou de lugar, não
+         desapareceu. Sem conta, continua sendo só uma marcação. */
+      deposits: (Array.isArray(g.deposits) ? g.deposits : []).map((d) => ({
+        at: U.isValidISO(d && d.at) ? d.at : U.todayISO(),
+        amount: U.round2(+(d && d.amount) || 0),
+        accountId: (d && d.accountId) || null
+      })).filter((d) => d.amount !== 0),
       createdAt: g.createdAt || U.todayISO()
     }));
     return prof;
@@ -328,6 +439,7 @@
       console.warn('Não foi possível ler o localStorage:', e);
     }
     state = normalizeState(raw);
+    revisao++;
     return state;
   };
 
@@ -349,6 +461,12 @@
 
   Store.state = () => state;
   Store.profile = () => state.profiles.find((p) => p.id === state.activeProfileId) || state.profiles[0];
+
+  /* Contador de mudanças. Quem guarda cálculo derivado (o Calc)
+     pergunta por ele em vez de recalcular: enquanto a revisão não
+     muda, nenhum dado mudou, e a resposta guardada continua certa.
+     É um número, não um evento — não dá para esquecer de ouvir. */
+  Store.revisao = () => revisao;
   Store.normalizeProfile = normalizeProfile;   // usado pela sincronização
 
   /** notifica quem estiver ouvindo (o app redesenha a página ativa) */
@@ -366,6 +484,7 @@
         if (p) p.updatedAt = now;
       }
     }
+    revisao++;
     Store.save();
     listeners.forEach((fn) => { try { fn(reason); } catch (e) { console.error(e); } });
   };
@@ -568,30 +687,106 @@
       const i = gs.findIndex((g) => g.id === id);
       if (i >= 0) { gs.splice(i, 1); Store.commit('goal'); }
     },
-    /** Guardar dinheiro numa meta não é despesa: é dinheiro mudando de lugar. */
-    deposit: function (id, valor) {
+    /**
+     * Guardar dinheiro numa meta não é despesa: é dinheiro mudando
+     * de lugar. Com `opts.accountId`, o lugar de onde ele saiu fica
+     * registrado — e o saldo daquela conta baixa de verdade.
+     */
+    deposit: function (id, valor, opts) {
       const g = Store.goals.get(id);
       if (!g) return null;
-      g.saved = U.round2(Math.max(0, g.saved + U.round2(+valor || 0)));
+      const v = U.round2(+valor || 0);
+      if (!v) return g;
+      const anterior = g.saved;
+      g.saved = U.round2(Math.max(0, g.saved + v));
+      const efetivo = U.round2(g.saved - anterior);   // respeita o piso em zero
+      if (efetivo) {
+        if (!Array.isArray(g.deposits)) g.deposits = [];
+        g.deposits.push({
+          at: (opts && U.isValidISO(opts.at)) ? opts.at : U.todayISO(),
+          amount: efetivo,
+          accountId: (opts && opts.accountId) || null
+        });
+      }
       Store.commit('goal');
       return g;
     }
   };
 
-  Store.setInvoicePaid = function (cardId, ref, paid, opts) {
+  function registroDaFatura(cardId, ref) {
     const p = Store.profile();
     const key = Store.invoiceKey(cardId, ref);
-    if (paid) {
-      p.invoices[key] = {
-        paid: true,
-        paidAt: (opts && opts.paidAt) || U.todayISO(),
-        accountId: (opts && opts.accountId) || null,
-        amount: U.round2((opts && opts.amount) || 0)
-      };
-    } else {
+    if (!p.invoices[key]) p.invoices[key] = { pagamentos: [], adiantamentos: {}, quitada: false };
+    const r = p.invoices[key];
+    if (!Array.isArray(r.pagamentos)) r.pagamentos = [];
+    if (!r.adiantamentos || typeof r.adiantamentos !== 'object') r.adiantamentos = {};
+    return r;
+  }
+
+  function limpaSeVazio(cardId, ref) {
+    const p = Store.profile();
+    const key = Store.invoiceKey(cardId, ref);
+    const r = p.invoices[key];
+    if (r && !r.pagamentos.length && !Object.keys(r.adiantamentos).length && !r.quitada) {
       delete p.invoices[key];
     }
+  }
+
+  /** Um pagamento da fatura. Vários somam; nenhum deles apaga o outro. */
+  Store.payInvoice = function (cardId, ref, opts) {
+    const r = registroDaFatura(cardId, ref);
+    const m = normalizeMovimento({
+      at: (opts && opts.paidAt) || U.todayISO(),
+      amount: (opts && opts.amount) || 0,
+      accountId: (opts && opts.accountId) || null
+    });
+    if (m) r.pagamentos.push(m);
+    r.pagamentos.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+    if (opts && opts.quitar !== undefined) r.quitada = !!opts.quitar;
+    limpaSeVazio(cardId, ref);
     Store.commit('invoices');
+  };
+
+  /** Declara (ou desfaz) o encerramento da fatura, sem mexer nos valores. */
+  Store.setInvoiceQuitada = function (cardId, ref, quitada) {
+    const r = registroDaFatura(cardId, ref);
+    r.quitada = !!quitada;
+    limpaSeVazio(cardId, ref);
+    Store.commit('invoices');
+  };
+
+  /** Adiantar UMA compra: a chave é a da ocorrência (id ou id#AAAA-MM). */
+  Store.advanceInvoiceItem = function (cardId, ref, chave, opts) {
+    const r = registroDaFatura(cardId, ref);
+    const m = normalizeMovimento({
+      at: (opts && opts.paidAt) || U.todayISO(),
+      amount: (opts && opts.amount) || 0,
+      accountId: (opts && opts.accountId) || null
+    });
+    if (m) r.adiantamentos[chave] = m; else delete r.adiantamentos[chave];
+    limpaSeVazio(cardId, ref);
+    Store.commit('invoices');
+  };
+
+  Store.removeInvoiceAdvance = function (cardId, ref, chave) {
+    const p = Store.profile();
+    const r = p.invoices[Store.invoiceKey(cardId, ref)];
+    if (!r || !r.adiantamentos || !r.adiantamentos[chave]) return;
+    delete r.adiantamentos[chave];
+    limpaSeVazio(cardId, ref);
+    Store.commit('invoices');
+  };
+
+  /** Apaga TODOS os movimentos da fatura — o "desfazer" da tela. */
+  Store.clearInvoicePayments = function (cardId, ref) {
+    delete Store.profile().invoices[Store.invoiceKey(cardId, ref)];
+    Store.commit('invoices');
+  };
+
+  /* Compatibilidade: chamadas antigas continuam funcionando. */
+  Store.setInvoicePaid = function (cardId, ref, paid, opts) {
+    if (paid) Store.payInvoice(cardId, ref, Object.assign({ quitar: true }, opts || {}));
+    else Store.clearInvoicePayments(cardId, ref);
   };
 
   /* ---------------- backup ---------------- */

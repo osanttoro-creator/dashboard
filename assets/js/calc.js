@@ -20,6 +20,49 @@
   const P = () => Store.profile();
 
   /* ============================================================
+     0 · MEMÓRIA DE CÁLCULO
+     ------------------------------------------------------------
+     Quase tudo aqui parte de Calc.entries(), que percorre TODOS os
+     lançamentos e expande os fixos mês a mês. Isso é barato uma
+     vez e caro trinta vezes — e trinta era o número real: desenhar
+     a carteira chamava cardUsed() por cartão, que abre 19 faturas,
+     e cada fatura chama entries() de novo. Somando o saldo de cada
+     conta, uma tela com 500 lançamentos varria a lista mais de
+     cem vezes, e a demora aparecia onde mais incomoda: ao salvar
+     uma compra, que redesenha a página inteira.
+
+     A saída não é calcular menos: é não calcular DUAS VEZES a
+     mesma coisa entre duas mudanças de dado. A chave é
+     Store.revisao(), um contador que sobe a cada commit. Enquanto
+     ele não muda, nada mudou, e a resposta guardada continua
+     verdadeira. Quando muda, a memória inteira é descartada — sem
+     invalidação seletiva, que é onde esse tipo de código erra.
+
+     Só o espaço ATIVO é memorizado: comparar dois espaços é raro e
+     não vale o risco de guardar resposta de um perfil e devolver
+     para outro.
+     ============================================================ */
+  let memoRev = -1;
+  let memoPid = null;
+  let memo = new Map();
+
+  function lembrar(prof, chave, calcular) {
+    const ativo = P();
+    if (!ativo || prof !== ativo) return calcular();
+    const rev = (global.Store && Store.revisao) ? Store.revisao() : -1;
+    if (rev !== memoRev || ativo.id !== memoPid) {
+      memoRev = rev; memoPid = ativo.id; memo = new Map();
+    }
+    if (memo.has(chave)) return memo.get(chave);
+    const valor = calcular();
+    memo.set(chave, valor);
+    return valor;
+  }
+
+  /** Descarta a memória à força (testes e depuração). */
+  Calc.esquecer = function () { memoRev = -1; memo = new Map(); };
+
+  /* ============================================================
      1 · OCORRÊNCIAS
      ============================================================ */
 
@@ -60,8 +103,32 @@
    * Todas as ocorrências no intervalo [fromISO, toISO], já expandidas.
    * Ordenadas por data e depois por descrição.
    */
+  /**
+   * Uma conta ou um cartão marcado como "fora dos totais" continua
+   * com extrato, saldo e fatura — o que ele deixa de fazer é entrar
+   * nas receitas e despesas do mês. É o caso da conta da empresa, da
+   * conta de terceiros, do cartão que outra pessoa paga: o dinheiro
+   * passa pelo banco e não é seu para gastar.
+   */
+  Calc.origemConsiderada = function (e, profile) {
+    const prof = profile || P();
+    if (e.method === 'card' && e.cardId) {
+      const c = prof.cards.find((x) => x.id === e.cardId);
+      return !c || c.considerado !== false;
+    }
+    const id = e.accountId || e.toAccountId;
+    if (!id) return true;
+    const a = prof.accounts.find((x) => x.id === id);
+    return !a || a.considerado !== false;
+  };
+
   Calc.entries = function (fromISO, toISO, profile) {
     const prof = profile || P();
+    return lembrar(prof, 'e|' + fromISO + '|' + toISO,
+      () => calcularEntries(fromISO, toISO, prof)).slice();
+  };
+
+  function calcularEntries(fromISO, toISO, prof) {
     const from = fromISO, to = toISO;
     const out = [];
     const months = U.monthRange(U.ymOf(from), U.ymOf(to));
@@ -83,8 +150,9 @@
 
     out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 :
       a.description.localeCompare(b.description, 'pt-BR')));
+    out.forEach((e) => { e.contaNosTotais = Calc.origemConsiderada(e, prof); });
     return out;
-  };
+  }
 
   Calc.entriesForMonth = function (ym, profile) {
     return Calc.entries(U.monthStart(ym), U.monthEnd(ym), profile);
@@ -93,13 +161,17 @@
   /** Primeira data com movimento (para varreduras "desde sempre"). */
   Calc.earliestDate = function (profile) {
     const prof = profile || P();
+    return lembrar(prof, 'ed', () => calcularEarliest(prof));
+  };
+
+  function calcularEarliest(prof) {
     let min = null;
     const consider = (d) => { if (d && (!min || d < min)) min = d; };
     prof.transactions.forEach((t) => consider(t.date));
     prof.investments.forEach((i) => consider(i.date));
     prof.accounts.forEach((a) => consider(a.openedAt));
     return min || U.monthStart(U.todayYM());
-  };
+  }
 
   /* ============================================================
      2 · TOTAIS DO MÊS
@@ -111,6 +183,11 @@
    * "planned" = tudo lançado (confirmado ou não).
    */
   Calc.monthTotals = function (ym, profile) {
+    const prof = profile || P();
+    return lembrar(prof, 'mt|' + ym, () => calcularMonthTotals(ym, prof));
+  };
+
+  function calcularMonthTotals(ym, profile) {
     const entries = Calc.entriesForMonth(ym, profile);
     const t = {
       income: 0, expense: 0, balance: 0,
@@ -123,6 +200,7 @@
 
     entries.forEach((e) => {
       if (e.kind === 'transfer') return;
+      if (e.contaNosTotais === false) return;   // conta/cartão fora dos totais
       const isIn = e.kind === 'income';
       if (isIn) t.plannedIncome += e.amount; else t.plannedExpense += e.amount;
       if (e.confirmed) {
@@ -143,12 +221,79 @@
     t.pendingIncome = U.round2(t.pendingIncome); t.pendingExpense = U.round2(t.pendingExpense);
     t.balance = U.round2(t.income - t.expense);
     t.plannedBalance = U.round2(t.plannedIncome - t.plannedExpense);
+
+    /* ----------------------------------------------------------
+       O DINHEIRO QUE REALMENTE SAI NO MÊS
+       ----------------------------------------------------------
+       Receitas − despesas é o resultado do mês por competência: a
+       compra no cartão pesa no mês em que foi feita. Mas quem
+       pergunta "quanto sobra este mês" está falando de CAIXA, e no
+       caixa a fatura sai inteira no dia em que é paga — inclusive
+       a fatura de compras de meses atrás.
+
+       Os dois números convivem porque respondem perguntas
+       diferentes, e nenhum deles é "o certo":
+         balance     resultado do mês   (competência)
+         saldoCaixa  o que sobra agora  (caixa)
+
+       Contar a compra no crédito E a fatura no mesmo saldo seria
+       contar o mesmo dinheiro duas vezes — por isso o caixa parte
+       das despesas no débito e soma as faturas pagas, nunca as
+       compras no crédito.
+       ---------------------------------------------------------- */
+    const fat = Calc.invoicePaymentsInMonth(ym, profile);
+    t.invoicesPaid = fat.total;
+    t.invoicePayments = fat.movimentos;
+    t.saldoCaixa = U.round2(t.income - t.expenseDebit - t.invoicesPaid);
+    t.plannedSaldoCaixa = U.round2(
+      t.plannedIncome - U.round2(t.plannedExpense - t.expenseCredit) - t.invoicesPaid);
     return t;
+  }
+
+  /**
+   * Pagamentos de fatura (e compras adiantadas) com data dentro do
+   * mês. É o que a fatura tira do bolso naquele mês, venha a compra
+   * de quando vier.
+   */
+  Calc.invoicePaymentsInMonth = function (ym, profile) {
+    const prof = profile || P();
+    return lembrar(prof, 'ipm|' + ym, function () {
+      const de = U.monthStart(ym), ate = U.monthEnd(ym);
+      const movimentos = [];
+      let total = 0;
+      Object.keys(prof.invoices).forEach((k) => {
+        const partes = k.split('|');
+        const card = prof.cards.find((c) => c.id === partes[0]);
+        if (card && card.considerado === false) return;
+        movimentosDoRegistro(prof.invoices[k]).forEach((m) => {
+          if (m.at < de || m.at > ate) return;
+          total += m.amount;
+          movimentos.push(Object.assign({ cardId: partes[0], ref: partes[1] }, m));
+        });
+      });
+      movimentos.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+      return { total: U.round2(total), movimentos };
+    });
   };
+
+  /** Todos os movimentos de um registro de fatura: pagamentos e adiantamentos. */
+  function movimentosDoRegistro(reg) {
+    if (!reg) return [];
+    const lista = (reg.pagamentos || []).map((m) => Object.assign({ tipo: 'fatura' }, m));
+    Object.keys(reg.adiantamentos || {}).forEach((chave) => {
+      lista.push(Object.assign({ tipo: 'adiantamento', chave }, reg.adiantamentos[chave]));
+    });
+    return lista;
+  }
+  Calc.invoiceMovements = movimentosDoRegistro;
 
   /** Fluxo operacional acumulado (confirmado) até uma data, inclusive. */
   Calc.cumulativeFlow = function (uptoISO, profile) {
     const prof = profile || P();
+    return lembrar(prof, 'cf|' + uptoISO, () => calcularCumulativeFlow(uptoISO, prof));
+  };
+
+  function calcularCumulativeFlow(uptoISO, prof) {
     const opening = prof.accounts.reduce(
       (s, a) => s + (a.openedAt <= uptoISO ? (+a.openingBalance || 0) : 0), 0);
     const from = Calc.earliestDate(prof);
@@ -159,7 +304,7 @@
       flow += e.kind === 'income' ? e.amount : -e.amount;
     });
     return U.round2(opening + flow);
-  };
+  }
 
   /** Saldo inicial do mês = fluxo acumulado até o último dia do mês anterior. */
   Calc.openingBalanceOfMonth = function (ym, profile) {
@@ -211,7 +356,7 @@
     const prof = profile || P();
     const map = new Map();
     Calc.entries(fromISO, toISO, prof).forEach((e) => {
-      if (e.kind !== kind || !e.confirmed) return;
+      if (e.kind !== kind || !e.confirmed || e.contaNosTotais === false) return;
       const id = e.categoryId || '__none__';
       if (!map.has(id)) map.set(id, { id, total: 0, count: 0 });
       const row = map.get(id);
@@ -243,7 +388,7 @@
     const prof = profile || P();
     const map = new Map();
     Calc.entries(fromISO, toISO, prof).forEach((e) => {
-      if (e.kind !== 'expense' || !e.confirmed) return;
+      if (e.kind !== 'expense' || !e.confirmed || e.contaNosTotais === false) return;
       const id = e.categoryId || '__none__';
       if (!map.has(id)) map.set(id, { id, debit: 0, credit: 0, count: 0 });
       const row = map.get(id);
@@ -291,9 +436,14 @@
   /** Saldo de caixa de uma conta até a data (inclusive). */
   Calc.accountBalance = function (accountId, uptoISO, profile) {
     const prof = profile || P();
+    const upto = uptoISO || U.todayISO();
+    return lembrar(prof, 'ab|' + accountId + '|' + upto,
+      () => calcularAccountBalance(accountId, upto, prof));
+  };
+
+  function calcularAccountBalance(accountId, upto, prof) {
     const acc = prof.accounts.find((a) => a.id === accountId);
     if (!acc) return 0;
-    const upto = uptoISO || U.todayISO();
     let bal = acc.openedAt <= upto ? (+acc.openingBalance || 0) : 0;
 
     Calc.entries(Calc.earliestDate(prof), upto, prof).forEach((e) => {
@@ -306,12 +456,11 @@
       }
     });
 
-    // faturas pagas debitadas desta conta
+    // faturas pagas e compras adiantadas debitadas desta conta
     Object.keys(prof.invoices).forEach((k) => {
-      const inv = prof.invoices[k];
-      if (inv && inv.paid && inv.accountId === accountId && (inv.paidAt || '') <= upto) {
-        bal -= (+inv.amount || 0);
-      }
+      movimentosDoRegistro(prof.invoices[k]).forEach((m) => {
+        if (m.accountId === accountId && m.at <= upto) bal -= m.amount;
+      });
     });
 
     // aportes debitados desta conta
@@ -319,8 +468,15 @@
       if (iv.accountId === accountId && iv.date <= upto) bal -= (+iv.amount || 0);
     });
 
+    // dinheiro guardado em metas, quando a pessoa disse de onde ele saiu
+    prof.goals.forEach((g) => {
+      (g.deposits || []).forEach((d) => {
+        if (d.accountId === accountId && d.at <= upto) bal -= d.amount;
+      });
+    });
+
     return U.round2(bal);
-  };
+  }
 
   Calc.totalAccountsBalance = function (uptoISO, profile) {
     const prof = profile || P();
@@ -362,15 +518,20 @@
     });
 
     Object.keys(prof.invoices).forEach((k) => {
-      const inv = prof.invoices[k];
-      if (!inv || !inv.paid || inv.accountId !== accountId) return;
-      const at = inv.paidAt || '';
-      if (at < fromISO || at > toISO) return;
       const cardId = k.split('|')[0];
+      const ref = k.split('|')[1];
       const card = prof.cards.find((c) => c.id === cardId);
-      rows.push({
-        date: at, desc: `Pagamento fatura ${card ? card.name : 'cartão'} (${U.monthLabel(k.split('|')[1], true)})`,
-        cat: 'Fatura', delta: -(+inv.amount || 0)
+      const nome = card ? card.name : 'cartão';
+      movimentosDoRegistro(prof.invoices[k]).forEach((m) => {
+        if (m.accountId !== accountId) return;
+        if (m.at < fromISO || m.at > toISO) return;
+        rows.push({
+          date: m.at,
+          desc: m.tipo === 'adiantamento'
+            ? `Compra adiantada ${nome} (fatura de ${U.monthLabel(ref, true)})`
+            : `Pagamento fatura ${nome} (${U.monthLabel(ref, true)})`,
+          cat: 'Fatura', delta: -m.amount
+        });
       });
     });
 
@@ -378,6 +539,14 @@
       if (iv.accountId !== accountId) return;
       if (iv.date < fromISO || iv.date > toISO) return;
       rows.push({ date: iv.date, desc: `Aporte: ${iv.name}`, cat: 'Investimento', delta: -(+iv.amount || 0) });
+    });
+
+    prof.goals.forEach((g) => {
+      (g.deposits || []).forEach((d) => {
+        if (d.accountId !== accountId) return;
+        if (d.at < fromISO || d.at > toISO) return;
+        rows.push({ date: d.at, desc: `Guardado em ${g.name}`, cat: 'Reserva', delta: -d.amount });
+      });
     });
 
     rows.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
@@ -412,8 +581,28 @@
    * Só entram itens confirmados no total "realizado"; pendentes vão
    * no total previsto.
    */
+  /**
+   * A fatura em que uma compra vai ser cobrada. É o inverso de
+   * invoiceDates: a pessoa pensa "comprei dia 28, cai em qual
+   * fatura?", e essa pergunta não tem resposta óbvia quando o
+   * fechamento é dia 25 e o vencimento é dia 5 do mês seguinte.
+   */
+  Calc.invoiceRefOfDate = function (card, dateISO) {
+    const base = U.ymOf(dateISO);
+    for (let k = -1; k <= 3; k++) {
+      const ref = U.addMonths(base, k);
+      const d = Calc.invoiceDates(card, ref);
+      if (dateISO >= d.openDate && dateISO <= d.closeDate) return ref;
+    }
+    return base;
+  };
+
   Calc.invoice = function (cardId, ref, profile) {
     const prof = profile || P();
+    return lembrar(prof, 'iv|' + cardId + '|' + ref, () => calcularInvoice(cardId, ref, prof));
+  };
+
+  function calcularInvoice(cardId, ref, prof) {
     const card = prof.cards.find((c) => c.id === cardId);
     if (!card) return null;
     const dates = Calc.invoiceDates(card, ref);
@@ -422,46 +611,87 @@
 
     const total = U.round2(U.sum(items.filter((i) => i.confirmed), (i) => i.amount));
     const planned = U.round2(U.sum(items, (i) => i.amount));
-    const rec = Store.getInvoice(cardId, ref);
+    const rec = prof.invoices[Store.invoiceKey(cardId, ref)] || null;
     const today = U.todayISO();
+
+    /* Cada item sabe se já foi adiantado, e por quanto: é o que
+       permite dizer, item a item, "esta compra já está paga" e
+       "desta aqui ainda falta metade". */
+    const adiantamentos = (rec && rec.adiantamentos) || {};
+    let pagoAdiantado = 0;
+    items.forEach((e) => {
+      const m = adiantamentos[e.key];
+      e.adiantado = m ? m.amount : 0;
+      e.adiantadoEm = m ? m.at : null;
+      e.adiantadoDaConta = m ? m.accountId : null;
+      if (m) pagoAdiantado += m.amount;
+    });
+
+    const pagoFatura = U.round2(U.sum((rec && rec.pagamentos) || [], (m) => m.amount));
+    pagoAdiantado = U.round2(pagoAdiantado);
+    const pago = U.round2(pagoFatura + pagoAdiantado);
+    const restante = U.round2(Math.max(0, planned - pago));
+    /* Quitada por decisão da pessoa, ou porque o que saiu já cobre
+       o que entrou. O centavo de folga existe porque arredondamento
+       não pode transformar fatura paga em fatura em aberto. */
+    const paid = !!(rec && rec.quitada) || (planned > 0 && pago >= U.round2(planned - 0.005));
+    const ultimo = (rec && rec.pagamentos && rec.pagamentos.length)
+      ? rec.pagamentos[rec.pagamentos.length - 1] : null;
 
     return {
       card, ref, items,
       openDate: dates.openDate, closeDate: dates.closeDate, dueDate: dates.dueDate,
       total, planned,
-      paid: !!(rec && rec.paid),
-      paidAt: rec ? rec.paidAt : null,
-      paidAmount: rec ? +rec.amount || 0 : 0,
-      paidAccountId: rec ? rec.accountId : null,
+      pagamentos: (rec && rec.pagamentos) || [],
+      adiantamentos,
+      pagoFatura, pagoAdiantado, pago, restante,
+      parcial: !paid && pago > 0,
+      paid,
+      paidAt: ultimo ? ultimo.at : null,
+      paidAmount: pago,
+      paidAccountId: ultimo ? ultimo.accountId : (card.accountId || null),
       isOpen: today <= dates.closeDate,
-      isOverdue: !(rec && rec.paid) && today > dates.dueDate && planned > 0
+      isOverdue: !paid && today > dates.dueDate && restante > 0
     };
-  };
+  }
 
-  /** Limite comprometido: soma das faturas não pagas (abertas + fechadas). */
+  /** Limite comprometido: o que ainda falta pagar nas faturas do período. */
   Calc.cardUsed = function (cardId, profile) {
     const prof = profile || P();
-    const card = prof.cards.find((c) => c.id === cardId);
-    if (!card) return 0;
-    const today = U.todayYM();
-    let used = 0;
-    for (let k = -6; k <= 12; k++) {
-      const ref = U.addMonths(today, k);
-      const inv = Calc.invoice(cardId, ref, prof);
-      if (inv && !inv.paid) used += inv.planned;
-    }
-    return U.round2(used);
+    return lembrar(prof, 'cu|' + cardId, function () {
+      const card = prof.cards.find((c) => c.id === cardId);
+      if (!card) return 0;
+      const today = U.todayYM();
+      let used = 0;
+      for (let k = -6; k <= 12; k++) {
+        const ref = U.addMonths(today, k);
+        const inv = Calc.invoice(cardId, ref, prof);
+        if (inv && !inv.paid) used += inv.restante;
+      }
+      return U.round2(used);
+    });
   };
 
-  /** Fatura "atual": a primeira em aberto ou não paga a partir do mês de hoje. */
+  /**
+   * Fatura "atual": a primeira que tem algo a pagar. Se nenhuma tem,
+   * a que ainda está recebendo compras.
+   *
+   * A regra anterior devolvia a primeira NÃO PAGA — e uma fatura
+   * vazia nunca está paga, então o cartão abria numa fatura de R$ 0
+   * enquanto as compras do mês estavam na seguinte. O primeiro
+   * ciclo de um cartão novo caía sempre nisso.
+   */
   Calc.currentInvoiceRef = function (card, baseYM, profile) {
     const base = baseYM || U.todayYM();
+    let aberta = null;
     for (let k = 0; k <= 3; k++) {
       const ref = U.addMonths(base, k);
       const inv = Calc.invoice(card.id, ref, profile);
-      if (inv && (!inv.paid || inv.planned > 0)) return ref;
+      if (!inv) continue;
+      if (!inv.paid && inv.planned > 0) return ref;
+      if (!aberta && inv.isOpen) aberta = ref;
     }
-    return base;
+    return aberta || base;
   };
 
   /* ============================================================
@@ -555,7 +785,26 @@
     const investido = Calc.investedTotal(atISO, prof);
     let faturas = 0;
     prof.cards.forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
-    return U.round2(contas + investido - U.round2(faturas));
+    return U.round2(contas + investido + Calc.reservedFromAccounts(atISO, prof)
+      - U.round2(faturas));
+  };
+
+  /**
+   * Dinheiro guardado em metas que SAIU de uma conta. Ele já foi
+   * descontado do saldo dela, então precisa voltar aqui: reservar
+   * não empobrece ninguém, só muda o dinheiro de lugar. Aportes
+   * sem conta de origem não entram — aqueles nunca saíram de nada.
+   */
+  Calc.reservedFromAccounts = function (atISO, profile) {
+    const prof = profile || P();
+    const ate = atISO || U.todayISO();
+    let total = 0;
+    prof.goals.forEach((g) => {
+      (g.deposits || []).forEach((d) => {
+        if (d.accountId && d.at <= ate) total += d.amount;
+      });
+    });
+    return U.round2(total);
   };
 
   /** Saldo disponível: caixa de verdade, sem o que já está comprometido. */
@@ -652,7 +901,7 @@
     let atrasos = 0;
     prof.cards.forEach((c) => {
       const inv = Calc.invoice(c.id, Calc.currentInvoiceRef(c, ym), prof);
-      if (inv && !inv.paid && inv.planned > 0 && inv.dueDate < hoje) atrasos++;
+      if (inv && !inv.paid && inv.restante > 0 && inv.dueDate < hoje) atrasos++;
     });
     let negativas = 0;
     prof.accounts.forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
@@ -700,7 +949,12 @@
         const inv = Calc.invoice(c.id, ref, prof);
         if (!inv || inv.planned <= 0) return;
         põe(inv.dueDate, {
-          tipo: 'due', titulo: 'Fatura ' + c.name, valor: inv.planned,
+          /* Com pagamento parcial, o que interessa no dia do
+             vencimento é o que ainda falta sair — não o total que a
+             fatura teve. */
+          tipo: 'due', titulo: 'Fatura ' + c.name,
+          valor: inv.restante > 0 ? inv.restante : inv.planned,
+          parcial: inv.parcial,
           confirmado: inv.paid, categoria: 'Cartão de crédito', cardId: c.id, ref
         });
       });

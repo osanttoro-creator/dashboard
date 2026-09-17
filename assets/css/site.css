@@ -919,7 +919,7 @@ p.leve { color: var(--bruma); }
 .galeria-legenda b { font-weight: 600; color: var(--tinta); }
 
 /* ---- cena 2 · importar ---- */
-.v-importar { max-width: 660px; display: flex; flex-direction: column; align-items: center; }
+.v-calendario { max-width: 660px; display: flex; flex-direction: column; align-items: center; }
 .v-arquivo {
   display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 10px 16px;
   border-radius: 999px; background: var(--petroleo); border: 1px solid var(--borda-forte);

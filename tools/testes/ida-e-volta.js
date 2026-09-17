@@ -118,9 +118,20 @@ const perfilOriginal = {
     { id: 'goal_2', name: 'Sem prazo', target: 1000, saved: 0,
       deadline: null, color: '#A98BFF', icon: 'target', accountId: null }
   ],
+  /* Desde 16/09/2026 a fatura guarda MOVIMENTOS, não um booleano:
+     dá para pagar em duas vezes e para adiantar uma compra. A linha
+     relacional continua com uma data e um total, então a ida e a
+     volta só preservam o que cabe ali — um pagamento somado. Este
+     retrato usa exatamente um pagamento por fatura por isso. */
   invoices: {
-    'card_1|2026-08': { paid: true,  paidAt: '2026-09-05', accountId: 'acc_1', amount: 1832.44 },
-    'card_1|2026-09': { paid: false, paidAt: null,         accountId: null,    amount: 432.19 }
+    'card_1|2026-08': {
+      pagamentos: [{ at: '2026-09-05', amount: 1832.44, accountId: 'acc_1' }],
+      adiantamentos: {}, quitada: true
+    },
+    'card_1|2026-09': {
+      pagamentos: [{ at: '2026-09-28', amount: 432.19, accountId: null }],
+      adiantamentos: {}, quitada: false
+    }
   },
   budgets: { cat_1: 900 }
 };

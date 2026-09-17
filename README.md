@@ -137,7 +137,7 @@ módulos ES são bloqueados por CORS quando abertos direto do disco.
 | **Início** | Destaque com o saldo total e a curva de 12 meses ao fundo; três cards (receitas, despesas com a quebra débito/crédito, investido); linha do saldo anual em área maior à esquerda; pizza 3D de categorias com as peças de detalhe; carteira com contas e cartões; receitas × despesas do ano em linha com marcadores |
 | **Receitas e Despesas** | Receitas em fixas/variáveis/previstas; despesas separadas em **débito** e **crédito**, com filtro Todos / Débito / Crédito; checkbox de confirmação em cada item; gráficos por categoria e previsto × realizado |
 | **Investimentos** | Cadastro de aportes, tabela com valor atual estimado, evolução do patrimônio, distribuição da carteira por tipo, calculadora de juros compostos |
-| **Cartões e Contas** | Contas de débito e cartões de crédito desenhados no mesmo formato de carteira; extrato da conta e fatura do cartão em foco; importação de extratos |
+| **Cartões e Contas** | Contas de débito e cartões de crédito desenhados no mesmo formato de carteira; extrato da conta e fatura do cartão em foco; pagamento parcial e compra adiantada na fatura |
 | **Categorias** | CRUD com cor e ícone, peso de cada categoria por período |
 
 > As páginas **Calendário** e **Resumo Anual** foram removidas. O que elas mostravam
@@ -227,28 +227,6 @@ ao fechamento — o formulário mostra um exemplo com datas reais enquanto você
 **6 · Valor atual do investimento.**
 Estimado por juros compostos sobre o aporte, usando a taxa anual informada. Se você
 preencher "valor atual", esse número substitui a estimativa.
-
-## Importação de extratos
-
-Aceita **CSV**, **OFX/QFX** e **texto colado**, por arquivo ou colando direto na caixa.
-
-- **CSV** — detecta o separador (`;`, tab, `|`, `,`) e mapeia as colunas
-  automaticamente pelo cabeçalho. Se não houver cabeçalho, as colunas são deduzidas
-  pelo conteúdo e você pode corrigir o mapeamento na mão. Suporta tanto uma coluna
-  de valor com sinal quanto colunas separadas de débito e crédito.
-- **OFX/QFX** — lê os blocos `<STMTTRN>`.
-- **Texto colado** — uma linha por lançamento, com data e valor em qualquer posição.
-  Ex.: `05/08/2026  SUPERMERCADO SILVA  -238,90`. Linhas sem data e valor são ignoradas
-  e o app informa quantas foram.
-- **Registrato (BCB)** — o relatório de relacionamentos lista *onde* você tem conta,
-  mas não traz lançamentos. O app detecta isso, extrai as instituições e oferece criar
-  as contas; os extratos de cada banco você importa depois em CSV/OFX.
-
-Toda importação vira uma **prévia revisável**: cada linha traz tipo, categoria sugerida
-(por palavra-chave: "ifood" → Alimentação, "posto" → Transporte, e assim por diante) e
-uma checkbox. Linhas que parecem já existir vêm desmarcadas. Ao importar, os lançamentos
-entram como **previstos** — você confirma na página Receitas e Despesas. Há uma opção
-para já entrar tudo confirmado.
 
 ## Perfis e backup
 

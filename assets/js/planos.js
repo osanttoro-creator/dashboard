@@ -83,7 +83,6 @@
         collaborators: 0
       },
       recursos: {
-        import_csv: false, import_ofx: false,
         export_csv: false, export_pdf: false,
         calendario: false,
         uglez_assistente_flutuante: false,
@@ -116,7 +115,6 @@
         collaborators: 0
       },
       recursos: {
-        import_csv: true, import_ofx: true,
         export_csv: true, export_pdf: true,
         calendario: true,
         uglez_assistente_flutuante: true,
@@ -149,7 +147,6 @@
         collaborators: 3
       },
       recursos: {
-        import_csv: true, import_ofx: true,
         export_csv: true, export_pdf: true,
         calendario: true,
         uglez_assistente_flutuante: true,
@@ -181,8 +178,6 @@
     // features.*
     uglezFloatingAssistant: 'uglez_assistente_flutuante',
     advancedAnalytics: 'analises_avancadas',
-    csvImport: 'import_csv',
-    ofxImport: 'import_ofx',
     csvExport: 'export_csv',
     pdfExport: 'export_pdf',
     monthlyComparison: 'comparacao_mensal',
@@ -282,8 +277,6 @@
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },
     { chave: 'analises_avancadas',     rotulo: 'Tendências, simulações e projeções', tipo: 'recurso' },
     { chave: 'calendario',             rotulo: 'Calendário financeiro',          tipo: 'recurso' },
-    { chave: 'import_csv',             rotulo: 'Importar extrato em CSV',        tipo: 'recurso' },
-    { chave: 'import_ofx',             rotulo: 'Importar extrato em OFX',        tipo: 'recurso' },
     { chave: 'export_csv',             rotulo: 'Exportar em CSV',                tipo: 'recurso' },
     { chave: 'export_pdf',             rotulo: 'Exportar em PDF',                tipo: 'recurso' },
     { chave: 'acesso_antecipado',      rotulo: 'Acesso antecipado a novidades',  tipo: 'recurso' },
@@ -304,7 +297,7 @@
       'Até 1.000 movimentações por mês',
       '20 orçamentos, 10 metas e 30 recorrências',
       'Histórico de 24 meses e comparação entre meses',
-      'Importar CSV e OFX, exportar CSV e PDF, calendário',
+      'Exportar em CSV e PDF, calendário financeiro',
       '60 consultas ao UGLEZ por mês, com assistente flutuante'
     ],
     pro: [

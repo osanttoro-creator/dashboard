@@ -35,6 +35,22 @@
     metas.forEach((g) => grid.appendChild(cartao(g)));
   };
 
+  /** "R$ 1.200 saíram da Conta corrente" — ou duas contas, ou nada. */
+  function origemDaReserva(g) {
+    const porConta = new Map();
+    (g.deposits || []).forEach((d) => {
+      if (!d.accountId) return;
+      porConta.set(d.accountId, U.round2((porConta.get(d.accountId) || 0) + d.amount));
+    });
+    if (!porConta.size) return '';
+    const partes = Array.from(porConta.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([id, v]) => U.fmtBRL(v) + ' de ' + Calc.accountName(id));
+    return partes.length === 1
+      ? partes[0]
+      : partes.slice(0, 2).join(' · ') + (partes.length > 2 ? ' · +' + (partes.length - 2) : '');
+  }
+
   function cartao(g) {
     const pct = g.target > 0 ? Math.min(100, (g.saved / g.target) * 100) : 0;
     const falta = U.round2(Math.max(0, g.target - g.saved));
@@ -98,6 +114,16 @@
         ])
         : null,
 
+      /* De onde o dinheiro veio. Só aparece quando existe resposta:
+         a meta que nunca teve conta de origem não ganha uma linha
+         dizendo que não tem. */
+      origemDaReserva(g)
+        ? el('p', { class: 'goal-pace' }, [
+          Icons.lucide('wallet', 14),
+          el('span', { text: origemDaReserva(g) })
+        ])
+        : null,
+
       /* A contribuição planejada, e o CONFRONTO com o ritmo
          necessário. Mostrar só "R$ 300 todo dia 5" seria repetir o
          que a pessoa digitou; o que ela precisa saber é se esse
@@ -140,16 +166,59 @@
     return Math.max(1, (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()));
   }
 
+  /* =============================================================
+     GUARDAR — e de onde o dinheiro sai
+     -------------------------------------------------------------
+     Guardar era só um número que subia: a reserva crescia, nenhuma
+     conta baixava, e o painel passava a mostrar dinheiro que estava
+     em dois lugares ao mesmo tempo. Faltava a pergunta óbvia — de
+     onde ele saiu.
+
+     Escolhida a conta, o saldo dela baixa de verdade e o aporte
+     aparece no extrato. O patrimônio não muda: Calc.netWorth soma
+     de volta o que está reservado, porque reservar não empobrece
+     ninguém. Sem conta, continua valendo a marcação simples de
+     antes, para quem guarda em papel ou em outro banco.
+     ============================================================= */
   function depositar(g) {
+    const prof = Store.profile();
     const campo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', placeholder: '0,00' });
+    const data = el('input', { class: 'input', type: 'date', value: U.todayISO() });
+    const conta = el('select', { class: 'input' });
+    UI.fillSelect(conta,
+      (prof.accounts || []).filter((a) => !a.archived).map((a) => ({
+        value: a.id, label: a.name + ' · ' + U.fmtBRL(Calc.accountBalance(a.id, U.todayISO()))
+      })),
+      g.accountId || '', 'Não tirar de nenhuma conta');
+
+    const efeito = el('p', { class: 'hint', role: 'status' });
+    function explica() {
+      const v = U.parseMoney(campo.value) || 0;
+      const a = prof.accounts.find((x) => x.id === conta.value);
+      efeito.textContent = !a
+        ? 'Sem conta escolhida, isto só marca o dinheiro como reservado: nenhum saldo muda.'
+        : v > 0
+          ? `Saem ${U.fmtBRL(v)} de ${a.name}. O saldo dela baixa; seu patrimônio continua o mesmo, porque o dinheiro passa a estar na reserva.`
+          : `O valor sai de ${a.name} quando você confirmar.`;
+    }
+    campo.addEventListener('input', explica);
+    conta.addEventListener('change', explica);
+    explica();
+
     const falta = U.round2(Math.max(0, g.target - g.saved));
     UI.openModal({
       title: 'Guardar em "' + g.name + '"',
-      body: el('div', { class: 'field' }, [
-        el('span', { class: 'field-label', text: 'Valor a guardar (R$)' }),
-        campo,
-        el('p', { class: 'hint', text: falta > 0 ? `Faltam ${U.fmtBRL(falta)} para o alvo.` : 'A meta já atingiu o alvo.' }),
-        el('p', { class: 'hint', text: 'Isto marca o dinheiro como reservado. Não cria despesa nem muda o saldo das suas contas.' })
+      body: el('div', { class: 'form-grid' }, [
+        el('div', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Valor a guardar (R$)' }), campo,
+          el('p', { class: 'hint', text: falta > 0 ? `Faltam ${U.fmtBRL(falta)} para o alvo.` : 'A meta já atingiu o alvo.' })
+        ]),
+        el('div', { class: 'field' }, [
+          el('span', { class: 'field-label', text: 'Data' }), data
+        ]),
+        el('div', { class: 'field span-2' }, [
+          el('span', { class: 'field-label', text: 'De onde sai o dinheiro' }), conta, efeito
+        ])
       ]),
       buttons: [
         { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
@@ -158,7 +227,8 @@
           onClick: () => {
             const v = U.parseMoney(campo.value) || 0;
             if (v <= 0) { UI.toast('Informe um valor maior que zero.', 'error'); return; }
-            Store.goals.deposit(g.id, v);
+            if (!U.isValidISO(data.value)) { UI.toast('Data inválida.', 'error'); return; }
+            Store.goals.deposit(g.id, v, { accountId: conta.value || null, at: data.value });
             UI.toast('Guardado ' + U.fmtBRL(v) + '.', 'success');
             UI.closeModal();
           }

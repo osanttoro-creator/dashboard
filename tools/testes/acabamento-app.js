@@ -9,14 +9,16 @@ const ler = (p) => fs.readFileSync(path.join(RAIZ, p), 'utf8');
 const html = ler('app.html');
 const app = ler('assets/js/app.js');
 const css = ler('assets/css/style.css');
-const importer = ler('assets/js/importer.js');
 const settings = ler('assets/js/pages/settings.js');
 const falhas = [];
 const exigir = (cond, msg) => { if (!cond) falhas.push(msg); };
 
-exigir(!/Registrato/i.test(html + importer), 'a função/propaganda do Registrato ainda existe');
-exigir(!/accept=[^>]*\.pdf/i.test(html), 'o seletor ainda oferece PDF');
-exigir(/PDF não é aceito/.test(html), 'falta explicar por que PDF não é aceito');
+exigir(!/Registrato/i.test(html), 'a função/propaganda do Registrato ainda existe');
+/* Antes o app prometia ler o extrato do banco e explicava por que
+   não aceitava PDF. Não aceita mais formato nenhum: a importação
+   inteira saiu em 16/09/2026 porque lia errado o arquivo de parte
+   dos bancos. O teste guarda a remoção. */
+exigir(!/importFile|btnParseImport|data-tab="import"/.test(html), 'a aba de importar extratos voltou ao app');
 exigir(/uso-detalhes/.test(settings) && /uso-resumo/.test(css), 'consumo do plano não está recolhível');
 exigir(/prepararSeletoresContexto/.test(app) && /oaze-select-menu/.test(css), 'menus de contexto próprios não foram ligados');
 exigir(/limitarEntradasNumericas/.test(app) && /\[inputmode="decimal"\]/.test(app), 'campos de valor não têm filtro numérico');

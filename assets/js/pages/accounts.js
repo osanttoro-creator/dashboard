@@ -8,10 +8,12 @@
   const Acc = {};
 
   Acc.render = function () {
+    /* Só duas abas desde 16/09/2026. Uma aba salva de antes ("import")
+       deixaria a página sem conteúdo nenhum: volta para contas. */
+    if (App.accTab !== 'accounts' && App.accTab !== 'cards') App.accTab = 'accounts';
     syncTabs();
-    if (App.accTab === 'accounts') { renderAccounts(); renderHistory(); }
-    else if (App.accTab === 'cards') renderCardDeck();
-    else Importer.renderTargets();
+    if (App.accTab === 'cards') renderCardDeck();
+    else { renderAccounts(); renderHistory(); }
   };
 
   function syncTabs() {

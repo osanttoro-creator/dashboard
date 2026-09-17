@@ -7,7 +7,7 @@ O OAZE é um software web em português do Brasil. O UGLEZ é o assistente finan
 ## Páginas públicas
 
 - [Página inicial](https://oaze.site/): apresentação do OAZE e acesso ao produto.
-- [Recursos](https://oaze.site/recursos): contas, cartões, lançamentos, orçamentos, metas, importação e UGLEZ.
+- [Recursos](https://oaze.site/recursos): contas, cartões, lançamentos, orçamentos, metas, calendário e UGLEZ.
 - [Planos](https://oaze.site/precos): comparação dos planos Semente, Coqueiro e Oásis.
 - [Suporte](https://oaze.site/suporte): ajuda e canais de atendimento.
 - [Privacidade](https://oaze.site/privacidade): tratamento de dados e direitos previstos na LGPD.
@@ -18,7 +18,6 @@ O OAZE é um software web em português do Brasil. O UGLEZ é o assistente finan
 - Controle de contas e cartões de crédito.
 - Registro e categorização de receitas, despesas e transferências.
 - Planejamento por orçamentos, metas, recorrências e calendário.
-- Importação de extratos financeiros.
 - Análises financeiras e assistência por IA com o UGLEZ.
 
 ## Limites de acesso

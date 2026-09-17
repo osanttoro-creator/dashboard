@@ -143,6 +143,87 @@
     else global.location.href = '/entrar?destino=/app';
   }
 
+  /* =============================================================
+     O BOTÃO DE SINCRONIZAR
+     -------------------------------------------------------------
+     Um botão só, com três papéis, porque as três perguntas são a
+     mesma: "isto aqui está junto com meus outros aparelhos?"
+
+       sem conta        leva para entrar
+       com conta        puxa os dados agora
+       ocupado/erro     diz o que está acontecendo, e não some
+
+     O rótulo muda com o estado em vez de dizer sempre
+     "Sincronizar": um botão que afirma a mesma coisa em todas as
+     situações não é informação, é enfeite. E o título carrega a
+     hora da última sincronização, que é o que responde "isso aqui
+     está velho?".
+     ============================================================= */
+  function quandoFoi(ms) {
+    if (!ms) return '';
+    const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
+    if (s < 60) return 'agora mesmo';
+    const m = Math.round(s / 60);
+    if (m < 60) return 'há ' + m + (m === 1 ? ' minuto' : ' minutos');
+    const h = Math.round(m / 60);
+    if (h < 24) return 'há ' + h + (h === 1 ? ' hora' : ' horas');
+    return 'em ' + new Date(ms).toLocaleDateString('pt-BR');
+  }
+
+  let sincronizando = false;
+
+  function pintarBotaoSync(s) {
+    const btn = document.getElementById('btnSync');
+    if (!btn) return;
+    const rot = document.getElementById('btnSyncLabel');
+    const temSync = !!(global.Sync && Sync.isConfigured && Sync.isConfigured());
+    btn.hidden = !temSync;
+    if (!temSync) return;
+
+    const restaurando = !!(global.Sync && Sync.restaurando && Sync.restaurando());
+    const u = global.Sync && Sync.currentUser ? Sync.currentUser() : null;
+    const ocupado = sincronizando || restaurando || s.chave === 'sincronizando';
+
+    let texto, dica, classe;
+    if (restaurando) {
+      texto = 'Verificando'; dica = 'Verificando sua conta…'; classe = 'is-sincronizando';
+    } else if (!u) {
+      texto = 'Entrar'; classe = 'is-local';
+      dica = 'Estes dados estão só neste aparelho. Entrar para sincronizar.';
+    } else if (ocupado) {
+      texto = 'Sincronizando'; dica = 'Sincronizando…'; classe = 'is-sincronizando';
+    } else if (s.chave === 'offline') {
+      texto = 'Sem conexão'; classe = 'is-offline';
+      dica = 'Sem conexão. As alterações ficam guardadas e sobem quando a rede voltar.';
+    } else if (s.chave === 'erro') {
+      texto = 'Erro'; classe = 'is-erro';
+      dica = s.texto + ' Toque para tentar de novo.';
+    } else {
+      const quando = quandoFoi(global.Sync && Sync.ultimaSincronia ? Sync.ultimaSincronia() : 0);
+      texto = 'Sincronizar'; classe = 'is-ok';
+      dica = (quando ? 'Sincronizado ' + quando + '. ' : '') + 'Toque para atualizar agora.';
+    }
+
+    if (rot) rot.textContent = texto;
+    btn.className = 'pill pill-btn pill-sync ' + classe;
+    btn.disabled = ocupado;
+    btn.setAttribute('aria-label', dica);
+    btn.setAttribute('data-dica', dica);
+    btn.title = dica;
+  }
+
+  function sincronizarAgora() {
+    if (!(global.Sync && Sync.currentUser && Sync.currentUser())) { entrar(); return; }
+    sincronizando = true;
+    ES.pintar();
+    const fim = function () { sincronizando = false; ES.pintar(); };
+    Promise.resolve(Sync.atualizarAgora && Sync.atualizarAgora(true))
+      .then(function () {
+        setTimeout(fim, 400);   // um piscar de 40ms não se lê como resposta
+      }, fim);
+  }
+  ES.sincronizarAgora = sincronizarAgora;
+
   function pintarConta(s) {
     const temSync = !!(global.Sync && Sync.isConfigured && Sync.isConfigured());
     const restaurando = !!(global.Sync && Sync.restaurando && Sync.restaurando());
@@ -224,6 +305,7 @@
   ES.pintar = function () {
     const s = decidir();
     pintarConta(s);
+    pintarBotaoSync(s);
 
     const alvo = document.getElementById('filaBox');
     if (!alvo) return;
@@ -287,6 +369,13 @@
   };
 
   ES.init = function () {
+    const btn = document.getElementById('btnSync');
+    if (btn) btn.addEventListener('click', sincronizarAgora);
+    /* O rótulo "há 3 minutos" envelhece sozinho; sem este relógio ele
+       continuaria dizendo "agora mesmo" uma hora depois. */
+    global.setInterval(function () {
+      if (!document.hidden) ES.pintar();
+    }, 60000);
     if (global.Fila && Fila.aoMudar) Fila.aoMudar(ES.pintar);
     if (global.Dados && Dados.aoMudar) Dados.aoMudar(ES.pintar);
     if (global.Sync && Sync.aoMudarEstado) Sync.aoMudarEstado(ES.pintar);

@@ -178,10 +178,12 @@
       editing ? editing.accountId : d.accountId, prof.accounts.length ? null : 'Nenhuma conta'));
     const fCard = field('Cartão', select(cardOptions(),
       editing ? editing.cardId : d.cardId, prof.cards.length ? null : 'Nenhum cartão'));
+    const faturaAviso = el('p', { class: 'hint hint-fatura span-2', role: 'status', hidden: true });
     const fToAccount = field('Conta de destino', select(accountOptions(),
       editing ? editing.toAccountId : d.toAccountId, 'Escolha…'));
 
-    const cbRecurring = checkbox('Repetir todo mês (lançamento fixo)', editing ? editing.recurring : false);
+    const cbRecurring = checkbox('Repetir todo mês (lançamento fixo)',
+      editing ? editing.recurring : !!d.recurring);
     const fRecurEnd = field('Repetir até (opcional)', input({
       type: 'month', value: editing && editing.recurEnd ? editing.recurEnd : ''
     }), { hint: 'Em branco = sem data final.' });
@@ -216,7 +218,7 @@
 
     const grid = el('div', { class: 'form-grid' }, [
       el('div', { class: 'field span-2' }, [el('span', { class: 'field-label', text: 'Tipo' }), kindSeg]),
-      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fToAccount,
+      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fToAccount, faturaAviso,
       el('div', { class: 'field span-2' }, cbRecurring),
       fRecurEnd, fInstallments,
       el('div', { class: 'field span-2' }, cbConfirmed),
@@ -243,7 +245,26 @@
         ? 'Crédito: entra na fatura do cartão e não mexe no saldo da conta agora. '
           + 'Conta como despesa na data da compra; o pagamento da fatura é só movimentação de caixa.'
         : 'Débito: sai direto da conta bancária e reduz o saldo dela na hora.';
+      avisaFatura();
     }
+
+    /* A pergunta que a data não responde: em QUAL fatura isto cai.
+       Com fechamento no dia 28, uma compra do dia 29 é cobrada só no
+       mês seguinte — e é esse mês que a pessoa procura. */
+    function avisaFatura() {
+      const useCard = currentKind === 'expense' && method === 'card';
+      const card = useCard ? Store.cards.get(fCard._control.value) : null;
+      const data = fDate._control.value;
+      if (!card || !U.isValidISO(data)) { faturaAviso.hidden = true; return; }
+      const ref = Calc.invoiceRefOfDate(card, data);
+      const venc = Calc.invoiceDates(card, ref).dueDate;
+      faturaAviso.hidden = false;
+      faturaAviso.textContent = 'Cobrança na fatura de ' + U.monthLabel(ref, true)
+        + ', que vence em ' + U.fmtDateBR(venc) + '.';
+    }
+    fDate._control.addEventListener('change', avisaFatura);
+    fDate._control.addEventListener('input', avisaFatura);
+    fCard._control.addEventListener('change', avisaFatura);
     cbRecurring._input.addEventListener('change', syncVisibility);
     syncVisibility();
 
@@ -398,6 +419,26 @@
     const picker = UI.colorPicker(editing ? editing.color : '#A68B6B');
     const fColor = field('Cor identificadora', picker, { span2: true });
 
+    /* ============================================================
+       DENTRO OU FORA DOS TOTAIS
+       ------------------------------------------------------------
+       Nem todo dinheiro que passa por uma conta é dinheiro seu. A
+       conta da empresa, a conta em que você recebe e repassa, a
+       poupança que administra para outra pessoa: tudo isso aparecia
+       somado às suas receitas e despesas e estragava o mês inteiro.
+       Apagar não serve — o saldo precisa continuar certo.
+
+       Desligado, a conta mantém extrato, saldo e histórico; o que
+       ela deixa de fazer é entrar nas receitas e despesas do mês,
+       nas categorias e no orçamento.
+       ============================================================ */
+    const cbConsiderado = checkbox('Considerar nos totais de receitas e despesas',
+      editing ? editing.considerado !== false : true);
+    const fConsiderado = el('div', { class: 'field span-2' }, [
+      cbConsiderado,
+      el('p', { class: 'hint', text: 'Desligado, a conta continua com saldo e extrato, mas fica fora dos totais do mês, das categorias e do orçamento.' })
+    ]);
+
     const nomeBanco = () => (bankSel.value === 'Outro' ? fCustomBank._control.value : bankSel.value);
 
     /* cor do cartão + prévia ao vivo — a conta é desenhada como carteira */
@@ -415,7 +456,8 @@
         color: picker.getValue(),
         gradient: grads.getValue(),
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
-        openingBalance: U.parseMoney(fBalance._control.value) || 0
+        openingBalance: U.parseMoney(fBalance._control.value) || 0,
+        considerado: cbConsiderado._input.checked
       };
     }
     function paintPreview() {
@@ -440,11 +482,12 @@
     const repaint = U.debounce(paintPreview, 200);
     [fName, fCustomBank, fLast4, fBalance].forEach((f) => f._control.addEventListener('input', repaint));
     fType._control.addEventListener('change', paintPreview);
+    cbConsiderado._input.addEventListener('change', paintPreview);
     U.$$('.color-opt', picker).forEach((b) => b.addEventListener('click', paintPreview));
     syncBank();
 
     const grid = el('div', { class: 'form-grid' },
-      [fName, fBank, fCustomBank, fType, fLast4, fBalance, fDate, fColor, fGrad, fPreview]);
+      [fName, fBank, fCustomBank, fType, fLast4, fBalance, fDate, fConsiderado, fColor, fGrad, fPreview]);
 
     function submit() {
       clearErrors([fName, fDate]);
@@ -461,6 +504,7 @@
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         openedAt: fDate._control.value,
+        considerado: cbConsiderado._input.checked,
         archived: editing ? editing.archived : false
       };
       if (editing) { Store.accounts.update(editing.id, data); UI.toast('Conta atualizada.', 'success'); }
@@ -521,6 +565,16 @@
       { hint: 'Se for menor que o fechamento, vence no mês seguinte.' });
     const fAccount = field('Conta de débito da fatura', select(accounts, editing ? editing.accountId : null, 'Nenhuma'));
 
+    /* Mesmo interruptor da conta de débito: o cartão do trabalho, ou
+       o que outra pessoa paga, continua com fatura e limite sem
+       entrar nas suas despesas. */
+    const cbConsiderado = checkbox('Considerar nos totais de despesas',
+      editing ? editing.considerado !== false : true);
+    const fConsiderado = el('div', { class: 'field span-2' }, [
+      cbConsiderado,
+      el('p', { class: 'hint', text: 'Desligado, a fatura continua sendo calculada, mas as compras ficam fora dos totais do mês, das categorias e do orçamento.' })
+    ]);
+
     /* cor do cartão + prévia ao vivo */
     const gradWrap = gradPicker(editing ? editing.gradient : null, () => paintPreview());
     const cardPreview = el('div', { class: 'card-preview' });
@@ -536,7 +590,8 @@
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: Math.min(31, Math.max(1, parseInt(fClosing._control.value, 10) || 1)),
         dueDay: Math.min(31, Math.max(1, parseInt(fDue._control.value, 10) || 10)),
-        accountId: null
+        accountId: null,
+        considerado: cbConsiderado._input.checked
       };
     }
 
@@ -558,6 +613,7 @@
     const repaint = U.debounce(paintPreview, 200);
     [fName, fLast4, fLimit, fClosing, fDue].forEach((f) => f._control.addEventListener('input', repaint));
     bankSel.addEventListener('change', paintPreview);
+    cbConsiderado._input.addEventListener('change', paintPreview);
     paintPreview();
 
     const fGrad = field('Cor do cartão', gradWrap, { span2: true });
@@ -566,7 +622,7 @@
     ]);
 
     const grid = el('div', { class: 'form-grid' }, [
-      fName, fBank, fLast4, fLimit, fAccount, fClosing, fDue, fGrad, fPreview
+      fName, fBank, fLast4, fLimit, fAccount, fClosing, fDue, fConsiderado, fGrad, fPreview
     ]);
 
     function submit() {
@@ -588,7 +644,8 @@
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: closing, dueDay: due,
-        accountId: fAccount._control.value || null
+        accountId: fAccount._control.value || null,
+        considerado: cbConsiderado._input.checked
       };
       if (editing) { Store.cards.update(editing.id, data); UI.toast('Cartão atualizado.', 'success'); }
       else { const c = Store.cards.add(data); App.cardFocusId = c.id; UI.toast('Cartão criado.', 'success'); }
@@ -747,16 +804,51 @@
      PAGAMENTO DE FATURA
      ============================================================ */
 
+  /* =============================================================
+     PAGAR A FATURA — inteira, em parte, ou antes da hora
+     -------------------------------------------------------------
+     Antes existia um botão só: "marcar como paga". Quem pagava
+     metade agora e o resto depois marcava como paga uma fatura que
+     ainda devia — e o app passava a mentir sobre o limite livre e
+     sobre o patrimônio.
+
+     Agora o valor é livre e a tela diz, na hora, quanto vai faltar.
+     O pagamento entra com data: é por ela que ele sai do dinheiro
+     daquele mês, mesmo que as compras sejam de meses atrás.
+     ============================================================= */
   Forms.openInvoicePayment = function (cardId, ref) {
     const inv = Calc.invoice(cardId, ref);
     if (!inv) return;
 
-    const fAmount = field('Valor pago (R$)', moneyInput(inv.total || inv.planned));
-    const fDate = field('Data do pagamento', input({ type: 'date', value: U.todayISO() }));
-    const fAccount = field('Debitar da conta', select(accountOptions(), inv.card.accountId, 'Não debitar de conta'),
-      { hint: 'O pagamento sai do saldo da conta, mas não conta como nova despesa — os itens da fatura já foram contabilizados na data da compra.' });
+    const sugerido = inv.restante > 0 ? inv.restante : (inv.total || inv.planned);
+    const fAmount = field('Valor pago (R$)', moneyInput(sugerido));
+    const fDate = field('Data do pagamento', input({ type: 'date', value: U.todayISO() }),
+      { hint: 'É por esta data que a fatura sai do dinheiro do mês.' });
+    const fAccount = field('De onde sai o dinheiro', select(accountOptions(), inv.card.accountId, 'Não debitar de conta'),
+      { hint: 'O pagamento baixa o saldo da conta, mas não conta como nova despesa — os itens da fatura já foram contabilizados na data da compra.' });
 
-    const grid = el('div', { class: 'form-grid' }, [fAmount, fDate, fAccount]);
+    const saldo = el('p', { class: 'hint span-2', role: 'status' });
+    const cbQuitar = checkbox('Encerrar a fatura mesmo assim', false);
+    const fQuitar = el('div', { class: 'field span-2' }, [cbQuitar,
+      el('p', { class: 'hint', text: 'Use quando a diferença for estorno, desconto ou juros que você não quer lançar.' })]);
+
+    function recalcula() {
+      const v = U.parseMoney(fAmount._control.value) || 0;
+      const falta = U.round2(Math.max(0, inv.planned - inv.pago - v));
+      const sobra = U.round2(Math.max(0, inv.pago + v - inv.planned));
+      saldo.textContent = inv.planned <= 0
+        ? 'Esta fatura não tem lançamentos.'
+        : falta > 0
+          ? `Depois deste pagamento ainda faltam ${U.fmtBRL(falta)} de ${U.fmtBRL(inv.planned)}.`
+          : sobra > 0
+            ? `Isto cobre a fatura inteira, com ${U.fmtBRL(sobra)} a mais.`
+            : 'Isto quita a fatura.';
+      fQuitar.hidden = !(falta > 0);
+    }
+    fAmount._control.addEventListener('input', recalcula);
+    recalcula();
+
+    const grid = el('div', { class: 'form-grid' }, [fAmount, fDate, fAccount, saldo, fQuitar]);
 
     UI.openModal({
       title: `Pagar fatura — ${inv.card.name} · ${U.monthLabel(ref)}`,
@@ -764,16 +856,76 @@
       buttons: [
         { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
         {
-          label: 'Marcar como paga', class: 'btn-primary',
+          label: 'Registrar pagamento', class: 'btn-primary',
           onClick: () => {
-            clearErrors([fDate]);
+            clearErrors([fDate, fAmount]);
+            const valor = U.parseMoney(fAmount._control.value) || 0;
+            if (valor <= 0) { setError(fAmount, 'Informe quanto foi pago.'); return; }
             if (!U.isValidISO(fDate._control.value)) { setError(fDate, 'Data inválida.'); return; }
-            Store.setInvoicePaid(cardId, ref, true, {
-              amount: U.parseMoney(fAmount._control.value) || 0,
+            const falta = U.round2(Math.max(0, inv.planned - inv.pago - valor));
+            Store.payInvoice(cardId, ref, {
+              amount: valor,
+              paidAt: fDate._control.value,
+              accountId: fAccount._control.value || null,
+              quitar: falta <= 0 ? true : cbQuitar._input.checked
+            });
+            UI.toast(falta > 0 && !cbQuitar._input.checked
+              ? `Pagamento registrado. Ainda faltam ${U.fmtBRL(falta)}.`
+              : 'Fatura paga.', 'success');
+            UI.closeModal();
+          }
+        }
+      ]
+    });
+  };
+
+  /**
+   * Adiantar UMA compra que ainda está prevista na fatura. O valor
+   * é livre pelo mesmo motivo do pagamento da fatura: adiantar
+   * metade de uma parcela é coisa que acontece.
+   */
+  Forms.openAdvancePayment = function (cardId, ref, entrada) {
+    const inv = Calc.invoice(cardId, ref);
+    if (!inv) return;
+    const jaPago = entrada.adiantado || 0;
+    const falta = U.round2(Math.max(0, entrada.amount - jaPago));
+
+    const fAmount = field('Valor adiantado (R$)', moneyInput(falta));
+    const fDate = field('Data do pagamento', input({ type: 'date', value: U.todayISO() }));
+    const fAccount = field('De onde sai o dinheiro', select(accountOptions(), inv.card.accountId, 'Não debitar de conta'));
+    const aviso = el('p', { class: 'hint span-2', role: 'status' });
+
+    function recalcula() {
+      const v = U.parseMoney(fAmount._control.value) || 0;
+      const resta = U.round2(Math.max(0, entrada.amount - v));
+      aviso.textContent = resta > 0
+        ? `Sobram ${U.fmtBRL(resta)} desta compra na fatura de ${U.monthLabel(ref, true)}.`
+        : `Esta compra sai inteira da fatura de ${U.monthLabel(ref, true)}.`;
+    }
+    fAmount._control.addEventListener('input', recalcula);
+    recalcula();
+
+    UI.openModal({
+      title: 'Adiantar — ' + entrada.description,
+      body: el('div', { class: 'form-grid' }, [
+        el('p', { class: 'hint span-2', text: `Compra de ${U.fmtBRL(entrada.amount)} em ${U.fmtDateBR(entrada.date)}, cobrada na fatura de ${U.monthLabel(ref, true)}.` }),
+        fAmount, fDate, fAccount, aviso
+      ]),
+      buttons: [
+        { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
+        {
+          label: 'Registrar adiantamento', class: 'btn-primary',
+          onClick: () => {
+            clearErrors([fAmount, fDate]);
+            const valor = U.parseMoney(fAmount._control.value) || 0;
+            if (valor <= 0) { setError(fAmount, 'Informe quanto foi adiantado.'); return; }
+            if (!U.isValidISO(fDate._control.value)) { setError(fDate, 'Data inválida.'); return; }
+            Store.advanceInvoiceItem(cardId, ref, entrada.key, {
+              amount: valor,
               paidAt: fDate._control.value,
               accountId: fAccount._control.value || null
             });
-            UI.toast('Fatura marcada como paga.', 'success');
+            UI.toast('Adiantamento registrado.', 'success');
             UI.closeModal();
           }
         }

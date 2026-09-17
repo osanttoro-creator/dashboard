@@ -14,7 +14,7 @@ Estado verificado em 13 de setembro de 2026. “Pronto” significa proteção p
 - **Consultas parametrizadas:** o aplicativo usa o cliente Supabase e RPCs com parâmetros. Não há SQL montado com texto enviado pelo usuário.
 - **Validação:** perguntas, planos, ciclos, datas, números e listas são normalizados e limitados antes do uso.
 - **Vazamento de conteúdo:** a UGLEZ recebe apenas agregados, usa `store: false`, não repassa erro do provedor e corta a resposta devolvida. O renderizador escapa o texto antes de produzir o Markdown mínimo.
-- **Upload:** o importador aceita apenas CSV, OFX, QFX e TXT, até 2 MB, e recusa conteúdo binário. A leitura continua local no navegador.
+- **Upload:** o aplicativo não recebe arquivo nenhum. A importação de extratos foi removida em 16/09/2026 e com ela o único ponto de upload que existia.
 - **Senha:** o OAZE não guarda senha em tabela própria. O Supabase Auth recebe a senha e mantém apenas o hash.
 - **Cobrança:** Checkout Stripe criado no servidor, preço lido do banco, idempotência, assinatura HMAC do webhook e conciliação antes de liberar plano.
 - **Rate limit:** assistente, pagamento, exclusão de conta e webhook têm janelas de uso no banco. A cota mensal da UGLEZ continua atômica e separada.

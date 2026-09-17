@@ -3,7 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const raiz = path.join(__dirname, '..', '..');
-const ler = (a) => fs.readFileSync(path.join(raiz, a), 'utf8');
+const caminho = (a) => path.join(raiz, a);
+const ler = (a) => fs.readFileSync(caminho(a), 'utf8');
 const falhas = [];
 const exige = (ok, msg) => { if (!ok) falhas.push(msg); };
 
@@ -23,9 +24,12 @@ const ht = ler('deploy/hostinger/.htaccess');
   exige(ht.includes(h), '.htaccess sem ' + h));
 exige(/RewriteRule \^ https:\/\//.test(ht), '.htaccess não força HTTPS');
 
-const importer = ler('assets/js/importer.js');
-exige(/MAX_ARQUIVO_BYTES/.test(importer) && /EXTENSOES_ACEITAS/.test(importer), 'upload sem limite de tamanho ou tipo');
-exige(/conteudo\.includes\('\\u0000'\)/.test(importer), 'upload não recusa conteúdo binário');
+/* A importação de extratos saiu em 16/09/2026 e, com ela, o único
+   ponto de upload do aplicativo. O teste passou a garantir a
+   ausência: nenhum campo de arquivo é mais fácil de defender do que
+   um leitor de arquivo bem trancado. */
+exige(!fs.existsSync(caminho('assets/js/importer.js')), 'o importador de extratos voltou a existir');
+exige(!/type="file"/.test(ler('app.html')), 'o app voltou a aceitar upload de arquivo');
 
 const assistant = ler('supabase/functions/oaze-assistant/index.ts');
 exige(/reservarRateLimit/.test(assistant), 'assistente sem limite por minuto/dia');

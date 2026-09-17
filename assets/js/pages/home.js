@@ -153,6 +153,24 @@
           + ' <span class="muted">vs. anterior</span>'
           + `<span class="split-pill" title="Débito — sai da conta">Déb ${U.fmtBRL(t.expenseDebit)}</span>`
           + `<span class="split-pill is-credit" title="Crédito — entra na fatura">Créd ${U.fmtBRL(t.expenseCredit)}</span>`
+      },
+      /* ----------------------------------------------------------
+         O QUE SAI DO BOLSO NESTE MÊS
+         ----------------------------------------------------------
+         "Receitas − despesas" responde pelo resultado do mês, mas
+         não pela pergunta prática: quanto dinheiro sai daqui até o
+         dia 30. A fatura é o caso em que os dois divergem — ela sai
+         inteira no dia em que é paga, com compras de meses atrás
+         dentro. Por isso este cartão troca as despesas no crédito
+         pelas faturas efetivamente pagas, e nunca soma as duas.
+         ---------------------------------------------------------- */
+      {
+        label: 'Sobra em caixa',
+        value: U.fmtBRL(t.saldoCaixa),
+        valueClass: U.signClass(t.saldoCaixa),
+        accent: 'var(--invest)',
+        delta: `<span class="muted">Receitas − despesas no débito${
+          t.invoicesPaid > 0 ? ' − ' + U.fmtBRL(t.invoicesPaid) + ' de fatura paga' : ' − faturas pagas'}</span>`
       }
     ]);
   }
@@ -464,8 +482,8 @@
           onclick: () => { if (global.Ob) Ob.reabrir(); }
         }),
         el('button', {
-          class: 'btn btn-outline', type: 'button', text: 'Importar um extrato',
-          onclick: () => App.goTo('accounts', { tab: 'import' })
+          class: 'btn btn-outline', type: 'button', text: 'Cadastrar um cartão',
+          onclick: () => App.goTo('accounts', { tab: 'cards' })
         })
       ])
     ]));

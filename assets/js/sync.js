@@ -70,6 +70,7 @@
   let releituraPedida = false;
   let geracaoEnvio = 0;
   let geracaoSessao = 0;
+  let ultimoOk = 0;          // quando a sincronização deu certo pela última vez
   const ouvintesEstado = [];
 
   /* ---------------- registro de backends ---------------- */
@@ -91,6 +92,8 @@
   Sync.status = () => ({ state, detail, user, backend: backend && backend.nome });
   Sync.currentUser = () => user;
   Sync.pronto = () => leuRemoto;
+  /** Instante (ms) da última sincronização bem-sucedida; 0 se nunca. */
+  Sync.ultimaSincronia = () => ultimoOk;
   Sync.temPendencia = () => envioEsperando || !!pushTimer || !!envioEmAndamento;
   Sync.aoMudarEstado = (fn) => { ouvintesEstado.push(fn); };
 
@@ -153,6 +156,11 @@
   };
 
   function setState(next, msg) {
+    /* Quando foi a última vez que deu certo. O botão de sincronizar
+       precisa disso: "Sincronizado" sem hora não diz se foi agora ou
+       há três horas — e é justamente essa a dúvida de quem abre o app
+       no segundo aparelho. */
+    if (next === 'ok' && state !== 'ok') ultimoOk = Date.now();
     state = next;
     detail = msg || '';
     paintAccount();

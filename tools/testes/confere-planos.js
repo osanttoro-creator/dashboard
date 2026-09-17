@@ -36,7 +36,7 @@ const ESPERADO = {
       ai_queries_per_month: 10, history_months: 3, comparison_months: 1, collaborators: 0
     },
     recursos: {
-      import_csv: false, import_ofx: false, export_csv: false, export_pdf: false,
+      export_csv: false, export_pdf: false,
       calendario: false, uglez_assistente_flutuante: false,
       comparacao_mensal: false, comparacao_anual: false,
       analises_avancadas: false, ia_simulacoes: false, colaboracao: false,
@@ -51,7 +51,7 @@ const ESPERADO = {
       ai_queries_per_month: 60, history_months: 24, comparison_months: 24, collaborators: 0
     },
     recursos: {
-      import_csv: true, import_ofx: true, export_csv: true, export_pdf: true,
+      export_csv: true, export_pdf: true,
       calendario: true, uglez_assistente_flutuante: true,
       comparacao_mensal: true, comparacao_anual: false,
       analises_avancadas: false, ia_simulacoes: false, colaboracao: false,
@@ -66,7 +66,7 @@ const ESPERADO = {
       ai_queries_per_month: 200, history_months: null, comparison_months: null, collaborators: 3
     },
     recursos: {
-      import_csv: true, import_ofx: true, export_csv: true, export_pdf: true,
+      export_csv: true, export_pdf: true,
       calendario: true, uglez_assistente_flutuante: true,
       comparacao_mensal: true, comparacao_anual: true,
       analises_avancadas: true, ia_simulacoes: true, colaboracao: true,

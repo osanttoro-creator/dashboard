@@ -18,9 +18,9 @@
    critério fosse "existe alguma conta?".
 
    SÓ O OPCIONAL PODE SER PULADO
-   Importar extrato e criar orçamento são conveniências. Ter uma
-   conta e um lançamento não é: sem isso o painel abre vazio e a
-   pessoa conclui que o produto não funciona.
+   Criar orçamento ou meta é conveniência. Ter uma conta e um
+   lançamento não é: sem isso o painel abre vazio e a pessoa conclui
+   que o produto não funciona.
    ============================================================= */
 (function (global) {
   'use strict';
@@ -36,7 +36,6 @@
     { id: 'espaco', titulo: 'Seu espaço financeiro', opcional: false },
     { id: 'conta', titulo: 'Onde está seu dinheiro', opcional: false },
     { id: 'categorias', titulo: 'Categorias', opcional: false },
-    { id: 'importar', titulo: 'Importar extrato', opcional: true },
     { id: 'lancamento', titulo: 'Primeira movimentação', opcional: false },
     { id: 'planejar', titulo: 'Orçamento ou meta', opcional: true },
     { id: 'fim', titulo: 'Tudo pronto', opcional: false }
@@ -198,7 +197,7 @@
 
     UI.openModal({
       title: etapa.titulo,
-      wide: etapa.id === 'categorias' || etapa.id === 'importar',
+      wide: etapa.id === 'categorias',
       body: el('div', {}, [etapa.id === 'fim' ? null : barra(), corpo].filter(Boolean)),
       buttons: botoes,
       noAutofocus: false
@@ -374,29 +373,7 @@
       return [{ label: 'Continuar', class: 'btn-primary', onClick: proxima }];
     },
 
-    /* --- 5 · importar (opcional) --- */
-    importar(box) {
-      box.appendChild(el('p', { class: 'ob-texto', text: 'Se você tem um extrato em CSV ou OFX, dá para trazer tudo de uma vez em vez de digitar lançamento por lançamento.' }));
-      box.appendChild(el('div', { class: 'parse-info' }, el('div', {
-        html: 'A importação abre em <strong>Contas e cartões → Importar extratos</strong>, ' +
-          'onde você confere cada linha antes de confirmar. Nada entra sem a sua revisão.'
-      })));
-      box.appendChild(el('p', { class: 'hint', style: { marginTop: '10px' }, text: 'Pode pular e fazer isso depois — não muda nada no resto da configuração.' }));
-
-      return [{
-        label: 'Abrir importação', class: 'btn-primary',
-        onClick: () => {
-          /* Marca a etapa como vista ANTES de sair, senão voltar ao
-             app perderia o lugar. */
-          estado.dados.importouVisto = true;
-          irPara(indice + 1);
-          UI.closeModal();
-          App.goTo('accounts', { tab: 'import' });
-        }
-      }];
-    },
-
-    /* --- 6 · o primeiro lançamento --- */
+    /* --- 5 · o primeiro lançamento --- */
     lancamento(box) {
       const d = estado.dados;
       const p = Store.profile();
@@ -455,7 +432,7 @@
       }];
     },
 
-    /* --- 7 · planejar (opcional) --- */
+    /* --- 6 · planejar (opcional) --- */
     planejar(box) {
       const d = estado.dados;
       const p = Store.profile();
@@ -482,7 +459,7 @@
       }];
     },
 
-    /* --- 8 · fim --- */
+    /* --- 7 · fim --- */
     fim(box) {
       box.appendChild(el('div', { class: 'ob-fim' }, [
         el('span', { class: 'empty-ico' }, Icons.lucide('check', 28)),
@@ -492,7 +469,7 @@
 
       const proximos = [
         ['Cadastrar um cartão de crédito', () => App.goTo('accounts', { tab: 'cards' })],
-        ['Importar um extrato', () => App.goTo('accounts', { tab: 'import' })],
+        ['Definir uma meta', () => App.goTo('goals')],
         ['Definir orçamento por categoria', () => App.goTo('budget')]
       ];
       box.appendChild(el('p', { class: 'ob-sub', style: { marginTop: '14px' }, text: 'Bons próximos passos' }));

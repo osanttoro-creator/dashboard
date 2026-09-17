@@ -309,10 +309,10 @@
         </a>
       </li>
       <li class="bento-card revela">
-        <a href="#cap-importar">
+        <a href="#cap-calendario">
           <span class="bento-luz" aria-hidden="true"></span>
-          <span class="bento-rotulo">Extrato</span>
-          <strong>O arquivo do banco vira lançamento.</strong>
+          <span class="bento-rotulo">Calendário</span>
+          <strong>O ano inteiro, mês a mês.</strong>
         </a>
       </li>
       <li class="bento-card bento-alto bento-uglez revela">
@@ -410,35 +410,41 @@
     </div>
   </section>
 
-  <!-- ============================ 2 · importar ============================ -->
-  <section class="cap cap-areia" id="cap-importar" data-cena aria-labelledby="importar-titulo">
-    <div class="cap-visual v-importar" role="img"
-         aria-label="Ilustração da importação: o arquivo extrato-setembro.ofx vira quatro lançamentos, cada um com data, valor e categoria sugerida.">
+  <!-- ============================ 2 · calendário ============================
+       Aqui ficava o capítulo da importação de extratos. O recurso saiu
+       do produto em 16/09/2026 (o leitor de CSV/OFX errava o formato de
+       parte dos bancos), e uma página que continuasse vendendo isso
+       seria propaganda de algo que não existe. O lugar passou a ser do
+       calendário, que é real e é o que a pessoa abre depois de lançar. -->
+  <section class="cap cap-areia" id="cap-calendario" data-cena aria-labelledby="calendario-titulo">
+    <div class="cap-visual v-calendario" role="img"
+         aria-label="Ilustração do calendário: o ano mês a mês, com receitas, despesas e a soma do que ainda está previsto em cada um.">
       <div class="v-arquivo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
-        <span>extrato-setembro.ofx</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span>ano de 2026</span>
       </div>
       <ul class="v-lanc" aria-hidden="true">
-        <li style="--i:0"><time>03 set</time><span>SUPERMERCADO SILVA</span><em style="--c:var(--despesa)">Alimentação</em><b class="sai">− R$ 238,90</b></li>
-        <li style="--i:1"><time>05 set</time><span>UBER *TRIP</span><em style="--c:var(--investimento)">Transporte</em><b class="sai">− R$ 24,50</b></li>
-        <li style="--i:2"><time>05 set</time><span>SALARIO EMPRESA</span><em style="--c:var(--receita)">Renda</em><b class="entra">+ R$ 5.400,00</b></li>
-        <li style="--i:3"><time>08 set</time><span>NETFLIX.COM</span><em style="--c:var(--alerta)">Assinaturas</em><b class="sai">− R$ 44,90</b></li>
+        <li style="--i:0"><time>set</time><span>Fechado</span><em style="--c:var(--receita)">+ R$ 5.400,00</em><b class="sai">− R$ 4.186,40</b></li>
+        <li style="--i:1"><time>out</time><span>3 previstos</span><em style="--c:var(--alerta)">Previsto</em><b class="sai">− R$ 3.240,00</b></li>
+        <li style="--i:2"><time>nov</time><span>3 previstos</span><em style="--c:var(--alerta)">Previsto</em><b class="sai">− R$ 3.240,00</b></li>
+        <li style="--i:3"><time>dez</time><span>4 previstos · 13º</span><em style="--c:var(--receita)">+ R$ 10.800,00</em><b class="sai">− R$ 4.910,00</b></li>
       </ul>
     </div>
 
     <div class="cap-texto revela">
-      <h2 id="importar-titulo">Passado a limpo.</h2>
-      <p class="cap-sub">O arquivo do banco vira lançamento organizado.</p>
+      <h2 id="calendario-titulo">O ano inteiro numa tela.</h2>
+      <p class="cap-sub">Semana, mês e ano — e o que ainda é só previsão.</p>
       <p class="cap-corpo">
-        Domingo à noite, você baixa o extrato no aplicativo do banco e solta o
-        arquivo no OAZE. Cada linha vira um lançamento com data, valor e uma
-        categoria sugerida pela descrição. Mercado vai para Alimentação. Uber vai
-        para Transporte. Você só confere. OFX é o formato de extrato que quase todo
-        banco oferece para baixar.
+        O aluguel de dezembro já existe em setembro: ele é fixo, e fixo é
+        previsível. O calendário do OAZE tem três escalas — os sete dias da
+        semana, a grade do mês com o saldo de cada dia, e os doze meses do ano
+        lado a lado. Em todas elas o que ainda não foi confirmado aparece somado
+        à parte, porque decidir sobre o que já aconteceu e sobre o que talvez
+        aconteça são duas coisas diferentes.
       </p>
       <dl class="numeros">
-        <div><dt>até <b data-conta="4">4</b></dt><dd>formas de trazer o extrato</dd></div>
-        <div><dt>até <b data-conta="100">100</b></dt><dd>lançamentos por mês no Semente. Sem limite no Oásis</dd></div>
+        <div><dt><b data-conta="3">3</b></dt><dd>escalas: semana, mês e ano</dd></div>
+        <div><dt><b data-conta="12">12</b></dt><dd>meses à frente, com o previsto somado em cada um</dd></div>
       </dl>
     </div>
   </section>
@@ -576,7 +582,7 @@
         </div>
         <p class="cmp-frase">Na planilha, você digita cada linha e conserta a fórmula.</p>
         <dl class="numeros">
-          <div><dt>até <b>4</b></dt><dd>formas de importar em vez de digitar</dd></div>
+          <div><dt>até <b>12</b></dt><dd>meses à frente já somados</dd></div>
           <div><dt>até <b>24</b></dt><dd>meses comparados, sem fórmula</dd></div>
           <div><dt>até <b>5</b></dt><dd>cartões com fatura por ciclo</dd></div>
         </dl>
@@ -662,7 +668,7 @@
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Até 1.000 movimentações por mês</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 20 orçamentos, 10 metas e 30 recorrências</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Histórico de 24 meses e comparação entre meses</li>
-            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Importar CSV e OFX, exportar CSV e PDF</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Exportar em CSV e PDF, calendário financeiro</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 60 consultas ao UGLEZ por mês, com assistente flutuante</li>
           </ul>
         </article>
@@ -715,7 +721,7 @@
 
         <details class="revela">
           <summary>O OAZE se conecta ao meu banco?</summary>
-          <div class="resposta"><p>Não, e isso é decisão de projeto. Não pedimos a senha do seu banco e não usamos Open Finance. Você importa o extrato em CSV ou OFX quando quiser — o arquivo que o próprio banco disponibiliza.</p></div>
+          <div class="resposta"><p>Não, e isso é decisão de projeto. Não pedimos a senha do seu banco e não usamos Open Finance: o OAZE nunca tem acesso à sua conta. Os lançamentos são seus, digitados por você — e as contas que se repetem todo mês você cadastra uma vez só, como fixas.</p></div>
         </details>
 
         <details class="revela">

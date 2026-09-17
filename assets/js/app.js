@@ -19,14 +19,13 @@
     recTab: 'all',          // all | subs (recorrências × assinaturas)
     calDay: null,           // dia selecionado no calendário
     accHistoryId: null,
-    invoiceRef: null,
-    importTarget: null
+    invoiceRef: null
   };
 
   const PAGES = {
     home:         { title: 'Visão geral',   sub: () => U.smartCase(U.monthLabel(App.ym)),                    render: () => Home.render() },
     transactions: { title: 'Financeiro',    sub: () => 'Receitas, despesas e transferências de ' + U.monthLabel(App.ym), render: () => Tx.render() },
-    accounts:     { title: 'Contas e cartões', sub: () => 'Carteira, faturas e importação de extratos',      render: () => Acc.render() },
+    accounts:     { title: 'Contas e cartões', sub: () => 'Carteira, faturas e limites',                       render: () => Acc.render() },
     budget:       { title: 'Orçamento',     sub: () => 'Limites de ' + U.monthLabel(App.ym),                 render: () => Bud.render() },
     goals:        { title: 'Metas',         sub: () => 'Onde você quer chegar',                              render: () => Goals.render() },
     recurring:    { title: 'Recorrências',  sub: () => 'O que se repete todo mês',                           render: () => Rec.render() },
@@ -440,8 +439,98 @@
 
   /* ---------------- ação principal flutuante ---------------- */
 
+  /* ============================================================
+     O "+" MUDA COM A PÁGINA
+     ------------------------------------------------------------
+     O menu era fixo: quatro lançamentos, iguais em toda parte. Na
+     página de cartões, o que a pessoa quer criar é um cartão — e
+     para isso precisava fechar o menu, achar o botão "+ Novo
+     cartão" no topo e clicar nele. O botão flutuante é o lugar do
+     polegar no celular; deixá-lo dizendo sempre a mesma coisa é
+     desperdiçar o único controle que está sempre ao alcance.
+
+     Agora cada página declara o que faz sentido criar ali. A Visão
+     geral continua exatamente como era — ela é o lugar onde as
+     quatro opções são todas plausíveis.
+
+     Regras que valem para todas as listas:
+       · o primeiro item é o mais provável naquela página;
+       · lançar despesa aparece em quase todas, porque é a ação
+         mais frequente do app inteiro;
+       · nada aqui é exclusivo: tudo continua acessível pelos
+         botões da própria página.
+     ============================================================ */
+  const ACAO = {
+    despesa: { ico: 'arrow-down-right', classe: 'is-expense', rotulo: 'Nova despesa', faz: () => Forms.openTransaction('expense') },
+    receita: { ico: 'arrow-up-right', classe: 'is-income', rotulo: 'Nova receita', faz: () => Forms.openTransaction('income') },
+    transferencia: { ico: 'arrow-left-right', classe: '', rotulo: 'Transferência', faz: () => Forms.openTransaction('transfer') },
+    investimento: { ico: 'trending-up', classe: 'is-invest', rotulo: 'Novo investimento', faz: () => Forms.openInvestment() },
+    conta: { ico: 'landmark', classe: '', rotulo: 'Nova conta de débito', faz: () => Forms.openAccount() },
+    cartao: { ico: 'credit-card', classe: '', rotulo: 'Novo cartão de crédito', faz: () => Forms.openCard() },
+    noCredito: {
+      ico: 'credit-card', classe: 'is-expense', rotulo: 'Nova compra no crédito',
+      faz: () => Forms.openTransaction('expense', null, {
+        method: 'card',
+        cardId: App.cardFocusId || ((Store.profile().cards[0] || {}).id || null)
+      })
+    },
+    categoriaDespesa: { ico: 'tag', classe: 'is-expense', rotulo: 'Categoria de despesa', faz: () => Forms.openCategory('expense') },
+    categoriaReceita: { ico: 'tag', classe: 'is-income', rotulo: 'Categoria de receita', faz: () => Forms.openCategory('income') },
+    orcamento: { ico: 'target', classe: '', rotulo: 'Novo limite de gasto', faz: () => Bud.open() },
+    meta: { ico: 'flag', classe: '', rotulo: 'Nova meta', faz: () => Goals.open() },
+    fixa: {
+      ico: 'repeat', classe: 'is-expense', rotulo: 'Nova despesa fixa',
+      faz: () => Forms.openTransaction('expense', null, { recurring: true })
+    },
+    noDia: {
+      ico: 'calendar', classe: 'is-expense', rotulo: 'Lançar no dia escolhido',
+      faz: () => Forms.openTransaction('expense', null, { date: App.selectedDateOrToday() })
+    }
+  };
+
+  const ACOES_DA_PAGINA = {
+    home: ['despesa', 'receita', 'transferencia', 'investimento'],
+    transactions: ['despesa', 'receita', 'transferencia'],
+    budget: ['orcamento', 'despesa'],
+    goals: ['meta', 'despesa'],
+    recurring: ['fixa', 'receita'],
+    calendar: ['noDia', 'receita', 'despesa'],
+    investments: ['investimento', 'receita'],
+    categories: ['categoriaDespesa', 'categoriaReceita'],
+    reports: ['despesa', 'receita']
+  };
+
+  /** A carteira muda com a aba: contas de um lado, cartões do outro. */
+  function acoesDaPagina() {
+    if (App.page === 'accounts') {
+      return App.accTab === 'cards'
+        ? ['cartao', 'noCredito', 'conta']
+        : ['conta', 'cartao', 'despesa', 'receita'];
+    }
+    return ACOES_DA_PAGINA[App.page] || ACOES_DA_PAGINA.home;
+  }
+
+  /** Redesenha o menu do "+" para a página atual. */
+  function pintarFab() {
+    const menu = document.getElementById('fabMenu');
+    if (!menu) return;
+    U.clear(menu);
+    acoesDaPagina().forEach((chave) => {
+      const a = ACAO[chave];
+      if (!a) return;
+      menu.appendChild(U.el('button', {
+        class: 'fab-item', type: 'button', role: 'menuitem',
+        onclick: () => { fabOpen(false); a.faz(); }
+      }, [
+        U.el('span', { class: 'fab-item-ico ' + a.classe }, Icons.lucide(a.ico, 17)),
+        U.el('span', { text: a.rotulo })
+      ]));
+    });
+  }
+  App.pintarFab = pintarFab;
+
   /**
-   * O "+" abre os quatro lançamentos. O menu nasce no canto do botão
+   * O "+" abre as ações da página. O menu nasce no canto do botão
    * (transform-origin no CSS), então fica claro de onde ele veio — e
    * some pelo mesmo caminho.
    */
@@ -452,6 +541,7 @@
     const alvo = abrir === undefined ? !estaAberto : abrir;
     if (alvo === estaAberto) return;
     btn.setAttribute('aria-expanded', alvo ? 'true' : 'false');
+    if (alvo) pintarFab();     // a página pode ter mudado desde a última vez
     menu.hidden = !alvo;
     if (alvo) {
       paintIcons();
@@ -523,7 +613,7 @@
     document.getElementById('profileSelect').addEventListener('change', (e) => {
       Store.setActiveProfile(e.target.value);
       App.accHistoryId = null; App.cardFocusId = null; App.walletFocusId = null;
-      App.invoiceRef = null; App.importTarget = null;
+      App.invoiceRef = null;
       UI.toast('Perfil alterado.');
     });
     document.getElementById('btnProfiles').addEventListener('click', () => Forms.openProfiles());
@@ -572,11 +662,6 @@
       App.accHistoryId = e.target.value; Acc.render();
     });
     // (a navegação de faturas agora fica no próprio painel do cartão em foco)
-
-    // importação
-    document.getElementById('importFile').addEventListener('change', (e) => Importer.readFile(e.target.files[0]));
-    document.getElementById('btnParseImport').addEventListener('click', () => Importer.analyze());
-    document.getElementById('importTarget').addEventListener('change', (e) => { App.importTarget = e.target.value; });
 
     // página 5
     document.getElementById('catRangeSelect').addEventListener('change', (e) => {

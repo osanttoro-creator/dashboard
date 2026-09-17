@@ -196,9 +196,10 @@
     let current = initial || colors[0];
     if (current && !colors.includes(current)) colors.push(current); // cor herdada de dados antigos
     colors.forEach((c) => {
+      const nome = Store.colorName ? Store.colorName(c) : c;
       const b = el('button', {
         type: 'button', class: 'color-opt' + (c === current ? ' is-active' : ''),
-        style: { background: c }, 'aria-label': 'Cor ' + c,
+        style: { background: c }, 'aria-label': 'Cor ' + nome, title: nome,
         onclick: () => {
           current = c;
           U.$$('.color-opt', wrap).forEach((n) => n.classList.remove('is-active'));

@@ -79,17 +79,32 @@
    * confirmar aparece à parte.
    */
   function totais(entradas) {
-    const t = { receitas: 0, despesas: 0, aConfirmar: 0, fixas: 0, qtdFixas: 0 };
+    const t = {
+      receitas: 0, despesas: 0, aConfirmar: 0, fixas: 0, qtdFixas: 0,
+      /* PREVISTO = o que está lançado e ainda não foi confirmado.
+         Ele já está dentro de "receitas" e "despesas" acima — aqui
+         ele aparece separado porque é a parte que ainda pode não
+         acontecer, e quem olha o calendário está justamente
+         perguntando "o que ainda vem?". */
+      previstoReceitas: 0, previstoDespesas: 0, qtdPrevistos: 0
+    };
     entradas.forEach((e) => {
       if (e.kind === 'transfer') return;
       if (e.kind === 'income') t.receitas += e.amount; else t.despesas += e.amount;
-      if (!e.confirmed) t.aConfirmar += e.kind === 'income' ? 0 : e.amount;
+      if (!e.confirmed) {
+        t.aConfirmar += e.kind === 'income' ? 0 : e.amount;
+        t.qtdPrevistos++;
+        if (e.kind === 'income') t.previstoReceitas += e.amount; else t.previstoDespesas += e.amount;
+      }
       if (e.recurring && e.kind === 'expense') { t.fixas += e.amount; t.qtdFixas++; }
     });
     t.receitas = U.round2(t.receitas);
     t.despesas = U.round2(t.despesas);
     t.aConfirmar = U.round2(t.aConfirmar);
     t.fixas = U.round2(t.fixas);
+    t.previstoReceitas = U.round2(t.previstoReceitas);
+    t.previstoDespesas = U.round2(t.previstoDespesas);
+    t.previstoSaldo = U.round2(t.previstoReceitas - t.previstoDespesas);
     t.saldo = U.round2(t.receitas - t.despesas);
     return t;
   }
@@ -107,6 +122,19 @@
       t.aConfirmar > 0 ? U.fmtBRL(t.aConfirmar) + ' a confirmar' : 'tudo confirmado'));
     box.appendChild(fig('Saldo previsto', (t.saldo < 0 ? '− ' : '') + U.fmtBRL(Math.abs(t.saldo)),
       t.saldo < 0 ? 'val-neg' : ''));
+
+    /* A soma do que ainda não aconteceu, nas três escalas. Sem ela,
+       "despesas do mês" misturava o que já saiu com o que talvez
+       saia, e as duas coisas exigem decisões diferentes. */
+    box.appendChild(fig(
+      'Previsto ' + rotuloPeriodo,
+      t.qtdPrevistos ? U.fmtBRL(t.previstoDespesas) : U.fmtBRL(0),
+      t.previstoDespesas > 0 ? 'val-neg' : '',
+      !t.qtdPrevistos ? 'nada a confirmar'
+        : (t.qtdPrevistos === 1 ? '1 lançamento' : t.qtdPrevistos + ' lançamentos')
+          + (t.previstoReceitas > 0 ? ' · ' + U.fmtBRL(t.previstoReceitas) + ' a receber' : '')
+    ));
+
     box.appendChild(extra || fig('Despesas fixas', U.fmtBRL(t.fixas), '',
       t.qtdFixas === 1 ? '1 lançamento' : t.qtdFixas + ' lançamentos'));
   }
@@ -487,8 +515,18 @@
         ])))
         : el('p', { class: 'cal-mes-vazio', text: passado ? 'Nada lançado neste mês.' : 'Nada previsto ainda.' }),
 
-      t.qtdFixas
-        ? el('p', { class: 'cal-mes-rodape', text: `${t.qtdFixas} fixa(s) · ${U.fmtBRL(t.fixas)}` })
+      /* Cada painel do ano diz quanto ainda é previsão — é o que
+         separa "gastei" de "vou gastar" na hora de olhar doze meses
+         de uma vez. */
+      t.qtdFixas || t.qtdPrevistos
+        ? el('p', { class: 'cal-mes-rodape' }, [
+          t.qtdPrevistos
+            ? el('span', { class: 'is-previsto', text: `Previsto: ${U.fmtBRL(t.previstoDespesas)} em ${t.qtdPrevistos} lançamento${t.qtdPrevistos > 1 ? 's' : ''}` })
+            : null,
+          t.qtdFixas
+            ? el('span', { text: `${t.qtdFixas} fixa${t.qtdFixas > 1 ? 's' : ''} · ${U.fmtBRL(t.fixas)}` })
+            : null
+        ].filter(Boolean))
         : null
     ].filter(Boolean));
   }
