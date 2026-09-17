@@ -22,6 +22,42 @@
 
   var A = {};
   var cliente = null;
+  var POLITICA_PRIVACIDADE_VERSAO = '2026-09-15';
+  var CHAVE_ACEITE_PENDENTE = 'oaze.privacidade.aceite-pendente';
+
+  A.POLITICA_PRIVACIDADE_VERSAO = POLITICA_PRIVACIDADE_VERSAO;
+
+  function aceiteValido(a) {
+    return !!(a && a.policy_version === POLITICA_PRIVACIDADE_VERSAO &&
+      typeof a.accepted_at === 'string' && !isNaN(Date.parse(a.accepted_at)) &&
+      typeof a.source === 'string' && a.source.length <= 40);
+  }
+
+  A.novoAceite = function (origem) {
+    return {
+      policy_version: POLITICA_PRIVACIDADE_VERSAO,
+      accepted_at: new Date().toISOString(),
+      source: String(origem || 'cadastro').slice(0, 40)
+    };
+  };
+
+  /* O OAuth atravessa outro site. sessionStorage preserva apenas o
+     aceite desta aba até a volta; a prova durável será gravada no
+     banco, vinculada ao usuário autenticado, já dentro do app. */
+  A.guardarAceitePendente = function (aceite) {
+    if (!aceiteValido(aceite)) throw new Error('privacy_policy_required');
+    global.sessionStorage.setItem(CHAVE_ACEITE_PENDENTE, JSON.stringify(aceite));
+    return aceite;
+  };
+  A.aceitePendente = function () {
+    try {
+      var a = JSON.parse(global.sessionStorage.getItem(CHAVE_ACEITE_PENDENTE) || 'null');
+      return aceiteValido(a) ? a : null;
+    } catch (e) { return null; }
+  };
+  A.limparAceitePendente = function () {
+    try { global.sessionStorage.removeItem(CHAVE_ACEITE_PENDENTE); } catch (e) {}
+  };
 
   /* ---------------------------------------------------------------
      cliente
@@ -71,7 +107,8 @@
     [/rate limit|too many requests/i,     'Muitas tentativas seguidas. Espere um minuto e tente de novo.'],
     [/token has expired|invalid token|expired/i, 'Esse link expirou. Peça um novo.'],
     [/network|fetch|failed to fetch/i,    'Sem conexão com o servidor. Verifique sua internet.'],
-    [/same as the old password/i,         'A senha nova precisa ser diferente da anterior.']
+    [/same as the old password/i,         'A senha nova precisa ser diferente da anterior.'],
+    [/privacy_policy_required/i,          'Aceite a Política de privacidade para criar e iniciar a conta.']
   ];
 
   A.frase = function (erro) {
@@ -161,6 +198,10 @@
       en: 'The new password must be different from the previous one.',
       fr: 'Le nouveau mot de passe doit être différent du précédent.',
       es: 'La contraseña nueva debe ser diferente de la anterior.' },
+    'Aceite a Política de privacidade para criar e iniciar a conta.': {
+      en: 'Accept the Privacy policy to create and start the account.',
+      fr: 'Acceptez la Politique de confidentialité pour créer et démarrer le compte.',
+      es: 'Acepta la Política de privacidad para crear e iniciar la cuenta.' },
     'Não foi possível concluir agora. Tente de novo em instantes.': {
       en: "We couldn't finish that right now. Try again in a moment.",
       fr: "Impossible de terminer pour le moment. Réessayez dans un instant.",
@@ -224,9 +265,10 @@
      Configuration → Redirect URLs no painel do Supabase. Fora da
      lista, o provedor devolve para a Site URL e a pessoa cai na
      página errada, sem erro nenhum na tela. */
-  A.entrarCom = function (provedor, caminho) {
+  A.entrarCom = function (provedor, caminho, aceite) {
     var c = A.cliente();
     if (!c) return Promise.reject(new Error('config'));
+    if (aceite) A.guardarAceitePendente(aceite);
     var opcoes = { redirectTo: A.voltarPara(caminho || A.destino()) };
     /* Sem isto, quem tem mais de uma conta Google entra sempre na
        última usada, sem chance de escolher qual. */
@@ -323,14 +365,20 @@
   /* ---------------------------------------------------------------
      operações
      --------------------------------------------------------------- */
-  A.cadastrar = function (email, senha, nome) {
+  A.cadastrar = function (email, senha, nome, aceite) {
     var c = A.cliente();
     if (!c) return Promise.reject(new Error('config'));
+    if (!aceiteValido(aceite)) return Promise.reject(new Error('privacy_policy_required'));
     return c.auth.signUp({
       email: email,
       password: senha,
       options: {
-        data: { nome: nome || '' },
+        data: {
+          nome: nome || '',
+          privacy_policy_version: aceite.policy_version,
+          privacy_accepted_at: aceite.accepted_at,
+          privacy_consent_source: aceite.source
+        },
         emailRedirectTo: A.voltarPara('/confirmar-email')
       }
     });

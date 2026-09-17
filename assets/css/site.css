@@ -592,6 +592,18 @@ p.leve { color: var(--bruma); }
 .legalzinho { margin: 18px 0 0; font-size: .84rem; line-height: 1.6; color: var(--bruma-2); text-align: center; }
 .legalzinho a { color: var(--bruma); text-decoration: underline; }
 
+.aceite-privacidade {
+  margin: 0 0 22px; padding: 14px 15px;
+  border: 1px solid var(--borda); border-radius: var(--raio-campo);
+  background: var(--raso);
+}
+.aceite-privacidade label { display: flex; align-items: flex-start; gap: 10px; color: var(--tinta); font-size: .92rem; line-height: 1.5; }
+.aceite-privacidade input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: var(--ouro); }
+.aceite-privacidade a { color: var(--ouro-claro); text-decoration: underline; text-underline-offset: 2px; }
+.aceite-privacidade .dica { margin: 7px 0 0 28px; color: var(--bruma-2); font-size: .8rem; }
+.aceite-privacidade .erro { margin: 7px 0 0 28px; color: var(--critico); font-size: .84rem; }
+.aceite-privacidade:has(input[aria-invalid="true"]) { border-color: rgba(240, 144, 112, .58); }
+
 /* ---------------------------------------------------------------
    12 · tabela de comparação dos planos
    --------------------------------------------------------------- */

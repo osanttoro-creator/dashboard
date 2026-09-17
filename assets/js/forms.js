@@ -197,9 +197,11 @@
     fMethod.appendChild(methodHint);
 
     const fAccount = field('Conta', select(accountOptions(),
-      editing ? editing.accountId : d.accountId, prof.accounts.length ? null : 'Nenhuma conta'));
+      editing ? editing.accountId : d.accountId,
+      prof.accounts.length ? (d.requireOrigin ? 'Escolha uma conta…' : null) : 'Nenhuma conta'));
     const fCard = field('Cartão', select(cardOptions(),
-      editing ? editing.cardId : d.cardId, prof.cards.length ? null : 'Nenhum cartão'));
+      editing ? editing.cardId : d.cardId,
+      prof.cards.length ? (d.requireOrigin ? 'Escolha um cartão…' : null) : 'Nenhum cartão'));
     /* ============================================================
        NO CRÉDITO, A PESSOA ESCOLHE A FATURA — NÃO O DIA
        ------------------------------------------------------------
@@ -425,7 +427,8 @@
         recurring: cbRecurring._input.checked,
         recurEnd: cbRecurring._input.checked ? (fRecurEnd._control.value || null) : null,
         confirmed: cbConfirmed._input.checked,
-        notes: fNotes._control.value.trim()
+        notes: fNotes._control.value.trim(),
+        source: editing ? (editing.source || 'manual') : (d.source || 'manual')
       };
 
       if (editing) {

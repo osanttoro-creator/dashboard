@@ -71,6 +71,7 @@
     'Gastos consolidados por categoria',
     'Metas e quanto já foi guardado',
     'Compromissos previstos, agrupados por dia',
+    'Carteira de investimentos agregada: aportado, valor atual, rendimento e distribuição por tipo',
     'Totais do ano: confirmado, previsto, média mensal e categorias que mais pesaram',
     'Mês a mês: receitas, despesas, fixas e as cinco maiores categorias',
     'As três últimas perguntas e respostas desta conversa'
@@ -258,7 +259,10 @@
       saldo: U.round2(t.balance),
       categorias: [],
       metas: [],
-      compromissos: []
+      compromissos: [],
+      investimentos: {
+        quantidade: 0, aportado: 0, valorAtual: 0, rendimento: 0, porTipo: []
+      }
     };
 
     try {
@@ -292,8 +296,139 @@
       resumo.compromissos = Array.from(porDia.values()).sort((a, b) => a.dia - b.dia);
     } catch (e) { /* idem */ }
 
+    try {
+      const at = U.monthEnd(periodo);
+      const porTipo = {};
+      const investimentos = (prof.investments || []).filter((i) => i.date <= at);
+      investimentos.forEach((i) => {
+        const tipo = i.type || 'Outro';
+        porTipo[tipo] = U.round2((porTipo[tipo] || 0) + Calc.investmentValueAt(i, at));
+      });
+      const aportado = Calc.contributedTotal(at);
+      const valorAtual = Calc.investedTotal(at);
+      resumo.investimentos = {
+        quantidade: investimentos.length,
+        aportado: U.round2(aportado),
+        valorAtual: U.round2(valorAtual),
+        rendimento: U.round2(valorAtual - aportado),
+        porTipo: Object.keys(porTipo).map((tipo) => ({ tipo, total: porTipo[tipo] }))
+          .sort((a, b) => b.total - a.total)
+      };
+    } catch (e) { /* segue com carteira zerada */ }
+
     return resumo;
   };
+
+  /* ============================================================
+     1c · AÇÃO PROPOSTA, NUNCA AÇÃO SILENCIOSA
+     ------------------------------------------------------------
+     A função pode reconhecer "gastei 50 reais..." e devolver
+     campos estruturados. Quem resolve o nome da conta/cartão é este
+     navegador — os nomes da carteira não saem para a IA — e quem
+     grava continua sendo o formulário oficial, depois de um clique.
+     ============================================================ */
+
+  function normalizarNome(v) {
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  function encontrarOrigem(lista, nome) {
+    const alvo = normalizarNome(nome);
+    if (!alvo) return null;
+    const itens = (lista || []).map((i) => ({ item: i, nome: normalizarNome(i.name) }));
+    const exato = itens.find((i) => i.nome === alvo);
+    if (exato) return exato.item;
+    const proximos = itens.filter((i) => i.nome.includes(alvo) || alvo.includes(i.nome));
+    return proximos.length === 1 ? proximos[0].item : null;
+  }
+
+  function encontrarCategoria(tipo, nome) {
+    const alvo = normalizarNome(nome);
+    if (!alvo) return null;
+    const lista = (Store.profile().categories || []).filter((c) => c.kind === tipo);
+    return lista.find((c) => normalizarNome(c.name) === alvo) || null;
+  }
+
+  function acaoValida(bruta) {
+    if (!bruta || (bruta.tipo !== 'expense' && bruta.tipo !== 'income')) return null;
+    if (bruta.forma_pagamento !== 'card' && bruta.forma_pagamento !== 'account') return null;
+    if (bruta.tipo === 'income' && bruta.forma_pagamento === 'card') return null;
+    const valor = Number(bruta.valor);
+    if (!Number.isFinite(valor) || valor <= 0 || !U.isValidISO(String(bruta.data || ''))) return null;
+    const descricao = String(bruta.descricao || '').trim().slice(0, 90);
+    if (!descricao) return null;
+    return {
+      tipo: bruta.tipo,
+      descricao,
+      valor: Math.round(Math.abs(valor) * 100) / 100,
+      data: String(bruta.data),
+      forma_pagamento: bruta.forma_pagamento,
+      origem: String(bruta.origem || '').trim().slice(0, 60),
+      categoria: bruta.categoria == null ? '' : String(bruta.categoria).trim().slice(0, 40),
+      confirmado: bruta.confirmado === true
+    };
+  }
+
+  function renderAcaoProposta(bruta) {
+    const a = acaoValida(bruta);
+    if (!a) return null;
+    const prof = Store.profile();
+    const listaOrigem = a.forma_pagamento === 'card' ? prof.cards : prof.accounts;
+    const origem = encontrarOrigem(listaOrigem, a.origem);
+    const categoria = encontrarCategoria(a.tipo, a.categoria);
+    const nomeOrigem = origem ? origem.name : (a.origem || 'Selecionar no formulário');
+
+    const abrirFormulario = () => {
+      if (a.forma_pagamento === 'card' && !prof.cards.length) {
+        UI.toast('Cadastre o cartão antes de revisar este lançamento.', 'error');
+        App.goTo('accounts', { tab: 'cards' });
+        return;
+      }
+      if (a.forma_pagamento === 'account' && !prof.accounts.length) {
+        UI.toast('Cadastre a conta antes de revisar este lançamento.', 'error');
+        App.goTo('accounts', { tab: 'accounts' });
+        return;
+      }
+      Forms.openTransaction(a.tipo, null, {
+        description: a.descricao,
+        amount: a.valor,
+        date: a.data,
+        method: a.forma_pagamento,
+        accountId: a.forma_pagamento === 'account' && origem ? origem.id : null,
+        cardId: a.forma_pagamento === 'card' && origem ? origem.id : null,
+        categoryId: categoria ? categoria.id : null,
+        confirmed: a.confirmado,
+        requireOrigin: !origem,
+        source: 'uglez'
+      });
+    };
+
+    return el('section', { class: 'uglez-proposta', 'aria-label': 'Lançamento preparado pelo UGLEZ' }, [
+      el('div', { class: 'uglez-proposta-topo' }, [
+        el('span', { class: 'uglez-proposta-sinal' }, [Icons.lucide('receipt-text', 16)]),
+        el('div', {}, [
+          el('strong', { text: a.tipo === 'income' ? 'Receita preparada' : 'Despesa preparada' }),
+          el('span', { text: 'Revise antes de salvar' })
+        ])
+      ]),
+      el('dl', { class: 'uglez-proposta-dados' }, [
+        el('div', {}, [el('dt', { text: 'Descrição' }), el('dd', { text: a.descricao })]),
+        el('div', {}, [el('dt', { text: 'Valor' }), el('dd', { text: U.fmtBRL(a.valor) })]),
+        el('div', {}, [el('dt', { text: 'Data' }), el('dd', { text: U.fmtDateBR(a.data) })]),
+        el('div', {}, [el('dt', { text: a.forma_pagamento === 'card' ? 'Cartão' : 'Conta' }), el('dd', { text: nomeOrigem })])
+      ]),
+      !origem ? el('p', {
+        class: 'uglez-proposta-aviso',
+        text: 'Não encontrei essa origem com segurança. Escolha a conta ou o cartão no formulário.'
+      }) : null,
+      el('p', { class: 'uglez-proposta-seguranca', text: 'Nada será salvo até você confirmar no formulário.' }),
+      el('button', {
+        class: 'btn btn-ai uglez-proposta-botao', type: 'button',
+        text: 'Revisar no formulário', onclick: abrirFormulario
+      })
+    ].filter(Boolean));
+  }
 
   /* ============================================================
      2 · CHAMADA À API
@@ -449,7 +584,7 @@
         encerrar('erro');
         return;
       }
-      if (!r.texto) {
+      if (!r.texto && !r.acao_proposta) {
         renderError(box, 'A resposta veio vazia. Tente reformular a pergunta.');
         encerrar('erro');
         return;
@@ -457,7 +592,10 @@
 
       sinal('respondendo');
       box.className = 'ai-answer';
-      box.innerHTML = renderMarkdown(r.texto);
+      const textoResposta = r.texto || 'Preparei o lançamento abaixo. Revise os dados antes de confirmar.';
+      box.innerHTML = renderMarkdown(textoResposta);
+      const proposta = renderAcaoProposta(r.acao_proposta);
+      if (proposta) box.appendChild(proposta);
       box.appendChild(el('div', { class: 'ai-meta' }, [
         /* O período analisado sai junto da resposta, e vem da
            FUNÇÃO — não do que a tela achava que tinha pedido. Se os
@@ -475,7 +613,7 @@
           ? el('span', { text: ' · ' + r.uso.usado + ' de ' + r.uso.limite + ' neste mês' })
           : null
       ].filter(Boolean)));
-      if (d.aoResponder) d.aoResponder(box, r.texto);
+      if (d.aoResponder) d.aoResponder(box, textoResposta);
 
       /* A cota mudou; a faixa da página precisa refletir isso agora,
          e não só no próximo carregamento. */

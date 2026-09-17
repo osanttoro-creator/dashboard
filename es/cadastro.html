@@ -45,6 +45,15 @@
 
       <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
 
+      <div class="aceite-privacidade" id="aceite-bloco">
+        <label for="aceite-privacidade">
+          <input type="checkbox" id="aceite-privacidade" aria-describedby="aceite-dica aceite-privacidade-erro">
+          <span>He leído y acepto la <a href="/es/privacidade" target="_blank" rel="noopener">Política de privacidad</a>.</span>
+        </label>
+        <p class="dica" id="aceite-dica">Obligatorio para crear e iniciar la cuenta.</p>
+        <p class="erro" id="aceite-privacidade-erro" role="alert" hidden></p>
+      </div>
+
       <!-- Entrada social. Os dois botões nascem escondidos: o script
            pergunta ao Supabase quais provedores estão ligados e mostra
            só os que existem. Com nenhum ligado, esta página fica
@@ -98,12 +107,12 @@
           <p class="erro" id="senha-erro" hidden></p>
         </div>
 
-        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar">Crear mi cuenta</button>
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar" disabled>Crear mi cuenta</button>
       </form>
       </div><!-- /via-email -->
 
       <p class="legalzinho">
-        Al crear la cuenta aceptas los <a href="/es/termos">Términos de uso</a> y la <a href="/es/privacidade">Política de privacidad</a>.
+        Al usar OAZE, también se aplican los <a href="/es/termos">Términos de uso</a>.
       </p>
 
       <p class="pe-do-painel">
@@ -126,6 +135,8 @@
   var senha = document.getElementById('senha');
   var form = document.getElementById('form-cadastro');
   var botao = document.getElementById('botao-cadastrar');
+  var aceite = document.getElementById('aceite-privacidade');
+  var aceiteErro = document.getElementById('aceite-privacidade-erro');
 
   if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); return; }
 
@@ -139,6 +150,44 @@
      depois faria a chamada pela memória ler undefined e morrer. */
   var ligados = {};
   var recolheu = false;
+  var umToqueIniciado = false;
+
+  function mostraErroAceite(texto) {
+    aceiteErro.textContent = texto || '';
+    aceiteErro.hidden = !texto;
+    aceite.setAttribute('aria-invalid', texto ? 'true' : 'false');
+  }
+
+  function aceiteObrigatorio() {
+    if (aceite.checked) { mostraErroAceite(''); return true; }
+    mostraErroAceite('Acepta la Política de privacidad para continuar.');
+    aceite.focus();
+    return false;
+  }
+
+  function atualizaAceite() {
+    botao.disabled = !aceite.checked;
+    ['btn-google', 'btn-apple'].forEach(function (id) {
+      var b = document.getElementById(id);
+      if (b) b.disabled = !aceite.checked;
+    });
+    if (aceite.checked) mostraErroAceite('');
+    talvezUmToque(ligados);
+  }
+
+  function talvezUmToque(p) {
+    if (!p || !p.google || !aceite.checked || umToqueIniciado) return;
+    umToqueIniciado = true;
+    try { A.guardarAceitePendente(A.novoAceite('oauth_google')); }
+    catch (e) { umToqueIniciado = false; A.diz(recado, A.frase(e), 'erro'); return; }
+    A.umToque(function (err) {
+      if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
+      location.replace('/onboarding');
+    });
+  }
+
+  aceite.addEventListener('change', atualizaAceite);
+  atualizaAceite();
 
   var perguntou = A.provedores();
 
@@ -152,15 +201,7 @@
     if (u) { location.replace('/app'); return; }
     return perguntou.then(function (p) {
       montarSocial(p);
-      /* O toque único só depois de saber que ninguém está logado --
-         a bolha aparecendo para quem já entrou seria ruído antes do
-         redirecionamento. Por isso ele não vem da memória. */
-      if (p.google) {
-        A.umToque(function (err) {
-          if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
-          location.replace('/onboarding');
-        });
-      }
+      talvezUmToque(p);
     });
   });
 
@@ -186,16 +227,19 @@
       if (ligados[par[0]]) return;
       ligados[par[0]] = true;
       b.addEventListener('click', function () {
+        if (!aceiteObrigatorio()) return;
         A.diz(recado, '');
         A.ocupado(b, true, 'Abriendo…');
-        A.entrarCom(par[0], '/onboarding').then(function (r) {
+        A.entrarCom(par[0], '/onboarding', A.novoAceite('oauth_' + par[0])).then(function (r) {
           if (r && r.error) throw r.error;
           /* deu certo: o navegador sai desta página para o provedor */
         }).catch(function (err) {
           A.ocupado(b, false);
+          atualizaAceite();
           A.diz(recado, A.frase(err), 'erro');
         });
       });
+      b.disabled = !aceite.checked;
     });
 
     caixa.hidden = !algum;
@@ -223,6 +267,7 @@
   function valida() {
     var ok = true;
     [email, senha].forEach(function (c) { A.erroNoCampo(c, ''); });
+    if (!aceiteObrigatorio()) ok = false;
     if (!email.value.trim()) { A.erroNoCampo(email, 'Ingresa tu correo.'); ok = false; }
     else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { A.erroNoCampo(email, 'Ese correo no parece válido.'); ok = false; }
     /* O mínimo é conferido aqui E no servidor. Aqui é cortesia -- dá
@@ -240,7 +285,7 @@
 
     A.ocupado(botao, true, 'Creando…');
     try {
-      var r = await A.cadastrar(email.value.trim(), senha.value, nome.value.trim());
+      var r = await A.cadastrar(email.value.trim(), senha.value, nome.value.trim(), A.novoAceite('cadastro_email'));
       if (r.error) throw r.error;
 
       /* DUAS SAÍDAS, e confundi-las é o erro clássico desta tela.
@@ -260,6 +305,7 @@
         'puede tardar unos minutos y a veces llega a la carpeta de spam.', 'ok');
     } catch (err) {
       A.ocupado(botao, false);
+      atualizaAceite();
       A.diz(recado, A.frase(err), 'erro');
     }
   });

@@ -12,6 +12,7 @@
     const ym = App.ym;
     const at = U.monthEnd(ym);
     renderKpis(at, ym);
+    renderUglezWidgets(at, ym);
     renderTypeFilter();
     renderTable(at);
     renderEvolution(ym);
@@ -19,6 +20,58 @@
     if (!projectionDrawn) { Inv.runProjection(); projectionDrawn = true; }
     else Inv.runProjection();
   };
+
+  /* ---------------- UGLEZ na carteira ---------------- */
+
+  function renderUglezWidgets(at, ym) {
+    const prof = Store.profile();
+    const lista = (prof.investments || []).filter((i) => i.date <= at);
+    const tipos = new Set(lista.map((i) => i.type || 'Outro'));
+    const valor = Calc.investedTotal(at);
+    const aportado = Calc.contributedTotal(at);
+    const resumo = document.getElementById('invUglezResumo');
+    const box = U.clear(document.getElementById('invUglezWidgets'));
+    if (!resumo || !box) return;
+
+    if (!lista.length) {
+      resumo.textContent = 'Ainda sem aportes. O UGLEZ pode calcular um começo que respeite o seu mês.';
+    } else {
+      const ganho = U.round2(valor - aportado);
+      resumo.textContent = `${tipos.size} tipo${tipos.size === 1 ? '' : 's'} · ${U.fmtBRL(valor)} hoje · ` +
+        `${ganho >= 0 ? '+' : ''}${U.fmtBRL(ganho)} sobre o aportado.`;
+    }
+
+    const ano = U.ymParts(ym).y;
+    const perguntas = [
+      {
+        icone: 'coins',
+        rotulo: 'Qual é o menor aporte que cabe no meu mês, com base no meu saldo, compromissos e carteira?'
+      },
+      {
+        icone: 'chart-pie',
+        rotulo: lista.length
+          ? 'Minha carteira está concentrada demais em algum tipo de investimento?'
+          : 'Como posso começar uma carteira sem comprometer minhas despesas previstas?'
+      },
+      {
+        icone: 'calendar',
+        rotulo: `Que ritmo de aportes é compatível com o restante de ${ano}?`
+      }
+    ];
+
+    perguntas.forEach((p) => {
+      box.appendChild(el('button', {
+        class: 'inv-uglez-pergunta', type: 'button',
+        onclick: () => {
+          App.goTo('uglez');
+          setTimeout(() => AI.ask(p.rotulo), 60);
+        }
+      }, [
+        Icons.lucide(p.icone, 16),
+        el('span', { text: p.rotulo })
+      ]));
+    });
+  }
 
   /* ---------------- distribuição da carteira ---------------- */
 

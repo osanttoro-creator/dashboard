@@ -48,6 +48,18 @@
   "es": "Plan Semilla (Semente): gratis, sin tarjeta de crédito y sin fecha de vencimiento."
  },
  {
+  "pt": "Li e aceito a <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a>.",
+  "en": "I have read and accept the <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>.",
+  "fr": "J'ai lu et j'accepte la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Politique de confidentialité</a>.",
+  "es": "He leído y acepto la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidad</a>."
+ },
+ {
+  "pt": "Obrigatório para criar e iniciar a conta.",
+  "en": "Required to create and start the account.",
+  "fr": "Obligatoire pour créer et démarrer le compte.",
+  "es": "Obligatorio para crear e iniciar la cuenta."
+ },
+ {
   "pt": "Criar conta com Google",
   "en": "Sign up with Google",
   "fr": "S'inscrire avec Google",
@@ -126,16 +138,22 @@
   "es": "Crear mi cuenta"
  },
  {
-  "pt": "Ao criar a conta você concorda com os <a href=\"/termos\">Termos de uso</a> e com a <a href=\"/privacidade\">Política de privacidade</a>.",
-  "en": "By creating an account you agree to the <a href=\"/termos\">Terms of use</a> and the <a href=\"/privacidade\">Privacy policy</a>.",
-  "fr": "En créant un compte, vous acceptez les <a href=\"/termos\">Conditions d'utilisation</a> et la <a href=\"/privacidade\">Politique de confidentialité</a>.",
-  "es": "Al crear la cuenta aceptas los <a href=\"/termos\">Términos de uso</a> y la <a href=\"/privacidade\">Política de privacidad</a>."
+  "pt": "Ao usar o OAZE, também se aplicam os <a href=\"/termos\">Termos de uso</a>.",
+  "en": "When you use OAZE, the <a href=\"/termos\">Terms of use</a> also apply.",
+  "fr": "En utilisant OAZE, les <a href=\"/termos\">Conditions d'utilisation</a> s'appliquent également.",
+  "es": "Al usar OAZE, también se aplican los <a href=\"/termos\">Términos de uso</a>."
  },
  {
   "pt": "Já tem conta? <a href=\"/entrar\">Entrar</a>",
   "en": "Already have an account? <a href=\"/entrar\">Sign in</a>",
   "fr": "Vous avez déjà un compte ? <a href=\"/entrar\">Se connecter</a>",
   "es": "¿Ya tienes cuenta? <a href=\"/entrar\">Inicia sesión</a>"
+ },
+ {
+  "pt": "Aceite a Política de privacidade para continuar.",
+  "en": "Accept the Privacy policy to continue.",
+  "fr": "Acceptez la Politique de confidentialité pour continuer.",
+  "es": "Acepta la Política de privacidad para continuar."
  },
  {
   "pt": "Abrindo…",

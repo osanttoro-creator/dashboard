@@ -812,9 +812,15 @@
 
        O atraso deixa a interface desenhar antes: um modal sobre a
        tela em branco assusta mais do que informa. */
-    setTimeout(() => {
-      if (global.Ob && Ob.talvezOferecer) Ob.talvezOferecer();
-    }, 700);
+    setTimeout(async () => {
+      try {
+        const autorizado = !global.Consentimento || await Consentimento.garantir();
+        if (autorizado && global.Ob && Ob.talvezOferecer) Ob.talvezOferecer();
+      } catch (e) {
+        console.error('Consentimento/início:', e);
+        UI.toast('Não foi possível verificar a privacidade. Recarregue a página.', 'error', 9000);
+      }
+    }, 0);
   }
 
   global.App = App;

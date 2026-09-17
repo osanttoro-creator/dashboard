@@ -1,6 +1,10 @@
 # Configuração do projeto Supabase.
 project_id = "gxwatircdhhetvzzlwwq"
 
+[auth.hook.before_user_created]
+enabled = true
+uri = "pg-functions://postgres/public/validar_aceite_privacidade"
+
 [functions.oaze-assistant]
 # Deixado LIGADO de propósito. Com verify_jwt ativo, a plataforma
 # valida o JWT antes de o código rodar: quem chega sem sessão leva

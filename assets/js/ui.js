@@ -30,6 +30,9 @@
   UI.openModal = function (opts) {
     const r = root();
     const modal = r.querySelector('.modal');
+    const fechar = r.querySelector('.modal-head [data-close-modal]');
+    r.dataset.locked = opts.locked ? 'true' : 'false';
+    if (fechar) fechar.hidden = !!opts.locked;
     r.querySelector('#modalTitle').textContent = opts.title || '';
     modal.classList.toggle('modal-wide', !!opts.wide);
 
@@ -57,10 +60,14 @@
     }, 40);
   };
 
-  UI.closeModal = function () {
+  UI.closeModal = function (force) {
     const r = root();
     if (r.hidden) return;
+    if (r.dataset.locked === 'true' && force !== true) return;
     r.hidden = true;
+    r.dataset.locked = 'false';
+    const fechar = r.querySelector('.modal-head [data-close-modal]');
+    if (fechar) fechar.hidden = false;
     document.body.style.overflow = '';
     const cb = onCloseCb; onCloseCb = null;
     if (cb) cb();

@@ -42,6 +42,16 @@ exigir(!/const SYSTEM\s*=/.test(cliente),
   'há um prompt de sistema morto ou controlável no navegador');
 exigir(!/api\.openai\.com/.test(cliente),
   'o navegador fala diretamente com a OpenAI');
+exigir(/name:\s*['"]propor_lancamento['"]/.test(funcao) && /strict:\s*true/.test(funcao),
+  'a proposta de lançamento não usa uma ferramenta estrita');
+exigir(/acao_proposta/.test(funcao) && /extrairAcao/.test(funcao),
+  'a saída estruturada não é reconstruída e validada no servidor');
+exigir(!/Store\.transactions\.(add|update)/.test(funcao),
+  'a Edge Function ganhou acesso direto para alterar a carteira');
+exigir(/renderAcaoProposta/.test(cliente) && /Forms\.openTransaction/.test(cliente),
+  'a proposta não passa pelo formulário oficial para revisão');
+exigir(/investimentos:\s*\{/.test(cliente) && /porTipo/.test(cliente),
+  'a carteira de investimentos agregada não acompanha a pergunta');
 
 if (falhas.length) {
   console.error('Contrato OpenAI do UGLEZ quebrado:');
@@ -49,4 +59,4 @@ if (falhas.length) {
   process.exit(1);
 }
 
-console.log('OK — UGLEZ usa a Responses API pelo servidor, sem descrições individuais.');
+console.log('OK — UGLEZ usa a Responses API pelo servidor e só propõe ações revisáveis.');

@@ -39,6 +39,7 @@ const VERIFICACOES = [
   ['tools/testes/navegacao-superior.js', 'navegação superior direta e Planejar visível'],
   ['tools/testes/seo-identidade-tema.js', 'tema persistente, identidade e descoberta pública'],
   ['tools/testes/legal-cookies-acessibilidade.js', 'SLA, privacidade, cookies e acessibilidade publicados'],
+  ['tools/testes/privacidade-cadastro.js', 'privacidade aceita antes do cadastro e do primeiro uso'],
   ['tools/testes/limites-contextuais.js', 'limites só aparecem durante a ação'],
   ['tools/testes/cartoes-integrados.js', 'mesmo baralho na Visão geral, Débito e Crédito'],
   ['tools/testes/sem-provedor-pagamento.js', 'nenhum provedor de pagamento antigo no produto'],

@@ -100,6 +100,7 @@
     const pode = (r) => !!(global.Limites && Limites.pode(r));
     const prof = Store.profile();
     const temMetas = !!(prof && (prof.goals || []).length);
+    const temInvestimentos = !!(prof && (prof.investments || []).length);
 
     /* O resumo do ano e as fixas vão para todos os planos — são
        totais do ano, não comparação entre meses. */
@@ -131,10 +132,18 @@
       icone: 'flag', rotulo: 'Minhas metas', sub: 'Ritmo e quanto falta',
       q: 'Como está o andamento das minhas metas, e no ritmo do ano, quando chego lá?'
     }] : [];
+    const investimentos = [{
+      icone: 'coins',
+      rotulo: temInvestimentos ? 'Menor aporte possível' : 'Começar a investir',
+      sub: temInvestimentos ? 'Sem apertar o restante do mês' : 'Um valor que caiba no orçamento',
+      q: temInvestimentos
+        ? 'Qual é o menor aporte que cabe no meu mês, com base no meu saldo, compromissos e carteira?'
+        : 'Com base no meu saldo e nos compromissos do mês, que valor inicial cabe no orçamento para começar a investir?'
+    }];
 
     const lista = escopo === 'mes'
-      ? doMes.concat(comparar.slice(0, 1), doAno.slice(0, 1), metas)
-      : doAno.concat(comparar, metas, doMes.slice(0, 1));
+      ? investimentos.concat(doMes, comparar.slice(0, 1), doAno.slice(0, 1), metas)
+      : investimentos.concat(doAno, comparar, metas, doMes.slice(0, 1));
     return lista.slice(0, 4);
   };
 
