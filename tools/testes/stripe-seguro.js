@@ -17,7 +17,11 @@ const precos = ler('assets/js/pages/precos.js');
 
 exige(/from\('plan_prices'\)/.test(pagamento), 'oaze-pagamento não lê o preço de plan_prices');
 exige(!/corpo\.(centavos|valor|preco|moeda)/.test(pagamento), 'oaze-pagamento aceita valor do navegador');
-exige(/new Set\(\['acao', 'plano', 'ciclo'\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
+/* A lista de campos aceitos continua explícita; o cupom entrou nela
+   (código, nunca valor). Qualquer outro campo continua recusado. */
+exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'cupom')?\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
+exige(/new Set\(\['acao', 'plano', 'ciclo', 'codigo'\]\)/.test(pagamento), 'a consulta de cupom aceita campos extras');
+exige(/cupom:minuto/.test(pagamento), 'a consulta de cupom não tem limite próprio contra tentativa e erro');
 exige(/mode', 'subscription'/.test(pagamento), 'Checkout não está em modo de assinatura');
 exige(pagamento.includes('checkout\\.stripe\\.com') && precos.includes('checkout\\.stripe\\.com'), 'redirecionamento não restringe o host da Stripe');
 exige(!/from\('subscriptions'\)\.(insert|upsert)/.test(pagamento), 'checkout libera plano sem webhook');

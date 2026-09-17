@@ -49,9 +49,69 @@ function siteUrl(): string | null {
 
 function corpoPermitido(corpo: unknown, acao: string): boolean {
   if (!corpo || typeof corpo !== 'object' || Array.isArray(corpo)) return false;
-  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo']) : new Set(['acao']);
+  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'cupom'])
+    : acao === 'cupom' ? new Set(['acao', 'plano', 'ciclo', 'codigo'])
+      : new Set(['acao']);
   return Object.keys(corpo as Record<string, unknown>).every((k) => permitidos.has(k));
 }
+
+/* =============================================================
+   CUPOM DE DESCONTO
+   -------------------------------------------------------------
+   O cupom é criado no painel da Stripe (Produtos → Cupons → código
+   promocional). O OAZE não guarda cupom nenhum: pergunta à Stripe se
+   o código existe e vale, e mostra o preço com desconto ANTES de
+   mandar a pessoa para o pagamento. No Checkout, o desconto vai pelo
+   id do código promocional — a Stripe aplica e registra o uso.
+
+   O preço de tabela (unit_amount) não muda com o cupom, então a
+   conciliação do webhook, que compara esse valor com a intenção,
+   continua valendo sem exceção.
+
+   Descobrir códigos por tentativa é o risco óbvio: por isso a
+   consulta tem limite próprio, mais apertado que o do pagamento, e a
+   resposta de "não existe" é a mesma para expirado, esgotado ou
+   inexistente.
+   ============================================================= */
+type Cupom = { id: string; codigo: string; descricao: string; centavosPrimeira: number };
+
+async function buscarCupom(codigo: string, centavos: number): Promise<Cupom | null> {
+  const lista = await stripe('GET', '/promotion_codes?limit=1&active=true&code=' + encodeURIComponent(codigo));
+  const pc = lista?.data?.[0];
+  if (!pc?.id || pc.active !== true) return null;
+  if (pc.expires_at && pc.expires_at * 1000 < Date.now()) return null;
+  if (pc.max_redemptions && pc.times_redeemed >= pc.max_redemptions) return null;
+
+  /* Versões novas da API guardam o cupom em promotion.coupon, e às
+     vezes só o id: nesse caso ele é buscado. */
+  let cupom: any = pc.coupon ?? pc.promotion?.coupon;
+  if (typeof cupom === 'string') cupom = await stripe('GET', '/coupons/' + encodeURIComponent(cupom));
+  if (!cupom?.id || cupom.valid === false) return null;
+
+  const minimo = pc.restrictions?.minimum_amount;
+  if (minimo && String(pc.restrictions?.minimum_amount_currency || '').toLowerCase() === 'brl' && centavos < minimo) return null;
+
+  let centavosPrimeira = centavos;
+  let desconto = '';
+  if (Number(cupom.percent_off) > 0) {
+    const pct = Math.min(100, Number(cupom.percent_off));
+    centavosPrimeira = Math.max(0, Math.round(centavos * (1 - pct / 100)));
+    desconto = String(pct).replace('.', ',') + '% de desconto';
+  } else if (Number(cupom.amount_off) > 0) {
+    if (String(cupom.currency || '').toLowerCase() !== 'brl') return null;
+    centavosPrimeira = Math.max(0, centavos - Number(cupom.amount_off));
+    desconto = 'R$ ' + (Number(cupom.amount_off) / 100).toFixed(2).replace('.', ',') + ' de desconto';
+  } else {
+    return null;
+  }
+  const quando = cupom.duration === 'forever' ? 'em todas as cobranças'
+    : cupom.duration === 'repeating' && cupom.duration_in_months
+      ? 'nos primeiros ' + cupom.duration_in_months + (cupom.duration_in_months === 1 ? ' mês' : ' meses')
+      : 'na primeira cobrança';
+  return { id: pc.id, codigo: String(pc.code || codigo), descricao: desconto + ' ' + quando, centavosPrimeira };
+}
+
+const codigoValido = (v: unknown) => typeof v === 'string' && /^[A-Za-z0-9_-]{3,40}$/.test(v.trim());
 
 Deno.serve(async (req: Request) => {
   const origem = req.headers.get('Origin');
@@ -107,7 +167,7 @@ Deno.serve(async (req: Request) => {
   let corpo: Record<string, unknown> = {};
   try { corpo = await req.json(); } catch { /* validado abaixo */ }
   const acao = typeof corpo.acao === 'string' ? corpo.acao : '';
-  if (!['assinar', 'cancelar'].includes(acao) || !corpoPermitido(corpo, acao)) {
+  if (!['assinar', 'cancelar', 'cupom'].includes(acao) || !corpoPermitido(corpo, acao)) {
     return json({ erro: 'acao', mensagem: 'Ação inválida.' }, 400, origem);
   }
 
@@ -145,6 +205,30 @@ Deno.serve(async (req: Request) => {
       return json({ erro: 'plano', mensagem: 'Plano inválido.' }, 400, origem);
     }
 
+    if (acao === 'cupom') {
+      if (!codigoValido(corpo.codigo)) {
+        return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom não existe ou não vale mais.' }, 200, origem);
+      }
+      const minuto = await reservarRateLimit(admin, 'cupom:minuto', usuario.id, 5, 60);
+      const hora = await reservarRateLimit(admin, 'cupom:hora', usuario.id, 20, 3600);
+      if (!minuto.permitido || !hora.permitido) {
+        return json({ erro: 'limite', mensagem: 'Muitas tentativas de cupom. Espere um pouco e tente de novo.' }, 429, origem,
+          { 'Retry-After': String(!minuto.permitido ? minuto.tentarEm : hora.tentarEm) });
+      }
+      const { data: precoCupom } = await admin.from('plan_prices')
+        .select('centavos,moeda').eq('plan_id', plano).eq('ciclo', ciclo).eq('vigente', true).maybeSingle();
+      if (!precoCupom || precoCupom.moeda !== 'BRL') {
+        return json({ erro: 'indisponivel', mensagem: 'Plano indisponível no momento.' }, 503, origem);
+      }
+      const achado = await buscarCupom(String(corpo.codigo).trim(), precoCupom.centavos);
+      log(achado ? 'cupom_valido' : 'cupom_recusado', { plano, ciclo });
+      if (!achado) return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom não existe ou não vale mais.' }, 200, origem);
+      return json({
+        ok: true, codigo: achado.codigo, descricao: achado.descricao,
+        centavos: precoCupom.centavos, centavosPrimeira: achado.centavosPrimeira
+      }, 200, origem);
+    }
+
     const vigente = atual && atual.plan_id !== 'free'
       && ['active', 'past_due'].includes(atual.status) && !atual.cancel_at_period_end
       && (!atual.current_period_end || new Date(atual.current_period_end) > new Date());
@@ -163,12 +247,24 @@ Deno.serve(async (req: Request) => {
       return json({ erro: 'indisponivel', mensagem: 'Plano indisponível no momento.' }, 503, origem);
     }
 
+    /* Cupom: validado de novo aqui — o que o navegador mostrou antes
+       não vale como prova. Cupom que deixou de valer entre a tela e o
+       clique volta como erro, e nada é cobrado. */
+    let cupom: Cupom | null = null;
+    if (corpo.cupom !== undefined && corpo.cupom !== null && corpo.cupom !== '') {
+      if (!codigoValido(corpo.cupom)) {
+        return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom não existe ou não vale mais.' }, 400, origem);
+      }
+      cupom = await buscarCupom(String(corpo.cupom).trim(), preco.centavos);
+      if (!cupom) return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom deixou de valer. Nada foi cobrado.' }, 400, origem);
+    }
+
     const { data: pendentes } = await admin.from('stripe_intencoes')
       .select('id,price_id,checkout_session_id,created_at')
       .eq('user_id', usuario.id).eq('status', 'aguardando');
     for (const p of pendentes ?? []) {
       const recente = Date.now() - new Date(p.created_at).getTime() < 30 * 60 * 1000;
-      if (recente && p.price_id === preco.id && p.checkout_session_id) {
+      if (!cupom && recente && p.price_id === preco.id && p.checkout_session_id) {
         const sessao = await stripe('GET', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id));
         if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))) {
           return json({ ok: true, url: sessao.url }, 200, origem);
@@ -201,10 +297,17 @@ Deno.serve(async (req: Request) => {
     parametros.set('subscription_data[metadata][oaze_intencao_id]', intencao.id);
     parametros.set('subscription_data[metadata][oaze_plan_id]', plano);
     parametros.set('subscription_data[metadata][oaze_price_id]', preco.id);
+    if (cupom) {
+      parametros.set('discounts[0][promotion_code]', cupom.id);
+      parametros.set('metadata[oaze_cupom]', cupom.codigo);
+    } else {
+      /* sem cupom no app, a página da Stripe ainda aceita um */
+      parametros.set('allow_promotion_codes', 'true');
+    }
 
     let sessao: any;
     try {
-      sessao = await stripe('POST', '/checkout/sessions', parametros, 'checkout-' + intencao.id);
+      sessao = await stripe('POST', '/checkout/sessions', parametros, 'checkout-' + intencao.id + (cupom ? '-' + cupom.id : ''));
     } catch (e) {
       await admin.from('stripe_intencoes').update({ status: 'falhou', updated_at: new Date().toISOString() })
         .eq('id', intencao.id);

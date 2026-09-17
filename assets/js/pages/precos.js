@@ -214,14 +214,90 @@
     const aviso = el('p', { class: 'hint', role: 'status', style: { minHeight: '18px' } });
     const diz = (t, erro) => { aviso.textContent = t || ''; aviso.style.color = erro ? 'var(--critical)' : ''; };
 
+    /* ============================================================
+       CUPOM DE DESCONTO
+       ------------------------------------------------------------
+       Fechado por padrão: um campo de cupom aberto para todo mundo
+       ensina quem não tem um a sair da página para procurar. Quem tem,
+       toca em "Tenho um cupom". O servidor pergunta à Stripe se o
+       código vale e devolve o preço com desconto; o preço cheio fica
+       riscado ao lado, para ninguém ter dúvida do que vai pagar.
+       ============================================================ */
+    let cupomAplicado = null;
+    const precoTexto = el('strong', { text: valor });
+    const precoAntigo = el('s', { class: 'cupom-antigo', hidden: true });
+    const campoCupom = el('input', {
+      class: 'input', type: 'text', maxlength: '40', autocomplete: 'off',
+      autocapitalize: 'characters', spellcheck: 'false', placeholder: 'Código do cupom',
+      'aria-label': 'Código do cupom de desconto'
+    });
+    const avisoCupom = el('p', { class: 'hint', role: 'status' });
+    const botaoAplicar = el('button', { class: 'btn btn-outline btn-sm', type: 'button', text: 'Aplicar' });
+    const caixaCupom = el('div', { class: 'cupom-caixa', hidden: true }, [
+      el('div', { class: 'cupom-linha' }, [campoCupom, botaoAplicar]), avisoCupom
+    ]);
+    const abrirCupom = el('button', {
+      class: 'link-btn cupom-abrir', type: 'button', text: 'Tenho um cupom de desconto',
+      onclick: () => { abrirCupom.hidden = true; caixaCupom.hidden = false; campoCupom.focus(); }
+    });
+
+    function tirarCupom() {
+      cupomAplicado = null;
+      precoTexto.textContent = valor;
+      precoAntigo.hidden = true;
+      botaoAplicar.textContent = 'Aplicar';
+      campoCupom.disabled = false;
+    }
+
+    async function aplicarCupom() {
+      if (cupomAplicado) { tirarCupom(); avisoCupom.textContent = 'Cupom removido.'; campoCupom.focus(); return; }
+      const codigo = campoCupom.value.trim().toUpperCase();
+      avisoCupom.style.color = '';
+      if (!/^[A-Z0-9_-]{3,40}$/.test(codigo)) {
+        avisoCupom.textContent = 'Digite o código como recebeu, sem espaços.';
+        avisoCupom.style.color = 'var(--critical)';
+        return;
+      }
+      botaoAplicar.disabled = true;
+      avisoCupom.textContent = 'Conferindo o cupom…';
+      try {
+        const r = await Conta.chamarFuncao('oaze-pagamento', { acao: 'cupom', plano: plano.id, ciclo, codigo });
+        if (r.ok === true && Number.isInteger(r.centavosPrimeira)) {
+          cupomAplicado = r.codigo || codigo;
+          campoCupom.value = cupomAplicado;
+          campoCupom.disabled = true;
+          botaoAplicar.textContent = 'Remover';
+          precoAntigo.textContent = valor;
+          precoAntigo.hidden = false;
+          precoTexto.textContent = Planos.moeda(r.centavosPrimeira) + (ciclo === 'annual' ? ' no primeiro ano' : ' no primeiro mês');
+          avisoCupom.textContent = '✓ ' + cupomAplicado + ': ' + (r.descricao || 'desconto aplicado') + '.';
+          avisoCupom.style.color = 'var(--good-text)';
+        } else {
+          avisoCupom.textContent = r.mensagem || 'Esse cupom não existe ou não vale mais.';
+          avisoCupom.style.color = 'var(--critical)';
+        }
+      } catch (e) {
+        avisoCupom.textContent = 'Não foi possível conferir o cupom agora.';
+        avisoCupom.style.color = 'var(--critical)';
+      }
+      botaoAplicar.disabled = false;
+    }
+    botaoAplicar.addEventListener('click', aplicarCupom);
+    campoCupom.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') { ev.preventDefault(); aplicarCupom(); }
+    });
+
     let enviando = false;
     UI.openModal({
       title: 'Assinar o ' + plano.nome,
+      noAutofocus: true,
       body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
         el('p', {}, [
-          el('strong', { text: valor }),
+          precoTexto, document.createTextNode(' '), precoAntigo,
           el('span', { text: ', no cartão de crédito. Renova sozinho; cancele quando quiser em Configurações.' })
         ]),
+        abrirCupom,
+        caixaCupom,
         el('p', { class: 'hint', style: { marginTop: '8px' },
           text: 'Você informa os dados de pagamento na página segura da Stripe. Número do cartão e código de segurança não passam pelo OAZE.' }),
         aviso
@@ -235,9 +311,9 @@
             enviando = true;
             diz('Preparando o pagamento…');
             try {
-              const r = await Conta.chamarFuncao('oaze-pagamento', {
-                acao: 'assinar', plano: plano.id, ciclo
-              });
+              const pedido = { acao: 'assinar', plano: plano.id, ciclo };
+              if (cupomAplicado) pedido.cupom = cupomAplicado;
+              const r = await Conta.chamarFuncao('oaze-pagamento', pedido);
               if (r.ok === true && /^https:\/\/checkout\.stripe\.com\//.test(r.url || '')) {
                 diz('Abrindo o pagamento seguro…');
                 location.assign(r.url);
