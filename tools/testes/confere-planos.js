@@ -75,6 +75,22 @@ const ESPERADO = {
   }
 };
 
+/* ---- retrato da tabela internacional, em 2026-09-17 ----
+   (migração 20260917130000_precos_internacionais)
+
+     select plan_id, ciclo, moeda, centavos from plan_prices
+      where moeda <> 'BRL' order by 1, 3, 2;
+
+   Estas linhas nascem com vigente = false e só passam a valer depois
+   que a função oaze-pagamento nova estiver no ar (ver a migração
+   20260917140000). O preço, porém, já é este — e é este que as
+   páginas em inglês, francês e espanhol anunciam. */
+const INTERNACIONAL = {
+  free:  { USD: { mensal: 0, anual: 0 },      EUR: { mensal: 0, anual: 0 } },
+  basic: { USD: { mensal: 399, anual: 3499 }, EUR: { mensal: 399, anual: 3499 } },
+  pro:   { USD: { mensal: 799, anual: 6999 }, EUR: { mensal: 799, anual: 6999 } }
+};
+
 /* ---- carrega o config do navegador ---- */
 const ctx = { window: {}, console };
 ctx.global = ctx;
@@ -95,6 +111,20 @@ Object.keys(ESPERADO).forEach((id) => {
   ok(id + ' · nome', js.nome === db.nome, js.nome + ' vs ' + db.nome);
   ok(id + ' · preço mensal', js.mensalCentavos === db.mensal, js.mensalCentavos + ' vs ' + db.mensal);
   ok(id + ' · preço anual', js.anualCentavos === db.anual, js.anualCentavos + ' vs ' + db.anual);
+
+  /* A tabela internacional entrou em 17/09/2026 (migração
+     20260917130000). O retrato do banco vive em INTERNACIONAL, logo
+     abaixo de ESPERADO: mudar o preço em dólar só no JS deixa a
+     página anunciando um valor que a Stripe não vai cobrar. */
+  const inter = INTERNACIONAL[id];
+  Object.keys(inter).forEach((moeda) => {
+    ok(id + ' · preço mensal em ' + moeda,
+      P.preco(js, 'monthly', moeda) === inter[moeda].mensal,
+      P.preco(js, 'monthly', moeda) + ' vs ' + inter[moeda].mensal);
+    ok(id + ' · preço anual em ' + moeda,
+      P.preco(js, 'annual', moeda) === inter[moeda].anual,
+      P.preco(js, 'annual', moeda) + ' vs ' + inter[moeda].anual);
+  });
 
   Object.keys(db.limites).forEach((k) => {
     const a = js.limites[k], b = db.limites[k];

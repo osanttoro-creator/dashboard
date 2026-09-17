@@ -34,10 +34,14 @@ const RAIZ = path.join(__dirname, '..');
 const DIC = path.join(RAIZ, 'i18n', 'site');
 const SITE = 'https://oaze.site';
 
+/* Cada língua vem com a moeda em que aquele público compra. O
+   espanhol paga em dólar porque quase todo o público de língua
+   espanhola do OAZE está na América Latina; a Espanha é a exceção que
+   o seletor dentro do app resolve em um clique. */
 const IDIOMAS = {
-  en: { html: 'en', og: 'en_US', nome: 'English' },
-  fr: { html: 'fr', og: 'fr_FR', nome: 'Français' },
-  es: { html: 'es', og: 'es_ES', nome: 'Español' }
+  en: { html: 'en', og: 'en_US', nome: 'English', moeda: 'USD' },
+  fr: { html: 'fr', og: 'fr_FR', nome: 'Français', moeda: 'EUR' },
+  es: { html: 'es', og: 'es_ES', nome: 'Español', moeda: 'USD' }
 };
 
 /* página → caminho público (sem .html) */
@@ -268,6 +272,109 @@ function caminhoTraduzido(lang, rota) {
   return '/' + lang + rota;
 }
 
+/* ---------------------------------------------------------------
+   5b · o preço na moeda daquela língua
+   ---------------------------------------------------------------
+   A tradução do texto vem do dicionário; o PREÇO não. Ele é trocado
+   aqui, depois de traduzido, a partir de assets/js/planos.js — a
+   mesma fonte que o app usa. Assim ninguém precisa lembrar de mexer
+   em doze dicionários quando o preço mudar: muda em planos.js,
+   regera, e as três línguas vêm juntas.
+
+   E não é conversão: US$ 3.99 não é R$ 14,90 no câmbio de hoje, é o
+   preço escrito para aquele mercado (ver o comentário em planos.js).
+   --------------------------------------------------------------- */
+let PLANOS_CACHE = null;
+function planos() {
+  if (!PLANOS_CACHE) {
+    const janela = {};
+    new Function('window', fs.readFileSync(path.join(RAIZ, 'assets/js/planos.js'), 'utf8'))(janela);
+    if (!janela.Planos) throw new Error('planos.js não expôs window.Planos');
+    PLANOS_CACHE = janela.Planos;
+  }
+  return PLANOS_CACHE;
+}
+
+/* Todo texto em real que pode aparecer numa página pública, com o que
+   ele vira na moeda de destino. Do mais longo para o mais curto: "R$
+   149,90" tem de ser trocado antes que qualquer regra mais curta
+   encoste nele. */
+function trocasDePreco(moeda) {
+  const P = planos();
+  const pares = new Map();
+  /* Zero fica de fora: "R$ 0,00" não é preço de plano nenhum (o
+     grátis aparece como "R$ 0", logo abaixo), e aparece no texto como
+     exemplo — "o UGLEZ não preenche o vazio com R$ 0,00 num ano". Isso
+     é fala do app, que é em português, e não deve virar dólar. */
+  const par = (centavos, alvo) => {
+    if (!centavos) return;
+    pares.set(P.moeda(centavos, 'BRL'), P.moeda(alvo, moeda));
+  };
+  for (const p of P.LISTA) {
+    for (const ciclo of ['monthly', 'annual']) {
+      par(P.preco(p, ciclo, 'BRL'), P.preco(p, ciclo, moeda));
+    }
+    par(P.mensalEquivalente(p, 'BRL'), P.mensalEquivalente(p, moeda));
+    par(P.economiaAnual(p, 'BRL'), P.economiaAnual(p, moeda));
+    par(p.mensalCentavos * 12, P.preco(p, 'monthly', moeda) * 12);
+  }
+  pares.set(P.gratis('BRL'), P.gratis(moeda));
+  return [...pares.entries()].sort((a, b) => b[0].length - a[0].length);
+}
+
+const escaparRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function comPrecoDaMoeda(html, lang) {
+  const moeda = IDIOMAS[lang].moeda;
+  const P = planos();
+  let saida = html;
+  /* A lupa para no fim do número: sem isso, "R$ 0" (o plano grátis)
+     entraria no meio de "R$ 0,00" e "R$ 14,90" no meio de um valor
+     maior da tela de demonstração. */
+  for (const [real, outra] of trocasDePreco(moeda)) {
+    saida = saida.replace(new RegExp(escaparRegex(real) + '(?![\\d.,])', 'g'), outra);
+  }
+
+  /* O selo do botão "Anual" é um arredondamento, e o desconto anual
+     de fora é maior que o do Brasil (o mercado de lá compra assim).
+     Deixar "−16%" numa página que dá 27% seria prometer menos do que
+     se entrega — e mesmo isso é mentira. Arredonda para baixo e usa o
+     MENOR desconto entre os planos, como manda o selo em português. */
+  const descontos = P.LISTA
+    .filter((p) => P.preco(p, 'monthly', moeda) > 0)
+    .map((p) => P.economiaAnual(p, moeda) / (P.preco(p, 'monthly', moeda) * 12));
+  if (descontos.length) {
+    const menor = Math.floor(Math.min.apply(null, descontos) * 100);
+    saida = saida.replace(/(class="economia">[^\d<]*)\d+(%)/g, '$1' + menor + '$2');
+  }
+
+  /* JSON-LD: o buscador lê o preço daqui, não do texto. Nada de
+     "priceCurrency: BRL" numa página que anuncia dólar. */
+  saida = saida.replace(/"price":\s*"([\d.]+)",(\s*)"priceCurrency":\s*"BRL"/g, (tudo, valor, espaco) => {
+    const centavos = Math.round(parseFloat(valor) * 100);
+    const plano = P.LISTA.find((p) => p.mensalCentavos === centavos);
+    if (!plano) return tudo;
+    const novo = (P.preco(plano, 'monthly', moeda) / 100).toFixed(2);
+    return '"price": "' + novo + '",' + espaco + '"priceCurrency": "' + moeda + '"';
+  });
+  return saida;
+}
+
+/* PREÇO DE PLANO em real numa página que não é em português é erro de
+   geração: é um valor que aquela pessoa não vai poder pagar.
+
+   Os outros valores em real da página inicial — extrato, saldos, a
+   tela de demonstração — ficam como estão de propósito. São a foto de
+   um app que é em português; trocar o símbolo deles daria a entender
+   que existe uma versão do aplicativo em dólar, e não existe. */
+function precoEmRealQueSobrou(html, moeda) {
+  const sobrando = trocasDePreco(moeda)
+    .map(([real]) => real)
+    .filter((real) => new RegExp(escaparRegex(real) + '(?![\\d.,])').test(html));
+  if (/"priceCurrency":\s*"BRL"/.test(html)) sobrando.push('priceCurrency BRL no JSON-LD');
+  return [...new Set(sobrando)];
+}
+
 function reescreverLinks(html, lang) {
   /* href interno de página pública → versão no idioma. Assets, app,
      âncoras e externos ficam como estão. O seletor de idioma marca
@@ -277,6 +384,12 @@ function reescreverLinks(html, lang) {
     const [base, resto] = href.split(/(?=[#?])/);
     if (base === '/') return a + '/' + lang + '/' + (resto || '') + b;
     if (ROTAS.includes(base)) return a + '/' + lang + base + (resto || '') + b;
+    /* O app é um só, em português. O que ele precisa saber de quem
+       veio do /en é a moeda: sem isso, a pessoa lê US$ 7.99 na página
+       e encontra R$ 29,90 na hora de assinar. */
+    if (base === '/app/planos' && !resto) {
+      return a + base + '?moeda=' + IDIOMAS[lang].moeda.toLowerCase() + b;
+    }
     return tudo;
   });
 }
@@ -399,6 +512,7 @@ function extrair() {
 function gerar(soConferir) {
   const faltas = new Set();
   const diferentes = [];
+  const reaisPerdidos = [];
   for (const pagina of Object.keys(PAGINAS)) {
     const rota = PAGINAS[pagina];
     /* a portuguesa ganha (ou mantém) os hreflang */
@@ -409,7 +523,9 @@ function gerar(soConferir) {
 
     const dic = mapaDoDic(lerDic(pagina));
     for (const lang of Object.keys(IDIOMAS)) {
-      const html = comSeletor(comHreflang(aplicar(pagina, lang, dic, faltas), rota), rota, lang);
+      const html = comPrecoDaMoeda(comSeletor(comHreflang(aplicar(pagina, lang, dic, faltas), rota), rota, lang), lang);
+      const sobrou = precoEmRealQueSobrou(html, IDIOMAS[lang].moeda);
+      if (sobrou.length) reaisPerdidos.push(lang + '/' + pagina + ': ' + sobrou.join(', '));
       const destino = path.join(RAIZ, lang, pagina);
       const atual = fs.existsSync(destino) ? fs.readFileSync(destino, 'utf8') : null;
       if (atual !== html) {
@@ -418,7 +534,7 @@ function gerar(soConferir) {
       }
     }
   }
-  return { faltas: [...faltas], diferentes };
+  return { faltas: [...faltas], diferentes, reaisPerdidos };
 }
 
 const arg = process.argv[2];
@@ -434,11 +550,19 @@ if (arg === '--extrair') {
     console.log('\n  gerado desatualizado (rode node tools/gen-idiomas.js):');
     r.diferentes.forEach((f) => console.log('    - ' + f));
   }
-  if (r.faltas.length || r.diferentes.length) process.exit(1);
-  console.log('OK — en, fr e es completos e em dia com o português.');
+  if (r.reaisPerdidos.length) {
+    console.log('\n  preço em real numa página que não é em português:');
+    r.reaisPerdidos.forEach((f) => console.log('    - ' + f));
+  }
+  if (r.faltas.length || r.diferentes.length || r.reaisPerdidos.length) process.exit(1);
+  console.log('OK — en, fr e es completos, em dia com o português e com o preço da moeda certa.');
 } else {
   const r = gerar(false);
   console.log('gerado: ' + Object.keys(IDIOMAS).join(', ') + (r.faltas.length ? ' — ' + r.faltas.length + ' trecho(s) ficaram em português' : ''));
+  if (r.reaisPerdidos.length) {
+    console.log('ATENÇÃO — preço em real sobrou fora do português:');
+    r.reaisPerdidos.forEach((f) => console.log('    - ' + f));
+  }
 }
 
 module.exports = { trechos, paraChave };

@@ -67,6 +67,7 @@
       moeda: 'BRL',
       mensalCentavos: 0,
       anualCentavos: 0,
+      internacional: { USD: { mensal: 0, anual: 0 }, EUR: { mensal: 0, anual: 0 } },
       destaque: false,
       limites: {
         workspaces: 1,
@@ -100,6 +101,7 @@
       moeda: 'BRL',
       mensalCentavos: 1490,
       anualCentavos: 14990,
+      internacional: { USD: { mensal: 399, anual: 3499 }, EUR: { mensal: 399, anual: 3499 } },
       destaque: true,
       limites: {
         workspaces: 1,
@@ -133,6 +135,7 @@
       moeda: 'BRL',
       mensalCentavos: 2990,
       anualCentavos: 29990,
+      internacional: { USD: { mensal: 799, anual: 6999 }, EUR: { mensal: 799, anual: 6999 } },
       destaque: false,
       limites: {
         workspaces: 5,
@@ -210,14 +213,84 @@
   Planos.get = (id) => Planos.LISTA.find((p) => p.id === id) || Planos.LISTA[0];
   Planos.IDS = Planos.LISTA.map((p) => p.id);
 
-  /* ---------------- dinheiro ---------------- */
+  /* ============================================================
+     DINHEIRO — E AGORA EM TRÊS MOEDAS
+     ------------------------------------------------------------
+     O site existe em quatro línguas desde 17/09/2026, e cobrar
+     R$ 29,90 de quem chegou pelo /en é vender por US$ 5,50 um
+     produto que os concorrentes de lá cobram a US$ 8 e US$ 15. O
+     preço internacional NÃO é conversão do real: é tabela própria,
+     escrita à mão, com o desconto anual maior que o daqui porque é
+     assim que o mercado de fora compra.
 
-  /** A única função que transforma centavo em texto. */
-  Planos.moeda = function (centavos) {
-    return (centavos / 100).toLocaleString('pt-BR', {
-      style: 'currency', currency: 'BRL',
-      minimumFractionDigits: 2, maximumFractionDigits: 2
-    });
+     Três regras que não podem ser quebradas:
+
+     1. Todo preço internacional é MAIOR que o brasileiro no câmbio
+        do dia (US$ 3,99 ≈ R$ 21, contra R$ 14,90). Isso não é
+        detalhe de marketing: é o que torna seguro deixar qualquer
+        pessoa escolher a moeda sem prova de país nenhuma. Não há
+        arbitragem a fazer — quem escolher dólar paga mais.
+     2. O real continua sendo o preço de tabela do catálogo
+        (mensalCentavos/anualCentavos). Os testes que comparam o JS
+        com o banco olham para ele, e o internacional entra por
+        fora, em `internacional`.
+     3. Quem cobra é o servidor. Estas funções desenham tela; o
+        valor vem sempre de plan_prices, por (plano, ciclo, moeda).
+     ============================================================ */
+
+  Planos.MOEDAS = [
+    { id: 'BRL', rotulo: 'Real (R$)',   simbolo: 'R$', depois: false, decimal: ',', milhar: '.' },
+    { id: 'USD', rotulo: 'Dólar (US$)', simbolo: 'US$', depois: false, decimal: '.', milhar: ',' },
+    { id: 'EUR', rotulo: 'Euro (€)',    simbolo: '€',  depois: true,  decimal: ',', milhar: '.' }
+  ];
+
+  Planos.MOEDA_PADRAO = 'BRL';
+
+  /** A moeda, se ela existir; o real, se vier qualquer outra coisa. */
+  Planos.moedaValida = function (id) {
+    const alvo = String(id || '').toUpperCase();
+    return Planos.MOEDAS.some((m) => m.id === alvo) ? alvo : Planos.MOEDA_PADRAO;
+  };
+
+  /* Países do euro. Quem está fora desta lista e fora do Brasil vê
+     dólar — inclusive Reino Unido e Canadá, que preferem a própria
+     moeda mas entendem um preço em dólar. */
+  const PAISES_EURO = ['AT', 'BE', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR',
+    'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PT', 'SI', 'SK'];
+
+  /**
+   * O palpite inicial, nunca a última palavra: a tela sempre deixa
+   * trocar. Fuso do Brasil vence idioma, porque brasileiro com o
+   * navegador em inglês continua brasileiro.
+   */
+  Planos.moedaSugerida = function () {
+    try {
+      const fuso = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if (/^America\/(Sao_Paulo|Bahia|Fortaleza|Recife|Belem|Manaus|Cuiaba|Campo_Grande|Boa_Vista|Porto_Velho|Rio_Branco|Maceio|Araguaina|Santarem|Noronha|Eirunepe)$/.test(fuso)) return 'BRL';
+      const idiomas = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'pt-BR']);
+      const tag = String(idiomas[0] || '');
+      const regiao = (tag.split('-')[1] || '').toUpperCase();
+      if (regiao === 'BR') return 'BRL';
+      if (PAISES_EURO.indexOf(regiao) >= 0) return 'EUR';
+      if (!regiao && /^pt/i.test(tag)) return 'BRL';
+      return 'USD';
+    } catch (e) {
+      return Planos.MOEDA_PADRAO;
+    }
+  };
+
+  /**
+   * A única função que transforma centavo em texto.
+   * R$ 14,90 · US$ 3.99 · 3,99 € — cada moeda com a pontuação e a
+   * posição de símbolo que o leitor daquele preço espera ver.
+   */
+  Planos.moeda = function (centavos, moeda) {
+    const m = Planos.MOEDAS.find((x) => x.id === Planos.moedaValida(moeda));
+    const inteiro = Math.floor(Math.abs(centavos) / 100);
+    const resto = String(Math.abs(centavos) % 100).padStart(2, '0');
+    const grupos = String(inteiro).replace(/\B(?=(\d{3})+(?!\d))/g, m.milhar);
+    const numero = (centavos < 0 ? '-' : '') + grupos + m.decimal + resto;
+    return m.depois ? numero + ' ' + m.simbolo : m.simbolo + ' ' + numero;
   };
 
   /**
@@ -225,19 +298,32 @@
    * centavo: prometer R$ 12,50 quando a conta dá 12,4916 seria
    * cobrar meio centavo a mais do que o anunciado.
    */
-  Planos.mensalEquivalente = function (plano) {
-    if (!plano.anualCentavos) return 0;
-    return Math.floor(plano.anualCentavos / 12);
+  Planos.mensalEquivalente = function (plano, moeda) {
+    const anual = Planos.preco(plano, 'annual', moeda);
+    if (!anual) return 0;
+    return Math.floor(anual / 12);
   };
 
   /** Quanto o anual economiza frente a doze mensais. */
-  Planos.economiaAnual = function (plano) {
-    if (!plano.anualCentavos || !plano.mensalCentavos) return 0;
-    return (plano.mensalCentavos * 12) - plano.anualCentavos;
+  Planos.economiaAnual = function (plano, moeda) {
+    const anual = Planos.preco(plano, 'annual', moeda);
+    const mensal = Planos.preco(plano, 'monthly', moeda);
+    if (!anual || !mensal) return 0;
+    return (mensal * 12) - anual;
   };
 
-  Planos.preco = function (plano, ciclo) {
-    return ciclo === 'annual' ? plano.anualCentavos : plano.mensalCentavos;
+  /* "R$ 0" e não "R$ 0,00": o plano grátis não tem centavo para
+     mostrar, e o zero redondo é o que a tabela de comparação usa. */
+  Planos.gratis = function (moeda) {
+    const m = Planos.MOEDAS.find((x) => x.id === Planos.moedaValida(moeda));
+    return m.depois ? '0 ' + m.simbolo : m.simbolo + ' 0';
+  };
+
+  Planos.preco = function (plano, ciclo, moeda) {
+    const m = Planos.moedaValida(moeda);
+    if (m === 'BRL') return ciclo === 'annual' ? plano.anualCentavos : plano.mensalCentavos;
+    const tabela = (plano.internacional || {})[m] || { mensal: 0, anual: 0 };
+    return ciclo === 'annual' ? tabela.anual : tabela.mensal;
   };
 
   /* ---------------- leitura de limites ---------------- */

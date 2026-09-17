@@ -4841,3 +4841,19 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 .link-btn:hover { color: var(--ink); }
 .link-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
 .link-btn[hidden] { display: none; }
+
+/* ---- 27.10 · em que moeda a assinatura é cobrada ----
+   Fica ao lado do mensal/anual e some sozinho se um dia a tabela
+   voltar a ter uma moeda só (o JS nem desenha o seletor). */
+.precos-moeda {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 4px; margin-left: 10px;
+}
+.precos-moeda-rotulo { font-size: 12.5px; color: var(--ink-2); }
+.precos-moeda-select {
+  min-height: 34px; padding: 6px 10px; border-radius: 999px;
+  font-size: 13px; font-weight: 560;
+}
+@media (max-width: 520px) {
+  .precos-moeda { margin-left: 0; margin-top: 8px; }
+}

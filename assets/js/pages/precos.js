@@ -24,7 +24,48 @@
 
   let ciclo = 'monthly';
 
+  /* ============================================================
+     EM QUE MOEDA ESTA PESSOA PAGA
+     ------------------------------------------------------------
+     Desde que o site existe em quatro línguas, quem chega por
+     /en/precos e clica em "assinar" cai aqui. O palpite inicial vem,
+     nesta ordem:
+
+       1. ?moeda= na URL — é assim que a página pública em inglês
+          traz a escolha dela junto;
+       2. o que a pessoa já escolheu antes, neste aparelho;
+       3. fuso e idioma do navegador (Planos.moedaSugerida).
+
+     Palpite, não decisão: o seletor ao lado do mensal/anual troca a
+     qualquer momento. E o que a tela mostra não cobra nada — quem
+     cobra é o servidor, que lê o valor de plan_prices pela mesma
+     tripla (plano, ciclo, moeda).
+     ============================================================ */
+  const GAVETA_MOEDA = 'oaze.moeda';
+  let moeda = Planos.MOEDA_PADRAO;
+
+  function moedaInicial() {
+    let daUrl = '';
+    try { daUrl = new URLSearchParams(location.search).get('moeda') || ''; } catch (e) { /* sem URL útil */ }
+    /* Guardar o que veio da URL não é detalhe: a pessoa entrou pelo
+       /en/precos, viu US$ 7.99, e daqui a dois cliques dentro do app
+       a query já não existe mais. Sem guardar, ela voltaria a esta
+       tela em real, sem ter pedido nada. */
+    if (daUrl) { guardarMoeda(daUrl); return moeda; }
+    try {
+      const guardada = localStorage.getItem(GAVETA_MOEDA);
+      if (guardada) return Planos.moedaValida(guardada);
+    } catch (e) { /* aparelho sem armazenamento: segue o palpite */ }
+    return Planos.moedaSugerida();
+  }
+
+  function guardarMoeda(nova) {
+    moeda = Planos.moedaValida(nova);
+    try { localStorage.setItem(GAVETA_MOEDA, moeda); } catch (e) { /* palpite por sessão, e tudo bem */ }
+  }
+
   Precos.render = function () {
+    moeda = moedaInicial();
     wire();
     cards();
     tabela();
@@ -47,6 +88,47 @@
         cards();
       });
     });
+    seletorDeMoeda();
+    seloDoAnual();
+  }
+
+  /* O selo do botão "Anual" vinha fixo no HTML: "2 meses grátis". Isso
+     é o desconto do real (16%) — em dólar e em euro o anual desconta
+     27%, quase três meses e meio. Um selo que promete menos do que
+     entrega ainda é um selo errado, e um que promete mais é pior.
+     Daqui em diante ele é calculado, arredondado para baixo e pelo
+     MENOR desconto entre os planos, porque o botão é um só. */
+  function seloDoAnual() {
+    const selo = document.querySelector('.ciclo-btn[data-ciclo="annual"] .ciclo-selo');
+    if (!selo) return;
+    const descontos = Planos.LISTA
+      .filter((p) => Planos.preco(p, 'monthly', moeda) > 0)
+      .map((p) => Planos.economiaAnual(p, moeda) / (Planos.preco(p, 'monthly', moeda) * 12));
+    if (!descontos.length) { selo.hidden = true; return; }
+    selo.hidden = false;
+    selo.textContent = '−' + Math.floor(Math.min.apply(null, descontos) * 100) + '%';
+  }
+
+  /* O seletor nasce em JS, ao lado do mensal/anual: assim ele não
+     existe em nenhuma tela que não tenha planos, e some junto com
+     ela. Só aparece porque há mais de uma moeda na tabela. */
+  function seletorDeMoeda() {
+    const grupo = document.querySelector('.precos-ciclo');
+    if (!grupo || grupo.parentNode.querySelector('.precos-moeda')) return;
+    if (Planos.MOEDAS.length < 2) return;
+
+    const select = el('select', {
+      class: 'select precos-moeda-select', 'aria-label': 'Moeda da cobrança',
+      onchange: () => { guardarMoeda(select.value); seloDoAnual(); cards(); }
+    }, Planos.MOEDAS.map((m) => el('option', { value: m.id, text: m.rotulo })));
+    select.value = moeda;
+
+    grupo.parentNode.insertBefore(
+      el('div', { class: 'precos-moeda' }, [
+        el('span', { class: 'precos-moeda-rotulo', text: 'Pagar em' }), select
+      ]),
+      grupo.nextSibling
+    );
   }
 
   /* ---------------- os três cartões ---------------- */
@@ -59,26 +141,26 @@
     const logado = !!(global.Sync && Sync.currentUser());
 
     Planos.LISTA.forEach((p) => {
-      const centavos = Planos.preco(p, ciclo);
+      const centavos = Planos.preco(p, ciclo, moeda);
       const eAtual = p.id === atual && logado;
 
       const preco = el('div', { class: 'plano-preco' });
       if (centavos === 0) {
-        preco.appendChild(el('span', { class: 'plano-valor', text: 'R$ 0' }));
+        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.gratis(moeda) }));
         preco.appendChild(el('span', { class: 'plano-periodo', text: 'para sempre' }));
       } else if (ciclo === 'annual') {
         /* No anual, o número grande é o mensal equivalente: é ele
            que a pessoa compara com o plano mensal. O valor cobrado
            vem logo abaixo, sem letra miúda. */
-        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(Planos.mensalEquivalente(p)) }));
+        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(Planos.mensalEquivalente(p, moeda), moeda) }));
         preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
-        preco.appendChild(el('p', { class: 'plano-cobranca', text: Planos.moeda(centavos) + ' cobrados uma vez por ano' }));
-        const eco = Planos.economiaAnual(p);
+        preco.appendChild(el('p', { class: 'plano-cobranca', text: Planos.moeda(centavos, moeda) + ' cobrados uma vez por ano' }));
+        const eco = Planos.economiaAnual(p, moeda);
         if (eco > 0) {
-          preco.appendChild(el('p', { class: 'plano-economia', text: 'Economia de ' + Planos.moeda(eco) + ' por ano' }));
+          preco.appendChild(el('p', { class: 'plano-economia', text: 'Economia de ' + Planos.moeda(eco, moeda) + ' por ano' }));
         }
       } else {
-        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(centavos) }));
+        preco.appendChild(el('span', { class: 'plano-valor', text: Planos.moeda(centavos, moeda) }));
         preco.appendChild(el('span', { class: 'plano-periodo', text: 'por mês' }));
       }
 
@@ -209,8 +291,8 @@
       return;
     }
 
-    const centavos = Planos.preco(plano, ciclo);
-    const valor = Planos.moeda(centavos) + (ciclo === 'annual' ? ' por ano' : ' por mês');
+    const centavos = Planos.preco(plano, ciclo, moeda);
+    const valor = Planos.moeda(centavos, moeda) + (ciclo === 'annual' ? ' por ano' : ' por mês');
     const aviso = el('p', { class: 'hint', role: 'status', style: { minHeight: '18px' } });
     const diz = (t, erro) => { aviso.textContent = t || ''; aviso.style.color = erro ? 'var(--critical)' : ''; };
 
@@ -261,7 +343,7 @@
       botaoAplicar.disabled = true;
       avisoCupom.textContent = 'Conferindo o cupom…';
       try {
-        const r = await Conta.chamarFuncao('oaze-pagamento', { acao: 'cupom', plano: plano.id, ciclo, codigo });
+        const r = await Conta.chamarFuncao('oaze-pagamento', { acao: 'cupom', plano: plano.id, ciclo, moeda, codigo });
         if (r.ok === true && Number.isInteger(r.centavosPrimeira)) {
           cupomAplicado = r.codigo || codigo;
           campoCupom.value = cupomAplicado;
@@ -269,7 +351,7 @@
           botaoAplicar.textContent = 'Remover';
           precoAntigo.textContent = valor;
           precoAntigo.hidden = false;
-          precoTexto.textContent = Planos.moeda(r.centavosPrimeira) + (ciclo === 'annual' ? ' no primeiro ano' : ' no primeiro mês');
+          precoTexto.textContent = Planos.moeda(r.centavosPrimeira, moeda) + (ciclo === 'annual' ? ' no primeiro ano' : ' no primeiro mês');
           avisoCupom.textContent = '✓ ' + cupomAplicado + ': ' + (r.descricao || 'desconto aplicado') + '.';
           avisoCupom.style.color = 'var(--good-text)';
         } else {
@@ -300,6 +382,11 @@
         caixaCupom,
         el('p', { class: 'hint', style: { marginTop: '8px' },
           text: 'Você informa os dados de pagamento na página segura da Stripe. Número do cartão e código de segurança não passam pelo OAZE.' }),
+        /* Quem paga em dólar ou euro com cartão brasileiro vê no
+           extrato um valor maior que o anunciado — IOF e spread do
+           banco. Dizer isso antes é mais barato que explicar depois. */
+        moeda === 'BRL' ? null : el('p', { class: 'hint', style: { marginTop: '4px' },
+          text: 'Cobrança internacional: seu banco pode somar imposto e taxa de câmbio ao valor acima.' }),
         aviso
       ]),
       buttons: [
@@ -311,7 +398,7 @@
             enviando = true;
             diz('Preparando o pagamento…');
             try {
-              const pedido = { acao: 'assinar', plano: plano.id, ciclo };
+              const pedido = { acao: 'assinar', plano: plano.id, ciclo, moeda };
               if (cupomAplicado) pedido.cupom = cupomAplicado;
               const r = await Conta.chamarFuncao('oaze-pagamento', pedido);
               if (r.ok === true && /^https:\/\/checkout\.stripe\.com\//.test(r.url || '')) {

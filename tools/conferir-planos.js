@@ -67,6 +67,39 @@ for (const id of ['basic', 'pro']) {
   }
 }
 
+/* ---- 1a · o mesmo, nas páginas em outras línguas ----
+   Desde 17/09/2026 o site vende em dólar e em euro. As páginas de
+   /en, /fr e /es são geradas, mas "gerado" não quer dizer "certo": um
+   erro na troca de preço publica um valor que a Stripe não vai cobrar.
+   Aqui a conferência é a mesma de cima, na moeda de cada idioma. */
+const MOEDA_DO_IDIOMA = { en: 'USD', fr: 'EUR', es: 'USD' };
+
+for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
+  for (const id of ['basic', 'pro']) {
+    const p = Planos.get(id);
+    const esperados = [
+      [Planos.moeda(Planos.preco(p, 'monthly', moeda), moeda), 'mensal'],
+      [Planos.moeda(Planos.preco(p, 'annual', moeda), moeda), 'anual'],
+      [Planos.moeda(Planos.mensalEquivalente(p, moeda), moeda), 'equivalente mensal do anual'],
+      [Planos.moeda(Planos.economiaAnual(p, moeda), moeda), 'economia anual']
+    ];
+    for (const arquivo of [lang + '/index.html', lang + '/precos.html']) {
+      if (!fs.existsSync(path.join(RAIZ, arquivo))) {
+        problemas.push(arquivo + ': página traduzida não existe (rode node tools/gen-idiomas.js)');
+        continue;
+      }
+      esperados.forEach(([texto, rotulo]) => conferir(arquivo, texto, id + ' ' + rotulo + ' em ' + moeda));
+      /* e nenhum preço do Brasil sobrando na página de fora */
+      const html = fs.readFileSync(path.join(RAIZ, arquivo), 'utf8');
+      for (const real of [brl(p.mensalCentavos), brl(p.anualCentavos)]) {
+        if (new RegExp(real.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\d.,])').test(html)) {
+          problemas.push(arquivo + ': ainda anuncia o preço em real "' + real + '"');
+        }
+      }
+    }
+  }
+}
+
 /* ---- 1b · os dados estruturados (JSON-LD) ----
    O buscador lê o preço daqui, não do texto da página. Em 11/09/2026
    o index.html ainda anunciava Basic 14.90 e Pro 29.90 no JSON-LD,
@@ -159,6 +192,22 @@ for (const { chave, rotulo } of LIMITES_NA_TABELA) {
     const achado = (html.match(/class="economia">[^\d]*(\d+)%/) || [])[1];
     if (achado !== String(menor)) {
       problemas.push(arquivo + ': o selo do anual diz ' + achado + '% e o desconto real é ' + menor + '%');
+    }
+  }
+
+  /* O mesmo selo, nas páginas de fora, onde o desconto anual é outro. */
+  for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
+    const fora = Planos.LISTA
+      .filter((p) => Planos.preco(p, 'monthly', moeda) > 0)
+      .map((p) => Planos.economiaAnual(p, moeda) / (Planos.preco(p, 'monthly', moeda) * 12));
+    const menorFora = Math.floor(Math.min.apply(null, fora) * 100);
+    for (const arquivo of [lang + '/index.html', lang + '/precos.html']) {
+      const caminho = path.join(RAIZ, arquivo);
+      if (!fs.existsSync(caminho)) continue;        // já reclamado acima
+      const achado = (fs.readFileSync(caminho, 'utf8').match(/class="economia">[^\d]*(\d+)%/) || [])[1];
+      if (achado !== String(menorFora)) {
+        problemas.push(arquivo + ': o selo do anual diz ' + achado + '% e o desconto em ' + moeda + ' é ' + menorFora + '%');
+      }
     }
   }
 }

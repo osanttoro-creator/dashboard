@@ -1,9 +1,16 @@
 /* =============================================================
    oaze-pagamento — Checkout e cancelamento pela Stripe
 
-   O navegador escolhe apenas plano e ciclo. Preço, moeda, versão,
-   usuário e estado da assinatura vêm do token e do banco. O plano
-   pago só é liberado pelo webhook assinado.
+   O navegador escolhe apenas plano, ciclo e em que moeda quer pagar.
+   VALOR ele nunca escolhe: preço, versão, usuário e estado da
+   assinatura vêm do token e do banco. O plano pago só é liberado
+   pelo webhook assinado.
+
+   Sobre a moeda ser escolha de quem compra: os preços em dólar e em
+   euro são MAIORES que os em real no câmbio do dia (US$ 3,99 ≈
+   R$ 21, contra R$ 14,90). Não existe arbitragem a fazer, então
+   pedir prova de país só criaria um jeito de errar com quem mora
+   fora e paga em real, ou viaja e some da própria tabela.
 
    Assinaturas antigas do Asaas continuam canceláveis durante a
    migração. Nenhuma assinatura nova é criada lá.
@@ -15,6 +22,25 @@ import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
 import { stripe, stripeConfigurada, StripeErro } from '../_shared/stripe.ts';
 
 const NOMES: Record<string, string> = { basic: 'Coqueiro', pro: 'Oásis' };
+
+/* As três moedas da tabela plan_prices. Quem pedir qualquer outra
+   coisa — ou nada — paga em real, como sempre foi. */
+const MOEDAS: Record<string, { simbolo: string; depois: boolean; decimal: string; locale: string }> = {
+  BRL: { simbolo: 'R$', depois: false, decimal: ',', locale: 'pt-BR' },
+  USD: { simbolo: 'US$', depois: false, decimal: '.', locale: 'auto' },
+  EUR: { simbolo: '€', depois: true, decimal: ',', locale: 'auto' }
+};
+
+function moedaEscolhida(v: unknown): string {
+  const alvo = typeof v === 'string' ? v.trim().toUpperCase() : '';
+  return Object.prototype.hasOwnProperty.call(MOEDAS, alvo) ? alvo : 'BRL';
+}
+
+function dinheiro(centavos: number, moeda: string): string {
+  const m = MOEDAS[moeda] ?? MOEDAS.BRL;
+  const n = (centavos / 100).toFixed(2).replace('.', m.decimal);
+  return m.depois ? n + ' ' + m.simbolo : m.simbolo + ' ' + n;
+}
 
 function origensPermitidas(): string[] {
   return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
@@ -49,8 +75,8 @@ function siteUrl(): string | null {
 
 function corpoPermitido(corpo: unknown, acao: string): boolean {
   if (!corpo || typeof corpo !== 'object' || Array.isArray(corpo)) return false;
-  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'cupom'])
-    : acao === 'cupom' ? new Set(['acao', 'plano', 'ciclo', 'codigo'])
+  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'cupom'])
+    : acao === 'cupom' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'codigo'])
       : new Set(['acao']);
   return Object.keys(corpo as Record<string, unknown>).every((k) => permitidos.has(k));
 }
@@ -75,7 +101,7 @@ function corpoPermitido(corpo: unknown, acao: string): boolean {
    ============================================================= */
 type Cupom = { id: string; codigo: string; descricao: string; centavosPrimeira: number };
 
-async function buscarCupom(codigo: string, centavos: number): Promise<Cupom | null> {
+async function buscarCupom(codigo: string, centavos: number, moeda: string): Promise<Cupom | null> {
   const lista = await stripe('GET', '/promotion_codes?limit=1&active=true&code=' + encodeURIComponent(codigo));
   const pc = lista?.data?.[0];
   if (!pc?.id || pc.active !== true) return null;
@@ -88,8 +114,13 @@ async function buscarCupom(codigo: string, centavos: number): Promise<Cupom | nu
   if (typeof cupom === 'string') cupom = await stripe('GET', '/coupons/' + encodeURIComponent(cupom));
   if (!cupom?.id || cupom.valid === false) return null;
 
+  /* Valor mínimo e desconto fixo só valem na moeda em que foram
+     criados na Stripe. Um cupom de "R$ 10 de desconto" aplicado a um
+     preço em dólar tiraria US$ 10 — o Coqueiro sairia de graça e
+     ainda com troco. Por isso, na moeda errada o cupom simplesmente
+     não existe. */
   const minimo = pc.restrictions?.minimum_amount;
-  if (minimo && String(pc.restrictions?.minimum_amount_currency || '').toLowerCase() === 'brl' && centavos < minimo) return null;
+  if (minimo && String(pc.restrictions?.minimum_amount_currency || '').toLowerCase() === moeda.toLowerCase() && centavos < minimo) return null;
 
   let centavosPrimeira = centavos;
   let desconto = '';
@@ -98,9 +129,9 @@ async function buscarCupom(codigo: string, centavos: number): Promise<Cupom | nu
     centavosPrimeira = Math.max(0, Math.round(centavos * (1 - pct / 100)));
     desconto = String(pct).replace('.', ',') + '% de desconto';
   } else if (Number(cupom.amount_off) > 0) {
-    if (String(cupom.currency || '').toLowerCase() !== 'brl') return null;
+    if (String(cupom.currency || '').toLowerCase() !== moeda.toLowerCase()) return null;
     centavosPrimeira = Math.max(0, centavos - Number(cupom.amount_off));
-    desconto = 'R$ ' + (Number(cupom.amount_off) / 100).toFixed(2).replace('.', ',') + ' de desconto';
+    desconto = dinheiro(Number(cupom.amount_off), moeda) + ' de desconto';
   } else {
     return null;
   }
@@ -201,6 +232,7 @@ Deno.serve(async (req: Request) => {
 
     const plano = typeof corpo.plano === 'string' ? corpo.plano : '';
     const ciclo = typeof corpo.ciclo === 'string' ? corpo.ciclo : '';
+    const moeda = moedaEscolhida(corpo.moeda);
     if (!NOMES[plano] || !['monthly', 'annual'].includes(ciclo)) {
       return json({ erro: 'plano', mensagem: 'Plano inválido.' }, 400, origem);
     }
@@ -216,15 +248,16 @@ Deno.serve(async (req: Request) => {
           { 'Retry-After': String(!minuto.permitido ? minuto.tentarEm : hora.tentarEm) });
       }
       const { data: precoCupom } = await admin.from('plan_prices')
-        .select('centavos,moeda').eq('plan_id', plano).eq('ciclo', ciclo).eq('vigente', true).maybeSingle();
-      if (!precoCupom || precoCupom.moeda !== 'BRL') {
+        .select('centavos,moeda').eq('plan_id', plano).eq('ciclo', ciclo)
+        .eq('moeda', moeda).eq('vigente', true).maybeSingle();
+      if (!precoCupom || precoCupom.moeda !== moeda) {
         return json({ erro: 'indisponivel', mensagem: 'Plano indisponível no momento.' }, 503, origem);
       }
-      const achado = await buscarCupom(String(corpo.codigo).trim(), precoCupom.centavos);
-      log(achado ? 'cupom_valido' : 'cupom_recusado', { plano, ciclo });
+      const achado = await buscarCupom(String(corpo.codigo).trim(), precoCupom.centavos, moeda);
+      log(achado ? 'cupom_valido' : 'cupom_recusado', { plano, ciclo, moeda });
       if (!achado) return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom não existe ou não vale mais.' }, 200, origem);
       return json({
-        ok: true, codigo: achado.codigo, descricao: achado.descricao,
+        ok: true, codigo: achado.codigo, descricao: achado.descricao, moeda,
         centavos: precoCupom.centavos, centavosPrimeira: achado.centavosPrimeira
       }, 200, origem);
     }
@@ -240,10 +273,11 @@ Deno.serve(async (req: Request) => {
     }
 
     const { data: preco } = await admin.from('plan_prices')
-      .select('id,centavos,versao,moeda').eq('plan_id', plano).eq('ciclo', ciclo).eq('vigente', true)
+      .select('id,centavos,versao,moeda').eq('plan_id', plano).eq('ciclo', ciclo)
+      .eq('moeda', moeda).eq('vigente', true)
       .maybeSingle();
-    if (!preco || !Number.isInteger(preco.centavos) || preco.centavos < 1 || preco.moeda !== 'BRL') {
-      log('preco_ausente', { plano, ciclo });
+    if (!preco || !Number.isInteger(preco.centavos) || preco.centavos < 1 || preco.moeda !== moeda) {
+      log('preco_ausente', { plano, ciclo, moeda });
       return json({ erro: 'indisponivel', mensagem: 'Plano indisponível no momento.' }, 503, origem);
     }
 
@@ -255,7 +289,7 @@ Deno.serve(async (req: Request) => {
       if (!codigoValido(corpo.cupom)) {
         return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom não existe ou não vale mais.' }, 400, origem);
       }
-      cupom = await buscarCupom(String(corpo.cupom).trim(), preco.centavos);
+      cupom = await buscarCupom(String(corpo.cupom).trim(), preco.centavos, moeda);
       if (!cupom) return json({ erro: 'cupom_invalido', mensagem: 'Esse cupom deixou de valer. Nada foi cobrado.' }, 400, origem);
     }
 
@@ -277,7 +311,7 @@ Deno.serve(async (req: Request) => {
 
     const { data: intencao, error: erroIntencao } = await admin.from('stripe_intencoes').insert({
       user_id: usuario.id, plan_id: plano, ciclo, price_id: preco.id,
-      centavos: preco.centavos, versao: preco.versao
+      centavos: preco.centavos, versao: preco.versao, moeda
     }).select('id').single();
     if (erroIntencao || !intencao) throw new Error('intencao');
 
@@ -287,9 +321,12 @@ Deno.serve(async (req: Request) => {
     parametros.set('customer_email', usuario.email);
     parametros.set('success_url', retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}');
     parametros.set('cancel_url', retorno + '/app/planos?pagamento=cancelado');
-    parametros.set('locale', 'pt-BR');
+    /* A página da Stripe em português para quem paga em real; para as
+       outras moedas, 'auto' — ela lê o idioma do navegador, que é
+       melhor palpite do que escolher inglês para um francês. */
+    parametros.set('locale', MOEDAS[moeda].locale);
     parametros.set('line_items[0][quantity]', '1');
-    parametros.set('line_items[0][price_data][currency]', 'brl');
+    parametros.set('line_items[0][price_data][currency]', moeda.toLowerCase());
     parametros.set('line_items[0][price_data][unit_amount]', String(preco.centavos));
     parametros.set('line_items[0][price_data][recurring][interval]', ciclo === 'annual' ? 'year' : 'month');
     parametros.set('line_items[0][price_data][product_data][name]', 'OAZE ' + NOMES[plano]);
@@ -320,7 +357,7 @@ Deno.serve(async (req: Request) => {
       checkout_session_id: sessao.id, updated_at: new Date().toISOString()
     }).eq('id', intencao.id);
 
-    log('checkout_criado', { plano, ciclo });
+    log('checkout_criado', { plano, ciclo, moeda });
     return json({ ok: true, url: sessao.url }, 200, origem);
   } catch (e) {
     const codigo = e instanceof StripeErro ? e.codigo : e instanceof AsaasErro ? e.codigo : 'interno';

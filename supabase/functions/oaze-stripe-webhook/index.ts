@@ -111,7 +111,7 @@ Deno.serve(async (req: Request) => {
     const assinatura = await stripe('GET', '/subscriptions/' + encodeURIComponent(assinaturaId));
     const intencaoId = String(assinatura?.metadata?.oaze_intencao_id || '');
     const { data: intencao } = await admin.from('stripe_intencoes')
-      .select('id,user_id,plan_id,ciclo,price_id,centavos,versao,status')
+      .select('id,user_id,plan_id,ciclo,price_id,centavos,versao,moeda,status')
       .eq('id', intencaoId).maybeSingle();
     if (!intencao || assinatura?.metadata?.oaze_plan_id !== intencao.plan_id
         || assinatura?.metadata?.oaze_price_id !== intencao.price_id) {
@@ -120,10 +120,15 @@ Deno.serve(async (req: Request) => {
       return resposta(200);
     }
 
+    /* A conciliação continua sendo "o que a Stripe cobrou é
+       exatamente o que a intenção registrou" — e agora a moeda faz
+       parte disso. Comparar com 'BRL' fixo recusaria toda assinatura
+       em dólar DEPOIS de cobrada, deixando a pessoa sem plano e com a
+       cobrança no cartão. */
     const item = assinatura?.items?.data?.[0];
     const valor = Number(item?.price?.unit_amount);
     const moeda = String(item?.price?.currency || '').toUpperCase();
-    if (!Number.isInteger(valor) || valor !== intencao.centavos || moeda !== 'BRL') {
+    if (!Number.isInteger(valor) || valor !== intencao.centavos || moeda !== String(intencao.moeda || 'BRL')) {
       log('preco_divergente', { tipo });
       await admin.from('stripe_intencoes').update({ status: 'falhou', updated_at: new Date().toISOString() })
         .eq('id', intencao.id);
