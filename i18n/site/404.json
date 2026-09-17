@@ -1,0 +1,74 @@
+[
+ {
+  "pt": "Página não encontrada — OAZE",
+  "en": "Page not found — OAZE",
+  "fr": "Page introuvable — OAZE",
+  "es": "Página no encontrada — OAZE"
+ },
+ {
+  "pt": "O endereço pedido não existe no OAZE.",
+  "en": "The address you requested does not exist on OAZE.",
+  "fr": "L'adresse demandée n'existe pas sur OAZE.",
+  "es": "La dirección solicitada no existe en OAZE."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Este endereço não existe",
+  "en": "This address does not exist",
+  "fr": "Cette adresse n'existe pas",
+  "es": "Esta dirección no existe"
+ },
+ {
+  "pt": "Pode ser um link antigo, um endereço digitado com um caractere a mais, ou uma página que saiu do ar.",
+  "en": "It may be an old link, an address typed with an extra character, or a page that was taken down.",
+  "fr": "Il peut s'agir d'un ancien lien, d'une adresse saisie avec un caractère en trop ou d'une page qui n'est plus en ligne.",
+  "es": "Puede ser un enlace antiguo, una dirección escrita con un carácter de más o una página que ya no está disponible."
+ },
+ {
+  "pt": "Ir para a página inicial",
+  "en": "Go to the home page",
+  "fr": "Aller à la page d'accueil",
+  "es": "Ir a la página de inicio"
+ },
+ {
+  "pt": "Abrir meu painel",
+  "en": "Open my dashboard",
+  "fr": "Ouvrir mon tableau de bord",
+  "es": "Abrir mi panel"
+ },
+ {
+  "pt": "Procurando alguma coisa específica? <a href=\"/recursos\">Recursos</a> · <a href=\"/precos\">Preços</a> · <a href=\"/suporte\">Suporte</a>",
+  "en": "Looking for something specific? <a href=\"/recursos\">Features</a> · <a href=\"/precos\">Pricing</a> · <a href=\"/suporte\">Support</a>",
+  "fr": "Vous cherchez quelque chose en particulier ? <a href=\"/recursos\">Fonctionnalités</a> · <a href=\"/precos\">Tarifs</a> · <a href=\"/suporte\">Assistance</a>",
+  "es": "¿Buscas algo en particular? <a href=\"/recursos\">Funciones</a> · <a href=\"/precos\">Precios</a> · <a href=\"/suporte\">Soporte</a>"
+ },
+ {
+  "pt": "Se você chegou aqui por um link nosso, <a href=\"/suporte\">avise o suporte</a> — link quebrado a gente conserta.",
+  "en": "If you got here through one of our links, <a href=\"/suporte\">let support know</a> — we fix broken links.",
+  "fr": "Si vous êtes arrivé ici par l'un de nos liens, <a href=\"/suporte\">prévenez l'assistance</a> — nous réparons les liens cassés.",
+  "es": "Si llegaste aquí por uno de nuestros enlaces, <a href=\"/suporte\">avisa a soporte</a>: arreglamos los enlaces rotos."
+ }
+]

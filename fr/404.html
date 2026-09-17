@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page introuvable — OAZE</title>
+<meta name="description" content="L'adresse demandée n'existe pas sur OAZE.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Aller au contenu</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/fr/" aria-label="OAZE, page d'accueil">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+      OAZE
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/fr/entrar">Se connecter</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div style="max-width:34rem;margin-inline:auto;text-align:center">
+      <!-- Sem etiqueta "Erro 404" acima do título: o código já está
+           na barra do navegador e no cabeçalho da resposta, e a
+           frase abaixo diz a mesma coisa em português. A sobrancelha
+           antes do H1 só repetia. -->
+      <h1>Cette adresse n'existe pas</h1>
+      <p class="leve" style="font-size:1.05rem">
+        Il peut s'agir d'un ancien lien, d'une adresse saisie avec un caractère en trop ou d'une page qui n'est plus en ligne.
+      </p>
+
+      <!-- Mostra o que foi pedido. Sem isso, quem chegou por um link
+           quebrado não tem como saber o que reportar -- e nós não
+           temos como corrigir o que ninguém consegue descrever.
+           O caminho é escrito com textContent, nunca com innerHTML:
+           ele vem da URL, que é entrada de quem quiser, e concatenar
+           isso em HTML é exatamente como se cria um XSS refletido. -->
+      <p style="margin-top:22px">
+        <code id="caminho" style="display:inline-block;max-width:100%;overflow-wrap:anywhere;
+          padding:8px 14px;border-radius:10px;background:rgba(0,0,0,.35);
+          border:1px solid var(--borda);color:var(--texto-3);
+          font-family:var(--fonte-mono);font-size:.86rem"></code>
+      </p>
+
+      <div class="hero-botoes" style="margin-top:30px">
+        <a class="btn btn-principal btn-grande" href="/fr/">Aller à la page d'accueil</a>
+        <a class="btn btn-fantasma btn-grande" href="/app">Ouvrir mon tableau de bord</a>
+      </div>
+
+      <p style="margin-top:34px;color:var(--texto-3);font-size:.93rem">
+        Vous cherchez quelque chose en particulier ? <a href="/fr/recursos">Fonctionnalités</a> · <a href="/fr/precos">Tarifs</a> · <a href="/fr/suporte">Assistance</a>
+      </p>
+
+      <p style="margin-top:18px;color:var(--texto-3);font-size:.88rem">
+        Si vous êtes arrivé ici par l'un de nos liens, <a href="/fr/suporte">prévenez l'assistance</a> — nous réparons les liens cassés.
+      </p>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var alvo = document.getElementById('caminho');
+  if (alvo) alvo.textContent = location.pathname + location.search;
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+<div class="idiomas-solto"><!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Langue"><a data-idioma href="/" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/" hreflang="en" lang="en">English</a><a data-idioma href="/fr/" hreflang="fr" lang="fr" aria-current="true">Français</a><a data-idioma href="/es/" hreflang="es" lang="es">Español</a></nav><!-- /seletor-idioma --></div>
+</body>
+</html>

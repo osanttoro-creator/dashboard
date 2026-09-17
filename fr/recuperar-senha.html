@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Réinitialiser le mot de passe — OAZE</title>
+<meta name="description" content="Recevez un lien pour réinitialiser le mot de passe de votre compte OAZE.">
+<link rel="canonical" href="https://oaze.site/fr/recuperar-senha">
+<!-- idiomas: gerado por tools/gen-idiomas.js -->
+<link rel="alternate" hreflang="pt-BR" href="https://oaze.site/recuperar-senha">
+<link rel="alternate" hreflang="en" href="https://oaze.site/en/recuperar-senha">
+<link rel="alternate" hreflang="fr" href="https://oaze.site/fr/recuperar-senha">
+<link rel="alternate" hreflang="es" href="https://oaze.site/es/recuperar-senha">
+<link rel="alternate" hreflang="x-default" href="https://oaze.site/recuperar-senha">
+<!-- /idiomas -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Aller au contenu</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/fr/" aria-label="OAZE, page d'accueil">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+      OAZE
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/fr/entrar">Se connecter</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Réinitialiser le mot de passe</h1>
+      <p>Saisissez l'e-mail du compte et nous vous enverrons un lien pour choisir un nouveau mot de passe.</p>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-recuperar" novalidate>
+        <div class="campo">
+          <label for="email">E-mail du compte</label>
+          <input type="email" id="email" name="email" autocomplete="email"
+                 required inputmode="email" placeholder="vous@exemple.com"
+                 aria-describedby="email-erro">
+          <p class="erro" id="email-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao">Envoyer le lien</button>
+      </form>
+
+      <p class="pe-do-painel">
+        Vous vous en souvenez ? <a href="/fr/entrar">Retour à la connexion</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var email = document.getElementById('email');
+  var form = document.getElementById('form-recuperar');
+  var botao = document.getElementById('botao');
+
+  if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); return; }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    A.erroNoCampo(email, '');
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) {
+      A.erroNoCampo(email, 'Saisissez un e-mail valide.');
+      email.focus();
+      return;
+    }
+
+    A.ocupado(botao, true, 'Envoi…');
+    try {
+      var r = await A.recuperarSenha(email.value.trim());
+      if (r.error) throw r.error;
+    } catch (err) {
+      /* Erro de rede o usuário precisa saber; o resto, não.
+         Ver a mensagem abaixo. */
+      if (/network|fetch/i.test(err && err.message || '')) {
+        A.ocupado(botao, false);
+        A.diz(recado, A.frase(err), 'erro');
+        return;
+      }
+    }
+
+    /* A MESMA RESPOSTA EXISTINDO OU NÃO A CONTA.
+       Dizer "esse e-mail não está cadastrado" transforma esta tela
+       num verificador de contas: qualquer um descobre quem tem conta
+       aqui testando endereços. Numa ferramenta financeira isso é
+       informação que não deve vazar. O preço é que quem digitou
+       errado espera um e-mail que não vem -- por isso o texto avisa
+       para conferir o endereço. */
+    form.hidden = true;
+    A.ocupado(botao, false);
+    A.diz(recado, 'Si un compte existe pour ' + email.value.trim() +
+      ', le lien est en route. Il est valable une heure. ' +
+      'Rien reçu ? Vérifiez l\'adresse saisie et votre dossier de spam.', 'ok');
+  });
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+<div class="idiomas-solto"><!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Langue"><a data-idioma href="/recuperar-senha" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/recuperar-senha" hreflang="en" lang="en">English</a><a data-idioma href="/fr/recuperar-senha" hreflang="fr" lang="fr" aria-current="true">Français</a><a data-idioma href="/es/recuperar-senha" hreflang="es" lang="es">Español</a></nav><!-- /seletor-idioma --></div>
+</body>
+</html>

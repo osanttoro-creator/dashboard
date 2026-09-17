@@ -1,0 +1,446 @@
+[
+ {
+  "pt": "Termos de uso — OAZE",
+  "en": "Terms of use — OAZE",
+  "fr": "Conditions d'utilisation — OAZE",
+  "es": "Términos de uso — OAZE"
+ },
+ {
+  "pt": "Termos de uso do OAZE: conta, plano gratuito, dados e responsabilidades.",
+  "en": "OAZE terms of use: account, free plan, data and responsibilities.",
+  "fr": "Conditions d'utilisation d'OAZE : compte, formule gratuite, données et responsabilités.",
+  "es": "Términos de uso de OAZE: cuenta, plan gratuito, datos y responsabilidades."
+ },
+ {
+  "pt": "Conta, plano gratuito, dados e responsabilidades.",
+  "en": "Account, free plan, data and responsibilities.",
+  "fr": "Compte, formule gratuite, données et responsabilités.",
+  "es": "Cuenta, plan gratuito, datos y responsabilidades."
+ },
+ {
+  "pt": "OAZE — controle financeiro pessoal",
+  "en": "OAZE — personal finance management",
+  "fr": "OAZE — gestion des finances personnelles",
+  "es": "OAZE — control financiero personal"
+ },
+ {
+  "pt": "Regras de uso, conta, planos e responsabilidades no OAZE.",
+  "en": "Rules of use, account, plans and responsibilities on OAZE.",
+  "fr": "Règles d'utilisation, compte, formules et responsabilités sur OAZE.",
+  "es": "Reglas de uso, cuenta, planes y responsabilidades en OAZE."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Abrir menu",
+  "en": "Open menu",
+  "fr": "Ouvrir le menu",
+  "es": "Abrir menú"
+ },
+ {
+  "pt": "Navegação principal",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "Recursos",
+  "en": "Features",
+  "fr": "Fonctionnalités",
+  "es": "Funciones"
+ },
+ {
+  "pt": "Preços",
+  "en": "Pricing",
+  "fr": "Tarifs",
+  "es": "Precios"
+ },
+ {
+  "pt": "Segurança",
+  "en": "Security",
+  "fr": "Sécurité",
+  "es": "Seguridad"
+ },
+ {
+  "pt": "Suporte",
+  "en": "Support",
+  "fr": "Assistance",
+  "es": "Soporte"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Criar conta grátis",
+  "en": "Create a free account",
+  "fr": "Créer un compte gratuit",
+  "es": "Crear cuenta gratis"
+ },
+ {
+  "pt": "Termos de uso",
+  "en": "Terms of use",
+  "fr": "Conditions d'utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Última atualização: 15 de setembro de 2026",
+  "en": "Last updated: 15 September 2026",
+  "fr": "Dernière mise à jour : 15 septembre 2026",
+  "es": "Última actualización: 15 de septiembre de 2026"
+ },
+ {
+  "pt": "<strong>Minuta pendente de revisão jurídica.</strong> Este texto foi redigido a partir do funcionamento real do produto e do Código de Defesa do Consumidor, mas <strong>não foi revisado por advogado</strong>.",
+  "en": "<strong>Draft pending legal review.</strong> This text was written from how the product actually works and from the Brazilian Consumer Protection Code, but it <strong>has not been reviewed by a lawyer</strong>.",
+  "fr": "<strong>Projet en attente de relecture juridique.</strong> Ce texte a été rédigé à partir du fonctionnement réel du produit et du Code de défense du consommateur brésilien, mais il <strong>n'a pas été relu par un avocat</strong>.",
+  "es": "<strong>Borrador pendiente de revisión jurídica.</strong> Este texto se redactó a partir del funcionamiento real del producto y del Código de Defensa del Consumidor de Brasil, pero <strong>no fue revisado por un abogado</strong>."
+ },
+ {
+  "pt": "Antes do lançamento, um profissional precisa revisar principalmente a responsabilidade (§7), o encerramento de conta (§5) e o foro (§10). Remova este aviso só depois dessa revisão.",
+  "en": "Before launch, a professional needs to review mainly liability (§7), account termination (§5) and jurisdiction (§10). Remove this notice only after that review.",
+  "fr": "Avant le lancement, un professionnel doit relire principalement la responsabilité (§7), la clôture du compte (§5) et la juridiction (§10). Ne retirez cet avertissement qu'après cette relecture.",
+  "es": "Antes del lanzamiento, un profesional debe revisar sobre todo la responsabilidad (§7), el cierre de cuenta (§5) y el fuero (§10). Quita este aviso solo después de esa revisión."
+ },
+ {
+  "pt": "1. O que é o OAZE",
+  "en": "1. What OAZE is",
+  "fr": "1. Ce qu'est OAZE",
+  "es": "1. Qué es OAZE"
+ },
+ {
+  "pt": "O OAZE é um painel de organização financeira pessoal. Ele registra, organiza e apresenta informações que <strong>você</strong> insere ou importa.",
+  "en": "OAZE is a personal finance dashboard. It records, organizes and presents information that <strong>you</strong> enter or import.",
+  "fr": "OAZE est un tableau de bord d'organisation financière personnelle. Il enregistre, organise et présente des informations que <strong>vous</strong> saisissez ou importez.",
+  "es": "OAZE es un panel de organización financiera personal. Registra, organiza y presenta información que <strong>tú</strong> ingresas o importas."
+ },
+ {
+  "pt": "<strong>O OAZE não é instituição financeira, não movimenta dinheiro e não presta consultoria de investimentos.</strong> Nada do que ele apresenta é recomendação de investimento, e as projeções são cálculos sobre os dados informados — não previsões de resultado.",
+  "en": "<strong>OAZE is not a financial institution, does not move money and does not provide investment advice.</strong> Nothing it shows is an investment recommendation, and projections are calculations over the data you provided — not forecasts of results.",
+  "fr": "<strong>OAZE n'est pas un établissement financier, ne déplace pas d'argent et ne fournit pas de conseil en investissement.</strong> Rien de ce qu'il affiche n'est une recommandation d'investissement, et les projections sont des calculs sur les données fournies — pas des prévisions de résultat.",
+  "es": "<strong>OAZE no es una institución financiera, no mueve dinero y no presta asesoría de inversiones.</strong> Nada de lo que muestra es una recomendación de inversión, y las proyecciones son cálculos sobre los datos informados, no previsiones de resultado."
+ },
+ {
+  "pt": "2. Sua conta",
+  "en": "2. Your account",
+  "fr": "2. Votre compte",
+  "es": "2. Tu cuenta"
+ },
+ {
+  "pt": "Para sincronizar dados entre aparelhos é preciso criar uma conta com e-mail e senha. Você é responsável por manter a senha em sigilo e por tudo que acontecer na conta enquanto ela estiver sob seu controle.",
+  "en": "To sync data between devices you need to create an account with an email and a password. You are responsible for keeping the password secret and for everything that happens in the account while it is under your control.",
+  "fr": "Pour synchroniser vos données entre appareils, vous devez créer un compte avec une adresse e-mail et un mot de passe. Vous êtes responsable de la confidentialité du mot de passe et de tout ce qui se passe sur le compte tant qu'il est sous votre contrôle.",
+  "es": "Para sincronizar datos entre dispositivos hay que crear una cuenta con correo y contraseña. Eres responsable de mantener la contraseña en secreto y de todo lo que ocurra en la cuenta mientras esté bajo tu control."
+ },
+ {
+  "pt": "É possível usar o OAZE <strong>sem conta</strong>. Nesse caso os dados ficam apenas no navegador do aparelho, e nós não temos como recuperá-los se forem perdidos — limpar o navegador ou trocar de aparelho apaga tudo.",
+  "en": "You can use OAZE <strong>without an account</strong>. In that case the data stays only in that device's browser, and we have no way to recover it if it is lost — clearing the browser or switching devices erases everything.",
+  "fr": "Vous pouvez utiliser OAZE <strong>sans compte</strong>. Dans ce cas, les données restent uniquement dans le navigateur de l'appareil, et nous n'avons aucun moyen de les récupérer en cas de perte — vider le navigateur ou changer d'appareil efface tout.",
+  "es": "Puedes usar OAZE <strong>sin cuenta</strong>. En ese caso los datos quedan solo en el navegador del dispositivo, y no podemos recuperarlos si se pierden: limpiar el navegador o cambiar de dispositivo borra todo."
+ },
+ {
+  "pt": "Você precisa ter 18 anos ou mais, ou autorização de responsável legal.",
+  "en": "You must be 18 or older, or have permission from a legal guardian.",
+  "fr": "Vous devez avoir 18 ans ou plus, ou disposer de l'autorisation d'un représentant légal.",
+  "es": "Debes tener 18 años o más, o autorización de un responsable legal."
+ },
+ {
+  "pt": "3. Uso aceitável",
+  "en": "3. Acceptable use",
+  "fr": "3. Utilisation acceptable",
+  "es": "3. Uso aceptable"
+ },
+ {
+  "pt": "Você concorda em não: tentar acessar dados de outras contas; sobrecarregar o serviço de forma automatizada; usar o OAZE para atividade ilícita; ou revender o acesso sem autorização por escrito.",
+  "en": "You agree not to: try to access other accounts' data; overload the service through automation; use OAZE for illegal activity; or resell access without written permission.",
+  "fr": "Vous acceptez de ne pas : tenter d'accéder aux données d'autres comptes ; surcharger le service de façon automatisée ; utiliser OAZE pour une activité illicite ; ou revendre l'accès sans autorisation écrite.",
+  "es": "Aceptas no: intentar acceder a datos de otras cuentas; sobrecargar el servicio de forma automatizada; usar OAZE para actividad ilícita; ni revender el acceso sin autorización por escrito."
+ },
+ {
+  "pt": "Ao importar um arquivo, você declara que tem direito de usar aquele conteúdo. Você é responsável por conferir a origem e por não enviar arquivo de terceiro, conteúdo ilícito ou material criado para comprometer o serviço.",
+  "en": "When importing a file, you declare that you have the right to use that content. You are responsible for checking its origin and for not sending third-party files, illegal content or material created to compromise the service.",
+  "fr": "En important un fichier, vous déclarez avoir le droit d'utiliser ce contenu. Vous êtes responsable d'en vérifier l'origine et de ne pas envoyer de fichier appartenant à un tiers, de contenu illicite ou de matériel conçu pour compromettre le service.",
+  "es": "Al importar un archivo, declaras que tienes derecho a usar ese contenido. Eres responsable de comprobar su origen y de no enviar archivos de terceros, contenido ilícito o material creado para comprometer el servicio."
+ },
+ {
+  "pt": "4. Planos e limites",
+  "en": "4. Plans and limits",
+  "fr": "4. Formules et limites",
+  "es": "4. Planes y límites"
+ },
+ {
+  "pt": "O plano <strong>Semente</strong> é gratuito, permanente e não exige cartão. Os planos <strong>Coqueiro</strong> e <strong>Oásis</strong> são assinaturas pagas. Preços e limites de cada plano estão publicados em <a href=\"/precos\">Preços</a>.",
+  "en": "The <strong>Semente</strong> plan is free, permanent and requires no card. The <strong>Coqueiro</strong> and <strong>Oásis</strong> plans are paid subscriptions. Prices and limits for each plan are published on <a href=\"/precos\">Pricing</a>.",
+  "fr": "La formule <strong>Semente</strong> est gratuite, permanente et ne demande pas de carte. Les formules <strong>Coqueiro</strong> et <strong>Oásis</strong> sont des abonnements payants. Les prix et limites de chaque formule sont publiés sur <a href=\"/precos\">Tarifs</a>.",
+  "es": "El plan <strong>Semente</strong> es gratuito, permanente y no exige tarjeta. Los planes <strong>Coqueiro</strong> y <strong>Oásis</strong> son suscripciones pagas. Los precios y límites de cada plan están publicados en <a href=\"/precos\">Precios</a>."
+ },
+ {
+  "pt": "<strong>Cobrança.</strong> As assinaturas são cobradas no cartão de crédito, de forma recorrente (mensal ou anual, conforme a escolha), por meio da <strong>Stripe</strong>, que processa o pagamento. O plano é liberado quando o pagamento é confirmado. O valor de uma assinatura em curso não muda sem aviso prévio.",
+  "en": "<strong>Billing.</strong> Subscriptions are charged to a credit card on a recurring basis (monthly or annual, as chosen), through <strong>Stripe</strong>, which processes the payment. The plan is released when payment is confirmed. The price of an ongoing subscription does not change without prior notice.",
+  "fr": "<strong>Facturation.</strong> Les abonnements sont prélevés sur carte bancaire de façon récurrente (mensuelle ou annuelle, selon votre choix), via <strong>Stripe</strong>, qui traite le paiement. La formule est activée dès la confirmation du paiement. Le montant d'un abonnement en cours ne change pas sans préavis.",
+  "es": "<strong>Cobro.</strong> Las suscripciones se cobran con tarjeta de crédito de forma recurrente (mensual o anual, según la elección), mediante <strong>Stripe</strong>, que procesa el pago. El plan se libera cuando se confirma el pago. El valor de una suscripción en curso no cambia sin aviso previo."
+ },
+ {
+  "pt": "<strong>Cancelamento.</strong> Você pode cancelar a qualquer momento em Configurações. A renovação é interrompida na hora e o plano continua disponível até o fim do período já pago; depois, a conta volta ao Semente. Excluir a conta também encerra a assinatura.",
+  "en": "<strong>Cancellation.</strong> You can cancel at any time in Settings. Renewal stops immediately and the plan remains available until the end of the period already paid; after that, the account returns to Semente. Deleting the account also ends the subscription.",
+  "fr": "<strong>Résiliation.</strong> Vous pouvez résilier à tout moment dans Réglages. Le renouvellement s'arrête immédiatement et la formule reste disponible jusqu'à la fin de la période déjà payée ; ensuite, le compte revient à Semente. Supprimer le compte met également fin à l'abonnement.",
+  "es": "<strong>Cancelación.</strong> Puedes cancelar en cualquier momento en Configuración. La renovación se detiene al instante y el plan sigue disponible hasta el final del período ya pagado; después, la cuenta vuelve a Semente. Eliminar la cuenta también termina la suscripción."
+ },
+ {
+  "pt": "<strong>Direito de arrependimento e estorno.</strong> Na primeira contratação, você pode desistir em até 7 dias (art. 49 do Código de Defesa do Consumidor) e receber o valor de volta, pelo <a href=\"/suporte\">suporte</a>. Pagamento estornado ou contestado encerra o plano pago imediatamente.",
+  "en": "<strong>Right of withdrawal and refunds.</strong> On your first purchase you may withdraw within 7 days (art. 49 of the Brazilian Consumer Protection Code) and get your money back, through <a href=\"/suporte\">support</a>. A chargeback or disputed payment ends the paid plan immediately.",
+  "fr": "<strong>Droit de rétractation et remboursement.</strong> Lors du premier achat, vous pouvez vous rétracter sous 7 jours (art. 49 du Code de défense du consommateur brésilien) et être remboursé, via l'<a href=\"/suporte\">assistance</a>. Un paiement contesté ou remboursé met immédiatement fin à la formule payante.",
+  "es": "<strong>Derecho de arrepentimiento y devolución.</strong> En la primera contratación puedes desistir en hasta 7 días (art. 49 del Código de Defensa del Consumidor de Brasil) y recibir el dinero de vuelta, a través de <a href=\"/suporte\">soporte</a>. Un pago devuelto o disputado termina el plan pago de inmediato."
+ },
+ {
+  "pt": "Os limites de cada plano são aplicados no nosso servidor. Ultrapassá-los impede criar registros novos, mas <strong>nunca apaga registros existentes</strong>.",
+  "en": "Each plan's limits are enforced on our server. Going over them prevents creating new records, but <strong>never deletes existing records</strong>.",
+  "fr": "Les limites de chaque formule sont appliquées sur notre serveur. Les dépasser empêche de créer de nouveaux enregistrements, mais <strong>ne supprime jamais les enregistrements existants</strong>.",
+  "es": "Los límites de cada plan se aplican en nuestro servidor. Superarlos impide crear registros nuevos, pero <strong>nunca borra los registros existentes</strong>."
+ },
+ {
+  "pt": "5. Encerramento da conta",
+  "en": "5. Closing your account",
+  "fr": "5. Clôture du compte",
+  "es": "5. Cierre de la cuenta"
+ },
+ {
+  "pt": "Você pode excluir sua conta a qualquer momento pelas Configurações. A exclusão remove os registros financeiros associados, em cascata, e <strong>não pode ser desfeita</strong>. Baixe seu backup antes.",
+  "en": "You can delete your account at any time in Settings. Deletion removes the associated financial records, cascading, and <strong>cannot be undone</strong>. Download your backup first.",
+  "fr": "Vous pouvez supprimer votre compte à tout moment dans Réglages. La suppression retire les enregistrements financiers associés, en cascade, et <strong>est irréversible</strong>. Téléchargez votre sauvegarde avant.",
+  "es": "Puedes eliminar tu cuenta en cualquier momento en Configuración. La eliminación borra los registros financieros asociados, en cascada, y <strong>no se puede deshacer</strong>. Descarga tu copia antes."
+ },
+ {
+  "pt": "Podemos encerrar contas que violem o §3, com aviso prévio e prazo para exportar os dados, salvo quando a violação exigir ação imediata.",
+  "en": "We may close accounts that violate §3, with prior notice and time to export the data, except when the violation requires immediate action.",
+  "fr": "Nous pouvons fermer les comptes qui enfreignent le §3, avec préavis et délai pour exporter les données, sauf si l'infraction exige une action immédiate.",
+  "es": "Podemos cerrar cuentas que infrinjan el §3, con aviso previo y plazo para exportar los datos, salvo cuando la infracción exija acción inmediata."
+ },
+ {
+  "pt": "6. Disponibilidade e suporte",
+  "en": "6. Availability and support",
+  "fr": "6. Disponibilité et assistance",
+  "es": "6. Disponibilidad y soporte"
+ },
+ {
+  "pt": "Nos planos pagos, a meta mensal de disponibilidade das funções centrais é de <strong>99,5%</strong>. Isso inclui autenticação, consulta, criação e sincronização dos registros financeiros. Em um mês de 30 dias, a meta admite até 3 horas e 36 minutos de indisponibilidade contabilizada.",
+  "en": "On paid plans, the monthly availability target for core functions is <strong>99.5%</strong>. This covers authentication, reading, creating and syncing financial records. In a 30-day month, the target allows up to 3 hours and 36 minutes of counted downtime.",
+  "fr": "Pour les formules payantes, l'objectif mensuel de disponibilité des fonctions principales est de <strong>99,5 %</strong>. Cela inclut l'authentification, la consultation, la création et la synchronisation des enregistrements financiers. Sur un mois de 30 jours, l'objectif admet jusqu'à 3 heures et 36 minutes d'indisponibilité comptabilisée.",
+  "es": "En los planes pagos, la meta mensual de disponibilidad de las funciones centrales es del <strong>99,5%</strong>. Incluye autenticación, consulta, creación y sincronización de los registros financieros. En un mes de 30 días, la meta admite hasta 3 horas y 36 minutos de indisponibilidad contabilizada."
+ },
+ {
+  "pt": "Não entram no cálculo manutenções programadas, avisadas com 48 horas de antecedência e limitadas a 4 horas por mês; falhas restritas ao aparelho, navegador ou conexão do usuário; força maior comprovada; e falhas externas fora do controle razoável do OAZE, desde que tenhamos agido com diligência para escolher, acompanhar e cobrar o fornecedor.",
+  "en": "The calculation excludes scheduled maintenance announced 48 hours in advance and limited to 4 hours per month; failures restricted to the user's device, browser or connection; proven force majeure; and external failures beyond OAZE's reasonable control, provided we acted diligently in choosing, monitoring and holding the supplier accountable.",
+  "fr": "Sont exclues du calcul : les maintenances programmées, annoncées 48 heures à l'avance et limitées à 4 heures par mois ; les pannes limitées à l'appareil, au navigateur ou à la connexion de l'utilisateur ; les cas de force majeure prouvés ; et les défaillances externes hors du contrôle raisonnable d'OAZE, dès lors que nous avons agi avec diligence pour choisir, suivre et mettre en demeure le fournisseur.",
+  "es": "No entran en el cálculo los mantenimientos programados, avisados con 48 horas de antelación y limitados a 4 horas por mes; las fallas limitadas al dispositivo, navegador o conexión del usuario; la fuerza mayor comprobada; y las fallas externas fuera del control razonable de OAZE, siempre que hayamos actuado con diligencia para elegir, supervisar y exigir al proveedor."
+ },
+ {
+  "pt": "Se a disponibilidade ficar abaixo de 99,5%, o titular do plano poderá pedir crédito sobre a mensalidade afetada: 10% abaixo de 99,5% e a partir de 99,0%; 25% abaixo de 99,0% e a partir de 98,0%; e 50% abaixo de 98,0%. O pedido poderá ser feito em até 30 dias. O crédito não substitui reembolso, abatimento, reparação ou outro direito previsto em lei.",
+  "en": "If availability falls below 99.5%, the plan holder may request a credit on the affected monthly fee: 10% below 99.5% and down to 99.0%; 25% below 99.0% and down to 98.0%; and 50% below 98.0%. The request can be made within 30 days. The credit does not replace a refund, price reduction, compensation or any other right provided by law.",
+  "fr": "Si la disponibilité tombe sous 99,5 %, le titulaire de la formule peut demander un avoir sur la mensualité concernée : 10 % en dessous de 99,5 % et jusqu'à 99,0 % ; 25 % en dessous de 99,0 % et jusqu'à 98,0 % ; et 50 % en dessous de 98,0 %. La demande peut être faite sous 30 jours. L'avoir ne remplace ni remboursement, ni réduction, ni réparation, ni aucun autre droit prévu par la loi.",
+  "es": "Si la disponibilidad queda por debajo del 99,5%, el titular del plan podrá pedir un crédito sobre la mensualidad afectada: 10% por debajo del 99,5% y hasta el 99,0%; 25% por debajo del 99,0% y hasta el 98,0%; y 50% por debajo del 98,0%. La solicitud puede hacerse en hasta 30 días. El crédito no sustituye el reembolso, la rebaja, la reparación u otro derecho previsto en la ley."
+ },
+ {
+  "pt": "O plano gratuito funciona por melhor esforço, sem crédito de serviço. Isso não reduz os direitos legais do usuário nem as obrigações de segurança, privacidade e acessibilidade.",
+  "en": "The free plan runs on a best-effort basis, with no service credit. This does not reduce the user's legal rights nor our security, privacy and accessibility obligations.",
+  "fr": "La formule gratuite fonctionne au mieux des efforts, sans avoir de service. Cela ne réduit ni les droits légaux de l'utilisateur ni nos obligations de sécurité, de confidentialité et d'accessibilité.",
+  "es": "El plan gratuito funciona por mejor esfuerzo, sin crédito de servicio. Esto no reduce los derechos legales del usuario ni las obligaciones de seguridad, privacidad y accesibilidad."
+ },
+ {
+  "pt": "Em incidente crítico que impeça a maioria dos usuários de entrar, consultar ou salvar dados, nossa meta é confirmar o recebimento em até 2 horas, atualizar a situação a cada 4 horas e publicar um relatório em até 10 dias úteis depois da estabilização.",
+  "en": "In a critical incident that prevents most users from signing in, reading or saving data, our target is to acknowledge receipt within 2 hours, update the status every 4 hours and publish a report within 10 business days after stabilization.",
+  "fr": "En cas d'incident critique empêchant la majorité des utilisateurs de se connecter, de consulter ou d'enregistrer des données, notre objectif est d'accuser réception sous 2 heures, de donner un point toutes les 4 heures et de publier un rapport sous 10 jours ouvrés après la stabilisation.",
+  "es": "En un incidente crítico que impida a la mayoría de los usuarios entrar, consultar o guardar datos, nuestra meta es confirmar la recepción en hasta 2 horas, actualizar la situación cada 4 horas y publicar un informe en hasta 10 días hábiles después de la estabilización."
+ },
+ {
+  "pt": "7. Responsabilidade, segurança e incidentes",
+  "en": "7. Liability, security and incidents",
+  "fr": "7. Responsabilité, sécurité et incidents",
+  "es": "7. Responsabilidad, seguridad e incidentes"
+ },
+ {
+  "pt": "O OAZE adota medidas técnicas e administrativas proporcionais ao risco. Nenhum sistema é imune a falhas, mas essa realidade não afasta as responsabilidades previstas na LGPD, no Código de Defesa do Consumidor ou em outra lei aplicável.",
+  "en": "OAZE adopts technical and administrative measures proportional to the risk. No system is immune to failure, but that reality does not remove the responsibilities set out in the LGPD, the Consumer Protection Code or any other applicable law.",
+  "fr": "OAZE met en œuvre des mesures techniques et administratives proportionnées au risque. Aucun système n'est à l'abri d'une défaillance, mais cette réalité n'écarte pas les responsabilités prévues par la LGPD, le Code de défense du consommateur ou toute autre loi applicable.",
+  "es": "OAZE adopta medidas técnicas y administrativas proporcionales al riesgo. Ningún sistema es inmune a fallas, pero esa realidad no elimina las responsabilidades previstas en la LGPD, el Código de Defensa del Consumidor u otra ley aplicable."
+ },
+ {
+  "pt": "<strong>As decisões financeiras são suas.</strong> Não respondemos por prejuízo decorrente de decisão tomada com base no que o OAZE apresenta, nem por dado incorreto que você tenha inserido ou importado.",
+  "en": "<strong>Financial decisions are yours.</strong> We are not liable for losses resulting from a decision made based on what OAZE shows, nor for incorrect data that you entered or imported.",
+  "fr": "<strong>Les décisions financières sont les vôtres.</strong> Nous ne répondons pas des pertes résultant d'une décision prise sur la base de ce qu'affiche OAZE, ni de données erronées que vous avez saisies ou importées.",
+  "es": "<strong>Las decisiones financieras son tuyas.</strong> No respondemos por perjuicios derivados de una decisión tomada con base en lo que OAZE muestra, ni por datos incorrectos que hayas ingresado o importado."
+ },
+ {
+  "pt": "O OAZE poderá responder quando der causa ao dano por tratamento ilegal, falha de segurança evitável, demora indevida em conter um incidente, instrução ilícita ou escolha e fiscalização negligentes de fornecedor. Se um fornecedor causar o incidente, cooperaremos com a investigação e com o atendimento ao titular; não transferiremos automaticamente o problema ao usuário.",
+  "en": "OAZE may be held liable when it causes harm through unlawful processing, an avoidable security failure, undue delay in containing an incident, unlawful instructions, or negligent choice and oversight of a supplier. If a supplier causes the incident, we will cooperate with the investigation and with supporting the data subject; we will not automatically pass the problem on to the user.",
+  "fr": "OAZE peut être tenu responsable lorsqu'il est à l'origine du dommage par un traitement illicite, une faille de sécurité évitable, un retard indu à contenir un incident, une instruction illicite ou un choix et un suivi négligents d'un fournisseur. Si un fournisseur cause l'incident, nous coopérerons à l'enquête et à l'accompagnement de la personne concernée ; nous ne transférerons pas automatiquement le problème à l'utilisateur.",
+  "es": "OAZE podrá responder cuando cause el daño por tratamiento ilegal, falla de seguridad evitable, demora indebida en contener un incidente, instrucción ilícita o elección y fiscalización negligentes de un proveedor. Si un proveedor causa el incidente, cooperaremos con la investigación y con la atención al titular; no trasladaremos automáticamente el problema al usuario."
+ },
+ {
+  "pt": "Você poderá responder por dano causado por fraude, ação ilícita, compartilhamento deliberado de credenciais ou culpa exclusiva comprovada. Erro comum, phishing ou uso indevido da conta não geram culpa exclusiva de forma automática.",
+  "en": "You may be held liable for harm caused by fraud, unlawful acts, deliberate sharing of credentials or proven exclusive fault. A common mistake, phishing or misuse of the account do not automatically constitute exclusive fault.",
+  "fr": "Vous pouvez être tenu responsable d'un dommage causé par une fraude, un acte illicite, le partage délibéré d'identifiants ou une faute exclusive prouvée. Une erreur courante, l'hameçonnage ou une mauvaise utilisation du compte ne constituent pas automatiquement une faute exclusive.",
+  "es": "Podrás responder por daños causados por fraude, acto ilícito, compartir credenciales deliberadamente o culpa exclusiva comprobada. Un error común, el phishing o el uso indebido de la cuenta no generan culpa exclusiva de forma automática."
+ },
+ {
+  "pt": "Incidentes que possam causar risco ou dano relevante serão comunicados à ANPD e aos titulares afetados no prazo legal, hoje de até 3 dias úteis. O aviso descreverá os dados, riscos, medidas adotadas e o canal de contato.",
+  "en": "Incidents that may cause relevant risk or harm will be reported to the ANPD (Brazil's data protection authority) and to the affected data subjects within the legal deadline, currently up to 3 business days. The notice will describe the data, risks, measures taken and the contact channel.",
+  "fr": "Les incidents susceptibles de causer un risque ou un dommage important seront signalés à l'ANPD (l'autorité brésilienne de protection des données) et aux personnes concernées dans le délai légal, aujourd'hui de 3 jours ouvrés au maximum. L'avis décrira les données, les risques, les mesures prises et le canal de contact.",
+  "es": "Los incidentes que puedan causar riesgo o daño relevante se comunicarán a la ANPD (la autoridad brasileña de protección de datos) y a los titulares afectados dentro del plazo legal, hoy de hasta 3 días hábiles. El aviso describirá los datos, los riesgos, las medidas adoptadas y el canal de contacto."
+ },
+ {
+  "pt": "8. Seus dados",
+  "en": "8. Your data",
+  "fr": "8. Vos données",
+  "es": "8. Tus datos"
+ },
+ {
+  "pt": "O tratamento de dados pessoais está na <a href=\"/privacidade\">Política de privacidade</a>, que faz parte destes termos.",
+  "en": "The processing of personal data is described in the <a href=\"/privacidade\">Privacy policy</a>, which is part of these terms.",
+  "fr": "Le traitement des données personnelles figure dans la <a href=\"/privacidade\">Politique de confidentialité</a>, qui fait partie des présentes conditions.",
+  "es": "El tratamiento de datos personales está en la <a href=\"/privacidade\">Política de privacidad</a>, que forma parte de estos términos."
+ },
+ {
+  "pt": "Os dados financeiros que você insere <strong>são seus</strong>. Não os vendemos, não os cedemos a terceiros para fins comerciais e não os usamos para treinar modelos de inteligência artificial.",
+  "en": "The financial data you enter <strong>is yours</strong>. We do not sell it, do not share it with third parties for commercial purposes and do not use it to train artificial intelligence models.",
+  "fr": "Les données financières que vous saisissez <strong>vous appartiennent</strong>. Nous ne les vendons pas, ne les cédons pas à des tiers à des fins commerciales et ne les utilisons pas pour entraîner des modèles d'intelligence artificielle.",
+  "es": "Los datos financieros que ingresas <strong>son tuyos</strong>. No los vendemos, no los cedemos a terceros con fines comerciales y no los usamos para entrenar modelos de inteligencia artificial."
+ },
+ {
+  "pt": "9. Acessibilidade",
+  "en": "9. Accessibility",
+  "fr": "9. Accessibilité",
+  "es": "9. Accesibilidad"
+ },
+ {
+  "pt": "A acessibilidade faz parte do serviço e não depende de plano pago. O OAZE trabalha para atender a WCAG 2.2 no nível AA, incluindo navegação por teclado, foco visível, leitores de tela, contraste, zoom, redução de movimento e mensagens de erro acessíveis.",
+  "en": "Accessibility is part of the service and does not depend on a paid plan. OAZE works to meet WCAG 2.2 level AA, including keyboard navigation, visible focus, screen readers, contrast, zoom, reduced motion and accessible error messages.",
+  "fr": "L'accessibilité fait partie du service et ne dépend pas d'une formule payante. OAZE s'efforce de respecter le niveau AA des WCAG 2.2, y compris la navigation au clavier, le focus visible, les lecteurs d'écran, le contraste, le zoom, la réduction des animations et des messages d'erreur accessibles.",
+  "es": "La accesibilidad forma parte del servicio y no depende de un plan pago. OAZE trabaja para cumplir la WCAG 2.2 en nivel AA, incluyendo navegación por teclado, foco visible, lectores de pantalla, contraste, zoom, reducción de movimiento y mensajes de error accesibles."
+ },
+ {
+  "pt": "Se uma barreira impedir cadastro, pagamento, exportação, cancelamento ou exclusão, escreva para <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Confirmaremos o recebimento em até 2 dias úteis e buscaremos uma alternativa equivalente, sem custo e sem perda de prazo, em até 5 dias úteis.",
+  "en": "If a barrier prevents sign-up, payment, export, cancellation or deletion, write to <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. We will acknowledge receipt within 2 business days and look for an equivalent alternative, at no cost and with no loss of deadline, within 5 business days.",
+  "fr": "Si un obstacle empêche l'inscription, le paiement, l'export, la résiliation ou la suppression, écrivez à <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Nous accuserons réception sous 2 jours ouvrés et chercherons une alternative équivalente, sans frais et sans perte de délai, sous 5 jours ouvrés.",
+  "es": "Si una barrera impide el registro, el pago, la exportación, la cancelación o la eliminación, escribe a <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Confirmaremos la recepción en hasta 2 días hábiles y buscaremos una alternativa equivalente, sin costo y sin pérdida de plazo, en hasta 5 días hábiles."
+ },
+ {
+  "pt": "10. Alterações, lei aplicável e foro",
+  "en": "10. Changes, applicable law and jurisdiction",
+  "fr": "10. Modifications, loi applicable et juridiction",
+  "es": "10. Cambios, ley aplicable y fuero"
+ },
+ {
+  "pt": "Podemos alterar estes termos. Mudanças relevantes são avisadas por e-mail com <strong>30 dias</strong> de antecedência; continuar usando depois disso significa aceitá-las.",
+  "en": "We may change these terms. Relevant changes are announced by email <strong>30 days</strong> in advance; continuing to use the service after that means accepting them.",
+  "fr": "Nous pouvons modifier ces conditions. Les changements importants sont annoncés par e-mail <strong>30 jours</strong> à l'avance ; continuer à utiliser le service après ce délai vaut acceptation.",
+  "es": "Podemos cambiar estos términos. Los cambios relevantes se avisan por correo con <strong>30 días</strong> de antelación; seguir usando el servicio después de eso significa aceptarlos."
+ },
+ {
+  "pt": "Aplica-se a <strong>lei brasileira</strong>. Fica eleito o foro do domicílio do consumidor, conforme o Código de Defesa do Consumidor.",
+  "en": "<strong>Brazilian law</strong> applies. The courts of the consumer's domicile are elected, as provided by the Consumer Protection Code.",
+  "fr": "La <strong>loi brésilienne</strong> s'applique. Le tribunal du domicile du consommateur est compétent, conformément au Code de défense du consommateur.",
+  "es": "Se aplica la <strong>ley brasileña</strong>. Se elige el fuero del domicilio del consumidor, conforme al Código de Defensa del Consumidor."
+ },
+ {
+  "pt": "11. Contato",
+  "en": "11. Contact",
+  "fr": "11. Contact",
+  "es": "11. Contacto"
+ },
+ {
+  "pt": "Dúvidas sobre estes termos: <a href=\"/suporte\">página de suporte</a> ou <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "en": "Questions about these terms: <a href=\"/suporte\">support page</a> or <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "fr": "Questions sur ces conditions : <a href=\"/suporte\">page d'assistance</a> ou <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "es": "Dudas sobre estos términos: <a href=\"/suporte\">página de soporte</a> o <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>."
+ },
+ {
+  "pt": "<strong>Falta preencher antes de publicar:</strong> razão social, CNPJ e endereço da empresa responsável. Um contrato de consumo sem identificação de quem é a parte contratada não cumpre o art. 4º do CDC.",
+  "en": "<strong>Still to be filled in before publishing:</strong> legal name, company tax ID (CNPJ) and address of the company responsible. A consumer contract without identifying the contracted party does not comply with art. 4 of the Brazilian Consumer Protection Code.",
+  "fr": "<strong>À compléter avant publication :</strong> raison sociale, numéro d'entreprise (CNPJ) et adresse de la société responsable. Un contrat de consommation sans identification de la partie contractée ne respecte pas l'art. 4 du Code de défense du consommateur brésilien.",
+  "es": "<strong>Falta completar antes de publicar:</strong> razón social, CNPJ y dirección de la empresa responsable. Un contrato de consumo sin identificación de la parte contratada no cumple el art. 4 del Código de Defensa del Consumidor."
+ },
+ {
+  "pt": "Um painel para enxergar o próprio dinheiro sem virar planilha.",
+  "en": "A dashboard to see your own money without turning it into a spreadsheet.",
+  "fr": "Un tableau de bord pour voir votre argent sans le transformer en tableur.",
+  "es": "Un panel para ver tu propio dinero sin convertirlo en una hoja de cálculo."
+ },
+ {
+  "pt": "Produto",
+  "en": "Product",
+  "fr": "Produit",
+  "es": "Producto"
+ },
+ {
+  "pt": "UGLEZ",
+  "en": "UGLEZ",
+  "fr": "UGLEZ",
+  "es": "UGLEZ"
+ },
+ {
+  "pt": "Conta",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Criar conta",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Recuperar senha",
+  "en": "Reset password",
+  "fr": "Réinitialiser le mot de passe",
+  "es": "Recuperar contraseña"
+ },
+ {
+  "pt": "Legal",
+  "en": "Legal",
+  "fr": "Mentions légales",
+  "es": "Legal"
+ },
+ {
+  "pt": "Política de privacidade",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "© <span data-ano>2026</span> OAZE",
+  "en": "© <span data-ano>2026</span> OAZE",
+  "fr": "© <span data-ano>2026</span> OAZE",
+  "es": "© <span data-ano>2026</span> OAZE"
+ },
+ {
+  "pt": "Feito no Brasil · valores em reais",
+  "en": "Made in Brazil · amounts in Brazilian reais (BRL)",
+  "fr": "Fait au Brésil · montants en réais brésiliens (BRL)",
+  "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
+ },
+ {
+  "pt": "suporte@oaze.site",
+  "en": "suporte@oaze.site",
+  "fr": "suporte@oaze.site",
+  "es": "suporte@oaze.site"
+ }
+]

@@ -63,7 +63,7 @@
      Traduzir aqui evita "Invalid login credentials" numa tela em
      português -- e evita repassar detalhe que não ajuda ninguém. */
   var FRASES = [
-    [/invalid login credentials/i,        'E-mail ou senha incorretos.'],
+    [/invalid login credentials/i,        'E-mail ou senha incorretos.'],  // traduzido em FRASES_IDIOMA
     [/email not confirmed/i,              'Confirme seu e-mail antes de entrar. Procure a mensagem que enviamos.'],
     [/user already registered|already registered/i, 'Já existe uma conta com esse e-mail. Tente entrar, ou recupere a senha.'],
     [/password should be at least (\d+)/i, 'A senha precisa ter pelo menos $1 caracteres.'],
@@ -78,13 +78,13 @@
     var m = (erro && (erro.message || erro.msg)) || String(erro || '');
     for (var i = 0; i < FRASES.length; i++) {
       var achou = m.match(FRASES[i][0]);
-      if (achou) return FRASES[i][1].replace('$1', achou[1] || '');
+      if (achou) return traduzida(FRASES[i][1]).replace('$1', achou[1] || '');
     }
     /* Sem tradução conhecida: uma frase genérica, e o original só no
        console. Erro cru na tela costuma vazar detalhe de servidor e
        não ajuda quem está tentando entrar. */
     if (m) console.warn('[auth]', m);
-    return 'Não foi possível concluir agora. Tente de novo em instantes.';
+    return traduzida('Não foi possível concluir agora. Tente de novo em instantes.');
   };
 
   /* ---------------------------------------------------------------
@@ -122,6 +122,55 @@
      Sem rede a resposta não vem, nenhum botão aparece, e o e-mail
      continua ali: a página nunca fica esperando por esta chamada. */
   var provedoresPromessa = null;
+  /* =============================================================
+     AS MENSAGENS DE ERRO NA LÍNGUA DA PÁGINA
+     -------------------------------------------------------------
+     O mesmo arquivo serve /entrar, /en/entrar, /fr/entrar e
+     /es/entrar. A frase em português é a chave; sem tradução, ela
+     mesma aparece. Mantém-se o $1 para o número de caracteres.
+     ============================================================= */
+  var IDIOMA = (document.documentElement.lang || 'pt').slice(0, 2).toLowerCase();
+  var FRASES_IDIOMA = {
+    'E-mail ou senha incorretos.': {
+      en: 'Wrong email or password.', fr: 'E-mail ou mot de passe incorrect.', es: 'Correo o contraseña incorrectos.' },
+    'Confirme seu e-mail antes de entrar. Procure a mensagem que enviamos.': {
+      en: 'Confirm your email before signing in. Look for the message we sent.',
+      fr: 'Confirmez votre e-mail avant de vous connecter. Cherchez le message que nous avons envoyé.',
+      es: 'Confirma tu correo antes de entrar. Busca el mensaje que enviamos.' },
+    'Já existe uma conta com esse e-mail. Tente entrar, ou recupere a senha.': {
+      en: 'An account with that email already exists. Try signing in, or reset the password.',
+      fr: 'Un compte existe déjà avec cet e-mail. Essayez de vous connecter ou réinitialisez le mot de passe.',
+      es: 'Ya existe una cuenta con ese correo. Intenta entrar o recupera la contraseña.' },
+    'A senha precisa ter pelo menos $1 caracteres.': {
+      en: 'The password needs at least $1 characters.',
+      fr: 'Le mot de passe doit contenir au moins $1 caractères.',
+      es: 'La contraseña debe tener al menos $1 caracteres.' },
+    'Esse e-mail não parece válido.': {
+      en: "That email doesn't look valid.", fr: 'Cet e-mail ne semble pas valide.', es: 'Ese correo no parece válido.' },
+    'Muitas tentativas seguidas. Espere um minuto e tente de novo.': {
+      en: 'Too many attempts in a row. Wait a minute and try again.',
+      fr: 'Trop de tentatives de suite. Attendez une minute et réessayez.',
+      es: 'Demasiados intentos seguidos. Espera un minuto e inténtalo de nuevo.' },
+    'Esse link expirou. Peça um novo.': {
+      en: 'That link has expired. Request a new one.', fr: 'Ce lien a expiré. Demandez-en un nouveau.', es: 'Ese enlace venció. Pide uno nuevo.' },
+    'Sem conexão com o servidor. Verifique sua internet.': {
+      en: 'No connection to the server. Check your internet.',
+      fr: 'Pas de connexion au serveur. Vérifiez votre connexion internet.',
+      es: 'Sin conexión con el servidor. Revisa tu internet.' },
+    'A senha nova precisa ser diferente da anterior.': {
+      en: 'The new password must be different from the previous one.',
+      fr: 'Le nouveau mot de passe doit être différent du précédent.',
+      es: 'La contraseña nueva debe ser diferente de la anterior.' },
+    'Não foi possível concluir agora. Tente de novo em instantes.': {
+      en: "We couldn't finish that right now. Try again in a moment.",
+      fr: "Impossible de terminer pour le moment. Réessayez dans un instant.",
+      es: 'No fue posible concluir ahora. Inténtalo de nuevo en unos instantes.' }
+  };
+  function traduzida(pt) {
+    var e = FRASES_IDIOMA[pt];
+    return (e && e[IDIOMA]) || pt;
+  }
+
   var GAVETA_PROV = 'oaze.provedores';
 
   /* O QUE SE SABIA DA ÚLTIMA VEZ

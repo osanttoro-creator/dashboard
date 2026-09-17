@@ -1,0 +1,626 @@
+[
+ {
+  "pt": "Política de privacidade — OAZE",
+  "en": "Privacy policy — OAZE",
+  "fr": "Politique de confidentialité — OAZE",
+  "es": "Política de privacidad — OAZE"
+ },
+ {
+  "pt": "Quais dados o OAZE coleta, para quê, com quem compartilha, por quanto tempo guarda e como você exerce seus direitos pela LGPD.",
+  "en": "What data OAZE collects, what for, who it is shared with, how long it is kept and how you exercise your rights under the LGPD.",
+  "fr": "Quelles données OAZE collecte, à quelles fins, avec qui elles sont partagées, combien de temps elles sont conservées et comment exercer vos droits au titre de la LGPD.",
+  "es": "Qué datos recoge OAZE, para qué, con quién los comparte, cuánto tiempo los guarda y cómo ejerces tus derechos según la LGPD."
+ },
+ {
+  "pt": "Quais dados coletamos, para quê e como você exerce seus direitos.",
+  "en": "What data we collect, what for and how you exercise your rights.",
+  "fr": "Quelles données nous collectons, à quelles fins et comment exercer vos droits.",
+  "es": "Qué datos recogemos, para qué y cómo ejerces tus derechos."
+ },
+ {
+  "pt": "OAZE — controle financeiro pessoal",
+  "en": "OAZE — personal finance management",
+  "fr": "OAZE — gestion des finances personnelles",
+  "es": "OAZE — control financiero personal"
+ },
+ {
+  "pt": "Como o OAZE protege seus dados e respeita a LGPD.",
+  "en": "How OAZE protects your data and complies with the LGPD.",
+  "fr": "Comment OAZE protège vos données et respecte la LGPD.",
+  "es": "Cómo OAZE protege tus datos y respeta la LGPD."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Abrir menu",
+  "en": "Open menu",
+  "fr": "Ouvrir le menu",
+  "es": "Abrir menú"
+ },
+ {
+  "pt": "Navegação principal",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "Recursos",
+  "en": "Features",
+  "fr": "Fonctionnalités",
+  "es": "Funciones"
+ },
+ {
+  "pt": "Preços",
+  "en": "Pricing",
+  "fr": "Tarifs",
+  "es": "Precios"
+ },
+ {
+  "pt": "Segurança",
+  "en": "Security",
+  "fr": "Sécurité",
+  "es": "Seguridad"
+ },
+ {
+  "pt": "Suporte",
+  "en": "Support",
+  "fr": "Assistance",
+  "es": "Soporte"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Criar conta grátis",
+  "en": "Create a free account",
+  "fr": "Créer un compte gratuit",
+  "es": "Crear cuenta gratis"
+ },
+ {
+  "pt": "Política de privacidade",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "Última atualização: 15 de setembro de 2026",
+  "en": "Last updated: 15 September 2026",
+  "fr": "Dernière mise à jour : 15 septembre 2026",
+  "es": "Última actualización: 15 de septiembre de 2026"
+ },
+ {
+  "pt": "<strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o funcionamento real do produto, mas <strong>não foi revisado por advogado</strong> e faltam dados obrigatórios.",
+  "en": "<strong>Draft pending legal review.</strong> The content describes how the product actually works, but it <strong>has not been reviewed by a lawyer</strong> and required details are missing.",
+  "fr": "<strong>Projet en attente de relecture juridique.</strong> Le contenu décrit le fonctionnement réel du produit, mais il <strong>n'a pas été relu par un avocat</strong> et des informations obligatoires manquent.",
+  "es": "<strong>Borrador pendiente de revisión jurídica.</strong> El contenido describe el funcionamiento real del producto, pero <strong>no fue revisado por un abogado</strong> y faltan datos obligatorios."
+ },
+ {
+  "pt": "Antes de publicar em definitivo: preencher a identificação do controlador (§1), nomear o encarregado pelo tratamento de dados (§11, exigido pelo art. 41 da LGPD) e revisar as bases legais do §3.",
+  "en": "Before final publication: fill in the controller identification (§1), appoint the data protection officer (§11, required by art. 41 of the LGPD) and review the legal bases in §3.",
+  "fr": "Avant la publication définitive : compléter l'identification du responsable de traitement (§1), désigner le délégué à la protection des données (§11, exigé par l'art. 41 de la LGPD) et revoir les bases légales du §3.",
+  "es": "Antes de publicar en definitivo: completar la identificación del controlador (§1), nombrar al encargado del tratamiento de datos (§11, exigido por el art. 41 de la LGPD) y revisar las bases legales del §3."
+ },
+ {
+  "pt": "1. Quem é o responsável",
+  "en": "1. Who is responsible",
+  "fr": "1. Qui est responsable",
+  "es": "1. Quién es el responsable"
+ },
+ {
+  "pt": "O OAZE é o <strong>controlador</strong> dos dados pessoais tratados aqui, nos termos da Lei Geral de Proteção de Dados (Lei 13.709/2018).",
+  "en": "OAZE is the <strong>controller</strong> of the personal data processed here, under Brazil's General Data Protection Law (Law 13.709/2018).",
+  "fr": "OAZE est le <strong>responsable du traitement</strong> des données personnelles traitées ici, au sens de la loi générale brésilienne de protection des données (loi 13.709/2018).",
+  "es": "OAZE es el <strong>controlador</strong> de los datos personales tratados aquí, en los términos de la Ley General de Protección de Datos de Brasil (Ley 13.709/2018)."
+ },
+ {
+  "pt": "Você é o <strong>titular</strong> dos seus dados. O papel de controlador só muda em uma futura contratação empresarial na qual o cliente decida como tratar dados pessoais de outras pessoas; esse caso terá contrato e anexo próprios.",
+  "en": "You are the <strong>data subject</strong>. The controller role only changes in a future business contract in which the client decides how to process other people's personal data; that case will have its own contract and annex.",
+  "fr": "Vous êtes la <strong>personne concernée</strong>. Le rôle de responsable ne change qu'en cas de futur contrat professionnel dans lequel le client déciderait du traitement de données personnelles de tiers ; ce cas fera l'objet d'un contrat et d'une annexe spécifiques.",
+  "es": "Tú eres el <strong>titular</strong> de tus datos. El papel de controlador solo cambia en una futura contratación empresarial en la que el cliente decida cómo tratar datos personales de otras personas; ese caso tendrá contrato y anexo propios."
+ },
+ {
+  "pt": "A completar: razão social, CNPJ e endereço.",
+  "en": "To be completed: legal name, company tax ID (CNPJ) and address.",
+  "fr": "À compléter : raison sociale, numéro d'entreprise (CNPJ) et adresse.",
+  "es": "A completar: razón social, CNPJ y dirección."
+ },
+ {
+  "pt": "2. O que coletamos",
+  "en": "2. What we collect",
+  "fr": "2. Ce que nous collectons",
+  "es": "2. Qué recogemos"
+ },
+ {
+  "pt": "<strong>Dados de cadastro.</strong> E-mail, senha (guardada apenas como hash, nunca em texto) e, opcionalmente, o nome pelo qual você quer ser chamado.",
+  "en": "<strong>Sign-up data.</strong> Email, password (stored only as a hash, never in plain text) and, optionally, the name you want to be called by.",
+  "fr": "<strong>Données d'inscription.</strong> E-mail, mot de passe (conservé uniquement sous forme de hachage, jamais en clair) et, facultativement, le nom par lequel vous souhaitez être appelé.",
+  "es": "<strong>Datos de registro.</strong> Correo, contraseña (guardada solo como hash, nunca en texto) y, opcionalmente, el nombre con el que quieres que te llamemos."
+ },
+ {
+  "pt": "<strong>Dados financeiros que você insere.</strong> Contas, cartões, categorias, lançamentos, orçamentos, metas e investimentos. Nós não buscamos isso em lugar nenhum: tudo chega porque você digitou ou importou um arquivo que você mesmo baixou do seu banco.",
+  "en": "<strong>Financial data you enter.</strong> Accounts, cards, categories, transactions, budgets, goals and investments. We do not fetch this from anywhere: it all arrives because you typed it or imported a file you downloaded from your own bank.",
+  "fr": "<strong>Données financières que vous saisissez.</strong> Comptes, cartes, catégories, opérations, budgets, objectifs et investissements. Nous ne les récupérons nulle part : tout arrive parce que vous l'avez saisi ou importé depuis un fichier téléchargé par vous auprès de votre banque.",
+  "es": "<strong>Datos financieros que ingresas.</strong> Cuentas, tarjetas, categorías, movimientos, presupuestos, metas e inversiones. No los buscamos en ningún lado: todo llega porque lo escribiste o importaste un archivo que tú mismo descargaste de tu banco."
+ },
+ {
+  "pt": "<strong>Dados do plano.</strong> Plano, limites e situação da assinatura associados à conta, com os identificadores da sessão e da assinatura na Stripe.",
+  "en": "<strong>Plan data.</strong> Plan, limits and subscription status linked to the account, with the session and subscription identifiers at Stripe.",
+  "fr": "<strong>Données de la formule.</strong> Formule, limites et statut de l'abonnement liés au compte, avec les identifiants de session et d'abonnement chez Stripe.",
+  "es": "<strong>Datos del plan.</strong> Plan, límites y situación de la suscripción asociados a la cuenta, con los identificadores de la sesión y de la suscripción en Stripe."
+ },
+ {
+  "pt": "<strong>Dados de pagamento.</strong> Ao assinar, o OAZE envia à <strong>Stripe</strong> seu e-mail, o plano e o valor escolhidos. Os dados do cartão são digitados na página da Stripe e <strong>nunca passam pelo OAZE</strong>.",
+  "en": "<strong>Payment data.</strong> When you subscribe, OAZE sends <strong>Stripe</strong> your email and the plan and amount chosen. Card details are typed on Stripe's page and <strong>never pass through OAZE</strong>.",
+  "fr": "<strong>Données de paiement.</strong> Lors de l'abonnement, OAZE transmet à <strong>Stripe</strong> votre e-mail, la formule et le montant choisis. Les données de carte sont saisies sur la page de Stripe et <strong>ne transitent jamais par OAZE</strong>.",
+  "es": "<strong>Datos de pago.</strong> Al suscribirte, OAZE envía a <strong>Stripe</strong> tu correo, el plan y el importe elegidos. Los datos de la tarjeta se escriben en la página de Stripe y <strong>nunca pasan por OAZE</strong>."
+ },
+ {
+  "pt": "<strong>Dados técnicos mínimos.</strong> Registros de erro do servidor, com identificador de requisição e horário. Eles não incluem conteúdo financeiro.",
+  "en": "<strong>Minimal technical data.</strong> Server error logs, with a request identifier and a timestamp. They do not include financial content.",
+  "fr": "<strong>Données techniques minimales.</strong> Journaux d'erreurs du serveur, avec un identifiant de requête et un horodatage. Ils ne contiennent aucun contenu financier.",
+  "es": "<strong>Datos técnicos mínimos.</strong> Registros de error del servidor, con identificador de solicitud y hora. No incluyen contenido financiero."
+ },
+ {
+  "pt": "<strong>Não coletamos:</strong> sua localização, sua lista de contatos, seu histórico de navegação em outros sites, nem dados de terceiros. Não usamos cookies de publicidade nem rastreadores de rede social. Usamos apenas armazenamento essencial para sessão, preferências e funcionamento local. Se você escolher entrar com Google, o Google pode usar os próprios cookies durante essa autenticação.",
+  "en": "<strong>We do not collect:</strong> your location, your contact list, your browsing history on other sites, or third-party data. We do not use advertising cookies or social network trackers. We use only storage that is essential for the session, preferences and local operation. If you choose to sign in with Google, Google may use its own cookies during that authentication.",
+  "fr": "<strong>Nous ne collectons pas :</strong> votre localisation, votre liste de contacts, votre historique de navigation sur d'autres sites, ni des données de tiers. Nous n'utilisons ni cookies publicitaires ni traceurs de réseaux sociaux. Nous n'utilisons que le stockage essentiel à la session, aux préférences et au fonctionnement local. Si vous choisissez de vous connecter avec Google, Google peut utiliser ses propres cookies pendant cette authentification.",
+  "es": "<strong>No recogemos:</strong> tu ubicación, tu lista de contactos, tu historial de navegación en otros sitios ni datos de terceros. No usamos cookies de publicidad ni rastreadores de redes sociales. Usamos solo almacenamiento esencial para la sesión, las preferencias y el funcionamiento local. Si eliges entrar con Google, Google puede usar sus propias cookies durante esa autenticación."
+ },
+ {
+  "pt": "3. Para que usamos, e com que base legal",
+  "en": "3. What we use it for, and on what legal basis",
+  "fr": "3. À quelles fins, et sur quelle base légale",
+  "es": "3. Para qué lo usamos y con qué base legal"
+ },
+ {
+  "pt": "<strong>Executar o contrato</strong> (art. 7º, V) — manter sua conta, sincronizar seus dados entre aparelhos, aplicar os limites do plano e cobrar a assinatura, quando houver.",
+  "en": "<strong>Performing the contract</strong> (art. 7, V) — keeping your account, syncing your data between devices, enforcing plan limits and charging the subscription, when there is one.",
+  "fr": "<strong>Exécution du contrat</strong> (art. 7, V) — maintenir votre compte, synchroniser vos données entre appareils, appliquer les limites de la formule et facturer l'abonnement, le cas échéant.",
+  "es": "<strong>Ejecutar el contrato</strong> (art. 7, V) — mantener tu cuenta, sincronizar tus datos entre dispositivos, aplicar los límites del plan y cobrar la suscripción, cuando exista."
+ },
+ {
+  "pt": "<strong>Cumprir obrigação legal</strong> (art. 7º, II) — atender obrigações legais aplicáveis ao serviço.",
+  "en": "<strong>Complying with legal obligations</strong> (art. 7, II) — meeting legal obligations applicable to the service.",
+  "fr": "<strong>Respect d'une obligation légale</strong> (art. 7, II) — satisfaire aux obligations légales applicables au service.",
+  "es": "<strong>Cumplir obligaciones legales</strong> (art. 7, II) — atender obligaciones legales aplicables al servicio."
+ },
+ {
+  "pt": "<strong>Legítimo interesse</strong> (art. 7º, IX) — segurança, prevenção a fraude e correção de defeitos, sempre com o mínimo de dado necessário.",
+  "en": "<strong>Legitimate interest</strong> (art. 7, IX) — security, fraud prevention and fixing defects, always with the minimum data needed.",
+  "fr": "<strong>Intérêt légitime</strong> (art. 7, IX) — sécurité, prévention de la fraude et correction des défauts, toujours avec le minimum de données nécessaires.",
+  "es": "<strong>Interés legítimo</strong> (art. 7, IX) — seguridad, prevención del fraude y corrección de defectos, siempre con el mínimo de datos necesarios."
+ },
+ {
+  "pt": "<strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à UGLEZ, descrito no §5. Você pode não usar a UGLEZ e o restante do produto continua funcionando igual.",
+  "en": "<strong>Consent</strong> (art. 7, I) — only for sending data to UGLEZ, described in §5. You can choose not to use UGLEZ and the rest of the product works exactly the same.",
+  "fr": "<strong>Consentement</strong> (art. 7, I) — uniquement pour l'envoi de données à UGLEZ, décrit au §5. Vous pouvez ne pas utiliser UGLEZ ; le reste du produit fonctionne à l'identique.",
+  "es": "<strong>Consentimiento</strong> (art. 7, I) — solo para el envío de datos a UGLEZ, descrito en el §5. Puedes no usar UGLEZ y el resto del producto sigue funcionando igual."
+ },
+ {
+  "pt": "4. Onde os dados ficam",
+  "en": "4. Where the data lives",
+  "fr": "4. Où les données sont hébergées",
+  "es": "4. Dónde están los datos"
+ },
+ {
+  "pt": "Os registros ficam em um banco PostgreSQL gerenciado pelo <strong>Supabase</strong>, com isolamento por conta aplicado no próprio banco (Row Level Security): uma conta só alcança as linhas dela, e isso é imposto pelo banco, não por uma verificação no aplicativo.",
+  "en": "Records live in a PostgreSQL database managed by <strong>Supabase</strong>, with per-account isolation enforced in the database itself (Row Level Security): an account only reaches its own rows, and that is enforced by the database, not by a check in the application.",
+  "fr": "Les enregistrements se trouvent dans une base PostgreSQL gérée par <strong>Supabase</strong>, avec un cloisonnement par compte appliqué dans la base elle-même (Row Level Security) : un compte n'atteint que ses propres lignes, et c'est la base qui l'impose, pas une vérification dans l'application.",
+  "es": "Los registros están en una base PostgreSQL gestionada por <strong>Supabase</strong>, con aislamiento por cuenta aplicado en la propia base (Row Level Security): una cuenta solo alcanza sus filas, y eso lo impone la base, no una verificación en la aplicación."
+ },
+ {
+  "pt": "O site é hospedado na <strong>Hostinger</strong>.",
+  "en": "The site is hosted on <strong>Hostinger</strong>.",
+  "fr": "Le site est hébergé chez <strong>Hostinger</strong>.",
+  "es": "El sitio está alojado en <strong>Hostinger</strong>."
+ },
+ {
+  "pt": "<strong>Transferência internacional:</strong> esses serviços podem manter servidores fora do Brasil. Antes de cada transferência, o OAZE deve confirmar a hipótese legal, o país, o importador e um mecanismo válido previsto na LGPD e na Resolução CD/ANPD nº 19/2024. <em>A confirmar: região do projeto Supabase e países usados por cada fornecedor.</em>",
+  "en": "<strong>International transfer:</strong> these services may keep servers outside Brazil. Before each transfer, OAZE must confirm the legal basis, the country, the importer and a valid mechanism under the LGPD and ANPD Resolution 19/2024. <em>To be confirmed: the Supabase project region and the countries used by each supplier.</em>",
+  "fr": "<strong>Transfert international :</strong> ces services peuvent disposer de serveurs hors du Brésil. Avant chaque transfert, OAZE doit confirmer la base légale, le pays, l'importateur et un mécanisme valide prévu par la LGPD et la résolution ANPD nº 19/2024. <em>À confirmer : la région du projet Supabase et les pays utilisés par chaque fournisseur.</em>",
+  "es": "<strong>Transferencia internacional:</strong> estos servicios pueden mantener servidores fuera de Brasil. Antes de cada transferencia, OAZE debe confirmar la hipótesis legal, el país, el importador y un mecanismo válido previsto en la LGPD y en la Resolución CD/ANPD n.º 19/2024. <em>A confirmar: región del proyecto Supabase y países usados por cada proveedor.</em>"
+ },
+ {
+  "pt": "5. A UGLEZ e o uso de inteligência artificial",
+  "en": "5. UGLEZ and the use of artificial intelligence",
+  "fr": "5. UGLEZ et l'usage de l'intelligence artificielle",
+  "es": "5. UGLEZ y el uso de inteligencia artificial"
+ },
+ {
+  "pt": "Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.",
+  "en": "Much of what UGLEZ shows is <strong>calculated in your own browser</strong>. For that, <strong>no data leaves the device</strong>.",
+  "fr": "Une grande partie de ce que montre UGLEZ est <strong>calculée dans votre propre navigateur</strong>. Pour cela, <strong>aucune donnée ne quitte l'appareil</strong>.",
+  "es": "Buena parte de lo que muestra UGLEZ es <strong>cálculo hecho en tu propio navegador</strong>. Para eso, <strong>ningún dato sale del dispositivo</strong>."
+ },
+ {
+  "pt": "Quando você <em>conversa</em> com a UGLEZ, a pergunta e um resumo dos seus números vão para um servidor nosso, que chama a Responses API da OpenAI. A tela mostra <strong>quais categorias de dado seguem junto antes de você enviar</strong>.",
+  "en": "When you <em>talk</em> to UGLEZ, the question and a summary of your numbers go to a server of ours, which calls OpenAI's Responses API. The screen shows <strong>which categories of data go along before you send</strong>.",
+  "fr": "Quand vous <em>discutez</em> avec UGLEZ, la question et un résumé de vos chiffres sont envoyés à l'un de nos serveurs, qui appelle l'API Responses d'OpenAI. L'écran indique <strong>quelles catégories de données partent avec, avant l'envoi</strong>.",
+  "es": "Cuando <em>conversas</em> con UGLEZ, la pregunta y un resumen de tus números van a un servidor nuestro, que llama a la Responses API de OpenAI. La pantalla muestra <strong>qué categorías de datos van junto, antes de que envíes</strong>."
+ },
+ {
+  "pt": "O que <strong>não</strong> é enviado: descrições de lançamento, nomes de estabelecimento, números de conta ou cartão, e o seu e-mail.",
+  "en": "What is <strong>not</strong> sent: transaction descriptions, merchant names, account or card numbers, and your email.",
+  "fr": "Ce qui n'est <strong>pas</strong> envoyé : les descriptions d'opérations, les noms de commerçants, les numéros de compte ou de carte, et votre e-mail.",
+  "es": "Lo que <strong>no</strong> se envía: descripciones de movimientos, nombres de comercios, números de cuenta o tarjeta, y tu correo."
+ },
+ {
+  "pt": "<strong>Seus dados não são usados para treinar modelos.</strong> Eles são enviados apenas para gerar a sua resposta. A chamada não solicita que a API armazene a resposta gerada (<code>store: false</code>).",
+  "en": "<strong>Your data is not used to train models.</strong> It is sent only to generate your answer. The call does not ask the API to store the generated response (<code>store: false</code>).",
+  "fr": "<strong>Vos données ne servent pas à entraîner des modèles.</strong> Elles ne sont envoyées que pour générer votre réponse. L'appel ne demande pas à l'API de conserver la réponse générée (<code>store: false</code>).",
+  "es": "<strong>Tus datos no se usan para entrenar modelos.</strong> Se envían solo para generar tu respuesta. La llamada no solicita que la API almacene la respuesta generada (<code>store: false</code>)."
+ },
+ {
+  "pt": "A chave de acesso ao provedor fica no servidor. <strong>Ela nunca chega ao seu navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.",
+  "en": "The provider access key stays on the server. <strong>It never reaches your browser</strong>, and the browser never talks directly to any AI provider.",
+  "fr": "La clé d'accès au fournisseur reste sur le serveur. <strong>Elle n'arrive jamais dans votre navigateur</strong>, et le navigateur ne parle jamais directement à un fournisseur d'IA.",
+  "es": "La clave de acceso al proveedor queda en el servidor. <strong>Nunca llega a tu navegador</strong>, y el navegador nunca habla directamente con ningún proveedor de IA."
+ },
+ {
+  "pt": "6. Com quem compartilhamos",
+  "en": "6. Who we share with",
+  "fr": "6. Avec qui nous partageons",
+  "es": "6. Con quién compartimos"
+ },
+ {
+  "pt": "Compartilhamos somente o necessário para a operação escolhida. O papel de cada fornecedor pode variar entre operador, suboperador e controlador independente:",
+  "en": "We share only what is needed for the operation you chose. Each supplier's role may be processor, sub-processor or independent controller:",
+  "fr": "Nous ne partageons que ce qui est nécessaire à l'opération choisie. Le rôle de chaque fournisseur peut être sous-traitant, sous-traitant ultérieur ou responsable indépendant :",
+  "es": "Compartimos solo lo necesario para la operación elegida. El papel de cada proveedor puede variar entre operador, suboperador y controlador independiente:"
+ },
+ {
+  "pt": "<strong>Supabase:</strong> banco PostgreSQL, autenticação, Edge Functions e backups disponíveis no plano contratado.",
+  "en": "<strong>Supabase:</strong> PostgreSQL database, authentication, Edge Functions and the backups available on the contracted plan.",
+  "fr": "<strong>Supabase :</strong> base PostgreSQL, authentification, Edge Functions et sauvegardes disponibles dans la formule souscrite.",
+  "es": "<strong>Supabase:</strong> base PostgreSQL, autenticación, Edge Functions y copias de seguridad disponibles en el plan contratado."
+ },
+ {
+  "pt": "<strong>Hostinger:</strong> hospedagem dos arquivos públicos e registros técnicos necessários à entrega e à segurança do site.",
+  "en": "<strong>Hostinger:</strong> hosting of the public files and the technical logs needed to deliver and secure the site.",
+  "fr": "<strong>Hostinger :</strong> hébergement des fichiers publics et journaux techniques nécessaires à la diffusion et à la sécurité du site.",
+  "es": "<strong>Hostinger:</strong> alojamiento de los archivos públicos y registros técnicos necesarios para la entrega y la seguridad del sitio."
+ },
+ {
+  "pt": "<strong>Stripe:</strong> Checkout, assinatura, fatura, cancelamento, estorno, disputa e prevenção a fraude.",
+  "en": "<strong>Stripe:</strong> Checkout, subscription, invoice, cancellation, refund, dispute and fraud prevention.",
+  "fr": "<strong>Stripe :</strong> Checkout, abonnement, facture, résiliation, remboursement, litige et prévention de la fraude.",
+  "es": "<strong>Stripe:</strong> Checkout, suscripción, factura, cancelación, devolución, disputa y prevención del fraude."
+ },
+ {
+  "pt": "<strong>OpenAI:</strong> resposta da UGLEZ, somente quando você escolhe enviar uma pergunta, nos limites descritos no §5.",
+  "en": "<strong>OpenAI:</strong> UGLEZ's answer, only when you choose to send a question, within the limits described in §5.",
+  "fr": "<strong>OpenAI :</strong> la réponse d'UGLEZ, uniquement lorsque vous choisissez d'envoyer une question, dans les limites décrites au §5.",
+  "es": "<strong>OpenAI:</strong> la respuesta de UGLEZ, solo cuando eliges enviar una pregunta, dentro de los límites descritos en el §5."
+ },
+ {
+  "pt": "<strong>Google e Apple:</strong> autenticação, somente quando o método estiver habilitado e você o escolher.",
+  "en": "<strong>Google and Apple:</strong> authentication, only when the method is enabled and you choose it.",
+  "fr": "<strong>Google et Apple :</strong> authentification, uniquement lorsque la méthode est activée et que vous la choisissez.",
+  "es": "<strong>Google y Apple:</strong> autenticación, solo cuando el método esté habilitado y tú lo elijas."
+ },
+ {
+  "pt": "<strong>jsDelivr:</strong> fallback técnico para carregar a biblioteca pública do Supabase se o arquivo local não estiver disponível.",
+  "en": "<strong>jsDelivr:</strong> technical fallback to load the public Supabase library if the local file is unavailable.",
+  "fr": "<strong>jsDelivr :</strong> secours technique pour charger la bibliothèque publique de Supabase si le fichier local n'est pas disponible.",
+  "es": "<strong>jsDelivr:</strong> respaldo técnico para cargar la biblioteca pública de Supabase si el archivo local no está disponible."
+ },
+ {
+  "pt": "Cloudflare Turnstile, hCaptcha, analytics, SMTP externo e monitoramento de erros só serão acrescentados a esta lista antes de sua ativação e depois da avaliação de finalidade, dados, retenção, segurança e transferência internacional.",
+  "en": "Cloudflare Turnstile, hCaptcha, analytics, external SMTP and error monitoring will only be added to this list before being activated and after assessing purpose, data, retention, security and international transfer.",
+  "fr": "Cloudflare Turnstile, hCaptcha, analytics, SMTP externe et surveillance des erreurs ne seront ajoutés à cette liste qu'avant leur activation et après évaluation de la finalité, des données, de la conservation, de la sécurité et du transfert international.",
+  "es": "Cloudflare Turnstile, hCaptcha, analytics, SMTP externo y monitoreo de errores solo se añadirán a esta lista antes de su activación y después de evaluar finalidad, datos, retención, seguridad y transferencia internacional."
+ },
+ {
+  "pt": "Não vendemos seus dados. Não os cedemos para publicidade. Não os cruzamos com outras bases.",
+  "en": "We do not sell your data. We do not hand it over for advertising. We do not cross-reference it with other databases.",
+  "fr": "Nous ne vendons pas vos données. Nous ne les cédons pas à des fins publicitaires. Nous ne les croisons pas avec d'autres bases.",
+  "es": "No vendemos tus datos. No los cedemos para publicidad. No los cruzamos con otras bases."
+ },
+ {
+  "pt": "Podemos fornecer dados por ordem judicial. Nesse caso avisamos você, salvo quando a lei proibir o aviso.",
+  "en": "We may provide data under a court order. In that case we notify you, except when the law forbids the notice.",
+  "fr": "Nous pouvons fournir des données sur décision de justice. Dans ce cas, nous vous prévenons, sauf lorsque la loi l'interdit.",
+  "es": "Podemos entregar datos por orden judicial. En ese caso te avisamos, salvo cuando la ley prohíba el aviso."
+ },
+ {
+  "pt": "7. O que fica só no seu aparelho",
+  "en": "7. What stays only on your device",
+  "fr": "7. Ce qui reste uniquement sur votre appareil",
+  "es": "7. Lo que queda solo en tu dispositivo"
+ },
+ {
+  "pt": "O OAZE guarda no <code>localStorage</code> do navegador: preferências de exibição (tema, mês selecionado), um cache dos seus dados para a tela abrir rápido e uma fila do que ainda não subiu quando você está sem internet.",
+  "en": "OAZE keeps in the browser's <code>localStorage</code>: display preferences (theme, selected month), a cache of your data so the screen opens quickly, and a queue of what has not been uploaded yet while you are offline.",
+  "fr": "OAZE conserve dans le <code>localStorage</code> du navigateur : les préférences d'affichage (thème, mois sélectionné), un cache de vos données pour un affichage rapide, et une file de ce qui n'a pas encore été envoyé lorsque vous êtes hors ligne.",
+  "es": "OAZE guarda en el <code>localStorage</code> del navegador: preferencias de visualización (tema, mes seleccionado), una caché de tus datos para que la pantalla abra rápido y una cola de lo que todavía no se subió cuando estás sin conexión."
+ },
+ {
+  "pt": "Isso é por aparelho e não chega até nós. Limpar os dados do navegador apaga essa parte — sem afetar o que está na sua conta.",
+  "en": "This is per device and never reaches us. Clearing the browser data erases this part — without affecting what is in your account.",
+  "fr": "C'est propre à chaque appareil et ne nous parvient jamais. Effacer les données du navigateur supprime cette partie — sans toucher à ce qui se trouve dans votre compte.",
+  "es": "Esto es por dispositivo y no llega hasta nosotros. Borrar los datos del navegador elimina esa parte, sin afectar lo que está en tu cuenta."
+ },
+ {
+  "pt": "Se você usa o OAZE <strong>sem conta</strong>, seus registros financeiros ficam no aparelho, e nós não temos cópia nem como recuperá-los. A hospedagem ainda pode gerar os registros técnicos e de acesso descritos nesta política.",
+  "en": "If you use OAZE <strong>without an account</strong>, your financial records stay on the device, and we have no copy and no way to recover them. Hosting may still generate the technical and access logs described in this policy.",
+  "fr": "Si vous utilisez OAZE <strong>sans compte</strong>, vos enregistrements financiers restent sur l'appareil, et nous n'en avons ni copie ni moyen de récupération. L'hébergement peut néanmoins générer les journaux techniques et d'accès décrits dans cette politique.",
+  "es": "Si usas OAZE <strong>sin cuenta</strong>, tus registros financieros quedan en el dispositivo, y no tenemos copia ni forma de recuperarlos. El alojamiento todavía puede generar los registros técnicos y de acceso descritos en esta política."
+ },
+ {
+  "pt": "8. Cookies e escolhas de privacidade",
+  "en": "8. Cookies and privacy choices",
+  "fr": "8. Cookies et choix de confidentialité",
+  "es": "8. Cookies y opciones de privacidad"
+ },
+ {
+  "pt": "O OAZE usa cookies ou tecnologias equivalentes estritamente necessários para sessão, segurança, preferências solicitadas e funcionamento local. Eles não são usados para publicidade.",
+  "en": "OAZE uses cookies or equivalent technologies strictly necessary for the session, security, requested preferences and local operation. They are not used for advertising.",
+  "fr": "OAZE utilise des cookies ou technologies équivalentes strictement nécessaires à la session, à la sécurité, aux préférences demandées et au fonctionnement local. Ils ne servent pas à la publicité.",
+  "es": "OAZE usa cookies o tecnologías equivalentes estrictamente necesarias para la sesión, la seguridad, las preferencias solicitadas y el funcionamiento local. No se usan para publicidad."
+ },
+ {
+  "pt": "O banner permite <strong>aceitar ou recusar tecnologias opcionais</strong>. Elas ficam desligadas até a escolha e, se forem recusadas, analytics, marketing, personalização não necessária e SDKs opcionais não poderão ser iniciados. Hoje o OAZE não tem nenhuma dessas categorias ativa.",
+  "en": "The banner lets you <strong>accept or refuse optional technologies</strong>. They stay off until you choose and, if refused, analytics, marketing, non-essential personalization and optional SDKs cannot start. Today OAZE has none of those categories active.",
+  "fr": "La bannière permet d'<strong>accepter ou de refuser les technologies optionnelles</strong>. Elles restent désactivées jusqu'à votre choix et, en cas de refus, l'analytique, le marketing, la personnalisation non nécessaire et les SDK optionnels ne peuvent pas démarrer. Aujourd'hui, OAZE n'a aucune de ces catégories active.",
+  "es": "El banner permite <strong>aceptar o rechazar tecnologías opcionales</strong>. Quedan desactivadas hasta que elijas y, si se rechazan, analytics, marketing, personalización no necesaria y SDK opcionales no podrán iniciarse. Hoy OAZE no tiene ninguna de esas categorías activa."
+ },
+ {
+  "pt": "A decisão fica em <code>oaze.cookies.v2</code>, no seu navegador, para que o banner respeite a escolha. Você pode apagar essa preferência nos dados do navegador e escolher novamente.",
+  "en": "The decision is kept in <code>oaze.cookies.v2</code>, in your browser, so the banner respects your choice. You can erase this preference in your browser data and choose again.",
+  "fr": "La décision est conservée dans <code>oaze.cookies.v2</code>, dans votre navigateur, pour que la bannière respecte votre choix. Vous pouvez effacer cette préférence dans les données du navigateur et choisir de nouveau.",
+  "es": "La decisión queda en <code>oaze.cookies.v2</code>, en tu navegador, para que el banner respete la elección. Puedes borrar esa preferencia en los datos del navegador y elegir de nuevo."
+ },
+ {
+  "pt": "Recusar opcionais não encerra a sessão nem desliga recursos necessários ao serviço que você pediu. Se você não quiser o tratamento necessário para uma conta, use o modo local sem conta; nesse modo, o OAZE não recebe seus registros financeiros.",
+  "en": "Refusing optional technologies does not end the session or turn off features needed for the service you asked for. If you do not want the processing required for an account, use the local mode without an account; in that mode, OAZE does not receive your financial records.",
+  "fr": "Refuser les technologies optionnelles ne met pas fin à la session et ne désactive pas les fonctions nécessaires au service demandé. Si vous ne souhaitez pas le traitement nécessaire à un compte, utilisez le mode local sans compte ; dans ce mode, OAZE ne reçoit pas vos enregistrements financiers.",
+  "es": "Rechazar las opcionales no cierra la sesión ni apaga funciones necesarias para el servicio que pediste. Si no quieres el tratamiento necesario para una cuenta, usa el modo local sin cuenta; en ese modo, OAZE no recibe tus registros financieros."
+ },
+ {
+  "pt": "9. Por quanto tempo guardamos e como excluímos",
+  "en": "9. How long we keep it and how we delete it",
+  "fr": "9. Combien de temps nous conservons et comment nous supprimons",
+  "es": "9. Cuánto tiempo guardamos y cómo eliminamos"
+ },
+ {
+  "pt": "Os registros financeiros permanecem enquanto sua conta existir. Ao excluir a conta, o OAZE cancela a renovação, revoga as sessões e remove os dados do banco ativo.",
+  "en": "Financial records remain for as long as your account exists. When you delete the account, OAZE cancels the renewal, revokes the sessions and removes the data from the active database.",
+  "fr": "Les enregistrements financiers sont conservés tant que votre compte existe. Lors de la suppression du compte, OAZE annule le renouvellement, révoque les sessions et supprime les données de la base active.",
+  "es": "Los registros financieros permanecen mientras exista tu cuenta. Al eliminar la cuenta, OAZE cancela la renovación, revoca las sesiones y elimina los datos de la base activa."
+ },
+ {
+  "pt": "Alguns registros podem ser conservados pelo prazo exigido por lei ou necessário para exercício regular de direitos, incluindo cobrança, fraude, aceites e registros de acesso. Quando o art. 15 do Marco Civil for aplicável, registros de acesso ficam por 6 meses, sob sigilo e segurança.",
+  "en": "Some records may be kept for the period required by law or needed to exercise rights, including billing, fraud, acceptances and access logs. Where art. 15 of the Brazilian Internet Act applies, access logs are kept for 6 months, under confidentiality and security.",
+  "fr": "Certains enregistrements peuvent être conservés pendant la durée exigée par la loi ou nécessaire à l'exercice régulier de droits, y compris facturation, fraude, acceptations et journaux d'accès. Lorsque l'art. 15 du Marco Civil s'applique, les journaux d'accès sont conservés 6 mois, sous confidentialité et sécurité.",
+  "es": "Algunos registros pueden conservarse por el plazo exigido por ley o necesario para el ejercicio regular de derechos, incluyendo cobro, fraude, aceptaciones y registros de acceso. Cuando se aplique el art. 15 del Marco Civil, los registros de acceso se guardan 6 meses, bajo secreto y seguridad."
+ },
+ {
+  "pt": "Cópias residuais podem permanecer em backups protegidos pelo ciclo técnico do fornecedor. Elas não ficam disponíveis para uso normal e devem voltar à fila de exclusão se um backup for restaurado. <em>O prazo máximo será publicado depois da confirmação contratual com o Supabase.</em>",
+  "en": "Residual copies may remain in backups protected by the supplier's technical cycle. They are not available for normal use and must return to the deletion queue if a backup is restored. <em>The maximum period will be published after contractual confirmation with Supabase.</em>",
+  "fr": "Des copies résiduelles peuvent subsister dans des sauvegardes protégées par le cycle technique du fournisseur. Elles ne sont pas disponibles pour un usage normal et doivent revenir dans la file de suppression si une sauvegarde est restaurée. <em>Le délai maximal sera publié après confirmation contractuelle avec Supabase.</em>",
+  "es": "Pueden quedar copias residuales en copias de seguridad protegidas por el ciclo técnico del proveedor. No están disponibles para uso normal y deben volver a la cola de eliminación si se restaura una copia. <em>El plazo máximo se publicará tras la confirmación contractual con Supabase.</em>"
+ },
+ {
+  "pt": "Registros de incidentes de segurança são mantidos por pelo menos 5 anos. Dados conservados após a exclusão não serão reutilizados para marketing ou reativação.",
+  "en": "Security incident records are kept for at least 5 years. Data retained after deletion will not be reused for marketing or reactivation.",
+  "fr": "Les enregistrements d'incidents de sécurité sont conservés au moins 5 ans. Les données conservées après suppression ne seront pas réutilisées à des fins de marketing ou de réactivation.",
+  "es": "Los registros de incidentes de seguridad se mantienen por al menos 5 años. Los datos conservados tras la eliminación no se reutilizarán para marketing ni reactivación."
+ },
+ {
+  "pt": "10. Seus direitos",
+  "en": "10. Your rights",
+  "fr": "10. Vos droits",
+  "es": "10. Tus derechos"
+ },
+ {
+  "pt": "A LGPD (art. 18) garante a você: confirmação de tratamento, acesso, correção, anonimização ou bloqueio, portabilidade, eliminação, informação sobre compartilhamento e revogação do consentimento.",
+  "en": "The LGPD (art. 18) guarantees you: confirmation of processing, access, correction, anonymization or blocking, portability, deletion, information about sharing and withdrawal of consent.",
+  "fr": "La LGPD (art. 18) vous garantit : la confirmation du traitement, l'accès, la rectification, l'anonymisation ou le blocage, la portabilité, l'effacement, l'information sur le partage et le retrait du consentement.",
+  "es": "La LGPD (art. 18) te garantiza: confirmación del tratamiento, acceso, corrección, anonimización o bloqueo, portabilidad, eliminación, información sobre el uso compartido y revocación del consentimiento."
+ },
+ {
+  "pt": "Na prática, dois deles você exerce sozinho, sem pedir nada a ninguém:",
+  "en": "In practice, two of them you exercise on your own, without asking anyone:",
+  "fr": "En pratique, vous en exercez deux tout seul, sans rien demander à personne :",
+  "es": "En la práctica, dos de ellos los ejerces solo, sin pedirle nada a nadie:"
+ },
+ {
+  "pt": "<strong>Portabilidade e acesso</strong> — Configurações → Exportar. Sai tudo, em formato aberto, na hora.",
+  "en": "<strong>Portability and access</strong> — Settings → Export. Everything comes out, in an open format, right away.",
+  "fr": "<strong>Portabilité et accès</strong> — Réglages → Exporter. Tout sort, dans un format ouvert, immédiatement.",
+  "es": "<strong>Portabilidad y acceso</strong> — Configuración → Exportar. Sale todo, en formato abierto, al instante."
+ },
+ {
+  "pt": "<strong>Eliminação</strong> — Configurações → Excluir conta. Pedimos que você digite o próprio e-mail para confirmar, porque a operação não tem volta.",
+  "en": "<strong>Deletion</strong> — Settings → Delete account. We ask you to type your own email to confirm, because the operation cannot be undone.",
+  "fr": "<strong>Effacement</strong> — Réglages → Supprimer le compte. Nous vous demandons de saisir votre propre e-mail pour confirmer, car l'opération est irréversible.",
+  "es": "<strong>Eliminación</strong> — Configuración → Eliminar cuenta. Te pedimos que escribas tu propio correo para confirmar, porque la operación no tiene vuelta atrás."
+ },
+ {
+  "pt": "Para os demais, escreva para <a href=\"/suporte\">o suporte</a>. Respondemos em até <strong>15 dias</strong>.",
+  "en": "For the rest, write to <a href=\"/suporte\">support</a>. We reply within <strong>15 days</strong>.",
+  "fr": "Pour les autres, écrivez à l'<a href=\"/suporte\">assistance</a>. Nous répondons sous <strong>15 jours</strong>.",
+  "es": "Para los demás, escribe a <a href=\"/suporte\">soporte</a>. Respondemos en hasta <strong>15 días</strong>."
+ },
+ {
+  "pt": "11. Encarregado (DPO)",
+  "en": "11. Data protection officer (DPO)",
+  "fr": "11. Délégué à la protection des données (DPO)",
+  "es": "11. Encargado de protección de datos (DPO)"
+ },
+ {
+  "pt": "A completar: nome e contato do encarregado, conforme o art. 41 da LGPD.",
+  "en": "To be completed: name and contact of the data protection officer, as required by art. 41 of the LGPD.",
+  "fr": "À compléter : nom et contact du délégué à la protection des données, conformément à l'art. 41 de la LGPD.",
+  "es": "A completar: nombre y contacto del encargado, conforme al art. 41 de la LGPD."
+ },
+ {
+  "pt": "12. Crianças e adolescentes",
+  "en": "12. Children and teenagers",
+  "fr": "12. Enfants et adolescents",
+  "es": "12. Niños y adolescentes"
+ },
+ {
+  "pt": "O OAZE não se destina a menores de 18 anos sem autorização de responsável legal, e não coletamos dados de crianças conscientemente. Se isso acontecer, avise o suporte e apagamos.",
+  "en": "OAZE is not intended for people under 18 without a legal guardian's permission, and we do not knowingly collect children's data. If that happens, tell support and we delete it.",
+  "fr": "OAZE ne s'adresse pas aux personnes de moins de 18 ans sans l'autorisation d'un représentant légal, et nous ne collectons pas sciemment de données d'enfants. Si cela arrive, prévenez l'assistance et nous les supprimons.",
+  "es": "OAZE no está destinado a menores de 18 años sin autorización de un responsable legal, y no recogemos datos de niños a sabiendas. Si eso ocurre, avisa a soporte y los borramos."
+ },
+ {
+  "pt": "13. Incidentes e responsabilidades",
+  "en": "13. Incidents and responsibilities",
+  "fr": "13. Incidents et responsabilités",
+  "es": "13. Incidentes y responsabilidades"
+ },
+ {
+  "pt": "O OAZE adota medidas de segurança proporcionais ao risco e poderá responder quando der causa ao dano por tratamento ilegal, falha evitável, instrução ilícita, demora na contenção ou escolha e fiscalização negligentes de fornecedor.",
+  "en": "OAZE adopts security measures proportional to the risk and may be held liable when it causes harm through unlawful processing, an avoidable failure, unlawful instructions, delay in containment, or negligent choice and oversight of a supplier.",
+  "fr": "OAZE met en œuvre des mesures de sécurité proportionnées au risque et peut être tenu responsable lorsqu'il cause le dommage par un traitement illicite, une défaillance évitable, une instruction illicite, un retard dans la maîtrise de l'incident ou un choix et un suivi négligents d'un fournisseur.",
+  "es": "OAZE adopta medidas de seguridad proporcionales al riesgo y podrá responder cuando cause el daño por tratamiento ilegal, falla evitable, instrucción ilícita, demora en la contención o elección y fiscalización negligentes de un proveedor."
+ },
+ {
+  "pt": "Se um operador descumprir a LGPD ou nossas instruções lícitas, ou se um controlador independente falhar em uma decisão própria, ele poderá responder pela participação no evento. Isso não impede o OAZE de cooperar com a investigação e atender o titular.",
+  "en": "If a processor breaches the LGPD or our lawful instructions, or if an independent controller fails in a decision of its own, it may be held liable for its part in the event. This does not prevent OAZE from cooperating with the investigation and supporting the data subject.",
+  "fr": "Si un sous-traitant enfreint la LGPD ou nos instructions licites, ou si un responsable indépendant faillit dans une décision qui lui est propre, il peut répondre de sa part dans l'événement. Cela n'empêche pas OAZE de coopérer à l'enquête et d'accompagner la personne concernée.",
+  "es": "Si un operador incumple la LGPD o nuestras instrucciones lícitas, o si un controlador independiente falla en una decisión propia, podrá responder por su participación en el evento. Eso no impide que OAZE coopere con la investigación y atienda al titular."
+ },
+ {
+  "pt": "O usuário poderá responder por fraude, ação ilícita, compartilhamento deliberado de credenciais ou culpa exclusiva comprovada. Erro comum ou phishing não transferem toda a responsabilidade automaticamente.",
+  "en": "The user may be held liable for fraud, unlawful acts, deliberate sharing of credentials or proven exclusive fault. A common mistake or phishing does not automatically transfer all responsibility.",
+  "fr": "L'utilisateur peut être tenu responsable en cas de fraude, d'acte illicite, de partage délibéré d'identifiants ou de faute exclusive prouvée. Une erreur courante ou l'hameçonnage ne transfèrent pas automatiquement toute la responsabilité.",
+  "es": "El usuario podrá responder por fraude, acto ilícito, compartir credenciales deliberadamente o culpa exclusiva comprobada. Un error común o el phishing no transfieren toda la responsabilidad de forma automática."
+ },
+ {
+  "pt": "Incidente que possa causar risco ou dano relevante será comunicado à ANPD e aos titulares afetados em até 3 dias úteis, salvo prazo legal específico. O aviso informará natureza dos dados, riscos, medidas adotadas e canal de contato.",
+  "en": "An incident that may cause relevant risk or harm will be reported to the ANPD and to the affected data subjects within 3 business days, unless a specific legal deadline applies. The notice will state the nature of the data, the risks, the measures taken and the contact channel.",
+  "fr": "Un incident susceptible de causer un risque ou un dommage important sera signalé à l'ANPD et aux personnes concernées sous 3 jours ouvrés, sauf délai légal spécifique. L'avis précisera la nature des données, les risques, les mesures prises et le canal de contact.",
+  "es": "Un incidente que pueda causar riesgo o daño relevante se comunicará a la ANPD y a los titulares afectados en hasta 3 días hábiles, salvo plazo legal específico. El aviso informará la naturaleza de los datos, los riesgos, las medidas adoptadas y el canal de contacto."
+ },
+ {
+  "pt": "14. Acessibilidade e privacidade",
+  "en": "14. Accessibility and privacy",
+  "fr": "14. Accessibilité et confidentialité",
+  "es": "14. Accesibilidad y privacidad"
+ },
+ {
+  "pt": "Esta política, as escolhas de cookies, os pedidos de direitos, a exportação e a exclusão devem funcionar com teclado, leitores de tela, zoom e outras tecnologias assistivas. A meta do OAZE é atender a WCAG 2.2 nível AA.",
+  "en": "This policy, the cookie choices, rights requests, export and deletion must work with a keyboard, screen readers, zoom and other assistive technologies. OAZE's target is WCAG 2.2 level AA.",
+  "fr": "Cette politique, les choix de cookies, les demandes d'exercice de droits, l'export et la suppression doivent fonctionner au clavier, avec les lecteurs d'écran, le zoom et d'autres technologies d'assistance. L'objectif d'OAZE est le niveau AA des WCAG 2.2.",
+  "es": "Esta política, las opciones de cookies, las solicitudes de derechos, la exportación y la eliminación deben funcionar con teclado, lectores de pantalla, zoom y otras tecnologías de asistencia. La meta de OAZE es cumplir la WCAG 2.2 en nivel AA."
+ },
+ {
+  "pt": "Se uma barreira impedir o exercício de um direito, escreva para <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Ofereceremos uma alternativa equivalente sem custo e sem perda de prazo.",
+  "en": "If a barrier prevents you from exercising a right, write to <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. We will offer an equivalent alternative at no cost and with no loss of deadline.",
+  "fr": "Si un obstacle empêche l'exercice d'un droit, écrivez à <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Nous proposerons une alternative équivalente, sans frais et sans perte de délai.",
+  "es": "Si una barrera impide ejercer un derecho, escribe a <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>. Ofreceremos una alternativa equivalente sin costo y sin pérdida de plazo."
+ },
+ {
+  "pt": "15. Mudanças nesta política",
+  "en": "15. Changes to this policy",
+  "fr": "15. Modifications de cette politique",
+  "es": "15. Cambios en esta política"
+ },
+ {
+  "pt": "Se algo relevante mudar, avisamos por e-mail com <strong>30 dias</strong> de antecedência e atualizamos a data no topo desta página.",
+  "en": "If something relevant changes, we notify you by email <strong>30 days</strong> in advance and update the date at the top of this page.",
+  "fr": "Si quelque chose d'important change, nous vous prévenons par e-mail <strong>30 jours</strong> à l'avance et mettons à jour la date en haut de cette page.",
+  "es": "Si algo relevante cambia, avisamos por correo con <strong>30 días</strong> de antelación y actualizamos la fecha al inicio de esta página."
+ },
+ {
+  "pt": "16. Contato",
+  "en": "16. Contact",
+  "fr": "16. Contact",
+  "es": "16. Contacto"
+ },
+ {
+  "pt": "<a href=\"/suporte\">Página de suporte</a> ou <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "en": "<a href=\"/suporte\">Support page</a> or <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "fr": "<a href=\"/suporte\">Page d'assistance</a> ou <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>.",
+  "es": "<a href=\"/suporte\">Página de soporte</a> o <a href=\"mailto:suporte@oaze.site\">suporte@oaze.site</a>."
+ },
+ {
+  "pt": "Um painel para enxergar o próprio dinheiro sem virar planilha.",
+  "en": "A dashboard to see your own money without turning it into a spreadsheet.",
+  "fr": "Un tableau de bord pour voir votre argent sans le transformer en tableur.",
+  "es": "Un panel para ver tu propio dinero sin convertirlo en una hoja de cálculo."
+ },
+ {
+  "pt": "Produto",
+  "en": "Product",
+  "fr": "Produit",
+  "es": "Producto"
+ },
+ {
+  "pt": "UGLEZ",
+  "en": "UGLEZ",
+  "fr": "UGLEZ",
+  "es": "UGLEZ"
+ },
+ {
+  "pt": "Conta",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Criar conta",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Recuperar senha",
+  "en": "Reset password",
+  "fr": "Réinitialiser le mot de passe",
+  "es": "Recuperar contraseña"
+ },
+ {
+  "pt": "Legal",
+  "en": "Legal",
+  "fr": "Mentions légales",
+  "es": "Legal"
+ },
+ {
+  "pt": "Termos de uso",
+  "en": "Terms of use",
+  "fr": "Conditions d'utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "© <span data-ano>2026</span> OAZE",
+  "en": "© <span data-ano>2026</span> OAZE",
+  "fr": "© <span data-ano>2026</span> OAZE",
+  "es": "© <span data-ano>2026</span> OAZE"
+ },
+ {
+  "pt": "Feito no Brasil · valores em reais",
+  "en": "Made in Brazil · amounts in Brazilian reais (BRL)",
+  "fr": "Fait au Brésil · montants en réais brésiliens (BRL)",
+  "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
+ },
+ {
+  "pt": "suporte@oaze.site",
+  "en": "suporte@oaze.site",
+  "fr": "suporte@oaze.site",
+  "es": "suporte@oaze.site"
+ }
+]

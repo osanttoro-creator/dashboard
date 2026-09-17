@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elegir contraseña nueva — OAZE</title>
+<meta name="description" content="Define una contraseña nueva para tu cuenta de OAZE.">
+<link rel="canonical" href="https://oaze.site/es/redefinir-senha">
+<!-- idiomas: gerado por tools/gen-idiomas.js -->
+<link rel="alternate" hreflang="pt-BR" href="https://oaze.site/redefinir-senha">
+<link rel="alternate" hreflang="en" href="https://oaze.site/en/redefinir-senha">
+<link rel="alternate" hreflang="fr" href="https://oaze.site/fr/redefinir-senha">
+<link rel="alternate" hreflang="es" href="https://oaze.site/es/redefinir-senha">
+<link rel="alternate" hreflang="x-default" href="https://oaze.site/redefinir-senha">
+<!-- /idiomas -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Saltar al contenido</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/es/" aria-label="OAZE, página de inicio">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+      OAZE
+    </a>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Elegir contraseña nueva</h1>
+      <p id="explica">Verificando el enlace…</p>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-senha" novalidate hidden>
+        <div class="campo">
+          <label for="senha">Contraseña nueva</label>
+          <input type="password" id="senha" name="senha" autocomplete="new-password"
+                 required minlength="8" placeholder="Al menos 8 caracteres"
+                 aria-describedby="senha-dica senha-erro">
+          <p class="dica" id="senha-dica">Mínimo 8 caracteres.</p>
+          <p class="erro" id="senha-erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="senha2">Repite la contraseña nueva</label>
+          <input type="password" id="senha2" name="senha2" autocomplete="new-password"
+                 required placeholder="La misma contraseña" aria-describedby="senha2-erro">
+          <p class="erro" id="senha2-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao">Guardar y entrar</button>
+      </form>
+
+      <p class="pe-do-painel" id="pe" hidden>
+        <a href="/es/recuperar-senha">Pedir un enlace nuevo</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var explica = document.getElementById('explica');
+  var form = document.getElementById('form-senha');
+  var senha = document.getElementById('senha');
+  var senha2 = document.getElementById('senha2');
+  var botao = document.getElementById('botao');
+  var pe = document.getElementById('pe');
+
+  if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
+
+  /* O link do e-mail chega com o token no fragmento da URL. O SDK
+     troca isso por uma sessão de recuperação -- mas leva um instante,
+     e o evento pode chegar depois deste script rodar. Por isso duas
+     vias: escutar o evento E consultar direto. A que responder
+     primeiro libera o formulário; um guarda impede o formulário de
+     ser mostrado duas vezes. */
+  var liberado = false;
+
+  function liberar() {
+    if (liberado) return;
+    liberado = true;
+    explica.textContent = 'Elige una contraseña que no uses en otro lugar.';
+    form.hidden = false;
+    senha.focus();
+  }
+
+  function recusar() {
+    if (liberado) return;
+    explica.textContent = '';
+    A.diz(recado, 'Este enlace ya no es válido. Los enlaces de recuperación sirven una sola vez y vencen en una hora.', 'erro');
+    pe.hidden = false;
+  }
+
+  A.cliente().auth.onAuthStateChange(function (evento, sessao) {
+    if (evento === 'PASSWORD_RECOVERY' || (sessao && sessao.user)) liberar();
+  });
+
+  A.quemEsta().then(function (u) {
+    if (u) liberar();
+    /* Só recusa depois de dar tempo ao SDK de processar o fragmento.
+       Recusar de imediato mostraria "link inválido" para todo mundo,
+       inclusive para quem tem um link perfeitamente bom. */
+    else setTimeout(function () { A.quemEsta().then(function (v) { v ? liberar() : recusar(); }); }, 1200);
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    A.erroNoCampo(senha, ''); A.erroNoCampo(senha2, '');
+
+    if (senha.value.length < 8) {
+      A.erroNoCampo(senha, 'La contraseña debe tener al menos 8 caracteres.');
+      senha.focus(); return;
+    }
+    if (senha.value !== senha2.value) {
+      A.erroNoCampo(senha2, 'Las dos contraseñas no coinciden.');
+      senha2.focus(); return;
+    }
+
+    A.ocupado(botao, true, 'Guardando…');
+    try {
+      var r = await A.trocarSenha(senha.value);
+      if (r.error) throw r.error;
+      A.diz(recado, 'Contraseña cambiada. Abriendo tu panel…', 'ok');
+      location.replace('/app');
+    } catch (err) {
+      A.ocupado(botao, false);
+      A.diz(recado, A.frase(err), 'erro');
+    }
+  });
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+<div class="idiomas-solto"><!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Idioma"><a data-idioma href="/redefinir-senha" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/redefinir-senha" hreflang="en" lang="en">English</a><a data-idioma href="/fr/redefinir-senha" hreflang="fr" lang="fr">Français</a><a data-idioma href="/es/redefinir-senha" hreflang="es" lang="es" aria-current="true">Español</a></nav><!-- /seletor-idioma --></div>
+</body>
+</html>

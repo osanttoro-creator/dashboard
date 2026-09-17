@@ -42,6 +42,11 @@ on:
     # `*.html` cobre todos, inclusive os que ainda não existem.
     paths:
       - '*.html'
+      # as paginas geradas em ingles, frances e espanhol
+      - 'en/**'
+      - 'fr/**'
+      - 'es/**'
+      - 'i18n/**'
       - 'robots.txt'
       - 'sitemap.xml'
       - 'manifest.webmanifest'

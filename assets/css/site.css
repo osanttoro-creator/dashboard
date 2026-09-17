@@ -1550,3 +1550,24 @@ p.leve { color: var(--bruma); }
 @media print {
   .telas { display: none; }
 }
+
+/* ---------------------------------------------------------------
+   Seletor de idioma — gerado por tools/gen-idiomas.js
+   ---------------------------------------------------------------
+   No rodapé das páginas que têm um; solto no fim das que não têm
+   (entrar, cadastro). Cada idioma aparece no próprio idioma, porque
+   quem procura "English" não lê "Inglês". O idioma atual não é link
+   morto: continua clicável e marcado com aria-current.
+   --------------------------------------------------------------- */
+.idiomas { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+.rodape-fim .idiomas { margin-left: auto; }
+.idiomas a { color: var(--bruma-2); text-decoration: none; font-size: .86rem; }
+.idiomas a:hover { color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; }
+.idiomas a[aria-current="true"] { color: var(--tinta); font-weight: 600; }
+.idiomas-solto {
+  display: flex; justify-content: center; padding: 24px 16px 32px;
+  border-top: 1px solid var(--borda); margin-top: 32px;
+}
+@media (max-width: 640px) {
+  .rodape-fim .idiomas { margin-left: 0; }
+}

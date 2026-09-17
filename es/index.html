@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- =============================================================
+     ATENÇÃO AO TROCAR DE DOMÍNIO
+     As URLs canônicas e as og:url de TODAS as páginas apontam para
+     https://oaze.site. Se o domínio mudar de novo, troque em todas -- uma canônica errada faz o buscador
+     indexar o endereço antigo e ignorar o novo.
+     Arquivos afetados: index, recursos, precos, entrar, cadastro,
+     recuperar-senha, privacidade, termos, suporte, 404.
+     ============================================================= -->
+<title>OAZE | Control financiero personal sin hojas de cálculo</title>
+<meta name="description" content="Organiza cuentas, tarjetas, gastos, presupuestos y metas en OAZE, un control financiero personal con asistente de IA. Empieza gratis.">
+<link rel="canonical" href="https://oaze.site/es/">
+<!-- idiomas: gerado por tools/gen-idiomas.js -->
+<link rel="alternate" hreflang="pt-BR" href="https://oaze.site/">
+<link rel="alternate" hreflang="en" href="https://oaze.site/en/">
+<link rel="alternate" hreflang="fr" href="https://oaze.site/fr/">
+<link rel="alternate" hreflang="es" href="https://oaze.site/es/">
+<link rel="alternate" hreflang="x-default" href="https://oaze.site/">
+<!-- /idiomas -->
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OAZE">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="OAZE | Control financiero personal sin hojas de cálculo">
+<meta property="og:description" content="Organiza cuentas, tarjetas, gastos, presupuestos y metas en un solo panel, con el asistente financiero UGLEZ.">
+<meta property="og:url" content="https://oaze.site/es/">
+<meta property="og:image" content="https://oaze.site/assets/img/oaze-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="OAZE — panel de finanzas personales">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OAZE | Control financiero personal sin hojas de cálculo">
+<meta name="twitter:description" content="Cuentas, tarjetas, gastos, presupuestos y metas en un solo panel.">
+<meta name="twitter:image" content="https://oaze.site/assets/img/oaze-og.png">
+
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/assets/css/site.css">
+
+<!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
+     classe o CSS esconde os blocos que serao revelados ao rolar. Sem
+     ela -- script bloqueado, erro, navegador antigo -- a pagina
+     aparece inteira, que e o comportamento certo para um site que
+     precisa ser lido e indexado. -->
+<script>document.documentElement.classList.add("anima", "lens-js");</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://oaze.site/#organization",
+      "name": "OAZE",
+      "url": "https://oaze.site/",
+      "logo": "https://oaze.site/assets/img/oaze-512.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://oaze.site/#website",
+      "name": "OAZE",
+      "alternateName": "OAZE Finanças",
+      "url": "https://oaze.site/",
+      "inLanguage": "es",
+      "publisher": { "@id": "https://oaze.site/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "OAZE",
+      "url": "https://oaze.site/",
+      "image": "https://oaze.site/assets/img/oaze-og.png",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "es",
+      "description": "Control financiero personal con cuentas, tarjetas, gastos, presupuestos, metas y el asistente financiero UGLEZ.",
+      "publisher": { "@id": "https://oaze.site/#organization" },
+      "offers": [
+        { "@type": "Offer", "name": "Semente",  "price": "0.00",  "priceCurrency": "BRL" },
+        { "@type": "Offer", "name": "Coqueiro", "price": "14.90", "priceCurrency": "BRL" },
+        { "@type": "Offer", "name": "Oásis",    "price": "29.90", "priceCurrency": "BRL" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="pagina-inicial">
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Saltar al contenido</a>
+
+<!-- ============================ cabeçalho ============================ -->
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/es/" aria-label="OAZE, página de inicio">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+      OAZE
+    </a>
+
+    <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+    </button>
+
+    <nav class="menu" id="menu-principal" aria-label="Navegación principal">
+      <a href="/es/recursos">Funciones</a>
+      <a href="/es/precos">Precios</a>
+      <a href="#seguranca">Seguridad</a>
+      <a href="/es/suporte">Soporte</a>
+    </nav>
+
+    <div class="acoes-topo">
+      <a class="btn btn-fantasma" href="/es/entrar">Iniciar sesión</a>
+      <a class="btn btn-principal" href="/es/cadastro">Crear cuenta gratis</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ============================ abertura com lente ============================ -->
+  <section class="lens-intro" data-lens aria-labelledby="hero-titulo">
+    <div class="lens-stage">
+      <div class="lens-world">
+        <div class="lens-curtain lens-curtain-esq" aria-hidden="true"></div>
+        <div class="lens-curtain lens-curtain-dir" aria-hidden="true"></div>
+
+        <div class="env lens-layout">
+          <div class="lens-copy">
+            <h1 id="hero-titulo">Tu dinero tiene sentido <em>cuando lo ves entero</em></h1>
+            <p class="hero-sub">
+              Control financiero personal con cuentas, tarjetas, presupuestos y metas en un solo panel, con la lectura de tu mes lista antes de que preguntes. Sin hoja de cálculo, sin fórmula rota, sin empezar de nuevo cada enero.
+            </p>
+            <div class="hero-botoes">
+              <a class="btn btn-principal btn-grande" href="/es/cadastro">Crear cuenta gratis</a>
+              <a class="btn btn-fantasma btn-grande" href="/es/recursos">Ver las funciones</a>
+            </div>
+            <p class="hero-nota">Sin tarjeta de crédito. El plan gratis no vence.</p>
+          </div>
+
+          <div class="lens-visual">
+            <div class="lens-glow" aria-hidden="true"></div>
+            <div class="demo" role="img"
+                 aria-label="Demostración ilustrativa del panel de OAZE: saldo del mes de 4.182,30 reales, ingresos de 7.400 reales, gastos de 3.217,70 reales y un gráfico que compara los últimos seis meses.">
+              <div class="demo-barra" aria-hidden="true">
+                <span class="demo-ponto"></span><span class="demo-ponto"></span><span class="demo-ponto"></span>
+                <span class="demo-url">oaze.site/app</span>
+              </div>
+              <div class="demo-corpo" aria-hidden="true">
+                <div class="demo-cartoes">
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Saldo del mes</p>
+                    <p class="demo-valor">R$ 4.182,30</p>
+                  </div>
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Ingresos</p>
+                    <p class="demo-valor entra">R$ 7.400,00</p>
+                  </div>
+                  <div class="demo-cartao">
+                    <p class="demo-rotulo">Gastos</p>
+                    <p class="demo-valor sai">R$ 3.217,70</p>
+                  </div>
+                </div>
+                <div class="demo-grafico">
+                  <svg viewBox="0 0 640 190" width="640" height="190" aria-hidden="true" style="width:100%;height:auto">
+                    <g fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1">
+                      <path d="M0 40h640M0 80h640M0 120h640M0 160h640"/>
+                    </g>
+                    <g>
+                      <rect x="26"  y="66"  width="26" height="94"  rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="58"  y="104" width="26" height="56"  rx="5" fill="#E9A178" opacity=".86"/>
+                      <rect x="128" y="52"  width="26" height="108" rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="160" y="112" width="26" height="48"  rx="5" fill="#E9A178" opacity=".86"/>
+                      <rect x="230" y="72"  width="26" height="88"  rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="262" y="94"  width="26" height="66"  rx="5" fill="#E9A178" opacity=".86"/>
+                      <rect x="332" y="44"  width="26" height="116" rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="364" y="118" width="26" height="42"  rx="5" fill="#E9A178" opacity=".86"/>
+                      <rect x="434" y="60"  width="26" height="100" rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="466" y="100" width="26" height="60"  rx="5" fill="#E9A178" opacity=".86"/>
+                      <rect x="536" y="36"  width="26" height="124" rx="5" fill="#86CFA4" opacity=".92"/>
+                      <rect x="568" y="122" width="26" height="38"  rx="5" fill="#E9A178" opacity=".86"/>
+                    </g>
+                    <path d="M0 168h640" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="lens-float lens-float-projecao" aria-hidden="true">
+              <span>Proyección del mes</span><strong>R$ 5.040</strong><small>+8,4% de margen</small>
+            </div>
+            <div class="lens-float lens-float-uglez" aria-hidden="true">
+              <span>UGLEZ</span><strong>Tu gasto en transporte bajó 12%.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lens-shutter" aria-hidden="true"></div>
+      <div class="lens-greeting" aria-hidden="true">
+        <!-- O hello escrito à mão: um traço só, do começo ao fim. A
+             ideia vem do "hello" da Apple; o desenho foi feito aqui,
+             em pé, e inclinado 14° ponto a ponto. Quem escreve é o
+             site.js, pelo stroke-dashoffset. -->
+        <svg class="hello" viewBox="19 11 494 208" width="680" height="286" focusable="false">
+          <defs>
+            <linearGradient id="hello-tinta" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#F5F0E9"/>
+              <stop offset=".35" stop-color="#F0DA9B"/>
+              <stop offset=".7" stop-color="#D8B45E"/>
+              <stop offset="1" stop-color="#B8912F"/>
+            </linearGradient>
+          </defs>
+          <path class="hello-traco" d="M35 196C64.5 190 97.5 162 120.4 122C138.4 90 152.9 56 148.9 40C145.4 26 124.9 28 116.4 46C105.9 72 86.5 150 75 200C80.5 178 89.5 154 104 140C119.5 126 142.4 122 150.5 134C157 144 150 168 145.5 182C141 196 146.3 203 158.8 201C180.5 198 204 184 218 164C228.5 150 230 128 215 128C198 128 181.5 154 178 176C175 196 189 204 209.8 201C233.7 197 264 176 285.5 138C302.9 108 322.4 62 319.4 42C317.4 26 298.9 28 289.9 48C280.4 74 261.5 150 255 184C252.5 198 262 204 277 200C301.2 195 330 176 351.5 138C368.9 108 388.4 62 385.4 42C383.4 26 364.9 28 355.9 48C346.4 74 327.5 150 321 184C318.5 198 328 204 343 200C363 196 385 172 398.5 150C405 140 410.5 134 417 132C406 128 382 136 374 160C366 184 373.5 202 392 200C410.5 198 424 176 425 156C426 140 419 132 410.5 134C419 140 434.5 142 451.7 137C469 132 484.7 125 498.4 118"/>
+        </svg>
+        <small><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>desplázate para ver</small>
+      </div>
+      <div class="lens-progress" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       NARRATIVA · v3
+       -------------------------------------------------------------
+       Modelo de página de produto da Apple, aplicado ao trecho entre a
+       abertura e o preço. A abertura (lente + hello) não muda.
+
+       Regras que este trecho segue, e que valem para quem mexer nele:
+         · benefício antes da especificação; o número vem depois da
+           frase que explica por que ele importa;
+         · todo número quantitativo leva "até" (as notas de rodapé saíram
+           em 15/09/2026, a pedido; os limites por plano estão em /precos);
+         · nenhuma seção sem visual; o visual entra primeiro;
+         · o fundo alterna entre Areia e Noite para marcar capítulo —
+           a tradução do "branco e preto" da Apple para a identidade v1;
+         · um CTA só, sempre igual: "Criar conta grátis".
+       ============================================================= -->
+
+  <!-- ============================ em todas as telas ============================
+       Logo depois do hello, o app funcionando — e não um desenho dele.
+       As telas são capturas do próprio OAZE com dados de exemplo
+       (assets/img/telas). A rolagem abre o notebook, traz o tablet e o
+       celular e passa as telas; quem pede menos movimento, ou está sem
+       JavaScript, vê a composição final parada. -->
+  <section class="telas" id="telas" data-telas aria-labelledby="telas-titulo">
+    <div class="telas-palco">
+      <div class="telas-texto">
+        <p class="cap-rotulo">Computadora · tablet · celular</p>
+        <h2 id="telas-titulo">El mismo OAZE, <em>en cualquier pantalla.</em></h2>
+        <ol class="telas-passos">
+          <li data-passo="0"><strong>En la computadora,</strong> el panel entero de una vez.</li>
+          <li data-passo="1"><strong>En la tablet,</strong> el año mes a mes, en claro o en oscuro.</li>
+          <li data-passo="2"><strong>En el celular,</strong> la billetera y UGLEZ al alcance del pulgar.</li>
+        </ol>
+      </div>
+
+      <div class="telas-cena" role="img"
+           aria-label="OAZE funcionando en tres dispositivos con datos de ejemplo: en la laptop, el panel con patrimonio, gráfico del año y gastos por categoría; en la tablet, el calendario del año y los movimientos; en el celular, la visión general, la billetera de tarjetas y una conversación con UGLEZ.">
+        <div class="telas-luz" aria-hidden="true"></div>
+
+        <div class="aparelho notebook" aria-hidden="true">
+          <div class="notebook-tampa">
+            <span class="notebook-camera"></span>
+            <div class="aparelho-tela notebook-tela">
+              <img class="tela-rolante" src="/assets/img/telas/notebook-inicio.webp" alt="" width="1440" height="2300" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <div class="notebook-base"><span></span></div>
+        </div>
+
+        <div class="aparelho tablet" aria-hidden="true">
+          <div class="aparelho-tela tablet-tela">
+            <img class="tela-quadro is-ativo" data-quadro="0" src="/assets/img/telas/tablet-calendario.webp" alt="" width="1180" height="820" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="1" src="/assets/img/telas/tablet-financeiro.webp" alt="" width="1180" height="820" loading="lazy" decoding="async">
+          </div>
+        </div>
+
+        <div class="aparelho celular" aria-hidden="true">
+          <div class="aparelho-tela celular-tela">
+            <img class="tela-quadro is-ativo" data-quadro="0" src="/assets/img/telas/celular-inicio.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="1" src="/assets/img/telas/celular-carteira.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <img class="tela-quadro" data-quadro="2" src="/assets/img/telas/celular-uglez.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+            <span class="celular-ilha"></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="telas-nota">Pantallas reales de la app, con datos de ejemplo.</p>
+    </div>
+  </section>
+
+  <!-- ============================ destaques ============================ -->
+  <section class="cap cap-areia cap-destaques" id="explorar" data-cena aria-labelledby="destaques-titulo">
+    <div class="cap-texto revela">
+      <p class="cap-rotulo">Cómo funciona OAZE</p>
+      <h2 id="destaques-titulo">Cinco cosas. <em>Un mes entero a la vista.</em></h2>
+    </div>
+
+    <ul class="bento" data-bento>
+      <li class="bento-card bento-largo revela">
+        <a href="#cap-contas">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Cuentas</span>
+          <strong>Todos los bancos en un solo panel.</strong>
+          <span class="bento-apoio">El saldo de cada cuenta, uno al lado del otro.</span>
+        </a>
+      </li>
+      <li class="bento-card revela">
+        <a href="#cap-calendario">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Calendario</span>
+          <strong>El año entero, mes a mes.</strong>
+        </a>
+      </li>
+      <li class="bento-card bento-alto bento-uglez revela">
+        <a href="#uglez">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-poeira" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="bento-rotulo">UGLEZ</span>
+          <strong>Tu mes explicado en frases.</strong>
+          <span class="bento-apoio">Pregunta en palabras simples. La respuesta viene con el número.</span>
+        </a>
+      </li>
+      <li class="bento-card revela">
+        <a href="#cap-cartao">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Tarjeta</span>
+          <strong>El resumen cierra en su propio día.</strong>
+        </a>
+      </li>
+      <li class="bento-card bento-largo revela">
+        <a href="#cap-mes">
+          <span class="bento-luz" aria-hidden="true"></span>
+          <span class="bento-rotulo">Mes</span>
+          <strong>El fin de mes, visto desde el comienzo.</strong>
+          <span class="bento-apoio">Proyección del cierre y metas con fecha.</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============================ 1 · contas ============================ -->
+  <section class="cap cap-noite" id="cap-contas" data-cena aria-labelledby="contas-titulo">
+    <div class="cap-visual v-contas" role="img"
+         aria-label="Ilustración del panel de cuentas: saldo total de 12.480,90 reales sumando Nubank, Banco do Brasil, Santander y PicPay, cada uno con su propia marca.">
+      <div class="v-painel" aria-hidden="true">
+        <div class="v-total">
+          <span>Saldo en todas las cuentas</span>
+          <strong>R$ 12.480,90</strong>
+        </div>
+        <ul class="v-lista">
+          <li style="--i:0"><i class="v-logo" style="--fundo:#820AD1;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.4429 30.8247C22.8489 27.274 27.3669 25.2 32.6747 25.2C43.0148 25.2 49.8704 32.6912 51.1821 43.9135C51.6073 47.558 51.6034 52.696 51.5992 58.6473C51.5983 59.2576 51.5983 59.8765 51.5983 60.5032V82.7976H37.3787V66.308C37.3787 66.308 37.3497 52.1952 37.2628 49.5576C36.8812 38.0701 30.0274 30.8519 19.4416 30.8441C16.2478 34.1923 14.5365 38.2861 14.2841 44.5456C14.2494 45.4186 14.2581 48.5132 14.2696 52.5917C14.2756 54.7049 14.2823 57.0823 14.2841 59.5517C14.2946 70.2997 14.2841 82.8 14.2841 82.8H0.0643782V57.4227C0.0643782 56.5531 0.0483961 55.6762 0.0323772 54.7957C0.000127149 53.0248 -0.0323785 51.2401 0.0643782 49.473C0.225037 46.5272 0.738617 43.6312 2.12396 40.941C5.29499 34.7778 11.7925 30.8095 18.7193 30.8095C18.9612 30.8095 19.2034 30.8155 19.4429 30.8247Z" /><path d="M107.937 58.5317C108.032 56.7649 108 54.9804 107.969 53.2099C107.953 52.3297 107.937 51.4529 107.937 50.5835V25.2108H94.0476C94.0476 25.2108 94.0372 37.7087 94.0476 48.4547C94.0492 50.9236 94.0557 53.3004 94.0615 55.4132C94.0728 59.4912 94.0813 62.5852 94.0476 63.4581C93.8011 69.7166 92.1293 73.8096 89.0097 77.1572C78.6696 77.1499 71.975 69.9324 71.6021 58.4471C71.5172 55.81 71.4812 49.2659 71.4812 41.6866V25.2L57.6018 25.2129V47.5032C57.6018 48.1298 57.601 48.7485 57.601 49.3588C57.5966 55.309 57.593 60.4459 58.0084 64.0899C59.2869 75.3102 65.9834 82.8 76.0837 82.8C81.2685 82.8 85.6817 80.7263 89.0087 77.1763C89.2425 77.1855 89.4789 77.191 89.7152 77.191C96.4813 77.191 102.828 73.2236 105.926 67.0616C107.279 64.3716 107.78 61.4764 107.937 58.531L107.937 58.5317Z" /></svg></i><span>Nubank</span><b>R$ 3.210,40</b></li>
+          <li style="--i:1"><i class="v-logo" style="--fundo:#003D7A;--cor:#FFDD00"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.1451 85.5004L1 92.997V108L23.2903 92.997L12.1451 85.5004Z" /><path d="M96.8501 22.5044L107.995 15.0078V0L85.7049 15.0078L96.8501 22.5044Z" /><path d="M54.4976 108L107.995 71.9968L85.7049 56.9938L58.9537 75.0003L70.0989 82.5017L55.614 92.2522L24.4067 71.2519L75.6762 36.7529L64.5311 29.2514L1 71.9968L54.4976 108Z" /><path d="M54.5024 0.0145097L1 36.0081L23.2903 51.011L50.0415 33.0046L38.8963 25.5079L53.386 15.7575L84.5933 36.7529L33.3238 71.2519L44.4689 78.7534L108 36.0081L54.5024 0.0145097Z" /></svg></i><span>Banco do Brasil</span><b>R$ 6.905,00</b></li>
+          <li style="--i:2"><i class="v-logo" style="--fundo:#EC0000;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M77.6686 49.5639C77.4221 45.9855 76.4358 42.4072 74.4633 39.306L57.6967 10.9181C56.4639 8.77108 55.4776 6.38554 54.9845 4L54.2448 5.19277C50.0531 12.1108 50.0531 20.9373 54.2448 27.8554L67.8059 50.5181C71.9976 57.4361 71.9976 66.2627 67.8059 73.1807L67.0662 74.3735C66.5731 71.988 65.5868 69.6024 64.354 67.4554L52.0257 46.7012L44.1355 33.3422C42.9027 31.1952 41.9164 28.8096 41.4233 26.4241L40.6836 27.6169C36.4919 34.5349 36.4919 43.1229 40.6836 50.2795L54.2448 72.9422C58.4364 79.8602 58.4364 88.6867 54.2448 95.6048L53.5051 96.7976C53.0119 94.412 52.0257 92.0265 50.7928 89.8795L33.7797 61.4916C31.5606 57.6747 30.5743 53.3807 30.5743 49.0867C12.5749 53.6193 0 63.4 0 74.612C0 90.3566 24.1636 103 53.9982 103C83.8328 103 107.996 90.3566 107.996 74.612C108.243 63.8771 95.9146 54.0964 77.6686 49.5639Z" /></svg></i><span>Santander</span><b>R$ 1.842,10</b></li>
+          <li style="--i:3"><i class="v-logo" style="--fundo:#21C25E;--cor:#FFFFFF"><svg viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.658 36.9477V63.3512H34.7375C38.5084 63.3512 41.9541 61.8434 44.4411 59.3933C46.8308 57.0389 48.324 53.7801 48.324 50.1495C48.324 46.5186 46.8308 43.2598 44.4411 40.9054C41.9541 38.4555 38.5084 36.9477 34.7375 36.9477H17.658ZM0.269165 100.877V36.9477H17.6269V20.5915H34.7375C42.8523 20.5915 50.3084 23.8763 55.7259 29.2134C61.159 34.5662 64.5536 41.9485 64.5536 50.1495C64.5536 58.3504 61.159 65.7325 55.7259 71.0853C50.3084 76.4227 42.8523 79.7075 34.7375 79.7075H17.658V100.877H0.269165Z" /><path fill-rule="evenodd" clip-rule="evenodd" d="M80.0617 11.6723V34.2791H102.493V11.6723H80.0617ZM85.5681 17.2217H96.987V28.7297H85.5681V17.2217ZM74.5553 6.12296H108V39.8284H74.5553V6.12296Z" /></svg></i><span>PicPay</span><b>R$ 523,40</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="contas-titulo">Todo en cuenta.</h2>
+      <p class="cap-sub">Cada banco que usas, en un solo panel.</p>
+      <p class="cap-corpo">
+        A las ocho de la mañana, antes del café, abres OAZE y ves la cuenta sueldo, el ahorro y las tarjetas una al lado de la otra. Cada una con la marca de su propio banco, reconocida por el nombre. El saldo de hoy queda arriba. Lo que ya salió queda abajo. Sin abrir cuatro aplicaciones para sumar de cabeza.
+      </p>
+      <dl class="numeros">
+        <div><dt>hasta <b data-conta="41">41</b></dt><dd>bancos con marca propia</dd></div>
+        <div><dt>hasta <b data-conta="10">10</b></dt><dd>cuentas en Coqueiro, 5× Semente</dd></div>
+        <div><dt>hasta <b data-conta="5">5</b></dt><dd>espacios en Oásis, 5× Semente</dd></div>
+      </dl>
+    </div>
+
+    <!-- galeria de modos: os espaços financeiros -->
+    <div class="galeria revela" role="region" aria-label="Galería de espacios financieros. Desplázate al costado para ver los demás." tabindex="0">
+      <ul class="galeria-trilho">
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">Personal</span>
+            <strong>R$ 4.182,30</strong>
+            <span class="v-espaco-linha"><i style="--w:72%;--c:var(--receita)"></i></span>
+            <span class="v-espaco-rodape">3 cuentas · 2 tarjetas</span>
+          </div>
+          <p class="galeria-legenda"><b>Personal.</b> El súper, el alquiler, la feria del sábado.</p>
+        </li>
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">Empresa / autónomo</span>
+            <strong>R$ 9.640,00</strong>
+            <span class="v-espaco-linha"><i style="--w:54%;--c:var(--investimento)"></i></span>
+            <span class="v-espaco-rodape">1 cuenta · impuesto del mes aparte</span>
+          </div>
+          <p class="galeria-legenda"><b>Empresa.</b> La factura del cliente nunca se mezcla con la casa.</p>
+        </li>
+        <li class="galeria-item">
+          <div class="v-espaco" aria-hidden="true">
+            <span class="v-espaco-nome">Casa</span>
+            <strong>R$ 1.230,75</strong>
+            <span class="v-espaco-linha"><i style="--w:38%;--c:var(--alerta)"></i></span>
+            <span class="v-espaco-rodape">las cuentas compartidas del mes</span>
+          </div>
+          <p class="galeria-legenda"><b>Casa.</b> Lo que es de todos, en un solo lugar.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================ 2 · calendário ============================
+       Aqui ficava o capítulo da importação de extratos. O recurso saiu
+       do produto em 16/09/2026 (o leitor de CSV/OFX errava o formato de
+       parte dos bancos), e uma página que continuasse vendendo isso
+       seria propaganda de algo que não existe. O lugar passou a ser do
+       calendário, que é real e é o que a pessoa abre depois de lançar. -->
+  <section class="cap cap-areia" id="cap-calendario" data-cena aria-labelledby="calendario-titulo">
+    <div class="cap-visual v-calendario" role="img"
+         aria-label="Ilustración del calendario: el año mes a mes, con ingresos, gastos y la suma de lo que todavía está previsto en cada uno.">
+      <div class="v-arquivo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span>año 2026</span>
+      </div>
+      <ul class="v-lanc" aria-hidden="true">
+        <li style="--i:0"><time>sep</time><span>Cerrado</span><em style="--c:var(--receita)">+ R$ 5.400,00</em><b class="sai">− R$ 4.186,40</b></li>
+        <li style="--i:1"><time>oct</time><span>3 previstos</span><em style="--c:var(--alerta)">Previsto</em><b class="sai">− R$ 3.240,00</b></li>
+        <li style="--i:2"><time>nov</time><span>3 previstos</span><em style="--c:var(--alerta)">Previsto</em><b class="sai">− R$ 3.240,00</b></li>
+        <li style="--i:3"><time>dic</time><span>4 previstos · aguinaldo</span><em style="--c:var(--receita)">+ R$ 10.800,00</em><b class="sai">− R$ 4.910,00</b></li>
+      </ul>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="calendario-titulo">El año entero en una pantalla.</h2>
+      <p class="cap-sub">Semana, mes y año — y lo que todavía es solo previsión.</p>
+      <p class="cap-corpo">
+        El alquiler de diciembre ya existe en septiembre: es fijo, y lo fijo es previsible. El calendario de OAZE tiene tres escalas: los siete días de la semana, la grilla del mes con el saldo de cada día y los doce meses del año uno al lado del otro. En todas ellas, lo que todavía no fue confirmado aparece sumado aparte, porque decidir sobre lo que ya pasó y sobre lo que quizá pase son dos cosas distintas.
+      </p>
+      <dl class="numeros">
+        <div><dt><b data-conta="3">3</b></dt><dd>escalas: semana, mes y año</dd></div>
+        <div><dt><b data-conta="12">12</b></dt><dd>meses por delante, con lo previsto sumado en cada uno</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 3 · cartão ============================ -->
+  <section class="cap cap-noite" id="cap-cartao" data-cena aria-labelledby="cartao-titulo">
+    <div class="cap-visual v-cartao" role="img"
+         aria-label="Ilustración de la tarjeta: una compra de 600 reales en 3 cuotas, hecha el día 28, después del cierre del día 25. Las cuotas caen en los resúmenes que cierran en octubre, noviembre y diciembre.">
+      <div class="v-compra" aria-hidden="true">
+        <span>28 sep</span><strong>Auriculares · R$ 600 en 3×</strong>
+      </div>
+      <div class="v-faturas" aria-hidden="true">
+        <div class="v-fatura v-fatura-fechada"><span class="v-fatura-mes">Cierra 25 sep</span><span class="v-fatura-estado">ya cerró</span></div>
+        <div class="v-fatura" style="--i:0"><span class="v-fatura-mes">Cierra 25 oct</span><em class="v-parcela">1/3 · R$ 200</em></div>
+        <div class="v-fatura" style="--i:1"><span class="v-fatura-mes">Cierra 25 nov</span><em class="v-parcela">2/3 · R$ 200</em></div>
+        <div class="v-fatura" style="--i:2"><span class="v-fatura-mes">Cierra 25 dic</span><em class="v-parcela">3/3 · R$ 200</em></div>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="cartao-titulo">Crédito donde corresponde.</h2>
+      <p class="cap-sub">La compra entra en el resumen en el que realmente cae.</p>
+      <p class="cap-corpo">
+        Compras unos auriculares en tres cuotas el día 28. La tarjeta cierra el día 25. OAZE pone la primera cuota en el resumen que cierra el mes siguiente, no en el que acaba de cerrar, y las otras dos en los meses en que van a caer. Cuando llega el resumen, el valor coincide con lo que cobra el banco.
+      </p>
+      <dl class="numeros">
+        <div><dt>hasta <b data-conta="10">10</b></dt><dd>tarjetas en Coqueiro. Sin límite en Oásis</dd></div>
+        <div><dt>hasta <b data-conta="24">24</b></dt><dd>meses de resúmenes uno al lado del otro, 24× Semente</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 4 · mês ============================ -->
+  <section class="cap cap-areia" id="cap-mes" data-cena aria-labelledby="mes-titulo">
+    <div class="cap-visual v-mes" role="img"
+         aria-label="Ilustración del mes: barras de ingresos y gastos de los últimos seis meses, una línea punteada que proyecta el cierre en 5.040 reales, y la meta de reserva de emergencia en 64 por ciento, con llegada prevista para marzo de 2027.">
+      <svg class="v-grafico" viewBox="0 0 640 230" aria-hidden="true">
+        <g class="v-grade"><path d="M0 40h640M0 90h640M0 140h640M0 190h640"/></g>
+        <g class="v-barras">
+          <rect style="--i:0" class="e" x="24"  y="92"  width="26" height="98"/>  <rect style="--i:0" class="s" x="54"  y="128" width="26" height="62"/>
+          <rect style="--i:1" class="e" x="124" y="78"  width="26" height="112"/> <rect style="--i:1" class="s" x="154" y="134" width="26" height="56"/>
+          <rect style="--i:2" class="e" x="224" y="98"  width="26" height="92"/>  <rect style="--i:2" class="s" x="254" y="118" width="26" height="72"/>
+          <rect style="--i:3" class="e" x="324" y="70"  width="26" height="120"/> <rect style="--i:3" class="s" x="354" y="140" width="26" height="50"/>
+          <rect style="--i:4" class="e" x="424" y="86"  width="26" height="104"/> <rect style="--i:4" class="s" x="454" y="124" width="26" height="66"/>
+          <rect style="--i:5" class="e" x="524" y="120" width="26" height="70"/>  <rect style="--i:5" class="s" x="554" y="150" width="26" height="40"/>
+        </g>
+        <path class="v-projecao" d="M554 150 C580 138 604 104 632 64"/>
+        <circle class="v-projecao-ponto" cx="632" cy="64" r="5"/>
+        <path d="M0 190h640" class="v-eixo"/>
+      </svg>
+      <div class="v-rotulo-projecao" aria-hidden="true"><span>Proyección del cierre</span><strong>R$ 5.040</strong></div>
+      <div class="v-meta" aria-hidden="true">
+        <span>Reserva de emergencia</span>
+        <span class="v-meta-barra"><i></i></span>
+        <span class="v-meta-rodape">64% · llega en mar/27 al ritmo actual</span>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="mes-titulo">Las cuentas cuadran.</h2>
+      <p class="cap-sub">El saldo de hoy y el del último día, en la misma pantalla.</p>
+      <p class="cap-corpo">
+        El día 12 abres el panel y ya sabes cómo termina el mes. Ingresos, gastos y lo que todavía va a caer entran en la cuenta. La meta muestra cuánto falta y en qué mes llega. Si el delivery creció, la categoría aparece sola. Con menos de tres meses de historial, OAZE avisa que todavía no puede proyectar.
+      </p>
+      <dl class="numeros">
+        <div><dt>hasta <b data-conta="24">24</b></dt><dd>meses de historial en Coqueiro, 8× Semente</dd></div>
+        <div><dt>hasta <b data-conta="10">10</b></dt><dd>metas con plazo en Coqueiro, 10× Semente</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ 5 · UGLEZ ============================ -->
+  <section class="cap cap-poco" id="uglez" data-cena aria-labelledby="uglez-titulo">
+    <div class="cap-visual v-uglez" role="img"
+         aria-label="Ilustración de UGLEZ: la pregunta «¿Puedo cambiar de celular en octubre?» y una respuesta con los valores del mes. Ejemplo ilustrativo.">
+      <div class="v-uglez-orbe" data-uglez-orbe aria-hidden="true"></div>
+      <div class="v-conversa" aria-hidden="true">
+        <p class="v-pergunta">¿Puedo cambiar de celular en octubre?</p>
+        <p class="v-resposta">Sí, manteniendo el ritmo. Te sobran R$ 1.140 por mes y el celular cuesta R$ 2.800. En octubre tendrás R$ 3.420 guardados: la meta de la reserva se atrasa un mes.</p>
+        <p class="v-exemplo">Ejemplo ilustrativo</p>
+      </div>
+    </div>
+
+    <div class="cap-texto revela">
+      <h2 id="uglez-titulo">Traduce sin traicionar.</h2>
+      <p class="cap-sub">Pregunta en palabras simples. La respuesta viene con el número.</p>
+      <p class="cap-corpo">
+        En el almuerzo preguntas si puedes cambiar de celular en octubre. UGLEZ mira los totales del mes, las metas y las recurrencias, y responde con los valores. Recibe solo el resumen, nunca la descripción de tus movimientos. Cuando el historial es demasiado corto para prever, lo dice en lugar de inventar.
+      </p>
+      <dl class="numeros">
+        <div><dt>hasta <b data-conta="200">200</b></dt><dd>lecturas por mes en Oásis, 20× Semente</dd></div>
+        <div><dt>hasta <b data-conta="60">60</b></dt><dd>lecturas por mes en Coqueiro, 6× Semente</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ comparador ============================ -->
+  <section class="cap cap-areia cap-comparador" id="comparar" aria-labelledby="comparar-titulo">
+    <div class="cap-texto revela">
+      <p class="cap-rotulo">Comparar</p>
+      <h2 id="comparar-titulo">¿Qué usas hoy?</h2>
+      <p class="cap-sub">Elige. La ganancia aparece en número.</p>
+    </div>
+
+    <!-- Funciona sem JavaScript: a escolha é um rádio, e o CSS mostra o
+         painel do rádio marcado. Não é aba — é um formulário de uma
+         pergunta só. -->
+    <div class="comparador revela">
+      <input type="radio" name="cmp" id="cmp-planilha" checked>
+      <input type="radio" name="cmp" id="cmp-banco">
+      <input type="radio" name="cmp" id="cmp-caderno">
+      <fieldset class="cmp-escolha">
+        <legend class="sr-only">Lo que usas hoy para controlar el dinero</legend>
+        <label for="cmp-planilha">Hoja de cálculo</label>
+        <label for="cmp-banco">App del banco</label>
+        <label for="cmp-caderno">Cuaderno</label>
+      </fieldset>
+
+      <div class="cmp-painel cmp-planilha">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-planilha"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">En la hoja de cálculo, escribes cada línea y arreglas la fórmula.</p>
+        <dl class="numeros">
+          <div><dt>hasta <b>12</b></dt><dd>meses por delante ya sumados</dd></div>
+          <div><dt>hasta <b>24</b></dt><dd>meses comparados, sin fórmula</dd></div>
+          <div><dt>hasta <b>5</b></dt><dd>tarjetas con resumen por ciclo</dd></div>
+        </dl>
+      </div>
+
+      <div class="cmp-painel cmp-banco">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-banco"><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">En la app del banco, ves un banco por vez.</p>
+        <dl class="numeros">
+          <div><dt>hasta <b>41</b></dt><dd>bancos en un solo panel</dd></div>
+          <div><dt>hasta <b>10</b></dt><dd>cuentas una al lado de la otra</dd></div>
+          <div><dt>hasta <b>5</b></dt><dd>espacios separados</dd></div>
+        </dl>
+      </div>
+
+      <div class="cmp-painel cmp-caderno">
+        <div class="cmp-visual" aria-hidden="true">
+          <span class="cmp-antes cmp-antes-caderno"><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="cmp-seta"></span>
+          <span class="cmp-depois"><b></b><b></b><b></b></span>
+        </div>
+        <p class="cmp-frase">El cuaderno guarda lo que pasó. No dice lo que viene.</p>
+        <dl class="numeros">
+          <div><dt>hasta <b>10</b></dt><dd>metas con fecha de llegada</dd></div>
+          <div><dt>hasta <b>24</b></dt><dd>meses de historial</dd></div>
+          <div><dt>hasta <b>120</b></dt><dd>lecturas de UGLEZ por mes</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/es/cadastro">Crear cuenta gratis</a></p>
+  </section>
+
+  <!-- ============================ planos ============================ -->
+  <section class="secao precos-cortina" id="planos">
+    <div class="pricing-curtains" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Planes que crecen contigo</h2>
+        <p>Empieza con el gratis. No vence, no pide tarjeta y cambias cuando tenga sentido.</p>
+      </div>
+
+      <div style="text-align:center">
+        <div class="alternador" data-alternador role="group" aria-label="Ciclo de cobro">
+          <button type="button" data-ciclo="mensal" aria-pressed="true">Mensual</button>
+          <button type="button" data-ciclo="anual"  aria-pressed="false">Anual <span class="economia">−16%</span></button>
+        </div>
+      </div>
+
+      <div class="planos">
+        <article class="plano revela">
+          <h3>Semente</h3>
+          <p class="plano-alvo">Siembra el hábito de mirar tu mes</p>
+          <p class="plano-preco"><b>R$ 0</b> <span>para siempre</span></p>
+          <p class="plano-nota">Sin tarjeta de crédito</p>
+          <a class="btn btn-fantasma btn-largo" href="/es/cadastro">Crear cuenta gratis</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 espacio financiero, 2 cuentas y 3 tarjetas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Hasta 100 movimientos por mes</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 1 presupuesto, 1 meta y 3 recurrencias</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Historial de los últimos 3 meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 consultas a UGLEZ por mes</li>
+          </ul>
+        </article>
+
+        <article class="plano plano-destaque revela">
+          <span class="selo">El más elegido</span>
+          <h3>Coqueiro</h3>
+          <p class="plano-alvo">Raíz firme: cuentas, tarjetas e historial</p>
+          <p class="plano-preco">
+            <b data-mensal="R$ 14,90" data-anual="R$ 12,49">R$ 14,90</b> <span>por mes</span>
+          </p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 149,90 por año · ahorro de R$ 28,90</span></p>
+          <a class="btn btn-principal btn-largo" href="/app/planos">Suscribirse a Coqueiro</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 10 cuentas y 10 tarjetas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Hasta 1.000 movimientos por mes</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 20 presupuestos, 10 metas y 30 recurrencias</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Historial de 24 meses y comparación entre meses</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Exportar en CSV y PDF, calendario financiero</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Tarjetas internacionales en dólares, euros y otras monedas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 60 consultas a UGLEZ por mes, con asistente flotante</li>
+          </ul>
+        </article>
+
+        <article class="plano revela">
+          <h3>Oásis</h3>
+          <p class="plano-alvo">Todo lo que hace OAZE, sin techo en el día a día</p>
+          <p class="plano-preco">
+            <b data-mensal="R$ 29,90" data-anual="R$ 24,99">R$ 29,90</b> <span>por mes</span>
+          </p>
+          <p class="plano-nota"><span data-so-anual hidden>R$ 299,90 por año · ahorro de R$ 58,90</span></p>
+          <a class="btn btn-fantasma btn-largo" href="/app/planos">Suscribirse a Oásis</a>
+          <ul class="lista">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Hasta 5 espacios financieros y 50 cuentas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Tarjetas y movimientos sin límite</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Historial completo y comparación anual</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Tendencias, simulaciones y proyecciones de UGLEZ</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> 200 consultas a UGLEZ por mes, con asistente flotante</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg> Acceso anticipado y atención prioritaria</li>
+          </ul>
+        </article>
+      </div>
+
+      <p style="text-align:center;margin-top:28px">
+        <a href="/es/precos">Ver la comparación completa de los planes →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ perguntas ============================ -->
+  <section class="secao secao-faq" id="perguntas">
+    <div class="env">
+      <div class="secao-topo revela">
+        <h2>Preguntas frecuentes</h2>
+      </div>
+
+      <div class="faq">
+        <details class="revela">
+          <summary>¿El plan gratis vence?</summary>
+          <div class="resposta"><p>No. No tiene plazo ni pide tarjeta de crédito. Tiene límites —1 espacio, 2 cuentas, 1 tarjeta, hasta 100 movimientos por mes e historial de 3 meses—, pero sigue funcionando indefinidamente.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>¿Necesito cuenta para usarlo?</summary>
+          <div class="resposta">
+            <p>Para probarlo, no: el panel funciona en tu navegador y los datos quedan en el propio dispositivo. Pero entonces existen solo ahí: cambiar de celular o limpiar el navegador se lleva todo.</p>
+            <p>Con cuenta, los registros pasan a vivir en el servidor y sobreviven a cualquier cosa que le pase al navegador.</p>
+          </div>
+        </details>
+
+        <details class="revela">
+          <summary>¿OAZE se conecta a mi banco?</summary>
+          <div class="resposta"><p>No, y es una decisión de proyecto. No pedimos la contraseña de tu banco ni usamos Open Finance: OAZE nunca tiene acceso a tu cuenta. Los movimientos son tuyos, escritos por ti, y las cuentas que se repiten cada mes las registras una sola vez, como fijas.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>Si vuelvo al gratis, ¿pierdo mis datos?</summary>
+          <div class="resposta"><p>No. Nada se borra al cambiar de plan. Lo que pase del límite del plan nuevo queda en modo de lectura: sigues viéndolo y eligiendo qué mantener activo, pero no creas más hasta estar dentro del límite.</p></div>
+        </details>
+
+        <details class="revela">
+          <summary>¿Mis datos financieros se usan para entrenar IA?</summary>
+          <div class="resposta"><p>No. Las consultas a UGLEZ pasan por el servidor de OAZE y usan la API de OpenAI solo para generar la respuesta. La pantalla muestra qué categorías de datos van junto antes del envío, y no se incluye ninguna descripción de movimiento.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ fechamento ============================ -->
+  <section class="cap cap-areia cap-fechamento" aria-labelledby="fecho-titulo">
+    <div class="cap-texto revela">
+      <h2 id="fecho-titulo">Por qué empezar aquí.</h2>
+    </div>
+
+    <ul class="motivos">
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <strong>Semente, sin plazo.</strong>
+        <span>El plan Semente es gratis y no vence.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M4 4l16 16"/></svg>
+        <strong>Sin tarjeta para empezar.</strong>
+        <span>Ningún dato de pago en el registro.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+        <strong>Nada que instalar.</strong>
+        <span>Se abre en el navegador del celular y de la computadora.</span>
+      </li>
+      <li class="revela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 11-3-6.2"/><path d="M20 4v5h-5"/></svg>
+        <strong>Pruébalo antes.</strong>
+        <span>El panel funciona antes del registro.</span>
+      </li>
+    </ul>
+
+    <div class="valores">
+      <article class="valor revela" id="seguranca">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6l20 8v14c0 13-8.5 24-20 28C20.5 52 12 41 12 28V14z"/><path d="M24 32l6 6 11-12"/></svg>
+        </div>
+        <h3>Privacidad</h3>
+        <p>
+          Tu extracto no se convierte en producto. Cada cuenta ve solo lo suyo, por una regla en la propia base de datos. OAZE no pide la contraseña de tu banco. UGLEZ recibe solo totales, nunca la descripción de tus movimientos.
+        </p>
+      </article>
+
+      <article class="valor revela">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="24"/><path d="M32 8v48"/><path d="M32 8a24 24 0 010 48" fill="currentColor" stroke="none" opacity=".9"/></svg>
+        </div>
+        <h3>Accesibilidad</h3>
+        <p>
+          Legible para quien ve poco. El texto llega hasta 15,3:1 de contraste, 2× el nivel más alto de la norma. Quien pide menos movimiento en su dispositivo recibe la página quieta. Cada control muestra dónde está el foco del teclado.
+        </p>
+      </article>
+
+      <article class="valor revela">
+        <div class="valor-visual" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 44c10-2 18-10 22-22 2-6 8-12 14-12-2 8-4 16-10 24-6 8-16 12-26 10z"/><path d="M14 44l-4 10"/><path d="M26 34l6 6"/></svg>
+        </div>
+        <h3>Ligereza</h3>
+        <p>
+          El cálculo de tu mes ocurre en tu dispositivo. Saldo, resumen y proyección no esperan a ningún servidor para aparecer. Menos ida y vuelta de datos para llegar al mismo número.
+        </p>
+      </article>
+    </div>
+
+    <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/es/cadastro">Crear cuenta gratis</a></p>
+  </section>
+</main>
+
+<!-- ============================ rodapé ============================ -->
+<footer class="rodape">
+  <div class="env">
+    <div class="rodape-grade">
+      <div>
+        <a class="marca" href="/es/" aria-label="OAZE, página de inicio">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+          OAZE
+        </a>
+        <p class="rodape-sobre">Un panel para ver tu propio dinero sin convertirlo en una hoja de cálculo.</p>
+      </div>
+
+      <div>
+        <h4>Producto</h4>
+        <ul>
+          <li><a href="/es/recursos">Funciones</a></li>
+          <li><a href="/es/precos">Precios</a></li>
+          <li><a href="/es/#uglez">UGLEZ</a></li>
+          <li><a href="/es/#seguranca">Seguridad</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Cuenta</h4>
+        <ul>
+          <li><a href="/es/entrar">Iniciar sesión</a></li>
+          <li><a href="/es/cadastro">Crear cuenta</a></li>
+          <li><a href="/es/recuperar-senha">Recuperar contraseña</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/es/termos">Términos de uso</a></li>
+          <li><a href="/es/privacidade">Política de privacidad</a></li>
+          <li><a href="/es/suporte">Soporte</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rodape-fim">
+      <p>© <span data-ano>2026</span> OAZE</p>
+      <p>Hecho en Brasil · importes en reales brasileños (BRL)</p>
+      <p><a href="/es/suporte">suporte@oaze.site</a></p>
+    <!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Idioma"><a data-idioma href="/" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/" hreflang="en" lang="en">English</a><a data-idioma href="/fr/" hreflang="fr" lang="fr">Français</a><a data-idioma href="/es/" hreflang="es" lang="es" aria-current="true">Español</a></nav><!-- /seletor-idioma --></div>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/uglez-particulas.js" defer></script>
+<script src="/assets/js/narrativa.js" defer></script>
+<script src="/assets/js/cookies.js" defer></script>
+</body>
+</html>

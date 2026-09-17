@@ -1,0 +1,188 @@
+[
+ {
+  "pt": "Criar conta grátis — OAZE",
+  "en": "Create a free account — OAZE",
+  "fr": "Créer un compte gratuit — OAZE",
+  "es": "Crear cuenta gratis — OAZE"
+ },
+ {
+  "pt": "Crie sua conta gratuita no OAZE. Sem cartão de crédito e sem prazo para acabar.",
+  "en": "Create your free OAZE account. No credit card and no expiration date.",
+  "fr": "Créez votre compte OAZE gratuit. Sans carte bancaire et sans date d'expiration.",
+  "es": "Crea tu cuenta gratuita en OAZE. Sin tarjeta de crédito y sin fecha de vencimiento."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Criar conta grátis",
+  "en": "Create a free account",
+  "fr": "Créer un compte gratuit",
+  "es": "Crear cuenta gratis"
+ },
+ {
+  "pt": "Plano Semente: grátis, sem cartão de crédito e sem prazo para acabar.",
+  "en": "Seed plan (Semente): free, no credit card and no expiration date.",
+  "fr": "Formule Graine (Semente) : gratuite, sans carte bancaire et sans date d'expiration.",
+  "es": "Plan Semilla (Semente): gratis, sin tarjeta de crédito y sin fecha de vencimiento."
+ },
+ {
+  "pt": "Criar conta com Google",
+  "en": "Sign up with Google",
+  "fr": "S'inscrire avec Google",
+  "es": "Registrarse con Google"
+ },
+ {
+  "pt": "Criar conta com a Apple",
+  "en": "Sign up with Apple",
+  "fr": "S'inscrire avec Apple",
+  "es": "Registrarse con Apple"
+ },
+ {
+  "pt": "ou",
+  "en": "or",
+  "fr": "ou",
+  "es": "o"
+ },
+ {
+  "pt": "Criar conta com e-mail",
+  "en": "Sign up with email",
+  "fr": "S'inscrire avec un e-mail",
+  "es": "Registrarse con correo"
+ },
+ {
+  "pt": "Como quer ser chamado",
+  "en": "What should we call you",
+  "fr": "Comment souhaitez-vous être appelé",
+  "es": "¿Cómo quieres que te llamemos?"
+ },
+ {
+  "pt": "Seu primeiro nome",
+  "en": "Your first name",
+  "fr": "Votre prénom",
+  "es": "Tu nombre"
+ },
+ {
+  "pt": "Aparece na saudação do painel. Pode deixar em branco.",
+  "en": "Shown in the dashboard greeting. You can leave it blank.",
+  "fr": "Affiché dans le message d'accueil du tableau de bord. Vous pouvez laisser vide.",
+  "es": "Aparece en el saludo del panel. Puedes dejarlo en blanco."
+ },
+ {
+  "pt": "E-mail",
+  "en": "Email",
+  "fr": "E-mail",
+  "es": "Correo electrónico"
+ },
+ {
+  "pt": "voce@exemplo.com",
+  "en": "you@example.com",
+  "fr": "vous@exemple.com",
+  "es": "tu@ejemplo.com"
+ },
+ {
+  "pt": "Senha",
+  "en": "Password",
+  "fr": "Mot de passe",
+  "es": "Contraseña"
+ },
+ {
+  "pt": "Pelo menos 8 caracteres",
+  "en": "At least 8 characters",
+  "fr": "Au moins 8 caractères",
+  "es": "Al menos 8 caracteres"
+ },
+ {
+  "pt": "Mínimo de 8 caracteres. Evite algo que você já usa em outro lugar.",
+  "en": "At least 8 characters. Avoid something you already use elsewhere.",
+  "fr": "Au moins 8 caractères. Évitez un mot de passe que vous utilisez déjà ailleurs.",
+  "es": "Mínimo 8 caracteres. Evita algo que ya uses en otro lugar."
+ },
+ {
+  "pt": "Criar minha conta",
+  "en": "Create my account",
+  "fr": "Créer mon compte",
+  "es": "Crear mi cuenta"
+ },
+ {
+  "pt": "Ao criar a conta você concorda com os <a href=\"/termos\">Termos de uso</a> e com a <a href=\"/privacidade\">Política de privacidade</a>.",
+  "en": "By creating an account you agree to the <a href=\"/termos\">Terms of use</a> and the <a href=\"/privacidade\">Privacy policy</a>.",
+  "fr": "En créant un compte, vous acceptez les <a href=\"/termos\">Conditions d'utilisation</a> et la <a href=\"/privacidade\">Politique de confidentialité</a>.",
+  "es": "Al crear la cuenta aceptas los <a href=\"/termos\">Términos de uso</a> y la <a href=\"/privacidade\">Política de privacidad</a>."
+ },
+ {
+  "pt": "Já tem conta? <a href=\"/entrar\">Entrar</a>",
+  "en": "Already have an account? <a href=\"/entrar\">Sign in</a>",
+  "fr": "Vous avez déjà un compte ? <a href=\"/entrar\">Se connecter</a>",
+  "es": "¿Ya tienes cuenta? <a href=\"/entrar\">Inicia sesión</a>"
+ },
+ {
+  "pt": "Abrindo…",
+  "en": "Opening…",
+  "fr": "Ouverture…",
+  "es": "Abriendo…"
+ },
+ {
+  "pt": "Informe seu e-mail.",
+  "en": "Enter your email.",
+  "fr": "Saisissez votre e-mail.",
+  "es": "Ingresa tu correo."
+ },
+ {
+  "pt": "Esse e-mail não parece válido.",
+  "en": "That email doesn't look valid.",
+  "fr": "Cet e-mail ne semble pas valide.",
+  "es": "Ese correo no parece válido."
+ },
+ {
+  "pt": "A senha precisa ter pelo menos 8 caracteres.",
+  "en": "Your password needs at least 8 characters.",
+  "fr": "Le mot de passe doit contenir au moins 8 caractères.",
+  "es": "La contraseña debe tener al menos 8 caracteres."
+ },
+ {
+  "pt": "Criando…",
+  "en": "Creating…",
+  "fr": "Création…",
+  "es": "Creando…"
+ },
+ {
+  "pt": "Conta criada. Enviamos uma confirmação para ",
+  "en": "Account created. We sent a confirmation to ",
+  "fr": "Compte créé. Nous avons envoyé une confirmation à ",
+  "es": "Cuenta creada. Enviamos una confirmación a "
+ },
+ {
+  "pt": ". Abra a mensagem para ativar o acesso — ",
+  "en": ". Open the message to activate your access — ",
+  "fr": ". Ouvrez le message pour activer votre accès — ",
+  "es": ". Abre el mensaje para activar tu acceso: "
+ },
+ {
+  "pt": "ela pode levar alguns minutos e às vezes cai no spam.",
+  "en": "it can take a few minutes and sometimes lands in spam.",
+  "fr": "il peut mettre quelques minutes à arriver et atterrit parfois dans les spams.",
+  "es": "puede tardar unos minutos y a veces llega a la carpeta de spam."
+ }
+]

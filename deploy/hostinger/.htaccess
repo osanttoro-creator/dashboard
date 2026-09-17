@@ -40,6 +40,18 @@
   #
   # O [L] encerra o processamento de cada uma — sem ele a regra
   # seguinte reescreveria por cima.
+  # -----------------------------------------------------------
+  # 2a · as mesmas rotas em inglês, francês e espanhol
+  # -----------------------------------------------------------
+  # /en, /fr e /es são pastas de verdade, geradas por
+  # tools/gen-idiomas.js a partir das páginas em português. Os nomes
+  # das rotas continuam os mesmos (/en/precos, não /en/pricing):
+  # mudar o caminho por idioma dobraria a tabela de rotas e quebraria
+  # todo link já compartilhado. Estas regras vêm ANTES das rotas em
+  # português — sem isso, /en/precos cairia no fallback do app.
+  RewriteRule ^(en|fr|es)/?$                       /$1/index.html [L]
+  RewriteRule ^(en|fr|es)/(recursos|precos|entrar|cadastro|recuperar-senha|redefinir-senha|confirmar-email|privacidade|termos|suporte)/?$  /$1/$2.html [L]
+
   RewriteRule ^recursos/?$          /recursos.html        [L]
   RewriteRule ^precos/?$            /precos.html          [L]
   RewriteRule ^entrar/?$            /entrar.html          [L]

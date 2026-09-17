@@ -1,0 +1,446 @@
+[
+ {
+  "pt": "Recursos para controle financeiro pessoal | OAZE",
+  "en": "Personal finance features | OAZE",
+  "fr": "Fonctionnalités de gestion financière personnelle | OAZE",
+  "es": "Funciones de control financiero personal | OAZE"
+ },
+ {
+  "pt": "Controle contas, cartões, gastos, parcelas, orçamentos e metas. Veja a semana, o mês e o ano e analise seu dinheiro com o assistente financeiro UGLEZ.",
+  "en": "Manage accounts, credit cards, spending, installments, budgets and goals. See your week, month and year and analyze your money with the UGLEZ financial assistant.",
+  "fr": "Gérez comptes, cartes, dépenses, paiements échelonnés, budgets et objectifs. Visualisez la semaine, le mois et l'année et analysez votre argent avec l'assistant financier UGLEZ.",
+  "es": "Controla cuentas, tarjetas, gastos, cuotas, presupuestos y metas. Mira la semana, el mes y el año y analiza tu dinero con el asistente financiero UGLEZ."
+ },
+ {
+  "pt": "Recursos — OAZE",
+  "en": "Features — OAZE",
+  "fr": "Fonctionnalités — OAZE",
+  "es": "Funciones — OAZE"
+ },
+ {
+  "pt": "Tudo o que o OAZE faz, e o que ele deliberadamente não faz.",
+  "en": "Everything OAZE does — and what it deliberately does not do.",
+  "fr": "Tout ce que fait OAZE, et ce qu'il ne fait volontairement pas.",
+  "es": "Todo lo que hace OAZE, y lo que deliberadamente no hace."
+ },
+ {
+  "pt": "OAZE — controle financeiro pessoal",
+  "en": "OAZE — personal finance management",
+  "fr": "OAZE — gestion des finances personnelles",
+  "es": "OAZE — control financiero personal"
+ },
+ {
+  "pt": "Contas, cartões, gastos, orçamentos, metas e análise financeira com o UGLEZ.",
+  "en": "Accounts, cards, spending, budgets, goals and financial analysis with UGLEZ.",
+  "fr": "Comptes, cartes, dépenses, budgets, objectifs et analyse financière avec UGLEZ.",
+  "es": "Cuentas, tarjetas, gastos, presupuestos, metas y análisis financiero con UGLEZ."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Abrir menu",
+  "en": "Open menu",
+  "fr": "Ouvrir le menu",
+  "es": "Abrir menú"
+ },
+ {
+  "pt": "Navegação principal",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "Recursos",
+  "en": "Features",
+  "fr": "Fonctionnalités",
+  "es": "Funciones"
+ },
+ {
+  "pt": "Preços",
+  "en": "Pricing",
+  "fr": "Tarifs",
+  "es": "Precios"
+ },
+ {
+  "pt": "Segurança",
+  "en": "Security",
+  "fr": "Sécurité",
+  "es": "Seguridad"
+ },
+ {
+  "pt": "Suporte",
+  "en": "Support",
+  "fr": "Assistance",
+  "es": "Soporte"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Criar conta grátis",
+  "en": "Create a free account",
+  "fr": "Créer un compte gratuit",
+  "es": "Crear cuenta gratis"
+ },
+ {
+  "pt": "Tudo o que o OAZE <em>faz</em>",
+  "en": "Everything OAZE <em>does</em>",
+  "fr": "Tout ce que fait <em>OAZE</em>",
+  "es": "Todo lo que <em>hace</em> OAZE"
+ },
+ {
+  "pt": "Recursos de controle financeiro pessoal reunidos sem duplicação. No fim da página, mostramos também o que o produto deliberadamente não faz.",
+  "en": "Personal finance features, all in one place with no duplication. At the end of the page we also show what the product deliberately does not do.",
+  "fr": "Les fonctionnalités de gestion financière personnelle réunies sans doublon. En fin de page, nous montrons aussi ce que le produit ne fait volontairement pas.",
+  "es": "Funciones de control financiero personal reunidas sin duplicación. Al final de la página mostramos también lo que el producto deliberadamente no hace."
+ },
+ {
+  "pt": "Visão geral do mês",
+  "en": "Month overview",
+  "fr": "Vue du mois",
+  "es": "Resumen del mes"
+ },
+ {
+  "pt": "Saldo, entradas, saídas e projeção de fechamento na primeira tela. Quando não há movimentação, ela diz isso — em vez de desenhar gráficos zerados que não informam nada.",
+  "en": "Balance, income, spending and an end-of-month projection on the first screen. When there is no activity, it says so — instead of drawing empty charts that tell you nothing.",
+  "fr": "Solde, entrées, sorties et projection de fin de mois dès le premier écran. Quand il n'y a aucun mouvement, il le dit — au lieu de dessiner des graphiques vides qui n'apprennent rien.",
+  "es": "Saldo, ingresos, gastos y proyección de cierre en la primera pantalla. Cuando no hay movimientos lo dice, en lugar de dibujar gráficos en cero que no informan nada."
+ },
+ {
+  "pt": "Lançamentos",
+  "en": "Transactions",
+  "fr": "Opérations",
+  "es": "Movimientos"
+ },
+ {
+  "pt": "Receita, despesa e transferência entre contas. Parcelamento que cai nos meses certos, e não todo no primeiro. Notas, categoria e método de pagamento em cada um.",
+  "en": "Income, expenses and transfers between accounts. Installments that land in the right months, not all in the first one. Notes, category and payment method on each.",
+  "fr": "Revenus, dépenses et virements entre comptes. Des paiements échelonnés qui tombent sur les bons mois, pas tous sur le premier. Notes, catégorie et moyen de paiement pour chacun.",
+  "es": "Ingresos, gastos y transferencias entre cuentas. Cuotas que caen en los meses correctos y no todas en el primero. Notas, categoría y medio de pago en cada uno."
+ },
+ {
+  "pt": "Contas",
+  "en": "Accounts",
+  "fr": "Comptes",
+  "es": "Cuentas"
+ },
+ {
+  "pt": "Corrente, poupança, carteira, investimento. Saldo de cada uma e o consolidado, com transferência interna que não conta como despesa — porque não é.",
+  "en": "Checking, savings, cash, investment. The balance of each one and the total, with internal transfers that don't count as spending — because they aren't.",
+  "fr": "Courant, épargne, espèces, investissement. Le solde de chacun et le total, avec des virements internes qui ne comptent pas comme dépenses — parce qu'ils n'en sont pas.",
+  "es": "Corriente, ahorro, efectivo, inversión. El saldo de cada una y el consolidado, con transferencias internas que no cuentan como gasto, porque no lo son."
+ },
+ {
+  "pt": "Cartões de crédito",
+  "en": "Credit cards",
+  "fr": "Cartes de crédit",
+  "es": "Tarjetas de crédito"
+ },
+ {
+  "pt": "Fatura por <strong>ciclo de fechamento</strong>, não por mês do calendário. Uma compra no dia 28 pode cair na fatura do mês seguinte, e aqui ela cai onde realmente cai. Fatura paga sai do saldo da conta escolhida.",
+  "en": "Statements by <strong>closing cycle</strong>, not by calendar month. A purchase on the 28th may land on next month's statement, and here it lands where it really does. A paid statement comes out of the balance of the account you choose.",
+  "fr": "Relevés par <strong>cycle de clôture</strong>, et non par mois civil. Un achat le 28 peut tomber sur le relevé du mois suivant, et ici il tombe là où il tombe vraiment. Le relevé payé est débité du compte choisi.",
+  "es": "Resumen por <strong>ciclo de cierre</strong>, no por mes calendario. Una compra el día 28 puede caer en el resumen del mes siguiente, y aquí cae donde realmente cae. El resumen pagado sale del saldo de la cuenta elegida."
+ },
+ {
+  "pt": "Categorias",
+  "en": "Categories",
+  "fr": "Catégories",
+  "es": "Categorías"
+ },
+ {
+  "pt": "As suas, com o peso histórico de cada uma. A categoria que cresceu aparece sozinha na comparação, sem você ir atrás.",
+  "en": "Yours, with the historical weight of each one. The category that grew shows up in the comparison on its own, without you having to look for it.",
+  "fr": "Les vôtres, avec le poids historique de chacune. La catégorie qui a augmenté apparaît d'elle-même dans la comparaison, sans que vous ayez à la chercher.",
+  "es": "Las tuyas, con el peso histórico de cada una. La categoría que creció aparece sola en la comparación, sin que tengas que buscarla."
+ },
+ {
+  "pt": "Orçamento",
+  "en": "Budget",
+  "fr": "Budget",
+  "es": "Presupuesto"
+ },
+ {
+  "pt": "Limite por categoria, com quanto já foi usado e quanto sobra. O estouro aparece antes de acontecer, não no fechamento.",
+  "en": "A limit per category, with how much has been used and how much is left. Overspending shows up before it happens, not at month end.",
+  "fr": "Une limite par catégorie, avec ce qui a été utilisé et ce qui reste. Le dépassement apparaît avant qu'il n'arrive, pas à la clôture.",
+  "es": "Límite por categoría, con cuánto ya se usó y cuánto queda. El exceso aparece antes de que ocurra, no al cierre."
+ },
+ {
+  "pt": "Metas",
+  "en": "Goals",
+  "fr": "Objectifs",
+  "es": "Metas"
+ },
+ {
+  "pt": "Quanto falta, quanto por mês, e em que data você chega no ritmo atual. Prazo calculado, não estimado no olho.",
+  "en": "How much is left, how much per month, and the date you'll get there at your current pace. A calculated deadline, not a guess.",
+  "fr": "Ce qui manque, combien par mois, et à quelle date vous y arriverez au rythme actuel. Une échéance calculée, pas estimée à l'œil.",
+  "es": "Cuánto falta, cuánto por mes y en qué fecha llegas al ritmo actual. Plazo calculado, no estimado a ojo."
+ },
+ {
+  "pt": "Recorrências",
+  "en": "Recurring items",
+  "fr": "Récurrences",
+  "es": "Recurrencias"
+ },
+ {
+  "pt": "Aluguel, assinatura, mensalidade. Cadastra uma vez e aparece todo mês, no dia certo, com data de término opcional.",
+  "en": "Rent, subscriptions, tuition. Add it once and it shows up every month on the right day, with an optional end date.",
+  "fr": "Loyer, abonnement, frais mensuels. Saisissez-le une fois et il apparaît chaque mois au bon jour, avec une date de fin facultative.",
+  "es": "Alquiler, suscripción, mensualidad. Lo registras una vez y aparece cada mes en el día correcto, con fecha de fin opcional."
+ },
+ {
+  "pt": "Calendário",
+  "en": "Calendar",
+  "fr": "Calendrier",
+  "es": "Calendario"
+ },
+ {
+  "pt": "A agenda do seu dinheiro: o que entra e o que sai, dia a dia. Útil para ver se a conta chega antes ou depois do salário.",
+  "en": "Your money's schedule: what comes in and what goes out, day by day. Useful to see whether a bill arrives before or after payday.",
+  "fr": "L'agenda de votre argent : ce qui entre et ce qui sort, jour après jour. Utile pour voir si une facture arrive avant ou après le salaire.",
+  "es": "La agenda de tu dinero: lo que entra y lo que sale, día a día. Útil para ver si una cuenta llega antes o después del sueldo."
+ },
+ {
+  "pt": "Investimentos",
+  "en": "Investments",
+  "fr": "Investissements",
+  "es": "Inversiones"
+ },
+ {
+  "pt": "Carteira, aportes e evolução. Projeção a partir do que você já aportou — não promessa de rendimento.",
+  "en": "Portfolio, contributions and growth. Projections based on what you have already invested — not promised returns.",
+  "fr": "Portefeuille, versements et évolution. Des projections à partir de ce que vous avez déjà investi — pas une promesse de rendement.",
+  "es": "Cartera, aportes y evolución. Proyección a partir de lo que ya aportaste, no una promesa de rentabilidad."
+ },
+ {
+  "pt": "Análises",
+  "en": "Analytics",
+  "fr": "Analyses",
+  "es": "Análisis"
+ },
+ {
+  "pt": "Consolidado do ano, comparação entre meses e evolução por categoria. Todo gráfico vem acompanhado de resumo em texto e de tabela navegável por teclado.",
+  "en": "Year totals, month-to-month comparison and trends by category. Every chart comes with a text summary and a keyboard-navigable table.",
+  "fr": "Consolidé de l'année, comparaison entre les mois et évolution par catégorie. Chaque graphique est accompagné d'un résumé textuel et d'un tableau navigable au clavier.",
+  "es": "Consolidado del año, comparación entre meses y evolución por categoría. Cada gráfico viene con un resumen en texto y una tabla navegable con el teclado."
+ },
+ {
+  "pt": "Calendário financeiro",
+  "en": "Financial calendar",
+  "fr": "Calendrier financier",
+  "es": "Calendario financiero"
+ },
+ {
+  "pt": "Semana, mês e ano na mesma página. Cada escala soma à parte o que ainda é previsão, e as contas fixas aparecem nos meses em que vão cair.",
+  "en": "Week, month and year on the same page. Each view adds up what is still only forecast separately, and fixed bills show up in the months they will be due.",
+  "fr": "Semaine, mois et année sur la même page. Chaque échelle additionne à part ce qui reste une prévision, et les charges fixes apparaissent dans les mois où elles tomberont.",
+  "es": "Semana, mes y año en la misma página. Cada escala suma aparte lo que todavía es previsión, y las cuentas fijas aparecen en los meses en que van a vencer."
+ },
+ {
+  "pt": "Espaços financeiros",
+  "en": "Financial spaces",
+  "fr": "Espaces financiers",
+  "es": "Espacios financieros"
+ },
+ {
+  "pt": "Pessoal e trabalho separados de verdade, cada um com suas contas, categorias e orçamento. 1 espaço no Semente e no Coqueiro, até 5 no Oásis.",
+  "en": "Personal and work truly separate, each with its own accounts, categories and budget. 1 space on Semente and Coqueiro, up to 5 on Oásis.",
+  "fr": "Personnel et professionnel vraiment séparés, chacun avec ses comptes, catégories et budget. 1 espace avec Semente et Coqueiro, jusqu'à 5 avec Oásis.",
+  "es": "Lo personal y el trabajo separados de verdad, cada uno con sus cuentas, categorías y presupuesto. 1 espacio en Semente y Coqueiro, hasta 5 en Oásis."
+ },
+ {
+  "pt": "UGLEZ",
+  "en": "UGLEZ",
+  "fr": "UGLEZ",
+  "es": "UGLEZ"
+ },
+ {
+  "pt": "A leitura do mês em português. Boa parte é cálculo feito no próprio navegador, sem dado nenhum saindo. <a href=\"/#uglez\">Como funciona</a>.",
+  "en": "Your month explained in plain words (currently in Portuguese). Much of it is calculated in your own browser, with no data leaving it. <a href=\"/#uglez\">How it works</a>.",
+  "fr": "La lecture de votre mois en mots simples (actuellement en portugais). Une grande partie est calculée dans votre propre navigateur, sans qu'aucune donnée ne sorte. <a href=\"/#uglez\">Comment ça marche</a>.",
+  "es": "La lectura del mes en palabras simples (por ahora en portugués). Buena parte se calcula en tu propio navegador, sin que salga ningún dato. <a href=\"/#uglez\">Cómo funciona</a>."
+ },
+ {
+  "pt": "Exportação e portabilidade",
+  "en": "Export and portability",
+  "fr": "Export et portabilité",
+  "es": "Exportación y portabilidad"
+ },
+ {
+  "pt": "CSV e PDF dos seus lançamentos na tela de Relatórios, a partir do Coqueiro, em formato aberto e na hora. Entre aparelhos os dados viajam sozinhos pela conta — não há arquivo para guardar nem restaurar à mão.",
+  "en": "CSV and PDF of your entries on the Reports screen, from Coqueiro up, in an open format and right away. Between devices the data travels on its own through your account — there is no file to keep or restore by hand.",
+  "fr": "CSV et PDF de vos écritures sur l'écran Rapports, à partir de Coqueiro, dans un format ouvert et sur-le-champ. D'un appareil à l'autre, les données voyagent seules par votre compte — aucun fichier à garder ni à restaurer à la main.",
+  "es": "CSV y PDF de tus movimientos en la pantalla de Informes, desde Coqueiro, en formato abierto y al instante. Entre dispositivos los datos viajan solos por tu cuenta: no hay archivo que guardar ni restaurar a mano."
+ },
+ {
+  "pt": "Funciona sem internet",
+  "en": "Works offline",
+  "fr": "Fonctionne hors ligne",
+  "es": "Funciona sin internet"
+ },
+ {
+  "pt": "O que você registrar offline entra numa fila e sobe quando a conexão voltar. A tela diz em qual dos estados você está — offline, sincronizando, sincronizado ou com erro.",
+  "en": "Whatever you record offline goes into a queue and syncs when the connection comes back. The screen tells you which state you are in — offline, syncing, synced or error.",
+  "fr": "Ce que vous enregistrez hors ligne entre dans une file et se synchronise au retour de la connexion. L'écran indique dans quel état vous êtes — hors ligne, synchronisation, synchronisé ou erreur.",
+  "es": "Lo que registres sin conexión entra en una cola y se sube cuando vuelve la conexión. La pantalla dice en qué estado estás: sin conexión, sincronizando, sincronizado o con error."
+ },
+ {
+  "pt": "O que o OAZE não faz",
+  "en": "What OAZE doesn't do",
+  "fr": "Ce que OAZE ne fait pas",
+  "es": "Lo que OAZE no hace"
+ },
+ {
+  "pt": "De propósito. Cada um destes é uma decisão, não uma pendência.",
+  "en": "On purpose. Each of these is a decision, not a to-do.",
+  "fr": "Volontairement. Chacun de ces points est une décision, pas une tâche en attente.",
+  "es": "A propósito. Cada uno es una decisión, no una tarea pendiente."
+ },
+ {
+  "pt": "Não conecta ao seu banco",
+  "en": "It doesn't connect to your bank",
+  "fr": "Il ne se connecte pas à votre banque",
+  "es": "No se conecta a tu banco"
+ },
+ {
+  "pt": "Não pedimos a senha do seu banco e não usamos Open Finance: o OAZE nunca tem acesso à sua conta. Os lançamentos são seus — e o que se repete todo mês você cadastra uma vez só, como fixo.",
+  "en": "We never ask for your bank password and we do not use Open Finance: OAZE never has access to your account. The entries are yours — and anything that repeats every month you add only once, as a recurring item.",
+  "fr": "Nous ne demandons jamais le mot de passe de votre banque et n'utilisons pas l'Open Finance : OAZE n'a jamais accès à votre compte. Les opérations sont les vôtres — et ce qui se répète chaque mois, vous ne le saisissez qu'une fois, comme récurrence.",
+  "es": "No pedimos la contraseña de tu banco ni usamos Open Finance: OAZE nunca tiene acceso a tu cuenta. Los movimientos son tuyos, y lo que se repite cada mes lo registras una sola vez, como fijo."
+ },
+ {
+  "pt": "Não recomenda investimento",
+  "en": "It doesn't recommend investments",
+  "fr": "Il ne recommande pas de placements",
+  "es": "No recomienda inversiones"
+ },
+ {
+  "pt": "O OAZE mostra o que os seus números dizem. Ele não indica onde aplicar, e nada nele é recomendação — não somos consultoria de investimentos.",
+  "en": "OAZE shows what your numbers say. It doesn't tell you where to invest, and nothing in it is a recommendation — we are not an investment advisory.",
+  "fr": "OAZE montre ce que disent vos chiffres. Il n'indique pas où placer votre argent, et rien n'y constitue une recommandation — nous ne sommes pas un conseiller en investissement.",
+  "es": "OAZE muestra lo que dicen tus números. No indica dónde invertir, y nada en él es una recomendación: no somos asesoría de inversiones."
+ },
+ {
+  "pt": "Não inventa previsão",
+  "en": "It doesn't make up forecasts",
+  "fr": "Il n'invente pas de prévisions",
+  "es": "No inventa previsiones"
+ },
+ {
+  "pt": "Sem movimentação suficiente, a UGLEZ diz que não há base para uma previsão. Ela não completa o vazio com “R$ 0,00 em um ano”.",
+  "en": "Without enough activity, UGLEZ says there is no basis for a forecast. It doesn't fill the gap with \"R$ 0.00 in a year\".",
+  "fr": "Sans mouvements suffisants, UGLEZ indique qu'il n'y a pas de base pour une prévision. Elle ne comble pas le vide avec « 0,00 R$ dans un an ».",
+  "es": "Sin movimientos suficientes, UGLEZ dice que no hay base para una previsión. No rellena el vacío con “R$ 0,00 en un año”."
+ },
+ {
+  "pt": "<strong>Ainda não disponível:</strong> relatórios personalizados, backup agendado, colaboradores no mesmo espaço e simulações avançadas da UGLEZ. Estão no plano do produto, mas não funcionam hoje — e por isso não estão na lista de nenhum plano.",
+  "en": "<strong>Not available yet:</strong> custom reports, scheduled backup, collaborators in the same space and advanced UGLEZ simulations. They are on the product roadmap but do not work today — which is why they are not listed in any plan.",
+  "fr": "<strong>Pas encore disponible :</strong> rapports personnalisés, sauvegarde programmée, collaborateurs dans le même espace et simulations avancées d'UGLEZ. Ils figurent dans la feuille de route du produit, mais ne fonctionnent pas aujourd'hui — c'est pourquoi ils n'apparaissent dans aucune formule.",
+  "es": "<strong>Todavía no disponible:</strong> informes personalizados, copia de seguridad programada, colaboradores en el mismo espacio y simulaciones avanzadas de UGLEZ. Están en el plan del producto, pero hoy no funcionan, y por eso no aparecen en la lista de ningún plan."
+ },
+ {
+  "pt": "Experimente sem compromisso",
+  "en": "Try it with no commitment",
+  "fr": "Essayez sans engagement",
+  "es": "Pruébalo sin compromiso"
+ },
+ {
+  "pt": "Plano Semente grátis e permanente, sem cartão de crédito.",
+  "en": "The Semente plan is free and permanent, no credit card required.",
+  "fr": "La formule Semente est gratuite et permanente, sans carte bancaire.",
+  "es": "El plan Semente es gratis y permanente, sin tarjeta de crédito."
+ },
+ {
+  "pt": "Ver os planos",
+  "en": "See the plans",
+  "fr": "Voir les formules",
+  "es": "Ver los planes"
+ },
+ {
+  "pt": "Um painel para enxergar o próprio dinheiro sem virar planilha.",
+  "en": "A dashboard to see your own money without turning it into a spreadsheet.",
+  "fr": "Un tableau de bord pour voir votre argent sans le transformer en tableur.",
+  "es": "Un panel para ver tu propio dinero sin convertirlo en una hoja de cálculo."
+ },
+ {
+  "pt": "Produto",
+  "en": "Product",
+  "fr": "Produit",
+  "es": "Producto"
+ },
+ {
+  "pt": "Conta",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Criar conta",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Recuperar senha",
+  "en": "Reset password",
+  "fr": "Réinitialiser le mot de passe",
+  "es": "Recuperar contraseña"
+ },
+ {
+  "pt": "Legal",
+  "en": "Legal",
+  "fr": "Mentions légales",
+  "es": "Legal"
+ },
+ {
+  "pt": "Termos de uso",
+  "en": "Terms of use",
+  "fr": "Conditions d'utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Política de privacidade",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "© <span data-ano>2026</span> OAZE",
+  "en": "© <span data-ano>2026</span> OAZE",
+  "fr": "© <span data-ano>2026</span> OAZE",
+  "es": "© <span data-ano>2026</span> OAZE"
+ },
+ {
+  "pt": "Feito no Brasil · valores em reais",
+  "en": "Made in Brazil · amounts in Brazilian reais (BRL)",
+  "fr": "Fait au Brésil · montants en réais brésiliens (BRL)",
+  "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
+ },
+ {
+  "pt": "suporte@oaze.site",
+  "en": "suporte@oaze.site",
+  "fr": "suporte@oaze.site",
+  "es": "suporte@oaze.site"
+ }
+]

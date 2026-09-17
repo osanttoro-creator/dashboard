@@ -1,0 +1,776 @@
+[
+ {
+  "pt": "Planos de controle financeiro pessoal | OAZE",
+  "en": "Personal finance plans | OAZE",
+  "fr": "Formules de gestion financière personnelle | OAZE",
+  "es": "Planes de control financiero personal | OAZE"
+ },
+ {
+  "pt": "Semente grátis para começar, Coqueiro por R$ 14,90 e Oásis por R$ 29,90 ao mês. Compare os limites de cada plano e veja o desconto anual.",
+  "en": "Semente is free to start, Coqueiro is R$ 14,90 and Oásis is R$ 29,90 per month. Compare the limits of each plan and see the annual discount.",
+  "fr": "Semente gratuit pour commencer, Coqueiro à R$ 14,90 et Oásis à R$ 29,90 par mois. Comparez les limites de chaque formule et découvrez la remise annuelle.",
+  "es": "Semente gratis para empezar, Coqueiro por R$ 14,90 y Oásis por R$ 29,90 al mes. Compara los límites de cada plan y mira el descuento anual."
+ },
+ {
+  "pt": "Preços e planos — OAZE",
+  "en": "Pricing and plans — OAZE",
+  "fr": "Tarifs et formules — OAZE",
+  "es": "Precios y planes — OAZE"
+ },
+ {
+  "pt": "Semente grátis para começar, Coqueiro por R$ 14,90 e Oásis por R$ 29,90 ao mês.",
+  "en": "Semente is free to start, Coqueiro is R$ 14,90 and Oásis is R$ 29,90 per month.",
+  "fr": "Semente gratuit pour commencer, Coqueiro à R$ 14,90 et Oásis à R$ 29,90 par mois.",
+  "es": "Semente gratis para empezar, Coqueiro por R$ 14,90 y Oásis por R$ 29,90 al mes."
+ },
+ {
+  "pt": "OAZE — controle financeiro pessoal",
+  "en": "OAZE — personal finance management",
+  "fr": "OAZE — gestion des finances personnelles",
+  "es": "OAZE — control financiero personal"
+ },
+ {
+  "pt": "Compare os planos Semente, Coqueiro e Oásis.",
+  "en": "Compare the Semente, Coqueiro and Oásis plans.",
+  "fr": "Comparez les formules Semente, Coqueiro et Oásis.",
+  "es": "Compara los planes Semente, Coqueiro y Oásis."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Abrir menu",
+  "en": "Open menu",
+  "fr": "Ouvrir le menu",
+  "es": "Abrir menú"
+ },
+ {
+  "pt": "Navegação principal",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "Recursos",
+  "en": "Features",
+  "fr": "Fonctionnalités",
+  "es": "Funciones"
+ },
+ {
+  "pt": "Preços",
+  "en": "Pricing",
+  "fr": "Tarifs",
+  "es": "Precios"
+ },
+ {
+  "pt": "Segurança",
+  "en": "Security",
+  "fr": "Sécurité",
+  "es": "Seguridad"
+ },
+ {
+  "pt": "Suporte",
+  "en": "Support",
+  "fr": "Assistance",
+  "es": "Soporte"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Criar conta grátis",
+  "en": "Create a free account",
+  "fr": "Créer un compte gratuit",
+  "es": "Crear cuenta gratis"
+ },
+ {
+  "pt": "Planos",
+  "en": "Plans",
+  "fr": "Formules",
+  "es": "Planes"
+ },
+ {
+  "pt": "Escolha o tamanho do seu <em>OAZE</em>",
+  "en": "Choose the size of your <em>OAZE</em>",
+  "fr": "Choisissez la taille de votre <em>OAZE</em>",
+  "es": "Elige el tamaño de tu <em>OAZE</em>"
+ },
+ {
+  "pt": "Comece no grátis, que não expira e não pede cartão. Mude de plano quando quiser — para cima ou para baixo.",
+  "en": "Start on the free plan, which never expires and doesn't ask for a card. Change plans whenever you want — up or down.",
+  "fr": "Commencez par la formule gratuite, qui n'expire pas et ne demande pas de carte. Changez de formule quand vous voulez — vers le haut ou vers le bas.",
+  "es": "Empieza con el gratis, que no vence ni pide tarjeta. Cambia de plan cuando quieras, hacia arriba o hacia abajo."
+ },
+ {
+  "pt": "Ciclo de cobrança",
+  "en": "Billing cycle",
+  "fr": "Cycle de facturation",
+  "es": "Ciclo de cobro"
+ },
+ {
+  "pt": "Mensal",
+  "en": "Monthly",
+  "fr": "Mensuel",
+  "es": "Mensual"
+ },
+ {
+  "pt": "Anual <span class=\"economia\">−16%</span>",
+  "en": "Annual <span class=\"economia\">−16%</span>",
+  "fr": "Annuel <span class=\"economia\">−16%</span>",
+  "es": "Anual <span class=\"economia\">−16%</span>"
+ },
+ {
+  "pt": "Semente",
+  "en": "Semente",
+  "fr": "Semente",
+  "es": "Semente"
+ },
+ {
+  "pt": "Plante o hábito de olhar o mês",
+  "en": "Plant the habit of checking your month",
+  "fr": "Prenez l'habitude de regarder votre mois",
+  "es": "Siembra el hábito de mirar tu mes"
+ },
+ {
+  "pt": "R$ 0",
+  "en": "R$ 0",
+  "fr": "R$ 0",
+  "es": "R$ 0"
+ },
+ {
+  "pt": "para sempre",
+  "en": "forever",
+  "fr": "pour toujours",
+  "es": "para siempre"
+ },
+ {
+  "pt": "Sem cartão de crédito",
+  "en": "No credit card",
+  "fr": "Sans carte bancaire",
+  "es": "Sin tarjeta de crédito"
+ },
+ {
+  "pt": "⟦s0⟧ 1 espaço financeiro, 2 contas e 3 cartões",
+  "en": "⟦s0⟧ 1 financial space, 2 accounts and 3 cards",
+  "fr": "⟦s0⟧ 1 espace financier, 2 comptes et 3 cartes",
+  "es": "⟦s0⟧ 1 espacio financiero, 2 cuentas y 3 tarjetas"
+ },
+ {
+  "pt": "⟦s0⟧ Até 100 movimentações por mês",
+  "en": "⟦s0⟧ Up to 100 transactions per month",
+  "fr": "⟦s0⟧ Jusqu'à 100 opérations par mois",
+  "es": "⟦s0⟧ Hasta 100 movimientos por mes"
+ },
+ {
+  "pt": "⟦s0⟧ 1 orçamento, 1 meta e 3 recorrências",
+  "en": "⟦s0⟧ 1 budget, 1 goal and 3 recurring items",
+  "fr": "⟦s0⟧ 1 budget, 1 objectif et 3 récurrences",
+  "es": "⟦s0⟧ 1 presupuesto, 1 meta y 3 recurrencias"
+ },
+ {
+  "pt": "⟦s0⟧ Histórico dos últimos 3 meses",
+  "en": "⟦s0⟧ History for the last 3 months",
+  "fr": "⟦s0⟧ Historique des 3 derniers mois",
+  "es": "⟦s0⟧ Historial de los últimos 3 meses"
+ },
+ {
+  "pt": "⟦s0⟧ 10 consultas ao UGLEZ por mês",
+  "en": "⟦s0⟧ 10 UGLEZ queries per month",
+  "fr": "⟦s0⟧ 10 requêtes UGLEZ par mois",
+  "es": "⟦s0⟧ 10 consultas a UGLEZ por mes"
+ },
+ {
+  "pt": "Mais escolhido",
+  "en": "Most popular",
+  "fr": "Le plus choisi",
+  "es": "El más elegido"
+ },
+ {
+  "pt": "Coqueiro",
+  "en": "Coqueiro",
+  "fr": "Coqueiro",
+  "es": "Coqueiro"
+ },
+ {
+  "pt": "Raiz firme: contas, cartões e histórico",
+  "en": "Solid roots: accounts, cards and history",
+  "fr": "Des racines solides : comptes, cartes et historique",
+  "es": "Raíz firme: cuentas, tarjetas e historial"
+ },
+ {
+  "pt": "R$ 14,90",
+  "en": "R$ 14,90",
+  "fr": "R$ 14,90",
+  "es": "R$ 14,90"
+ },
+ {
+  "pt": "por mês",
+  "en": "per month",
+  "fr": "par mois",
+  "es": "por mes"
+ },
+ {
+  "pt": "R$ 149,90 por ano · economia de R$ 28,90",
+  "en": "R$ 149,90 per year · save R$ 28,90",
+  "fr": "R$ 149,90 par an · économie de R$ 28,90",
+  "es": "R$ 149,90 por año · ahorro de R$ 28,90"
+ },
+ {
+  "pt": "Assinar o Coqueiro",
+  "en": "Subscribe to Coqueiro",
+  "fr": "S'abonner à Coqueiro",
+  "es": "Suscribirse a Coqueiro"
+ },
+ {
+  "pt": "⟦s0⟧ 10 contas e 10 cartões",
+  "en": "⟦s0⟧ 10 accounts and 10 cards",
+  "fr": "⟦s0⟧ 10 comptes et 10 cartes",
+  "es": "⟦s0⟧ 10 cuentas y 10 tarjetas"
+ },
+ {
+  "pt": "⟦s0⟧ Até 1.000 movimentações por mês",
+  "en": "⟦s0⟧ Up to 1,000 transactions per month",
+  "fr": "⟦s0⟧ Jusqu'à 1 000 opérations par mois",
+  "es": "⟦s0⟧ Hasta 1.000 movimientos por mes"
+ },
+ {
+  "pt": "⟦s0⟧ 20 orçamentos, 10 metas e 30 recorrências",
+  "en": "⟦s0⟧ 20 budgets, 10 goals and 30 recurring items",
+  "fr": "⟦s0⟧ 20 budgets, 10 objectifs et 30 récurrences",
+  "es": "⟦s0⟧ 20 presupuestos, 10 metas y 30 recurrencias"
+ },
+ {
+  "pt": "⟦s0⟧ Histórico de 24 meses e comparação entre meses",
+  "en": "⟦s0⟧ 24 months of history and month-to-month comparison",
+  "fr": "⟦s0⟧ 24 mois d'historique et comparaison entre les mois",
+  "es": "⟦s0⟧ Historial de 24 meses y comparación entre meses"
+ },
+ {
+  "pt": "⟦s0⟧ Exportar em CSV e PDF, calendário financeiro",
+  "en": "⟦s0⟧ Export to CSV and PDF, financial calendar",
+  "fr": "⟦s0⟧ Export en CSV et PDF, calendrier financier",
+  "es": "⟦s0⟧ Exportar en CSV y PDF, calendario financiero"
+ },
+ {
+  "pt": "⟦s0⟧ Cartões internacionais em dólar, euro e outras moedas",
+  "en": "⟦s0⟧ International cards in dollars, euros and other currencies",
+  "fr": "⟦s0⟧ Cartes internationales en dollars, euros et autres devises",
+  "es": "⟦s0⟧ Tarjetas internacionales en dólares, euros y otras monedas"
+ },
+ {
+  "pt": "⟦s0⟧ 60 consultas ao UGLEZ por mês, com assistente flutuante",
+  "en": "⟦s0⟧ 60 UGLEZ queries per month, with the floating assistant",
+  "fr": "⟦s0⟧ 60 requêtes UGLEZ par mois, avec l'assistant flottant",
+  "es": "⟦s0⟧ 60 consultas a UGLEZ por mes, con asistente flotante"
+ },
+ {
+  "pt": "Oásis",
+  "en": "Oásis",
+  "fr": "Oásis",
+  "es": "Oásis"
+ },
+ {
+  "pt": "Tudo o que o OAZE faz, sem teto no dia a dia",
+  "en": "Everything OAZE does, with no ceiling on your day-to-day",
+  "fr": "Tout ce que fait OAZE, sans plafond au quotidien",
+  "es": "Todo lo que hace OAZE, sin techo en el día a día"
+ },
+ {
+  "pt": "R$ 29,90",
+  "en": "R$ 29,90",
+  "fr": "R$ 29,90",
+  "es": "R$ 29,90"
+ },
+ {
+  "pt": "R$ 299,90 por ano · economia de R$ 58,90",
+  "en": "R$ 299,90 per year · save R$ 58,90",
+  "fr": "R$ 299,90 par an · économie de R$ 58,90",
+  "es": "R$ 299,90 por año · ahorro de R$ 58,90"
+ },
+ {
+  "pt": "Assinar o Oásis",
+  "en": "Subscribe to Oásis",
+  "fr": "S'abonner à Oásis",
+  "es": "Suscribirse a Oásis"
+ },
+ {
+  "pt": "⟦s0⟧ Até 5 espaços financeiros e 50 contas",
+  "en": "⟦s0⟧ Up to 5 financial spaces and 50 accounts",
+  "fr": "⟦s0⟧ Jusqu'à 5 espaces financiers et 50 comptes",
+  "es": "⟦s0⟧ Hasta 5 espacios financieros y 50 cuentas"
+ },
+ {
+  "pt": "⟦s0⟧ Cartões e movimentações sem limite",
+  "en": "⟦s0⟧ Unlimited cards and transactions",
+  "fr": "⟦s0⟧ Cartes et opérations illimitées",
+  "es": "⟦s0⟧ Tarjetas y movimientos sin límite"
+ },
+ {
+  "pt": "⟦s0⟧ Histórico completo e comparação anual",
+  "en": "⟦s0⟧ Full history and year-over-year comparison",
+  "fr": "⟦s0⟧ Historique complet et comparaison annuelle",
+  "es": "⟦s0⟧ Historial completo y comparación anual"
+ },
+ {
+  "pt": "⟦s0⟧ Tendências, simulações e projeções do UGLEZ",
+  "en": "⟦s0⟧ UGLEZ trends, simulations and projections",
+  "fr": "⟦s0⟧ Tendances, simulations et projections UGLEZ",
+  "es": "⟦s0⟧ Tendencias, simulaciones y proyecciones de UGLEZ"
+ },
+ {
+  "pt": "⟦s0⟧ 200 consultas ao UGLEZ por mês, com assistente flutuante",
+  "en": "⟦s0⟧ 200 UGLEZ queries per month, with the floating assistant",
+  "fr": "⟦s0⟧ 200 requêtes UGLEZ par mois, avec l'assistant flottant",
+  "es": "⟦s0⟧ 200 consultas a UGLEZ por mes, con asistente flotante"
+ },
+ {
+  "pt": "⟦s0⟧ Acesso antecipado e atendimento prioritário",
+  "en": "⟦s0⟧ Early access and priority support",
+  "fr": "⟦s0⟧ Accès anticipé et assistance prioritaire",
+  "es": "⟦s0⟧ Acceso anticipado y atención prioritaria"
+ },
+ {
+  "pt": "<strong>Ainda não disponível, e por isso não está na lista acima:</strong> relatórios personalizados, backup completo agendado e colaboradores no mesmo espaço financeiro.",
+  "en": "<strong>Not available yet, and therefore not in the list above:</strong> custom reports, full scheduled backup and collaborators in the same financial space.",
+  "fr": "<strong>Pas encore disponible, et donc absent de la liste ci-dessus :</strong> rapports personnalisés, sauvegarde complète programmée et collaborateurs dans le même espace financier.",
+  "es": "<strong>Todavía no disponible, y por eso no está en la lista de arriba:</strong> informes personalizados, copia de seguridad completa programada y colaboradores en el mismo espacio financiero."
+ },
+ {
+  "pt": "Essas funções estão no plano do produto e a estrutura de permissões já as reconhece no banco, mas elas não funcionam hoje. Quando funcionarem, entram na lista do Oásis — não antes.",
+  "en": "These features are on the product roadmap and the permission system already recognizes them in the database, but they don't work today. When they do, they will join the Oásis list — not before.",
+  "fr": "Ces fonctions figurent dans la feuille de route et le système de permissions les reconnaît déjà dans la base, mais elles ne fonctionnent pas aujourd'hui. Quand elles fonctionneront, elles rejoindront la liste d'Oásis — pas avant.",
+  "es": "Estas funciones están en el plan del producto y la estructura de permisos ya las reconoce en la base de datos, pero hoy no funcionan. Cuando funcionen, entrarán en la lista de Oásis, no antes."
+ },
+ {
+  "pt": "<strong>A exportação em PDF sai pela janela de impressão do navegador</strong> (\"Salvar como PDF\"), com o relatório já formatado para papel. É PDF de verdade, com texto selecionável — e é assim que ela funciona hoje, para você saber antes de assinar.",
+  "en": "<strong>PDF export goes through your browser's print window</strong> (\"Save as PDF\"), with the report already formatted for paper. It is a real PDF, with selectable text — and that is how it works today, so you know before subscribing.",
+  "fr": "<strong>L'export PDF passe par la fenêtre d'impression du navigateur</strong> (« Enregistrer au format PDF »), avec le rapport déjà mis en page pour le papier. C'est un vrai PDF, avec du texte sélectionnable — et c'est ainsi que cela fonctionne aujourd'hui, pour que vous le sachiez avant de vous abonner.",
+  "es": "<strong>La exportación en PDF sale por la ventana de impresión del navegador</strong> («Guardar como PDF»), con el informe ya formateado para papel. Es un PDF de verdad, con texto seleccionable, y así funciona hoy, para que lo sepas antes de suscribirte."
+ },
+ {
+  "pt": "Comparação completa",
+  "en": "Full comparison",
+  "fr": "Comparaison complète",
+  "es": "Comparación completa"
+ },
+ {
+  "pt": "Todos os limites, lado a lado.",
+  "en": "Every limit, side by side.",
+  "fr": "Toutes les limites, côte à côte.",
+  "es": "Todos los límites, uno al lado del otro."
+ },
+ {
+  "pt": "Comparação completa dos planos, rolável na horizontal",
+  "en": "Full plan comparison, scrolls horizontally",
+  "fr": "Comparaison complète des formules, défilement horizontal",
+  "es": "Comparación completa de los planes, con desplazamiento horizontal"
+ },
+ {
+  "pt": "Limites por plano. “Ilimitado” quer dizer sem teto imposto pelo plano.",
+  "en": "Limits per plan. \"Unlimited\" means no ceiling imposed by the plan.",
+  "fr": "Limites par formule. « Illimité » signifie aucun plafond imposé par la formule.",
+  "es": "Límites por plan. «Ilimitado» significa sin techo impuesto por el plan."
+ },
+ {
+  "pt": "Recurso",
+  "en": "Feature",
+  "fr": "Fonctionnalité",
+  "es": "Función"
+ },
+ {
+  "pt": "Preço mensal",
+  "en": "Monthly price",
+  "fr": "Prix mensuel",
+  "es": "Precio mensual"
+ },
+ {
+  "pt": "Preço anual",
+  "en": "Annual price",
+  "fr": "Prix annuel",
+  "es": "Precio anual"
+ },
+ {
+  "pt": "R$ 149,90",
+  "en": "R$ 149,90",
+  "fr": "R$ 149,90",
+  "es": "R$ 149,90"
+ },
+ {
+  "pt": "R$ 299,90",
+  "en": "R$ 299,90",
+  "fr": "R$ 299,90",
+  "es": "R$ 299,90"
+ },
+ {
+  "pt": "Equivalente mensal no anual",
+  "en": "Monthly equivalent on annual",
+  "fr": "Équivalent mensuel à l'année",
+  "es": "Equivalente mensual en el anual"
+ },
+ {
+  "pt": "R$ 12,49",
+  "en": "R$ 12,49",
+  "fr": "R$ 12,49",
+  "es": "R$ 12,49"
+ },
+ {
+  "pt": "R$ 24,99",
+  "en": "R$ 24,99",
+  "fr": "R$ 24,99",
+  "es": "R$ 24,99"
+ },
+ {
+  "pt": "Economia no anual",
+  "en": "Annual savings",
+  "fr": "Économie annuelle",
+  "es": "Ahorro en el anual"
+ },
+ {
+  "pt": "R$ 28,90",
+  "en": "R$ 28,90",
+  "fr": "R$ 28,90",
+  "es": "R$ 28,90"
+ },
+ {
+  "pt": "R$ 58,90",
+  "en": "R$ 58,90",
+  "fr": "R$ 58,90",
+  "es": "R$ 58,90"
+ },
+ {
+  "pt": "Espaços financeiros",
+  "en": "Financial spaces",
+  "fr": "Espaces financiers",
+  "es": "Espacios financieros"
+ },
+ {
+  "pt": "Contas",
+  "en": "Accounts",
+  "fr": "Comptes",
+  "es": "Cuentas"
+ },
+ {
+  "pt": "Cartões",
+  "en": "Cards",
+  "fr": "Cartes",
+  "es": "Tarjetas"
+ },
+ {
+  "pt": "Ilimitados",
+  "en": "Unlimited",
+  "fr": "Illimitées",
+  "es": "Ilimitadas"
+ },
+ {
+  "pt": "Movimentações por mês",
+  "en": "Transactions per month",
+  "fr": "Opérations par mois",
+  "es": "Movimientos por mes"
+ },
+ {
+  "pt": "Ilimitadas",
+  "en": "Unlimited",
+  "fr": "Illimitées",
+  "es": "Ilimitados"
+ },
+ {
+  "pt": "Categorias personalizadas",
+  "en": "Custom categories",
+  "fr": "Catégories personnalisées",
+  "es": "Categorías personalizadas"
+ },
+ {
+  "pt": "Orçamentos ativos",
+  "en": "Active budgets",
+  "fr": "Budgets actifs",
+  "es": "Presupuestos activos"
+ },
+ {
+  "pt": "Metas ativas",
+  "en": "Active goals",
+  "fr": "Objectifs actifs",
+  "es": "Metas activas"
+ },
+ {
+  "pt": "Recorrências",
+  "en": "Recurring items",
+  "fr": "Récurrences",
+  "es": "Recurrencias"
+ },
+ {
+  "pt": "Histórico",
+  "en": "History",
+  "fr": "Historique",
+  "es": "Historial"
+ },
+ {
+  "pt": "3 meses",
+  "en": "3 months",
+  "fr": "3 mois",
+  "es": "3 meses"
+ },
+ {
+  "pt": "24 meses",
+  "en": "24 months",
+  "fr": "24 mois",
+  "es": "24 meses"
+ },
+ {
+  "pt": "Completo",
+  "en": "Full",
+  "fr": "Complet",
+  "es": "Completo"
+ },
+ {
+  "pt": "Consultas ao UGLEZ por mês",
+  "en": "UGLEZ queries per month",
+  "fr": "Requêtes UGLEZ par mois",
+  "es": "Consultas a UGLEZ por mes"
+ },
+ {
+  "pt": "UGLEZ na página própria",
+  "en": "UGLEZ on its own page",
+  "fr": "UGLEZ sur sa propre page",
+  "es": "UGLEZ en su propia página"
+ },
+ {
+  "pt": "Sim",
+  "en": "Yes",
+  "fr": "Oui",
+  "es": "Sí"
+ },
+ {
+  "pt": "UGLEZ flutuante dentro do app",
+  "en": "Floating UGLEZ inside the app",
+  "fr": "UGLEZ flottante dans l'app",
+  "es": "UGLEZ flotante dentro de la app"
+ },
+ {
+  "pt": "Não",
+  "en": "No",
+  "fr": "Non",
+  "es": "No"
+ },
+ {
+  "pt": "Comparação entre meses",
+  "en": "Month-to-month comparison",
+  "fr": "Comparaison entre les mois",
+  "es": "Comparación entre meses"
+ },
+ {
+  "pt": "Comparação anual",
+  "en": "Year-over-year comparison",
+  "fr": "Comparaison annuelle",
+  "es": "Comparación anual"
+ },
+ {
+  "pt": "Tendências, simulações e projeções",
+  "en": "Trends, simulations and projections",
+  "fr": "Tendances, simulations et projections",
+  "es": "Tendencias, simulaciones y proyecciones"
+ },
+ {
+  "pt": "Calendário financeiro",
+  "en": "Financial calendar",
+  "fr": "Calendrier financier",
+  "es": "Calendario financiero"
+ },
+ {
+  "pt": "Cartões em dólar, euro e outras moedas",
+  "en": "Cards in dollars, euros and other currencies",
+  "fr": "Cartes en dollars, euros et autres devises",
+  "es": "Tarjetas en dólares, euros y otras monedas"
+ },
+ {
+  "pt": "Exportação CSV",
+  "en": "CSV export",
+  "fr": "Export CSV",
+  "es": "Exportación CSV"
+ },
+ {
+  "pt": "Exportação PDF",
+  "en": "PDF export",
+  "fr": "Export PDF",
+  "es": "Exportación PDF"
+ },
+ {
+  "pt": "Acesso antecipado a novidades",
+  "en": "Early access to new features",
+  "fr": "Accès anticipé aux nouveautés",
+  "es": "Acceso anticipado a novedades"
+ },
+ {
+  "pt": "Atendimento prioritário",
+  "en": "Priority support",
+  "fr": "Assistance prioritaire",
+  "es": "Atención prioritaria"
+ },
+ {
+  "pt": "Perguntas sobre os planos",
+  "en": "Questions about the plans",
+  "fr": "Questions sur les formules",
+  "es": "Preguntas sobre los planes"
+ },
+ {
+  "pt": "Como funciona a cobrança?",
+  "en": "How does billing work?",
+  "fr": "Comment fonctionne la facturation ?",
+  "es": "¿Cómo funciona el cobro?"
+ },
+ {
+  "pt": "No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova sozinha, e você cancela quando quiser em Configurações: a renovação para na hora e o plano segue até o fim do período pago.",
+  "en": "By credit card, through Stripe. You type your card on Stripe's secure page — OAZE never sees or stores the number or the security code. The subscription renews automatically, and you can cancel anytime in Settings: renewal stops immediately and the plan stays active until the end of the paid period.",
+  "fr": "Par carte bancaire, via Stripe. Vous saisissez la carte sur la page sécurisée de Stripe — OAZE ne voit ni ne conserve le numéro ou le code de sécurité. L'abonnement se renouvelle automatiquement, et vous l'annulez quand vous voulez dans Réglages : le renouvellement s'arrête aussitôt et la formule reste active jusqu'à la fin de la période payée.",
+  "es": "Con tarjeta de crédito, a través de Stripe. La tarjeta se ingresa en la página segura de Stripe: OAZE no ve ni guarda el número ni el código de seguridad. La suscripción se renueva sola, y la cancelas cuando quieras en Configuración: la renovación se detiene al instante y el plan sigue hasta el final del período pagado."
+ },
+ {
+  "pt": "Existe período de teste do Coqueiro ou do Oásis?",
+  "en": "Is there a trial for Coqueiro or Oásis?",
+  "fr": "Existe-t-il une période d'essai pour Coqueiro ou Oásis ?",
+  "es": "¿Hay período de prueba de Coqueiro u Oásis?"
+ },
+ {
+  "pt": "Não. Em vez de teste com prazo, o Semente é grátis e permanente — você usa o produto de verdade, sem contagem regressiva, e assina quando os limites apertarem.",
+  "en": "No. Instead of a time-limited trial, Semente is free and permanent — you use the real product, with no countdown, and subscribe when you outgrow the limits.",
+  "fr": "Non. Au lieu d'un essai limité dans le temps, Semente est gratuit et permanent — vous utilisez le vrai produit, sans compte à rebours, et vous vous abonnez quand les limites deviennent trop justes.",
+  "es": "No. En lugar de una prueba con plazo, Semente es gratis y permanente: usas el producto de verdad, sin cuenta regresiva, y te suscribes cuando los límites se queden cortos."
+ },
+ {
+  "pt": "O que acontece se eu passar do limite de consultas da UGLEZ?",
+  "en": "What happens if I go over the UGLEZ query limit?",
+  "fr": "Que se passe-t-il si je dépasse la limite de requêtes UGLEZ ?",
+  "es": "¿Qué pasa si supero el límite de consultas de UGLEZ?"
+ },
+ {
+  "pt": "As consultas param até o próximo mês, e a tela diz quantas restam antes de você gastar a última. Erro nosso ou indisponibilidade do provedor não consomem consulta — só uma resposta concluída conta.",
+  "en": "Queries stop until next month, and the screen tells you how many are left before you use the last one. Errors on our side or provider outages don't use up a query — only a completed answer counts.",
+  "fr": "Les requêtes s'arrêtent jusqu'au mois suivant, et l'écran indique combien il en reste avant que vous n'utilisiez la dernière. Nos erreurs ou une indisponibilité du fournisseur ne consomment pas de requête — seule une réponse complète compte.",
+  "es": "Las consultas se detienen hasta el mes siguiente, y la pantalla dice cuántas quedan antes de que uses la última. Un error nuestro o una caída del proveedor no consumen consulta: solo cuenta una respuesta completa."
+ },
+ {
+  "pt": "Preciso assinar para usar em mais de um aparelho?",
+  "en": "Do I need to subscribe to use it on more than one device?",
+  "fr": "Dois-je m'abonner pour l'utiliser sur plusieurs appareils ?",
+  "es": "¿Necesito suscribirme para usarlo en más de un dispositivo?"
+ },
+ {
+  "pt": "Não. A sincronização entre aparelhos vem com a conta, inclusive no Semente. Os planos pagos aumentam limites, não liberam a sincronização.",
+  "en": "No. Syncing between devices comes with the account, including on Semente. Paid plans raise limits; they don't unlock syncing.",
+  "fr": "Non. La synchronisation entre appareils est incluse avec le compte, y compris avec Semente. Les formules payantes augmentent les limites, elles ne débloquent pas la synchronisation.",
+  "es": "No. La sincronización entre dispositivos viene con la cuenta, incluso en Semente. Los planes pagos aumentan los límites; no desbloquean la sincronización."
+ },
+ {
+  "pt": "Comece pelo grátis",
+  "en": "Start with the free plan",
+  "fr": "Commencez gratuitement",
+  "es": "Empieza por el gratis"
+ },
+ {
+  "pt": "Sem cartão, sem prazo. Você assina quando fizer sentido — não antes.",
+  "en": "No card, no deadline. Subscribe when it makes sense — not before.",
+  "fr": "Sans carte, sans échéance. Abonnez-vous quand cela a du sens — pas avant.",
+  "es": "Sin tarjeta, sin plazo. Te suscribes cuando tenga sentido, no antes."
+ },
+ {
+  "pt": "Ver os recursos",
+  "en": "See the features",
+  "fr": "Voir les fonctionnalités",
+  "es": "Ver las funciones"
+ },
+ {
+  "pt": "Um painel para enxergar o próprio dinheiro sem virar planilha.",
+  "en": "A dashboard to see your own money without turning it into a spreadsheet.",
+  "fr": "Un tableau de bord pour voir votre argent sans le transformer en tableur.",
+  "es": "Un panel para ver tu propio dinero sin convertirlo en una hoja de cálculo."
+ },
+ {
+  "pt": "Produto",
+  "en": "Product",
+  "fr": "Produit",
+  "es": "Producto"
+ },
+ {
+  "pt": "UGLEZ",
+  "en": "UGLEZ",
+  "fr": "UGLEZ",
+  "es": "UGLEZ"
+ },
+ {
+  "pt": "Conta",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Criar conta",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Recuperar senha",
+  "en": "Reset password",
+  "fr": "Réinitialiser le mot de passe",
+  "es": "Recuperar contraseña"
+ },
+ {
+  "pt": "Legal",
+  "en": "Legal",
+  "fr": "Mentions légales",
+  "es": "Legal"
+ },
+ {
+  "pt": "Termos de uso",
+  "en": "Terms of use",
+  "fr": "Conditions d'utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Política de privacidade",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "© <span data-ano>2026</span> OAZE",
+  "en": "© <span data-ano>2026</span> OAZE",
+  "fr": "© <span data-ano>2026</span> OAZE",
+  "es": "© <span data-ano>2026</span> OAZE"
+ },
+ {
+  "pt": "Feito no Brasil · valores em reais",
+  "en": "Made in Brazil · amounts in Brazilian reais (BRL)",
+  "fr": "Fait au Brésil · montants en réais brésiliens (BRL)",
+  "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
+ },
+ {
+  "pt": "suporte@oaze.site",
+  "en": "suporte@oaze.site",
+  "fr": "suporte@oaze.site",
+  "es": "suporte@oaze.site"
+ },
+ {
+  "pt": "Você está no plano ",
+  "en": "You're on the plan ",
+  "fr": "Vous êtes sur la formule ",
+  "es": "Estás en el plan "
+ }
+]

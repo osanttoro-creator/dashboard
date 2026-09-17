@@ -122,7 +122,14 @@
          tela e o CSS leem a mesma verdade, e não há como as duas
          divergirem depois de um redimensionamento. */
       botaoMenu.setAttribute('aria-expanded', aberto ? 'true' : 'false');
-      botaoMenu.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+      /* o rótulo acompanha a língua da página (ver gen-idiomas.js) */
+      var lang = (document.documentElement.lang || 'pt').slice(0, 2).toLowerCase();
+      var rotulos = {
+        pt: ['Abrir menu', 'Fechar menu'], en: ['Open menu', 'Close menu'],
+        fr: ['Ouvrir le menu', 'Fermer le menu'], es: ['Abrir menú', 'Cerrar menú']
+      };
+      var par = rotulos[lang] || rotulos.pt;
+      botaoMenu.setAttribute('aria-label', aberto ? par[1] : par[0]);
     });
 
     /* Escape fecha e devolve o foco ao botão. Sem devolver o foco,

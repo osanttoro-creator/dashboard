@@ -42,7 +42,10 @@ $arquivos = @(
   # apoio
   'robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', '404.html'
 )
-$pastas   = @('assets')
+# en, fr e es sao geradas por tools/gen-idiomas.js a partir das
+# paginas em portugues. Vao inteiras: cada uma tem os mesmos
+# documentos, com title, description e canonica proprias.
+$pastas   = @('assets', 'en', 'fr', 'es')
 
 $faltando = @()
 foreach ($f in $arquivos) {

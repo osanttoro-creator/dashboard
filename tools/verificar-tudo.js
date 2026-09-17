@@ -47,6 +47,7 @@ const VERIFICACOES = [
   ['tools/testes/uglez-camara.js', 'UGLEZ preserva estados, fallback e responsividade'],
   ['tools/testes/uglez-openai.js', 'UGLEZ chama a OpenAI pelo servidor e envia só agregados'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
+  ['tools/gen-idiomas.js --conferir', 'inglês, francês e espanhol em dia com o português'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],
   ['tools/testes/ida-e-volta.js', 'dados voltam iguais do banco'],
@@ -70,7 +71,8 @@ for (const [script, descricao] of VERIFICACOES) {
   let saida = '';
   let ok = true;
   try {
-    saida = execFileSync(process.execPath, [script], { cwd: RAIZ, encoding: 'utf8' });
+    /* o nome pode trazer argumentos: 'arquivo.js --conferir' */
+    saida = execFileSync(process.execPath, script.split(' '), { cwd: RAIZ, encoding: 'utf8' });
   } catch (e) {
     ok = false;
     saida = (e.stdout || '') + (e.stderr || '');

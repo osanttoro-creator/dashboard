@@ -1,0 +1,92 @@
+[
+ {
+  "pt": "Confirmar e-mail — OAZE",
+  "en": "Confirm email — OAZE",
+  "fr": "Confirmer l'e-mail — OAZE",
+  "es": "Confirmar correo — OAZE"
+ },
+ {
+  "pt": "Confirmação de e-mail da sua conta OAZE.",
+  "en": "Email confirmation for your OAZE account.",
+  "fr": "Confirmation de l'e-mail de votre compte OAZE.",
+  "es": "Confirmación de correo de tu cuenta de OAZE."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Confirmando…",
+  "en": "Confirming…",
+  "fr": "Confirmation…",
+  "es": "Confirmando…"
+ },
+ {
+  "pt": "Um instante enquanto validamos o link.",
+  "en": "One moment while we validate the link.",
+  "fr": "Un instant, nous vérifions le lien.",
+  "es": "Un momento mientras validamos el enlace."
+ },
+ {
+  "pt": "Continuar",
+  "en": "Continue",
+  "fr": "Continuer",
+  "es": "Continuar"
+ },
+ {
+  "pt": "Ir para a tela de entrada",
+  "en": "Go to the sign-in page",
+  "fr": "Aller à la page de connexion",
+  "es": "Ir a la pantalla de inicio de sesión"
+ },
+ {
+  "pt": "E-mail confirmado",
+  "en": "Email confirmed",
+  "fr": "E-mail confirmé",
+  "es": "Correo confirmado"
+ },
+ {
+  "pt": "Sua conta ",
+  "en": "Your account ",
+  "fr": "Votre compte ",
+  "es": "Tu cuenta "
+ },
+ {
+  "pt": "está ativa. Vamos montar seu painel em alguns passos rápidos.",
+  "en": "is active. Let's set up your dashboard in a few quick steps.",
+  "fr": "est active. Configurons votre tableau de bord en quelques étapes rapides.",
+  "es": "está activa. Vamos a armar tu panel en unos pocos pasos rápidos."
+ },
+ {
+  "pt": "Link expirado",
+  "en": "Link expired",
+  "fr": "Lien expiré",
+  "es": "Enlace vencido"
+ },
+ {
+  "pt": "Este link não vale mais — ou porque expirou, ou porque ",
+  "en": "This link is no longer valid — either it expired or it ",
+  "fr": "Ce lien n'est plus valable — soit il a expiré, soit il ",
+  "es": "Este enlace ya no es válido: o venció o "
+ },
+ {
+  "pt": "já foi usado. Se você já confirmou antes, é só entrar normalmente.",
+  "en": "has already been used. If you confirmed before, just sign in as usual.",
+  "fr": "a déjà été utilisé. Si vous avez déjà confirmé, connectez-vous simplement.",
+  "es": "ya se usó. Si ya confirmaste antes, solo inicia sesión como siempre."
+ }
+]

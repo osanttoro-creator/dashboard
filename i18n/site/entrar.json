@@ -1,0 +1,188 @@
+[
+ {
+  "pt": "Entrar — OAZE",
+  "en": "Sign in — OAZE",
+  "fr": "Se connecter — OAZE",
+  "es": "Iniciar sesión — OAZE"
+ },
+ {
+  "pt": "Entre na sua conta do OAZE para acessar seu painel financeiro em qualquer aparelho.",
+  "en": "Sign in to your OAZE account to access your financial dashboard on any device.",
+  "fr": "Connectez-vous à votre compte OAZE pour accéder à votre tableau de bord financier sur tous vos appareils.",
+  "es": "Inicia sesión en tu cuenta de OAZE para acceder a tu panel financiero en cualquier dispositivo."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Criar conta",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Seus dados sincronizados em qualquer aparelho.",
+  "en": "Your data in sync on every device.",
+  "fr": "Vos données synchronisées sur tous vos appareils.",
+  "es": "Tus datos sincronizados en todos tus dispositivos."
+ },
+ {
+  "pt": "Continuar com Google",
+  "en": "Continue with Google",
+  "fr": "Continuer avec Google",
+  "es": "Continuar con Google"
+ },
+ {
+  "pt": "Continuar com a Apple",
+  "en": "Continue with Apple",
+  "fr": "Continuer avec Apple",
+  "es": "Continuar con Apple"
+ },
+ {
+  "pt": "ou",
+  "en": "or",
+  "fr": "ou",
+  "es": "o"
+ },
+ {
+  "pt": "Entrar com e-mail",
+  "en": "Sign in with email",
+  "fr": "Se connecter avec un e-mail",
+  "es": "Iniciar sesión con correo"
+ },
+ {
+  "pt": "E-mail",
+  "en": "Email",
+  "fr": "E-mail",
+  "es": "Correo electrónico"
+ },
+ {
+  "pt": "voce@exemplo.com",
+  "en": "you@example.com",
+  "fr": "vous@exemple.com",
+  "es": "tu@ejemplo.com"
+ },
+ {
+  "pt": "Senha",
+  "en": "Password",
+  "fr": "Mot de passe",
+  "es": "Contraseña"
+ },
+ {
+  "pt": "Esqueci a senha",
+  "en": "Forgot password",
+  "fr": "J'ai oublié mon mot de passe",
+  "es": "Olvidé mi contraseña"
+ },
+ {
+  "pt": "Sua senha",
+  "en": "Your password",
+  "fr": "Votre mot de passe",
+  "es": "Tu contraseña"
+ },
+ {
+  "pt": "Receber um link por e-mail",
+  "en": "Get a link by email",
+  "fr": "Recevoir un lien par e-mail",
+  "es": "Recibir un enlace por correo"
+ },
+ {
+  "pt": "Entra sem senha. O link vale por uma hora e serve uma vez só.",
+  "en": "Sign in without a password. The link is valid for one hour and works only once.",
+  "fr": "Connexion sans mot de passe. Le lien est valable une heure et ne fonctionne qu'une seule fois.",
+  "es": "Entra sin contraseña. El enlace vale por una hora y solo se puede usar una vez."
+ },
+ {
+  "pt": "Ainda não tem conta? <a href=\"/cadastro\">Criar conta grátis</a>",
+  "en": "Don't have an account yet? <a href=\"/cadastro\">Create a free account</a>",
+  "fr": "Pas encore de compte ? <a href=\"/cadastro\">Créer un compte gratuit</a>",
+  "es": "¿Aún no tienes cuenta? <a href=\"/cadastro\">Crea una cuenta gratis</a>"
+ },
+ {
+  "pt": "Você pode usar o OAZE sem conta — os dados ficam só neste aparelho. <a href=\"/#perguntas\">Entenda a diferença</a>.",
+  "en": "You can use OAZE without an account — your data stays on this device only. <a href=\"/#perguntas\">See the difference</a>.",
+  "fr": "Vous pouvez utiliser OAZE sans compte — les données restent uniquement sur cet appareil. <a href=\"/#perguntas\">Comprendre la différence</a>.",
+  "es": "Puedes usar OAZE sin cuenta: los datos se quedan solo en este dispositivo. <a href=\"/#perguntas\">Entiende la diferencia</a>."
+ },
+ {
+  "pt": "Abrindo…",
+  "en": "Opening…",
+  "fr": "Ouverture…",
+  "es": "Abriendo…"
+ },
+ {
+  "pt": "Informe seu e-mail.",
+  "en": "Enter your email.",
+  "fr": "Saisissez votre e-mail.",
+  "es": "Ingresa tu correo."
+ },
+ {
+  "pt": "Esse e-mail não parece válido.",
+  "en": "That email doesn't look valid.",
+  "fr": "Cet e-mail ne semble pas valide.",
+  "es": "Ese correo no parece válido."
+ },
+ {
+  "pt": "Informe sua senha.",
+  "en": "Enter your password.",
+  "fr": "Saisissez votre mot de passe.",
+  "es": "Ingresa tu contraseña."
+ },
+ {
+  "pt": "Entrando…",
+  "en": "Signing in…",
+  "fr": "Connexion…",
+  "es": "Entrando…"
+ },
+ {
+  "pt": "Tudo certo. Abrindo seu painel…",
+  "en": "All set. Opening your dashboard…",
+  "fr": "Tout est prêt. Ouverture de votre tableau de bord…",
+  "es": "Todo listo. Abriendo tu panel…"
+ },
+ {
+  "pt": "Informe seu e-mail para receber o link.",
+  "en": "Enter your email to receive the link.",
+  "fr": "Saisissez votre e-mail pour recevoir le lien.",
+  "es": "Ingresa tu correo para recibir el enlace."
+ },
+ {
+  "pt": "Enviando…",
+  "en": "Sending…",
+  "fr": "Envoi…",
+  "es": "Enviando…"
+ },
+ {
+  "pt": "Enviamos um link para ",
+  "en": "We sent a link to ",
+  "fr": "Nous avons envoyé un lien à ",
+  "es": "Enviamos un enlace a "
+ },
+ {
+  "pt": ". Abra a mensagem no mesmo aparelho para entrar.",
+  "en": ". Open the message on this same device to sign in.",
+  "fr": ". Ouvrez le message sur ce même appareil pour vous connecter.",
+  "es": ". Abre el mensaje en este mismo dispositivo para entrar."
+ }
+]

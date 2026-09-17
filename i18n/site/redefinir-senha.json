@@ -1,0 +1,122 @@
+[
+ {
+  "pt": "Escolher senha nova — OAZE",
+  "en": "Choose a new password — OAZE",
+  "fr": "Choisir un nouveau mot de passe — OAZE",
+  "es": "Elegir contraseña nueva — OAZE"
+ },
+ {
+  "pt": "Defina uma senha nova para a sua conta OAZE.",
+  "en": "Set a new password for your OAZE account.",
+  "fr": "Définissez un nouveau mot de passe pour votre compte OAZE.",
+  "es": "Define una contraseña nueva para tu cuenta de OAZE."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Escolher senha nova",
+  "en": "Choose a new password",
+  "fr": "Choisir un nouveau mot de passe",
+  "es": "Elegir contraseña nueva"
+ },
+ {
+  "pt": "Confirmando o link…",
+  "en": "Checking the link…",
+  "fr": "Vérification du lien…",
+  "es": "Verificando el enlace…"
+ },
+ {
+  "pt": "Senha nova",
+  "en": "New password",
+  "fr": "Nouveau mot de passe",
+  "es": "Contraseña nueva"
+ },
+ {
+  "pt": "Pelo menos 8 caracteres",
+  "en": "At least 8 characters",
+  "fr": "Au moins 8 caractères",
+  "es": "Al menos 8 caracteres"
+ },
+ {
+  "pt": "Mínimo de 8 caracteres.",
+  "en": "At least 8 characters.",
+  "fr": "Au moins 8 caractères.",
+  "es": "Mínimo 8 caracteres."
+ },
+ {
+  "pt": "Repita a senha nova",
+  "en": "Repeat the new password",
+  "fr": "Répétez le nouveau mot de passe",
+  "es": "Repite la contraseña nueva"
+ },
+ {
+  "pt": "A mesma senha",
+  "en": "The same password",
+  "fr": "Le même mot de passe",
+  "es": "La misma contraseña"
+ },
+ {
+  "pt": "Salvar e entrar",
+  "en": "Save and sign in",
+  "fr": "Enregistrer et se connecter",
+  "es": "Guardar y entrar"
+ },
+ {
+  "pt": "Pedir um link novo",
+  "en": "Request a new link",
+  "fr": "Demander un nouveau lien",
+  "es": "Pedir un enlace nuevo"
+ },
+ {
+  "pt": "Escolha uma senha que você não use em outro lugar.",
+  "en": "Choose a password you don't use anywhere else.",
+  "fr": "Choisissez un mot de passe que vous n'utilisez nulle part ailleurs.",
+  "es": "Elige una contraseña que no uses en otro lugar."
+ },
+ {
+  "pt": "Este link não vale mais. Links de recuperação servem uma vez só e expiram em uma hora.",
+  "en": "This link is no longer valid. Reset links work only once and expire after one hour.",
+  "fr": "Ce lien n'est plus valable. Les liens de réinitialisation ne servent qu'une fois et expirent au bout d'une heure.",
+  "es": "Este enlace ya no es válido. Los enlaces de recuperación sirven una sola vez y vencen en una hora."
+ },
+ {
+  "pt": "A senha precisa ter pelo menos 8 caracteres.",
+  "en": "Your password needs at least 8 characters.",
+  "fr": "Le mot de passe doit contenir au moins 8 caractères.",
+  "es": "La contraseña debe tener al menos 8 caracteres."
+ },
+ {
+  "pt": "As duas senhas não são iguais.",
+  "en": "The two passwords don't match.",
+  "fr": "Les deux mots de passe ne correspondent pas.",
+  "es": "Las dos contraseñas no coinciden."
+ },
+ {
+  "pt": "Salvando…",
+  "en": "Saving…",
+  "fr": "Enregistrement…",
+  "es": "Guardando…"
+ },
+ {
+  "pt": "Senha alterada. Abrindo seu painel…",
+  "en": "Password changed. Opening your dashboard…",
+  "fr": "Mot de passe modifié. Ouverture de votre tableau de bord…",
+  "es": "Contraseña cambiada. Abriendo tu panel…"
+ }
+]

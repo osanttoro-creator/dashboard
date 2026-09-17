@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Create a free account — OAZE</title>
+<meta name="description" content="Create your free OAZE account. No credit card and no expiration date.">
+<link rel="canonical" href="https://oaze.site/en/cadastro">
+<!-- idiomas: gerado por tools/gen-idiomas.js -->
+<link rel="alternate" hreflang="pt-BR" href="https://oaze.site/cadastro">
+<link rel="alternate" hreflang="en" href="https://oaze.site/en/cadastro">
+<link rel="alternate" hreflang="fr" href="https://oaze.site/fr/cadastro">
+<link rel="alternate" hreflang="es" href="https://oaze.site/es/cadastro">
+<link rel="alternate" hreflang="x-default" href="https://oaze.site/cadastro">
+<!-- /idiomas -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/en/" aria-label="OAZE, home page">
+        <img src="/assets/img/oaze-mark.svg" alt="" width="28" height="28" decoding="async">
+      OAZE
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/en/entrar">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Create a free account</h1>
+      <p>Seed plan (Semente): free, no credit card and no expiration date.</p>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <!-- Entrada social. Os dois botões nascem escondidos: o script
+           pergunta ao Supabase quais provedores estão ligados e mostra
+           só os que existem. Com nenhum ligado, esta página fica
+           exatamente como era. -->
+      <div class="social" id="social" hidden>
+        <button class="btn btn-largo btn-social btn-social-forte" type="button" id="btn-google" hidden>
+          <svg class="marca-social" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+            <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.71-1.57 2.69-3.89 2.69-6.62z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.33A9 9 0 0 0 9 18z"/>
+            <path fill="#FBBC05" d="M3.96 10.71a5.41 5.41 0 0 1 0-3.42V4.96H.96a9 9 0 0 0 0 8.08l3-2.33z"/>
+            <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3 2.33C4.67 5.16 6.66 3.58 9 3.58z"/>
+          </svg>
+          <span data-rotulo>Sign up with Google</span>
+        </button>
+        <button class="btn btn-fantasma btn-largo btn-social" type="button" id="btn-apple" hidden>
+          <svg class="marca-social" viewBox="0 0 16 20" aria-hidden="true" focusable="false" fill="currentColor">
+            <path d="M13.27 10.6c-.02-2.2 1.8-3.26 1.88-3.31-1.02-1.5-2.62-1.7-3.19-1.72-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.75 2.21 1.1-.05 1.52-.72 2.85-.72 1.33 0 1.7.72 2.87.69 1.19-.02 1.94-1.08 2.66-2.14.84-1.23 1.19-2.43 1.2-2.49-.03-.01-2.3-.88-2.3-3.5zM11.1 4.1c.6-.73 1.01-1.75.9-2.77-.87.03-1.93.58-2.56 1.31-.56.64-1.05 1.68-.92 2.68.97.08 1.96-.49 2.58-1.22z"/>
+          </svg>
+          <span data-rotulo>Sign up with Apple</span>
+        </button>
+      </div>
+      <div class="separa" id="separa-social" hidden>or</div>
+      <button class="btn btn-fantasma btn-largo" type="button" id="abrir-email" hidden>
+        Sign up with email
+      </button>
+
+      <div id="via-email">
+      <form id="form-cadastro" novalidate>
+        <div class="campo">
+          <label for="nome">What should we call you</label>
+          <input type="text" id="nome" name="nome" autocomplete="given-name"
+                 placeholder="Your first name" aria-describedby="nome-dica nome-erro">
+          <p class="dica" id="nome-dica">Shown in the dashboard greeting. You can leave it blank.</p>
+          <p class="erro" id="nome-erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email"
+                 required inputmode="email" placeholder="you@example.com"
+                 aria-describedby="email-erro">
+          <p class="erro" id="email-erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="senha">Password</label>
+          <input type="password" id="senha" name="senha" autocomplete="new-password"
+                 required minlength="8" placeholder="At least 8 characters"
+                 aria-describedby="senha-dica senha-erro">
+          <p class="dica" id="senha-dica">At least 8 characters. Avoid something you already use elsewhere.</p>
+          <p class="erro" id="senha-erro" hidden></p>
+        </div>
+
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar">Create my account</button>
+      </form>
+      </div><!-- /via-email -->
+
+      <p class="legalzinho">
+        By creating an account you agree to the <a href="/en/termos">Terms of use</a> and the <a href="/en/privacidade">Privacy policy</a>.
+      </p>
+
+      <p class="pe-do-painel">
+        Already have an account? <a href="/en/entrar">Sign in</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var recado = document.getElementById('recado');
+  var nome = document.getElementById('nome');
+  var email = document.getElementById('email');
+  var senha = document.getElementById('senha');
+  var form = document.getElementById('form-cadastro');
+  var botao = document.getElementById('botao-cadastrar');
+
+  if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); return; }
+
+  /* Pergunta JÁ, antes de qualquer outra coisa: é a resposta mais
+     lenta da página e é ela que decide o que aparece. */
+  /* montarSocial roda duas vezes: uma com a memória, outra com a
+     resposta da rede. Estas travas evitam ouvinte de clique dobrado
+     e evitam recolher de novo um e-mail que a pessoa já abriu.
+     Declaradas AQUI, antes da primeira chamada: com var, a atribuição
+     só acontece quando a execução passa pela linha -- deixá-las
+     depois faria a chamada pela memória ler undefined e morrer. */
+  var ligados = {};
+  var recolheu = false;
+
+  var perguntou = A.provedores();
+
+  /* E desenha agora com o que se sabia da última visita, sem esperar
+     a rede. Na primeira visita não há o que lembrar e a tela espera,
+     como antes. */
+  var lembrado = A.provedoresLembrados();
+  if (lembrado) montarSocial(lembrado);
+
+  A.quemEsta().then(function (u) {
+    if (u) { location.replace('/app'); return; }
+    return perguntou.then(function (p) {
+      montarSocial(p);
+      /* O toque único só depois de saber que ninguém está logado --
+         a bolha aparecendo para quem já entrou seria ruído antes do
+         redirecionamento. Por isso ele não vem da memória. */
+      if (p.google) {
+        A.umToque(function (err) {
+          if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
+          location.replace('/onboarding');
+        });
+      }
+    });
+  });
+
+  /* Entrada social: criar conta pelo Google é a MESMA porta de
+     entrar -- na primeira vez o Supabase cria o usuário sozinho. Por
+     isso a volta cai em /onboarding, como a do formulário quando a
+     confirmação de e-mail está desligada. */
+  function montarSocial(p) {
+    var caixa = document.getElementById('social');
+    var separa = document.getElementById('separa-social');
+    var via = document.getElementById('via-email');
+    var abrir = document.getElementById('abrir-email');
+    var algum = false;
+
+    [['google', 'btn-google'], ['apple', 'btn-apple']].forEach(function (par) {
+      var b = document.getElementById(par[1]);
+      if (!b) return;
+      /* A resposta da rede manda: se o provedor saiu, o botão que a
+         memória tinha posto na tela sai junto. */
+      if (!p[par[0]]) { b.hidden = true; return; }
+      b.hidden = false;
+      algum = true;
+      if (ligados[par[0]]) return;
+      ligados[par[0]] = true;
+      b.addEventListener('click', function () {
+        A.diz(recado, '');
+        A.ocupado(b, true, 'Opening…');
+        A.entrarCom(par[0], '/onboarding').then(function (r) {
+          if (r && r.error) throw r.error;
+          /* deu certo: o navegador sai desta página para o provedor */
+        }).catch(function (err) {
+          A.ocupado(b, false);
+          A.diz(recado, A.frase(err), 'erro');
+        });
+      });
+    });
+
+    caixa.hidden = !algum;
+    separa.hidden = !algum;
+
+    if (!algum) {
+      /* A memória mentiu e não há mais provedor nenhum: devolve o
+         e-mail à tela, senão a página fica sem porta. */
+      if (recolheu) { via.hidden = false; abrir.hidden = true; recolheu = false; }
+      return;
+    }
+
+    if (recolheu) return;
+    recolheu = true;
+    via.hidden = true;
+    abrir.hidden = false;
+    abrir.addEventListener('click', function () {
+      via.hidden = false;
+      abrir.hidden = true;
+      var campo = via.querySelector('input');
+      if (campo) campo.focus();
+    });
+  }
+
+  function valida() {
+    var ok = true;
+    [email, senha].forEach(function (c) { A.erroNoCampo(c, ''); });
+    if (!email.value.trim()) { A.erroNoCampo(email, 'Enter your email.'); ok = false; }
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { A.erroNoCampo(email, 'That email doesn\'t look valid.'); ok = false; }
+    /* O mínimo é conferido aqui E no servidor. Aqui é cortesia -- dá
+       a resposta na hora; lá é a regra, porque o navegador é do
+       usuário e minlength some com um clique no DevTools. */
+    if (senha.value.length < 8) { A.erroNoCampo(senha, 'Your password needs at least 8 characters.'); ok = false; }
+    if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
+    return ok;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    A.diz(recado, '');
+    if (!valida()) return;
+
+    A.ocupado(botao, true, 'Creating…');
+    try {
+      var r = await A.cadastrar(email.value.trim(), senha.value, nome.value.trim());
+      if (r.error) throw r.error;
+
+      /* DUAS SAÍDAS, e confundi-las é o erro clássico desta tela.
+         Com "Confirm email" ligado, o Supabase devolve um usuário SEM
+         sessão: mandar para /app aqui daria numa página protegida que
+         expulsa a pessoa de volta, logo depois de ela ter criado a
+         conta com sucesso. Só existe sessão quando a confirmação está
+         desligada no painel. */
+      if (r.data && r.data.session) {
+        location.replace('/onboarding');
+        return;
+      }
+
+      form.hidden = true;
+      A.diz(recado, 'Account created. We sent a confirmation to ' +
+        email.value.trim() + '. Open the message to activate your access — ' +
+        'it can take a few minutes and sometimes lands in spam.', 'ok');
+    } catch (err) {
+      A.ocupado(botao, false);
+      A.diz(recado, A.frase(err), 'erro');
+    }
+  });
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+<div class="idiomas-solto"><!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Language"><a data-idioma href="/cadastro" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/cadastro" hreflang="en" lang="en" aria-current="true">English</a><a data-idioma href="/fr/cadastro" hreflang="fr" lang="fr">Français</a><a data-idioma href="/es/cadastro" hreflang="es" lang="es">Español</a></nav><!-- /seletor-idioma --></div>
+</body>
+</html>

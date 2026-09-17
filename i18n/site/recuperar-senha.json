@@ -1,0 +1,104 @@
+[
+ {
+  "pt": "Recuperar senha — OAZE",
+  "en": "Reset password — OAZE",
+  "fr": "Réinitialiser le mot de passe — OAZE",
+  "es": "Recuperar contraseña — OAZE"
+ },
+ {
+  "pt": "Receba um link para redefinir a senha da sua conta OAZE.",
+  "en": "Get a link to reset the password of your OAZE account.",
+  "fr": "Recevez un lien pour réinitialiser le mot de passe de votre compte OAZE.",
+  "es": "Recibe un enlace para restablecer la contraseña de tu cuenta de OAZE."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "OAZE, página inicial",
+  "en": "OAZE, home page",
+  "fr": "OAZE, page d'accueil",
+  "es": "OAZE, página de inicio"
+ },
+ {
+  "pt": "OAZE",
+  "en": "OAZE",
+  "fr": "OAZE",
+  "es": "OAZE"
+ },
+ {
+  "pt": "Entrar",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Iniciar sesión"
+ },
+ {
+  "pt": "Recuperar senha",
+  "en": "Reset password",
+  "fr": "Réinitialiser le mot de passe",
+  "es": "Recuperar contraseña"
+ },
+ {
+  "pt": "Informe o e-mail da conta e enviamos um link para você escolher uma senha nova.",
+  "en": "Enter your account's email and we'll send you a link to choose a new password.",
+  "fr": "Saisissez l'e-mail du compte et nous vous enverrons un lien pour choisir un nouveau mot de passe.",
+  "es": "Ingresa el correo de la cuenta y te enviaremos un enlace para elegir una contraseña nueva."
+ },
+ {
+  "pt": "E-mail da conta",
+  "en": "Account email",
+  "fr": "E-mail du compte",
+  "es": "Correo de la cuenta"
+ },
+ {
+  "pt": "voce@exemplo.com",
+  "en": "you@example.com",
+  "fr": "vous@exemple.com",
+  "es": "tu@ejemplo.com"
+ },
+ {
+  "pt": "Enviar link",
+  "en": "Send link",
+  "fr": "Envoyer le lien",
+  "es": "Enviar enlace"
+ },
+ {
+  "pt": "Lembrou a senha? <a href=\"/entrar\">Voltar para entrar</a>",
+  "en": "Remembered your password? <a href=\"/entrar\">Back to sign in</a>",
+  "fr": "Vous vous en souvenez ? <a href=\"/entrar\">Retour à la connexion</a>",
+  "es": "¿Recordaste la contraseña? <a href=\"/entrar\">Volver a iniciar sesión</a>"
+ },
+ {
+  "pt": "Informe um e-mail válido.",
+  "en": "Enter a valid email.",
+  "fr": "Saisissez un e-mail valide.",
+  "es": "Ingresa un correo válido."
+ },
+ {
+  "pt": "Enviando…",
+  "en": "Sending…",
+  "fr": "Envoi…",
+  "es": "Enviando…"
+ },
+ {
+  "pt": "Se existe uma conta com ",
+  "en": "If an account exists for ",
+  "fr": "Si un compte existe pour ",
+  "es": "Si existe una cuenta con "
+ },
+ {
+  "pt": ", o link está a caminho. Ele vale por uma hora. ",
+  "en": ", the link is on its way. It is valid for one hour. ",
+  "fr": ", le lien est en route. Il est valable une heure. ",
+  "es": ", el enlace está en camino. Vale por una hora. "
+ },
+ {
+  "pt": "Não chegou? Confira o endereço digitado e a caixa de spam.",
+  "en": "Didn't get it? Check the address you typed and your spam folder.",
+  "fr": "Rien reçu ? Vérifiez l'adresse saisie et votre dossier de spam.",
+  "es": "¿No llegó? Revisa la dirección que escribiste y la carpeta de spam."
+ }
+]
