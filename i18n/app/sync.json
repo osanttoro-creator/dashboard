@@ -1,0 +1,218 @@
+[
+ {
+  "pt": "Sync/sessão:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sincronização não configurada",
+  "tipo": "exato",
+  "en": "Sync not set up",
+  "fr": "Synchronisation non configurée",
+  "es": "Sincronización no configurada"
+ },
+ {
+  "pt": "Não logado — só neste aparelho",
+  "tipo": "exato",
+  "en": "Not signed in — this device only",
+  "fr": "Non connecté — cet appareil seulement",
+  "es": "Sin sesión — solo en este dispositivo"
+ },
+ {
+  "pt": "Conectando…",
+  "tipo": "exato",
+  "en": "Connecting…",
+  "fr": "Connexion…",
+  "es": "Conectando…"
+ },
+ {
+  "pt": "Sem conexão — usando dados locais",
+  "tipo": "exato",
+  "en": "Offline — using local data",
+  "fr": "Hors ligne — données locales",
+  "es": "Sin conexión — usando datos locales"
+ },
+ {
+  "pt": "Sync/estado:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Como ativar a sincronização entre aparelhos",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "O app funciona normalmente sem login. Clique para entender.",
+  "tipo": "exato",
+  "en": "The app works normally without signing in. Click to learn more.",
+  "fr": "L'app fonctionne normalement sans connexion. Cliquez pour en savoir plus.",
+  "es": "La app funciona normalmente sin iniciar sesión. Haz clic para entender."
+ },
+ {
+  "pt": "Sair desta conta",
+  "tipo": "exato",
+  "en": "Sign out of this account",
+  "fr": "Se déconnecter de ce compte",
+  "es": "Salir de esta cuenta"
+ },
+ {
+  "pt": "não foi possível carregar {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Sync/login:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "erro desconhecido",
+  "tipo": "exato",
+  "en": "unknown error",
+  "fr": "erreur inconnue",
+  "es": "error desconocido"
+ },
+ {
+  "pt": "Sair da conta",
+  "tipo": "exato",
+  "en": "Sign out",
+  "fr": "Se déconnecter",
+  "es": "Cerrar sesión"
+ },
+ {
+  "pt": "Os dados continuam salvos",
+  "tipo": "exato",
+  "en": "Your data stays saved",
+  "fr": "Les données restent enregistrées",
+  "es": "Los datos siguen guardados"
+ },
+ {
+  "pt": "neste aparelho",
+  "tipo": "exato",
+  "en": "on this device",
+  "fr": "sur cet appareil",
+  "es": "en este dispositivo"
+ },
+ {
+  "pt": "e na sua nuvem, mas param de sincronizar até você entrar de novo. Sair?",
+  "tipo": "exato",
+  "en": "and in your cloud, but stop syncing until you sign in again. Sign out?",
+  "fr": "et dans votre cloud, mais ne se synchronisent plus jusqu'à votre prochaine connexion. Se déconnecter ?",
+  "es": "y en tu nube, pero dejan de sincronizarse hasta que vuelvas a entrar. ¿Salir?"
+ },
+ {
+  "pt": "Você saiu. O app continua funcionando com os dados deste aparelho.",
+  "tipo": "exato",
+  "en": "You signed out. The app keeps working with this device's data.",
+  "fr": "Vous êtes déconnecté. L'app continue de fonctionner avec les données de cet appareil.",
+  "es": "Cerraste sesión. La app sigue funcionando con los datos de este dispositivo."
+ },
+ {
+  "pt": "Sync/observar:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sincronizando como {0}.",
+  "tipo": "padrao",
+  "en": "Syncing as {0}.",
+  "fr": "Synchronisation en tant que {0}.",
+  "es": "Sincronizando como {0}."
+ },
+ {
+  "pt": "Dados atualizados a partir de outro dispositivo.",
+  "tipo": "exato",
+  "en": "Data updated from another device.",
+  "fr": "Données mises à jour depuis un autre appareil.",
+  "es": "Datos actualizados desde otro dispositivo."
+ },
+ {
+  "pt": "Alterações guardadas neste aparelho.",
+  "tipo": "exato",
+  "en": "Changes saved on this device.",
+  "fr": "Modifications gardées sur cet appareil.",
+  "es": "Cambios guardados en este dispositivo."
+ },
+ {
+  "pt": "Falha ao enviar: {0}",
+  "tipo": "padrao",
+  "en": "Couldn't send: {0}",
+  "fr": "Échec de l'envoi : {0}",
+  "es": "Error al enviar: {0}"
+ },
+ {
+  "pt": "Sync/releitura:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não foi possível atualizar agora.",
+  "tipo": "exato",
+  "en": "Couldn't update right now.",
+  "fr": "Impossible de mettre à jour pour le moment.",
+  "es": "No se pudo actualizar ahora."
+ },
+ {
+  "pt": "Sincronizar é",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ". Sem login, o app funciona igual — os dados ficam neste aparelho, no",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ". A conta serve só para ver os mesmos dados no PC e no celular.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A sincronização não está configurada neste build. Cole a URL e a chave publicável em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "e rode",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "No primeiro login, os dois lados se somam.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Se este aparelho já tem perfis e a sua conta também, você vai ficar com todos — nada é apagado, mas pode haver duplicata (dois \"Pessoal\", por exemplo). Apague os que sobrarem em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "⚙ Perfis",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ". Depois disso, cada perfil passa a ser reconhecido pelo mesmo identificador nos dois aparelhos.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Backup e Restaurar em JSON continuam disponíveis e funcionam com ou sem login — inclusive para trazer dados de antes de você ter conta.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sincronizar entre aparelhos",
+  "tipo": "exato",
+  "en": "Sync across devices",
+  "fr": "Synchroniser entre appareils",
+  "es": "Sincronizar entre dispositivos"
+ },
+ {
+  "pt": "Sync/{0}:",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

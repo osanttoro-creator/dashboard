@@ -16,6 +16,10 @@
 (function (global) {
   'use strict';
 
+  /* A linha do extrato é desenhada com translate="no" (a descrição
+     é da pessoa). As que o próprio app escreve já saem traduzidas. */
+  const tr = (texto) => (global.I18n ? global.I18n.t(texto) : texto);
+
   const Calc = {};
   const P = () => Store.profile();
 
@@ -582,7 +586,7 @@
     // extrato — sem isso o saldo corrente não fecha com Calc.accountBalance.
     if (acc && acc.openedAt >= fromISO && acc.openedAt <= toISO && (+acc.openingBalance || 0) !== 0) {
       rows.push({
-        date: acc.openedAt, desc: 'Saldo inicial da conta', cat: 'Abertura',
+        date: acc.openedAt, desc: tr('Saldo inicial da conta'), cat: 'Abertura',
         delta: +acc.openingBalance || 0
       });
     }
@@ -611,8 +615,8 @@
         rows.push({
           date: m.at,
           desc: m.tipo === 'adiantamento'
-            ? `Compra adiantada ${nome} (fatura de ${U.monthLabel(ref, true)})`
-            : `Pagamento fatura ${nome} (${U.monthLabel(ref, true)})`,
+            ? tr(`Compra adiantada ${nome} (fatura de ${U.monthLabel(ref, true)})`)
+            : tr(`Pagamento fatura ${nome} (${U.monthLabel(ref, true)})`),
           cat: 'Fatura', delta: -m.amount
         });
       });
@@ -621,14 +625,14 @@
     prof.investments.forEach((iv) => {
       if (iv.accountId !== accountId) return;
       if (iv.date < fromISO || iv.date > toISO) return;
-      rows.push({ date: iv.date, desc: `Aporte: ${iv.name}`, cat: 'Investimento', delta: -(+iv.amount || 0) });
+      rows.push({ date: iv.date, desc: tr(`Aporte: ${iv.name}`), cat: 'Investimento', delta: -(+iv.amount || 0) });
     });
 
     prof.goals.forEach((g) => {
       (g.deposits || []).forEach((d) => {
         if (d.accountId !== accountId) return;
         if (d.at < fromISO || d.at > toISO) return;
-        rows.push({ date: d.at, desc: `Guardado em ${g.name}`, cat: 'Reserva', delta: -d.amount });
+        rows.push({ date: d.at, desc: tr(`Guardado em ${g.name}`), cat: 'Reserva', delta: -d.amount });
       });
     });
 

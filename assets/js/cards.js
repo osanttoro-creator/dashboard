@@ -446,7 +446,7 @@
 
     const head = el('div', { class: 'cc-detail-head' }, [
       Icons.bankTile(card.bank || card.name, 30, card.color),
-      el('h3', { text: card.name }),
+      el('h3', { text: card.name, translate: 'no' }),
       inv.paid ? UI.badge(`Paga em ${U.fmtDateBR(inv.paidAt)}`, 'ok')
         : inv.parcial ? UI.badge('Paga em parte', 'pend')
           : inv.isOverdue ? UI.badge('Vencida', 'late')

@@ -1,0 +1,631 @@
+[
+ {
+  "pt": "Reunindo os dados do mês…",
+  "tipo": "exato",
+  "en": "Gathering the month's data…",
+  "fr": "Rassemblement des données du mois…",
+  "es": "Reuniendo los datos del mes…"
+ },
+ {
+  "pt": "Analisando…",
+  "tipo": "exato",
+  "en": "Analyzing…",
+  "fr": "Analyse…",
+  "es": "Analizando…"
+ },
+ {
+  "pt": "Escrevendo a resposta…",
+  "tipo": "exato",
+  "en": "Writing the answer…",
+  "fr": "Rédaction de la réponse…",
+  "es": "Escribiendo la respuesta…"
+ },
+ {
+  "pt": "Resposta pronta.",
+  "tipo": "exato",
+  "en": "Answer ready.",
+  "fr": "Réponse prête.",
+  "es": "Respuesta lista."
+ },
+ {
+  "pt": "Não foi possível responder.",
+  "tipo": "exato",
+  "en": "Couldn't answer.",
+  "fr": "Impossible de répondre.",
+  "es": "No se pudo responder."
+ },
+ {
+  "pt": "Resumo de {0}",
+  "tipo": "padrao",
+  "en": "{0} summary",
+  "fr": "Résumé de {0}",
+  "es": "Resumen de {0}"
+ },
+ {
+  "pt": "Receitas, despesas e o que mais pesou",
+  "tipo": "exato",
+  "en": "Income, expenses and what weighed most",
+  "fr": "Revenus, dépenses et ce qui a le plus pesé",
+  "es": "Ingresos, gastos y lo que más pesó"
+ },
+ {
+  "pt": "Faça um resumo do meu ano de {0}: quanto entrou, quanto saiu, o saldo e as categorias que mais pesaram.",
+  "tipo": "padrao",
+  "en": "Summarize my year {0}: how much came in, how much went out, the balance and the heaviest categories.",
+  "fr": "Fais un résumé de mon année {0} : combien est entré, combien est sorti, le solde et les catégories qui ont le plus pesé.",
+  "es": "Haz un resumen de mi año {0}: cuánto entró, cuánto salió, el saldo y las categorías que más pesaron."
+ },
+ {
+  "pt": "Fixas no ano",
+  "tipo": "exato",
+  "en": "Fixed costs this year",
+  "fr": "Fixes sur l'année",
+  "es": "Fijos en el año"
+ },
+ {
+  "pt": "Quanto já está comprometido",
+  "tipo": "exato",
+  "en": "How much is already committed",
+  "fr": "Ce qui est déjà engagé",
+  "es": "Cuánto ya está comprometido"
+ },
+ {
+  "pt": "Quanto das minhas despesas de {0} é fixo, e quanto isso compromete da minha receita até dezembro?",
+  "tipo": "padrao",
+  "en": "How much of my {0} expenses is fixed, and how much of my income does that commit through December?",
+  "fr": "Quelle part de mes dépenses de {0} est fixe, et combien cela engage-t-il de mes revenus jusqu'en décembre ?",
+  "es": "¿Cuánto de mis gastos de {0} es fijo, y cuánto compromete de mis ingresos hasta diciembre?"
+ },
+ {
+  "pt": "Onde economizar",
+  "tipo": "exato",
+  "en": "Where to save",
+  "fr": "Où économiser",
+  "es": "Dónde ahorrar"
+ },
+ {
+  "pt": "As maiores categorias de {0}",
+  "tipo": "padrao",
+  "en": "The largest categories in {0}",
+  "fr": "Les plus grandes catégories de {0}",
+  "es": "Las categorías mayores de {0}"
+ },
+ {
+  "pt": "Onde posso cortar gastos este mês, olhando as maiores categorias?",
+  "tipo": "exato",
+  "en": "Where can I cut spending this month, looking at the largest categories?",
+  "fr": "Où puis-je réduire mes dépenses ce mois-ci, en regardant les plus grandes catégories ?",
+  "es": "¿Dónde puedo recortar gastos este mes, mirando las categorías mayores?"
+ },
+ {
+  "pt": "Entradas, saídas e o que pesou",
+  "tipo": "exato",
+  "en": "Money in, money out and what weighed",
+  "fr": "Entrées, sorties et ce qui a pesé",
+  "es": "Entradas, salidas y lo que pesó"
+ },
+ {
+  "pt": "Faça um resumo do meu mês: receitas, despesas e o que mais pesou.",
+  "tipo": "exato",
+  "en": "Summarize my month: income, expenses and what weighed most.",
+  "fr": "Fais un résumé de mon mois : revenus, dépenses et ce qui a le plus pesé.",
+  "es": "Haz un resumen de mi mes: ingresos, gastos y lo que más pesó."
+ },
+ {
+  "pt": "Mês mais caro",
+  "tipo": "exato",
+  "en": "Most expensive month",
+  "fr": "Mois le plus cher",
+  "es": "Mes más caro"
+ },
+ {
+  "pt": "E o que explica a diferença",
+  "tipo": "exato",
+  "en": "And what explains the difference",
+  "fr": "Et ce qui explique la différence",
+  "es": "Y qué explica la diferencia"
+ },
+ {
+  "pt": "Qual foi o mês mais caro de {0}, e quais categorias explicam a diferença para os outros meses?",
+  "tipo": "padrao",
+  "en": "Which was the most expensive month of {0}, and which categories explain the difference from the other months?",
+  "fr": "Quel a été le mois le plus cher de {0}, et quelles catégories expliquent la différence avec les autres mois ?",
+  "es": "¿Cuál fue el mes más caro de {0}, y qué categorías explican la diferencia con los otros meses?"
+ },
+ {
+  "pt": "Até dezembro",
+  "tipo": "exato",
+  "en": "Through December",
+  "fr": "Jusqu'en décembre",
+  "es": "Hasta diciembre"
+ },
+ {
+  "pt": "O que já está previsto",
+  "tipo": "exato",
+  "en": "What's already planned",
+  "fr": "Ce qui est déjà prévu",
+  "es": "Lo que ya está previsto"
+ },
+ {
+  "pt": "Olhando o que já está previsto, como devem ficar meus próximos meses até dezembro de {0}?",
+  "tipo": "padrao",
+  "en": "Looking at what's already planned, how should my next months look through December {0}?",
+  "fr": "Au vu de ce qui est déjà prévu, à quoi devraient ressembler mes prochains mois jusqu'en décembre {0} ?",
+  "es": "Mirando lo que ya está previsto, ¿cómo deberían quedar mis próximos meses hasta diciembre de {0}?"
+ },
+ {
+  "pt": "Minhas metas",
+  "tipo": "exato",
+  "en": "My goals",
+  "fr": "Mes objectifs",
+  "es": "Mis metas"
+ },
+ {
+  "pt": "Ritmo e quanto falta",
+  "tipo": "exato",
+  "en": "Pace and how much is left",
+  "fr": "Rythme et ce qu'il reste",
+  "es": "Ritmo y cuánto falta"
+ },
+ {
+  "pt": "Como está o andamento das minhas metas, e no ritmo do ano, quando chego lá?",
+  "tipo": "exato",
+  "en": "How are my goals coming along, and at this year's pace, when will I get there?",
+  "fr": "Où en sont mes objectifs, et au rythme de l'année, quand vais-je y arriver ?",
+  "es": "¿Cómo van mis metas, y al ritmo del año, cuándo llego?"
+ },
+ {
+  "pt": "Menor aporte possível",
+  "tipo": "exato",
+  "en": "Smallest possible contribution",
+  "fr": "Plus petit versement possible",
+  "es": "Menor aporte posible"
+ },
+ {
+  "pt": "Começar a investir",
+  "tipo": "exato",
+  "en": "Start investing",
+  "fr": "Commencer à investir",
+  "es": "Empezar a invertir"
+ },
+ {
+  "pt": "Sem apertar o restante do mês",
+  "tipo": "exato",
+  "en": "Without squeezing the rest of the month",
+  "fr": "Sans serrer le reste du mois",
+  "es": "Sin apretar el resto del mes"
+ },
+ {
+  "pt": "Um valor que caiba no orçamento",
+  "tipo": "exato",
+  "en": "An amount that fits the budget",
+  "fr": "Un montant qui tient dans le budget",
+  "es": "Un monto que quepa en el presupuesto"
+ },
+ {
+  "pt": "Com base no meu saldo e nos compromissos do mês, que valor inicial cabe no orçamento para começar a investir?",
+  "tipo": "exato",
+  "en": "Based on my balance and this month's commitments, what starting amount fits the budget to start investing?",
+  "fr": "Selon mon solde et les engagements du mois, quel montant initial tient dans le budget pour commencer à investir ?",
+  "es": "Según mi saldo y los compromisos del mes, ¿qué monto inicial cabe en el presupuesto para empezar a invertir?"
+ },
+ {
+  "pt": "Lendo o ano de {0}",
+  "tipo": "padrao",
+  "en": "Reading the year {0}",
+  "fr": "Lecture de l'année {0}",
+  "es": "Leyendo el año {0}"
+ },
+ {
+  "pt": "Você usou as {0} consultas do plano {1} neste mês",
+  "tipo": "padrao",
+  "en": "You've used the {0} questions on the {1} plan this month",
+  "fr": "Vous avez utilisé les {0} questions de la formule {1} ce mois-ci",
+  "es": "Usaste las {0} consultas del plan {1} este mes"
+ },
+ {
+  "pt": "Elas voltam no dia 1º. Nada foi apagado, e o restante do OAZE continua funcionando normalmente — a leitura do mês abaixo é calculada aqui mesmo e não consome consulta.",
+  "tipo": "exato",
+  "en": "They come back on the 1st. Nothing was deleted, and the rest of OAZE keeps working normally — the month reading below is calculated right here and doesn't use up a question.",
+  "fr": "Elles reviennent le 1er. Rien n'a été supprimé, et le reste d'OAZE fonctionne normalement — la lecture du mois ci-dessous est calculée ici même et ne consomme pas de question.",
+  "es": "Vuelven el día 1. No se borró nada, y el resto de OAZE sigue funcionando normalmente — la lectura del mes de abajo se calcula aquí mismo y no consume consulta."
+ },
+ {
+  "pt": "{0} de {1} consultas restantes neste mês. Erro nosso ou indisponibilidade não consomem consulta.",
+  "tipo": "padrao",
+  "en": "{0} of {1} questions left this month. Our errors or outages don't use up a question.",
+  "fr": "{0} sur {1} questions restantes ce mois-ci. Nos erreurs ou indisponibilités ne consomment pas de question.",
+  "es": "{0} de {1} consultas restantes este mes. Errores nuestros o caídas no consumen consulta."
+ },
+ {
+  "pt": "Copiar resposta",
+  "tipo": "exato",
+  "en": "Copy answer",
+  "fr": "Copier la réponse",
+  "es": "Copiar respuesta"
+ },
+ {
+  "pt": "Copiado",
+  "tipo": "exato",
+  "en": "Copied",
+  "fr": "Copié",
+  "es": "Copiado"
+ },
+ {
+  "pt": "Copiar",
+  "tipo": "exato",
+  "en": "Copy",
+  "fr": "Copier",
+  "es": "Copiar"
+ },
+ {
+  "pt": "Não foi possível copiar.",
+  "tipo": "exato",
+  "en": "Couldn't copy.",
+  "fr": "Impossible de copier.",
+  "es": "No se pudo copiar."
+ },
+ {
+  "pt": "Perguntar de novo",
+  "tipo": "exato",
+  "en": "Ask again",
+  "fr": "Redemander",
+  "es": "Preguntar de nuevo"
+ },
+ {
+  "pt": "Refazer",
+  "tipo": "exato",
+  "en": "Redo",
+  "fr": "Refaire",
+  "es": "Rehacer"
+ },
+ {
+  "pt": "Bom dia",
+  "tipo": "exato",
+  "en": "Good morning",
+  "fr": "Bonjour",
+  "es": "Buenos días"
+ },
+ {
+  "pt": "Boa tarde",
+  "tipo": "exato",
+  "en": "Good afternoon",
+  "fr": "Bon après-midi",
+  "es": "Buenas tardes"
+ },
+ {
+  "pt": "Boa noite",
+  "tipo": "exato",
+  "en": "Good evening",
+  "fr": "Bonsoir",
+  "es": "Buenas noches"
+ },
+ {
+  "pt": "{0} Sobre o que vamos conversar?",
+  "tipo": "padrao",
+  "en": "{0} What shall we talk about?",
+  "fr": "{0} De quoi allons-nous parler ?",
+  "es": "{0} ¿De qué vamos a hablar?"
+ },
+ {
+  "pt": "lançamento",
+  "tipo": "exato",
+  "en": "entry",
+  "fr": "écriture",
+  "es": "movimiento"
+ },
+ {
+  "pt": "Sem dados",
+  "tipo": "exato",
+  "en": "No data",
+  "fr": "Aucune donnée",
+  "es": "Sin datos"
+ },
+ {
+  "pt": "Pergunte sobre o seu ano…",
+  "tipo": "exato",
+  "en": "Ask about your year…",
+  "fr": "Posez une question sur votre année…",
+  "es": "Pregunta sobre tu año…"
+ },
+ {
+  "pt": "Pergunte sobre {0}…",
+  "tipo": "padrao",
+  "en": "Ask about {0}…",
+  "fr": "Posez une question sur {0}…",
+  "es": "Pregunta sobre {0}…"
+ },
+ {
+  "pt": "Sem lançamentos neste mês — escolha \"Ano\" para ler os outros meses.",
+  "tipo": "exato",
+  "en": "No entries this month — choose \"Year\" to read the other months.",
+  "fr": "Aucune écriture ce mois-ci — choisissez « Année » pour lire les autres mois.",
+  "es": "Sin movimientos este mes — elige \"Año\" para leer los otros meses."
+ },
+ {
+  "pt": "Servidor autenticado — nenhuma chave de IA neste navegador",
+  "tipo": "exato",
+  "en": "Authenticated server — no AI key in this browser",
+  "fr": "Serveur authentifié — aucune clé d'IA dans ce navigateur",
+  "es": "Servidor autenticado — ninguna clave de IA en este navegador"
+ },
+ {
+  "pt": "Entre na sua conta para conversar",
+  "tipo": "exato",
+  "en": "Sign in to your account to chat",
+  "fr": "Connectez-vous à votre compte pour discuter",
+  "es": "Inicia sesión en tu cuenta para conversar"
+ },
+ {
+  "pt": "Assistente indisponível neste ambiente",
+  "tipo": "exato",
+  "en": "Assistant unavailable in this environment",
+  "fr": "Assistant indisponible dans cet environnement",
+  "es": "Asistente no disponible en este entorno"
+ },
+ {
+  "pt": "Precisa de atenção",
+  "tipo": "exato",
+  "en": "Needs attention",
+  "fr": "Demande de l'attention",
+  "es": "Necesita atención"
+ },
+ {
+  "pt": "Ver faturas",
+  "tipo": "exato",
+  "en": "See bills",
+  "fr": "Voir les relevés",
+  "es": "Ver facturas"
+ },
+ {
+  "pt": "Ver orçamento",
+  "tipo": "exato",
+  "en": "See budget",
+  "fr": "Voir le budget",
+  "es": "Ver presupuesto"
+ },
+ {
+  "pt": "Ver lançamentos",
+  "tipo": "exato",
+  "en": "See entries",
+  "fr": "Voir les écritures",
+  "es": "Ver movimientos"
+ },
+ {
+  "pt": "Subiu bastante",
+  "tipo": "exato",
+  "en": "Went up a lot",
+  "fr": "Fortement en hausse",
+  "es": "Subió bastante"
+ },
+ {
+  "pt": "Caiu bastante",
+  "tipo": "exato",
+  "en": "Went down a lot",
+  "fr": "Fortement en baisse",
+  "es": "Bajó bastante"
+ },
+ {
+  "pt": "{0} agora, contra {1} em {2}.",
+  "tipo": "padrao",
+  "en": "{0} now, against {1} in {2}.",
+  "fr": "{0} maintenant, contre {1} en {2}.",
+  "es": "{0} ahora, frente a {1} en {2}."
+ },
+ {
+  "pt": "Ver categoria",
+  "tipo": "exato",
+  "en": "See category",
+  "fr": "Voir la catégorie",
+  "es": "Ver categoría"
+ },
+ {
+  "pt": "Ainda sem base para prever",
+  "tipo": "exato",
+  "en": "Not enough data to forecast yet",
+  "fr": "Pas encore assez de données pour prévoir",
+  "es": "Todavía sin base para prever"
+ },
+ {
+  "pt": "Você ainda não possui movimentações suficientes para uma previsão.",
+  "tipo": "exato",
+  "en": "You don't have enough transactions for a forecast yet.",
+  "fr": "Vous n'avez pas encore assez de mouvements pour une prévision.",
+  "es": "Todavía no tienes suficientes movimientos para una previsión."
+ },
+ {
+  "pt": "Cadastre receitas e despesas para receber sua primeira análise.",
+  "tipo": "exato",
+  "en": "Add income and expenses to get your first analysis.",
+  "fr": "Ajoutez des revenus et des dépenses pour recevoir votre première analyse.",
+  "es": "Registra ingresos y gastos para recibir tu primer análisis."
+ },
+ {
+  "pt": "Registrar lançamento",
+  "tipo": "exato",
+  "en": "Record entry",
+  "fr": "Enregistrer une écriture",
+  "es": "Registrar movimiento"
+ },
+ {
+  "pt": "Resultado deste mês",
+  "tipo": "exato",
+  "en": "This month's result",
+  "fr": "Résultat de ce mois",
+  "es": "Resultado de este mes"
+ },
+ {
+  "pt": "Atenção ao mês",
+  "tipo": "exato",
+  "en": "Watch this month",
+  "fr": "Attention au mois",
+  "es": "Atención al mes"
+ },
+ {
+  "pt": "Sobraram {0} em {1}",
+  "tipo": "padrao",
+  "en": "{0} left over in {1}",
+  "fr": "Il est resté {0} en {1}",
+  "es": "Sobraron {0} en {1}"
+ },
+ {
+  "pt": "Faltaram {0} em {1}",
+  "tipo": "padrao",
+  "en": "{0} short in {1}",
+  "fr": "Il a manqué {0} en {1}",
+  "es": "Faltaron {0} en {1}"
+ },
+ {
+  "pt": "Com {0} {1} de histórico ainda não dá para projetar um ano —",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "um mês isolado não mostra tendência. A partir de três, a previsão aparece aqui.",
+  "tipo": "fragmento",
+  "ignorar": true
+ },
+ {
+  "pt": "Ver análises",
+  "tipo": "exato",
+  "en": "See analysis",
+  "fr": "Voir les analyses",
+  "es": "Ver análisis"
+ },
+ {
+  "pt": "Se mantiver o ritmo",
+  "tipo": "exato",
+  "en": "If you keep the pace",
+  "fr": "Si vous gardez le rythme",
+  "es": "Si mantienes el ritmo"
+ },
+ {
+  "pt": "Atenção ao ritmo",
+  "tipo": "exato",
+  "en": "Watch the pace",
+  "fr": "Attention au rythme",
+  "es": "Atención al ritmo"
+ },
+ {
+  "pt": "{0} em um ano",
+  "tipo": "padrao",
+  "en": "{0} in a year",
+  "fr": "{0} en un an",
+  "es": "{0} en un año"
+ },
+ {
+  "pt": "{0} de rombo em um ano",
+  "tipo": "padrao",
+  "en": "{0} shortfall in a year",
+  "fr": "{0} de déficit en un an",
+  "es": "{0} de faltante en un año"
+ },
+ {
+  "pt": "Média de {0} por mês nos últimos {1} meses com movimentação.",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "É uma projeção do ritmo atual, não uma promessa.",
+  "tipo": "fragmento",
+  "ignorar": true
+ },
+ {
+  "pt": "Muito comprometido",
+  "tipo": "exato",
+  "en": "Heavily committed",
+  "fr": "Très engagé",
+  "es": "Muy comprometido"
+ },
+ {
+  "pt": "Compromissos fixos",
+  "tipo": "exato",
+  "en": "Fixed commitments",
+  "fr": "Engagements fixes",
+  "es": "Compromisos fijos"
+ },
+ {
+  "pt": "{0} da sua receita já está comprometida",
+  "tipo": "padrao",
+  "en": "{0} of your income is already committed",
+  "fr": "{0} de vos revenus sont déjà engagés",
+  "es": "el {0} de tus ingresos ya está comprometido"
+ },
+ {
+  "pt": "{0} despesa(s) fixa(s) somam {1} por mês — {2} no ano.",
+  "tipo": "padrao",
+  "en": "{0} fixed expense(s) add up to {1} per month — {2} a year.",
+  "fr": "{0} dépense(s) fixe(s) totalisent {1} par mois — {2} sur l'année.",
+  "es": "{0} gasto(s) fijo(s) suman {1} por mes — {2} en el año."
+ },
+ {
+  "pt": "Ver recorrências",
+  "tipo": "exato",
+  "en": "See recurring items",
+  "fr": "Voir les récurrences",
+  "es": "Ver recurrentes"
+ },
+ {
+  "pt": "Nada lançado neste mês ainda.",
+  "tipo": "exato",
+  "en": "Nothing recorded this month yet.",
+  "fr": "Rien de saisi ce mois-ci pour l'instant.",
+  "es": "Nada registrado este mes todavía."
+ },
+ {
+  "pt": "Assim que houver movimentação, a leitura aparece aqui.",
+  "tipo": "exato",
+  "en": "As soon as there's activity, the reading shows up here.",
+  "fr": "Dès qu'il y aura des mouvements, la lecture apparaîtra ici.",
+  "es": "En cuanto haya movimientos, la lectura aparece aquí."
+ },
+ {
+  "pt": "Score {0} — {1}.",
+  "tipo": "padrao",
+  "en": "Score {0} — {1}.",
+  "fr": "Score {0} — {1}.",
+  "es": "Score {0} — {1}."
+ },
+ {
+  "pt": "Sem leituras para este mês",
+  "tipo": "exato",
+  "en": "No readings for this month",
+  "fr": "Aucune lecture pour ce mois",
+  "es": "Sin lecturas para este mes"
+ },
+ {
+  "pt": "Lance receitas e despesas para o UGLEZ ter o que analisar.",
+  "tipo": "exato",
+  "en": "Record income and expenses so UGLEZ has something to analyze.",
+  "fr": "Saisissez revenus et dépenses pour que UGLEZ ait de quoi analyser.",
+  "es": "Registra ingresos y gastos para que UGLEZ tenga qué analizar."
+ },
+ {
+  "pt": "Oportunidade",
+  "tipo": "exato",
+  "en": "Opportunity",
+  "fr": "Opportunité",
+  "es": "Oportunidad"
+ },
+ {
+  "pt": "Previsão",
+  "tipo": "exato",
+  "en": "Forecast",
+  "fr": "Prévision",
+  "es": "Previsión"
+ },
+ {
+  "pt": "Risco",
+  "tipo": "exato",
+  "en": "Risk",
+  "fr": "Risque",
+  "es": "Riesgo"
+ },
+ {
+  "pt": "Leitura indisponível para este mês.",
+  "tipo": "exato",
+  "en": "Reading unavailable for this month.",
+  "fr": "Lecture indisponible pour ce mois.",
+  "es": "Lectura no disponible para este mes."
+ }
+]

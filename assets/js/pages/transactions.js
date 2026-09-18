@@ -205,7 +205,7 @@
       el('label', { class: 'check' }, cb),
       Icons.categoryBadge(e.categoryId),
       el('div', { class: 'tx-main' }, [
-        el('div', { class: 'tx-name', text: e.description, title: e.description }),
+        el('div', { class: 'tx-name', text: e.description, title: e.description, translate: 'no' }),
         el('div', { class: 'tx-meta' }, meta)
       ]),
       el('span', {
@@ -225,7 +225,7 @@
         title: 'Excluir lançamento fixo',
         body: el('p', {
           style: { fontSize: '13.5px', lineHeight: '1.6' },
-          html: `<strong>${U.escape(e.description)}</strong> se repete todo mês. O que você quer fazer?`
+          html: `<strong translate="no">${U.escape(e.description)}</strong> se repete todo mês. O que você quer fazer?`
         }),
         buttons: [
           { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
@@ -244,7 +244,7 @@
     }
     const ok = await UI.confirm({
       title: 'Excluir lançamento',
-      message: `Excluir <strong>${U.escape(e.description)}</strong> (${U.fmtBRL(e.amount)})?` +
+      message: `Excluir <strong translate="no">${U.escape(e.description)}</strong> (${U.fmtBRL(e.amount)})?` +
         (e.installment ? ' Todas as parcelas do grupo serão removidas.' : ''),
       confirmLabel: 'Excluir', danger: true
     });

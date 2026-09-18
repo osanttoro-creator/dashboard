@@ -1,0 +1,37 @@
+[
+ {
+  "pt": "A cópia dos seus dados para a conta está em andamento.",
+  "tipo": "exato",
+  "en": "Your data is being copied to your account.",
+  "fr": "La copie de vos données vers votre compte est en cours.",
+  "es": "La copia de tus datos a tu cuenta está en curso."
+ },
+ {
+  "pt": "Este aparelho tem dados que ainda não foram copiados para a sua conta. Eles sobem primeiro — nada foi substituído.",
+  "tipo": "exato",
+  "en": "This device has data that hasn't been copied to your account yet. It goes up first — nothing was replaced.",
+  "fr": "Cet appareil a des données pas encore copiées vers votre compte. Elles partent en premier — rien n'a été remplacé.",
+  "es": "Este dispositivo tiene datos que aún no se copiaron a tu cuenta. Se suben primero — no se reemplazó nada."
+ },
+ {
+  "pt": "Há alterações deste aparelho ainda não enviadas. Elas sobem primeiro — seus dados do servidor não foram trazidos por cima.",
+  "tipo": "exato",
+  "en": "There are changes on this device that haven't been sent yet. They go up first — your server data wasn't brought over them.",
+  "fr": "Des modifications de cet appareil n'ont pas encore été envoyées. Elles partent en premier — vos données du serveur ne les ont pas écrasées.",
+  "es": "Hay cambios de este dispositivo que aún no se enviaron. Se suben primero — tus datos del servidor no se trajeron encima."
+ },
+ {
+  "pt": "Algo mudou enquanto os dados chegavam. Nada foi substituído.",
+  "tipo": "exato",
+  "en": "Something changed while the data was arriving. Nothing was replaced.",
+  "fr": "Quelque chose a changé pendant l'arrivée des données. Rien n'a été remplacé.",
+  "es": "Algo cambió mientras llegaban los datos. No se reemplazó nada."
+ },
+ {
+  "pt": "Não foi possível trazer seus dados do servidor. O que está na tela é a última cópia deste aparelho.",
+  "tipo": "exato",
+  "en": "Couldn't bring your data from the server. What's on screen is this device's latest copy.",
+  "fr": "Impossible de récupérer vos données du serveur. Ce qui est à l'écran est la dernière copie de cet appareil.",
+  "es": "No se pudieron traer tus datos del servidor. Lo que está en pantalla es la última copia de este dispositivo."
+ }
+]

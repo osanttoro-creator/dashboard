@@ -1,0 +1,31 @@
+[
+ {
+  "pt": "Sem conexão — alterações guardadas",
+  "tipo": "exato",
+  "en": "Offline — changes saved",
+  "fr": "Hors ligne — modifications gardées",
+  "es": "Sin conexión — cambios guardados"
+ },
+ {
+  "pt": "Falha ao sincronizar — tentando de novo",
+  "tipo": "exato",
+  "en": "Sync failed — trying again",
+  "fr": "Échec de la synchronisation — nouvel essai",
+  "es": "Error al sincronizar — reintentando"
+ },
+ {
+  "pt": "Fila:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "sem cliente",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "tipo de tarefa desconhecido: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

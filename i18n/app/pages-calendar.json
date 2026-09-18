@@ -1,0 +1,303 @@
+[
+ {
+  "pt": "Recebido {0}",
+  "tipo": "padrao",
+  "en": "Received {0}",
+  "fr": "Reçu {0}",
+  "es": "Recibido {0}"
+ },
+ {
+  "pt": "{0} ainda a receber",
+  "tipo": "padrao",
+  "en": "{0} still to receive",
+  "fr": "{0} encore à recevoir",
+  "es": "{0} todavía por cobrar"
+ },
+ {
+  "pt": "nada pendente",
+  "tipo": "exato",
+  "en": "nothing pending",
+  "fr": "rien en attente",
+  "es": "nada pendiente"
+ },
+ {
+  "pt": "Pago {0}",
+  "tipo": "padrao",
+  "en": "Paid {0}",
+  "fr": "Payé {0}",
+  "es": "Pagado {0}"
+ },
+ {
+  "pt": "{0} ainda a pagar",
+  "tipo": "padrao",
+  "en": "{0} still to pay",
+  "fr": "{0} encore à payer",
+  "es": "{0} todavía por pagar"
+ },
+ {
+  "pt": "Saldo {0}",
+  "tipo": "padrao",
+  "en": "Balance {0}",
+  "fr": "Solde {0}",
+  "es": "Saldo {0}"
+ },
+ {
+  "pt": "se tudo se confirmar: {0}",
+  "tipo": "padrao",
+  "en": "if everything goes through: {0}",
+  "fr": "si tout se confirme : {0}",
+  "es": "si todo se confirma: {0}"
+ },
+ {
+  "pt": "Previsto {0}",
+  "tipo": "padrao",
+  "en": "Planned {0}",
+  "fr": "Prévu {0}",
+  "es": "Previsto {0}"
+ },
+ {
+  "pt": "nada a confirmar",
+  "tipo": "exato",
+  "en": "nothing to confirm",
+  "fr": "rien à confirmer",
+  "es": "nada por confirmar"
+ },
+ {
+  "pt": "1 lançamento",
+  "tipo": "exato",
+  "en": "1 entry",
+  "fr": "1 écriture",
+  "es": "1 movimiento"
+ },
+ {
+  "pt": "{0} lançamentos",
+  "tipo": "padrao",
+  "en": "{0} entries",
+  "fr": "{0} écritures",
+  "es": "{0} movimientos"
+ },
+ {
+  "pt": "· {0} a receber",
+  "tipo": "padrao",
+  "en": "· {0} to receive",
+  "fr": "· {0} à recevoir",
+  "es": "· {0} por cobrar"
+ },
+ {
+  "pt": "Despesas fixas",
+  "tipo": "exato",
+  "en": "Fixed expenses",
+  "fr": "Dépenses fixes",
+  "es": "Gastos fijos"
+ },
+ {
+  "pt": "do mês",
+  "tipo": "exato",
+  "en": "this month",
+  "fr": "du mois",
+  "es": "del mes"
+ },
+ {
+  "pt": ", {0} evento(s)",
+  "tipo": "padrao",
+  "en": ", {0} event(s)",
+  "fr": ", {0} événement(s)",
+  "es": ", {0} evento(s)"
+ },
+ {
+  "pt": ", sem eventos",
+  "tipo": "exato",
+  "en": ", no events",
+  "fr": ", aucun événement",
+  "es": ", sin eventos"
+ },
+ {
+  "pt": "Toque em um dia da grade para ver o que acontece nele.",
+  "tipo": "exato",
+  "en": "Tap a day on the grid to see what happens that day.",
+  "fr": "Touchez un jour de la grille pour voir ce qui s'y passe.",
+  "es": "Toca un día de la cuadrícula para ver qué pasa en él."
+ },
+ {
+  "pt": "Nenhuma movimentação neste dia.",
+  "tipo": "exato",
+  "en": "No activity on this day.",
+  "fr": "Aucun mouvement ce jour-là.",
+  "es": "Ningún movimiento en este día."
+ },
+ {
+  "pt": "Fixa",
+  "tipo": "exato",
+  "en": "Fixed",
+  "fr": "Fixe",
+  "es": "Fijo"
+ },
+ {
+  "pt": "Em aberto",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "En cours",
+  "es": "Pendiente"
+ },
+ {
+  "pt": "Editar {0}",
+  "tipo": "padrao",
+  "en": "Edit {0}",
+  "fr": "Modifier {0}",
+  "es": "Editar {0}"
+ },
+ {
+  "pt": "Ver fatura",
+  "tipo": "exato",
+  "en": "See bill",
+  "fr": "Voir le relevé",
+  "es": "Ver factura"
+ },
+ {
+  "pt": "Entrada",
+  "tipo": "exato",
+  "en": "Money in",
+  "fr": "Entrée",
+  "es": "Entrada"
+ },
+ {
+  "pt": "Saída",
+  "tipo": "exato",
+  "en": "Money out",
+  "fr": "Sortie",
+  "es": "Salida"
+ },
+ {
+  "pt": "Vencimento de fatura",
+  "tipo": "exato",
+  "en": "Card bill due",
+  "fr": "Échéance du relevé",
+  "es": "Vencimiento de factura"
+ },
+ {
+  "pt": "{0} a {1} de {2}",
+  "tipo": "padrao",
+  "en": "{2} {0} to {1}",
+  "fr": "du {0} au {1} {2}",
+  "es": "{0} al {1} de {2}"
+ },
+ {
+  "pt": "{0} de {1} a {2} de {3}",
+  "tipo": "padrao",
+  "en": "{1} {0} to {3} {2}",
+  "fr": "du {0} {1} au {2} {3}",
+  "es": "{0} de {1} al {2} de {3}"
+ },
+ {
+  "pt": "Semana de {0}",
+  "tipo": "padrao",
+  "en": "Week of {0}",
+  "fr": "Semaine du {0}",
+  "es": "Semana del {0}"
+ },
+ {
+  "pt": "da semana",
+  "tipo": "exato",
+  "en": "this week",
+  "fr": "de la semaine",
+  "es": "de la semana"
+ },
+ {
+  "pt": "Ano de {0}",
+  "tipo": "padrao",
+  "en": "Year {0}",
+  "fr": "Année {0}",
+  "es": "Año {0}"
+ },
+ {
+  "pt": "Gasto médio por mês",
+  "tipo": "exato",
+  "en": "Average spending per month",
+  "fr": "Dépense moyenne par mois",
+  "es": "Gasto promedio por mes"
+ },
+ {
+  "pt": "maior em {0}",
+  "tipo": "padrao",
+  "en": "highest in {0}",
+  "fr": "le plus élevé en {0}",
+  "es": "mayor en {0}"
+ },
+ {
+  "pt": "sem despesas no ano",
+  "tipo": "exato",
+  "en": "no expenses this year",
+  "fr": "aucune dépense cette année",
+  "es": "sin gastos en el año"
+ },
+ {
+  "pt": "do ano",
+  "tipo": "exato",
+  "en": "this year",
+  "fr": "de l'année",
+  "es": "del año"
+ },
+ {
+  "pt": "{0}: recebido {1}, pago {2}",
+  "tipo": "padrao",
+  "en": "{0}: received {1}, paid {2}",
+  "fr": "{0} : reçu {1}, payé {2}",
+  "es": "{0}: recibido {1}, pagado {2}"
+ },
+ {
+  "pt": ", previsto {0} a pagar e {1} a receber",
+  "tipo": "padrao",
+  "en": ", {0} expected to pay and {1} to receive",
+  "fr": ", {0} prévus à payer et {1} à recevoir",
+  "es": ", previsto {0} por pagar y {1} por cobrar"
+ },
+ {
+  "pt": "Abrir a grade de {0}",
+  "tipo": "padrao",
+  "en": "Open the {0} grid",
+  "fr": "Ouvrir la grille de {0}",
+  "es": "Abrir la cuadrícula de {0}"
+ },
+ {
+  "pt": "Abrir",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "Ouvrir",
+  "es": "Abrir"
+ },
+ {
+  "pt": "Recebido",
+  "tipo": "exato",
+  "en": "Received",
+  "fr": "Reçu",
+  "es": "Recibido"
+ },
+ {
+  "pt": "Pago",
+  "tipo": "exato",
+  "en": "Paid",
+  "fr": "Payé",
+  "es": "Pagado"
+ },
+ {
+  "pt": "Nada lançado neste mês.",
+  "tipo": "exato",
+  "en": "Nothing recorded this month.",
+  "fr": "Rien de saisi ce mois-ci.",
+  "es": "Nada registrado este mes."
+ },
+ {
+  "pt": "Nada previsto ainda.",
+  "tipo": "exato",
+  "en": "Nothing planned yet.",
+  "fr": "Rien de prévu pour l'instant.",
+  "es": "Nada previsto todavía."
+ },
+ {
+  "pt": "{0} fixa{1} · {2}",
+  "tipo": "padrao",
+  "en": "{0} fixed · {2}",
+  "fr": "{0} fixe(s) · {2}",
+  "es": "{0} fijo(s) · {2}"
+ }
+]

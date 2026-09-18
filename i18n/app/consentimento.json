@@ -1,0 +1,99 @@
+[
+ {
+  "pt": "oaze.privacidade.aceite-pendente",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Antes de continuar, leia como o OAZE trata seus dados financeiros e seus direitos.",
+  "tipo": "exato",
+  "en": "Before continuing, read how OAZE handles your financial data and your rights.",
+  "fr": "Avant de continuer, lisez comment OAZE traite vos données financières et vos droits.",
+  "es": "Antes de continuar, lee cómo OAZE trata tus datos financieros y tus derechos."
+ },
+ {
+  "pt": "Li e aceito a",
+  "tipo": "exato",
+  "en": "I have read and accept the",
+  "fr": "J'ai lu et j'accepte la",
+  "es": "He leído y acepto la"
+ },
+ {
+  "pt": "_blank",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Política de privacidade",
+  "tipo": "exato",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "O aceite será vinculado à sua conta. Você pode consultar a política a qualquer momento.",
+  "tipo": "exato",
+  "en": "Your acceptance will be linked to your account. You can read the policy anytime.",
+  "fr": "L'acceptation sera liée à votre compte. Vous pouvez consulter la politique à tout moment.",
+  "es": "La aceptación quedará vinculada a tu cuenta. Puedes consultar la política en cualquier momento."
+ },
+ {
+  "pt": "Sem conta, este aceite vale apenas neste navegador.",
+  "tipo": "exato",
+  "en": "Without an account, this acceptance only applies to this browser.",
+  "fr": "Sans compte, cette acceptation ne vaut que pour ce navigateur.",
+  "es": "Sin cuenta, esta aceptación vale solo en este navegador."
+ },
+ {
+  "pt": "Privacidade antes de começar",
+  "tipo": "exato",
+  "en": "Privacy before you start",
+  "fr": "La confidentialité avant de commencer",
+  "es": "Privacidad antes de empezar"
+ },
+ {
+  "pt": "Sair",
+  "tipo": "exato",
+  "en": "Sign out",
+  "fr": "Se déconnecter",
+  "es": "Salir"
+ },
+ {
+  "pt": "Voltar ao site",
+  "tipo": "exato",
+  "en": "Back to the site",
+  "fr": "Retour au site",
+  "es": "Volver al sitio"
+ },
+ {
+  "pt": "Aceitar e continuar",
+  "tipo": "exato",
+  "en": "Accept and continue",
+  "fr": "Accepter et continuer",
+  "es": "Aceptar y continuar"
+ },
+ {
+  "pt": "Marque o aceite para continuar.",
+  "tipo": "exato",
+  "en": "Tick the box to continue.",
+  "fr": "Cochez la case pour continuer.",
+  "es": "Marca la aceptación para continuar."
+ },
+ {
+  "pt": "Consentimento:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não foi possível registrar o aceite. Verifique a conexão e tente novamente.",
+  "tipo": "exato",
+  "en": "Couldn't record your acceptance. Check your connection and try again.",
+  "fr": "Impossible d'enregistrer l'acceptation. Vérifiez la connexion et réessayez.",
+  "es": "No se pudo registrar la aceptación. Revisa la conexión e inténtalo de nuevo."
+ },
+ {
+  "pt": "Consentimento/verificação:",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

@@ -478,7 +478,7 @@
           onClick: async () => {
             const ok = await UI.confirm({
               title: 'Excluir lançamento',
-              message: `Excluir <strong>${U.escape(editing.description)}</strong>?` +
+              message: `Excluir <strong translate="no">${U.escape(editing.description)}</strong>?` +
                 (editing.recurring ? ' Todas as ocorrências mensais serão removidas.' : '') +
                 (editing.installment ? ' Todas as parcelas do grupo serão removidas.' : ''),
               confirmLabel: 'Excluir', danger: true
@@ -639,8 +639,8 @@
             const ok = await UI.confirm({
               title: 'Excluir conta',
               message: used
-                ? `A conta <strong>${U.escape(editing.name)}</strong> tem lançamentos vinculados. Eles ficarão sem conta. Excluir mesmo assim?`
-                : `Excluir a conta <strong>${U.escape(editing.name)}</strong>?`,
+                ? `A conta <strong translate="no">${U.escape(editing.name)}</strong> tem lançamentos vinculados. Eles ficarão sem conta. Excluir mesmo assim?`
+                : `Excluir a conta <strong translate="no">${U.escape(editing.name)}</strong>?`,
               confirmLabel: 'Excluir', danger: true
             });
             if (ok) { Store.accounts.remove(editing.id); UI.toast('Conta excluída.'); UI.closeModal(); }
@@ -825,7 +825,7 @@
           onClick: async () => {
             const ok = await UI.confirm({
               title: 'Excluir cartão',
-              message: `Excluir <strong>${U.escape(editing.name)}</strong>? As despesas lançadas nele ficarão sem cartão.`,
+              message: `Excluir <strong translate="no">${U.escape(editing.name)}</strong>? As despesas lançadas nele ficarão sem cartão.`,
               confirmLabel: 'Excluir', danger: true
             });
             if (ok) { Store.cards.remove(editing.id); UI.toast('Cartão excluído.'); UI.closeModal(); }
@@ -882,8 +882,8 @@
             const ok = await UI.confirm({
               title: 'Excluir categoria',
               message: n
-                ? `<strong>${n}</strong> lançamento(s) usam <strong>${U.escape(editing.name)}</strong> e ficarão "Sem categoria". Excluir?`
-                : `Excluir a categoria <strong>${U.escape(editing.name)}</strong>?`,
+                ? `<strong>${n}</strong> lançamento(s) usam <strong translate="no">${U.escape(editing.name)}</strong> e ficarão "Sem categoria". Excluir?`
+                : `Excluir a categoria <strong translate="no">${U.escape(editing.name)}</strong>?`,
               confirmLabel: 'Excluir', danger: true
             });
             if (ok) {
@@ -953,7 +953,7 @@
           onClick: async () => {
             const ok = await UI.confirm({
               title: 'Excluir investimento',
-              message: `Excluir <strong>${U.escape(editing.name)}</strong>?`, confirmLabel: 'Excluir', danger: true
+              message: `Excluir <strong translate="no">${U.escape(editing.name)}</strong>?`, confirmLabel: 'Excluir', danger: true
             });
             if (ok) { Store.investments.remove(editing.id); UI.toast('Investimento excluído.'); UI.closeModal(); }
           }
@@ -1116,7 +1116,7 @@
         list.appendChild(el('div', { class: 'cat-row' }, [
           el('span', { class: 'cat-swatch', style: { background: p.id === st.activeProfileId ? 'var(--s1)' : 'var(--axis)' } }),
           el('div', {}, [
-            el('div', { class: 'cat-name', text: p.name }),
+            el('div', { class: 'cat-name', text: p.name, translate: 'no' }),
             el('div', { class: 'muted', text: counts })
           ]),
           el('span'),
@@ -1134,7 +1134,7 @@
                 if (st.profiles.length <= 1) { UI.toast('É preciso manter ao menos um espaço.', 'error'); return; }
                 const ok = await UI.confirm({
                   title: 'Excluir espaço',
-                  message: `Excluir <strong>${U.escape(p.name)}</strong> e TODOS os seus dados? Isso não pode ser desfeito.`,
+                  message: `Excluir <strong translate="no">${U.escape(p.name)}</strong> e TODOS os seus dados? Isso não pode ser desfeito.`,
                   confirmLabel: 'Excluir espaço', danger: true
                 });
                 if (ok) { Store.deleteProfile(p.id); UI.toast('Espaço excluído.'); Forms.openProfiles(); }

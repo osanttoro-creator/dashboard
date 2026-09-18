@@ -95,7 +95,7 @@
 
   Ug.sugestoes = function () {
     const ano = U.ymParts(App.ym).y;
-    const mes = U.MONTHS[U.ymParts(App.ym).m].toLowerCase();
+    const mes = U.mesNaFrase(U.ymParts(App.ym).m);
     const escopo = Ug.escopo();
     const pode = (r) => !!(global.Limites && Limites.pode(r));
     const prof = Store.profile();
@@ -260,7 +260,7 @@
      abrir a troca na conversa, que é o que Ug.novaResposta faz. */
   Ug.registrar = function () {};
 
-  const hora = (d) => d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const hora = (d) => d.toLocaleTimeString(((window.U && U.LOCALE) || 'pt-BR'), { hour: '2-digit', minute: '2-digit' });
 
   function rolaParaOFim() {
     const corpo = document.getElementById('uglezCorpo');
@@ -430,7 +430,7 @@
     const escopo = Ug.escopo();
     if (campo) campo.placeholder = escopo !== 'mes'
       ? 'Pergunte sobre o seu ano…'
-      : temDado ? 'Pergunte sobre ' + U.monthLabel(App.ym).toLowerCase() + '…'
+      : temDado ? 'Pergunte sobre ' + U.frase(U.monthLabel(App.ym)) + '…'
         : 'Sem lançamentos neste mês — escolha "Ano" para ler os outros meses.';
     /* "Sem dados no mês" só faz sentido quando a leitura É o mês. Com
        o ano no alcance, um mês vazio não impede a conversa. */

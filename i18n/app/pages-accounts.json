@@ -1,0 +1,77 @@
+[
+ {
+  "pt": "Nenhuma conta cadastrada ainda. Cadastre a primeira para começar a lançar movimentações.",
+  "tipo": "exato",
+  "en": "No accounts yet. Add the first one to start recording transactions.",
+  "fr": "Aucun compte pour l'instant. Ajoutez le premier pour commencer à saisir des mouvements.",
+  "es": "Ninguna cuenta registrada todavía. Agrega la primera para empezar a registrar movimientos."
+ },
+ {
+  "pt": "Explore o baralho e escolha uma conta para abrir o extrato.",
+  "tipo": "exato",
+  "en": "Browse the deck and choose an account to open its statement.",
+  "fr": "Parcourez le paquet et choisissez un compte pour ouvrir son relevé.",
+  "es": "Explora el mazo y elige una cuenta para abrir su extracto."
+ },
+ {
+  "pt": "Ver extrato",
+  "tipo": "exato",
+  "en": "See statement",
+  "fr": "Voir le relevé",
+  "es": "Ver extracto"
+ },
+ {
+  "pt": "✎ Editar",
+  "tipo": "exato",
+  "en": "✎ Edit",
+  "fr": "✎ Modifier",
+  "es": "✎ Editar"
+ },
+ {
+  "pt": "Saldo somado em contas:",
+  "tipo": "exato",
+  "en": "Combined account balance:",
+  "fr": "Solde cumulé des comptes :",
+  "es": "Saldo sumado en cuentas:"
+ },
+ {
+  "pt": "Cadastre uma conta para ver o extrato.",
+  "tipo": "exato",
+  "en": "Add an account to see its statement.",
+  "fr": "Ajoutez un compte pour voir le relevé.",
+  "es": "Agrega una cuenta para ver el extracto."
+ },
+ {
+  "pt": "Sem movimentações confirmadas entre {0} e {1}.",
+  "tipo": "padrao",
+  "en": "No confirmed transactions between {0} and {1}.",
+  "fr": "Aucun mouvement confirmé entre le {0} et le {1}.",
+  "es": "Sin movimientos confirmados entre el {0} y el {1}."
+ },
+ {
+  "pt": "num {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Nenhum cartão cadastrado. Cadastre para acompanhar faturas, limite e vencimentos.",
+  "tipo": "exato",
+  "en": "No cards yet. Add one to track bills, limits and due dates.",
+  "fr": "Aucune carte enregistrée. Ajoutez-en une pour suivre relevés, plafond et échéances.",
+  "es": "Ninguna tarjeta registrada. Agrega una para seguir facturas, límite y vencimientos."
+ },
+ {
+  "pt": "Explore o baralho e escolha um cartão para abrir a fatura.",
+  "tipo": "exato",
+  "en": "Browse the deck and choose a card to open its bill.",
+  "fr": "Parcourez le paquet et choisissez une carte pour ouvrir son relevé.",
+  "es": "Explora el mazo y elige una tarjeta para abrir su factura."
+ },
+ {
+  "pt": "Comprometido em faturas em aberto:",
+  "tipo": "exato",
+  "en": "Committed on open bills:",
+  "fr": "Engagé sur les relevés en cours :",
+  "es": "Comprometido en facturas pendientes:"
+ }
+]

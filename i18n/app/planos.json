@@ -1,0 +1,367 @@
+[
+ {
+  "pt": "Semente",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Plante o hábito de olhar o mês.",
+  "tipo": "exato",
+  "en": "Plant the habit of checking your month.",
+  "fr": "Plantez l'habitude de regarder votre mois.",
+  "es": "Planta el hábito de mirar tu mes."
+ },
+ {
+  "pt": "Coqueiro",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Raiz firme: contas, cartões e histórico.",
+  "tipo": "exato",
+  "en": "Firm roots: accounts, cards and history.",
+  "fr": "Des racines solides : comptes, cartes et historique.",
+  "es": "Raíz firme: cuentas, tarjetas e historial."
+ },
+ {
+  "pt": "Tudo o que o OAZE faz, sem teto no dia a dia.",
+  "tipo": "exato",
+  "en": "Everything OAZE does, with no ceiling on your day-to-day.",
+  "fr": "Tout ce que fait OAZE, sans plafond au quotidien.",
+  "es": "Todo lo que hace OAZE, sin techo en el día a día."
+ },
+ {
+  "pt": "US$",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Ilimitado",
+  "tipo": "exato",
+  "en": "Unlimited",
+  "fr": "Illimité",
+  "es": "Ilimitado"
+ },
+ {
+  "pt": "{0} de {1}{2}",
+  "tipo": "padrao",
+  "en": "{0} of {1}{2}",
+  "fr": "{0} sur {1}{2}",
+  "es": "{0} de {1}{2}"
+ },
+ {
+  "pt": "Movimentações por mês",
+  "tipo": "exato",
+  "en": "Transactions per month",
+  "fr": "Mouvements par mois",
+  "es": "Movimientos por mes"
+ },
+ {
+  "pt": "Categorias personalizadas",
+  "tipo": "exato",
+  "en": "Custom categories",
+  "fr": "Catégories personnalisées",
+  "es": "Categorías personalizadas"
+ },
+ {
+  "pt": "Orçamentos ativos",
+  "tipo": "exato",
+  "en": "Active budgets",
+  "fr": "Budgets actifs",
+  "es": "Presupuestos activos"
+ },
+ {
+  "pt": "Metas ativas",
+  "tipo": "exato",
+  "en": "Active goals",
+  "fr": "Objectifs actifs",
+  "es": "Metas activas"
+ },
+ {
+  "pt": "Histórico disponível",
+  "tipo": "exato",
+  "en": "History available",
+  "fr": "Historique disponible",
+  "es": "Historial disponible"
+ },
+ {
+  "pt": "Consultas ao UGLEZ por mês",
+  "tipo": "exato",
+  "en": "UGLEZ questions per month",
+  "fr": "Questions à UGLEZ par mois",
+  "es": "Consultas a UGLEZ por mes"
+ },
+ {
+  "pt": "UGLEZ flutuante no app",
+  "tipo": "exato",
+  "en": "Floating UGLEZ in the app",
+  "fr": "UGLEZ flottant dans l'app",
+  "es": "UGLEZ flotante en la app"
+ },
+ {
+  "pt": "Comparação entre meses",
+  "tipo": "exato",
+  "en": "Month-to-month comparison",
+  "fr": "Comparaison entre les mois",
+  "es": "Comparación entre meses"
+ },
+ {
+  "pt": "Comparação anual",
+  "tipo": "exato",
+  "en": "Yearly comparison",
+  "fr": "Comparaison annuelle",
+  "es": "Comparación anual"
+ },
+ {
+  "pt": "Tendências, simulações e projeções",
+  "tipo": "exato",
+  "en": "Trends, simulations and projections",
+  "fr": "Tendances, simulations et projections",
+  "es": "Tendencias, simulaciones y proyecciones"
+ },
+ {
+  "pt": "Calendário financeiro",
+  "tipo": "exato",
+  "en": "Financial calendar",
+  "fr": "Calendrier financier",
+  "es": "Calendario financiero"
+ },
+ {
+  "pt": "Cartões em dólar, euro e outras moedas",
+  "tipo": "exato",
+  "en": "Cards in dollars, euros and other currencies",
+  "fr": "Cartes en dollar, en euro et dans d'autres devises",
+  "es": "Tarjetas en dólar, euro y otras monedas"
+ },
+ {
+  "pt": "Exportar em CSV",
+  "tipo": "exato",
+  "en": "Export to CSV",
+  "fr": "Exporter en CSV",
+  "es": "Exportar en CSV"
+ },
+ {
+  "pt": "Exportar em PDF",
+  "tipo": "exato",
+  "en": "Export to PDF",
+  "fr": "Exporter en PDF",
+  "es": "Exportar en PDF"
+ },
+ {
+  "pt": "Acesso antecipado a novidades",
+  "tipo": "exato",
+  "en": "Early access to new features",
+  "fr": "Accès anticipé aux nouveautés",
+  "es": "Acceso anticipado a novedades"
+ },
+ {
+  "pt": "Atendimento prioritário",
+  "tipo": "exato",
+  "en": "Priority support",
+  "fr": "Assistance prioritaire",
+  "es": "Atención prioritaria"
+ },
+ {
+  "pt": "1 espaço financeiro, 2 contas e 3 cartões",
+  "tipo": "exato",
+  "en": "1 financial space, 2 accounts and 3 cards",
+  "fr": "1 espace financier, 2 comptes et 3 cartes",
+  "es": "1 espacio financiero, 2 cuentas y 3 tarjetas"
+ },
+ {
+  "pt": "Até 100 movimentações por mês",
+  "tipo": "exato",
+  "en": "Up to 100 transactions per month",
+  "fr": "Jusqu'à 100 mouvements par mois",
+  "es": "Hasta 100 movimientos por mes"
+ },
+ {
+  "pt": "1 orçamento, 1 meta e 3 recorrências",
+  "tipo": "exato",
+  "en": "1 budget, 1 goal and 3 recurring items",
+  "fr": "1 budget, 1 objectif et 3 récurrences",
+  "es": "1 presupuesto, 1 meta y 3 recurrentes"
+ },
+ {
+  "pt": "Histórico dos últimos 3 meses",
+  "tipo": "exato",
+  "en": "History of the last 3 months",
+  "fr": "Historique des 3 derniers mois",
+  "es": "Historial de los últimos 3 meses"
+ },
+ {
+  "pt": "10 consultas ao UGLEZ por mês, na página do UGLEZ",
+  "tipo": "exato",
+  "en": "10 UGLEZ questions per month, on the UGLEZ page",
+  "fr": "10 questions à UGLEZ par mois, sur la page UGLEZ",
+  "es": "10 consultas a UGLEZ por mes, en la página de UGLEZ"
+ },
+ {
+  "pt": "10 contas e 10 cartões",
+  "tipo": "exato",
+  "en": "10 accounts and 10 cards",
+  "fr": "10 comptes et 10 cartes",
+  "es": "10 cuentas y 10 tarjetas"
+ },
+ {
+  "pt": "Até 1.000 movimentações por mês",
+  "tipo": "exato",
+  "en": "Up to 1,000 transactions per month",
+  "fr": "Jusqu'à 1 000 mouvements par mois",
+  "es": "Hasta 1.000 movimientos por mes"
+ },
+ {
+  "pt": "20 orçamentos, 10 metas e 30 recorrências",
+  "tipo": "exato",
+  "en": "20 budgets, 10 goals and 30 recurring items",
+  "fr": "20 budgets, 10 objectifs et 30 récurrences",
+  "es": "20 presupuestos, 10 metas y 30 recurrentes"
+ },
+ {
+  "pt": "Histórico de 24 meses e comparação entre meses",
+  "tipo": "exato",
+  "en": "24 months of history and month-to-month comparison",
+  "fr": "24 mois d'historique et comparaison entre les mois",
+  "es": "24 meses de historial y comparación entre meses"
+ },
+ {
+  "pt": "Exportar em CSV e PDF, calendário financeiro",
+  "tipo": "exato",
+  "en": "Export to CSV and PDF, financial calendar",
+  "fr": "Export en CSV et PDF, calendrier financier",
+  "es": "Exportar en CSV y PDF, calendario financiero"
+ },
+ {
+  "pt": "Cartões internacionais em dólar, euro e outras moedas",
+  "tipo": "exato",
+  "en": "International cards in dollars, euros and other currencies",
+  "fr": "Cartes internationales en dollar, en euro et dans d'autres devises",
+  "es": "Tarjetas internacionales en dólar, euro y otras monedas"
+ },
+ {
+  "pt": "60 consultas ao UGLEZ por mês, com assistente flutuante",
+  "tipo": "exato",
+  "en": "60 UGLEZ questions per month, with the floating assistant",
+  "fr": "60 questions à UGLEZ par mois, avec l'assistant flottant",
+  "es": "60 consultas a UGLEZ por mes, con asistente flotante"
+ },
+ {
+  "pt": "Até 5 espaços financeiros e 50 contas",
+  "tipo": "exato",
+  "en": "Up to 5 financial spaces and 50 accounts",
+  "fr": "Jusqu'à 5 espaces financiers et 50 comptes",
+  "es": "Hasta 5 espacios financieros y 50 cuentas"
+ },
+ {
+  "pt": "Cartões e movimentações sem limite",
+  "tipo": "exato",
+  "en": "Unlimited cards and transactions",
+  "fr": "Cartes et mouvements illimités",
+  "es": "Tarjetas y movimientos sin límite"
+ },
+ {
+  "pt": "100 orçamentos, 50 metas e 150 recorrências",
+  "tipo": "exato",
+  "en": "100 budgets, 50 goals and 150 recurring items",
+  "fr": "100 budgets, 50 objectifs et 150 récurrences",
+  "es": "100 presupuestos, 50 metas y 150 recurrentes"
+ },
+ {
+  "pt": "Histórico completo e comparação anual",
+  "tipo": "exato",
+  "en": "Full history and yearly comparison",
+  "fr": "Historique complet et comparaison annuelle",
+  "es": "Historial completo y comparación anual"
+ },
+ {
+  "pt": "Tendências, simulações e projeções do UGLEZ",
+  "tipo": "exato",
+  "en": "UGLEZ trends, simulations and projections",
+  "fr": "Tendances, simulations et projections d'UGLEZ",
+  "es": "Tendencias, simulaciones y proyecciones de UGLEZ"
+ },
+ {
+  "pt": "200 consultas ao UGLEZ por mês, com assistente flutuante",
+  "tipo": "exato",
+  "en": "200 UGLEZ questions per month, with the floating assistant",
+  "fr": "200 questions à UGLEZ par mois, avec l'assistant flottant",
+  "es": "200 consultas a UGLEZ por mes, con asistente flotante"
+ },
+ {
+  "pt": "Acesso antecipado e atendimento prioritário",
+  "tipo": "exato",
+  "en": "Early access and priority support",
+  "fr": "Accès anticipé et assistance prioritaire",
+  "es": "Acceso anticipado y atención prioritaria"
+ },
+ {
+  "pt": "Como funciona a cobrança?",
+  "tipo": "exato",
+  "en": "How does billing work?",
+  "fr": "Comment fonctionne la facturation ?",
+  "es": "¿Cómo funciona el cobro?"
+ },
+ {
+  "pt": "No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova a cada mês ou ano, e o plano é liberado quando o pagamento é confirmado.",
+  "tipo": "exato",
+  "en": "By credit card, through Stripe. You type your card on Stripe's secure page — OAZE never sees or stores the number or security code. The subscription renews every month or year, and the plan unlocks once the payment is confirmed.",
+  "fr": "Par carte de crédit, via Stripe. La carte est saisie sur la page sécurisée de Stripe — OAZE ne voit ni ne garde le numéro ou le code de sécurité. L'abonnement se renouvelle chaque mois ou chaque année, et la formule est activée dès que le paiement est confirmé.",
+  "es": "Con tarjeta de crédito, a través de Stripe. La tarjeta se ingresa en la página segura de Stripe — OAZE no ve ni guarda el número ni el código de seguridad. La suscripción se renueva cada mes o año, y el plan se habilita cuando se confirma el pago."
+ },
+ {
+  "pt": "Posso cancelar quando quiser?",
+  "tipo": "exato",
+  "en": "Can I cancel anytime?",
+  "fr": "Puis-je annuler quand je veux ?",
+  "es": "¿Puedo cancelar cuando quiera?"
+ },
+ {
+  "pt": "Sim, em Configurações. A renovação para na hora e você continua com o plano até o fim do período que já pagou.",
+  "tipo": "exato",
+  "en": "Yes, in Settings. Renewal stops right away and you keep the plan until the end of the period you already paid for.",
+  "fr": "Oui, dans Paramètres. Le renouvellement s'arrête tout de suite et vous gardez la formule jusqu'à la fin de la période déjà payée.",
+  "es": "Sí, en Configuración. La renovación se detiene al instante y mantienes el plan hasta el fin del período que ya pagaste."
+ },
+ {
+  "pt": "O que acontece com meus dados se eu voltar para o Semente?",
+  "tipo": "exato",
+  "en": "What happens to my data if I go back to Semente?",
+  "fr": "Que deviennent mes données si je reviens à Semente ?",
+  "es": "¿Qué pasa con mis datos si vuelvo a Semente?"
+ },
+ {
+  "pt": "Nada é apagado. Se você tiver mais contas ou cartões do que o Semente permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.",
+  "tipo": "exato",
+  "en": "Nothing is deleted. If you have more accounts or cards than Semente allows, they stay visible and usable — what changes is that you can't create new ones until you're within the limit or subscribe again.",
+  "fr": "Rien n'est supprimé. Si vous avez plus de comptes ou de cartes que Semente ne le permet, ils restent visibles et utilisables — ce qui change, c'est que vous ne pouvez pas en créer de nouveaux tant que vous n'êtes pas dans la limite ou réabonné.",
+  "es": "No se borra nada. Si tienes más cuentas o tarjetas de las que permite Semente, siguen visibles y utilizables — lo que cambia es que no creas nuevas hasta quedar dentro del límite o volver a suscribirte."
+ },
+ {
+  "pt": "Meus dados financeiros são enviados para a inteligência artificial?",
+  "tipo": "exato",
+  "en": "Is my financial data sent to the AI?",
+  "fr": "Mes données financières sont-elles envoyées à l'intelligence artificielle ?",
+  "es": "¿Mis datos financieros se envían a la inteligencia artificial?"
+ },
+ {
+  "pt": "Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela do UGLEZ mostra o que segue junto antes de você enviar.",
+  "tipo": "exato",
+  "en": "Only an aggregated summary of the month you're looking at — totals, combined categories and goals. Never the list of entries, account names or your email. The UGLEZ screen shows what goes along before you send.",
+  "fr": "Seulement un résumé agrégé du mois que vous regardez — totaux, catégories consolidées et objectifs. Jamais la liste des écritures, les noms de comptes ni votre e-mail. L'écran d'UGLEZ montre ce qui part avant l'envoi.",
+  "es": "Solo un resumen agregado del mes que estás mirando — totales, categorías consolidadas y metas. Nunca la lista de movimientos, nombres de cuentas ni tu correo. La pantalla de UGLEZ muestra lo que se envía antes de que lo mandes."
+ },
+ {
+  "pt": "Preciso de conta para usar o OAZE?",
+  "tipo": "exato",
+  "en": "Do I need an account to use OAZE?",
+  "fr": "Ai-je besoin d'un compte pour utiliser OAZE ?",
+  "es": "¿Necesito una cuenta para usar OAZE?"
+ },
+ {
+  "pt": "Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com o UGLEZ.",
+  "tipo": "exato",
+  "en": "No. The dashboard works on this device without any account. An account lets you see the same data on your computer and phone, and talk to UGLEZ.",
+  "fr": "Non. Le tableau de bord fonctionne sur cet appareil sans aucun compte. Un compte sert à voir les mêmes données sur l'ordinateur et le téléphone, et à discuter avec UGLEZ.",
+  "es": "No. El panel funciona en este dispositivo sin ninguna cuenta. La cuenta sirve para ver los mismos datos en la computadora y el celular, y para conversar con UGLEZ."
+ }
+]

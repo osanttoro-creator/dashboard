@@ -1,0 +1,142 @@
+[
+ {
+  "pt": "Com {0} {1} de histórico ainda não dá para projetar um ano — um mês isolado não mostra tendência. A partir de três, a previsão aparece aqui.",
+  "tipo": "padrao",
+  "en": "With {0} {1} of history it's still too early to project a year — a single month doesn't show a trend. From three on, the forecast shows up here.",
+  "fr": "Avec {0} {1} d'historique, il est encore trop tôt pour projeter une année — un mois isolé ne montre pas de tendance. À partir de trois, la prévision apparaît ici.",
+  "es": "Con {0} {1} de historial todavía no se puede proyectar un año — un mes aislado no muestra tendencia. A partir de tres, la previsión aparece aquí."
+ },
+ {
+  "pt": "Média de {0} por mês nos últimos {1} meses com movimentação. É uma projeção do ritmo atual, não uma promessa.",
+  "tipo": "padrao",
+  "en": "Average of {0} per month over the last {1} months with activity. It's a projection of the current pace, not a promise.",
+  "fr": "Moyenne de {0} par mois sur les {1} derniers mois avec des mouvements. C'est une projection du rythme actuel, pas une promesse.",
+  "es": "Promedio de {0} por mes en los últimos {1} meses con movimientos. Es una proyección del ritmo actual, no una promesa."
+ },
+ {
+  "pt": "meses",
+  "tipo": "exato",
+  "en": "months",
+  "fr": "mois",
+  "es": "meses"
+ },
+ {
+  "pt": "{0} de {1}, sem eventos",
+  "tipo": "padrao",
+  "en": "{1} {0}, no events",
+  "fr": "{0} {1}, aucun événement",
+  "es": "{0} de {1}, sin eventos"
+ },
+ {
+  "pt": "{0} de {1}, {2} evento(s)",
+  "tipo": "padrao",
+  "en": "{1} {0}, {2} event(s)",
+  "fr": "{0} {1}, {2} événement(s)",
+  "es": "{0} de {1}, {2} evento(s)"
+ },
+ {
+  "pt": "Espaço \"{0}\"",
+  "tipo": "padrao",
+  "en": "Space \"{0}\"",
+  "fr": "Espace « {0} »",
+  "es": "Espacio \"{0}\""
+ },
+ {
+  "pt": "Espaço \"{0}\" · {1} lançamentos · {2} contas · {3} cartões",
+  "tipo": "padrao",
+  "en": "Space \"{0}\" · {1} entries · {2} accounts · {3} cards",
+  "fr": "Espace « {0} » · {1} écritures · {2} comptes · {3} cartes",
+  "es": "Espacio \"{0}\" · {1} movimientos · {2} cuentas · {3} tarjetas"
+ },
+ {
+  "pt": "Sua sessão expirou. Entre novamente.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again.",
+  "fr": "Votre session a expiré. Reconnectez-vous.",
+  "es": "Tu sesión expiró. Entra de nuevo."
+ },
+ {
+  "pt": "Requisição inválida.",
+  "tipo": "exato",
+  "en": "Invalid request.",
+  "fr": "Requête invalide.",
+  "es": "Solicitud inválida."
+ },
+ {
+  "pt": "Escreva uma pergunta.",
+  "tipo": "exato",
+  "en": "Write a question.",
+  "fr": "Écrivez une question.",
+  "es": "Escribe una pregunta."
+ },
+ {
+  "pt": "Pergunta muito longa.",
+  "tipo": "exato",
+  "en": "Question too long.",
+  "fr": "Question trop longue.",
+  "es": "Pregunta demasiado larga."
+ },
+ {
+  "pt": "Há dados demais neste período para analisar de uma vez.",
+  "tipo": "exato",
+  "en": "There is too much data in this period to analyze at once.",
+  "fr": "Il y a trop de données sur cette période pour tout analyser d'un coup.",
+  "es": "Hay demasiados datos en este período para analizar de una vez."
+ },
+ {
+  "pt": "Muitas perguntas em pouco tempo. Espere um pouco e tente novamente.",
+  "tipo": "exato",
+  "en": "Too many questions in a short time. Wait a bit and try again.",
+  "fr": "Trop de questions en peu de temps. Patientez un peu et réessayez.",
+  "es": "Demasiadas preguntas en poco tiempo. Espera un poco e inténtalo de nuevo."
+ },
+ {
+  "pt": "Você atingiu o limite de perguntas do seu plano.",
+  "tipo": "exato",
+  "en": "You've reached your plan's question limit.",
+  "fr": "Vous avez atteint la limite de questions de votre formule.",
+  "es": "Alcanzaste el límite de preguntas de tu plan."
+ },
+ {
+  "pt": "O assistente está temporariamente indisponível.",
+  "tipo": "exato",
+  "en": "The assistant is temporarily unavailable.",
+  "fr": "L'assistant est temporairement indisponible.",
+  "es": "El asistente no está disponible temporalmente."
+ },
+ {
+  "pt": "O assistente não conseguiu responder agora. Tente de novo em instantes.",
+  "tipo": "exato",
+  "en": "The assistant couldn't answer right now. Try again in a moment.",
+  "fr": "L'assistant n'a pas pu répondre pour le moment. Réessayez dans un instant.",
+  "es": "El asistente no pudo responder ahora. Inténtalo de nuevo en unos instantes."
+ },
+ {
+  "pt": "O assistente não retornou resposta. Tente reformular a pergunta.",
+  "tipo": "exato",
+  "en": "The assistant returned no answer. Try rephrasing the question.",
+  "fr": "L'assistant n'a renvoyé aucune réponse. Essayez de reformuler la question.",
+  "es": "El asistente no devolvió respuesta. Intenta reformular la pregunta."
+ },
+ {
+  "pt": "Subiu {0} em 6 meses",
+  "tipo": "padrao",
+  "en": "Up {0} in 6 months",
+  "fr": "En hausse de {0} en 6 mois",
+  "es": "Subió {0} en 6 meses"
+ },
+ {
+  "pt": "Caiu {0} em 6 meses",
+  "tipo": "padrao",
+  "en": "Down {0} in 6 months",
+  "fr": "En baisse de {0} en 6 mois",
+  "es": "Bajó {0} en 6 meses"
+ },
+ {
+  "pt": "visitante",
+  "tipo": "exato",
+  "en": "visitor",
+  "fr": "visiteur",
+  "es": "visitante"
+ }
+]

@@ -1,0 +1,381 @@
+[
+ {
+  "pt": "Md",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "mil M",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Janeiro",
+  "tipo": "exato",
+  "en": "January",
+  "fr": "Janvier",
+  "es": "Enero"
+ },
+ {
+  "pt": "Fevereiro",
+  "tipo": "exato",
+  "en": "February",
+  "fr": "Février",
+  "es": "Febrero"
+ },
+ {
+  "pt": "Março",
+  "tipo": "exato",
+  "en": "March",
+  "fr": "Mars",
+  "es": "Marzo"
+ },
+ {
+  "pt": "Abril",
+  "tipo": "exato",
+  "en": "April",
+  "fr": "Avril",
+  "es": "Abril"
+ },
+ {
+  "pt": "Maio",
+  "tipo": "exato",
+  "en": "May",
+  "fr": "Mai",
+  "es": "Mayo"
+ },
+ {
+  "pt": "Junho",
+  "tipo": "exato",
+  "en": "June",
+  "fr": "Juin",
+  "es": "Junio"
+ },
+ {
+  "pt": "Julho",
+  "tipo": "exato",
+  "en": "July",
+  "fr": "Juillet",
+  "es": "Julio"
+ },
+ {
+  "pt": "Agosto",
+  "tipo": "exato",
+  "en": "August",
+  "fr": "Août",
+  "es": "Agosto"
+ },
+ {
+  "pt": "Setembro",
+  "tipo": "exato",
+  "en": "September",
+  "fr": "Septembre",
+  "es": "Septiembre"
+ },
+ {
+  "pt": "Outubro",
+  "tipo": "exato",
+  "en": "October",
+  "fr": "Octobre",
+  "es": "Octubre"
+ },
+ {
+  "pt": "Novembro",
+  "tipo": "exato",
+  "en": "November",
+  "fr": "Novembre",
+  "es": "Noviembre"
+ },
+ {
+  "pt": "Dezembro",
+  "tipo": "exato",
+  "en": "December",
+  "fr": "Décembre",
+  "es": "Diciembre"
+ },
+ {
+  "pt": "January",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "February",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "March",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "April",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "May",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "June",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "July",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "August",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "September",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "October",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "November",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "December",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Jan",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Feb",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mar",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Apr",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Jun",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Jul",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Aug",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sep",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Oct",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nov",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Dec",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Janvier",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Février",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mars",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Avril",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mai",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Juin",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Juillet",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Août",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Septembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Octobre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Novembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Décembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "févr",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "août",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "déc",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Enero",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Febrero",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Marzo",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mayo",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Junio",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Julio",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Septiembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Octubre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Noviembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Diciembre",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "sáb",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sun",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mon",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Tue",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Wed",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Thu",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Fri",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sat",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "mié",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

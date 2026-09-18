@@ -100,7 +100,7 @@
     rows.slice().reverse().forEach((r) => {
       tbody.appendChild(el('tr', {}, [
         el('td', { text: U.fmtDateBR(r.date) }),
-        el('td', { text: r.desc }),
+        el('td', { text: r.desc, translate: 'no' }),
         el('td', { text: r.cat }),
         el('td', { class: 'num ' + U.signClass(r.delta), text: (r.delta >= 0 ? '+ ' : '− ') + U.fmtBRL(Math.abs(r.delta)) }),
         el('td', { class: 'num', text: U.fmtBRL(r.balance) })

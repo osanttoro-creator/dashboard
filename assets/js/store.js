@@ -20,6 +20,11 @@
 (function (global) {
   'use strict';
 
+  /* O que o app cria sozinho — categorias prontas, o espaço "Pessoal" —
+     nasce na língua de quem está começando. Depois de criado é dado da
+     pessoa: fica como está, mesmo se ela trocar a língua da tela. */
+  const tr = (texto) => (global.I18n ? global.I18n.t(texto) : texto);
+
   const KEY = 'financas.v1';
   const VERSION = 1;
 
@@ -136,12 +141,17 @@
   /* Nomes das categorias que já vêm no app. O limite de
      "categorias personalizadas" do plano não conta estas — cobrar
      pelo padrão do produto seria cobrar por nada. */
-  const NOMES_PADRAO = DEFAULT_EXPENSE_CATS.map((c) => c[0])
+  const NOMES_PADRAO_PT = DEFAULT_EXPENSE_CATS.map((c) => c[0])
     .concat(DEFAULT_INCOME_CATS.map((c) => c[0]));
+  /* na língua em que um espaço novo nasceria agora; em português é a
+     mesma lista de sempre. As duas existem porque um espaço criado em
+     português continua com esses nomes se a tela mudar de língua. */
+  const NOMES_PADRAO = NOMES_PADRAO_PT.map(tr);
 
   const Store = {
     PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES, MOEDAS,
-    CATEGORIAS_PADRAO: NOMES_PADRAO
+    CATEGORIAS_PADRAO: NOMES_PADRAO,
+    CATEGORIAS_PADRAO_PT: NOMES_PADRAO_PT
   };
 
   /** Nome da cor para rótulo e dica; o hex é o fallback honesto. */
@@ -156,16 +166,16 @@
   function makeCategories() {
     const out = [];
     DEFAULT_EXPENSE_CATS.forEach(([name, color, icon]) =>
-      out.push({ id: U.uid('cat'), name, kind: 'expense', color, icon }));
+      out.push({ id: U.uid('cat'), name: tr(name), kind: 'expense', color, icon }));
     DEFAULT_INCOME_CATS.forEach(([name, color, icon]) =>
-      out.push({ id: U.uid('cat'), name, kind: 'income', color, icon }));
+      out.push({ id: U.uid('cat'), name: tr(name), kind: 'income', color, icon }));
     return out;
   }
 
   function makeProfile(name) {
     return {
       id: U.uid('prf'),
-      name: name || 'Pessoal',
+      name: name || tr('Pessoal'),
       createdAt: U.todayISO(),
       updatedAt: 0,
       accounts: [],
@@ -180,7 +190,7 @@
   }
 
   function makeInitialState() {
-    const pessoal = makeProfile('Pessoal');
+    const pessoal = makeProfile(tr('Pessoal'));
     const pj = makeProfile('PJ / Autônomo');
     pessoal.accounts.push({
       id: U.uid('acc'), name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente',
@@ -476,7 +486,7 @@
       Store.storageOK = false;
       if (!warnedOnce && global.UI && UI.toast) {
         warnedOnce = true;
-        UI.toast('Não foi possível salvar neste navegador (armazenamento cheio ou bloqueado). Use "↓ Backup" para não perder o trabalho.', 'error', 9000);
+        UI.toast('Não foi possível salvar neste navegador (armazenamento cheio ou bloqueado). Entre na sua conta para não perder o trabalho.', 'error', 9000);
       }
       return false;
     }

@@ -108,7 +108,7 @@
 
         el('div', { class: 'bud-main' }, [
           el('div', { class: 'bud-top' }, [
-            el('span', { class: 'bud-name', text: r.nome }),
+            el('span', { class: 'bud-name', text: r.nome, translate: 'no' }),
             r.orfa ? UI.badge('categoria removida', 'late') : null,
             el('span', { class: 'bud-val' }, [
               el('strong', { class: r.gasto > r.limite ? 'val-neg' : '', text: U.fmtBRL(r.gasto) }),
@@ -137,7 +137,7 @@
             onclick: async () => {
               const ok = await UI.confirm({
                 title: 'Remover limite',
-                message: `Remover o limite de <strong>${U.escape(r.nome)}</strong>? Os lançamentos não são afetados.`,
+                message: `Remover o limite de <strong translate="no">${U.escape(r.nome)}</strong>? Os lançamentos não são afetados.`,
                 confirmLabel: 'Remover', danger: true
               });
               if (ok) { Store.budgets.remove(r.id); UI.toast('Limite removido.'); }
@@ -163,7 +163,7 @@
     const atual = categoryId || cats[0].id;
 
     const sel = el('select', { class: 'input' });
-    cats.forEach((c) => sel.appendChild(el('option', { value: c.id, text: c.name })));
+    cats.forEach((c) => sel.appendChild(el('option', { value: c.id, text: c.name, translate: 'no' })));
     sel.value = atual;
     if (categoryId) sel.disabled = true;
 

@@ -9,11 +9,24 @@
 
   const U = {};
 
+  /* ---------------- língua ----------------
+     idioma.js carrega antes deste arquivo e decide a língua da tela.
+     Em português nada muda — cada ramo abaixo que não é 'pt' existe só
+     para as outras três. O dinheiro continua em real: o que muda é a
+     pontuação (R$1,234.56 em inglês), não a moeda do espaço. */
+  const LANG = (global.I18n && global.I18n.lang) || 'pt';
+  const LOCALE = (global.I18n && global.I18n.locale) || 'pt-BR';
+  U.LANG = LANG;
+  U.LOCALE = LOCALE;
+
   /* ---------------- números / moeda ---------------- */
 
-  const nfBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-  const nfNum = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const nfInt = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
+  /* Fora do português, o símbolo curto: o espanhol escreveria "BRL" em
+     vez de "R$", e quem lê a tela reconhece o símbolo, não o código. */
+  const EXIBICAO = LANG === 'pt' ? {} : { currencyDisplay: 'narrowSymbol' };
+  const nfBRL = new Intl.NumberFormat(LOCALE, Object.assign({ style: 'currency', currency: 'BRL' }, EXIBICAO));
+  const nfNum = new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const nfInt = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 });
 
   U.fmtBRL = (n) => nfBRL.format(Number.isFinite(+n) ? +n : 0);
   /* Moeda do cartão internacional. O formato continua o brasileiro
@@ -24,22 +37,31 @@
     const m = /^[A-Z]{3}$/.test(moeda || '') ? moeda : 'BRL';
     if (m === 'BRL') return U.fmtBRL(n);
     if (!nfMoeda[m]) {
-      try { nfMoeda[m] = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: m }); }
+      try { nfMoeda[m] = new Intl.NumberFormat(LOCALE, Object.assign({ style: 'currency', currency: m }, EXIBICAO)); }
       catch (e) { nfMoeda[m] = { format: (v) => m + ' ' + nfNum.format(v) }; }
     }
     return nfMoeda[m].format(Number.isFinite(+n) ? +n : 0);
   };
   U.fmtNum = (n) => nfNum.format(Number.isFinite(+n) ? +n : 0);
   U.fmtInt = (n) => nfInt.format(Number.isFinite(+n) ? +n : 0);
-  U.fmtPct = (n, d = 1) => (Number.isFinite(+n) ? (+n).toFixed(d).replace('.', ',') : '0,0') + '%';
+  const VIRGULA = LANG !== 'en';
+  U.fmtPct = (n, d = 1) => {
+    const t = Number.isFinite(+n) ? (+n).toFixed(d) : (0).toFixed(d);
+    return (VIRGULA ? t.replace('.', ',') : t) + (LANG === 'fr' ? '\u00a0%' : '%');
+  };
 
   /** Valor compacto para eixos e rótulos: 12,3 mil / 4,2 mi */
+  const SUFIXOS = {
+    pt: [' bi', ' mi', ' mil'], en: ['B', 'M', 'K'],
+    fr: ['\u00a0Md', '\u00a0M', '\u00a0k'], es: [' mil M', ' M', ' mil']
+  }[LANG] || [' bi', ' mi', ' mil'];
   U.fmtCompact = function (n) {
     const v = Math.abs(+n || 0);
     const s = n < 0 ? '-' : '';
-    if (v >= 1e9) return s + nfNum.format(v / 1e9).replace(',00', '') + ' bi';
-    if (v >= 1e6) return s + nfNum.format(v / 1e6).replace(',00', '') + ' mi';
-    if (v >= 1e3) return s + nfInt.format(v / 1e3) + ' mil';
+    const semZeros = (t) => t.replace(/[.,]00$/, '');
+    if (v >= 1e9) return s + semZeros(nfNum.format(v / 1e9)) + SUFIXOS[0];
+    if (v >= 1e6) return s + semZeros(nfNum.format(v / 1e6)) + SUFIXOS[1];
+    if (v >= 1e3) return s + nfInt.format(v / 1e3) + SUFIXOS[2];
     return s + nfInt.format(v);
   };
   U.fmtBRLCompact = (n) => 'R$ ' + U.fmtCompact(n);
@@ -74,11 +96,35 @@
 
   /* ---------------- datas ---------------- */
 
-  const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-  const MONTHS_SHORT = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  /* Escritos à mão, não pedidos ao Intl: o app usa os nomes como
+     rótulo ("Setembro"), no meio de frase (.toLowerCase()) e na
+     referência curta da fatura ("set/26"), e o Intl de cada navegador
+     devolve abreviação diferente ("sept." num, "sep" noutro). */
+  const MESES = {
+    pt: [['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']],
+    en: [['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']],
+    fr: [['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+      ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc']],
+    es: [['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']]
+  };
+  const MONTHS = (MESES[LANG] || MESES.pt)[0];
+  const MONTHS_SHORT = (MESES[LANG] || MESES.pt)[1];
+  /* de domingo a sábado, como Date.getDay() */
+  U.WEEKDAYS_SHORT = {
+    pt: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'],
+    en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    fr: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
+    es: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb']
+  }[LANG] || ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
   U.MONTHS = MONTHS;
   U.MONTHS_SHORT = MONTHS_SHORT;
+  /* No meio da frase o mês vai em minúscula ("no fim de setembro") —
+     em português, francês e espanhol. Em inglês, mês é nome próprio. */
+  U.frase = (s) => (LANG === 'en' ? String(s) : String(s).toLowerCase());
+  U.mesNaFrase = (i) => U.frase(MONTHS[i]);
 
   const pad = (n) => String(n).padStart(2, '0');
   U.pad = pad;
@@ -130,17 +176,26 @@
   U.monthStart = (ym) => { const p = U.ymParts(ym); return U.isoOf(p.y, p.m, 1); };
   U.monthEnd = (ym) => { const p = U.ymParts(ym); return U.isoOf(p.y, p.m, U.daysInMonth(p.y, p.m)); };
 
+  /* "Setembro de 2026" · "September 2026" · "Septembre 2026" · "Septiembre de 2026" */
+  const LIGA_ANO = { pt: ' de ', es: ' de ' }[LANG] || ' ';
   U.monthLabel = (ym, short) => {
     const p = U.ymParts(ym);
-    return short ? `${MONTHS_SHORT[p.m]}/${String(p.y).slice(2)}` : `${MONTHS[p.m]} de ${p.y}`;
+    return short ? `${MONTHS_SHORT[p.m]}/${String(p.y).slice(2)}` : `${MONTHS[p.m]}${LIGA_ANO}${p.y}`;
   };
+  /* O nome ficou (fmtDateBR) porque 60 lugares o chamam; o formato
+     segue a língua: dia primeiro em todas, menos em inglês americano. */
+  const MES_PRIMEIRO = LANG === 'en';
   U.fmtDateBR = (iso) => {
     const d = U.parseISO(iso);
-    return d ? `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}` : '—';
+    if (!d) return '—';
+    return MES_PRIMEIRO
+      ? `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()}`
+      : `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
   };
   U.fmtDayMonth = (iso) => {
     const d = U.parseISO(iso);
-    return d ? `${pad(d.getDate())}/${pad(d.getMonth() + 1)}` : '—';
+    if (!d) return '—';
+    return MES_PRIMEIRO ? `${pad(d.getMonth() + 1)}/${pad(d.getDate())}` : `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
   };
   U.addDaysISO = (iso, n) => {
     const d = U.parseISO(iso);

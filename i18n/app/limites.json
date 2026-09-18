@@ -1,0 +1,191 @@
+[
+ {
+  "pt": "espaço financeiro",
+  "tipo": "exato",
+  "en": "financial space",
+  "fr": "espace financier",
+  "es": "espacio financiero"
+ },
+ {
+  "pt": "espaços financeiros",
+  "tipo": "exato",
+  "en": "financial spaces",
+  "fr": "espaces financiers",
+  "es": "espacios financieros"
+ },
+ {
+  "pt": "movimentação neste mês",
+  "tipo": "exato",
+  "en": "transaction this month",
+  "fr": "mouvement ce mois-ci",
+  "es": "movimiento este mes"
+ },
+ {
+  "pt": "movimentações neste mês",
+  "tipo": "exato",
+  "en": "transactions this month",
+  "fr": "mouvements ce mois-ci",
+  "es": "movimientos este mes"
+ },
+ {
+  "pt": "cartão de crédito",
+  "tipo": "exato",
+  "en": "credit card",
+  "fr": "carte de crédit",
+  "es": "tarjeta de crédito"
+ },
+ {
+  "pt": "cartões de crédito",
+  "tipo": "exato",
+  "en": "credit cards",
+  "fr": "cartes de crédit",
+  "es": "tarjetas de crédito"
+ },
+ {
+  "pt": "categoria personalizada",
+  "tipo": "exato",
+  "en": "custom category",
+  "fr": "catégorie personnalisée",
+  "es": "categoría personalizada"
+ },
+ {
+  "pt": "categorias personalizadas",
+  "tipo": "exato",
+  "en": "custom categories",
+  "fr": "catégories personnalisées",
+  "es": "categorías personalizadas"
+ },
+ {
+  "pt": "orçamento",
+  "tipo": "exato",
+  "en": "budget",
+  "fr": "budget",
+  "es": "presupuesto"
+ },
+ {
+  "pt": "orçamentos",
+  "tipo": "exato",
+  "en": "budgets",
+  "fr": "budgets",
+  "es": "presupuestos"
+ },
+ {
+  "pt": "recorrência",
+  "tipo": "exato",
+  "en": "recurring item",
+  "fr": "récurrence",
+  "es": "recurrente"
+ },
+ {
+  "pt": "recorrências",
+  "tipo": "exato",
+  "en": "recurring items",
+  "fr": "récurrences",
+  "es": "recurrentes"
+ },
+ {
+  "pt": "Você está usando {0} de {1} {2}",
+  "tipo": "padrao",
+  "en": "You're using {0} of {1} {2}",
+  "fr": "Vous utilisez {0} sur {1} {2}",
+  "es": "Estás usando {0} de {1} {2}"
+ },
+ {
+  "pt": "disponíveis no plano {0}.",
+  "tipo": "padrao",
+  "en": "available on the {0} plan.",
+  "fr": "disponibles dans la formule {0}.",
+  "es": "disponibles en el plan {0}."
+ },
+ {
+  "pt": "No {0}, você pode cadastrar",
+  "tipo": "padrao",
+  "en": "On {0}, you can add",
+  "fr": "Avec {0}, vous pouvez ajouter",
+  "es": "En {0}, puedes registrar"
+ },
+ {
+  "pt": "quantos quiser",
+  "tipo": "exato",
+  "en": "as many as you want",
+  "fr": "autant que vous voulez",
+  "es": "cuantos quieras"
+ },
+ {
+  "pt": "até {0}",
+  "tipo": "padrao",
+  "en": "up to {0}",
+  "fr": "jusqu'à {0}",
+  "es": "hasta {0}"
+ },
+ {
+  "pt": "Nada foi apagado, e o resto do app continua funcionando. Você também pode excluir um dos que já existem para abrir espaço.",
+  "tipo": "exato",
+  "en": "Nothing was deleted, and the rest of the app keeps working. You can also delete one of the existing ones to make room.",
+  "fr": "Rien n'a été supprimé, et le reste de l'app continue de fonctionner. Vous pouvez aussi en supprimer un existant pour faire de la place.",
+  "es": "No se borró nada, y el resto de la app sigue funcionando. También puedes eliminar uno de los que ya existen para hacer lugar."
+ },
+ {
+  "pt": "Limite do plano {0}",
+  "tipo": "padrao",
+  "en": "{0} plan limit",
+  "fr": "Limite de la formule {0}",
+  "es": "Límite del plan {0}"
+ },
+ {
+  "pt": "Entendi",
+  "tipo": "exato",
+  "en": "Got it",
+  "fr": "Compris",
+  "es": "Entendido"
+ },
+ {
+  "pt": "Disponível em outro plano",
+  "tipo": "exato",
+  "en": "Available on another plan",
+  "fr": "Disponible dans une autre formule",
+  "es": "Disponible en otro plan"
+ },
+ {
+  "pt": "{0} não está incluído no plano {1}.",
+  "tipo": "padrao",
+  "en": "{0} isn't included in the {1} plan.",
+  "fr": "{0} n'est pas inclus dans la formule {1}.",
+  "es": "{0} no está incluido en el plan {1}."
+ },
+ {
+  "pt": "Está disponível a partir do {0}.",
+  "tipo": "padrao",
+  "en": "It's available from {0} up.",
+  "fr": "Disponible à partir de {0}.",
+  "es": "Está disponible a partir de {0}."
+ },
+ {
+  "pt": "Seus dados continuam intactos e o resto do app segue funcionando normalmente.",
+  "tipo": "exato",
+  "en": "Your data stays intact and the rest of the app keeps working normally.",
+  "fr": "Vos données restent intactes et le reste de l'app fonctionne normalement.",
+  "es": "Tus datos siguen intactos y el resto de la app funciona normalmente."
+ },
+ {
+  "pt": "{0}{1} · ilimitado",
+  "tipo": "padrao",
+  "en": "{0}{1} · unlimited",
+  "fr": "{0}{1} · illimité",
+  "es": "{0}{1} · ilimitado"
+ },
+ {
+  "pt": "{0} de {1}",
+  "tipo": "padrao",
+  "en": "{0} of {1}",
+  "fr": "{0} sur {1}",
+  "es": "{0} de {1}"
+ },
+ {
+  "pt": "{0}: {1} de {2}",
+  "tipo": "padrao",
+  "en": "{0}: {1} of {2}",
+  "fr": "{0} : {1} sur {2}",
+  "es": "{0}: {1} de {2}"
+ }
+]

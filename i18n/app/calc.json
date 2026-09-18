@@ -1,0 +1,254 @@
+[
+ {
+  "pt": "Sem categoria",
+  "tipo": "exato",
+  "en": "Uncategorized",
+  "fr": "Sans catégorie",
+  "es": "Sin categoría"
+ },
+ {
+  "pt": "Outras ({0})",
+  "tipo": "padrao",
+  "en": "Other ({0})",
+  "fr": "Autres ({0})",
+  "es": "Otras ({0})"
+ },
+ {
+  "pt": "Saldo inicial da conta",
+  "tipo": "exato",
+  "en": "Account opening balance",
+  "fr": "Solde initial du compte",
+  "es": "Saldo inicial de la cuenta"
+ },
+ {
+  "pt": "Abertura",
+  "tipo": "exato",
+  "en": "Opening",
+  "fr": "Ouverture",
+  "es": "Apertura"
+ },
+ {
+  "pt": "cartão",
+  "tipo": "exato",
+  "en": "card",
+  "fr": "carte",
+  "es": "tarjeta"
+ },
+ {
+  "pt": "Compra adiantada {0} (fatura de {1})",
+  "tipo": "padrao",
+  "en": "Early-paid purchase {0} ({1} bill)",
+  "fr": "Achat anticipé {0} (relevé de {1})",
+  "es": "Compra adelantada {0} (factura de {1})"
+ },
+ {
+  "pt": "Pagamento fatura {0} ({1})",
+  "tipo": "padrao",
+  "en": "Bill payment {0} ({1})",
+  "fr": "Paiement du relevé {0} ({1})",
+  "es": "Pago de factura {0} ({1})"
+ },
+ {
+  "pt": "Fatura",
+  "tipo": "exato",
+  "en": "Bill",
+  "fr": "Relevé",
+  "es": "Factura"
+ },
+ {
+  "pt": "Aporte: {0}",
+  "tipo": "padrao",
+  "en": "Contribution: {0}",
+  "fr": "Versement : {0}",
+  "es": "Aporte: {0}"
+ },
+ {
+  "pt": "Investimento",
+  "tipo": "exato",
+  "en": "Investment",
+  "fr": "Investissement",
+  "es": "Inversión"
+ },
+ {
+  "pt": "Guardado em {0}",
+  "tipo": "padrao",
+  "en": "Saved in {0}",
+  "fr": "Mis de côté dans {0}",
+  "es": "Guardado en {0}"
+ },
+ {
+  "pt": "Reserva",
+  "tipo": "exato",
+  "en": "Reserve",
+  "fr": "Réserve",
+  "es": "Reserva"
+ },
+ {
+  "pt": "fatura {0}",
+  "tipo": "padrao",
+  "en": "{0} bill",
+  "fr": "relevé {0}",
+  "es": "factura {0}"
+ },
+ {
+  "pt": "Sobra no fim do mês",
+  "tipo": "exato",
+  "en": "Left over at month's end",
+  "fr": "Reste en fin de mois",
+  "es": "Sobra a fin de mes"
+ },
+ {
+  "pt": "Sem receita registrada nos últimos 3 meses",
+  "tipo": "exato",
+  "en": "No income recorded in the last 3 months",
+  "fr": "Aucun revenu enregistré ces 3 derniers mois",
+  "es": "Sin ingresos registrados en los últimos 3 meses"
+ },
+ {
+  "pt": "Você guarda {0} do que recebe",
+  "tipo": "padrao",
+  "en": "You keep {0} of what you earn",
+  "fr": "Vous gardez {0} de ce que vous recevez",
+  "es": "Guardas el {0} de lo que recibes"
+ },
+ {
+  "pt": "Crédito sob controle",
+  "tipo": "exato",
+  "en": "Credit under control",
+  "fr": "Crédit maîtrisé",
+  "es": "Crédito bajo control"
+ },
+ {
+  "pt": "Nenhuma fatura em aberto",
+  "tipo": "exato",
+  "en": "No open bills",
+  "fr": "Aucun relevé en cours",
+  "es": "Ninguna factura pendiente"
+ },
+ {
+  "pt": "Faturas em aberto somam {0} da sua receita",
+  "tipo": "padrao",
+  "en": "Open bills add up to {0} of your income",
+  "fr": "Les relevés en cours représentent {0} de vos revenus",
+  "es": "Las facturas pendientes suman el {0} de tus ingresos"
+ },
+ {
+  "pt": "Reserva de emergência",
+  "tipo": "exato",
+  "en": "Emergency fund",
+  "fr": "Épargne de précaution",
+  "es": "Fondo de emergencia"
+ },
+ {
+  "pt": "Sem gastos para comparar",
+  "tipo": "exato",
+  "en": "No spending to compare",
+  "fr": "Aucune dépense à comparer",
+  "es": "Sin gastos para comparar"
+ },
+ {
+  "pt": "Cobre {0} meses do seu gasto",
+  "tipo": "padrao",
+  "en": "Covers {0} months of your spending",
+  "fr": "Couvre {0} mois de vos dépenses",
+  "es": "Cubre {0} meses de tus gastos"
+ },
+ {
+  "pt": "Patrimônio crescendo",
+  "tipo": "exato",
+  "en": "Growing net worth",
+  "fr": "Patrimoine en hausse",
+  "es": "Patrimonio en crecimiento"
+ },
+ {
+  "pt": "Subiu",
+  "tipo": "exato",
+  "en": "Up",
+  "fr": "En hausse",
+  "es": "Subió"
+ },
+ {
+  "pt": "Caiu",
+  "tipo": "exato",
+  "en": "Down",
+  "fr": "En baisse",
+  "es": "Bajó"
+ },
+ {
+  "pt": "{0}{1} em 6 meses",
+  "tipo": "padrao",
+  "en": "{0}{1} in 6 months",
+  "fr": "{0}{1} en 6 mois",
+  "es": "{0}{1} en 6 meses"
+ },
+ {
+  "pt": "Contas em dia",
+  "tipo": "exato",
+  "en": "Bills up to date",
+  "fr": "Comptes à jour",
+  "es": "Cuentas al día"
+ },
+ {
+  "pt": "Nada vencido e nenhuma conta negativa",
+  "tipo": "exato",
+  "en": "Nothing overdue and no negative accounts",
+  "fr": "Rien en retard et aucun compte à découvert",
+  "es": "Nada vencido y ninguna cuenta en negativo"
+ },
+ {
+  "pt": "{0} fatura(s) vencida(s).",
+  "tipo": "padrao",
+  "en": "{0} overdue bill(s).",
+  "fr": "{0} relevé(s) en retard.",
+  "es": "{0} factura(s) vencida(s)."
+ },
+ {
+  "pt": "{0} conta(s) negativa(s).",
+  "tipo": "padrao",
+  "en": "{0} negative account(s).",
+  "fr": "{0} compte(s) à découvert.",
+  "es": "{0} cuenta(s) en negativo."
+ },
+ {
+  "pt": "Excelente",
+  "tipo": "exato",
+  "en": "Excellent",
+  "fr": "Excellent",
+  "es": "Excelente"
+ },
+ {
+  "pt": "Saudável",
+  "tipo": "exato",
+  "en": "Healthy",
+  "fr": "Sain",
+  "es": "Saludable"
+ },
+ {
+  "pt": "Atenção",
+  "tipo": "exato",
+  "en": "Watch out",
+  "fr": "Attention",
+  "es": "Atención"
+ },
+ {
+  "pt": "Frágil",
+  "tipo": "exato",
+  "en": "Fragile",
+  "fr": "Fragile",
+  "es": "Frágil"
+ },
+ {
+  "pt": "Fatura {0}",
+  "tipo": "padrao",
+  "en": "Bill {0}",
+  "fr": "Relevé {0}",
+  "es": "Factura {0}"
+ },
+ {
+  "pt": "Cartão de crédito",
+  "tipo": "exato",
+  "en": "Credit card",
+  "fr": "Carte de crédit",
+  "es": "Tarjeta de crédito"
+ }
+]

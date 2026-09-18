@@ -1,0 +1,29 @@
+[
+ {
+  "pt": "toast{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "btn {0}{1}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Confirmar",
+  "tipo": "exato",
+  "en": "Confirm",
+  "fr": "Confirmer",
+  "es": "Confirmar"
+ },
+ {
+  "pt": "kpi{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "badge {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

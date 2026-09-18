@@ -1,0 +1,310 @@
+[
+ {
+  "pt": "Nenhuma meta ainda",
+  "tipo": "exato",
+  "en": "No goals yet",
+  "fr": "Aucun objectif pour l'instant",
+  "es": "Ninguna meta todavía"
+ },
+ {
+  "pt": "Uma reserva de emergência, uma viagem, a troca do carro. Defina o alvo e vá guardando.",
+  "tipo": "exato",
+  "en": "An emergency fund, a trip, a new car. Set the target and keep saving.",
+  "fr": "Une épargne de précaution, un voyage, une nouvelle voiture. Fixez la cible et mettez de côté.",
+  "es": "Un fondo de emergencia, un viaje, cambiar el auto. Define el objetivo y ve ahorrando."
+ },
+ {
+  "pt": "{0} de {1} —",
+  "tipo": "padrao",
+  "en": "{0} of {1} —",
+  "fr": "{0} sur {1} —",
+  "es": "{0} de {1} —"
+ },
+ {
+  "pt": "sem prazo",
+  "tipo": "exato",
+  "en": "no deadline",
+  "fr": "sans échéance",
+  "es": "sin plazo"
+ },
+ {
+  "pt": "Concluída",
+  "tipo": "exato",
+  "en": "Done",
+  "fr": "Atteint",
+  "es": "Cumplida"
+ },
+ {
+  "pt": "Faltam {0}",
+  "tipo": "padrao",
+  "en": "{0} to go",
+  "fr": "Il manque {0}",
+  "es": "Faltan {0}"
+ },
+ {
+  "pt": "Alvo alcançado",
+  "tipo": "exato",
+  "en": "Target reached",
+  "fr": "Cible atteinte",
+  "es": "Objetivo alcanzado"
+ },
+ {
+  "pt": "Guarde {0} por mês para chegar no prazo",
+  "tipo": "padrao",
+  "en": "Save {0} a month to hit the deadline",
+  "fr": "Mettez {0} de côté par mois pour tenir l'échéance",
+  "es": "Ahorra {0} por mes para llegar a tiempo"
+ },
+ {
+  "pt": "Você planejou {0} todo dia {1} —",
+  "tipo": "padrao",
+  "en": "You planned {0} every month on day {1} —",
+  "fr": "Vous avez prévu {0} chaque mois le {1} —",
+  "es": "Planeaste {0} cada día {1} —"
+ },
+ {
+  "pt": "{0} a menos do que o prazo pede",
+  "tipo": "padrao",
+  "en": "{0} less than the deadline needs",
+  "fr": "{0} de moins que ce qu'exige l'échéance",
+  "es": "{0} menos de lo que pide el plazo"
+ },
+ {
+  "pt": "Você planejou {0} todo dia {1}",
+  "tipo": "padrao",
+  "en": "You planned {0} every month on day {1}",
+  "fr": "Vous avez prévu {0} chaque mois le {1}",
+  "es": "Planeaste {0} cada día {1}"
+ },
+ {
+  "pt": "+ Guardar",
+  "tipo": "exato",
+  "en": "+ Save",
+  "fr": "+ Mettre de côté",
+  "es": "+ Ahorrar"
+ },
+ {
+  "pt": "Excluir meta",
+  "tipo": "exato",
+  "en": "Delete goal",
+  "fr": "Supprimer l'objectif",
+  "es": "Eliminar meta"
+ },
+ {
+  "pt": "Excluir {0}",
+  "tipo": "padrao",
+  "en": "Delete {0}",
+  "fr": "Supprimer {0}",
+  "es": "Eliminar {0}"
+ },
+ {
+  "pt": "? O valor guardado deixa de ser acompanhado, mas nenhum lançamento é apagado.",
+  "tipo": "exato",
+  "en": "? The saved amount stops being tracked, but no entry is deleted.",
+  "fr": " ? Le montant mis de côté n'est plus suivi, mais aucune écriture n'est supprimée.",
+  "es": "? El monto ahorrado deja de seguirse, pero no se borra ningún movimiento."
+ },
+ {
+  "pt": "Meta excluída.",
+  "tipo": "exato",
+  "en": "Goal deleted.",
+  "fr": "Objectif supprimé.",
+  "es": "Meta eliminada."
+ },
+ {
+  "pt": "Não tirar de nenhuma conta",
+  "tipo": "exato",
+  "en": "Don't take from any account",
+  "fr": "Ne prélever sur aucun compte",
+  "es": "No sacar de ninguna cuenta"
+ },
+ {
+  "pt": "Sem conta escolhida, isto só marca o dinheiro como reservado: nenhum saldo muda.",
+  "tipo": "exato",
+  "en": "With no account chosen, this only marks the money as set aside: no balance changes.",
+  "fr": "Sans compte choisi, cela marque seulement l'argent comme mis de côté : aucun solde ne change.",
+  "es": "Sin cuenta elegida, esto solo marca el dinero como reservado: ningún saldo cambia."
+ },
+ {
+  "pt": "Saem {0} de {1}. O saldo dela baixa; seu patrimônio continua o mesmo, porque o dinheiro passa a estar na reserva.",
+  "tipo": "padrao",
+  "en": "{0} comes out of {1}. Its balance goes down; your net worth stays the same, because the money is now in the reserve.",
+  "fr": "{0} sortent de {1}. Son solde baisse ; votre patrimoine reste le même, car l'argent passe dans la réserve.",
+  "es": "Salen {0} de {1}. Su saldo baja; tu patrimonio sigue igual, porque el dinero pasa a estar en la reserva."
+ },
+ {
+  "pt": "O valor sai de {0} quando você confirmar.",
+  "tipo": "padrao",
+  "en": "The amount comes out of {0} when you confirm.",
+  "fr": "Le montant sort de {0} quand vous confirmez.",
+  "es": "El monto sale de {0} cuando confirmes."
+ },
+ {
+  "pt": "Guardar em \"{0}\"",
+  "tipo": "padrao",
+  "en": "Save to \"{0}\"",
+  "fr": "Mettre de côté dans « {0} »",
+  "es": "Ahorrar en \"{0}\""
+ },
+ {
+  "pt": "Valor a guardar (R$)",
+  "tipo": "exato",
+  "en": "Amount to save (R$)",
+  "fr": "Montant à mettre de côté (R$)",
+  "es": "Monto a ahorrar (R$)"
+ },
+ {
+  "pt": "Faltam {0} para o alvo.",
+  "tipo": "padrao",
+  "en": "{0} to go to reach the target.",
+  "fr": "Il manque {0} pour atteindre la cible.",
+  "es": "Faltan {0} para el objetivo."
+ },
+ {
+  "pt": "A meta já atingiu o alvo.",
+  "tipo": "exato",
+  "en": "The goal has already reached its target.",
+  "fr": "L'objectif a déjà atteint sa cible.",
+  "es": "La meta ya alcanzó el objetivo."
+ },
+ {
+  "pt": "Guardar",
+  "tipo": "exato",
+  "en": "Save",
+  "fr": "Mettre de côté",
+  "es": "Ahorrar"
+ },
+ {
+  "pt": "Guardado {0}.",
+  "tipo": "padrao",
+  "en": "Saved {0}.",
+  "fr": "{0} mis de côté.",
+  "es": "Ahorrado {0}."
+ },
+ {
+  "pt": "Nenhuma conta em especial",
+  "tipo": "exato",
+  "en": "No particular account",
+  "fr": "Aucun compte en particulier",
+  "es": "Ninguna cuenta en especial"
+ },
+ {
+  "pt": "Ícone {0}",
+  "tipo": "padrao",
+  "en": "Icon {0}",
+  "fr": "Icône {0}",
+  "es": "Ícono {0}"
+ },
+ {
+  "pt": "Editar meta",
+  "tipo": "exato",
+  "en": "Edit goal",
+  "fr": "Modifier l'objectif",
+  "es": "Editar meta"
+ },
+ {
+  "pt": "Alvo (R$) *",
+  "tipo": "exato",
+  "en": "Target (R$) *",
+  "fr": "Cible (R$) *",
+  "es": "Objetivo (R$) *"
+ },
+ {
+  "pt": "Já guardado (R$)",
+  "tipo": "exato",
+  "en": "Already saved (R$)",
+  "fr": "Déjà mis de côté (R$)",
+  "es": "Ya ahorrado (R$)"
+ },
+ {
+  "pt": "Prazo",
+  "tipo": "exato",
+  "en": "Deadline",
+  "fr": "Échéance",
+  "es": "Plazo"
+ },
+ {
+  "pt": "Opcional. Com prazo, o app calcula quanto guardar por mês.",
+  "tipo": "exato",
+  "en": "Optional. With a deadline, the app works out how much to save each month.",
+  "fr": "Facultatif. Avec une échéance, l'app calcule combien mettre de côté par mois.",
+  "es": "Opcional. Con plazo, la app calcula cuánto ahorrar por mes."
+ },
+ {
+  "pt": "Opcional. Serve para agrupar metas parecidas.",
+  "tipo": "exato",
+  "en": "Optional. Used to group similar goals.",
+  "fr": "Facultatif. Sert à regrouper des objectifs similaires.",
+  "es": "Opcional. Sirve para agrupar metas parecidas."
+ },
+ {
+  "pt": "Conta relacionada",
+  "tipo": "exato",
+  "en": "Related account",
+  "fr": "Compte associé",
+  "es": "Cuenta relacionada"
+ },
+ {
+  "pt": "Opcional. Onde este dinheiro costuma ficar.",
+  "tipo": "exato",
+  "en": "Optional. Where this money usually sits.",
+  "fr": "Facultatif. Où cet argent se trouve d'habitude.",
+  "es": "Opcional. Dónde suele estar este dinero."
+ },
+ {
+  "pt": "Contribuição mensal (R$)",
+  "tipo": "exato",
+  "en": "Monthly contribution (R$)",
+  "fr": "Contribution mensuelle (R$)",
+  "es": "Contribución mensual (R$)"
+ },
+ {
+  "pt": "Opcional. Quanto você pretende guardar por mês.",
+  "tipo": "exato",
+  "en": "Optional. How much you plan to save each month.",
+  "fr": "Facultatif. Combien vous comptez mettre de côté par mois.",
+  "es": "Opcional. Cuánto piensas ahorrar por mes."
+ },
+ {
+  "pt": "Dia do mês",
+  "tipo": "exato",
+  "en": "Day of the month",
+  "fr": "Jour du mois",
+  "es": "Día del mes"
+ },
+ {
+  "pt": "Só o lembrete: o aporte continua sendo confirmado por você.",
+  "tipo": "exato",
+  "en": "Just the reminder: you still confirm each contribution.",
+  "fr": "Seulement le rappel : c'est toujours vous qui confirmez le versement.",
+  "es": "Solo el recordatorio: el aporte lo sigues confirmando tú."
+ },
+ {
+  "pt": "Informe o nome da meta.",
+  "tipo": "exato",
+  "en": "Enter the goal name.",
+  "fr": "Saisissez le nom de l'objectif.",
+  "es": "Ingresa el nombre de la meta."
+ },
+ {
+  "pt": "O alvo precisa ser maior que zero.",
+  "tipo": "exato",
+  "en": "The target must be greater than zero.",
+  "fr": "La cible doit être supérieure à zéro.",
+  "es": "El objetivo debe ser mayor que cero."
+ },
+ {
+  "pt": "Meta atualizada.",
+  "tipo": "exato",
+  "en": "Goal updated.",
+  "fr": "Objectif mis à jour.",
+  "es": "Meta actualizada."
+ },
+ {
+  "pt": "Meta criada.",
+  "tipo": "exato",
+  "en": "Goal created.",
+  "fr": "Objectif créé.",
+  "es": "Meta creada."
+ }
+]

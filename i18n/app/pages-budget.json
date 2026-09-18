@@ -1,0 +1,219 @@
+[
+ {
+  "pt": "Categoria removida",
+  "tipo": "exato",
+  "en": "Category removed",
+  "fr": "Catégorie supprimée",
+  "es": "Categoría eliminada"
+ },
+ {
+  "pt": "Limite definido",
+  "tipo": "exato",
+  "en": "Limit set",
+  "fr": "Limite définie",
+  "es": "Límite definido"
+ },
+ {
+  "pt": "{0} categoria(s) com limite",
+  "tipo": "padrao",
+  "en": "{0} category(ies) with a limit",
+  "fr": "{0} catégorie(s) avec limite",
+  "es": "{0} categoría(s) con límite"
+ },
+ {
+  "pt": "Nenhum limite definido ainda",
+  "tipo": "exato",
+  "en": "No limits set yet",
+  "fr": "Aucune limite définie pour l'instant",
+  "es": "Ningún límite definido todavía"
+ },
+ {
+  "pt": "Gasto dentro do limite",
+  "tipo": "exato",
+  "en": "Spent within limits",
+  "fr": "Dépensé dans les limites",
+  "es": "Gastado dentro del límite"
+ },
+ {
+  "pt": "{0} do que você reservou",
+  "tipo": "padrao",
+  "en": "{0} of what you set aside",
+  "fr": "{0} de ce que vous avez prévu",
+  "es": "el {0} de lo que reservaste"
+ },
+ {
+  "pt": "Categorias estouradas",
+  "tipo": "exato",
+  "en": "Categories over limit",
+  "fr": "Catégories dépassées",
+  "es": "Categorías excedidas"
+ },
+ {
+  "pt": "Sobra do orçamento",
+  "tipo": "exato",
+  "en": "Budget left over",
+  "fr": "Reste du budget",
+  "es": "Sobrante del presupuesto"
+ },
+ {
+  "pt": "+ {0} gastos em categorias sem limite",
+  "tipo": "padrao",
+  "en": "+ {0} spent in categories without a limit",
+  "fr": "+ {0} dépensés dans des catégories sans limite",
+  "es": "+ {0} gastados en categorías sin límite"
+ },
+ {
+  "pt": "Todo gasto do mês está coberto por um limite",
+  "tipo": "exato",
+  "en": "Every expense this month is covered by a limit",
+  "fr": "Toutes les dépenses du mois sont couvertes par une limite",
+  "es": "Todo gasto del mes está cubierto por un límite"
+ },
+ {
+  "pt": "Nenhum limite definido",
+  "tipo": "exato",
+  "en": "No limits set",
+  "fr": "Aucune limite définie",
+  "es": "Ningún límite definido"
+ },
+ {
+  "pt": "Escolha uma categoria e diga quanto pretende gastar por mês. O acompanhamento é automático.",
+  "tipo": "exato",
+  "en": "Pick a category and say how much you plan to spend per month. Tracking is automatic.",
+  "fr": "Choisissez une catégorie et indiquez combien vous comptez dépenser par mois. Le suivi est automatique.",
+  "es": "Elige una categoría y di cuánto piensas gastar por mes. El seguimiento es automático."
+ },
+ {
+  "pt": "categoria removida",
+  "tipo": "exato",
+  "en": "category removed",
+  "fr": "catégorie supprimée",
+  "es": "categoría eliminada"
+ },
+ {
+  "pt": "de {0}",
+  "tipo": "padrao",
+  "en": "of {0}",
+  "fr": "sur {0}",
+  "es": "de {0}"
+ },
+ {
+  "pt": "{0} usado",
+  "tipo": "padrao",
+  "en": "{0} used",
+  "fr": "{0} utilisé",
+  "es": "{0} usado"
+ },
+ {
+  "pt": "Restam {0}",
+  "tipo": "padrao",
+  "en": "{0} left",
+  "fr": "Reste {0}",
+  "es": "Quedan {0}"
+ },
+ {
+  "pt": "Passou {0}",
+  "tipo": "padrao",
+  "en": "{0} over",
+  "fr": "Dépassé de {0}",
+  "es": "Excedido en {0}"
+ },
+ {
+  "pt": "Alterar limite",
+  "tipo": "exato",
+  "en": "Change limit",
+  "fr": "Modifier la limite",
+  "es": "Cambiar límite"
+ },
+ {
+  "pt": "Alterar limite de {0}",
+  "tipo": "padrao",
+  "en": "Change {0} limit",
+  "fr": "Modifier la limite de {0}",
+  "es": "Cambiar límite de {0}"
+ },
+ {
+  "pt": "Remover limite",
+  "tipo": "exato",
+  "en": "Remove limit",
+  "fr": "Retirer la limite",
+  "es": "Quitar límite"
+ },
+ {
+  "pt": "Remover limite de {0}",
+  "tipo": "padrao",
+  "en": "Remove {0} limit",
+  "fr": "Retirer la limite de {0}",
+  "es": "Quitar límite de {0}"
+ },
+ {
+  "pt": "Remover o limite de",
+  "tipo": "exato",
+  "en": "Remove the limit for",
+  "fr": "Retirer la limite de",
+  "es": "Quitar el límite de"
+ },
+ {
+  "pt": "? Os lançamentos não são afetados.",
+  "tipo": "exato",
+  "en": "? Entries aren't affected.",
+  "fr": " ? Les écritures ne sont pas touchées.",
+  "es": "? Los movimientos no se ven afectados."
+ },
+ {
+  "pt": "Remover",
+  "tipo": "exato",
+  "en": "Remove",
+  "fr": "Retirer",
+  "es": "Quitar"
+ },
+ {
+  "pt": "Limite removido.",
+  "tipo": "exato",
+  "en": "Limit removed.",
+  "fr": "Limite retirée.",
+  "es": "Límite quitado."
+ },
+ {
+  "pt": "Crie uma categoria de despesa antes de definir um limite.",
+  "tipo": "exato",
+  "en": "Create an expense category before setting a limit.",
+  "fr": "Créez une catégorie de dépense avant de définir une limite.",
+  "es": "Crea una categoría de gasto antes de definir un límite."
+ },
+ {
+  "pt": "Nos últimos 3 meses você gastou em média {0} nesta categoria.",
+  "tipo": "padrao",
+  "en": "Over the last 3 months you spent {0} on average in this category.",
+  "fr": "Ces 3 derniers mois, vous avez dépensé en moyenne {0} dans cette catégorie.",
+  "es": "En los últimos 3 meses gastaste en promedio {0} en esta categoría."
+ },
+ {
+  "pt": "Sem histórico nesta categoria nos últimos 3 meses.",
+  "tipo": "exato",
+  "en": "No history in this category over the last 3 months.",
+  "fr": "Aucun historique dans cette catégorie ces 3 derniers mois.",
+  "es": "Sin historial en esta categoría en los últimos 3 meses."
+ },
+ {
+  "pt": "Definir limite mensal",
+  "tipo": "exato",
+  "en": "Set monthly limit",
+  "fr": "Définir une limite mensuelle",
+  "es": "Definir límite mensual"
+ },
+ {
+  "pt": "Limite por mês (R$)",
+  "tipo": "exato",
+  "en": "Limit per month (R$)",
+  "fr": "Limite par mois (R$)",
+  "es": "Límite por mes (R$)"
+ },
+ {
+  "pt": "Limite salvo.",
+  "tipo": "exato",
+  "en": "Limit saved.",
+  "fr": "Limite enregistrée.",
+  "es": "Límite guardado."
+ }
+]

@@ -79,10 +79,19 @@ const PERFIL: Record<string, {
 const TIMEOUT_MS = 30_000;
 const MAX_PERGUNTA = 500;
 
+/* A língua da resposta. O navegador manda só a chave ('en'); o nome
+   que entra nas instruções é este, escrito aqui. */
+const IDIOMAS: Record<string, string> = {
+  pt: 'português do Brasil',
+  en: 'inglês (English)',
+  fr: 'francês (français)',
+  es: 'espanhol (español)'
+};
+
 /* O prompt vive AQUI. Nunca chega pelo corpo da requisição. */
 const SISTEMA = `Você é o assistente financeiro do OAZE.
 
-Responda em português do Brasil, com linguagem clara, direta e acolhedora.
+Responda no idioma indicado no fim destas instruções, com linguagem clara, direta e acolhedora.
 
 Sua função é ajudar o usuário a compreender seus próprios dados financeiros, identificar padrões, organizar orçamento, acompanhar metas e sugerir próximos passos práticos.
 
@@ -198,6 +207,10 @@ type Entrada = {
   /* As últimas trocas da conversa, curtas, para "e no mês seguinte?"
      ter a que se referir. Tratadas como dado, nunca como instrução. */
   conversa?: Array<{ pergunta: string; resposta: string }>;
+  /* A língua da tela de quem pergunta. Lista fechada: qualquer outra
+     coisa vira português, e nada do que chega aqui entra no prompt
+     como texto livre — só o nome da língua, escolhido deste lado. */
+  idioma: 'pt' | 'en' | 'fr' | 'es';
   resumo: {
     receitas?: number;
     despesas?: number;
@@ -275,6 +288,8 @@ function validar(bruto: unknown, perfil: typeof PERFIL['free']):
     categorias: cats(a.categorias, perfil.categorias)
   } : undefined;
 
+  const idioma = (['pt', 'en', 'fr', 'es'].includes(String(b.idioma)) ? String(b.idioma) : 'pt') as Entrada['idioma'];
+
   const conversa = lista(b.conversa, 3).map((c: any) => ({
     pergunta: texto(c?.pergunta, MAX_PERGUNTA), resposta: texto(c?.resposta, 600)
   })).filter((c) => c.pergunta && c.resposta);
@@ -286,6 +301,7 @@ function validar(bruto: unknown, perfil: typeof PERFIL['free']):
     historico,
     ano,
     conversa,
+    idioma,
     resumo: {
       receitas: numero(r.receitas),
       despesas: numero(r.despesas),
@@ -596,7 +612,8 @@ Deno.serve(async (req: Request) => {
         /* O prompt base é igual para todos; o que muda é o
            parágrafo do plano — e, principalmente, os dados que
            chegaram (ou não) no contexto. */
-        instructions: SISTEMA + '\n\nRegras deste plano:\n' + perfil.estilo,
+        instructions: SISTEMA + '\n\nRegras deste plano:\n' + perfil.estilo +
+          '\n\nIdioma da resposta: ' + IDIOMAS[v.dados.idioma] + '. Os valores são em reais (R$): mantenha o símbolo.',
         input: '<dados_financeiros>\n' + contexto +
           '\nData de hoje no Brasil: ' + hojeBrasil +
           '\n</dados_financeiros>\n\n' + conversaAnterior + 'Pergunta do usuário: ' + v.dados.pergunta,

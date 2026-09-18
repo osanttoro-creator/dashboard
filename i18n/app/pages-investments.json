@@ -1,0 +1,215 @@
+[
+ {
+  "pt": "Ainda sem aportes. O UGLEZ pode calcular um começo que respeite o seu mês.",
+  "tipo": "exato",
+  "en": "No contributions yet. UGLEZ can work out a start that fits your month.",
+  "fr": "Pas encore de versements. UGLEZ peut calculer un début qui respecte votre mois.",
+  "es": "Todavía sin aportes. UGLEZ puede calcular un comienzo que respete tu mes."
+ },
+ {
+  "pt": "{0} tipo{1} · {2} hoje ·",
+  "tipo": "padrao",
+  "en": "{0} type(s) · {2} today ·",
+  "fr": "{0} type(s) · {2} aujourd'hui ·",
+  "es": "{0} tipo(s) · {2} hoy ·"
+ },
+ {
+  "pt": "{0}{1} sobre o aportado.",
+  "tipo": "padrao",
+  "en": "{0}{1} over what was contributed.",
+  "fr": "{0}{1} sur le montant versé.",
+  "es": "{0}{1} sobre lo aportado."
+ },
+ {
+  "pt": "Qual é o menor aporte que cabe no meu mês, com base no meu saldo, compromissos e carteira?",
+  "tipo": "exato",
+  "en": "What's the smallest contribution that fits my month, based on my balance, commitments and portfolio?",
+  "fr": "Quel est le plus petit versement qui tient dans mon mois, selon mon solde, mes engagements et mon portefeuille ?",
+  "es": "¿Cuál es el aporte más pequeño que cabe en mi mes, según mi saldo, compromisos y cartera?"
+ },
+ {
+  "pt": "Minha carteira está concentrada demais em algum tipo de investimento?",
+  "tipo": "exato",
+  "en": "Is my portfolio too concentrated in any type of investment?",
+  "fr": "Mon portefeuille est-il trop concentré sur un type d'investissement ?",
+  "es": "¿Mi cartera está demasiado concentrada en algún tipo de inversión?"
+ },
+ {
+  "pt": "Como posso começar uma carteira sem comprometer minhas despesas previstas?",
+  "tipo": "exato",
+  "en": "How can I start a portfolio without putting my planned expenses at risk?",
+  "fr": "Comment commencer un portefeuille sans compromettre mes dépenses prévues ?",
+  "es": "¿Cómo puedo empezar una cartera sin comprometer mis gastos previstos?"
+ },
+ {
+  "pt": "Que ritmo de aportes é compatível com o restante de {0}?",
+  "tipo": "padrao",
+  "en": "What contribution pace fits the rest of {0}?",
+  "fr": "Quel rythme de versements est compatible avec le reste de {0} ?",
+  "es": "¿Qué ritmo de aportes es compatible con el resto de {0}?"
+ },
+ {
+  "pt": "{0} concentra {1} da carteira",
+  "tipo": "padrao",
+  "en": "{0} makes up {1} of the portfolio",
+  "fr": "{0} représente {1} du portefeuille",
+  "es": "{0} concentra el {1} de la cartera"
+ },
+ {
+  "pt": "color-mix(in srgb, {0} 20%, transparent)",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Patrimônio investido",
+  "tipo": "exato",
+  "en": "Invested assets",
+  "fr": "Patrimoine investi",
+  "es": "Patrimonio invertido"
+ },
+ {
+  "pt": "Primeiro mês com aportes",
+  "tipo": "exato",
+  "en": "First month with contributions",
+  "fr": "Premier mois avec versements",
+  "es": "Primer mes con aportes"
+ },
+ {
+  "pt": "Total aportado",
+  "tipo": "exato",
+  "en": "Total contributed",
+  "fr": "Total versé",
+  "es": "Total aportado"
+ },
+ {
+  "pt": "{0} aporte(s) registrados",
+  "tipo": "padrao",
+  "en": "{0} contribution(s) recorded",
+  "fr": "{0} versement(s) enregistré(s)",
+  "es": "{0} aporte(s) registrado(s)"
+ },
+ {
+  "pt": "Rendimento estimado",
+  "tipo": "exato",
+  "en": "Estimated return",
+  "fr": "Rendement estimé",
+  "es": "Rendimiento estimado"
+ },
+ {
+  "pt": "sobre o aportado",
+  "tipo": "exato",
+  "en": "over what was contributed",
+  "fr": "sur le montant versé",
+  "es": "sobre lo aportado"
+ },
+ {
+  "pt": "Aportado em {0}",
+  "tipo": "padrao",
+  "en": "Contributed in {0}",
+  "fr": "Versé en {0}",
+  "es": "Aportado en {0}"
+ },
+ {
+  "pt": "Média de {0}/mês",
+  "tipo": "padrao",
+  "en": "Average of {0}/month",
+  "fr": "Moyenne de {0}/mois",
+  "es": "Promedio de {0}/mes"
+ },
+ {
+  "pt": "Nenhum investimento cadastrado. Use \"+ Novo aporte\" para começar.",
+  "tipo": "exato",
+  "en": "No investments yet. Use \"+ New contribution\" to start.",
+  "fr": "Aucun investissement enregistré. Utilisez « + Nouveau versement » pour commencer.",
+  "es": "Ninguna inversión registrada. Usa \"+ Nuevo aporte\" para empezar."
+ },
+ {
+  "pt": "valor informado manualmente",
+  "tipo": "exato",
+  "en": "value entered manually",
+  "fr": "valeur saisie manuellement",
+  "es": "valor ingresado manualmente"
+ },
+ {
+  "pt": "Patrimônio cresceu {0} acima dos aportes",
+  "tipo": "padrao",
+  "en": "Assets grew {0} above contributions",
+  "fr": "Le patrimoine a progressé de {0} au-delà des versements",
+  "es": "El patrimonio creció {0} por encima de los aportes"
+ },
+ {
+  "pt": "Patrimônio abaixo do total aportado",
+  "tipo": "exato",
+  "en": "Assets below the total contributed",
+  "fr": "Patrimoine inférieur au total versé",
+  "es": "Patrimonio por debajo del total aportado"
+ },
+ {
+  "pt": "Valor estimado",
+  "tipo": "exato",
+  "en": "Estimated value",
+  "fr": "Valeur estimée",
+  "es": "Valor estimado"
+ },
+ {
+  "pt": "Aportes acumulados",
+  "tipo": "exato",
+  "en": "Total contributions",
+  "fr": "Versements cumulés",
+  "es": "Aportes acumulados"
+ },
+ {
+  "pt": "Valor final",
+  "tipo": "exato",
+  "en": "Final value",
+  "fr": "Valeur finale",
+  "es": "Valor final"
+ },
+ {
+  "pt": "Total investido",
+  "tipo": "exato",
+  "en": "Total invested",
+  "fr": "Total investi",
+  "es": "Total invertido"
+ },
+ {
+  "pt": "Juros acumulados",
+  "tipo": "exato",
+  "en": "Accumulated interest",
+  "fr": "Intérêts cumulés",
+  "es": "Intereses acumulados"
+ },
+ {
+  "pt": "Juros / total",
+  "tipo": "exato",
+  "en": "Interest / total",
+  "fr": "Intérêts / total",
+  "es": "Intereses / total"
+ },
+ {
+  "pt": "12px 13px",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "{0} ano{1}",
+  "tipo": "padrao",
+  "en": "{0} year(s)",
+  "fr": "{0} an(s)",
+  "es": "{0} año(s)"
+ },
+ {
+  "pt": "Valor projetado",
+  "tipo": "exato",
+  "en": "Projected value",
+  "fr": "Valeur projetée",
+  "es": "Valor proyectado"
+ },
+ {
+  "pt": "Só os aportes (sem juros)",
+  "tipo": "exato",
+  "en": "Contributions only (no interest)",
+  "fr": "Versements seuls (sans intérêts)",
+  "es": "Solo los aportes (sin intereses)"
+ }
+]

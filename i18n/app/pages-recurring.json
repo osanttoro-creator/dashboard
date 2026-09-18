@@ -1,0 +1,163 @@
+[
+ {
+  "pt": "Assinaturas e mensalidades",
+  "tipo": "exato",
+  "en": "Subscriptions and memberships",
+  "fr": "Abonnements et mensualités",
+  "es": "Suscripciones y mensualidades"
+ },
+ {
+  "pt": "Compromisso mensal",
+  "tipo": "exato",
+  "en": "Monthly commitment",
+  "fr": "Engagement mensuel",
+  "es": "Compromiso mensual"
+ },
+ {
+  "pt": "{0} por ano",
+  "tipo": "padrao",
+  "en": "{0} a year",
+  "fr": "{0} par an",
+  "es": "{0} al año"
+ },
+ {
+  "pt": "Nenhuma despesa fixa",
+  "tipo": "exato",
+  "en": "No fixed expenses",
+  "fr": "Aucune dépense fixe",
+  "es": "Ningún gasto fijo"
+ },
+ {
+  "pt": "Entrada fixa",
+  "tipo": "exato",
+  "en": "Fixed income",
+  "fr": "Revenu fixe",
+  "es": "Ingreso fijo"
+ },
+ {
+  "pt": "{0} receita(s) recorrente(s)",
+  "tipo": "padrao",
+  "en": "{0} recurring income item(s)",
+  "fr": "{0} revenu(s) récurrent(s)",
+  "es": "{0} ingreso(s) recurrente(s)"
+ },
+ {
+  "pt": "Assinaturas ativas",
+  "tipo": "exato",
+  "en": "Active subscriptions",
+  "fr": "Abonnements actifs",
+  "es": "Suscripciones activas"
+ },
+ {
+  "pt": "Recorrências ativas",
+  "tipo": "exato",
+  "en": "Active recurring items",
+  "fr": "Récurrences actives",
+  "es": "Recurrentes activos"
+ },
+ {
+  "pt": "{0} com data para encerrar",
+  "tipo": "padrao",
+  "en": "{0} with an end date",
+  "fr": "{0} avec une date de fin",
+  "es": "{0} con fecha de fin"
+ },
+ {
+  "pt": "de {0} recorrência(s) no total",
+  "tipo": "padrao",
+  "en": "out of {0} recurring item(s) in total",
+  "fr": "sur {0} récurrence(s) au total",
+  "es": "de {0} recurrente(s) en total"
+ },
+ {
+  "pt": "Nenhuma assinatura encontrada",
+  "tipo": "exato",
+  "en": "No subscriptions found",
+  "fr": "Aucun abonnement trouvé",
+  "es": "Ninguna suscripción encontrada"
+ },
+ {
+  "pt": "Nenhuma recorrência",
+  "tipo": "exato",
+  "en": "No recurring items",
+  "fr": "Aucune récurrence",
+  "es": "Ningún recurrente"
+ },
+ {
+  "pt": "Assinaturas são despesas fixas em categorias como Assinaturas, Streaming ou Academia.",
+  "tipo": "exato",
+  "en": "Subscriptions are fixed expenses in categories like Subscriptions, Streaming or Gym.",
+  "fr": "Les abonnements sont des dépenses fixes dans des catégories comme Abonnements, Streaming ou Salle de sport.",
+  "es": "Las suscripciones son gastos fijos en categorías como Suscripciones, Streaming o Gimnasio."
+ },
+ {
+  "pt": "Marque \"repete todo mês\" ao criar um lançamento para ele aparecer aqui.",
+  "tipo": "exato",
+  "en": "Tick \"repeat every month\" when creating an entry for it to show up here.",
+  "fr": "Cochez « répéter chaque mois » en créant une écriture pour qu'elle apparaisse ici.",
+  "es": "Marca \"repetir cada mes\" al crear un movimiento para que aparezca aquí."
+ },
+ {
+  "pt": "− Nova despesa fixa",
+  "tipo": "exato",
+  "en": "− New fixed expense",
+  "fr": "− Nouvelle dépense fixe",
+  "es": "− Nuevo gasto fijo"
+ },
+ {
+  "pt": "dia {0}",
+  "tipo": "padrao",
+  "en": "day {0}",
+  "fr": "le {0}",
+  "es": "día {0}"
+ },
+ {
+  "pt": "Encerrar",
+  "tipo": "exato",
+  "en": "End",
+  "fr": "Arrêter",
+  "es": "Terminar"
+ },
+ {
+  "pt": "Encerrar {0}",
+  "tipo": "padrao",
+  "en": "End {0}",
+  "fr": "Arrêter {0}",
+  "es": "Terminar {0}"
+ },
+ {
+  "pt": "Somando tudo, estas recorrências comprometem {0} por ano.",
+  "tipo": "padrao",
+  "en": "All together, these recurring items commit {0} a year.",
+  "fr": "Au total, ces récurrences engagent {0} par an.",
+  "es": "Sumando todo, estos recurrentes comprometen {0} al año."
+ },
+ {
+  "pt": "Encerrar recorrência",
+  "tipo": "exato",
+  "en": "End recurring item",
+  "fr": "Arrêter la récurrence",
+  "es": "Terminar recurrente"
+ },
+ {
+  "pt": "deixa de se repetir a partir do mês seguinte a",
+  "tipo": "exato",
+  "en": "stops repeating after",
+  "fr": "ne se répète plus après",
+  "es": "deja de repetirse después de"
+ },
+ {
+  "pt": ". Os lançamentos anteriores continuam no histórico.",
+  "tipo": "exato",
+  "en": ". Earlier entries stay in the history.",
+  "fr": ". Les écritures précédentes restent dans l'historique.",
+  "es": ". Los movimientos anteriores siguen en el historial."
+ },
+ {
+  "pt": "Recorrência encerrada em {0}.",
+  "tipo": "padrao",
+  "en": "Recurring item ended in {0}.",
+  "fr": "Récurrence arrêtée en {0}.",
+  "es": "Recurrente terminado en {0}."
+ }
+]

@@ -106,7 +106,7 @@
         }, Icons.lucide(Icons.forCategory(cat), 17)),
 
         el('div', { class: 'rec-main' }, [
-          el('div', { class: 'rec-name', text: t.description }),
+          el('div', { class: 'rec-name', text: t.description, translate: 'no' }),
           el('div', { class: 'rec-meta' }, [
             el('span', { text: Calc.categoryName(t.categoryId) }),
             el('span', { text: 'dia ' + t.date.slice(8, 10) }),
@@ -149,7 +149,7 @@
   async function encerrar(t) {
     const ok = await UI.confirm({
       title: 'Encerrar recorrência',
-      message: `<strong>${U.escape(t.description)}</strong> deixa de se repetir a partir do mês seguinte a ` +
+      message: `<strong translate="no">${U.escape(t.description)}</strong> deixa de se repetir a partir do mês seguinte a ` +
         `<strong>${U.monthLabel(App.ym)}</strong>. Os lançamentos anteriores continuam no histórico.`,
       confirmLabel: 'Encerrar'
     });

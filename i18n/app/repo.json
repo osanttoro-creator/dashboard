@@ -1,0 +1,87 @@
+[
+ {
+  "pt": "Sem conexão com o Supabase.",
+  "tipo": "exato",
+  "en": "No connection to the server.",
+  "fr": "Pas de connexion au serveur.",
+  "es": "Sin conexión con el servidor."
+ },
+ {
+  "pt": "Android",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mac",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Windows",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Renda fixa",
+  "tipo": "exato",
+  "en": "Fixed income",
+  "fr": "Revenu fixe",
+  "es": "Renta fija"
+ },
+ {
+  "pt": "Meta",
+  "tipo": "exato",
+  "en": "Goal",
+  "fr": "Objectif",
+  "es": "Meta"
+ },
+ {
+  "pt": "espaço: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "participação: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "cartões",
+  "tipo": "exato",
+  "en": "cards",
+  "fr": "cartes",
+  "es": "tarjetas"
+ },
+ {
+  "pt": "lançamentos",
+  "tipo": "exato",
+  "en": "entries",
+  "fr": "écritures",
+  "es": "movimientos"
+ },
+ {
+  "pt": "faturas: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "orçamentos: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "{0}: não foi possível contar",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "{0}: enviados {1}, gravados {2}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "espaços: {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

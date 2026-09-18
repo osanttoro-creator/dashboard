@@ -258,7 +258,7 @@
       const atual = Store.profile();
       const nome = el('input', {
         class: 'input', type: 'text', maxlength: '40',
-        value: d.espacoNome || (atual && atual.name) || 'Pessoal'
+        value: d.espacoNome || (atual && atual.name) || (global.I18n ? I18n.t('Pessoal') : 'Pessoal')
       });
 
       box.appendChild(el('p', { class: 'ob-texto', text: 'Um espaço financeiro guarda contas, cartões e lançamentos separados dos demais. A maioria das pessoas usa só um.' }));
@@ -267,7 +267,7 @@
       return [{
         label: 'Continuar', class: 'btn-primary',
         onClick: () => {
-          d.espacoNome = nome.value.trim() || 'Pessoal';
+          d.espacoNome = nome.value.trim() || (global.I18n ? I18n.t('Pessoal') : 'Pessoal');
           /* Renomeia o espaço que já existe em vez de criar outro —
              recarregar a página não pode gerar "Pessoal (2)". */
           if (atual && atual.name !== d.espacoNome) Store.renameProfile(atual.id, d.espacoNome);
@@ -356,7 +356,7 @@
             }
           }, [
             UI.catDot(c.color),
-            el('span', { text: c.name }),
+            el('span', { text: c.name, translate: 'no' }),
             el('span', { class: 'ob-cat-x', text: '×', 'aria-hidden': 'true' })
           ]);
           grade.appendChild(chip);

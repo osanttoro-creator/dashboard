@@ -1,0 +1,392 @@
+[
+ {
+  "pt": "Tema",
+  "tipo": "exato",
+  "en": "Theme",
+  "fr": "Thème",
+  "es": "Tema"
+ },
+ {
+  "pt": "Aparece no topo do painel.",
+  "tipo": "exato",
+  "en": "It shows at the top of the dashboard.",
+  "fr": "Il apparaît en haut du tableau de bord.",
+  "es": "Aparece arriba del panel."
+ },
+ {
+  "pt": "Definir nome",
+  "tipo": "exato",
+  "en": "Set name",
+  "fr": "Définir le nom",
+  "es": "Definir nombre"
+ },
+ {
+  "pt": "Claro",
+  "tipo": "exato",
+  "en": "Light",
+  "fr": "Clair",
+  "es": "Claro"
+ },
+ {
+  "pt": "Escuro",
+  "tipo": "exato",
+  "en": "Dark",
+  "fr": "Sombre",
+  "es": "Oscuro"
+ },
+ {
+  "pt": "Seguindo o seu sistema operacional, que agora pede o tema {0}. Escolher aqui vale para a sua conta, em qualquer aparelho.",
+  "tipo": "padrao",
+  "en": "Following your operating system, which currently asks for the {0} theme. Choosing here applies to your account, on any device.",
+  "fr": "Suit votre système d'exploitation, qui demande en ce moment le thème {0}. Choisir ici s'applique à votre compte, sur n'importe quel appareil.",
+  "es": "Siguiendo tu sistema operativo, que ahora pide el tema {0}. Elegir aquí vale para tu cuenta, en cualquier dispositivo."
+ },
+ {
+  "pt": "Escolhido por você. Vale para a sua conta em qualquer aparelho — volte para \"Sistema\" se quiser acompanhar o aparelho de novo.",
+  "tipo": "exato",
+  "en": "Chosen by you. It applies to your account on any device — go back to \"System\" if you want to follow the device again.",
+  "fr": "Choisi par vous. Il s'applique à votre compte sur n'importe quel appareil — revenez à « Système » pour suivre à nouveau l'appareil.",
+  "es": "Elegido por ti. Vale para tu cuenta en cualquier dispositivo — vuelve a \"Sistema\" si quieres seguir al dispositivo otra vez."
+ },
+ {
+  "pt": "Idioma",
+  "tipo": "exato",
+  "en": "Language",
+  "fr": "Langue",
+  "es": "Idioma"
+ },
+ {
+  "pt": "A língua das telas do app. O que você cadastrou continua como está.",
+  "tipo": "exato",
+  "en": "The language of the app's screens. What you've entered stays as it is.",
+  "fr": "La langue des écrans de l'app. Ce que vous avez saisi reste tel quel.",
+  "es": "El idioma de las pantallas de la app. Lo que registraste sigue como está."
+ },
+ {
+  "pt": "Movimento",
+  "tipo": "exato",
+  "en": "Motion",
+  "fr": "Mouvement",
+  "es": "Movimiento"
+ },
+ {
+  "pt": "O sistema respeita a preferência do seu aparelho por menos movimento e menos transparência.",
+  "tipo": "exato",
+  "en": "The system respects your device's preference for less motion and less transparency.",
+  "fr": "Le système respecte la préférence de votre appareil pour moins de mouvement et moins de transparence.",
+  "es": "El sistema respeta la preferencia de tu dispositivo por menos movimiento y menos transparencia."
+ },
+ {
+  "pt": "Reduzido pelo sistema",
+  "tipo": "exato",
+  "en": "Reduced by the system",
+  "fr": "Réduit par le système",
+  "es": "Reducido por el sistema"
+ },
+ {
+  "pt": "Normal",
+  "tipo": "exato",
+  "en": "Normal",
+  "fr": "Normal",
+  "es": "Normal"
+ },
+ {
+  "pt": "Consulte recursos, limites e opções de assinatura.",
+  "tipo": "exato",
+  "en": "See features, limits and subscription options.",
+  "fr": "Consultez fonctionnalités, limites et options d'abonnement.",
+  "es": "Consulta funciones, límites y opciones de suscripción."
+ },
+ {
+  "pt": "Ajuda e suporte",
+  "tipo": "exato",
+  "en": "Help and support",
+  "fr": "Aide et assistance",
+  "es": "Ayuda y soporte"
+ },
+ {
+  "pt": "Abra a central de ajuda do OAZE.",
+  "tipo": "exato",
+  "en": "Open the OAZE help center.",
+  "fr": "Ouvrez le centre d'aide d'OAZE.",
+  "es": "Abre el centro de ayuda de OAZE."
+ },
+ {
+  "pt": "Abrir ajuda",
+  "tipo": "exato",
+  "en": "Open help",
+  "fr": "Ouvrir l'aide",
+  "es": "Abrir ayuda"
+ },
+ {
+  "pt": "Sem cobrança.",
+  "tipo": "exato",
+  "en": "No charge.",
+  "fr": "Sans frais.",
+  "es": "Sin cobro."
+ },
+ {
+  "pt": "Acesso já registrado na sua conta.",
+  "tipo": "exato",
+  "en": "Access already registered on your account.",
+  "fr": "Accès déjà enregistré sur votre compte.",
+  "es": "Acceso ya registrado en tu cuenta."
+ },
+ {
+  "pt": "0 2px 8px",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sem conta, o app usa os limites do plano Semente neste aparelho.",
+  "tipo": "exato",
+  "en": "Without an account, the app uses the Semente plan limits on this device.",
+  "fr": "Sans compte, l'app utilise les limites de la formule Semente sur cet appareil.",
+  "es": "Sin cuenta, la app usa los límites del plan Semente en este dispositivo."
+ },
+ {
+  "pt": "UGLEZ neste mês",
+  "tipo": "exato",
+  "en": "UGLEZ this month",
+  "fr": "UGLEZ ce mois-ci",
+  "es": "UGLEZ este mes"
+ },
+ {
+  "pt": "Orçamentos",
+  "tipo": "exato",
+  "en": "Budgets",
+  "fr": "Budgets",
+  "es": "Presupuestos"
+ },
+ {
+  "pt": "Acompanhar recursos utilizados",
+  "tipo": "exato",
+  "en": "Track resources used",
+  "fr": "Suivre les ressources utilisées",
+  "es": "Seguir los recursos usados"
+ },
+ {
+  "pt": "Consumo do plano",
+  "tipo": "exato",
+  "en": "Plan usage",
+  "fr": "Consommation de la formule",
+  "es": "Consumo del plan"
+ },
+ {
+  "pt": "A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.",
+  "tipo": "exato",
+  "en": "The UGLEZ quota resets on the 1st of every month, Brasília time.",
+  "fr": "Le quota UGLEZ se réinitialise le 1er de chaque mois, heure de Brasília.",
+  "es": "La cuota de UGLEZ se reinicia cada día 1, en horario de Brasilia."
+ },
+ {
+  "pt": "Coqueiro e Oásis",
+  "tipo": "exato",
+  "en": "Coqueiro and Oásis",
+  "fr": "Coqueiro et Oásis",
+  "es": "Coqueiro y Oásis"
+ },
+ {
+  "pt": "Mais contas, histórico e consultas ao UGLEZ. No cartão, cancele quando quiser.",
+  "tipo": "exato",
+  "en": "More accounts, history and UGLEZ questions. By card, cancel anytime.",
+  "fr": "Plus de comptes, d'historique et de questions à UGLEZ. Par carte, annulez quand vous voulez.",
+  "es": "Más cuentas, historial y consultas a UGLEZ. Con tarjeta, cancela cuando quieras."
+ },
+ {
+  "pt": "Assinatura cancelada",
+  "tipo": "exato",
+  "en": "Subscription canceled",
+  "fr": "Abonnement annulé",
+  "es": "Suscripción cancelada"
+ },
+ {
+  "pt": "Não renova. Você continua com o {0} até {1}.",
+  "tipo": "padrao",
+  "en": "Won't renew. You keep {0} until {1}.",
+  "fr": "Ne se renouvelle pas. Vous gardez {0} jusqu'au {1}.",
+  "es": "No se renueva. Mantienes {0} hasta el {1}."
+ },
+ {
+  "pt": "Não renova.",
+  "tipo": "exato",
+  "en": "Won't renew.",
+  "fr": "Ne se renouvelle pas.",
+  "es": "No se renueva."
+ },
+ {
+  "pt": "Assinatura",
+  "tipo": "exato",
+  "en": "Subscription",
+  "fr": "Abonnement",
+  "es": "Suscripción"
+ },
+ {
+  "pt": "O último pagamento não passou. Atualize o cartão pelo aviso da Stripe",
+  "tipo": "exato",
+  "en": "The last payment didn't go through. Update your card from Stripe's notice",
+  "fr": "Le dernier paiement n'est pas passé. Mettez à jour votre carte via l'avis de Stripe",
+  "es": "El último pago no pasó. Actualiza la tarjeta desde el aviso de Stripe"
+ },
+ {
+  "pt": "Renova no cartão {0}",
+  "tipo": "padrao",
+  "en": "Renews on the card {0}",
+  "fr": "Se renouvelle sur la carte {0}",
+  "es": "Se renueva en la tarjeta {0}"
+ },
+ {
+  "pt": "todo ano",
+  "tipo": "exato",
+  "en": "every year",
+  "fr": "chaque année",
+  "es": "cada año"
+ },
+ {
+  "pt": "todo mês",
+  "tipo": "exato",
+  "en": "every month",
+  "fr": "chaque mois",
+  "es": "cada mes"
+ },
+ {
+  "pt": "· período atual até {0}.",
+  "tipo": "padrao",
+  "en": "· current period until {0}.",
+  "fr": "· période en cours jusqu'au {0}.",
+  "es": "· período actual hasta el {0}."
+ },
+ {
+  "pt": "Cancelar assinatura…",
+  "tipo": "exato",
+  "en": "Cancel subscription…",
+  "fr": "Annuler l'abonnement…",
+  "es": "Cancelar suscripción…"
+ },
+ {
+  "pt": "Cancelar o {0}",
+  "tipo": "padrao",
+  "en": "Cancel {0}",
+  "fr": "Annuler {0}",
+  "es": "Cancelar {0}"
+ },
+ {
+  "pt": "A renovação para agora e nada mais é cobrado.{0}",
+  "tipo": "padrao",
+  "en": "Renewal stops now and nothing more is charged.{0}",
+  "fr": "Le renouvellement s'arrête maintenant et plus rien n'est facturé.{0}",
+  "es": "La renovación se detiene ahora y no se cobra nada más.{0}"
+ },
+ {
+  "pt": "Você continua com o {0} até {1}.",
+  "tipo": "padrao",
+  "en": "You keep {0} until {1}.",
+  "fr": "Vous gardez {0} jusqu'au {1}.",
+  "es": "Mantienes {0} hasta el {1}."
+ },
+ {
+  "pt": "Depois, a conta volta ao Semente. Nenhum dado é apagado.",
+  "tipo": "exato",
+  "en": "After that, the account goes back to Semente. No data is deleted.",
+  "fr": "Ensuite, le compte revient à Semente. Aucune donnée n'est supprimée.",
+  "es": "Después, la cuenta vuelve a Semente. No se borra ningún dato."
+ },
+ {
+  "pt": "Manter assinatura",
+  "tipo": "exato",
+  "en": "Keep subscription",
+  "fr": "Garder l'abonnement",
+  "es": "Mantener suscripción"
+ },
+ {
+  "pt": "Cancelar assinatura",
+  "tipo": "exato",
+  "en": "Cancel subscription",
+  "fr": "Annuler l'abonnement",
+  "es": "Cancelar suscripción"
+ },
+ {
+  "pt": "Cancelando…",
+  "tipo": "exato",
+  "en": "Canceling…",
+  "fr": "Annulation…",
+  "es": "Cancelando…"
+ },
+ {
+  "pt": "Não foi possível cancelar agora. Tente de novo.",
+  "tipo": "exato",
+  "en": "Couldn't cancel right now. Try again.",
+  "fr": "Impossible d'annuler pour le moment. Réessayez.",
+  "es": "No se pudo cancelar ahora. Inténtalo de nuevo."
+ },
+ {
+  "pt": "Assinatura cancelada. Nada mais será cobrado.",
+  "tipo": "exato",
+  "en": "Subscription canceled. Nothing more will be charged.",
+  "fr": "Abonnement annulé. Plus rien ne sera facturé.",
+  "es": "Suscripción cancelada. No se cobrará nada más."
+ },
+ {
+  "pt": "Falha ao falar com o servidor. Nada mudou.",
+  "tipo": "exato",
+  "en": "Couldn't reach the server. Nothing changed.",
+  "fr": "Échec de communication avec le serveur. Rien n'a changé.",
+  "es": "Error al comunicarse con el servidor. No cambió nada."
+ },
+ {
+  "pt": "Restaurando a sessão salva neste aparelho.",
+  "tipo": "exato",
+  "en": "Restoring the session saved on this device.",
+  "fr": "Restauration de la session enregistrée sur cet appareil.",
+  "es": "Restaurando la sesión guardada en este dispositivo."
+ },
+ {
+  "pt": "Sem conta neste aparelho",
+  "tipo": "exato",
+  "en": "No account on this device",
+  "fr": "Aucun compte sur cet appareil",
+  "es": "Sin cuenta en este dispositivo"
+ },
+ {
+  "pt": "O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar o UGLEZ.",
+  "tipo": "exato",
+  "en": "The dashboard works anyway. An account lets you see the same data on your computer and phone, and use UGLEZ.",
+  "fr": "Le tableau de bord fonctionne quand même. Un compte sert à voir les mêmes données sur l'ordinateur et le téléphone, et à utiliser UGLEZ.",
+  "es": "El panel funciona igual. Una cuenta sirve para ver los mismos datos en la computadora y el celular, y para usar UGLEZ."
+ },
+ {
+  "pt": "Entrar ou criar conta",
+  "tipo": "exato",
+  "en": "Sign in or create an account",
+  "fr": "Se connecter ou créer un compte",
+  "es": "Iniciar sesión o crear cuenta"
+ },
+ {
+  "pt": "conta conectada",
+  "tipo": "exato",
+  "en": "account connected",
+  "fr": "compte connecté",
+  "es": "cuenta conectada"
+ },
+ {
+  "pt": "Editar perfil",
+  "tipo": "exato",
+  "en": "Edit profile",
+  "fr": "Modifier le profil",
+  "es": "Editar perfil"
+ },
+ {
+  "pt": "Apaga a conta e todos os dados do servidor, em todos os aparelhos, e encerra a assinatura. Não tem volta.",
+  "tipo": "exato",
+  "en": "Deletes the account and all its server data, on every device, and ends the subscription. There's no going back.",
+  "fr": "Supprime le compte et toutes les données du serveur, sur tous les appareils, et met fin à l'abonnement. Irréversible.",
+  "es": "Borra la cuenta y todos los datos del servidor, en todos los dispositivos, y termina la suscripción. No tiene vuelta atrás."
+ },
+ {
+  "pt": "Excluir conta…",
+  "tipo": "exato",
+  "en": "Delete account…",
+  "fr": "Supprimer le compte…",
+  "es": "Eliminar cuenta…"
+ }
+]

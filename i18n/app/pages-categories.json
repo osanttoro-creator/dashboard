@@ -1,0 +1,58 @@
+[
+ {
+  "pt": "últimos 12 meses",
+  "tipo": "exato",
+  "en": "last 12 months",
+  "fr": "12 derniers mois",
+  "es": "últimos 12 meses"
+ },
+ {
+  "pt": "histórico completo",
+  "tipo": "exato",
+  "en": "full history",
+  "fr": "historique complet",
+  "es": "historial completo"
+ },
+ {
+  "pt": "Nenhuma categoria cadastrada.",
+  "tipo": "exato",
+  "en": "No categories yet.",
+  "fr": "Aucune catégorie enregistrée.",
+  "es": "Ninguna categoría registrada."
+ },
+ {
+  "pt": "{0} lançamento(s) · {1}",
+  "tipo": "padrao",
+  "en": "{0} entry(ies) · {1}",
+  "fr": "{0} écriture(s) · {1}",
+  "es": "{0} movimiento(s) · {1}"
+ },
+ {
+  "pt": "sem lançamentos · {0}",
+  "tipo": "padrao",
+  "en": "no entries · {0}",
+  "fr": "aucune écriture · {0}",
+  "es": "sin movimientos · {0}"
+ },
+ {
+  "pt": "{0} lançamento(s) sem categoria definida",
+  "tipo": "padrao",
+  "en": "{0} entry(ies) without a category",
+  "fr": "{0} écriture(s) sans catégorie",
+  "es": "{0} movimiento(s) sin categoría definida"
+ },
+ {
+  "pt": "Sem despesas confirmadas no período",
+  "tipo": "exato",
+  "en": "No confirmed expenses in this period",
+  "fr": "Aucune dépense confirmée sur la période",
+  "es": "Sin gastos confirmados en el período"
+ },
+ {
+  "pt": "{0} responde por {1} — {2} · {3}",
+  "tipo": "padrao",
+  "en": "{0} accounts for {1} — {2} · {3}",
+  "fr": "{0} représente {1} — {2} · {3}",
+  "es": "{0} representa el {1} — {2} · {3}"
+ }
+]

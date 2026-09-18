@@ -1,0 +1,441 @@
+[
+ {
+  "pt": "use strict",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Indisponível — sem conta configurada",
+  "tipo": "exato",
+  "en": "Unavailable — no account set up",
+  "fr": "Indisponible — aucun compte configuré",
+  "es": "No disponible — sin cuenta configurada"
+ },
+ {
+  "pt": "Verificando sua conta…",
+  "tipo": "exato",
+  "en": "Checking your account…",
+  "fr": "Vérification de votre compte…",
+  "es": "Verificando tu cuenta…"
+ },
+ {
+  "pt": "Entre na sua conta para usar",
+  "tipo": "exato",
+  "en": "Sign in to your account to use it",
+  "fr": "Connectez-vous à votre compte pour l'utiliser",
+  "es": "Inicia sesión en tu cuenta para usarlo"
+ },
+ {
+  "pt": "Servidor seguro (chave protegida)",
+  "tipo": "exato",
+  "en": "Secure server (protected key)",
+  "fr": "Serveur sécurisé (clé protégée)",
+  "es": "Servidor seguro (clave protegida)"
+ },
+ {
+  "pt": "Mês e ano selecionados, e o alcance escolhido (mês, ano ou tudo)",
+  "tipo": "exato",
+  "en": "Selected month and year, and the chosen scope (month, year or everything)",
+  "fr": "Mois et année sélectionnés, et la portée choisie (mois, année ou tout)",
+  "es": "Mes y año seleccionados, y el alcance elegido (mes, año o todo)"
+ },
+ {
+  "pt": "Total de receitas, despesas e saldo do mês",
+  "tipo": "exato",
+  "en": "Total income, expenses and balance for the month",
+  "fr": "Total des revenus, dépenses et solde du mois",
+  "es": "Total de ingresos, gastos y saldo del mes"
+ },
+ {
+  "pt": "Gastos consolidados por categoria",
+  "tipo": "exato",
+  "en": "Spending combined by category",
+  "fr": "Dépenses consolidées par catégorie",
+  "es": "Gastos consolidados por categoría"
+ },
+ {
+  "pt": "Metas e quanto já foi guardado",
+  "tipo": "exato",
+  "en": "Goals and how much has been saved",
+  "fr": "Objectifs et montant déjà mis de côté",
+  "es": "Metas y cuánto ya se ahorró"
+ },
+ {
+  "pt": "Compromissos previstos, agrupados por dia",
+  "tipo": "exato",
+  "en": "Upcoming commitments, grouped by day",
+  "fr": "Engagements prévus, regroupés par jour",
+  "es": "Compromisos previstos, agrupados por día"
+ },
+ {
+  "pt": "Carteira de investimentos agregada: aportado, valor atual, rendimento e distribuição por tipo",
+  "tipo": "exato",
+  "en": "Aggregated investment portfolio: contributed, current value, return and allocation by type",
+  "fr": "Portefeuille d'investissements agrégé : versé, valeur actuelle, rendement et répartition par type",
+  "es": "Cartera de inversiones agregada: aportado, valor actual, rendimiento y distribución por tipo"
+ },
+ {
+  "pt": "Totais do ano: confirmado, previsto, média mensal e categorias que mais pesaram",
+  "tipo": "exato",
+  "en": "Year totals: confirmed, planned, monthly average and the heaviest categories",
+  "fr": "Totaux de l'année : confirmé, prévu, moyenne mensuelle et catégories les plus lourdes",
+  "es": "Totales del año: confirmado, previsto, promedio mensual y las categorías que más pesaron"
+ },
+ {
+  "pt": "Mês a mês: receitas, despesas, fixas e as cinco maiores categorias",
+  "tipo": "exato",
+  "en": "Month by month: income, expenses, fixed items and the five largest categories",
+  "fr": "Mois par mois : revenus, dépenses, fixes et les cinq plus grandes catégories",
+  "es": "Mes a mes: ingresos, gastos, fijos y las cinco categorías mayores"
+ },
+ {
+  "pt": "As três últimas perguntas e respostas desta conversa",
+  "tipo": "exato",
+  "en": "The last three questions and answers in this conversation",
+  "fr": "Les trois dernières questions et réponses de cette conversation",
+  "es": "Las tres últimas preguntas y respuestas de esta conversación"
+ },
+ {
+  "pt": "Outro",
+  "tipo": "exato",
+  "en": "Other",
+  "fr": "Autre",
+  "es": "Otro"
+ },
+ {
+  "pt": "Selecionar no formulário",
+  "tipo": "exato",
+  "en": "Select in the form",
+  "fr": "Sélectionner dans le formulaire",
+  "es": "Seleccionar en el formulario"
+ },
+ {
+  "pt": "Cadastre o cartão antes de revisar este lançamento.",
+  "tipo": "exato",
+  "en": "Add the card before reviewing this entry.",
+  "fr": "Ajoutez la carte avant de vérifier cette écriture.",
+  "es": "Registra la tarjeta antes de revisar este movimiento."
+ },
+ {
+  "pt": "Cadastre a conta antes de revisar este lançamento.",
+  "tipo": "exato",
+  "en": "Add the account before reviewing this entry.",
+  "fr": "Ajoutez le compte avant de vérifier cette écriture.",
+  "es": "Registra la cuenta antes de revisar este movimiento."
+ },
+ {
+  "pt": "Lançamento preparado pelo UGLEZ",
+  "tipo": "exato",
+  "en": "Entry prepared by UGLEZ",
+  "fr": "Écriture préparée par UGLEZ",
+  "es": "Movimiento preparado por UGLEZ"
+ },
+ {
+  "pt": "Receita preparada",
+  "tipo": "exato",
+  "en": "Income prepared",
+  "fr": "Revenu préparé",
+  "es": "Ingreso preparado"
+ },
+ {
+  "pt": "Despesa preparada",
+  "tipo": "exato",
+  "en": "Expense prepared",
+  "fr": "Dépense préparée",
+  "es": "Gasto preparado"
+ },
+ {
+  "pt": "Revise antes de salvar",
+  "tipo": "exato",
+  "en": "Review before saving",
+  "fr": "Vérifiez avant d'enregistrer",
+  "es": "Revisa antes de guardar"
+ },
+ {
+  "pt": "Cartão",
+  "tipo": "exato",
+  "en": "Card",
+  "fr": "Carte",
+  "es": "Tarjeta"
+ },
+ {
+  "pt": "Conta",
+  "tipo": "exato",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Não encontrei essa origem com segurança. Escolha a conta ou o cartão no formulário.",
+  "tipo": "exato",
+  "en": "I couldn't find that source for sure. Choose the account or card in the form.",
+  "fr": "Je n'ai pas trouvé cette origine avec certitude. Choisissez le compte ou la carte dans le formulaire.",
+  "es": "No encontré ese origen con seguridad. Elige la cuenta o la tarjeta en el formulario."
+ },
+ {
+  "pt": "Nada será salvo até você confirmar no formulário.",
+  "tipo": "exato",
+  "en": "Nothing is saved until you confirm in the form.",
+  "fr": "Rien n'est enregistré avant votre confirmation dans le formulaire.",
+  "es": "No se guarda nada hasta que confirmes en el formulario."
+ },
+ {
+  "pt": "Revisar no formulário",
+  "tipo": "exato",
+  "en": "Review in the form",
+  "fr": "Vérifier dans le formulaire",
+  "es": "Revisar en el formulario"
+ },
+ {
+  "pt": "Escreva uma pergunta primeiro.",
+  "tipo": "exato",
+  "en": "Write a question first.",
+  "fr": "Écrivez d'abord une question.",
+  "es": "Escribe una pregunta primero."
+ },
+ {
+  "pt": "Pensando…",
+  "tipo": "exato",
+  "en": "Thinking…",
+  "fr": "Réflexion…",
+  "es": "Pensando…"
+ },
+ {
+  "pt": "Lendo {0}",
+  "tipo": "padrao",
+  "en": "Reading {0}",
+  "fr": "Lecture de {0}",
+  "es": "Leyendo {0}"
+ },
+ {
+  "pt": "Lendo os meses de {0}",
+  "tipo": "padrao",
+  "en": "Reading the months of {0}",
+  "fr": "Lecture des mois de {0}",
+  "es": "Leyendo los meses de {0}"
+ },
+ {
+  "pt": "Lendo o ano e os meses anteriores",
+  "tipo": "exato",
+  "en": "Reading the year and previous months",
+  "fr": "Lecture de l'année et des mois précédents",
+  "es": "Leyendo el año y los meses anteriores"
+ },
+ {
+  "pt": "Perguntar",
+  "tipo": "exato",
+  "en": "Ask",
+  "fr": "Demander",
+  "es": "Preguntar"
+ },
+ {
+  "pt": "Sua sessão expirou. Entre de novo para continuar.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again to continue.",
+  "fr": "Votre session a expiré. Reconnectez-vous pour continuer.",
+  "es": "Tu sesión expiró. Entra de nuevo para continuar."
+ },
+ {
+  "pt": "Você usou {0} de {1} consultas do seu plano neste mês. Elas voltam no dia 1º. Erro nosso ou indisponibilidade não consomem consulta.",
+  "tipo": "padrao",
+  "en": "You've used {0} of {1} questions on your plan this month. They come back on the 1st. Our errors or outages don't use up a question.",
+  "fr": "Vous avez utilisé {0} sur {1} questions de votre formule ce mois-ci. Elles reviennent le 1er. Nos erreurs ou indisponibilités ne consomment pas de question.",
+  "es": "Usaste {0} de {1} consultas de tu plan este mes. Vuelven el día 1. Errores nuestros o caídas no consumen consulta."
+ },
+ {
+  "pt": "O assistente está indisponível agora.",
+  "tipo": "exato",
+  "en": "The assistant is unavailable right now.",
+  "fr": "L'assistant est indisponible pour le moment.",
+  "es": "El asistente no está disponible ahora."
+ },
+ {
+  "pt": "A resposta veio vazia. Tente reformular a pergunta.",
+  "tipo": "exato",
+  "en": "The answer came back empty. Try rephrasing the question.",
+  "fr": "La réponse est vide. Essayez de reformuler la question.",
+  "es": "La respuesta llegó vacía. Intenta reformular la pregunta."
+ },
+ {
+  "pt": "Preparei o lançamento abaixo. Revise os dados antes de confirmar.",
+  "tipo": "exato",
+  "en": "I've prepared the entry below. Review the details before confirming.",
+  "fr": "J'ai préparé l'écriture ci-dessous. Vérifiez les données avant de confirmer.",
+  "es": "Preparé el movimiento de abajo. Revisa los datos antes de confirmar."
+ },
+ {
+  "pt": "Período analisado: {0}.",
+  "tipo": "padrao",
+  "en": "Period analyzed: {0}.",
+  "fr": "Période analysée : {0}.",
+  "es": "Período analizado: {0}."
+ },
+ {
+  "pt": "Alcance: {0}, a partir de {1}.",
+  "tipo": "padrao",
+  "en": "Scope: {0}, starting from {1}.",
+  "fr": "Portée : {0}, à partir de {1}.",
+  "es": "Alcance: {0}, a partir de {1}."
+ },
+ {
+  "pt": "o ano de {0}",
+  "tipo": "padrao",
+  "en": "the year {0}",
+  "fr": "l'année {0}",
+  "es": "el año {0}"
+ },
+ {
+  "pt": "o ano e os meses anteriores",
+  "tipo": "exato",
+  "en": "the year and previous months",
+  "fr": "l'année et les mois précédents",
+  "es": "el año y los meses anteriores"
+ },
+ {
+  "pt": "Orientativo, não é consultoria financeira.",
+  "tipo": "exato",
+  "en": "For guidance only, not financial advice.",
+  "fr": "À titre indicatif, pas un conseil financier.",
+  "es": "Orientativo, no es asesoría financiera."
+ },
+ {
+  "pt": "· {0} de {1} neste mês",
+  "tipo": "padrao",
+  "en": "· {0} of {1} this month",
+  "fr": "· {0} sur {1} ce mois-ci",
+  "es": "· {0} de {1} este mes"
+ },
+ {
+  "pt": "UGLEZ:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não foi possível falar com o assistente. Verifique a conexão e tente de novo.",
+  "tipo": "exato",
+  "en": "Couldn't reach the assistant. Check your connection and try again.",
+  "fr": "Impossible de joindre l'assistant. Vérifiez la connexion et réessayez.",
+  "es": "No se pudo hablar con el asistente. Revisa la conexión e inténtalo de nuevo."
+ },
+ {
+  "pt": "Assistente não configurado.",
+  "tipo": "exato",
+  "en": "Assistant not set up.",
+  "fr": "Assistant non configuré.",
+  "es": "Asistente no configurado."
+ },
+ {
+  "pt": "application/json",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Bearer {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "O UGLEZ precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.",
+  "tipo": "exato",
+  "en": "UGLEZ needs your account to work. It's not a sales lock: it's how the server knows whose usage limit it is and which data the question refers to.",
+  "fr": "UGLEZ a besoin de votre compte pour fonctionner. Ce n'est pas un verrou commercial : c'est ainsi que le serveur sait à qui appartient la limite d'usage et à quelles données la question se rapporte.",
+  "es": "UGLEZ necesita tu cuenta para funcionar. No es un bloqueo comercial: así el servidor sabe de quién es el límite de uso y a qué datos se refiere la pregunta."
+ },
+ {
+  "pt": "O assistente ainda não está configurado neste ambiente.",
+  "tipo": "exato",
+  "en": "The assistant isn't set up in this environment yet.",
+  "fr": "L'assistant n'est pas encore configuré dans cet environnement.",
+  "es": "El asistente todavía no está configurado en este entorno."
+ },
+ {
+  "pt": "A análise acontece no servidor. Nenhuma chave de IA existe neste navegador, e nenhuma pergunta sai daqui sem passar por ele.",
+  "tipo": "exato",
+  "en": "The analysis happens on the server. No AI key exists in this browser, and no question leaves here without going through it.",
+  "fr": "L'analyse se fait sur le serveur. Aucune clé d'IA n'existe dans ce navigateur, et aucune question ne part d'ici sans passer par lui.",
+  "es": "El análisis ocurre en el servidor. No existe ninguna clave de IA en este navegador, y ninguna pregunta sale de aquí sin pasar por él."
+ },
+ {
+  "pt": "Entrar",
+  "tipo": "exato",
+  "en": "Sign in",
+  "fr": "Se connecter",
+  "es": "Entrar"
+ },
+ {
+  "pt": "(sua pergunta)",
+  "tipo": "exato",
+  "en": "(your question)",
+  "fr": "(votre question)",
+  "es": "(tu pregunta)"
+ },
+ {
+  "pt": "O que a UGLEZ recebe",
+  "tipo": "exato",
+  "en": "What UGLEZ receives",
+  "fr": "Ce que reçoit UGLEZ",
+  "es": "Lo que recibe UGLEZ"
+ },
+ {
+  "pt": "Ao perguntar, sai daqui um resumo agregado — e só ele:",
+  "tipo": "exato",
+  "en": "When you ask, an aggregated summary leaves here — and only that:",
+  "fr": "Quand vous posez une question, un résumé agrégé part d'ici — et seulement lui :",
+  "es": "Al preguntar, sale de aquí un resumen agregado — y solo eso:"
+ },
+ {
+  "pt": "Não sai: a lista de lançamentos, a descrição de qualquer lançamento, nomes de contas ou cartões, identificadores internos, seu e-mail, nem dados de outro espaço. Quantos meses chegam ao modelo depende do seu plano — o servidor corta o resto.",
+  "tipo": "exato",
+  "en": "What doesn't leave: the list of entries, the description of any entry, account or card names, internal identifiers, your email, or data from another space. How many months reach the model depends on your plan — the server cuts the rest.",
+  "fr": "Ne part pas : la liste des écritures, la description d'une écriture, les noms de comptes ou de cartes, les identifiants internes, votre e-mail, ni les données d'un autre espace. Le nombre de mois transmis au modèle dépend de votre formule — le serveur coupe le reste.",
+  "es": "No sale: la lista de movimientos, la descripción de ningún movimiento, nombres de cuentas o tarjetas, identificadores internos, tu correo, ni datos de otro espacio. Cuántos meses llegan al modelo depende de tu plan — el servidor corta el resto."
+ },
+ {
+  "pt": "Abaixo, exatamente o que seria enviado agora:",
+  "tipo": "exato",
+  "en": "Below, exactly what would be sent right now:",
+  "fr": "Ci-dessous, exactement ce qui serait envoyé maintenant :",
+  "es": "Abajo, exactamente lo que se enviaría ahora:"
+ },
+ {
+  "pt": "input textarea",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não deu certo.",
+  "tipo": "exato",
+  "en": "That didn't work.",
+  "fr": "Ça n'a pas marché.",
+  "es": "No funcionó."
+ },
+ {
+  "pt": "Removemos a chave de IA guardada neste aparelho. Revogue-a no painel do provedor.",
+  "tipo": "exato",
+  "en": "We removed the AI key stored on this device. Revoke it in the provider's dashboard.",
+  "fr": "Nous avons retiré la clé d'IA enregistrée sur cet appareil. Révoquez-la dans le tableau de bord du fournisseur.",
+  "es": "Quitamos la clave de IA guardada en este dispositivo. Revócala en el panel del proveedor."
+ },
+ {
+  "pt": "O que é enviado",
+  "tipo": "exato",
+  "en": "What gets sent",
+  "fr": "Ce qui est envoyé",
+  "es": "Lo que se envía"
+ },
+ {
+  "pt": "{0}px",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "(hover: none)",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Enter",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

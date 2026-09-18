@@ -1,0 +1,463 @@
+[
+ {
+  "pt": "Receitas, despesas e transferências de {0}",
+  "tipo": "padrao",
+  "en": "Income, expenses and transfers for {0}",
+  "fr": "Revenus, dépenses et virements de {0}",
+  "es": "Ingresos, gastos y transferencias de {0}"
+ },
+ {
+  "pt": "Carteira, faturas e limites",
+  "tipo": "exato",
+  "en": "Wallet, bills and limits",
+  "fr": "Portefeuille, relevés et plafonds",
+  "es": "Cartera, facturas y límites"
+ },
+ {
+  "pt": "Limites de {0}",
+  "tipo": "padrao",
+  "en": "{0} limits",
+  "fr": "Limites de {0}",
+  "es": "Límites de {0}"
+ },
+ {
+  "pt": "Onde você quer chegar",
+  "tipo": "exato",
+  "en": "Where you want to get",
+  "fr": "Où vous voulez arriver",
+  "es": "A dónde quieres llegar"
+ },
+ {
+  "pt": "O que se repete todo mês",
+  "tipo": "exato",
+  "en": "What repeats every month",
+  "fr": "Ce qui se répète chaque mois",
+  "es": "Lo que se repite cada mes"
+ },
+ {
+  "pt": "Semana, mês e ano do seu dinheiro",
+  "tipo": "exato",
+  "en": "Your money by week, month and year",
+  "fr": "Votre argent par semaine, mois et année",
+  "es": "Tu dinero por semana, mes y año"
+ },
+ {
+  "pt": "Carteira, evolução e projeções",
+  "tipo": "exato",
+  "en": "Portfolio, growth and projections",
+  "fr": "Portefeuille, évolution et projections",
+  "es": "Cartera, evolución y proyecciones"
+ },
+ {
+  "pt": "Consolidado de {0}",
+  "tipo": "padrao",
+  "en": "{0} at a glance",
+  "fr": "Consolidé de {0}",
+  "es": "Consolidado de {0}"
+ },
+ {
+  "pt": "Leitura do seu dinheiro",
+  "tipo": "exato",
+  "en": "A reading of your money",
+  "fr": "Lecture de votre argent",
+  "es": "Lectura de tu dinero"
+ },
+ {
+  "pt": "Organização e peso histórico",
+  "tipo": "exato",
+  "en": "Organization and historical weight",
+  "fr": "Organisation et poids historique",
+  "es": "Organización y peso histórico"
+ },
+ {
+  "pt": "Perfil, aparência, dados e integrações",
+  "tipo": "exato",
+  "en": "Profile, appearance, data and integrations",
+  "fr": "Profil, apparence, données et intégrations",
+  "es": "Perfil, apariencia, datos e integraciones"
+ },
+ {
+  "pt": "Erro ao desenhar a página \"{0}\":",
+  "tipo": "padrao",
+  "en": "Error drawing the \"{0}\" page:",
+  "fr": "Erreur lors de l'affichage de la page « {0} » :",
+  "es": "Error al dibujar la página \"{0}\":"
+ },
+ {
+  "pt": "Algo deu errado ao desenhar esta página. Veja o console.",
+  "tipo": "exato",
+  "en": "Something went wrong drawing this page. Check the console.",
+  "fr": "Un problème est survenu lors de l'affichage de cette page. Consultez la console.",
+  "es": "Algo salió mal al dibujar esta página. Revisa la consola."
+ },
+ {
+  "pt": "Espaço \"{0}\" · {1} lançamentos ·",
+  "tipo": "padrao",
+  "en": "Space \"{0}\" · {1} entries ·",
+  "fr": "Espace « {0} » · {1} écritures ·",
+  "es": "Espacio \"{0}\" · {1} movimientos ·"
+ },
+ {
+  "pt": "{0} contas · {1} cartões",
+  "tipo": "padrao",
+  "en": "{0} accounts · {1} cards",
+  "fr": "{0} comptes · {1} cartes",
+  "es": "{0} cuentas · {1} tarjetas"
+ },
+ {
+  "pt": "Dados salvos apenas neste navegador — sem conta, não há cópia em outro lugar",
+  "tipo": "exato",
+  "en": "Data saved only in this browser — without an account, there's no copy anywhere else",
+  "fr": "Données enregistrées seulement dans ce navigateur — sans compte, il n'y a aucune copie ailleurs",
+  "es": "Datos guardados solo en este navegador — sin cuenta, no hay copia en otro lugar"
+ },
+ {
+  "pt": "Dados na sua conta, no servidor. Este navegador guarda uma cópia para abrir rápido",
+  "tipo": "exato",
+  "en": "Data in your account, on the server. This browser keeps a copy to open quickly",
+  "fr": "Données dans votre compte, sur le serveur. Ce navigateur en garde une copie pour ouvrir vite",
+  "es": "Datos en tu cuenta, en el servidor. Este navegador guarda una copia para abrir rápido"
+ },
+ {
+  "pt": "Clique para trocar o nome",
+  "tipo": "exato",
+  "en": "Click to change the name",
+  "fr": "Cliquez pour changer le nom",
+  "es": "Haz clic para cambiar el nombre"
+ },
+ {
+  "pt": "Hoje é {0}",
+  "tipo": "padrao",
+  "en": "Today is {0}",
+  "fr": "Nous sommes le {0}",
+  "es": "Hoy es {0}"
+ },
+ {
+  "pt": "2-digit",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Como você quer ser chamado?",
+  "tipo": "exato",
+  "en": "What should we call you?",
+  "fr": "Comment voulez-vous être appelé ?",
+  "es": "¿Cómo quieres que te llamemos?"
+ },
+ {
+  "pt": "Nome na saudação",
+  "tipo": "exato",
+  "en": "Name in the greeting",
+  "fr": "Nom dans le message d'accueil",
+  "es": "Nombre en el saludo"
+ },
+ {
+  "pt": "Aparece no topo do painel. Deixe em branco para voltar a \"visitante\".",
+  "tipo": "exato",
+  "en": "It shows at the top of the dashboard. Leave it blank to go back to \"visitor\".",
+  "fr": "Il apparaît en haut du tableau de bord. Laissez vide pour revenir à « visiteur ».",
+  "es": "Aparece arriba del panel. Déjalo en blanco para volver a \"visitante\"."
+ },
+ {
+  "pt": "Cancelar",
+  "tipo": "exato",
+  "en": "Cancel",
+  "fr": "Annuler",
+  "es": "Cancelar"
+ },
+ {
+  "pt": "Salvar",
+  "tipo": "exato",
+  "en": "Save",
+  "fr": "Enregistrer",
+  "es": "Guardar"
+ },
+ {
+  "pt": "Selecionar",
+  "tipo": "exato",
+  "en": "Select",
+  "fr": "Sélectionner",
+  "es": "Seleccionar"
+ },
+ {
+  "pt": "Opções",
+  "tipo": "exato",
+  "en": "Options",
+  "fr": "Options",
+  "es": "Opciones"
+ },
+ {
+  "pt": "+ Novo espaço",
+  "tipo": "exato",
+  "en": "+ New space",
+  "fr": "+ Nouvel espace",
+  "es": "+ Nuevo espacio"
+ },
+ {
+  "pt": "Gerenciar espaços…",
+  "tipo": "exato",
+  "en": "Manage spaces…",
+  "fr": "Gérer les espaces…",
+  "es": "Administrar espacios…"
+ },
+ {
+  "pt": "ArrowDown",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "ArrowUp",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Home",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "End",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Escape",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Tab",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nova despesa",
+  "tipo": "exato",
+  "en": "New expense",
+  "fr": "Nouvelle dépense",
+  "es": "Nuevo gasto"
+ },
+ {
+  "pt": "Nova receita",
+  "tipo": "exato",
+  "en": "New income",
+  "fr": "Nouveau revenu",
+  "es": "Nuevo ingreso"
+ },
+ {
+  "pt": "Transferência",
+  "tipo": "exato",
+  "en": "Transfer",
+  "fr": "Virement",
+  "es": "Transferencia"
+ },
+ {
+  "pt": "Novo investimento",
+  "tipo": "exato",
+  "en": "New investment",
+  "fr": "Nouvel investissement",
+  "es": "Nueva inversión"
+ },
+ {
+  "pt": "Nova conta de débito",
+  "tipo": "exato",
+  "en": "New debit account",
+  "fr": "Nouveau compte de débit",
+  "es": "Nueva cuenta de débito"
+ },
+ {
+  "pt": "Novo cartão de crédito",
+  "tipo": "exato",
+  "en": "New credit card",
+  "fr": "Nouvelle carte de crédit",
+  "es": "Nueva tarjeta de crédito"
+ },
+ {
+  "pt": "Nova compra no crédito",
+  "tipo": "exato",
+  "en": "New credit purchase",
+  "fr": "Nouvel achat à crédit",
+  "es": "Nueva compra con crédito"
+ },
+ {
+  "pt": "Categoria de despesa",
+  "tipo": "exato",
+  "en": "Expense category",
+  "fr": "Catégorie de dépense",
+  "es": "Categoría de gasto"
+ },
+ {
+  "pt": "Categoria de receita",
+  "tipo": "exato",
+  "en": "Income category",
+  "fr": "Catégorie de revenu",
+  "es": "Categoría de ingreso"
+ },
+ {
+  "pt": "Novo limite de gasto",
+  "tipo": "exato",
+  "en": "New spending limit",
+  "fr": "Nouvelle limite de dépense",
+  "es": "Nuevo límite de gasto"
+ },
+ {
+  "pt": "Nova meta",
+  "tipo": "exato",
+  "en": "New goal",
+  "fr": "Nouvel objectif",
+  "es": "Nueva meta"
+ },
+ {
+  "pt": "Nova despesa fixa",
+  "tipo": "exato",
+  "en": "New fixed expense",
+  "fr": "Nouvelle dépense fixe",
+  "es": "Nuevo gasto fijo"
+ },
+ {
+  "pt": "Lançar no dia escolhido",
+  "tipo": "exato",
+  "en": "Add on the chosen day",
+  "fr": "Saisir au jour choisi",
+  "es": "Registrar en el día elegido"
+ },
+ {
+  "pt": "Perfil alterado.",
+  "tipo": "exato",
+  "en": "Profile changed.",
+  "fr": "Profil modifié.",
+  "es": "Perfil cambiado."
+ },
+ {
+  "pt": "ArrowLeft",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "ArrowRight",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Este navegador está bloqueando o armazenamento local: os dados vão sumir ao fechar a aba. Entre na sua conta antes de sair para guardá-los.",
+  "tipo": "exato",
+  "en": "This browser is blocking local storage: your data will disappear when you close the tab. Sign in before leaving to keep it.",
+  "fr": "Ce navigateur bloque le stockage local : les données disparaîtront à la fermeture de l'onglet. Connectez-vous avant de partir pour les garder.",
+  "es": "Este navegador está bloqueando el almacenamiento local: los datos desaparecerán al cerrar la pestaña. Inicia sesión antes de salir para conservarlos."
+ },
+ {
+  "pt": "Falha ao iniciar \"{0}\":",
+  "tipo": "padrao",
+  "en": "Failed to start \"{0}\":",
+  "fr": "Échec du démarrage de « {0} » :",
+  "es": "Error al iniciar \"{0}\":"
+ },
+ {
+  "pt": "Parte do app não iniciou ({0}). Veja o console.",
+  "tipo": "padrao",
+  "en": "Part of the app didn't start ({0}). Check the console.",
+  "fr": "Une partie de l'app n'a pas démarré ({0}). Consultez la console.",
+  "es": "Parte de la app no se inició ({0}). Revisa la consola."
+ },
+ {
+  "pt": "ícones",
+  "tipo": "exato",
+  "en": "icons",
+  "fr": "icônes",
+  "es": "íconos"
+ },
+ {
+  "pt": "período",
+  "tipo": "exato",
+  "en": "period",
+  "fr": "période",
+  "es": "período"
+ },
+ {
+  "pt": "seletores de contexto",
+  "tipo": "exato",
+  "en": "context selectors",
+  "fr": "sélecteurs de contexte",
+  "es": "selectores de contexto"
+ },
+ {
+  "pt": "calendário",
+  "tipo": "exato",
+  "en": "calendar",
+  "fr": "calendrier",
+  "es": "calendario"
+ },
+ {
+  "pt": "navegação superior",
+  "tipo": "exato",
+  "en": "top navigation",
+  "fr": "navigation du haut",
+  "es": "navegación superior"
+ },
+ {
+  "pt": "navegação do celular",
+  "tipo": "exato",
+  "en": "mobile navigation",
+  "fr": "navigation mobile",
+  "es": "navegación del celular"
+ },
+ {
+  "pt": "endereços",
+  "tipo": "exato",
+  "en": "addresses",
+  "fr": "adresses",
+  "es": "direcciones"
+ },
+ {
+  "pt": "fila offline",
+  "tipo": "exato",
+  "en": "offline queue",
+  "fr": "file hors ligne",
+  "es": "cola sin conexión"
+ },
+ {
+  "pt": "fonte dos dados",
+  "tipo": "exato",
+  "en": "data source",
+  "fr": "source des données",
+  "es": "fuente de los datos"
+ },
+ {
+  "pt": "estado da sincronia",
+  "tipo": "exato",
+  "en": "sync status",
+  "fr": "état de la synchronisation",
+  "es": "estado de la sincronización"
+ },
+ {
+  "pt": "sincronização",
+  "tipo": "exato",
+  "en": "sync",
+  "fr": "synchronisation",
+  "es": "sincronización"
+ },
+ {
+  "pt": "UGLEZ flutuante",
+  "tipo": "exato",
+  "en": "floating UGLEZ",
+  "fr": "UGLEZ flottant",
+  "es": "UGLEZ flotante"
+ },
+ {
+  "pt": "Consentimento/início:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não foi possível verificar a privacidade. Recarregue a página.",
+  "tipo": "exato",
+  "en": "Couldn't check the privacy settings. Reload the page.",
+  "fr": "Impossible de vérifier la confidentialité. Rechargez la page.",
+  "es": "No se pudo verificar la privacidad. Recarga la página."
+ },
+ {
+  "pt": "DOMContentLoaded",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

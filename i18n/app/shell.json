@@ -1,0 +1,159 @@
+[
+ {
+  "pt": "oaze:notificacoes-lidas",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Fatura vencida — {0}",
+  "tipo": "padrao",
+  "en": "Overdue bill — {0}",
+  "fr": "Relevé en retard — {0}",
+  "es": "Factura vencida — {0}"
+ },
+ {
+  "pt": "{0} · venceu em {1}",
+  "tipo": "padrao",
+  "en": "{0} · was due on {1}",
+  "fr": "{0} · échu le {1}",
+  "es": "{0} · venció el {1}"
+ },
+ {
+  "pt": "em {0} dia(s)",
+  "tipo": "padrao",
+  "en": "in {0} day(s)",
+  "fr": "dans {0} jour(s)",
+  "es": "en {0} día(s)"
+ },
+ {
+  "pt": "Fatura vence {0} — {1}",
+  "tipo": "padrao",
+  "en": "Bill due {0} — {1}",
+  "fr": "Relevé échéance {0} — {1}",
+  "es": "Factura vence {0} — {1}"
+ },
+ {
+  "pt": "{0} lançamento(s) por confirmar",
+  "tipo": "padrao",
+  "en": "{0} entry(ies) to confirm",
+  "fr": "{0} écriture(s) à confirmer",
+  "es": "{0} movimiento(s) por confirmar"
+ },
+ {
+  "pt": "{0} aguardando em {1}",
+  "tipo": "padrao",
+  "en": "{0} waiting in {1}",
+  "fr": "{0} en attente en {1}",
+  "es": "{0} esperando en {1}"
+ },
+ {
+  "pt": "{0} está negativa",
+  "tipo": "padrao",
+  "en": "{0} is negative",
+  "fr": "{0} est à découvert",
+  "es": "{0} está en negativo"
+ },
+ {
+  "pt": "{0} em {1}",
+  "tipo": "padrao",
+  "en": "{0} on {1}",
+  "fr": "{0} le {1}",
+  "es": "{0} el {1}"
+ },
+ {
+  "pt": "Orçamento estourado — {0}",
+  "tipo": "padrao",
+  "en": "Budget exceeded — {0}",
+  "fr": "Budget dépassé — {0}",
+  "es": "Presupuesto excedido — {0}"
+ },
+ {
+  "pt": "Notificações:",
+  "tipo": "exato",
+  "en": "Notifications:",
+  "fr": "Notifications :",
+  "es": "Notificaciones:"
+ },
+ {
+  "pt": "{0} notificação(ões)",
+  "tipo": "padrao",
+  "en": "{0} notification(s)",
+  "fr": "{0} notification(s)",
+  "es": "{0} notificación(es)"
+ },
+ {
+  "pt": "Notificações — nada pendente",
+  "tipo": "exato",
+  "en": "Notifications — nothing pending",
+  "fr": "Notifications — rien en attente",
+  "es": "Notificaciones — nada pendiente"
+ },
+ {
+  "pt": "Tudo em dia",
+  "tipo": "exato",
+  "en": "All caught up",
+  "fr": "Tout est à jour",
+  "es": "Todo al día"
+ },
+ {
+  "pt": "Faturas, saldos e orçamentos sem pendência.",
+  "tipo": "exato",
+  "en": "Bills, balances and budgets with nothing pending.",
+  "fr": "Relevés, soldes et budgets sans rien en attente.",
+  "es": "Facturas, saldos y presupuestos sin pendientes."
+ },
+ {
+  "pt": "Lançamentos de {0}",
+  "tipo": "padrao",
+  "en": "{0} entries",
+  "fr": "Écritures de {0}",
+  "es": "Movimientos de {0}"
+ },
+ {
+  "pt": "· previsto",
+  "tipo": "exato",
+  "en": "· planned",
+  "fr": "· prévu",
+  "es": "· previsto"
+ },
+ {
+  "pt": "Lançamentos",
+  "tipo": "exato",
+  "en": "Entries",
+  "fr": "Écritures",
+  "es": "Movimientos"
+ },
+ {
+  "pt": "Encontre pelo nome",
+  "tipo": "exato",
+  "en": "Find by name",
+  "fr": "Trouver par le nom",
+  "es": "Busca por nombre"
+ },
+ {
+  "pt": "busca de qualquer tela",
+  "tipo": "exato",
+  "en": "search from any screen",
+  "fr": "recherche depuis n'importe quel écran",
+  "es": "búsqueda desde cualquier pantalla"
+ },
+ {
+  "pt": "Nada encontrado para “{0}”",
+  "tipo": "padrao",
+  "en": "Nothing found for “{0}”",
+  "fr": "Rien trouvé pour « {0} »",
+  "es": "Nada encontrado para “{0}”"
+ },
+ {
+  "pt": "Tente o nome da conta, da categoria ou parte da descrição.",
+  "tipo": "exato",
+  "en": "Try the account name, the category or part of the description.",
+  "fr": "Essayez le nom du compte, de la catégorie ou une partie de la description.",
+  "es": "Prueba con el nombre de la cuenta, de la categoría o parte de la descripción."
+ },
+ {
+  "pt": "color-mix(in srgb, {0} 18%, transparent)",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

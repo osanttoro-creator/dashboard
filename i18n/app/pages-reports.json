@@ -1,0 +1,136 @@
+[
+ {
+  "pt": "Receitas em {0}",
+  "tipo": "padrao",
+  "en": "Income in {0}",
+  "fr": "Revenus en {0}",
+  "es": "Ingresos en {0}"
+ },
+ {
+  "pt": "{0} mês(es) com entrada",
+  "tipo": "padrao",
+  "en": "{0} month(s) with income",
+  "fr": "{0} mois avec entrée",
+  "es": "{0} mes(es) con ingresos"
+ },
+ {
+  "pt": "Despesas em {0}",
+  "tipo": "padrao",
+  "en": "Expenses in {0}",
+  "fr": "Dépenses en {0}",
+  "es": "Gastos en {0}"
+ },
+ {
+  "pt": "Pico em {0}: {1}",
+  "tipo": "padrao",
+  "en": "Peak in {0}: {1}",
+  "fr": "Pic en {0} : {1}",
+  "es": "Pico en {0}: {1}"
+ },
+ {
+  "pt": "Sobrou no ano",
+  "tipo": "exato",
+  "en": "Left over this year",
+  "fr": "Reste de l'année",
+  "es": "Sobró en el año"
+ },
+ {
+  "pt": "do que entrou",
+  "tipo": "exato",
+  "en": "of what came in",
+  "fr": "de ce qui est entré",
+  "es": "de lo que entró"
+ },
+ {
+  "pt": "Sem receita para comparar",
+  "tipo": "exato",
+  "en": "No income to compare",
+  "fr": "Aucun revenu à comparer",
+  "es": "Sin ingresos para comparar"
+ },
+ {
+  "pt": "Investido até dez",
+  "tipo": "exato",
+  "en": "Invested through Dec",
+  "fr": "Investi jusqu'en déc.",
+  "es": "Invertido hasta dic"
+ },
+ {
+  "pt": "Valor estimado no fim do ano",
+  "tipo": "exato",
+  "en": "Estimated value at year-end",
+  "fr": "Valeur estimée en fin d'année",
+  "es": "Valor estimado a fin de año"
+ },
+ {
+  "pt": "Total {0}",
+  "tipo": "padrao",
+  "en": "Total {0}",
+  "fr": "Total {0}",
+  "es": "Total {0}"
+ },
+ {
+  "pt": "Despesas: {0}",
+  "tipo": "padrao",
+  "en": "Expenses: {0}",
+  "fr": "Dépenses : {0}",
+  "es": "Gastos: {0}"
+ },
+ {
+  "pt": "Sobrou {0} do que entrou",
+  "tipo": "padrao",
+  "en": "{0} of what came in was left over",
+  "fr": "Il est resté {0} de ce qui est entré",
+  "es": "Sobró el {0} de lo que entró"
+ },
+ {
+  "pt": "A exportação em CSV",
+  "tipo": "exato",
+  "en": "CSV export",
+  "fr": "L'export en CSV",
+  "es": "La exportación en CSV"
+ },
+ {
+  "pt": "Mes",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze-consolidado-{0}.csv",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "text/csv",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "CSV exportado.",
+  "tipo": "exato",
+  "en": "CSV exported.",
+  "fr": "CSV exporté.",
+  "es": "CSV exportado."
+ },
+ {
+  "pt": "A exportação em PDF",
+  "tipo": "exato",
+  "en": "PDF export",
+  "fr": "L'export en PDF",
+  "es": "La exportación en PDF"
+ },
+ {
+  "pt": "OAZE — consolidado {0}",
+  "tipo": "padrao",
+  "en": "OAZE — {0} summary",
+  "fr": "OAZE — consolidé {0}",
+  "es": "OAZE — consolidado {0}"
+ },
+ {
+  "pt": "Este navegador não abriu a janela de impressão.",
+  "tipo": "exato",
+  "en": "This browser didn't open the print window.",
+  "fr": "Ce navigateur n'a pas ouvert la fenêtre d'impression.",
+  "es": "Este navegador no abrió la ventana de impresión."
+ }
+]

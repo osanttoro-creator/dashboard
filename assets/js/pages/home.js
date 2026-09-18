@@ -77,7 +77,7 @@
     if (temPendencia) {
       UI.setValue('heroProjecaoValor', U.fmtBRL(pr.saldo));
       document.getElementById('heroProjecaoValor').className = 'hero-projecao-v ' + U.signClass(pr.saldo);
-      const partes = ['no fim de ' + U.MONTHS[U.ymParts(ym).m].toLowerCase()];
+      const partes = ['no fim de ' + U.mesNaFrase(U.ymParts(ym).m)];
       /* espaço sem quebra depois do sinal: "−" sozinho no fim da linha
          e o valor na de baixo se lê como traço, não como subtração */
       if (pr.receber > 0) partes.push('+ ' + U.fmtBRL(pr.receber) + ' a receber');
@@ -256,7 +256,7 @@
       }, [
         Icons.categoryBadge(r.id === '__none__' ? null : r.id, 30),
         el('span', { class: 'cat-tile-id' }, [
-          el('span', { class: 'cat-tile-name', text: r.name }),
+          el('span', { class: 'cat-tile-name', text: r.name, translate: 'no' }),
           el('span', { class: 'cat-tile-bar' }, [
             r.debit > 0 ? el('i', { style: { width: wDeb + '%', background: r.color } }) : null,
             r.credit > 0 ? el('i', { class: 'is-credit', style: { width: wCre + '%', background: r.color } }) : null

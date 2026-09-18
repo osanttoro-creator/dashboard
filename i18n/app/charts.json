@@ -1,0 +1,70 @@
+[
+ {
+  "pt": "{0}: sem dados no período.",
+  "tipo": "padrao",
+  "en": "{0}: no data for this period.",
+  "fr": "{0} : aucune donnée sur la période.",
+  "es": "{0}: sin datos en el período."
+ },
+ {
+  "pt": "{0}{1} pontos. Maior: {2}{3}. Menor: {4}{5}.",
+  "tipo": "padrao",
+  "en": "{0}{1} points. Highest: {2}{3}. Lowest: {4}{5}.",
+  "fr": "{0}{1} points. Maximum : {2}{3}. Minimum : {4}{5}.",
+  "es": "{0}{1} puntos. Mayor: {2}{3}. Menor: {4}{5}."
+ },
+ {
+  "pt": "{0}-tabela",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Item",
+  "tipo": "exato",
+  "en": "Item",
+  "fr": "Élément",
+  "es": "Ítem"
+ },
+ {
+  "pt": "Série {0}",
+  "tipo": "padrao",
+  "en": "Series {0}",
+  "fr": "Série {0}",
+  "es": "Serie {0}"
+ },
+ {
+  "pt": "{0} — os mesmos dados do gráfico, em tabela.",
+  "tipo": "padrao",
+  "en": "{0} — the same data as the chart, as a table.",
+  "fr": "{0} — les mêmes données que le graphique, en tableau.",
+  "es": "{0} — los mismos datos del gráfico, en tabla."
+ },
+ {
+  "pt": "Gráfico: {0}",
+  "tipo": "padrao",
+  "en": "Chart: {0}",
+  "fr": "Graphique : {0}",
+  "es": "Gráfico: {0}"
+ },
+ {
+  "pt": "Gráfico",
+  "tipo": "exato",
+  "en": "Chart",
+  "fr": "Graphique",
+  "es": "Gráfico"
+ },
+ {
+  "pt": "Total",
+  "tipo": "exato",
+  "en": "Total",
+  "fr": "Total",
+  "es": "Total"
+ },
+ {
+  "pt": "Total: {0}",
+  "tipo": "padrao",
+  "en": "Total: {0}",
+  "fr": "Total : {0}",
+  "es": "Total: {0}"
+ }
+]

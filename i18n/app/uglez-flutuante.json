@@ -1,0 +1,51 @@
+[
+ {
+  "pt": "Sua pergunta para o UGLEZ",
+  "tipo": "exato",
+  "en": "Your question for UGLEZ",
+  "fr": "Votre question pour UGLEZ",
+  "es": "Tu pregunta para UGLEZ"
+ },
+ {
+  "pt": "Pergunte sobre o mês que você está vendo…",
+  "tipo": "exato",
+  "en": "Ask about the month you're looking at…",
+  "fr": "Posez une question sur le mois affiché…",
+  "es": "Pregunta sobre el mes que estás viendo…"
+ },
+ {
+  "pt": "Fechar UGLEZ",
+  "tipo": "exato",
+  "en": "Close UGLEZ",
+  "fr": "Fermer UGLEZ",
+  "es": "Cerrar UGLEZ"
+ },
+ {
+  "pt": "Orientação, não consultoria.",
+  "tipo": "exato",
+  "en": "Guidance, not financial advice.",
+  "fr": "Une orientation, pas un conseil financier.",
+  "es": "Orientación, no asesoría."
+ },
+ {
+  "pt": "Abrir UGLEZ",
+  "tipo": "exato",
+  "en": "Open UGLEZ",
+  "fr": "Ouvrir UGLEZ",
+  "es": "Abrir UGLEZ"
+ },
+ {
+  "pt": "Você usou as {0} consultas do seu plano neste mês. Elas voltam no dia 1º.",
+  "tipo": "padrao",
+  "en": "You've used your plan's {0} questions this month. They come back on the 1st.",
+  "fr": "Vous avez utilisé les {0} questions de votre formule ce mois-ci. Elles reviennent le 1er.",
+  "es": "Usaste las {0} consultas de tu plan este mes. Vuelven el día 1."
+ },
+ {
+  "pt": "{0} de {1} consultas restantes neste mês.",
+  "tipo": "padrao",
+  "en": "{0} of {1} questions left this month.",
+  "fr": "{0} sur {1} questions restantes ce mois-ci.",
+  "es": "{0} de {1} consultas restantes este mes."
+ }
+]

@@ -47,7 +47,7 @@
       box.appendChild(el('div', { class: 'cat-row' }, [
         Icons.categoryBadge(c.id, 28),
         el('div', {}, [
-          el('div', { class: 'cat-name', text: c.name }),
+          el('div', { class: 'cat-name', text: c.name, translate: 'no' }),
           el('div', { class: 'muted', text: t ? `${t.count} lançamento(s) · ${r.label}` : `sem lançamentos · ${r.label}` })
         ]),
         el('div', { class: 'cat-stat' }, [

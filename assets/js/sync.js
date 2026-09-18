@@ -425,11 +425,15 @@
     const contas = Array.isArray(p.accounts) ? p.accounts : [];
     const contasIniciais = contas.every((a) =>
       a && a.name === 'Conta corrente' && (+a.openingBalance || 0) === 0);
-    const padrao = (Store.CATEGORIAS_PADRAO || []).slice().sort();
     const atuais = (Array.isArray(p.categories) ? p.categories : [])
       .map((c) => c && c.name).filter(Boolean).sort();
-    const categoriasIniciais = atuais.length === padrao.length &&
-      atuais.every((nome, i) => nome === padrao[i]);
+    /* As categorias prontas nascem na língua da tela: um espaço sem
+       conteúdo pode tê-las em português ou na língua atual. */
+    const iguais = (lista) => {
+      const padrao = (lista || []).slice().sort();
+      return atuais.length === padrao.length && atuais.every((nome, i) => nome === padrao[i]);
+    };
+    const categoriasIniciais = iguais(Store.CATEGORIAS_PADRAO) || iguais(Store.CATEGORIAS_PADRAO_PT);
     return colecoesVazias && mapasVazios && contasIniciais && categoriasIniciais;
   }
 

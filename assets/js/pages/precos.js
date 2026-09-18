@@ -118,7 +118,7 @@
     if (Planos.MOEDAS.length < 2) return;
 
     const select = el('select', {
-      class: 'select precos-moeda-select', 'aria-label': 'Moeda da cobrança',
+      class: 'input precos-moeda-select', 'aria-label': 'Moeda da cobrança',
       onchange: () => { guardarMoeda(select.value); seloDoAnual(); cards(); }
     }, Planos.MOEDAS.map((m) => el('option', { value: m.id, text: m.rotulo })));
     select.value = moeda;

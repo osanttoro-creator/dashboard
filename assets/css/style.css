@@ -4951,3 +4951,6 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 @media (max-width: 520px) {
   .precos-moeda { margin-left: 0; margin-top: 8px; }
 }
+
+/* ---- 27.11 · língua das telas (Configurações → Aparência) ---- */
+.set-lingua { width: auto; min-width: 150px; }

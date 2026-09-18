@@ -1,0 +1,301 @@
+[
+ {
+  "pt": "Sem conexão — alteração guardada neste aparelho",
+  "tipo": "exato",
+  "en": "Offline — change saved on this device",
+  "fr": "Hors ligne — modification gardée sur cet appareil",
+  "es": "Sin conexión — cambio guardado en este dispositivo"
+ },
+ {
+  "pt": "Sem conexão",
+  "tipo": "exato",
+  "en": "Offline",
+  "fr": "Hors ligne",
+  "es": "Sin conexión"
+ },
+ {
+  "pt": "Sincronizando…",
+  "tipo": "exato",
+  "en": "Syncing…",
+  "fr": "Synchronisation…",
+  "es": "Sincronizando…"
+ },
+ {
+  "pt": "Sincronizado",
+  "tipo": "exato",
+  "en": "Synced",
+  "fr": "Synchronisé",
+  "es": "Sincronizado"
+ },
+ {
+  "pt": "Dados só neste aparelho",
+  "tipo": "exato",
+  "en": "Data on this device only",
+  "fr": "Données sur cet appareil seulement",
+  "es": "Datos solo en este dispositivo"
+ },
+ {
+  "pt": "Sem conexão — {0}{1}",
+  "tipo": "padrao",
+  "en": "Offline — {0}{1}",
+  "fr": "Hors ligne — {0}{1}",
+  "es": "Sin conexión — {0}{1}"
+ },
+ {
+  "pt": "alterações guardadas",
+  "tipo": "exato",
+  "en": "changes saved",
+  "fr": "modifications gardées",
+  "es": "cambios guardados"
+ },
+ {
+  "pt": "alteração guardada",
+  "tipo": "exato",
+  "en": "change saved",
+  "fr": "modification gardée",
+  "es": "cambio guardado"
+ },
+ {
+  "pt": "Não foi possível enviar {0}{1}",
+  "tipo": "padrao",
+  "en": "Couldn't send {0}{1}",
+  "fr": "Impossible d'envoyer {0}{1}",
+  "es": "No se pudo enviar {0}{1}"
+ },
+ {
+  "pt": "alterações",
+  "tipo": "exato",
+  "en": "changes",
+  "fr": "modifications",
+  "es": "cambios"
+ },
+ {
+  "pt": "alteração",
+  "tipo": "exato",
+  "en": "change",
+  "fr": "modification",
+  "es": "cambio"
+ },
+ {
+  "pt": "Elas continuam guardadas aqui. Nada foi perdido.",
+  "tipo": "exato",
+  "en": "They're still saved here. Nothing was lost.",
+  "fr": "Elles restent gardées ici. Rien n'a été perdu.",
+  "es": "Siguen guardados aquí. No se perdió nada."
+ },
+ {
+  "pt": "Não foi possível trazer seus dados",
+  "tipo": "exato",
+  "en": "Couldn't bring your data",
+  "fr": "Impossible de récupérer vos données",
+  "es": "No se pudieron traer tus datos"
+ },
+ {
+  "pt": "O que está na tela é a última cópia deste aparelho.",
+  "tipo": "exato",
+  "en": "What's on screen is this device's latest copy.",
+  "fr": "Ce qui est à l'écran est la dernière copie de cet appareil.",
+  "es": "Lo que está en pantalla es la última copia de este dispositivo."
+ },
+ {
+  "pt": "oaze.aviso-conta.fechado",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "há {0} min",
+  "tipo": "padrao",
+  "en": "{0} min ago",
+  "fr": "il y a {0} min",
+  "es": "hace {0} min"
+ },
+ {
+  "pt": "há {0} h",
+  "tipo": "padrao",
+  "en": "{0} h ago",
+  "fr": "il y a {0} h",
+  "es": "hace {0} h"
+ },
+ {
+  "pt": "em {0}",
+  "tipo": "padrao",
+  "en": "on {0}",
+  "fr": "le {0}",
+  "es": "el {0}"
+ },
+ {
+  "pt": "Verificando sua conta",
+  "tipo": "exato",
+  "en": "Checking your account",
+  "fr": "Vérification de votre compte",
+  "es": "Verificando tu cuenta"
+ },
+ {
+  "pt": "Aguarde",
+  "tipo": "exato",
+  "en": "Please wait",
+  "fr": "Patientez",
+  "es": "Espera"
+ },
+ {
+  "pt": "Só neste aparelho",
+  "tipo": "exato",
+  "en": "This device only",
+  "fr": "Cet appareil seulement",
+  "es": "Solo en este dispositivo"
+ },
+ {
+  "pt": "Estes dados estão só neste aparelho. Entre para sincronizar com os outros.",
+  "tipo": "exato",
+  "en": "This data is only on this device. Sign in to sync with the others.",
+  "fr": "Ces données sont seulement sur cet appareil. Connectez-vous pour synchroniser avec les autres.",
+  "es": "Estos datos están solo en este dispositivo. Entra para sincronizar con los demás."
+ },
+ {
+  "pt": "Sincronizando",
+  "tipo": "exato",
+  "en": "Syncing",
+  "fr": "Synchronisation",
+  "es": "Sincronizando"
+ },
+ {
+  "pt": "Sincronizando com seus outros aparelhos…",
+  "tipo": "exato",
+  "en": "Syncing with your other devices…",
+  "fr": "Synchronisation avec vos autres appareils…",
+  "es": "Sincronizando con tus otros dispositivos…"
+ },
+ {
+  "pt": "alterações guardadas aqui",
+  "tipo": "exato",
+  "en": "changes saved here",
+  "fr": "modifications gardées ici",
+  "es": "cambios guardados aquí"
+ },
+ {
+  "pt": "Tentar",
+  "tipo": "exato",
+  "en": "Retry",
+  "fr": "Réessayer",
+  "es": "Reintentar"
+ },
+ {
+  "pt": "Sem conexão. O que você fizer fica guardado e sobe quando a rede voltar.",
+  "tipo": "exato",
+  "en": "Offline. What you do is saved and goes up when the network is back.",
+  "fr": "Hors ligne. Ce que vous faites est gardé et part quand le réseau revient.",
+  "es": "Sin conexión. Lo que hagas queda guardado y se sube cuando vuelva la red."
+ },
+ {
+  "pt": "Não sincronizou",
+  "tipo": "exato",
+  "en": "Didn't sync",
+  "fr": "Pas synchronisé",
+  "es": "No se sincronizó"
+ },
+ {
+  "pt": "Tentar de novo",
+  "tipo": "exato",
+  "en": "Try again",
+  "fr": "Réessayer",
+  "es": "Intentar de nuevo"
+ },
+ {
+  "pt": "{0}. Toque para tentar de novo.",
+  "tipo": "padrao",
+  "en": "{0}. Tap to try again.",
+  "fr": "{0}. Touchez pour réessayer.",
+  "es": "{0}. Toca para intentar de nuevo."
+ },
+ {
+  "pt": "Sincronizado com seus outros aparelhos{0}. Toque para atualizar agora.",
+  "tipo": "padrao",
+  "en": "Synced with your other devices{0}. Tap to refresh now.",
+  "fr": "Synchronisé avec vos autres appareils{0}. Touchez pour actualiser.",
+  "es": "Sincronizado con tus otros dispositivos{0}. Toca para actualizar ahora."
+ },
+ {
+  "pt": "Um instante.",
+  "tipo": "exato",
+  "en": "One moment.",
+  "fr": "Un instant.",
+  "es": "Un momento."
+ },
+ {
+  "pt": "Sua conta",
+  "tipo": "exato",
+  "en": "Your account",
+  "fr": "Votre compte",
+  "es": "Tu cuenta"
+ },
+ {
+  "pt": "Sincronizado com seus outros aparelhos",
+  "tipo": "exato",
+  "en": "Synced with your other devices",
+  "fr": "Synchronisé avec vos autres appareils",
+  "es": "Sincronizado con tus otros dispositivos"
+ },
+ {
+  "pt": "Entre com a mesma conta do computador para ver tudo aqui.",
+  "tipo": "exato",
+  "en": "Sign in with the same account as on your computer to see everything here.",
+  "fr": "Connectez-vous avec le même compte que sur l'ordinateur pour tout voir ici.",
+  "es": "Entra con la misma cuenta de la computadora para ver todo aquí."
+ },
+ {
+  "pt": "Sincronizar agora",
+  "tipo": "exato",
+  "en": "Sync now",
+  "fr": "Synchroniser maintenant",
+  "es": "Sincronizar ahora"
+ },
+ {
+  "pt": "Estes dados estão só neste aparelho.",
+  "tipo": "exato",
+  "en": "This data is only on this device.",
+  "fr": "Ces données sont seulement sur cet appareil.",
+  "es": "Estos datos están solo en este dispositivo."
+ },
+ {
+  "pt": "Entre com a mesma conta do computador ou do tablet para ver tudo sincronizado aqui.",
+  "tipo": "exato",
+  "en": "Sign in with the same account as on your computer or tablet to see everything synced here.",
+  "fr": "Connectez-vous avec le même compte que sur l'ordinateur ou la tablette pour tout voir synchronisé ici.",
+  "es": "Entra con la misma cuenta de la computadora o la tableta para ver todo sincronizado aquí."
+ },
+ {
+  "pt": "Entrar e sincronizar",
+  "tipo": "exato",
+  "en": "Sign in and sync",
+  "fr": "Se connecter et synchroniser",
+  "es": "Entrar y sincronizar"
+ },
+ {
+  "pt": "Agora não",
+  "tipo": "exato",
+  "en": "Not now",
+  "fr": "Pas maintenant",
+  "es": "Ahora no"
+ },
+ {
+  "pt": "Tentar novamente",
+  "tipo": "exato",
+  "en": "Try again",
+  "fr": "Réessayer",
+  "es": "Intentar de nuevo"
+ },
+ {
+  "pt": "Tentando…",
+  "tipo": "exato",
+  "en": "Trying…",
+  "fr": "Nouvel essai…",
+  "es": "Intentando…"
+ },
+ {
+  "pt": "Entrar para sincronizar",
+  "tipo": "exato",
+  "en": "Sign in to sync",
+  "fr": "Se connecter pour synchroniser",
+  "es": "Entrar para sincronizar"
+ }
+]

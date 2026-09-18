@@ -220,7 +220,7 @@
        informação continua acessível sem gastar uma linha de tela. */
     const pp = document.getElementById('periodPicker');
     if (pp) {
-      pp.title = 'Hoje é ' + new Date().toLocaleDateString('pt-BR', {
+      pp.title = 'Hoje é ' + new Date().toLocaleDateString(((window.U && U.LOCALE) || 'pt-BR'), {
         weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
       });
     }
@@ -750,7 +750,10 @@
 
     if (!Store.storageOK) {
       setTimeout(() => UI.toast(
-        'Este navegador está bloqueando o armazenamento local: os dados vão sumir ao fechar a aba. Baixe um backup antes de sair.',
+        /* "Baixe um backup" saiu: o backup por arquivo não existe mais
+           (a transferência de dados é só pela conta). Pedir o que não
+           existe numa hora de risco é o pior momento para errar. */
+        'Este navegador está bloqueando o armazenamento local: os dados vão sumir ao fechar a aba. Entre na sua conta antes de sair para guardá-los.',
         'error', 12000), 800);
     }
 

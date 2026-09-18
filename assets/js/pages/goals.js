@@ -90,7 +90,7 @@
           }
         }, Icons.lucide(g.icon || 'target', 17)),
         el('div', { class: 'goal-id' }, [
-          el('h3', { class: 'goal-name', text: g.name }),
+          el('h3', { class: 'goal-name', text: g.name, translate: 'no' }),
           el('p', { class: 'goal-sub', text: g.deadline ? 'até ' + U.fmtDateBR(g.deadline) : 'sem prazo' })
         ]),
         completa ? UI.badge('Concluída', 'ok') : null
@@ -149,7 +149,7 @@
           onclick: async () => {
             const ok = await UI.confirm({
               title: 'Excluir meta',
-              message: `Excluir <strong>${U.escape(g.name)}</strong>? O valor guardado deixa de ser acompanhado, mas nenhum lançamento é apagado.`,
+              message: `Excluir <strong translate="no">${U.escape(g.name)}</strong>? O valor guardado deixa de ser acompanhado, mas nenhum lançamento é apagado.`,
               confirmLabel: 'Excluir', danger: true
             });
             if (ok) { Store.goals.remove(g.id); UI.toast('Meta excluída.'); }

@@ -231,7 +231,10 @@
       /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
          é a Edge Function, pelo plano. Ver AI.historico. */
       historico: AI.historico(),
-      conversa: AI.conversaRecente()
+      conversa: AI.conversaRecente(),
+      /* A resposta vem na língua da tela. É só a chave ('en'); o nome
+         da língua que entra nas instruções é escrito no servidor. */
+      idioma: (global.I18n && global.I18n.lang) || 'pt'
     };
   };
 

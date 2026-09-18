@@ -206,8 +206,8 @@
       const gainPct = iv.amount > 0 ? (gain / iv.amount) * 100 : 0;
       tbody.appendChild(el('tr', {}, [
         el('td', {}, [
-          el('strong', { text: iv.name }),
-          iv.notes ? el('div', { class: 'muted', text: iv.notes }) : null,
+          el('strong', { text: iv.name, translate: 'no' }),
+          iv.notes ? el('div', { class: 'muted', text: iv.notes, translate: 'no' }) : null,
           iv.currentValue != null ? el('div', { class: 'muted', text: 'valor informado manualmente' }) : null
         ].filter(Boolean)),
         el('td', { text: iv.type }),

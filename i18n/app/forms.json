@@ -1,0 +1,1319 @@
+[
+ {
+  "pt": "field{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Automático — deriva do banco escolhido",
+  "tipo": "exato",
+  "en": "Automatic — follows the chosen bank",
+  "fr": "Automatique — suit la banque choisie",
+  "es": "Automático — según el banco elegido"
+ },
+ {
+  "pt": "Cor {0}",
+  "tipo": "padrao",
+  "en": "Color {0}",
+  "fr": "Couleur {0}",
+  "es": "Color {0}"
+ },
+ {
+  "pt": "Automático — deduz pelo nome da categoria",
+  "tipo": "exato",
+  "en": "Automatic — guessed from the category name",
+  "fr": "Automatique — déduit du nom de la catégorie",
+  "es": "Automático — se deduce del nombre de la categoría"
+ },
+ {
+  "pt": "Cadastre uma conta ou cartão antes de lançar.",
+  "tipo": "exato",
+  "en": "Add an account or card before recording entries.",
+  "fr": "Ajoutez un compte ou une carte avant de saisir des écritures.",
+  "es": "Agrega una cuenta o tarjeta antes de registrar movimientos."
+ },
+ {
+  "pt": "Descrição *",
+  "tipo": "exato",
+  "en": "Description *",
+  "fr": "Description *",
+  "es": "Descripción *"
+ },
+ {
+  "pt": "Ex.: Supermercado",
+  "tipo": "exato",
+  "en": "e.g. Groceries",
+  "fr": "Ex. : Supermarché",
+  "es": "Ej.: Supermercado"
+ },
+ {
+  "pt": "Valor (R$) *",
+  "tipo": "exato",
+  "en": "Amount (R$) *",
+  "fr": "Montant (R$) *",
+  "es": "Monto (R$) *"
+ },
+ {
+  "pt": "Valor ({0}) *",
+  "tipo": "padrao",
+  "en": "Amount ({0}) *",
+  "fr": "Montant ({0}) *",
+  "es": "Monto ({0}) *"
+ },
+ {
+  "pt": "≈ {0} nos totais, pela cotação de {1} por 1 {2}.",
+  "tipo": "padrao",
+  "en": "≈ {0} in the totals, at a rate of {1} per 1 {2}.",
+  "fr": "≈ {0} dans les totaux, au taux de {1} pour 1 {2}.",
+  "es": "≈ {0} en los totales, a una cotización de {1} por 1 {2}."
+ },
+ {
+  "pt": "Este cartão não tem cotação: cadastre uma para converter em reais.",
+  "tipo": "exato",
+  "en": "This card has no exchange rate: add one to convert to reais.",
+  "fr": "Cette carte n'a pas de taux de change : ajoutez-en un pour convertir en reais.",
+  "es": "Esta tarjeta no tiene cotización: agrega una para convertir a reales."
+ },
+ {
+  "pt": "Data *",
+  "tipo": "exato",
+  "en": "Date *",
+  "fr": "Date *",
+  "es": "Fecha *"
+ },
+ {
+  "pt": "⌂ Débito",
+  "tipo": "exato",
+  "en": "⌂ Debit",
+  "fr": "⌂ Débit",
+  "es": "⌂ Débito"
+ },
+ {
+  "pt": "▭ Crédito",
+  "tipo": "exato",
+  "en": "▭ Credit",
+  "fr": "▭ Crédit",
+  "es": "▭ Crédito"
+ },
+ {
+  "pt": "Forma de pagamento",
+  "tipo": "exato",
+  "en": "Payment method",
+  "fr": "Moyen de paiement",
+  "es": "Forma de pago"
+ },
+ {
+  "pt": "Escolha uma conta…",
+  "tipo": "exato",
+  "en": "Choose an account…",
+  "fr": "Choisissez un compte…",
+  "es": "Elige una cuenta…"
+ },
+ {
+  "pt": "Nenhuma conta",
+  "tipo": "exato",
+  "en": "No accounts",
+  "fr": "Aucun compte",
+  "es": "Ninguna cuenta"
+ },
+ {
+  "pt": "Escolha um cartão…",
+  "tipo": "exato",
+  "en": "Choose a card…",
+  "fr": "Choisissez une carte…",
+  "es": "Elige una tarjeta…"
+ },
+ {
+  "pt": "Nenhum cartão",
+  "tipo": "exato",
+  "en": "No cards",
+  "fr": "Aucune carte",
+  "es": "Ninguna tarjeta"
+ },
+ {
+  "pt": "Fatura *",
+  "tipo": "exato",
+  "en": "Bill *",
+  "fr": "Relevé *",
+  "es": "Factura *"
+ },
+ {
+  "pt": "fatura de {0}",
+  "tipo": "padrao",
+  "en": "{0} bill",
+  "fr": "relevé de {0}",
+  "es": "factura de {0}"
+ },
+ {
+  "pt": "Conta de destino",
+  "tipo": "exato",
+  "en": "Destination account",
+  "fr": "Compte de destination",
+  "es": "Cuenta de destino"
+ },
+ {
+  "pt": "Escolha…",
+  "tipo": "exato",
+  "en": "Choose…",
+  "fr": "Choisissez…",
+  "es": "Elige…"
+ },
+ {
+  "pt": "Repetir todo mês (lançamento fixo)",
+  "tipo": "exato",
+  "en": "Repeat every month (fixed entry)",
+  "fr": "Répéter chaque mois (écriture fixe)",
+  "es": "Repetir cada mes (movimiento fijo)"
+ },
+ {
+  "pt": "Repetir até (opcional)",
+  "tipo": "exato",
+  "en": "Repeat until (optional)",
+  "fr": "Répéter jusqu'au (facultatif)",
+  "es": "Repetir hasta (opcional)"
+ },
+ {
+  "pt": "Em branco = sem data final.",
+  "tipo": "exato",
+  "en": "Blank = no end date.",
+  "fr": "Vide = sans date de fin.",
+  "es": "En blanco = sin fecha final."
+ },
+ {
+  "pt": "Parcelar em",
+  "tipo": "exato",
+  "en": "Split into",
+  "fr": "Payer en",
+  "es": "Pagar en"
+ },
+ {
+  "pt": "O valor informado é o TOTAL; será dividido nas parcelas.",
+  "tipo": "exato",
+  "en": "The amount entered is the TOTAL; it will be split across the installments.",
+  "fr": "Le montant saisi est le TOTAL ; il sera réparti entre les échéances.",
+  "es": "El monto ingresado es el TOTAL; se dividirá entre las cuotas."
+ },
+ {
+  "pt": "Já foi pago (entra nos totais)",
+  "tipo": "exato",
+  "en": "Already paid (counts in the totals)",
+  "fr": "Déjà payé (compte dans les totaux)",
+  "es": "Ya se pagó (entra en los totales)"
+ },
+ {
+  "pt": "Observações",
+  "tipo": "exato",
+  "en": "Notes",
+  "fr": "Remarques",
+  "es": "Notas"
+ },
+ {
+  "pt": "Este lançamento é fixo: alterar aqui muda todas as ocorrências. Para mudar só um mês, edite o valor pela lista.",
+  "tipo": "exato",
+  "en": "This is a fixed entry: changing it here changes every occurrence. To change a single month, edit the amount from the list.",
+  "fr": "Cette écriture est fixe : la modifier ici change toutes les occurrences. Pour ne changer qu'un mois, modifiez le montant depuis la liste.",
+  "es": "Este movimiento es fijo: cambiarlo aquí cambia todas las ocurrencias. Para cambiar solo un mes, edita el monto desde la lista."
+ },
+ {
+  "pt": "Já foi feita (entra nos saldos)",
+  "tipo": "exato",
+  "en": "Already made (counts in the balances)",
+  "fr": "Déjà effectué (compte dans les soldes)",
+  "es": "Ya se hizo (entra en los saldos)"
+ },
+ {
+  "pt": "Já foi recebido (entra nos totais)",
+  "tipo": "exato",
+  "en": "Already received (counts in the totals)",
+  "fr": "Déjà reçu (compte dans les totaux)",
+  "es": "Ya se recibió (entra en los totales)"
+ },
+ {
+  "pt": "Compra já feita (entra nos totais)",
+  "tipo": "exato",
+  "en": "Purchase already made (counts in the totals)",
+  "fr": "Achat déjà effectué (compte dans les totaux)",
+  "es": "Compra ya hecha (entra en los totales)"
+ },
+ {
+  "pt": "Conta de origem",
+  "tipo": "exato",
+  "en": "Source account",
+  "fr": "Compte d'origine",
+  "es": "Cuenta de origen"
+ },
+ {
+  "pt": "Crédito: entra na fatura escolhida abaixo e não mexe no saldo da conta agora. O dinheiro sai do caixa quando a fatura for paga.",
+  "tipo": "exato",
+  "en": "Credit: goes on the bill chosen below and doesn't touch the account balance now. The money leaves your cash when the bill is paid.",
+  "fr": "Crédit : s'ajoute au relevé choisi ci-dessous et ne touche pas au solde du compte maintenant. L'argent sort de la trésorerie quand le relevé est payé.",
+  "es": "Crédito: entra en la factura elegida abajo y no toca el saldo de la cuenta ahora. El dinero sale de la caja cuando se paga la factura."
+ },
+ {
+  "pt": "Débito: sai direto da conta bancária e reduz o saldo dela na hora.",
+  "tipo": "exato",
+  "en": "Debit: comes straight out of the bank account and lowers its balance right away.",
+  "fr": "Débit : sort directement du compte bancaire et réduit son solde tout de suite.",
+  "es": "Débito: sale directo de la cuenta bancaria y reduce su saldo al instante."
+ },
+ {
+  "pt": "Parcelas da fatura de {0} à de {1}. A primeira vence em {2}.",
+  "tipo": "padrao",
+  "en": "Installments from the {0} bill to the {1} bill. The first is due on {2}.",
+  "fr": "Échéances du relevé de {0} à celui de {1}. La première est due le {2}.",
+  "es": "Cuotas desde la factura de {0} hasta la de {1}. La primera vence el {2}."
+ },
+ {
+  "pt": "Vence em {0}.",
+  "tipo": "padrao",
+  "en": "Due on {0}.",
+  "fr": "Échéance le {0}.",
+  "es": "Vence el {0}."
+ },
+ {
+  "pt": "Informe uma descrição.",
+  "tipo": "exato",
+  "en": "Enter a description.",
+  "fr": "Saisissez une description.",
+  "es": "Ingresa una descripción."
+ },
+ {
+  "pt": "Informe um valor maior que zero.",
+  "tipo": "exato",
+  "en": "Enter an amount greater than zero.",
+  "fr": "Saisissez un montant supérieur à zéro.",
+  "es": "Ingresa un monto mayor que cero."
+ },
+ {
+  "pt": "Escolha a fatura.",
+  "tipo": "exato",
+  "en": "Choose the bill.",
+  "fr": "Choisissez le relevé.",
+  "es": "Elige la factura."
+ },
+ {
+  "pt": "Data inválida.",
+  "tipo": "exato",
+  "en": "Invalid date.",
+  "fr": "Date invalide.",
+  "es": "Fecha inválida."
+ },
+ {
+  "pt": "Escolha um cartão.",
+  "tipo": "exato",
+  "en": "Choose a card.",
+  "fr": "Choisissez une carte.",
+  "es": "Elige una tarjeta."
+ },
+ {
+  "pt": "Escolha uma conta.",
+  "tipo": "exato",
+  "en": "Choose an account.",
+  "fr": "Choisissez un compte.",
+  "es": "Elige una cuenta."
+ },
+ {
+  "pt": "Escolha a conta de destino.",
+  "tipo": "exato",
+  "en": "Choose the destination account.",
+  "fr": "Choisissez le compte de destination.",
+  "es": "Elige la cuenta de destino."
+ },
+ {
+  "pt": "Origem e destino devem ser diferentes.",
+  "tipo": "exato",
+  "en": "Source and destination must be different.",
+  "fr": "L'origine et la destination doivent être différentes.",
+  "es": "El origen y el destino deben ser diferentes."
+ },
+ {
+  "pt": "Parcela ficaria menor que R$ 0,01.",
+  "tipo": "exato",
+  "en": "Each installment would be less than R$ 0.01.",
+  "fr": "Chaque échéance serait inférieure à 0,01 R$.",
+  "es": "Cada cuota quedaría por debajo de R$ 0,01."
+ },
+ {
+  "pt": "Cadastre a cotação do cartão {0} antes de lançar em {1}.",
+  "tipo": "padrao",
+  "en": "Add the exchange rate for card {0} before recording in {1}.",
+  "fr": "Ajoutez le taux de change de la carte {0} avant de saisir en {1}.",
+  "es": "Registra la cotización de la tarjeta {0} antes de registrar en {1}."
+ },
+ {
+  "pt": "Lançamento atualizado.",
+  "tipo": "exato",
+  "en": "Entry updated.",
+  "fr": "Écriture mise à jour.",
+  "es": "Movimiento actualizado."
+ },
+ {
+  "pt": "{0} parcelas lançadas.",
+  "tipo": "padrao",
+  "en": "{0} installments recorded.",
+  "fr": "{0} échéances enregistrées.",
+  "es": "{0} cuotas registradas."
+ },
+ {
+  "pt": "Receita lançada.",
+  "tipo": "exato",
+  "en": "Income recorded.",
+  "fr": "Revenu enregistré.",
+  "es": "Ingreso registrado."
+ },
+ {
+  "pt": "Transferência lançada.",
+  "tipo": "exato",
+  "en": "Transfer recorded.",
+  "fr": "Virement enregistré.",
+  "es": "Transferencia registrada."
+ },
+ {
+  "pt": "Despesa lançada.",
+  "tipo": "exato",
+  "en": "Expense recorded.",
+  "fr": "Dépense enregistrée.",
+  "es": "Gasto registrado."
+ },
+ {
+  "pt": "Editar lançamento",
+  "tipo": "exato",
+  "en": "Edit entry",
+  "fr": "Modifier l'écriture",
+  "es": "Editar movimiento"
+ },
+ {
+  "pt": "Novo lançamento",
+  "tipo": "exato",
+  "en": "New entry",
+  "fr": "Nouvelle écriture",
+  "es": "Nuevo movimiento"
+ },
+ {
+  "pt": "Excluir",
+  "tipo": "exato",
+  "en": "Delete",
+  "fr": "Supprimer",
+  "es": "Eliminar"
+ },
+ {
+  "pt": "Excluir lançamento",
+  "tipo": "exato",
+  "en": "Delete entry",
+  "fr": "Supprimer l'écriture",
+  "es": "Eliminar movimiento"
+ },
+ {
+  "pt": "Todas as ocorrências mensais serão removidas.",
+  "tipo": "exato",
+  "en": "Every monthly occurrence will be removed.",
+  "fr": "Toutes les occurrences mensuelles seront supprimées.",
+  "es": "Se eliminarán todas las ocurrencias mensuales."
+ },
+ {
+  "pt": "Todas as parcelas do grupo serão removidas.",
+  "tipo": "exato",
+  "en": "Every installment in the group will be removed.",
+  "fr": "Toutes les échéances du groupe seront supprimées.",
+  "es": "Se eliminarán todas las cuotas del grupo."
+ },
+ {
+  "pt": "Lançamento excluído.",
+  "tipo": "exato",
+  "en": "Entry deleted.",
+  "fr": "Écriture supprimée.",
+  "es": "Movimiento eliminado."
+ },
+ {
+  "pt": "Salvar e novo",
+  "tipo": "exato",
+  "en": "Save and add another",
+  "fr": "Enregistrer et nouveau",
+  "es": "Guardar y nuevo"
+ },
+ {
+  "pt": "Nome da conta *",
+  "tipo": "exato",
+  "en": "Account name *",
+  "fr": "Nom du compte *",
+  "es": "Nombre de la cuenta *"
+ },
+ {
+  "pt": "Ex.: Conta corrente",
+  "tipo": "exato",
+  "en": "e.g. Checking account",
+  "fr": "Ex. : Compte courant",
+  "es": "Ej.: Cuenta corriente"
+ },
+ {
+  "pt": "Itaú",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Banco",
+  "tipo": "exato",
+  "en": "Bank",
+  "fr": "Banque",
+  "es": "Banco"
+ },
+ {
+  "pt": "Nome do banco",
+  "tipo": "exato",
+  "en": "Bank name",
+  "fr": "Nom de la banque",
+  "es": "Nombre del banco"
+ },
+ {
+  "pt": "Saldo inicial (R$)",
+  "tipo": "exato",
+  "en": "Opening balance (R$)",
+  "fr": "Solde initial (R$)",
+  "es": "Saldo inicial (R$)"
+ },
+ {
+  "pt": "Saldo que a conta tinha na data de abertura abaixo.",
+  "tipo": "exato",
+  "en": "The balance the account had on the opening date below.",
+  "fr": "Le solde du compte à la date d'ouverture ci-dessous.",
+  "es": "El saldo que tenía la cuenta en la fecha de apertura de abajo."
+ },
+ {
+  "pt": "Considerar a partir de",
+  "tipo": "exato",
+  "en": "Count from",
+  "fr": "Prendre en compte à partir du",
+  "es": "Considerar a partir de"
+ },
+ {
+  "pt": "4 últimos dígitos",
+  "tipo": "exato",
+  "en": "Last 4 digits",
+  "fr": "4 derniers chiffres",
+  "es": "Últimos 4 dígitos"
+ },
+ {
+  "pt": "Só para reconhecer a conta na carteira. Opcional.",
+  "tipo": "exato",
+  "en": "Just to recognize the account in the wallet. Optional.",
+  "fr": "Seulement pour reconnaître le compte dans le portefeuille. Facultatif.",
+  "es": "Solo para reconocer la cuenta en la cartera. Opcional."
+ },
+ {
+  "pt": "Cor identificadora",
+  "tipo": "exato",
+  "en": "Identifying color",
+  "fr": "Couleur d'identification",
+  "es": "Color identificador"
+ },
+ {
+  "pt": "Considerar nos totais de receitas e despesas",
+  "tipo": "exato",
+  "en": "Count in income and expense totals",
+  "fr": "Prendre en compte dans les totaux de revenus et de dépenses",
+  "es": "Considerar en los totales de ingresos y gastos"
+ },
+ {
+  "pt": "Desligado, a conta continua com saldo e extrato, mas fica fora dos totais do mês, das categorias e do orçamento.",
+  "tipo": "exato",
+  "en": "When off, the account keeps its balance and statement, but stays out of the month's totals, categories and budget.",
+  "fr": "Désactivé, le compte garde son solde et son relevé, mais reste hors des totaux du mois, des catégories et du budget.",
+  "es": "Desactivada, la cuenta mantiene su saldo y extracto, pero queda fuera de los totales del mes, de las categorías y del presupuesto."
+ },
+ {
+  "pt": "Cor do cartão na carteira",
+  "tipo": "exato",
+  "en": "Card color in the wallet",
+  "fr": "Couleur de la carte dans le portefeuille",
+  "es": "Color de la tarjeta en la cartera"
+ },
+ {
+  "pt": "Prévia",
+  "tipo": "exato",
+  "en": "Preview",
+  "fr": "Aperçu",
+  "es": "Vista previa"
+ },
+ {
+  "pt": "O cartão usa as cores do {0}. A cor só é escolhida quando o banco é \"Outro\".",
+  "tipo": "padrao",
+  "en": "The card uses {0}'s colors. You only pick a color when the bank is \"Other\".",
+  "fr": "La carte utilise les couleurs de {0}. La couleur ne se choisit que lorsque la banque est « Autre ».",
+  "es": "La tarjeta usa los colores de {0}. El color solo se elige cuando el banco es \"Otro\"."
+ },
+ {
+  "pt": "Informe o nome da conta.",
+  "tipo": "exato",
+  "en": "Enter the account name.",
+  "fr": "Saisissez le nom du compte.",
+  "es": "Ingresa el nombre de la cuenta."
+ },
+ {
+  "pt": "Conta atualizada.",
+  "tipo": "exato",
+  "en": "Account updated.",
+  "fr": "Compte mis à jour.",
+  "es": "Cuenta actualizada."
+ },
+ {
+  "pt": "Conta criada.",
+  "tipo": "exato",
+  "en": "Account created.",
+  "fr": "Compte créé.",
+  "es": "Cuenta creada."
+ },
+ {
+  "pt": "Editar conta",
+  "tipo": "exato",
+  "en": "Edit account",
+  "fr": "Modifier le compte",
+  "es": "Editar cuenta"
+ },
+ {
+  "pt": "Nova conta bancária",
+  "tipo": "exato",
+  "en": "New bank account",
+  "fr": "Nouveau compte bancaire",
+  "es": "Nueva cuenta bancaria"
+ },
+ {
+  "pt": "Excluir conta",
+  "tipo": "exato",
+  "en": "Delete account",
+  "fr": "Supprimer le compte",
+  "es": "Eliminar cuenta"
+ },
+ {
+  "pt": "A conta",
+  "tipo": "exato",
+  "en": "The account",
+  "fr": "Le compte",
+  "es": "La cuenta"
+ },
+ {
+  "pt": "tem lançamentos vinculados. Eles ficarão sem conta. Excluir mesmo assim?",
+  "tipo": "exato",
+  "en": "has linked entries. They will be left without an account. Delete anyway?",
+  "fr": "a des écritures liées. Elles resteront sans compte. Supprimer quand même ?",
+  "es": "tiene movimientos vinculados. Quedarán sin cuenta. ¿Eliminar de todos modos?"
+ },
+ {
+  "pt": "Conta excluída.",
+  "tipo": "exato",
+  "en": "Account deleted.",
+  "fr": "Compte supprimé.",
+  "es": "Cuenta eliminada."
+ },
+ {
+  "pt": "Nome do cartão *",
+  "tipo": "exato",
+  "en": "Card name *",
+  "fr": "Nom de la carte *",
+  "es": "Nombre de la tarjeta *"
+ },
+ {
+  "pt": "Ex.: Cartão principal",
+  "tipo": "exato",
+  "en": "e.g. Main card",
+  "fr": "Ex. : Carte principale",
+  "es": "Ej.: Tarjeta principal"
+ },
+ {
+  "pt": "Nubank",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Banco emissor",
+  "tipo": "exato",
+  "en": "Issuing bank",
+  "fr": "Banque émettrice",
+  "es": "Banco emisor"
+ },
+ {
+  "pt": "Só para identificar o cartão na tela. Opcional — nunca guarde o número completo.",
+  "tipo": "exato",
+  "en": "Just to identify the card on screen. Optional — never store the full number.",
+  "fr": "Seulement pour identifier la carte à l'écran. Facultatif — ne gardez jamais le numéro complet.",
+  "es": "Solo para identificar la tarjeta en pantalla. Opcional — nunca guardes el número completo."
+ },
+ {
+  "pt": "Limite total (R$)",
+  "tipo": "exato",
+  "en": "Total limit (R$)",
+  "fr": "Plafond total (R$)",
+  "es": "Límite total (R$)"
+ },
+ {
+  "pt": "Moeda do cartão",
+  "tipo": "exato",
+  "en": "Card currency",
+  "fr": "Devise de la carte",
+  "es": "Moneda de la tarjeta"
+ },
+ {
+  "pt": "Para cartões de conta em dólar, euro e outras moedas.",
+  "tipo": "exato",
+  "en": "For cards on dollar, euro and other currency accounts.",
+  "fr": "Pour les cartes de comptes en dollar, en euro et dans d'autres devises.",
+  "es": "Para tarjetas de cuentas en dólar, euro y otras monedas."
+ },
+ {
+  "pt": "Cotação (R$ por 1 unidade) *",
+  "tipo": "exato",
+  "en": "Exchange rate (R$ per 1 unit) *",
+  "fr": "Taux de change (R$ pour 1 unité) *",
+  "es": "Cotización (R$ por 1 unidad) *"
+ },
+ {
+  "pt": "A que o seu banco usa. Vale para as compras novas; as antigas guardam a do dia.",
+  "tipo": "exato",
+  "en": "The one your bank uses. It applies to new purchases; older ones keep the rate of their day.",
+  "fr": "Celui de votre banque. Il vaut pour les nouveaux achats ; les anciens gardent celui du jour.",
+  "es": "La que usa tu banco. Vale para las compras nuevas; las anteriores conservan la del día."
+ },
+ {
+  "pt": "Cartão em outra moeda",
+  "tipo": "exato",
+  "en": "Card in another currency",
+  "fr": "Carte dans une autre devise",
+  "es": "Tarjeta en otra moneda"
+ },
+ {
+  "pt": "Limite total ({0})",
+  "tipo": "padrao",
+  "en": "Total limit ({0})",
+  "fr": "Plafond total ({0})",
+  "es": "Límite total ({0})"
+ },
+ {
+  "pt": "Dia de fechamento *",
+  "tipo": "exato",
+  "en": "Closing day *",
+  "fr": "Jour d'arrêté *",
+  "es": "Día de cierre *"
+ },
+ {
+  "pt": "Dia em que a fatura fecha.",
+  "tipo": "exato",
+  "en": "Day the bill closes.",
+  "fr": "Jour où le relevé est arrêté.",
+  "es": "Día en que cierra la factura."
+ },
+ {
+  "pt": "Dia de vencimento *",
+  "tipo": "exato",
+  "en": "Due day *",
+  "fr": "Jour d'échéance *",
+  "es": "Día de vencimiento *"
+ },
+ {
+  "pt": "Se for menor que o fechamento, vence no mês seguinte.",
+  "tipo": "exato",
+  "en": "If it's earlier than the closing day, it's due the following month.",
+  "fr": "S'il est avant le jour d'arrêté, l'échéance tombe le mois suivant.",
+  "es": "Si es anterior al cierre, vence el mes siguiente."
+ },
+ {
+  "pt": "Conta de débito da fatura",
+  "tipo": "exato",
+  "en": "Account that pays the bill",
+  "fr": "Compte qui paie le relevé",
+  "es": "Cuenta que paga la factura"
+ },
+ {
+  "pt": "Nenhuma",
+  "tipo": "exato",
+  "en": "None",
+  "fr": "Aucun",
+  "es": "Ninguna"
+ },
+ {
+  "pt": "Considerar nos totais de despesas",
+  "tipo": "exato",
+  "en": "Count in expense totals",
+  "fr": "Prendre en compte dans les totaux de dépenses",
+  "es": "Considerar en los totales de gastos"
+ },
+ {
+  "pt": "Desligado, a fatura continua sendo calculada, mas as compras ficam fora dos totais do mês, das categorias e do orçamento.",
+  "tipo": "exato",
+  "en": "When off, the bill is still calculated, but its purchases stay out of the month's totals, categories and budget.",
+  "fr": "Désactivé, le relevé est toujours calculé, mais les achats restent hors des totaux du mois, des catégories et du budget.",
+  "es": "Desactivada, la factura se sigue calculando, pero las compras quedan fuera de los totales del mes, de las categorías y del presupuesto."
+ },
+ {
+  "pt": "Fatura de {0}: compras de {1} a {2}, vencendo em {3}.",
+  "tipo": "padrao",
+  "en": "{0} bill: purchases from {1} to {2}, due on {3}.",
+  "fr": "Relevé de {0} : achats du {1} au {2}, échéance le {3}.",
+  "es": "Factura de {0}: compras del {1} al {2}, con vencimiento el {3}."
+ },
+ {
+  "pt": "Cor do cartão",
+  "tipo": "exato",
+  "en": "Card color",
+  "fr": "Couleur de la carte",
+  "es": "Color de la tarjeta"
+ },
+ {
+  "pt": "Informe quantos reais vale 1 {0}.",
+  "tipo": "padrao",
+  "en": "Enter how many reais 1 {0} is worth.",
+  "fr": "Indiquez combien de reais vaut 1 {0}.",
+  "es": "Indica cuántos reales vale 1 {0}."
+ },
+ {
+  "pt": "Informe o nome do cartão.",
+  "tipo": "exato",
+  "en": "Enter the card name.",
+  "fr": "Saisissez le nom de la carte.",
+  "es": "Ingresa el nombre de la tarjeta."
+ },
+ {
+  "pt": "Use um dia entre 1 e 31.",
+  "tipo": "exato",
+  "en": "Use a day between 1 and 31.",
+  "fr": "Choisissez un jour entre 1 et 31.",
+  "es": "Usa un día entre 1 y 31."
+ },
+ {
+  "pt": "Cartão atualizado.",
+  "tipo": "exato",
+  "en": "Card updated.",
+  "fr": "Carte mise à jour.",
+  "es": "Tarjeta actualizada."
+ },
+ {
+  "pt": "Cartão criado.",
+  "tipo": "exato",
+  "en": "Card created.",
+  "fr": "Carte créée.",
+  "es": "Tarjeta creada."
+ },
+ {
+  "pt": "Editar cartão",
+  "tipo": "exato",
+  "en": "Edit card",
+  "fr": "Modifier la carte",
+  "es": "Editar tarjeta"
+ },
+ {
+  "pt": "Excluir cartão",
+  "tipo": "exato",
+  "en": "Delete card",
+  "fr": "Supprimer la carte",
+  "es": "Eliminar tarjeta"
+ },
+ {
+  "pt": "? As despesas lançadas nele ficarão sem cartão.",
+  "tipo": "exato",
+  "en": "? The expenses recorded on it will be left without a card.",
+  "fr": " ? Les dépenses saisies dessus resteront sans carte.",
+  "es": "? Los gastos registrados en ella quedarán sin tarjeta."
+ },
+ {
+  "pt": "Cartão excluído.",
+  "tipo": "exato",
+  "en": "Card deleted.",
+  "fr": "Carte supprimée.",
+  "es": "Tarjeta eliminada."
+ },
+ {
+  "pt": "Nome *",
+  "tipo": "exato",
+  "en": "Name *",
+  "fr": "Nom *",
+  "es": "Nombre *"
+ },
+ {
+  "pt": "Cor",
+  "tipo": "exato",
+  "en": "Color",
+  "fr": "Couleur",
+  "es": "Color"
+ },
+ {
+  "pt": "Ícone",
+  "tipo": "exato",
+  "en": "Icon",
+  "fr": "Icône",
+  "es": "Ícono"
+ },
+ {
+  "pt": "Em \"auto\", o ícone é deduzido pelo nome da categoria.",
+  "tipo": "exato",
+  "en": "On \"auto\", the icon is guessed from the category name.",
+  "fr": "En « auto », l'icône est déduite du nom de la catégorie.",
+  "es": "En \"auto\", el ícono se deduce del nombre de la categoría."
+ },
+ {
+  "pt": "Informe o nome.",
+  "tipo": "exato",
+  "en": "Enter the name.",
+  "fr": "Saisissez le nom.",
+  "es": "Ingresa el nombre."
+ },
+ {
+  "pt": "Já existe uma categoria com esse nome.",
+  "tipo": "exato",
+  "en": "A category with that name already exists.",
+  "fr": "Une catégorie porte déjà ce nom.",
+  "es": "Ya existe una categoría con ese nombre."
+ },
+ {
+  "pt": "Categoria atualizada.",
+  "tipo": "exato",
+  "en": "Category updated.",
+  "fr": "Catégorie mise à jour.",
+  "es": "Categoría actualizada."
+ },
+ {
+  "pt": "Categoria criada.",
+  "tipo": "exato",
+  "en": "Category created.",
+  "fr": "Catégorie créée.",
+  "es": "Categoría creada."
+ },
+ {
+  "pt": "Editar categoria",
+  "tipo": "exato",
+  "en": "Edit category",
+  "fr": "Modifier la catégorie",
+  "es": "Editar categoría"
+ },
+ {
+  "pt": "Nova categoria de receita",
+  "tipo": "exato",
+  "en": "New income category",
+  "fr": "Nouvelle catégorie de revenu",
+  "es": "Nueva categoría de ingreso"
+ },
+ {
+  "pt": "Nova categoria de despesa",
+  "tipo": "exato",
+  "en": "New expense category",
+  "fr": "Nouvelle catégorie de dépense",
+  "es": "Nueva categoría de gasto"
+ },
+ {
+  "pt": "Excluir categoria",
+  "tipo": "exato",
+  "en": "Delete category",
+  "fr": "Supprimer la catégorie",
+  "es": "Eliminar categoría"
+ },
+ {
+  "pt": "lançamento(s) usam",
+  "tipo": "exato",
+  "en": "entry(ies) use",
+  "fr": "écriture(s) utilisent",
+  "es": "movimiento(s) usan"
+ },
+ {
+  "pt": "e ficarão \"Sem categoria\". Excluir?",
+  "tipo": "exato",
+  "en": "and will become \"Uncategorized\". Delete?",
+  "fr": "et passeront en « Sans catégorie ». Supprimer ?",
+  "es": "y quedarán \"Sin categoría\". ¿Eliminar?"
+ },
+ {
+  "pt": "Excluir a categoria",
+  "tipo": "exato",
+  "en": "Delete the category",
+  "fr": "Supprimer la catégorie",
+  "es": "Eliminar la categoría"
+ },
+ {
+  "pt": "Categoria excluída.",
+  "tipo": "exato",
+  "en": "Category deleted.",
+  "fr": "Catégorie supprimée.",
+  "es": "Categoría eliminada."
+ },
+ {
+  "pt": "Ex.: Tesouro Selic 2029",
+  "tipo": "exato",
+  "en": "e.g. Treasury bond 2029",
+  "fr": "Ex. : Obligation d'État 2029",
+  "es": "Ej.: Bono del Tesoro 2029"
+ },
+ {
+  "pt": "Valor aportado (R$) *",
+  "tipo": "exato",
+  "en": "Amount contributed (R$) *",
+  "fr": "Montant versé (R$) *",
+  "es": "Monto aportado (R$) *"
+ },
+ {
+  "pt": "Data do aporte *",
+  "tipo": "exato",
+  "en": "Contribution date *",
+  "fr": "Date du versement *",
+  "es": "Fecha del aporte *"
+ },
+ {
+  "pt": "Rentabilidade estimada (% a.a.)",
+  "tipo": "exato",
+  "en": "Estimated return (% p.a.)",
+  "fr": "Rendement estimé (% par an)",
+  "es": "Rentabilidad estimada (% anual)"
+ },
+ {
+  "pt": "Usada para estimar o valor atual.",
+  "tipo": "exato",
+  "en": "Used to estimate the current value.",
+  "fr": "Sert à estimer la valeur actuelle.",
+  "es": "Se usa para estimar el valor actual."
+ },
+ {
+  "pt": "Valor atual (opcional)",
+  "tipo": "exato",
+  "en": "Current value (optional)",
+  "fr": "Valeur actuelle (facultatif)",
+  "es": "Valor actual (opcional)"
+ },
+ {
+  "pt": "Se preenchido, substitui a estimativa.",
+  "tipo": "exato",
+  "en": "If filled in, it replaces the estimate.",
+  "fr": "Si renseignée, elle remplace l'estimation.",
+  "es": "Si se completa, reemplaza la estimación."
+ },
+ {
+  "pt": "Debitar da conta",
+  "tipo": "exato",
+  "en": "Take from account",
+  "fr": "Débiter du compte",
+  "es": "Debitar de la cuenta"
+ },
+ {
+  "pt": "Não debitar",
+  "tipo": "exato",
+  "en": "Don't take from an account",
+  "fr": "Ne pas débiter",
+  "es": "No debitar"
+ },
+ {
+  "pt": "Se escolher, o aporte sai do saldo da conta.",
+  "tipo": "exato",
+  "en": "If you choose one, the contribution comes out of that account's balance.",
+  "fr": "Si vous en choisissez un, le versement sort du solde du compte.",
+  "es": "Si eliges una, el aporte sale del saldo de la cuenta."
+ },
+ {
+  "pt": "Investimento atualizado.",
+  "tipo": "exato",
+  "en": "Investment updated.",
+  "fr": "Investissement mis à jour.",
+  "es": "Inversión actualizada."
+ },
+ {
+  "pt": "Aporte registrado.",
+  "tipo": "exato",
+  "en": "Contribution recorded.",
+  "fr": "Versement enregistré.",
+  "es": "Aporte registrado."
+ },
+ {
+  "pt": "Editar investimento",
+  "tipo": "exato",
+  "en": "Edit investment",
+  "fr": "Modifier l'investissement",
+  "es": "Editar inversión"
+ },
+ {
+  "pt": "Novo aporte",
+  "tipo": "exato",
+  "en": "New contribution",
+  "fr": "Nouveau versement",
+  "es": "Nuevo aporte"
+ },
+ {
+  "pt": "Excluir investimento",
+  "tipo": "exato",
+  "en": "Delete investment",
+  "fr": "Supprimer l'investissement",
+  "es": "Eliminar inversión"
+ },
+ {
+  "pt": "Investimento excluído.",
+  "tipo": "exato",
+  "en": "Investment deleted.",
+  "fr": "Investissement supprimé.",
+  "es": "Inversión eliminada."
+ },
+ {
+  "pt": "Valor pago (R$)",
+  "tipo": "exato",
+  "en": "Amount paid (R$)",
+  "fr": "Montant payé (R$)",
+  "es": "Monto pagado (R$)"
+ },
+ {
+  "pt": "Data do pagamento",
+  "tipo": "exato",
+  "en": "Payment date",
+  "fr": "Date du paiement",
+  "es": "Fecha del pago"
+ },
+ {
+  "pt": "É por esta data que a fatura sai do dinheiro do mês.",
+  "tipo": "exato",
+  "en": "This is the date the bill comes out of the month's money.",
+  "fr": "C'est à cette date que le relevé sort de l'argent du mois.",
+  "es": "Es en esta fecha que la factura sale del dinero del mes."
+ },
+ {
+  "pt": "De onde sai o dinheiro",
+  "tipo": "exato",
+  "en": "Where the money comes from",
+  "fr": "D'où vient l'argent",
+  "es": "De dónde sale el dinero"
+ },
+ {
+  "pt": "Não debitar de conta",
+  "tipo": "exato",
+  "en": "Don't take from an account",
+  "fr": "Ne débiter aucun compte",
+  "es": "No debitar de ninguna cuenta"
+ },
+ {
+  "pt": "O pagamento baixa o saldo da conta, mas não conta como nova despesa — os itens da fatura já foram contabilizados na data da compra.",
+  "tipo": "exato",
+  "en": "The payment lowers the account balance, but doesn't count as a new expense — the bill's items were already counted on the purchase date.",
+  "fr": "Le paiement réduit le solde du compte, mais ne compte pas comme une nouvelle dépense — les achats du relevé ont déjà été comptés à la date d'achat.",
+  "es": "El pago baja el saldo de la cuenta, pero no cuenta como un gasto nuevo — los ítems de la factura ya se contabilizaron en la fecha de compra."
+ },
+ {
+  "pt": "Encerrar a fatura mesmo assim",
+  "tipo": "exato",
+  "en": "Close the bill anyway",
+  "fr": "Clôturer le relevé quand même",
+  "es": "Cerrar la factura de todos modos"
+ },
+ {
+  "pt": "Use quando a diferença for estorno, desconto ou juros que você não quer lançar.",
+  "tipo": "exato",
+  "en": "Use it when the difference is a refund, discount or interest you don't want to record.",
+  "fr": "À utiliser quand la différence est un remboursement, une remise ou des intérêts que vous ne voulez pas saisir.",
+  "es": "Úsalo cuando la diferencia sea un reembolso, descuento o intereses que no quieres registrar."
+ },
+ {
+  "pt": "Esta fatura não tem lançamentos.",
+  "tipo": "exato",
+  "en": "This bill has no entries.",
+  "fr": "Ce relevé n'a aucune écriture.",
+  "es": "Esta factura no tiene movimientos."
+ },
+ {
+  "pt": "Depois deste pagamento ainda faltam {0} de {1}.",
+  "tipo": "padrao",
+  "en": "After this payment, {0} of {1} is still left.",
+  "fr": "Après ce paiement, il reste encore {0} sur {1}.",
+  "es": "Después de este pago todavía faltan {0} de {1}."
+ },
+ {
+  "pt": "Isto cobre a fatura inteira, com {0} a mais.",
+  "tipo": "padrao",
+  "en": "This covers the whole bill, with {0} extra.",
+  "fr": "Cela couvre tout le relevé, avec {0} en plus.",
+  "es": "Esto cubre toda la factura, con {0} de más."
+ },
+ {
+  "pt": "Isto quita a fatura.",
+  "tipo": "exato",
+  "en": "This pays off the bill.",
+  "fr": "Cela solde le relevé.",
+  "es": "Esto salda la factura."
+ },
+ {
+  "pt": "Pagar fatura — {0} · {1}",
+  "tipo": "padrao",
+  "en": "Pay bill — {0} · {1}",
+  "fr": "Payer le relevé — {0} · {1}",
+  "es": "Pagar factura — {0} · {1}"
+ },
+ {
+  "pt": "Registrar pagamento",
+  "tipo": "exato",
+  "en": "Record payment",
+  "fr": "Enregistrer le paiement",
+  "es": "Registrar pago"
+ },
+ {
+  "pt": "Informe quanto foi pago.",
+  "tipo": "exato",
+  "en": "Enter how much was paid.",
+  "fr": "Indiquez combien a été payé.",
+  "es": "Indica cuánto se pagó."
+ },
+ {
+  "pt": "Pagamento registrado. Ainda faltam {0}.",
+  "tipo": "padrao",
+  "en": "Payment recorded. {0} still left.",
+  "fr": "Paiement enregistré. Il reste encore {0}.",
+  "es": "Pago registrado. Todavía faltan {0}."
+ },
+ {
+  "pt": "Fatura paga.",
+  "tipo": "exato",
+  "en": "Bill paid.",
+  "fr": "Relevé payé.",
+  "es": "Factura pagada."
+ },
+ {
+  "pt": "Valor adiantado (R$)",
+  "tipo": "exato",
+  "en": "Amount paid early (R$)",
+  "fr": "Montant anticipé (R$)",
+  "es": "Monto adelantado (R$)"
+ },
+ {
+  "pt": "Sobram {0} desta compra na fatura de {1}.",
+  "tipo": "padrao",
+  "en": "{0} of this purchase stays on the {1} bill.",
+  "fr": "Il reste {0} de cet achat sur le relevé de {1}.",
+  "es": "Quedan {0} de esta compra en la factura de {1}."
+ },
+ {
+  "pt": "Esta compra sai inteira da fatura de {0}.",
+  "tipo": "padrao",
+  "en": "This purchase comes entirely off the {0} bill.",
+  "fr": "Cet achat sort entièrement du relevé de {0}.",
+  "es": "Esta compra sale entera de la factura de {0}."
+ },
+ {
+  "pt": "Adiantar — {0}",
+  "tipo": "padrao",
+  "en": "Pay early — {0}",
+  "fr": "Anticiper — {0}",
+  "es": "Adelantar — {0}"
+ },
+ {
+  "pt": "Compra de {0} em {1}, cobrada na fatura de {2}.",
+  "tipo": "padrao",
+  "en": "{0} purchase on {1}, charged on the {2} bill.",
+  "fr": "Achat de {0} le {1}, prélevé sur le relevé de {2}.",
+  "es": "Compra de {0} el {1}, cobrada en la factura de {2}."
+ },
+ {
+  "pt": "Registrar adiantamento",
+  "tipo": "exato",
+  "en": "Record early payment",
+  "fr": "Enregistrer l'anticipation",
+  "es": "Registrar adelanto"
+ },
+ {
+  "pt": "Informe quanto foi adiantado.",
+  "tipo": "exato",
+  "en": "Enter how much was paid early.",
+  "fr": "Indiquez combien a été anticipé.",
+  "es": "Indica cuánto se adelantó."
+ },
+ {
+  "pt": "Adiantamento registrado.",
+  "tipo": "exato",
+  "en": "Early payment recorded.",
+  "fr": "Anticipation enregistrée.",
+  "es": "Adelanto registrado."
+ },
+ {
+  "pt": "{0} lançamentos · {1} contas · {2} cartões",
+  "tipo": "padrao",
+  "en": "{0} entries · {1} accounts · {2} cards",
+  "fr": "{0} écritures · {1} comptes · {2} cartes",
+  "es": "{0} movimientos · {1} cuentas · {2} tarjetas"
+ },
+ {
+  "pt": "Renomear",
+  "tipo": "exato",
+  "en": "Rename",
+  "fr": "Renommer",
+  "es": "Renombrar"
+ },
+ {
+  "pt": "Novo nome do espaço:",
+  "tipo": "exato",
+  "en": "New space name:",
+  "fr": "Nouveau nom de l'espace :",
+  "es": "Nuevo nombre del espacio:"
+ },
+ {
+  "pt": "É preciso manter ao menos um espaço.",
+  "tipo": "exato",
+  "en": "You need to keep at least one space.",
+  "fr": "Il faut garder au moins un espace.",
+  "es": "Hay que mantener al menos un espacio."
+ },
+ {
+  "pt": "Excluir espaço",
+  "tipo": "exato",
+  "en": "Delete space",
+  "fr": "Supprimer l'espace",
+  "es": "Eliminar espacio"
+ },
+ {
+  "pt": "e TODOS os seus dados? Isso não pode ser desfeito.",
+  "tipo": "exato",
+  "en": "and ALL its data? This can't be undone.",
+  "fr": "et TOUTES ses données ? C'est irréversible.",
+  "es": "y TODOS sus datos? Esto no se puede deshacer."
+ },
+ {
+  "pt": "Espaço excluído.",
+  "tipo": "exato",
+  "en": "Space deleted.",
+  "fr": "Espace supprimé.",
+  "es": "Espacio eliminado."
+ },
+ {
+  "pt": "Ex.: Casa, Empresa, Viagem",
+  "tipo": "exato",
+  "en": "e.g. Home, Business, Trip",
+  "fr": "Ex. : Maison, Entreprise, Voyage",
+  "es": "Ej.: Casa, Empresa, Viaje"
+ },
+ {
+  "pt": "Dê um nome ao espaço.",
+  "tipo": "exato",
+  "en": "Give the space a name.",
+  "fr": "Donnez un nom à l'espace.",
+  "es": "Ponle un nombre al espacio."
+ },
+ {
+  "pt": "Espaço \"{0}\" criado e aberto.",
+  "tipo": "padrao",
+  "en": "Space \"{0}\" created and opened.",
+  "fr": "Espace « {0} » créé et ouvert.",
+  "es": "Espacio \"{0}\" creado y abierto."
+ },
+ {
+  "pt": "Novo espaço",
+  "tipo": "exato",
+  "en": "New space",
+  "fr": "Nouvel espace",
+  "es": "Nuevo espacio"
+ },
+ {
+  "pt": "Criar",
+  "tipo": "exato",
+  "en": "Create",
+  "fr": "Créer",
+  "es": "Crear"
+ },
+ {
+  "pt": "Cada espaço tem suas próprias contas, cartões, categorias e orçamento.",
+  "tipo": "exato",
+  "en": "Each space has its own accounts, cards, categories and budget.",
+  "fr": "Chaque espace a ses propres comptes, cartes, catégories et budget.",
+  "es": "Cada espacio tiene sus propias cuentas, tarjetas, categorías y presupuesto."
+ },
+ {
+  "pt": "Espaços financeiros",
+  "tipo": "exato",
+  "en": "Financial spaces",
+  "fr": "Espaces financiers",
+  "es": "Espacios financieros"
+ }
+]

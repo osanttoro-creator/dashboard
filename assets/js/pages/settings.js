@@ -149,6 +149,22 @@
       controle
     ));
 
+    /* A língua das telas. Cada língua com o próprio nome — quem procura
+       "English" não lê "Inglês" —, por isso as opções têm translate="no".
+       Trocar grava a escolha neste aparelho e recarrega: o app inteiro
+       nasce de novo na língua nova, em vez de meia tela em cada uma. */
+    if (global.I18n) {
+      const lingua = el('select', { class: 'input set-lingua', 'aria-label': 'Idioma' },
+        ['pt', 'en', 'fr', 'es'].map((l) => el('option', { value: l, text: I18n.NOMES[l], translate: 'no' })));
+      lingua.value = I18n.lang;
+      lingua.addEventListener('change', () => I18n.escolher(lingua.value));
+      box.appendChild(linha(
+        'Idioma',
+        'A língua das telas do app. O que você cadastrou continua como está.',
+        lingua
+      ));
+    }
+
     box.appendChild(linha(
       'Movimento',
       'O sistema respeita a preferência do seu aparelho por menos movimento e menos transparência.',
@@ -237,7 +253,7 @@
       return;
     }
 
-    const ate = d.fimPeriodo ? new Date(d.fimPeriodo).toLocaleDateString('pt-BR') : null;
+    const ate = d.fimPeriodo ? new Date(d.fimPeriodo).toLocaleDateString(((window.U && U.LOCALE) || 'pt-BR')) : null;
     if (d.cancelaNoFim) {
       box.appendChild(linha(
         'Assinatura cancelada',

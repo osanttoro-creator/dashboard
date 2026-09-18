@@ -1,0 +1,1632 @@
+[
+ {
+  "pt": "OAZE — Gestão Financeira",
+  "tipo": "exato",
+  "en": "OAZE — Money Management",
+  "fr": "OAZE — Gestion financière",
+  "es": "OAZE — Gestión financiera"
+ },
+ {
+  "pt": "Área autenticada do OAZE para organizar contas, cartões, gastos, orçamentos, metas e análises financeiras.",
+  "tipo": "exato",
+  "en": "OAZE's signed-in area for organizing accounts, cards, spending, budgets, goals and financial analysis.",
+  "fr": "Espace connecté d'OAZE pour organiser comptes, cartes, dépenses, budgets, objectifs et analyses financières.",
+  "es": "Área privada de OAZE para organizar cuentas, tarjetas, gastos, presupuestos, metas y análisis financieros."
+ },
+ {
+  "pt": "Pular para o conteúdo",
+  "tipo": "exato",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "Navegação principal",
+  "tipo": "exato",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "OAZE — ir para a visão geral",
+  "tipo": "exato",
+  "en": "OAZE — go to overview",
+  "fr": "OAZE — aller à la vue d'ensemble",
+  "es": "OAZE — ir al resumen general"
+ },
+ {
+  "pt": "OAZE",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Seções",
+  "tipo": "exato",
+  "en": "Sections",
+  "fr": "Sections",
+  "es": "Secciones"
+ },
+ {
+  "pt": "Principal",
+  "tipo": "exato",
+  "en": "Main",
+  "fr": "Principal",
+  "es": "Principal"
+ },
+ {
+  "pt": "Visão geral",
+  "tipo": "exato",
+  "en": "Overview",
+  "fr": "Vue d'ensemble",
+  "es": "Resumen general"
+ },
+ {
+  "pt": "Início",
+  "tipo": "exato",
+  "en": "Home",
+  "fr": "Accueil",
+  "es": "Inicio"
+ },
+ {
+  "pt": "Financeiro",
+  "tipo": "exato",
+  "en": "Finances",
+  "fr": "Finances",
+  "es": "Finanzas"
+ },
+ {
+  "pt": "Contas e cartões",
+  "tipo": "exato",
+  "en": "Accounts and cards",
+  "fr": "Comptes et cartes",
+  "es": "Cuentas y tarjetas"
+ },
+ {
+  "pt": "Carteira",
+  "tipo": "exato",
+  "en": "Wallet",
+  "fr": "Portefeuille",
+  "es": "Cartera"
+ },
+ {
+  "pt": "Crescer",
+  "tipo": "exato",
+  "en": "Grow",
+  "fr": "Croissance",
+  "es": "Crecer"
+ },
+ {
+  "pt": "Investimentos",
+  "tipo": "exato",
+  "en": "Investments",
+  "fr": "Investissements",
+  "es": "Inversiones"
+ },
+ {
+  "pt": "Investir",
+  "tipo": "exato",
+  "en": "Invest",
+  "fr": "Investir",
+  "es": "Invertir"
+ },
+ {
+  "pt": "Análises",
+  "tipo": "exato",
+  "en": "Analysis",
+  "fr": "Analyses",
+  "es": "Análisis"
+ },
+ {
+  "pt": "Planejar",
+  "tipo": "exato",
+  "en": "Plan",
+  "fr": "Planifier",
+  "es": "Planificar"
+ },
+ {
+  "pt": "Orçamento",
+  "tipo": "exato",
+  "en": "Budget",
+  "fr": "Budget",
+  "es": "Presupuesto"
+ },
+ {
+  "pt": "Metas",
+  "tipo": "exato",
+  "en": "Goals",
+  "fr": "Objectifs",
+  "es": "Metas"
+ },
+ {
+  "pt": "Recorrências",
+  "tipo": "exato",
+  "en": "Recurring",
+  "fr": "Récurrences",
+  "es": "Recurrentes"
+ },
+ {
+  "pt": "Fixas",
+  "tipo": "exato",
+  "en": "Fixed",
+  "fr": "Fixes",
+  "es": "Fijos"
+ },
+ {
+  "pt": "Calendário",
+  "tipo": "exato",
+  "en": "Calendar",
+  "fr": "Calendrier",
+  "es": "Calendario"
+ },
+ {
+  "pt": "Agenda",
+  "tipo": "exato",
+  "en": "Schedule",
+  "fr": "Agenda",
+  "es": "Agenda"
+ },
+ {
+  "pt": "Categorias",
+  "tipo": "exato",
+  "en": "Categories",
+  "fr": "Catégories",
+  "es": "Categorías"
+ },
+ {
+  "pt": "Sistema",
+  "tipo": "exato",
+  "en": "System",
+  "fr": "Système",
+  "es": "Sistema"
+ },
+ {
+  "pt": "UGLEZ",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Configurações",
+  "tipo": "exato",
+  "en": "Settings",
+  "fr": "Paramètres",
+  "es": "Configuración"
+ },
+ {
+  "pt": "Config.",
+  "tipo": "exato",
+  "en": "Settings",
+  "fr": "Réglages",
+  "es": "Config."
+ },
+ {
+  "pt": "Abrir todas as seções",
+  "tipo": "exato",
+  "en": "Open all sections",
+  "fr": "Ouvrir toutes les sections",
+  "es": "Abrir todas las secciones"
+ },
+ {
+  "pt": "Menu",
+  "tipo": "exato",
+  "en": "Menu",
+  "fr": "Menu",
+  "es": "Menú"
+ },
+ {
+  "pt": "Controles",
+  "tipo": "exato",
+  "en": "Controls",
+  "fr": "Commandes",
+  "es": "Controles"
+ },
+ {
+  "pt": "OAZE — início",
+  "tipo": "exato",
+  "en": "OAZE — home",
+  "fr": "OAZE — accueil",
+  "es": "OAZE — inicio"
+ },
+ {
+  "pt": "Espaço",
+  "tipo": "exato",
+  "en": "Space",
+  "fr": "Espace",
+  "es": "Espacio"
+ },
+ {
+  "pt": "Espaço financeiro",
+  "tipo": "exato",
+  "en": "Financial space",
+  "fr": "Espace financier",
+  "es": "Espacio financiero"
+ },
+ {
+  "pt": "Gerenciar espaços financeiros",
+  "tipo": "exato",
+  "en": "Manage financial spaces",
+  "fr": "Gérer les espaces financiers",
+  "es": "Administrar espacios financieros"
+ },
+ {
+  "pt": "Gerenciar espaços",
+  "tipo": "exato",
+  "en": "Manage spaces",
+  "fr": "Gérer les espaces",
+  "es": "Administrar espacios"
+ },
+ {
+  "pt": "Mês anterior",
+  "tipo": "exato",
+  "en": "Previous month",
+  "fr": "Mois précédent",
+  "es": "Mes anterior"
+ },
+ {
+  "pt": "Período",
+  "tipo": "exato",
+  "en": "Period",
+  "fr": "Période",
+  "es": "Período"
+ },
+ {
+  "pt": "Mês",
+  "tipo": "exato",
+  "en": "Month",
+  "fr": "Mois",
+  "es": "Mes"
+ },
+ {
+  "pt": "Ano",
+  "tipo": "exato",
+  "en": "Year",
+  "fr": "Année",
+  "es": "Año"
+ },
+ {
+  "pt": "Próximo mês",
+  "tipo": "exato",
+  "en": "Next month",
+  "fr": "Mois suivant",
+  "es": "Mes siguiente"
+ },
+ {
+  "pt": "Mês atual",
+  "tipo": "exato",
+  "en": "This month",
+  "fr": "Mois en cours",
+  "es": "Mes actual"
+ },
+ {
+  "pt": "Buscar em todo o app",
+  "tipo": "exato",
+  "en": "Search the whole app",
+  "fr": "Rechercher dans toute l'app",
+  "es": "Buscar en toda la app"
+ },
+ {
+  "pt": "Buscar /",
+  "tipo": "exato",
+  "en": "Search /",
+  "fr": "Rechercher /",
+  "es": "Buscar /"
+ },
+ {
+  "pt": "Buscar",
+  "tipo": "exato",
+  "en": "Search",
+  "fr": "Rechercher",
+  "es": "Buscar"
+ },
+ {
+  "pt": "Notificações",
+  "tipo": "exato",
+  "en": "Notifications",
+  "fr": "Notifications",
+  "es": "Notificaciones"
+ },
+ {
+  "pt": "Avisos",
+  "tipo": "exato",
+  "en": "Alerts",
+  "fr": "Alertes",
+  "es": "Avisos"
+ },
+ {
+  "pt": "Olá, <span id=\"ownerName\">visitante</span>",
+  "tipo": "bloco",
+  "en": "Hi, <span id=\"ownerName\">visitor</span>",
+  "fr": "Bonjour, <span id=\"ownerName\">visiteur</span>",
+  "es": "Hola, <span id=\"ownerName\">visitante</span>"
+ },
+ {
+  "pt": "Sincronização",
+  "tipo": "exato",
+  "en": "Sync",
+  "fr": "Synchronisation",
+  "es": "Sincronización"
+ },
+ {
+  "pt": "Sincronizar",
+  "tipo": "exato",
+  "en": "Sync",
+  "fr": "Synchroniser",
+  "es": "Sincronizar"
+ },
+ {
+  "pt": "Conta e sincronização",
+  "tipo": "exato",
+  "en": "Account and sync",
+  "fr": "Compte et synchronisation",
+  "es": "Cuenta y sincronización"
+ },
+ {
+  "pt": "Saldo atual",
+  "tipo": "exato",
+  "en": "Current balance",
+  "fr": "Solde actuel",
+  "es": "Saldo actual"
+ },
+ {
+  "pt": "Se tudo se confirmar",
+  "tipo": "exato",
+  "en": "If everything goes through",
+  "fr": "Si tout se confirme",
+  "es": "Si todo se confirma"
+ },
+ {
+  "pt": "Atalhos",
+  "tipo": "exato",
+  "en": "Shortcuts",
+  "fr": "Raccourcis",
+  "es": "Atajos"
+ },
+ {
+  "pt": "Receita",
+  "tipo": "exato",
+  "en": "Income",
+  "fr": "Revenu",
+  "es": "Ingreso"
+ },
+ {
+  "pt": "Despesa",
+  "tipo": "exato",
+  "en": "Expense",
+  "fr": "Dépense",
+  "es": "Gasto"
+ },
+ {
+  "pt": "Transferir",
+  "tipo": "exato",
+  "en": "Transfer",
+  "fr": "Virement",
+  "es": "Transferir"
+ },
+ {
+  "pt": "Cartões",
+  "tipo": "exato",
+  "en": "Cards",
+  "fr": "Cartes",
+  "es": "Tarjetas"
+ },
+ {
+  "pt": "OAZE Score",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Como o score é calculado",
+  "tipo": "exato",
+  "en": "How the score is calculated",
+  "fr": "Comment le score est calculé",
+  "es": "Cómo se calcula el score"
+ },
+ {
+  "pt": "Fluxo financeiro",
+  "tipo": "exato",
+  "en": "Cash flow",
+  "fr": "Flux financier",
+  "es": "Flujo financiero"
+ },
+ {
+  "pt": "Entradas, saídas e o saldo de cada mês",
+  "tipo": "exato",
+  "en": "Money in, money out and each month's balance",
+  "fr": "Entrées, sorties et le solde de chaque mois",
+  "es": "Entradas, salidas y el saldo de cada mes"
+ },
+ {
+  "pt": "Analisando o mês…",
+  "tipo": "exato",
+  "en": "Analyzing the month…",
+  "fr": "Analyse du mois…",
+  "es": "Analizando el mes…"
+ },
+ {
+  "pt": "Abrir →",
+  "tipo": "exato",
+  "en": "Open →",
+  "fr": "Ouvrir →",
+  "es": "Abrir →"
+ },
+ {
+  "pt": "Distribuição de gastos",
+  "tipo": "exato",
+  "en": "Spending breakdown",
+  "fr": "Répartition des dépenses",
+  "es": "Distribución de gastos"
+ },
+ {
+  "pt": "Sem despesas confirmadas neste mês.",
+  "tipo": "exato",
+  "en": "No confirmed expenses this month.",
+  "fr": "Aucune dépense confirmée ce mois-ci.",
+  "es": "Sin gastos confirmados este mes."
+ },
+ {
+  "pt": "Próximos eventos",
+  "tipo": "exato",
+  "en": "Upcoming",
+  "fr": "À venir",
+  "es": "Próximos eventos"
+ },
+ {
+  "pt": "Calendário →",
+  "tipo": "exato",
+  "en": "Calendar →",
+  "fr": "Calendrier →",
+  "es": "Calendario →"
+ },
+ {
+  "pt": "Resumo do mês",
+  "tipo": "exato",
+  "en": "Month summary",
+  "fr": "Résumé du mois",
+  "es": "Resumen del mes"
+ },
+ {
+  "pt": "Sua carteira",
+  "tipo": "exato",
+  "en": "Your wallet",
+  "fr": "Votre portefeuille",
+  "es": "Tu cartera"
+ },
+ {
+  "pt": "Gerenciar →",
+  "tipo": "exato",
+  "en": "Manage →",
+  "fr": "Gérer →",
+  "es": "Administrar →"
+ },
+ {
+  "pt": "Movimentações recentes",
+  "tipo": "exato",
+  "en": "Recent activity",
+  "fr": "Mouvements récents",
+  "es": "Movimientos recientes"
+ },
+ {
+  "pt": "Ver tudo →",
+  "tipo": "exato",
+  "en": "See all →",
+  "fr": "Tout voir →",
+  "es": "Ver todo →"
+ },
+ {
+  "pt": "+ Receita",
+  "tipo": "exato",
+  "en": "+ Income",
+  "fr": "+ Revenu",
+  "es": "+ Ingreso"
+ },
+ {
+  "pt": "− Despesa",
+  "tipo": "exato",
+  "en": "− Expense",
+  "fr": "− Dépense",
+  "es": "− Gasto"
+ },
+ {
+  "pt": "⇄ Transferência",
+  "tipo": "exato",
+  "en": "⇄ Transfer",
+  "fr": "⇄ Virement",
+  "es": "⇄ Transferencia"
+ },
+ {
+  "pt": "Filtrar despesas por forma de pagamento",
+  "tipo": "exato",
+  "en": "Filter expenses by payment method",
+  "fr": "Filtrer les dépenses par moyen de paiement",
+  "es": "Filtrar gastos por forma de pago"
+ },
+ {
+  "pt": "Tudo",
+  "tipo": "exato",
+  "en": "All",
+  "fr": "Tout",
+  "es": "Todo"
+ },
+ {
+  "pt": "Débito",
+  "tipo": "exato",
+  "en": "Debit",
+  "fr": "Débit",
+  "es": "Débito"
+ },
+ {
+  "pt": "Crédito",
+  "tipo": "exato",
+  "en": "Credit",
+  "fr": "Crédit",
+  "es": "Crédito"
+ },
+ {
+  "pt": "Buscar nos lançamentos",
+  "tipo": "exato",
+  "en": "Search entries",
+  "fr": "Rechercher dans les écritures",
+  "es": "Buscar en los movimientos"
+ },
+ {
+  "pt": "Buscar por descrição…",
+  "tipo": "exato",
+  "en": "Search by description…",
+  "fr": "Rechercher par description…",
+  "es": "Buscar por descripción…"
+ },
+ {
+  "pt": "Mostrar apenas lançamentos a confirmar",
+  "tipo": "exato",
+  "en": "Show only entries to confirm",
+  "fr": "Afficher seulement les écritures à confirmer",
+  "es": "Mostrar solo movimientos por confirmar"
+ },
+ {
+  "pt": "Só pendentes",
+  "tipo": "exato",
+  "en": "Pending only",
+  "fr": "En attente seulement",
+  "es": "Solo pendientes"
+ },
+ {
+  "pt": "Sem movimentações neste mês",
+  "tipo": "exato",
+  "en": "No activity this month",
+  "fr": "Aucun mouvement ce mois-ci",
+  "es": "Sin movimientos este mes"
+ },
+ {
+  "pt": "As análises aparecem assim que houver o que analisar: uma receita ou uma despesa já bastam para o primeiro gráfico.",
+  "tipo": "exato",
+  "en": "Analysis shows up as soon as there's something to analyze: one income or one expense is enough for the first chart.",
+  "fr": "Les analyses apparaissent dès qu'il y a quelque chose à analyser : un revenu ou une dépense suffit pour le premier graphique.",
+  "es": "Los análisis aparecen en cuanto hay algo que analizar: un ingreso o un gasto bastan para el primer gráfico."
+ },
+ {
+  "pt": "Registrar receita",
+  "tipo": "exato",
+  "en": "Add income",
+  "fr": "Ajouter un revenu",
+  "es": "Registrar ingreso"
+ },
+ {
+  "pt": "Registrar despesa",
+  "tipo": "exato",
+  "en": "Add expense",
+  "fr": "Ajouter une dépense",
+  "es": "Registrar gasto"
+ },
+ {
+  "pt": "Despesas por categoria no mês",
+  "tipo": "exato",
+  "en": "Expenses by category this month",
+  "fr": "Dépenses par catégorie ce mois-ci",
+  "es": "Gastos por categoría en el mes"
+ },
+ {
+  "pt": "Débito × Crédito ao longo do ano",
+  "tipo": "exato",
+  "en": "Debit × Credit over the year",
+  "fr": "Débit × Crédit sur l'année",
+  "es": "Débito × Crédito a lo largo del año"
+ },
+ {
+  "pt": "Previsto × Realizado no mês",
+  "tipo": "exato",
+  "en": "Planned × Actual this month",
+  "fr": "Prévu × Réalisé ce mois-ci",
+  "es": "Previsto × Realizado en el mes"
+ },
+ {
+  "pt": "Receitas por categoria no mês",
+  "tipo": "exato",
+  "en": "Income by category this month",
+  "fr": "Revenus par catégorie ce mois-ci",
+  "es": "Ingresos por categoría en el mes"
+ },
+ {
+  "pt": "+ Novo aporte",
+  "tipo": "exato",
+  "en": "+ New contribution",
+  "fr": "+ Nouveau versement",
+  "es": "+ Nuevo aporte"
+ },
+ {
+  "pt": "Filtrar investimentos por tipo",
+  "tipo": "exato",
+  "en": "Filter investments by type",
+  "fr": "Filtrer les investissements par type",
+  "es": "Filtrar inversiones por tipo"
+ },
+ {
+  "pt": "Todos os tipos",
+  "tipo": "exato",
+  "en": "All types",
+  "fr": "Tous les types",
+  "es": "Todos los tipos"
+ },
+ {
+  "pt": "UGLEZ na sua carteira",
+  "tipo": "exato",
+  "en": "UGLEZ in your portfolio",
+  "fr": "UGLEZ dans votre portefeuille",
+  "es": "UGLEZ en tu cartera"
+ },
+ {
+  "pt": "Lendo aportes, distribuição e espaço do mês para investir.",
+  "tipo": "exato",
+  "en": "Reading contributions, allocation and this month's room to invest.",
+  "fr": "Lecture des versements, de la répartition et de la marge du mois pour investir.",
+  "es": "Leyendo aportes, distribución y el margen del mes para invertir."
+ },
+ {
+  "pt": "Perguntas de investimento sugeridas",
+  "tipo": "exato",
+  "en": "Suggested investment questions",
+  "fr": "Questions d'investissement suggérées",
+  "es": "Preguntas de inversión sugeridas"
+ },
+ {
+  "pt": "Carteira de investimentos",
+  "tipo": "exato",
+  "en": "Investment portfolio",
+  "fr": "Portefeuille d'investissements",
+  "es": "Cartera de inversiones"
+ },
+ {
+  "pt": "Valor atual estimado por juros compostos sobre o aporte",
+  "tipo": "exato",
+  "en": "Current value estimated with compound interest on the contribution",
+  "fr": "Valeur actuelle estimée par intérêts composés sur le versement",
+  "es": "Valor actual estimado con interés compuesto sobre el aporte"
+ },
+ {
+  "pt": "Nome",
+  "tipo": "exato",
+  "en": "Name",
+  "fr": "Nom",
+  "es": "Nombre"
+ },
+ {
+  "pt": "Tipo",
+  "tipo": "exato",
+  "en": "Type",
+  "fr": "Type",
+  "es": "Tipo"
+ },
+ {
+  "pt": "Aporte",
+  "tipo": "exato",
+  "en": "Contribution",
+  "fr": "Versement",
+  "es": "Aporte"
+ },
+ {
+  "pt": "Valor aportado",
+  "tipo": "exato",
+  "en": "Amount contributed",
+  "fr": "Montant versé",
+  "es": "Monto aportado"
+ },
+ {
+  "pt": "Taxa a.a.",
+  "tipo": "exato",
+  "en": "Rate p.a.",
+  "fr": "Taux annuel",
+  "es": "Tasa anual"
+ },
+ {
+  "pt": "Valor atual",
+  "tipo": "exato",
+  "en": "Current value",
+  "fr": "Valeur actuelle",
+  "es": "Valor actual"
+ },
+ {
+  "pt": "Rendimento",
+  "tipo": "exato",
+  "en": "Return",
+  "fr": "Rendement",
+  "es": "Rendimiento"
+ },
+ {
+  "pt": "Evolução do patrimônio investido",
+  "tipo": "exato",
+  "en": "Invested assets over time",
+  "fr": "Évolution du patrimoine investi",
+  "es": "Evolución del patrimonio invertido"
+ },
+ {
+  "pt": "Aportes acumulados × valor estimado com rentabilidade",
+  "tipo": "exato",
+  "en": "Total contributions × estimated value with returns",
+  "fr": "Versements cumulés × valeur estimée avec rendement",
+  "es": "Aportes acumulados × valor estimado con rentabilidad"
+ },
+ {
+  "pt": "Distribuição da carteira",
+  "tipo": "exato",
+  "en": "Portfolio allocation",
+  "fr": "Répartition du portefeuille",
+  "es": "Distribución de la cartera"
+ },
+ {
+  "pt": "Por tipo de investimento",
+  "tipo": "exato",
+  "en": "By investment type",
+  "fr": "Par type d'investissement",
+  "es": "Por tipo de inversión"
+ },
+ {
+  "pt": "Nenhum aporte registrado até aqui.",
+  "tipo": "exato",
+  "en": "No contributions recorded yet.",
+  "fr": "Aucun versement enregistré pour l'instant.",
+  "es": "Ningún aporte registrado hasta ahora."
+ },
+ {
+  "pt": "Calculadora de projeção — juros compostos",
+  "tipo": "exato",
+  "en": "Projection calculator — compound interest",
+  "fr": "Calculateur de projection — intérêts composés",
+  "es": "Calculadora de proyección — interés compuesto"
+ },
+ {
+  "pt": "Valor inicial (R$)",
+  "tipo": "exato",
+  "en": "Starting amount (R$)",
+  "fr": "Montant initial (R$)",
+  "es": "Monto inicial (R$)"
+ },
+ {
+  "pt": "Valor inicial da projeção",
+  "tipo": "exato",
+  "en": "Projection starting amount",
+  "fr": "Montant initial de la projection",
+  "es": "Monto inicial de la proyección"
+ },
+ {
+  "pt": "Aporte mensal (R$)",
+  "tipo": "exato",
+  "en": "Monthly contribution (R$)",
+  "fr": "Versement mensuel (R$)",
+  "es": "Aporte mensual (R$)"
+ },
+ {
+  "pt": "Aporte mensal da projeção",
+  "tipo": "exato",
+  "en": "Projection monthly contribution",
+  "fr": "Versement mensuel de la projection",
+  "es": "Aporte mensual de la proyección"
+ },
+ {
+  "pt": "Taxa de juros",
+  "tipo": "exato",
+  "en": "Interest rate",
+  "fr": "Taux d'intérêt",
+  "es": "Tasa de interés"
+ },
+ {
+  "pt": "Taxa de rendimento da projeção",
+  "tipo": "exato",
+  "en": "Projection rate of return",
+  "fr": "Taux de rendement de la projection",
+  "es": "Tasa de rendimiento de la proyección"
+ },
+ {
+  "pt": "Período da taxa",
+  "tipo": "exato",
+  "en": "Rate period",
+  "fr": "Période du taux",
+  "es": "Período de la tasa"
+ },
+ {
+  "pt": "% ao ano",
+  "tipo": "exato",
+  "en": "% per year",
+  "fr": "% par an",
+  "es": "% al año"
+ },
+ {
+  "pt": "% ao mês",
+  "tipo": "exato",
+  "en": "% per month",
+  "fr": "% par mois",
+  "es": "% al mes"
+ },
+ {
+  "pt": "Período (meses)",
+  "tipo": "exato",
+  "en": "Period (months)",
+  "fr": "Période (mois)",
+  "es": "Período (meses)"
+ },
+ {
+  "pt": "Meses da projeção",
+  "tipo": "exato",
+  "en": "Projection months",
+  "fr": "Mois de projection",
+  "es": "Meses de la proyección"
+ },
+ {
+  "pt": "Calcular projeção",
+  "tipo": "exato",
+  "en": "Calculate projection",
+  "fr": "Calculer la projection",
+  "es": "Calcular proyección"
+ },
+ {
+  "pt": "Contas de débito",
+  "tipo": "exato",
+  "en": "Debit accounts",
+  "fr": "Comptes de débit",
+  "es": "Cuentas de débito"
+ },
+ {
+  "pt": "Contas",
+  "tipo": "exato",
+  "en": "Accounts",
+  "fr": "Comptes",
+  "es": "Cuentas"
+ },
+ {
+  "pt": "Cartões de crédito",
+  "tipo": "exato",
+  "en": "Credit cards",
+  "fr": "Cartes de crédit",
+  "es": "Tarjetas de crédito"
+ },
+ {
+  "pt": "+ Nova conta",
+  "tipo": "exato",
+  "en": "+ New account",
+  "fr": "+ Nouveau compte",
+  "es": "+ Nueva cuenta"
+ },
+ {
+  "pt": "Extrato da conta",
+  "tipo": "exato",
+  "en": "Account statement",
+  "fr": "Relevé du compte",
+  "es": "Extracto de la cuenta"
+ },
+ {
+  "pt": "Conta do extrato",
+  "tipo": "exato",
+  "en": "Statement account",
+  "fr": "Compte du relevé",
+  "es": "Cuenta del extracto"
+ },
+ {
+  "pt": "Data",
+  "tipo": "exato",
+  "en": "Date",
+  "fr": "Date",
+  "es": "Fecha"
+ },
+ {
+  "pt": "Descrição",
+  "tipo": "exato",
+  "en": "Description",
+  "fr": "Description",
+  "es": "Descripción"
+ },
+ {
+  "pt": "Categoria",
+  "tipo": "exato",
+  "en": "Category",
+  "fr": "Catégorie",
+  "es": "Categoría"
+ },
+ {
+  "pt": "Valor",
+  "tipo": "exato",
+  "en": "Amount",
+  "fr": "Montant",
+  "es": "Monto"
+ },
+ {
+  "pt": "Saldo",
+  "tipo": "exato",
+  "en": "Balance",
+  "fr": "Solde",
+  "es": "Saldo"
+ },
+ {
+  "pt": "+ Novo cartão",
+  "tipo": "exato",
+  "en": "+ New card",
+  "fr": "+ Nouvelle carte",
+  "es": "+ Nueva tarjeta"
+ },
+ {
+  "pt": "+ Categoria de despesa",
+  "tipo": "exato",
+  "en": "+ Expense category",
+  "fr": "+ Catégorie de dépense",
+  "es": "+ Categoría de gasto"
+ },
+ {
+  "pt": "+ Categoria de receita",
+  "tipo": "exato",
+  "en": "+ Income category",
+  "fr": "+ Catégorie de revenu",
+  "es": "+ Categoría de ingreso"
+ },
+ {
+  "pt": "Período das categorias",
+  "tipo": "exato",
+  "en": "Category period",
+  "fr": "Période des catégories",
+  "es": "Período de las categorías"
+ },
+ {
+  "pt": "Histórico completo",
+  "tipo": "exato",
+  "en": "Full history",
+  "fr": "Historique complet",
+  "es": "Historial completo"
+ },
+ {
+  "pt": "Ano selecionado",
+  "tipo": "exato",
+  "en": "Selected year",
+  "fr": "Année sélectionnée",
+  "es": "Año seleccionado"
+ },
+ {
+  "pt": "Últimos 12 meses",
+  "tipo": "exato",
+  "en": "Last 12 months",
+  "fr": "12 derniers mois",
+  "es": "Últimos 12 meses"
+ },
+ {
+  "pt": "Mês selecionado",
+  "tipo": "exato",
+  "en": "Selected month",
+  "fr": "Mois sélectionné",
+  "es": "Mes seleccionado"
+ },
+ {
+  "pt": "Categorias de despesa",
+  "tipo": "exato",
+  "en": "Expense categories",
+  "fr": "Catégories de dépense",
+  "es": "Categorías de gasto"
+ },
+ {
+  "pt": "Categorias de receita",
+  "tipo": "exato",
+  "en": "Income categories",
+  "fr": "Catégories de revenu",
+  "es": "Categorías de ingreso"
+ },
+ {
+  "pt": "Peso histórico de cada categoria de despesa",
+  "tipo": "exato",
+  "en": "Historical weight of each expense category",
+  "fr": "Poids historique de chaque catégorie de dépense",
+  "es": "Peso histórico de cada categoría de gasto"
+ },
+ {
+  "pt": "+ Definir limite",
+  "tipo": "exato",
+  "en": "+ Set limit",
+  "fr": "+ Définir une limite",
+  "es": "+ Definir límite"
+ },
+ {
+  "pt": "Limites por categoria",
+  "tipo": "exato",
+  "en": "Limits by category",
+  "fr": "Limites par catégorie",
+  "es": "Límites por categoría"
+ },
+ {
+  "pt": "Quanto você decidiu gastar, contra o que já gastou",
+  "tipo": "exato",
+  "en": "What you decided to spend, against what you've already spent",
+  "fr": "Ce que vous avez décidé de dépenser, face à ce que vous avez déjà dépensé",
+  "es": "Lo que decidiste gastar, frente a lo que ya gastaste"
+ },
+ {
+  "pt": "+ Nova meta",
+  "tipo": "exato",
+  "en": "+ New goal",
+  "fr": "+ Nouvel objectif",
+  "es": "+ Nueva meta"
+ },
+ {
+  "pt": "Todas as recorrências",
+  "tipo": "exato",
+  "en": "All recurring items",
+  "fr": "Toutes les récurrences",
+  "es": "Todos los recurrentes"
+ },
+ {
+  "pt": "Assinaturas",
+  "tipo": "exato",
+  "en": "Subscriptions",
+  "fr": "Abonnements",
+  "es": "Suscripciones"
+ },
+ {
+  "pt": "Lançamentos fixos",
+  "tipo": "exato",
+  "en": "Fixed entries",
+  "fr": "Écritures fixes",
+  "es": "Movimientos fijos"
+ },
+ {
+  "pt": "Repetem todo mês até você encerrar",
+  "tipo": "exato",
+  "en": "They repeat every month until you end them",
+  "fr": "Elles se répètent chaque mois jusqu'à ce que vous les arrêtiez",
+  "es": "Se repiten cada mes hasta que los termines"
+ },
+ {
+  "pt": "Escala do calendário",
+  "tipo": "exato",
+  "en": "Calendar scale",
+  "fr": "Échelle du calendrier",
+  "es": "Escala del calendario"
+ },
+ {
+  "pt": "Semana",
+  "tipo": "exato",
+  "en": "Week",
+  "fr": "Semaine",
+  "es": "Semana"
+ },
+ {
+  "pt": "Semana anterior",
+  "tipo": "exato",
+  "en": "Previous week",
+  "fr": "Semaine précédente",
+  "es": "Semana anterior"
+ },
+ {
+  "pt": "Esta semana",
+  "tipo": "exato",
+  "en": "This week",
+  "fr": "Cette semaine",
+  "es": "Esta semana"
+ },
+ {
+  "pt": "Próxima semana",
+  "tipo": "exato",
+  "en": "Next week",
+  "fr": "Semaine suivante",
+  "es": "Próxima semana"
+ },
+ {
+  "pt": "Grade do mês",
+  "tipo": "exato",
+  "en": "Month grid",
+  "fr": "Grille du mois",
+  "es": "Cuadrícula del mes"
+ },
+ {
+  "pt": "<i class=\"dot-in\"></i>Entrada",
+  "tipo": "bloco",
+  "en": "<i class=\"dot-in\"></i>Money in",
+  "fr": "<i class=\"dot-in\"></i>Entrée",
+  "es": "<i class=\"dot-in\"></i>Entrada"
+ },
+ {
+  "pt": "<i class=\"dot-out\"></i>Saída",
+  "tipo": "bloco",
+  "en": "<i class=\"dot-out\"></i>Money out",
+  "fr": "<i class=\"dot-out\"></i>Sortie",
+  "es": "<i class=\"dot-out\"></i>Salida"
+ },
+ {
+  "pt": "<i class=\"dot-due\"></i>Fatura",
+  "tipo": "bloco",
+  "en": "<i class=\"dot-due\"></i>Card bill",
+  "fr": "<i class=\"dot-due\"></i>Relevé",
+  "es": "<i class=\"dot-due\"></i>Factura"
+ },
+ {
+  "pt": "Selecione um dia",
+  "tipo": "exato",
+  "en": "Select a day",
+  "fr": "Sélectionnez un jour",
+  "es": "Selecciona un día"
+ },
+ {
+  "pt": "Receitas e despesas do ano",
+  "tipo": "exato",
+  "en": "Income and expenses for the year",
+  "fr": "Revenus et dépenses de l'année",
+  "es": "Ingresos y gastos del año"
+ },
+ {
+  "pt": "Toque num mês para abrir a grade",
+  "tipo": "exato",
+  "en": "Tap a month to open its grid",
+  "fr": "Touchez un mois pour ouvrir sa grille",
+  "es": "Toca un mes para abrir su cuadrícula"
+ },
+ {
+  "pt": "Comparação ano a ano",
+  "tipo": "exato",
+  "en": "Year-over-year comparison",
+  "fr": "Comparaison d'une année sur l'autre",
+  "es": "Comparación interanual"
+ },
+ {
+  "pt": "Ainda não há dados de outro ano para comparar.",
+  "tipo": "exato",
+  "en": "There's no data from another year to compare yet.",
+  "fr": "Pas encore de données d'une autre année à comparer.",
+  "es": "Todavía no hay datos de otro año para comparar."
+ },
+ {
+  "pt": "Taxa de poupança",
+  "tipo": "exato",
+  "en": "Savings rate",
+  "fr": "Taux d'épargne",
+  "es": "Tasa de ahorro"
+ },
+ {
+  "pt": "Quanto de cada real recebido sobrou",
+  "tipo": "exato",
+  "en": "How much of each real received was left over",
+  "fr": "Ce qui est resté de chaque réal reçu",
+  "es": "Cuánto quedó de cada real recibido"
+ },
+ {
+  "pt": "Consolidado mensal",
+  "tipo": "exato",
+  "en": "Monthly summary",
+  "fr": "Consolidé mensuel",
+  "es": "Consolidado mensual"
+ },
+ {
+  "pt": "↓ Exportar CSV",
+  "tipo": "exato",
+  "en": "↓ Export CSV",
+  "fr": "↓ Exporter en CSV",
+  "es": "↓ Exportar CSV"
+ },
+ {
+  "pt": "↓ Exportar PDF",
+  "tipo": "exato",
+  "en": "↓ Export PDF",
+  "fr": "↓ Exporter en PDF",
+  "es": "↓ Exportar PDF"
+ },
+ {
+  "pt": "Receitas",
+  "tipo": "exato",
+  "en": "Income",
+  "fr": "Revenus",
+  "es": "Ingresos"
+ },
+ {
+  "pt": "Despesas",
+  "tipo": "exato",
+  "en": "Expenses",
+  "fr": "Dépenses",
+  "es": "Gastos"
+ },
+ {
+  "pt": "Acumulado",
+  "tipo": "exato",
+  "en": "Running total",
+  "fr": "Cumulé",
+  "es": "Acumulado"
+ },
+ {
+  "pt": "Investido",
+  "tipo": "exato",
+  "en": "Invested",
+  "fr": "Investi",
+  "es": "Invertido"
+ },
+ {
+  "pt": "Inteligência financeira que lê o contexto antes de responder.",
+  "tipo": "exato",
+  "en": "Financial intelligence that reads the context before answering.",
+  "fr": "Une intelligence financière qui lit le contexte avant de répondre.",
+  "es": "Inteligencia financiera que lee el contexto antes de responder."
+ },
+ {
+  "pt": "Contexto da análise",
+  "tipo": "exato",
+  "en": "Analysis context",
+  "fr": "Contexte de l'analyse",
+  "es": "Contexto del análisis"
+ },
+ {
+  "pt": "Base",
+  "tipo": "exato",
+  "en": "Data",
+  "fr": "Base",
+  "es": "Base"
+ },
+ {
+  "pt": "0 lançamentos",
+  "tipo": "exato",
+  "en": "0 entries",
+  "fr": "0 écriture",
+  "es": "0 movimientos"
+ },
+ {
+  "pt": "Leitura",
+  "tipo": "exato",
+  "en": "Reading",
+  "fr": "Lecture",
+  "es": "Lectura"
+ },
+ {
+  "pt": "Local",
+  "tipo": "exato",
+  "en": "Local",
+  "fr": "Locale",
+  "es": "Local"
+ },
+ {
+  "pt": "Mova o cursor sobre a formação para observar o campo de análise.",
+  "tipo": "exato",
+  "en": "Move the cursor over the shape to watch the analysis field.",
+  "fr": "Passez le curseur sur la forme pour observer le champ d'analyse.",
+  "es": "Mueve el cursor sobre la forma para observar el campo de análisis."
+ },
+ {
+  "pt": "Conversa",
+  "tipo": "exato",
+  "en": "Conversation",
+  "fr": "Conversation",
+  "es": "Conversación"
+ },
+ {
+  "pt": "O que a UGLEZ considera",
+  "tipo": "exato",
+  "en": "What UGLEZ takes into account",
+  "fr": "Ce que UGLEZ prend en compte",
+  "es": "Lo que UGLEZ tiene en cuenta"
+ },
+ {
+  "pt": "Começar nova conversa",
+  "tipo": "exato",
+  "en": "Start a new conversation",
+  "fr": "Commencer une nouvelle conversation",
+  "es": "Empezar una nueva conversación"
+ },
+ {
+  "pt": "Nova conversa",
+  "tipo": "exato",
+  "en": "New conversation",
+  "fr": "Nouvelle conversation",
+  "es": "Nueva conversación"
+ },
+ {
+  "pt": "Pronto para analisar",
+  "tipo": "exato",
+  "en": "Ready to analyze",
+  "fr": "Prêt à analyser",
+  "es": "Listo para analizar"
+ },
+ {
+  "pt": "Sobre o que vamos conversar?",
+  "tipo": "exato",
+  "en": "What shall we talk about?",
+  "fr": "De quoi allons-nous parler ?",
+  "es": "¿De qué vamos a hablar?"
+ },
+ {
+  "pt": "Eu leio os totais do mês, do ano e dos meses anteriores — nunca a descrição de um lançamento.",
+  "tipo": "exato",
+  "en": "I read the totals for the month, the year and previous months — never the description of an entry.",
+  "fr": "Je lis les totaux du mois, de l'année et des mois précédents — jamais la description d'une écriture.",
+  "es": "Leo los totales del mes, del año y de los meses anteriores — nunca la descripción de un movimiento."
+ },
+ {
+  "pt": "Perguntas sugeridas",
+  "tipo": "exato",
+  "en": "Suggested questions",
+  "fr": "Questions suggérées",
+  "es": "Preguntas sugeridas"
+ },
+ {
+  "pt": "Sem dados em <span id=\"uglezMesVazio\"></span>",
+  "tipo": "bloco",
+  "en": "No data in <span id=\"uglezMesVazio\"></span>",
+  "fr": "Aucune donnée en <span id=\"uglezMesVazio\"></span>",
+  "es": "Sin datos en <span id=\"uglezMesVazio\"></span>"
+ },
+ {
+  "pt": "Adicione uma movimentação para receber uma análise financeira real.",
+  "tipo": "exato",
+  "en": "Add a transaction to get a real financial analysis.",
+  "fr": "Ajoutez un mouvement pour recevoir une vraie analyse financière.",
+  "es": "Agrega un movimiento para recibir un análisis financiero real."
+ },
+ {
+  "pt": "Ver planos",
+  "tipo": "exato",
+  "en": "See plans",
+  "fr": "Voir les formules",
+  "es": "Ver planes"
+ },
+ {
+  "pt": "Mensagens da conversa",
+  "tipo": "exato",
+  "en": "Conversation messages",
+  "fr": "Messages de la conversation",
+  "es": "Mensajes de la conversación"
+ },
+ {
+  "pt": "Sua pergunta para a UGLEZ",
+  "tipo": "exato",
+  "en": "Your question for UGLEZ",
+  "fr": "Votre question pour UGLEZ",
+  "es": "Tu pregunta para UGLEZ"
+ },
+ {
+  "pt": "Pergunte sobre o seu dinheiro…",
+  "tipo": "exato",
+  "en": "Ask about your money…",
+  "fr": "Posez une question sur votre argent…",
+  "es": "Pregunta sobre tu dinero…"
+ },
+ {
+  "pt": "Enviar pergunta",
+  "tipo": "exato",
+  "en": "Send question",
+  "fr": "Envoyer la question",
+  "es": "Enviar pregunta"
+ },
+ {
+  "pt": "A UGLEZ pode errar. Orientação, não consultoria.",
+  "tipo": "exato",
+  "en": "UGLEZ can make mistakes. Guidance, not financial advice.",
+  "fr": "UGLEZ peut se tromper. Une orientation, pas un conseil financier.",
+  "es": "UGLEZ puede equivocarse. Orientación, no asesoría."
+ },
+ {
+  "pt": "Dados usados",
+  "tipo": "exato",
+  "en": "Data used",
+  "fr": "Données utilisées",
+  "es": "Datos usados"
+ },
+ {
+  "pt": "Perfil",
+  "tipo": "exato",
+  "en": "Profile",
+  "fr": "Profil",
+  "es": "Perfil"
+ },
+ {
+  "pt": "Aparência",
+  "tipo": "exato",
+  "en": "Appearance",
+  "fr": "Apparence",
+  "es": "Apariencia"
+ },
+ {
+  "pt": "Planos e suporte",
+  "tipo": "exato",
+  "en": "Plans and support",
+  "fr": "Formules et assistance",
+  "es": "Planes y soporte"
+ },
+ {
+  "pt": "Escolha o tamanho do seu OAZE",
+  "tipo": "exato",
+  "en": "Choose the size of your OAZE",
+  "fr": "Choisissez la taille de votre OAZE",
+  "es": "Elige el tamaño de tu OAZE"
+ },
+ {
+  "pt": "Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.",
+  "tipo": "exato",
+  "en": "Every plan keeps your data the same way. What changes is how much fits and how much UGLEZ analyzes.",
+  "fr": "Toutes les formules conservent vos données de la même façon. Ce qui change, c'est ce qui tient dedans et ce que UGLEZ analyse.",
+  "es": "Todos los planes guardan tus datos de la misma forma. Lo que cambia es cuánto cabe y cuánto analiza UGLEZ."
+ },
+ {
+  "pt": "Ciclo de cobrança",
+  "tipo": "exato",
+  "en": "Billing cycle",
+  "fr": "Cycle de facturation",
+  "es": "Ciclo de cobro"
+ },
+ {
+  "pt": "Mensal",
+  "tipo": "exato",
+  "en": "Monthly",
+  "fr": "Mensuel",
+  "es": "Mensual"
+ },
+ {
+  "pt": "Anual <span class=\"ciclo-selo\">2 meses grátis</span>",
+  "tipo": "bloco",
+  "en": "Annual <span class=\"ciclo-selo\">2 months free</span>",
+  "fr": "Annuel <span class=\"ciclo-selo\">2 mois offerts</span>",
+  "es": "Anual <span class=\"ciclo-selo\">2 meses gratis</span>"
+ },
+ {
+  "pt": "Comparativo completo",
+  "tipo": "exato",
+  "en": "Full comparison",
+  "fr": "Comparatif complet",
+  "es": "Comparativa completa"
+ },
+ {
+  "pt": "Perguntas frequentes",
+  "tipo": "exato",
+  "en": "Frequently asked questions",
+  "fr": "Questions fréquentes",
+  "es": "Preguntas frecuentes"
+ },
+ {
+  "pt": "Buscar no OAZE",
+  "tipo": "exato",
+  "en": "Search OAZE",
+  "fr": "Rechercher dans OAZE",
+  "es": "Buscar en OAZE"
+ },
+ {
+  "pt": "Fechar busca",
+  "tipo": "exato",
+  "en": "Close search",
+  "fr": "Fermer la recherche",
+  "es": "Cerrar búsqueda"
+ },
+ {
+  "pt": "Esc",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Seu OAZE",
+  "tipo": "exato",
+  "en": "Your OAZE",
+  "fr": "Votre OAZE",
+  "es": "Tu OAZE"
+ },
+ {
+  "pt": "Fechar menu",
+  "tipo": "exato",
+  "en": "Close menu",
+  "fr": "Fermer le menu",
+  "es": "Cerrar menú"
+ },
+ {
+  "pt": "Limites do mês",
+  "tipo": "exato",
+  "en": "Monthly limits",
+  "fr": "Limites du mois",
+  "es": "Límites del mes"
+ },
+ {
+  "pt": "Onde quer chegar",
+  "tipo": "exato",
+  "en": "Where you want to get",
+  "fr": "Où vous voulez arriver",
+  "es": "A dónde quieres llegar"
+ },
+ {
+  "pt": "Semana, mês e ano",
+  "tipo": "exato",
+  "en": "Week, month and year",
+  "fr": "Semaine, mois et année",
+  "es": "Semana, mes y año"
+ },
+ {
+  "pt": "O que se repete",
+  "tipo": "exato",
+  "en": "What repeats",
+  "fr": "Ce qui se répète",
+  "es": "Lo que se repite"
+ },
+ {
+  "pt": "Organização",
+  "tipo": "exato",
+  "en": "Organization",
+  "fr": "Organisation",
+  "es": "Organización"
+ },
+ {
+  "pt": "Carteira e projeção",
+  "tipo": "exato",
+  "en": "Portfolio and projection",
+  "fr": "Portefeuille et projection",
+  "es": "Cartera y proyección"
+ },
+ {
+  "pt": "O ano consolidado",
+  "tipo": "exato",
+  "en": "The year at a glance",
+  "fr": "L'année consolidée",
+  "es": "El año consolidado"
+ },
+ {
+  "pt": "Seu assistente",
+  "tipo": "exato",
+  "en": "Your assistant",
+  "fr": "Votre assistant",
+  "es": "Tu asistente"
+ },
+ {
+  "pt": "Conta e tema",
+  "tipo": "exato",
+  "en": "Account and theme",
+  "fr": "Compte et thème",
+  "es": "Cuenta y tema"
+ },
+ {
+  "pt": "Planos",
+  "tipo": "exato",
+  "en": "Plans",
+  "fr": "Formules",
+  "es": "Planes"
+ },
+ {
+  "pt": "Seu plano",
+  "tipo": "exato",
+  "en": "Your plan",
+  "fr": "Votre formule",
+  "es": "Tu plan"
+ },
+ {
+  "pt": "Ações rápidas",
+  "tipo": "exato",
+  "en": "Quick actions",
+  "fr": "Actions rapides",
+  "es": "Acciones rápidas"
+ },
+ {
+  "pt": "Ações rápidas (N)",
+  "tipo": "exato",
+  "en": "Quick actions (N)",
+  "fr": "Actions rapides (N)",
+  "es": "Acciones rápidas (N)"
+ },
+ {
+  "pt": "Título",
+  "tipo": "exato",
+  "en": "Title",
+  "fr": "Titre",
+  "es": "Título"
+ },
+ {
+  "pt": "Fechar",
+  "tipo": "exato",
+  "en": "Close",
+  "fr": "Fermer",
+  "es": "Cerrar"
+ },
+ {
+  "pt": "Chart.js não pôde ser carregado (sem internet). Tabelas e números continuam funcionando; os gráficos ficam ocultos.",
+  "tipo": "exato",
+  "en": "Charts couldn't be loaded (no internet). Tables and numbers keep working; the charts stay hidden.",
+  "fr": "Impossible de charger les graphiques (pas d'internet). Les tableaux et les chiffres fonctionnent toujours ; les graphiques restent masqués.",
+  "es": "No se pudieron cargar los gráficos (sin internet). Las tablas y los números siguen funcionando; los gráficos quedan ocultos."
+ }
+]

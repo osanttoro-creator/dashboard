@@ -163,7 +163,7 @@
         /* Só as que a pessoa criou contam. As que vêm prontas não
            deveriam consumir a cota de "personalizadas" — cobrar por
            elas seria cobrar pelo padrão do produto. */
-        const padrao = new Set(Store.CATEGORIAS_PADRAO || []);
+        const padrao = new Set((Store.CATEGORIAS_PADRAO || []).concat(Store.CATEGORIAS_PADRAO_PT || []));
         return (p.categories || []).filter((c) => !padrao.has(c.name)).length;
       }
       default: return 0;

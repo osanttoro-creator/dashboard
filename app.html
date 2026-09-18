@@ -27,7 +27,42 @@
     document.documentElement.setAttribute('data-theme', tema);
   } catch (e) { /* data-theme="dark" continua como fallback seguro */ }
 })();
+/* A língua, também antes da primeira pintura. Nesta ordem:
+     1. a escolha feita em Configurações (oaze.idioma);
+     2. ?lang= no endereço — o link das páginas em inglês, francês e
+        espanhol para o app leva isso;
+     3. a língua da última página do site que a pessoa leu;
+     4. quem já usa o app (tem financas.v1) fica em português, como
+        sempre foi: trocar a língua de alguém sem ele pedir não é
+        detalhe; quem chega agora recebe a do navegador.
+   Fora do português o corpo nasce escondido (data-traduzindo) até o
+   dicionário traduzir a tela — e aparece de qualquer jeito em 3 s,
+   para uma falha de rede nunca deixar o app em branco. */
+(function () {
+  var ok = { pt: 1, en: 1, fr: 1, es: 1 };
+  var lang = null;
+  try {
+    var q = (location.search.match(/[?&]lang=([a-z]{2})\b/) || [])[1];
+    lang = localStorage.getItem('oaze.idioma');
+    if (!ok[lang]) lang = null;
+    if (!lang && q && ok[q]) { lang = q; localStorage.setItem('oaze.idioma.site', q); }
+    if (!lang) { var site = localStorage.getItem('oaze.idioma.site'); if (ok[site]) lang = site; }
+    if (!lang && localStorage.getItem('financas.v1') === null) {
+      var nav = String(navigator.language || 'pt').slice(0, 2).toLowerCase();
+      lang = ok[nav] ? nav : 'en';
+    }
+  } catch (e) { /* sem armazenamento: português */ }
+  lang = lang || 'pt';
+  var raiz = document.documentElement;
+  raiz.setAttribute('data-idioma', lang);
+  raiz.setAttribute('lang', { pt: 'pt-BR', en: 'en', fr: 'fr', es: 'es' }[lang]);
+  if (lang !== 'pt') {
+    raiz.setAttribute('data-traduzindo', '');
+    setTimeout(function () { raiz.removeAttribute('data-traduzindo'); }, 3000);
+  }
+})();
 </script>
+<style>html[data-traduzindo] body { visibility: hidden; }</style>
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
@@ -1165,6 +1200,9 @@
   Chart.js não pôde ser carregado (sem internet). Tabelas e números continuam funcionando; os gráficos ficam ocultos.
 </div>
 
+<!-- primeiro de todos: traduz o HTML fixo antes de qualquer script
+     guardar referência a um elemento ou ligar um evento nele -->
+<script src="/assets/js/idioma.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <!-- sem internet (avião, celular offline), cai para a cópia local -->
 <script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>

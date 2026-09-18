@@ -1,0 +1,302 @@
+[
+ {
+  "pt": "localStorage:financas.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Migração: sem espaço para a cópia de segurança —",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Entendido. Os dados continuam guardados neste aparelho.",
+  "tipo": "exato",
+  "en": "Got it. Your data stays saved on this device.",
+  "fr": "Compris. Les données restent gardées sur cet appareil.",
+  "es": "Entendido. Los datos siguen guardados en este dispositivo."
+ },
+ {
+  "pt": "Migração: não deu para registrar a dispensa agora —",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "arquivo não é um objeto",
+  "tipo": "exato",
+  "en": "the file isn't an object",
+  "fr": "le fichier n'est pas un objet",
+  "es": "el archivo no es un objeto"
+ },
+ {
+  "pt": "nenhum perfil encontrado",
+  "tipo": "exato",
+  "en": "no profile found",
+  "fr": "aucun profil trouvé",
+  "es": "ningún perfil encontrado"
+ },
+ {
+  "pt": "perfil {0}{1}",
+  "tipo": "padrao",
+  "en": "profile {0}{1}",
+  "fr": "profil {0}{1}",
+  "es": "perfil {0}{1}"
+ },
+ {
+  "pt": "{0}: não é um objeto",
+  "tipo": "padrao",
+  "en": "{0}: isn't an object",
+  "fr": "{0} : n'est pas un objet",
+  "es": "{0}: no es un objeto"
+ },
+ {
+  "pt": "{0}: sem identificador",
+  "tipo": "padrao",
+  "en": "{0}: no identifier",
+  "fr": "{0} : sans identifiant",
+  "es": "{0}: sin identificador"
+ },
+ {
+  "pt": "{0}: {1} não é uma lista",
+  "tipo": "padrao",
+  "en": "{0}: {1} isn't a list",
+  "fr": "{0} : {1} n'est pas une liste",
+  "es": "{0}: {1} no es una lista"
+ },
+ {
+  "pt": "{0}: lançamento {1} sem identificador",
+  "tipo": "padrao",
+  "en": "{0}: entry {1} without an identifier",
+  "fr": "{0} : écriture {1} sans identifiant",
+  "es": "{0}: movimiento {1} sin identificador"
+ },
+ {
+  "pt": "{0}: lançamento \"{1}\" com data inválida",
+  "tipo": "padrao",
+  "en": "{0}: entry \"{1}\" with an invalid date",
+  "fr": "{0} : écriture « {1} » avec une date invalide",
+  "es": "{0}: movimiento \"{1}\" con fecha inválida"
+ },
+ {
+  "pt": "{0}: lançamento \"{1}\" com valor não numérico",
+  "tipo": "padrao",
+  "en": "{0}: entry \"{1}\" with a non-numeric amount",
+  "fr": "{0} : écriture « {1} » avec un montant non numérique",
+  "es": "{0}: movimiento \"{1}\" con monto no numérico"
+ },
+ {
+  "pt": "Seus dados estão neste aparelho. Vamos copiá-los para a sua conta, para que apareçam também no celular.",
+  "tipo": "exato",
+  "en": "Your data is on this device. We'll copy it to your account so it also shows up on your phone.",
+  "fr": "Vos données sont sur cet appareil. Nous allons les copier vers votre compte pour qu'elles apparaissent aussi sur le téléphone.",
+  "es": "Tus datos están en este dispositivo. Vamos a copiarlos a tu cuenta para que también aparezcan en el celular."
+ },
+ {
+  "pt": "O que será copiado",
+  "tipo": "exato",
+  "en": "What will be copied",
+  "fr": "Ce qui sera copié",
+  "es": "Lo que se copiará"
+ },
+ {
+  "pt": "{0} perfil(is)",
+  "tipo": "padrao",
+  "en": "{0} profile(s)",
+  "fr": "{0} profil(s)",
+  "es": "{0} perfil(es)"
+ },
+ {
+  "pt": "{0} lançamento(s)",
+  "tipo": "padrao",
+  "en": "{0} entry(ies)",
+  "fr": "{0} écriture(s)",
+  "es": "{0} movimiento(s)"
+ },
+ {
+  "pt": "{0} conta(s) e {1} cartão(ões)",
+  "tipo": "padrao",
+  "en": "{0} account(s) and {1} card(s)",
+  "fr": "{0} compte(s) et {1} carte(s)",
+  "es": "{0} cuenta(s) y {1} tarjeta(s)"
+ },
+ {
+  "pt": "{0} categoria(s), {1} investimento(s), {2} meta(s)",
+  "tipo": "padrao",
+  "en": "{0} category(ies), {1} investment(s), {2} goal(s)",
+  "fr": "{0} catégorie(s), {1} investissement(s), {2} objectif(s)",
+  "es": "{0} categoría(s), {1} inversión(es), {2} meta(s)"
+ },
+ {
+  "pt": "Encontramos {0} problema(s) nos dados",
+  "tipo": "padrao",
+  "en": "We found {0} problem(s) in the data",
+  "fr": "Nous avons trouvé {0} problème(s) dans les données",
+  "es": "Encontramos {0} problema(s) en los datos"
+ },
+ {
+  "pt": "A cópia não vai começar enquanto isso não for resolvido. Baixe o backup e me procure com ele.",
+  "tipo": "exato",
+  "en": "The copy won't start until this is fixed. Download the backup and contact us with it.",
+  "fr": "La copie ne commencera pas tant que ce n'est pas résolu. Téléchargez la sauvegarde et contactez-nous avec.",
+  "es": "La copia no va a empezar mientras esto no se resuelva. Descarga la copia de seguridad y contáctanos con ella."
+ },
+ {
+  "pt": "Nada é apagado.",
+  "tipo": "exato",
+  "en": "Nothing is deleted.",
+  "fr": "Rien n'est supprimé.",
+  "es": "No se borra nada."
+ },
+ {
+  "pt": "Os dados continuam neste aparelho depois da cópia, e você baixa um backup antes de começar.",
+  "tipo": "exato",
+  "en": "The data stays on this device after the copy, and you download a backup before starting.",
+  "fr": "Les données restent sur cet appareil après la copie, et vous téléchargez une sauvegarde avant de commencer.",
+  "es": "Los datos siguen en este dispositivo después de la copia, y descargas una copia de seguridad antes de empezar."
+ },
+ {
+  "pt": "Copiar dados deste navegador",
+  "tipo": "exato",
+  "en": "Copy data from this browser",
+  "fr": "Copier les données de ce navigateur",
+  "es": "Copiar datos de este navegador"
+ },
+ {
+  "pt": "Baixar backup",
+  "tipo": "exato",
+  "en": "Download backup",
+  "fr": "Télécharger la sauvegarde",
+  "es": "Descargar copia"
+ },
+ {
+  "pt": "Copiar para a conta",
+  "tipo": "exato",
+  "en": "Copy to account",
+  "fr": "Copier vers le compte",
+  "es": "Copiar a la cuenta"
+ },
+ {
+  "pt": "Backup baixado. Guarde-o antes de continuar.",
+  "tipo": "exato",
+  "en": "Backup downloaded. Keep it before continuing.",
+  "fr": "Sauvegarde téléchargée. Gardez-la avant de continuer.",
+  "es": "Copia descargada. Guárdala antes de continuar."
+ },
+ {
+  "pt": "Seus dados já estão na conta.",
+  "tipo": "exato",
+  "en": "Your data is already in your account.",
+  "fr": "Vos données sont déjà dans votre compte.",
+  "es": "Tus datos ya están en la cuenta."
+ },
+ {
+  "pt": "Copiando…",
+  "tipo": "exato",
+  "en": "Copying…",
+  "fr": "Copie…",
+  "es": "Copiando…"
+ },
+ {
+  "pt": "Não feche esta aba. Se algo falhar, nada é perdido — os dados continuam no aparelho.",
+  "tipo": "exato",
+  "en": "Don't close this tab. If something fails, nothing is lost — the data stays on the device.",
+  "fr": "Ne fermez pas cet onglet. En cas d'échec, rien n'est perdu — les données restent sur l'appareil.",
+  "es": "No cierres esta pestaña. Si algo falla, no se pierde nada — los datos siguen en el dispositivo."
+ },
+ {
+  "pt": "✓ Backup baixado",
+  "tipo": "exato",
+  "en": "✓ Backup downloaded",
+  "fr": "✓ Sauvegarde téléchargée",
+  "es": "✓ Copia descargada"
+ },
+ {
+  "pt": "não foi possível registrar a migração: {0}",
+  "tipo": "padrao",
+  "en": "couldn't record the migration: {0}",
+  "fr": "impossible d'enregistrer la migration : {0}",
+  "es": "no se pudo registrar la migración: {0}"
+ },
+ {
+  "pt": "→ Conferindo…",
+  "tipo": "exato",
+  "en": "→ Checking…",
+  "fr": "→ Vérification…",
+  "es": "→ Verificando…"
+ },
+ {
+  "pt": "conferência falhou — {0}",
+  "tipo": "padrao",
+  "en": "check failed — {0}",
+  "fr": "échec de la vérification — {0}",
+  "es": "la verificación falló — {0}"
+ },
+ {
+  "pt": "✓ {0} lançamentos conferidos no servidor",
+  "tipo": "padrao",
+  "en": "✓ {0} entries checked on the server",
+  "fr": "✓ {0} écritures vérifiées sur le serveur",
+  "es": "✓ {0} movimientos verificados en el servidor"
+ },
+ {
+  "pt": "Pronto",
+  "tipo": "exato",
+  "en": "Done",
+  "fr": "Terminé",
+  "es": "Listo"
+ },
+ {
+  "pt": "Seus dados agora estão na conta e aparecem em qualquer aparelho onde você entrar.",
+  "tipo": "exato",
+  "en": "Your data is now in your account and shows up on any device you sign in on.",
+  "fr": "Vos données sont maintenant dans votre compte et apparaissent sur tout appareil où vous vous connectez.",
+  "es": "Tus datos ahora están en la cuenta y aparecen en cualquier dispositivo donde entres."
+ },
+ {
+  "pt": "O que estava aqui continua aqui.",
+  "tipo": "exato",
+  "en": "What was here is still here.",
+  "fr": "Ce qui était ici y est toujours.",
+  "es": "Lo que estaba aquí sigue aquí."
+ },
+ {
+  "pt": "Nada foi apagado deste navegador, e o backup está na sua pasta de downloads.",
+  "tipo": "exato",
+  "en": "Nothing was deleted from this browser, and the backup is in your downloads folder.",
+  "fr": "Rien n'a été supprimé de ce navigateur, et la sauvegarde est dans votre dossier de téléchargements.",
+  "es": "No se borró nada de este navegador, y la copia está en tu carpeta de descargas."
+ },
+ {
+  "pt": "Migração:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A cópia não terminou",
+  "tipo": "exato",
+  "en": "The copy didn't finish",
+  "fr": "La copie n'est pas terminée",
+  "es": "La copia no terminó"
+ },
+ {
+  "pt": "Algo falhou no meio do caminho:",
+  "tipo": "exato",
+  "en": "Something failed along the way:",
+  "fr": "Quelque chose a échoué en cours de route :",
+  "es": "Algo falló en el camino:"
+ },
+ {
+  "pt": "Seus dados estão intactos.",
+  "tipo": "exato",
+  "en": "Your data is intact.",
+  "fr": "Vos données sont intactes.",
+  "es": "Tus datos están intactos."
+ },
+ {
+  "pt": "Nada foi apagado deste aparelho e o backup está na sua pasta de downloads. Pode tentar de novo — o que já foi copiado não será duplicado.",
+  "tipo": "exato",
+  "en": "Nothing was deleted from this device and the backup is in your downloads folder. You can try again — what was already copied won't be duplicated.",
+  "fr": "Rien n'a été supprimé de cet appareil et la sauvegarde est dans votre dossier de téléchargements. Vous pouvez réessayer — ce qui a déjà été copié ne sera pas dupliqué.",
+  "es": "No se borró nada de este dispositivo y la copia está en tu carpeta de descargas. Puedes intentarlo de nuevo — lo que ya se copió no se duplicará."
+ }
+]

@@ -10,6 +10,14 @@
   const Charts = {};
   const registry = new Map();
 
+  /* O canvas não é DOM: a legenda e a dica do Chart.js não passam pelo
+     tradutor da tela (idioma.js). O nome de cada SÉRIE é escrito pelo
+     app ('Receitas', 'Débito (conta)') e é traduzido aqui, no único
+     lugar por onde todo gráfico passa. Os rótulos do eixo NÃO: ou são
+     meses (já na língua, por utils.js) ou nomes que a pessoa deu. */
+  const tr = (texto) => (global.I18n ? global.I18n.t(texto) : texto);
+  const trExato = (texto) => (global.I18n && global.I18n.exato ? global.I18n.exato(texto) : texto);
+
   Charts.available = () => typeof global.Chart !== 'undefined';
 
   /** Lê os tokens de cor do tema ativo direto do CSS. */
@@ -108,6 +116,14 @@
     if (!canvas) return null;
     const prev = registry.get(canvasId);
     if (prev) { prev.destroy(); registry.delete(canvasId); }
+    if (config && config.data && Array.isArray(config.data.datasets)) {
+      config.data.datasets.forEach((d) => { if (d && typeof d.label === 'string') d.label = trExato(d.label); });
+    }
+    /* rótulo do eixo escrito pelo app ('Receitas', 'Despesas'): só o que
+       o dicionário conhece muda — mês e nome dado pela pessoa ficam */
+    if (config && config.data && Array.isArray(config.data.labels)) {
+      config.data.labels = config.data.labels.map((l) => (typeof l === 'string' ? trExato(l) : l));
+    }
     const chart = new Chart(canvas.getContext('2d'), config);
     registry.set(canvasId, chart);
     descrever(canvas, config);
@@ -152,13 +168,13 @@
     /* Sem dados, dizer isso é mais útil do que uma tabela vazia. */
     if (!sets.length) {
       canvas.setAttribute('role', 'img');
-      canvas.setAttribute('aria-label', titulo + ': sem dados no período.');
+      canvas.setAttribute('aria-label', tr(titulo + ': sem dados no período.'));
       limparTabela(canvas);
       return;
     }
 
     /* --- o resumo falado --- */
-    const partes = [titulo + '.'];
+    const partes = [tr(titulo) + '.'];
     sets.forEach((d) => {
       const nums = d.data.map((v) => (typeof v === 'object' && v ? +v.y : +v))
         .filter((v) => isFinite(v));
@@ -166,10 +182,10 @@
       let iMax = 0, iMin = 0;
       nums.forEach((v, i) => { if (v > nums[iMax]) iMax = i; if (v < nums[iMin]) iMin = i; });
       const nome = d.label ? d.label + ': ' : '';
-      partes.push(nome + nums.length + ' pontos. Maior: ' +
+      partes.push(tr(nome + nums.length + ' pontos. Maior: ' +
         (labels[iMax] != null ? labels[iMax] + ', ' : '') + valorFmt(nums[iMax], formato) +
         '. Menor: ' + (labels[iMin] != null ? labels[iMin] + ', ' : '') +
-        valorFmt(nums[iMin], formato) + '.');
+        valorFmt(nums[iMin], formato) + '.'));
     });
 
     canvas.setAttribute('role', 'img');

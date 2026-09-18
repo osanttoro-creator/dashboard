@@ -1,0 +1,346 @@
+[
+ {
+  "pt": "Sobre você",
+  "tipo": "exato",
+  "en": "About you",
+  "fr": "À propos de vous",
+  "es": "Sobre ti"
+ },
+ {
+  "pt": "Seu espaço financeiro",
+  "tipo": "exato",
+  "en": "Your financial space",
+  "fr": "Votre espace financier",
+  "es": "Tu espacio financiero"
+ },
+ {
+  "pt": "Onde está seu dinheiro",
+  "tipo": "exato",
+  "en": "Where your money is",
+  "fr": "Où est votre argent",
+  "es": "Dónde está tu dinero"
+ },
+ {
+  "pt": "Primeira movimentação",
+  "tipo": "exato",
+  "en": "First transaction",
+  "fr": "Premier mouvement",
+  "es": "Primer movimiento"
+ },
+ {
+  "pt": "Orçamento ou meta",
+  "tipo": "exato",
+  "en": "Budget or goal",
+  "fr": "Budget ou objectif",
+  "es": "Presupuesto o meta"
+ },
+ {
+  "pt": "Tudo pronto",
+  "tipo": "exato",
+  "en": "All set",
+  "fr": "Tout est prêt",
+  "es": "Todo listo"
+ },
+ {
+  "pt": "Onboarding: progresso não subiu agora, ficou salvo aqui.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Etapa {0} de {1}",
+  "tipo": "padrao",
+  "en": "Step {0} of {1}",
+  "fr": "Étape {0} sur {1}",
+  "es": "Paso {0} de {1}"
+ },
+ {
+  "pt": "Voltar",
+  "tipo": "exato",
+  "en": "Back",
+  "fr": "Retour",
+  "es": "Volver"
+ },
+ {
+  "pt": "Pular",
+  "tipo": "exato",
+  "en": "Skip",
+  "fr": "Passer",
+  "es": "Saltar"
+ },
+ {
+  "pt": "como quer ser chamado",
+  "tipo": "exato",
+  "en": "what you'd like to be called",
+  "fr": "comment vous voulez être appelé",
+  "es": "cómo quieres que te llamen"
+ },
+ {
+  "pt": "Vamos configurar o essencial. São poucos minutos, e você pode sair e continuar depois de onde parou.",
+  "tipo": "exato",
+  "en": "Let's set up the essentials. It only takes a few minutes, and you can leave and pick up where you left off.",
+  "fr": "Configurons l'essentiel. Quelques minutes suffisent, et vous pouvez partir puis reprendre là où vous vous êtes arrêté.",
+  "es": "Vamos a configurar lo esencial. Son pocos minutos, y puedes salir y continuar después donde lo dejaste."
+ },
+ {
+  "pt": "Aparece na saudação do painel.",
+  "tipo": "exato",
+  "en": "It shows in the dashboard greeting.",
+  "fr": "Il apparaît dans le message d'accueil du tableau de bord.",
+  "es": "Aparece en el saludo del panel."
+ },
+ {
+  "pt": "Fuso detectado: {0}",
+  "tipo": "padrao",
+  "en": "Time zone detected: {0}",
+  "fr": "Fuseau détecté : {0}",
+  "es": "Zona horaria detectada: {0}"
+ },
+ {
+  "pt": "Continuar",
+  "tipo": "exato",
+  "en": "Continue",
+  "fr": "Continuer",
+  "es": "Continuar"
+ },
+ {
+  "pt": "Pessoal",
+  "tipo": "exato",
+  "en": "Personal",
+  "fr": "Personnel",
+  "es": "Personal"
+ },
+ {
+  "pt": "Um espaço financeiro guarda contas, cartões e lançamentos separados dos demais. A maioria das pessoas usa só um.",
+  "tipo": "exato",
+  "en": "A financial space keeps accounts, cards and entries separate from the others. Most people only use one.",
+  "fr": "Un espace financier garde comptes, cartes et écritures séparés des autres. La plupart des gens n'en utilisent qu'un.",
+  "es": "Un espacio financiero guarda cuentas, tarjetas y movimientos separados de los demás. La mayoría de las personas usa solo uno."
+ },
+ {
+  "pt": "Nome do espaço",
+  "tipo": "exato",
+  "en": "Space name",
+  "fr": "Nom de l'espace",
+  "es": "Nombre del espacio"
+ },
+ {
+  "pt": "Ex.: Itaú",
+  "tipo": "exato",
+  "en": "e.g. Chase",
+  "fr": "Ex. : BNP",
+  "es": "Ej.: Santander"
+ },
+ {
+  "pt": "Cadastre onde seu dinheiro está hoje. O saldo que você informar é o ponto de partida — tudo que entrar e sair depois é contado a partir dele.",
+  "tipo": "exato",
+  "en": "Add where your money is today. The balance you enter is the starting point — everything that comes in and goes out afterwards is counted from it.",
+  "fr": "Indiquez où se trouve votre argent aujourd'hui. Le solde saisi est le point de départ — tout ce qui entre et sort ensuite est compté à partir de lui.",
+  "es": "Registra dónde está tu dinero hoy. El saldo que informes es el punto de partida — todo lo que entre y salga después se cuenta desde él."
+ },
+ {
+  "pt": "Nome da conta",
+  "tipo": "exato",
+  "en": "Account name",
+  "fr": "Nom du compte",
+  "es": "Nombre de la cuenta"
+ },
+ {
+  "pt": "Saldo hoje (R$)",
+  "tipo": "exato",
+  "en": "Balance today (R$)",
+  "fr": "Solde aujourd'hui (R$)",
+  "es": "Saldo hoy (R$)"
+ },
+ {
+  "pt": "Cartões de crédito você cadastra depois, em Contas e cartões.",
+  "tipo": "exato",
+  "en": "You add credit cards later, in Accounts and cards.",
+  "fr": "Vous ajouterez les cartes de crédit plus tard, dans Comptes et cartes.",
+  "es": "Las tarjetas de crédito las registras después, en Cuentas y tarjetas."
+ },
+ {
+  "pt": "Dê um nome para a conta.",
+  "tipo": "exato",
+  "en": "Give the account a name.",
+  "fr": "Donnez un nom au compte.",
+  "es": "Ponle un nombre a la cuenta."
+ },
+ {
+  "pt": "Conta corrente",
+  "tipo": "exato",
+  "en": "Checking account",
+  "fr": "Compte courant",
+  "es": "Cuenta corriente"
+ },
+ {
+  "pt": "Estas categorias já vêm prontas. Remova as que não fazem sentido para você — dá para criar outras a qualquer momento.",
+  "tipo": "exato",
+  "en": "These categories come ready-made. Remove the ones that don't make sense for you — you can create others anytime.",
+  "fr": "Ces catégories sont déjà prêtes. Retirez celles qui n'ont pas de sens pour vous — vous pouvez en créer d'autres à tout moment.",
+  "es": "Estas categorías ya vienen listas. Quita las que no tengan sentido para ti — puedes crear otras en cualquier momento."
+ },
+ {
+  "pt": "Remover {0}",
+  "tipo": "padrao",
+  "en": "Remove {0}",
+  "fr": "Retirer {0}",
+  "es": "Quitar {0}"
+ },
+ {
+  "pt": "Esta categoria já tem lançamentos e não pode sair.",
+  "tipo": "exato",
+  "en": "This category already has entries and can't be removed.",
+  "fr": "Cette catégorie a déjà des écritures et ne peut pas être retirée.",
+  "es": "Esta categoría ya tiene movimientos y no se puede quitar."
+ },
+ {
+  "pt": "Ex.: Salário, Aluguel, Mercado",
+  "tipo": "exato",
+  "en": "e.g. Salary, Rent, Groceries",
+  "fr": "Ex. : Salaire, Loyer, Courses",
+  "es": "Ej.: Salario, Alquiler, Supermercado"
+ },
+ {
+  "pt": "Registre uma movimentação real — a última que você lembra. É ela que faz o painel sair do zero.",
+  "tipo": "exato",
+  "en": "Record a real transaction — the last one you remember. That's what gets the dashboard off zero.",
+  "fr": "Enregistrez un vrai mouvement — le dernier dont vous vous souvenez. C'est lui qui fait sortir le tableau de bord de zéro.",
+  "es": "Registra un movimiento real — el último que recuerdes. Es el que hace que el panel salga de cero."
+ },
+ {
+  "pt": "Valor (R$)",
+  "tipo": "exato",
+  "en": "Amount (R$)",
+  "fr": "Montant (R$)",
+  "es": "Monto (R$)"
+ },
+ {
+  "pt": "Registrar",
+  "tipo": "exato",
+  "en": "Record",
+  "fr": "Enregistrer",
+  "es": "Registrar"
+ },
+ {
+  "pt": "Descreva a movimentação.",
+  "tipo": "exato",
+  "en": "Describe the transaction.",
+  "fr": "Décrivez le mouvement.",
+  "es": "Describe el movimiento."
+ },
+ {
+  "pt": "Ex.: Reserva de emergência",
+  "tipo": "exato",
+  "en": "e.g. Emergency fund",
+  "fr": "Ex. : Épargne de précaution",
+  "es": "Ej.: Fondo de emergencia"
+ },
+ {
+  "pt": "Uma meta dá direção ao dinheiro que sobra. Você pode criar uma agora ou deixar para depois.",
+  "tipo": "exato",
+  "en": "A goal gives direction to the money you have left over. You can create one now or leave it for later.",
+  "fr": "Un objectif donne une direction à l'argent qui reste. Vous pouvez en créer un maintenant ou plus tard.",
+  "es": "Una meta le da dirección al dinero que sobra. Puedes crear una ahora o dejarlo para después."
+ },
+ {
+  "pt": "Nome da meta",
+  "tipo": "exato",
+  "en": "Goal name",
+  "fr": "Nom de l'objectif",
+  "es": "Nombre de la meta"
+ },
+ {
+  "pt": "Quanto quer juntar (R$)",
+  "tipo": "exato",
+  "en": "How much you want to save (R$)",
+  "fr": "Combien vous voulez mettre de côté (R$)",
+  "es": "Cuánto quieres juntar (R$)"
+ },
+ {
+  "pt": "Orçamentos por categoria ficam em Orçamento, quando você já tiver alguns meses de histórico para comparar.",
+  "tipo": "exato",
+  "en": "Category budgets live in Budget, once you have a few months of history to compare.",
+  "fr": "Les budgets par catégorie se trouvent dans Budget, quand vous aurez quelques mois d'historique à comparer.",
+  "es": "Los presupuestos por categoría están en Presupuesto, cuando ya tengas algunos meses de historial para comparar."
+ },
+ {
+  "pt": "Criar meta",
+  "tipo": "exato",
+  "en": "Create goal",
+  "fr": "Créer l'objectif",
+  "es": "Crear meta"
+ },
+ {
+  "pt": "Preencha o nome e o valor, ou use \"Pular\".",
+  "tipo": "exato",
+  "en": "Fill in the name and amount, or use \"Skip\".",
+  "fr": "Renseignez le nom et le montant, ou utilisez « Passer ».",
+  "es": "Completa el nombre y el monto, o usa \"Saltar\"."
+ },
+ {
+  "pt": "Seu painel está de pé",
+  "tipo": "exato",
+  "en": "Your dashboard is up and running",
+  "fr": "Votre tableau de bord est prêt",
+  "es": "Tu panel está en marcha"
+ },
+ {
+  "pt": "Tudo que aparece ali foi você que cadastrou — nenhum número é de exemplo. Conforme você for lançando, os gráficos e o OAZE Score ganham sentido.",
+  "tipo": "exato",
+  "en": "Everything there is what you entered — no number is a sample. As you keep recording, the charts and the OAZE Score start to mean something.",
+  "fr": "Tout ce qui y apparaît, c'est vous qui l'avez saisi — aucun chiffre n'est un exemple. Au fil de vos saisies, les graphiques et le OAZE Score prennent sens.",
+  "es": "Todo lo que aparece ahí lo registraste tú — ningún número es de ejemplo. A medida que registres, los gráficos y el OAZE Score cobran sentido."
+ },
+ {
+  "pt": "Cadastrar um cartão de crédito",
+  "tipo": "exato",
+  "en": "Add a credit card",
+  "fr": "Ajouter une carte de crédit",
+  "es": "Agregar una tarjeta de crédito"
+ },
+ {
+  "pt": "Definir uma meta",
+  "tipo": "exato",
+  "en": "Set a goal",
+  "fr": "Définir un objectif",
+  "es": "Definir una meta"
+ },
+ {
+  "pt": "Definir orçamento por categoria",
+  "tipo": "exato",
+  "en": "Set a budget by category",
+  "fr": "Définir un budget par catégorie",
+  "es": "Definir presupuesto por categoría"
+ },
+ {
+  "pt": "Bons próximos passos",
+  "tipo": "exato",
+  "en": "Good next steps",
+  "fr": "Bonnes prochaines étapes",
+  "es": "Buenos próximos pasos"
+ },
+ {
+  "pt": "Abrir o painel",
+  "tipo": "exato",
+  "en": "Open the dashboard",
+  "fr": "Ouvrir le tableau de bord",
+  "es": "Abrir el panel"
+ },
+ {
+  "pt": "Onboarding/perfil:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Configuração concluída.",
+  "tipo": "exato",
+  "en": "Setup complete.",
+  "fr": "Configuration terminée.",
+  "es": "Configuración completada."
+ },
+ {
+  "pt": "Onboarding:",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

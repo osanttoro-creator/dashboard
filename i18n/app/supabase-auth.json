@@ -1,0 +1,469 @@
+[
+ {
+  "pt": "SDK do Supabase indisponível.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Minha conta",
+  "tipo": "exato",
+  "en": "My account",
+  "fr": "Mon compte",
+  "es": "Mi cuenta"
+ },
+ {
+  "pt": "Sync/leitura:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A tabela \"dados\" não existe no seu projeto. Rode docs/supabase.sql no SQL Editor.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "invalid login credentials",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "E-mail ou senha incorretos.",
+  "tipo": "exato",
+  "en": "Wrong email or password.",
+  "fr": "E-mail ou mot de passe incorrect.",
+  "es": "Correo o contraseña incorrectos."
+ },
+ {
+  "pt": "email not confirmed",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Confirme o e-mail pelo link que enviamos antes de entrar.",
+  "tipo": "exato",
+  "en": "Confirm your email with the link we sent before signing in.",
+  "fr": "Confirmez votre e-mail avec le lien envoyé avant de vous connecter.",
+  "es": "Confirma tu correo con el enlace que enviamos antes de entrar."
+ },
+ {
+  "pt": "user already registered",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Já existe uma conta com este e-mail. Tente entrar.",
+  "tipo": "exato",
+  "en": "An account with this email already exists. Try signing in.",
+  "fr": "Un compte existe déjà avec cet e-mail. Essayez de vous connecter.",
+  "es": "Ya existe una cuenta con este correo. Intenta entrar."
+ },
+ {
+  "pt": "password should be at least",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "unable to validate email",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "invalid email",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "E-mail inválido.",
+  "tipo": "exato",
+  "en": "Invalid email.",
+  "fr": "E-mail invalide.",
+  "es": "Correo inválido."
+ },
+ {
+  "pt": "email rate limit",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "too many requests",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "rate limit",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Muitas tentativas seguidas. Espere um minuto e tente de novo.",
+  "tipo": "exato",
+  "en": "Too many attempts in a row. Wait a minute and try again.",
+  "fr": "Trop de tentatives de suite. Attendez une minute et réessayez.",
+  "es": "Demasiados intentos seguidos. Espera un minuto e inténtalo de nuevo."
+ },
+ {
+  "pt": "signups not allowed",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "O cadastro está desativado neste projeto (Auth → Providers → Email).",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "provider is not enabled",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Este método de login não está ativado no projeto (Auth → Providers).",
+  "tipo": "exato",
+  "en": "This sign-in method isn't enabled.",
+  "fr": "Cette méthode de connexion n'est pas activée.",
+  "es": "Este método de inicio de sesión no está activado."
+ },
+ {
+  "pt": "failed to fetch",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sem conexão para falar com o Supabase.",
+  "tipo": "exato",
+  "en": "No connection to reach the server.",
+  "fr": "Pas de connexion pour joindre le serveur.",
+  "es": "Sin conexión para comunicarse con el servidor."
+ },
+ {
+  "pt": "Não foi possível completar a operação.",
+  "tipo": "exato",
+  "en": "Couldn't complete the operation.",
+  "fr": "Impossible de terminer l'opération.",
+  "es": "No se pudo completar la operación."
+ },
+ {
+  "pt": "voce@exemplo.com",
+  "tipo": "exato",
+  "en": "you@example.com",
+  "fr": "vous@exemple.com",
+  "es": "tu@ejemplo.com"
+ },
+ {
+  "pt": "sua senha",
+  "tipo": "exato",
+  "en": "your password",
+  "fr": "votre mot de passe",
+  "es": "tu contraseña"
+ },
+ {
+  "pt": "Aguarde…",
+  "tipo": "exato",
+  "en": "Please wait…",
+  "fr": "Patientez…",
+  "es": "Espera…"
+ },
+ {
+  "pt": "Criar conta",
+  "tipo": "exato",
+  "en": "Create account",
+  "fr": "Créer un compte",
+  "es": "Crear cuenta"
+ },
+ {
+  "pt": "Entrar na sua conta",
+  "tipo": "exato",
+  "en": "Sign in to your account",
+  "fr": "Se connecter à votre compte",
+  "es": "Entrar a tu cuenta"
+ },
+ {
+  "pt": "Criar uma conta",
+  "tipo": "exato",
+  "en": "Create an account",
+  "fr": "Créer un compte",
+  "es": "Crear una cuenta"
+ },
+ {
+  "pt": "Não tenho conta",
+  "tipo": "exato",
+  "en": "I don't have an account",
+  "fr": "Je n'ai pas de compte",
+  "es": "No tengo cuenta"
+ },
+ {
+  "pt": "Já tenho conta",
+  "tipo": "exato",
+  "en": "I already have an account",
+  "fr": "J'ai déjà un compte",
+  "es": "Ya tengo cuenta"
+ },
+ {
+  "pt": "Escreva o e-mail primeiro.",
+  "tipo": "exato",
+  "en": "Type your email first.",
+  "fr": "Saisissez d'abord votre e-mail.",
+  "es": "Escribe el correo primero."
+ },
+ {
+  "pt": "Enviamos um link para redefinir a senha. Confira a caixa de entrada.",
+  "tipo": "exato",
+  "en": "We sent a link to reset your password. Check your inbox.",
+  "fr": "Nous avons envoyé un lien pour réinitialiser le mot de passe. Consultez votre boîte de réception.",
+  "es": "Enviamos un enlace para restablecer la contraseña. Revisa tu bandeja de entrada."
+ },
+ {
+  "pt": "Esqueci a senha",
+  "tipo": "exato",
+  "en": "Forgot password",
+  "fr": "Mot de passe oublié",
+  "es": "Olvidé la contraseña"
+ },
+ {
+  "pt": "Link enviado. Abra o e-mail neste mesmo aparelho para entrar.",
+  "tipo": "exato",
+  "en": "Link sent. Open the email on this same device to sign in.",
+  "fr": "Lien envoyé. Ouvrez l'e-mail sur ce même appareil pour vous connecter.",
+  "es": "Enlace enviado. Abre el correo en este mismo dispositivo para entrar."
+ },
+ {
+  "pt": "Receber link por e-mail",
+  "tipo": "exato",
+  "en": "Get a link by email",
+  "fr": "Recevoir un lien par e-mail",
+  "es": "Recibir enlace por correo"
+ },
+ {
+  "pt": "Continuar com Google",
+  "tipo": "exato",
+  "en": "Continue with Google",
+  "fr": "Continuer avec Google",
+  "es": "Continuar con Google"
+ },
+ {
+  "pt": "Informe o e-mail.",
+  "tipo": "exato",
+  "en": "Enter your email.",
+  "fr": "Saisissez l'e-mail.",
+  "es": "Ingresa el correo."
+ },
+ {
+  "pt": "Conta criada. Confirme pelo link enviado ao seu e-mail e depois entre.",
+  "tipo": "exato",
+  "en": "Account created. Confirm with the link sent to your email, then sign in.",
+  "fr": "Compte créé. Confirmez avec le lien envoyé par e-mail, puis connectez-vous.",
+  "es": "Cuenta creada. Confirma con el enlace enviado a tu correo y después entra."
+ },
+ {
+  "pt": "Sua conta serve para ver os mesmos dados no PC e no celular. Sem ela, o app continua funcionando neste aparelho.",
+  "tipo": "exato",
+  "en": "Your account lets you see the same data on your computer and phone. Without it, the app keeps working on this device.",
+  "fr": "Votre compte sert à voir les mêmes données sur l'ordinateur et le téléphone. Sans lui, l'app continue de fonctionner sur cet appareil.",
+  "es": "Tu cuenta sirve para ver los mismos datos en la computadora y el celular. Sin ella, la app sigue funcionando en este dispositivo."
+ },
+ {
+  "pt": "E-mail",
+  "tipo": "exato",
+  "en": "Email",
+  "fr": "E-mail",
+  "es": "Correo"
+ },
+ {
+  "pt": "Senha",
+  "tipo": "exato",
+  "en": "Password",
+  "fr": "Mot de passe",
+  "es": "Contraseña"
+ },
+ {
+  "pt": "Ao criar a conta você recebe um link de confirmação por e-mail. É preciso abri-lo antes do primeiro login.",
+  "tipo": "exato",
+  "en": "When you create the account you get a confirmation link by email. You need to open it before your first sign-in.",
+  "fr": "En créant le compte, vous recevez un lien de confirmation par e-mail. Il faut l'ouvrir avant la première connexion.",
+  "es": "Al crear la cuenta recibes un enlace de confirmación por correo. Hay que abrirlo antes del primer inicio de sesión."
+ },
+ {
+  "pt": "Conta OAZE",
+  "tipo": "exato",
+  "en": "OAZE account",
+  "fr": "Compte OAZE",
+  "es": "Cuenta OAZE"
+ },
+ {
+  "pt": "Login cancelado.",
+  "tipo": "exato",
+  "en": "Sign-in canceled.",
+  "fr": "Connexion annulée.",
+  "es": "Inicio de sesión cancelado."
+ },
+ {
+  "pt": "Supabase não configurado.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "user_id=eq.{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Este app está ligado a um projeto Supabase. O login acontece aqui dentro, com e-mail e senha.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Crie um projeto em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "supabase.com/dashboard",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "⚙ Project Settings → API",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ", copie a",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Project URL",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "e a chave",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "No",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "SQL Editor",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ", rode o conteúdo de",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ": ele cria a tabela",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "e as políticas de RLS.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Authentication → Providers → Email",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ", deixe ativado. Para testar sem confirmar e-mail, desligue",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Confirm email",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Authentication → URL Configuration",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ", ponha o endereço do site em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Site URL",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "e em",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Redirect URLs",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Opcional: ative",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Google",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "em Providers e ligue",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Realtime",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "na tabela",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "para atualização automática entre aparelhos.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A proteção de verdade é o RLS: cada conta só lê e grava a linha onde",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "user_id = auth.uid()",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ". A chave",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "pode ser pública — o que não pode é publicar a",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": ", que ignora o RLS.",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

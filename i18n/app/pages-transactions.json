@@ -1,0 +1,355 @@
+[
+ {
+  "pt": "Débito — sai direto da conta",
+  "tipo": "exato",
+  "en": "Debit — comes straight out of the account",
+  "fr": "Débit — sort directement du compte",
+  "es": "Débito — sale directo de la cuenta"
+ },
+ {
+  "pt": "Crédito — entra na fatura do cartão",
+  "tipo": "exato",
+  "en": "Credit — goes on the card bill",
+  "fr": "Crédit — s'ajoute au relevé de la carte",
+  "es": "Crédito — entra en la factura de la tarjeta"
+ },
+ {
+  "pt": "Nada confirmado ainda",
+  "tipo": "exato",
+  "en": "Nothing confirmed yet",
+  "fr": "Rien de confirmé pour l'instant",
+  "es": "Nada confirmado todavía"
+ },
+ {
+  "pt": "Receitas confirmadas",
+  "tipo": "exato",
+  "en": "Confirmed income",
+  "fr": "Revenus confirmés",
+  "es": "Ingresos confirmados"
+ },
+ {
+  "pt": "+ {0} previstos aguardando confirmação",
+  "tipo": "padrao",
+  "en": "+ {0} expected, awaiting confirmation",
+  "fr": "+ {0} prévus en attente de confirmation",
+  "es": "+ {0} previstos esperando confirmación"
+ },
+ {
+  "pt": "Nada pendente",
+  "tipo": "exato",
+  "en": "Nothing pending",
+  "fr": "Rien en attente",
+  "es": "Nada pendiente"
+ },
+ {
+  "pt": "Despesas confirmadas",
+  "tipo": "exato",
+  "en": "Confirmed expenses",
+  "fr": "Dépenses confirmées",
+  "es": "Gastos confirmados"
+ },
+ {
+  "pt": "Se tudo se confirmar:",
+  "tipo": "exato",
+  "en": "If everything goes through:",
+  "fr": "Si tout se confirme :",
+  "es": "Si todo se confirma:"
+ },
+ {
+  "pt": "{0} confirmadas · {1}",
+  "tipo": "padrao",
+  "en": "{0} confirmed · {1}",
+  "fr": "{0} confirmées · {1}",
+  "es": "{0} confirmados · {1}"
+ },
+ {
+  "pt": "Nenhuma receita lançada neste mês.",
+  "tipo": "exato",
+  "en": "No income recorded this month.",
+  "fr": "Aucun revenu saisi ce mois-ci.",
+  "es": "Ningún ingreso registrado este mes."
+ },
+ {
+  "pt": "Nenhum item corresponde ao filtro atual.",
+  "tipo": "exato",
+  "en": "No items match the current filter.",
+  "fr": "Aucun élément ne correspond au filtre actuel.",
+  "es": "Ningún ítem coincide con el filtro actual."
+ },
+ {
+  "pt": "Variáveis",
+  "tipo": "exato",
+  "en": "Variable",
+  "fr": "Variables",
+  "es": "Variables"
+ },
+ {
+  "pt": "Previstas",
+  "tipo": "exato",
+  "en": "Planned",
+  "fr": "Prévues",
+  "es": "Previstas"
+ },
+ {
+  "pt": "crédito",
+  "tipo": "exato",
+  "en": "credit",
+  "fr": "crédit",
+  "es": "crédito"
+ },
+ {
+  "pt": "débito",
+  "tipo": "exato",
+  "en": "debit",
+  "fr": "débit",
+  "es": "débito"
+ },
+ {
+  "pt": "· filtrando {0}",
+  "tipo": "padrao",
+  "en": "· filtering {0}",
+  "fr": "· filtre {0}",
+  "es": "· filtrando {0}"
+ },
+ {
+  "pt": "Nenhuma despesa lançada neste mês.",
+  "tipo": "exato",
+  "en": "No expenses recorded this month.",
+  "fr": "Aucune dépense saisie ce mois-ci.",
+  "es": "Ningún gasto registrado este mes."
+ },
+ {
+  "pt": "Previstos",
+  "tipo": "exato",
+  "en": "Planned",
+  "fr": "Prévus",
+  "es": "Previstos"
+ },
+ {
+  "pt": "Crédito — cartão",
+  "tipo": "exato",
+  "en": "Credit — card",
+  "fr": "Crédit — carte",
+  "es": "Crédito — tarjeta"
+ },
+ {
+  "pt": "Débito — conta",
+  "tipo": "exato",
+  "en": "Debit — account",
+  "fr": "Débit — compte",
+  "es": "Débito — cuenta"
+ },
+ {
+  "pt": "4px 4px 8px",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nada no cartão neste mês.",
+  "tipo": "exato",
+  "en": "Nothing on the card this month.",
+  "fr": "Rien sur la carte ce mois-ci.",
+  "es": "Nada en la tarjeta este mes."
+ },
+ {
+  "pt": "Nada em débito neste mês.",
+  "tipo": "exato",
+  "en": "Nothing on debit this month.",
+  "fr": "Rien au débit ce mois-ci.",
+  "es": "Nada en débito este mes."
+ },
+ {
+  "pt": "sum {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Marcar como {0}: {1}",
+  "tipo": "padrao",
+  "en": "Mark as {0}: {1}",
+  "fr": "Marquer comme {0} : {1}",
+  "es": "Marcar como {0}: {1}"
+ },
+ {
+  "pt": "Marcar como {0}",
+  "tipo": "padrao",
+  "en": "Mark as {0}",
+  "fr": "Marquer comme {0}",
+  "es": "Marcar como {0}"
+ },
+ {
+  "pt": "{0} — entrou nos totais.",
+  "tipo": "padrao",
+  "en": "{0} — now counts in the totals.",
+  "fr": "{0} — compte désormais dans les totaux.",
+  "es": "{0} — entró en los totales."
+ },
+ {
+  "pt": "Voltou a previsto — saiu dos totais.",
+  "tipo": "exato",
+  "en": "Back to planned — out of the totals.",
+  "fr": "Revenu à prévu — hors des totaux.",
+  "es": "Volvió a previsto — salió de los totales."
+ },
+ {
+  "pt": "Importado",
+  "tipo": "exato",
+  "en": "Imported",
+  "fr": "Importé",
+  "es": "Importado"
+ },
+ {
+  "pt": "Excluir lançamento fixo",
+  "tipo": "exato",
+  "en": "Delete fixed entry",
+  "fr": "Supprimer l'écriture fixe",
+  "es": "Eliminar movimiento fijo"
+ },
+ {
+  "pt": "se repete todo mês. O que você quer fazer?",
+  "tipo": "exato",
+  "en": "repeats every month. What do you want to do?",
+  "fr": "se répète chaque mois. Que voulez-vous faire ?",
+  "es": "se repite cada mes. ¿Qué quieres hacer?"
+ },
+ {
+  "pt": "Pular só {0}",
+  "tipo": "padrao",
+  "en": "Skip only {0}",
+  "fr": "Sauter seulement {0}",
+  "es": "Saltar solo {0}"
+ },
+ {
+  "pt": "Ocorrência removida deste mês.",
+  "tipo": "exato",
+  "en": "Occurrence removed from this month.",
+  "fr": "Occurrence retirée de ce mois.",
+  "es": "Ocurrencia eliminada de este mes."
+ },
+ {
+  "pt": "Excluir todas",
+  "tipo": "exato",
+  "en": "Delete all",
+  "fr": "Tout supprimer",
+  "es": "Eliminar todas"
+ },
+ {
+  "pt": "Lançamento fixo excluído.",
+  "tipo": "exato",
+  "en": "Fixed entry deleted.",
+  "fr": "Écriture fixe supprimée.",
+  "es": "Movimiento fijo eliminado."
+ },
+ {
+  "pt": "Despesas por categoria — tudo em débito",
+  "tipo": "exato",
+  "en": "Expenses by category — all on debit",
+  "fr": "Dépenses par catégorie — tout au débit",
+  "es": "Gastos por categoría — todo en débito"
+ },
+ {
+  "pt": "Despesas por categoria — tudo no cartão",
+  "tipo": "exato",
+  "en": "Expenses by category — all on the card",
+  "fr": "Dépenses par catégorie — tout sur la carte",
+  "es": "Gastos por categoría — todo en la tarjeta"
+ },
+ {
+  "pt": "Despesas por categoria — {0} no cartão",
+  "tipo": "padrao",
+  "en": "Expenses by category — {0} on the card",
+  "fr": "Dépenses par catégorie — {0} sur la carte",
+  "es": "Gastos por categoría — {0} en la tarjeta"
+ },
+ {
+  "pt": "{0} categoria{1} com despesa.",
+  "tipo": "padrao",
+  "en": "Categories with expenses: {0}.",
+  "fr": "Catégories avec dépenses : {0}.",
+  "es": "Categorías con gastos: {0}."
+ },
+ {
+  "pt": "A maior é {0}, com {1} —",
+  "tipo": "padrao",
+  "en": "The largest is {0}, at {1} —",
+  "fr": "La plus grande est {0}, avec {1} —",
+  "es": "La mayor es {0}, con {1} —"
+ },
+ {
+  "pt": "{0} do total do mês.",
+  "tipo": "padrao",
+  "en": "{0} of the month's total.",
+  "fr": "{0} du total du mois.",
+  "es": "el {0} del total del mes."
+ },
+ {
+  "pt": "Débito × Crédito em {0} — {1} no cartão",
+  "tipo": "padrao",
+  "en": "Debit × Credit in {0} — {1} on the card",
+  "fr": "Débit × Crédit en {0} — {1} sur la carte",
+  "es": "Débito × Crédito en {0} — {1} en la tarjeta"
+ },
+ {
+  "pt": "mês",
+  "tipo": "exato",
+  "en": "month",
+  "fr": "mois",
+  "es": "mes"
+ },
+ {
+  "pt": "{0} {1} com despesa em {2}.",
+  "tipo": "padrao",
+  "en": "Months with expenses in {2}: {0}.",
+  "fr": "Mois avec dépenses en {2} : {0}.",
+  "es": "Meses con gastos en {2}: {0}."
+ },
+ {
+  "pt": "No acumulado, {0} no cartão e {1} em débito.",
+  "tipo": "padrao",
+  "en": "In total, {0} on the card and {1} on debit.",
+  "fr": "Au cumul, {0} sur la carte et {1} au débit.",
+  "es": "En el acumulado, {0} en la tarjeta y {1} en débito."
+ },
+ {
+  "pt": "{0} categoria{1} com receita.",
+  "tipo": "padrao",
+  "en": "Categories with income: {0}.",
+  "fr": "Catégories avec revenus : {0}.",
+  "es": "Categorías con ingresos: {0}."
+ },
+ {
+  "pt": "A maior é {0}, com {1}.",
+  "tipo": "padrao",
+  "en": "The largest is {0}, at {1}.",
+  "fr": "La plus grande est {0}, avec {1}.",
+  "es": "La mayor es {0}, con {1}."
+ },
+ {
+  "pt": "Previsto (tudo lançado)",
+  "tipo": "exato",
+  "en": "Planned (everything recorded)",
+  "fr": "Prévu (tout ce qui est saisi)",
+  "es": "Previsto (todo lo registrado)"
+ },
+ {
+  "pt": "Realizado (confirmado)",
+  "tipo": "exato",
+  "en": "Actual (confirmed)",
+  "fr": "Réalisé (confirmé)",
+  "es": "Realizado (confirmado)"
+ },
+ {
+  "pt": "Faltam {0} em despesas para confirmar.",
+  "tipo": "padrao",
+  "en": "{0} in expenses still to confirm.",
+  "fr": "Il reste {0} de dépenses à confirmer.",
+  "es": "Faltan {0} en gastos por confirmar."
+ },
+ {
+  "pt": "Tudo o que estava lançado já foi confirmado.",
+  "tipo": "exato",
+  "en": "Everything recorded has already been confirmed.",
+  "fr": "Tout ce qui était saisi a déjà été confirmé.",
+  "es": "Todo lo registrado ya se confirmó."
+ }
+]

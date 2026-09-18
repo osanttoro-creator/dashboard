@@ -1,0 +1,315 @@
+[
+ {
+  "pt": "Moeda da cobrança",
+  "tipo": "exato",
+  "en": "Billing currency",
+  "fr": "Devise de facturation",
+  "es": "Moneda del cobro"
+ },
+ {
+  "pt": "Pagar em",
+  "tipo": "exato",
+  "en": "Pay in",
+  "fr": "Payer en",
+  "es": "Pagar en"
+ },
+ {
+  "pt": "para sempre",
+  "tipo": "exato",
+  "en": "forever",
+  "fr": "pour toujours",
+  "es": "para siempre"
+ },
+ {
+  "pt": "por mês",
+  "tipo": "exato",
+  "en": "per month",
+  "fr": "par mois",
+  "es": "por mes"
+ },
+ {
+  "pt": "{0} cobrados uma vez por ano",
+  "tipo": "padrao",
+  "en": "{0} billed once a year",
+  "fr": "{0} facturés une fois par an",
+  "es": "{0} cobrados una vez al año"
+ },
+ {
+  "pt": "Economia de {0} por ano",
+  "tipo": "padrao",
+  "en": "Save {0} a year",
+  "fr": "Économisez {0} par an",
+  "es": "Ahorra {0} al año"
+ },
+ {
+  "pt": "btn {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Seu plano atual",
+  "tipo": "exato",
+  "en": "Your current plan",
+  "fr": "Votre formule actuelle",
+  "es": "Tu plan actual"
+ },
+ {
+  "pt": "Começar grátis",
+  "tipo": "exato",
+  "en": "Start free",
+  "fr": "Commencer gratuitement",
+  "es": "Empezar gratis"
+ },
+ {
+  "pt": "Assinar o {0}",
+  "tipo": "padrao",
+  "en": "Subscribe to {0}",
+  "fr": "S'abonner à {0}",
+  "es": "Suscribirse a {0}"
+ },
+ {
+  "pt": "Mais escolhido",
+  "tipo": "exato",
+  "en": "Most popular",
+  "fr": "Le plus choisi",
+  "es": "El más elegido"
+ },
+ {
+  "pt": "Plano atual",
+  "tipo": "exato",
+  "en": "Current plan",
+  "fr": "Formule actuelle",
+  "es": "Plan actual"
+ },
+ {
+  "pt": "não",
+  "tipo": "exato",
+  "en": "no",
+  "fr": "non",
+  "es": "no"
+ },
+ {
+  "pt": "Completo",
+  "tipo": "exato",
+  "en": "Full",
+  "fr": "Complet",
+  "es": "Completo"
+ },
+ {
+  "pt": "{0} meses",
+  "tipo": "padrao",
+  "en": "{0} months",
+  "fr": "{0} mois",
+  "es": "{0} meses"
+ },
+ {
+  "pt": "Recurso",
+  "tipo": "exato",
+  "en": "Feature",
+  "fr": "Fonctionnalité",
+  "es": "Función"
+ },
+ {
+  "pt": "não incluído",
+  "tipo": "exato",
+  "en": "not included",
+  "fr": "non inclus",
+  "es": "no incluido"
+ },
+ {
+  "pt": "incluído",
+  "tipo": "exato",
+  "en": "included",
+  "fr": "inclus",
+  "es": "incluido"
+ },
+ {
+  "pt": "Lançamentos manuais, sincronização entre aparelhos e o painel completo estão em todos os planos, inclusive no Semente. Colaboração e relatórios personalizados ainda não existem no produto e por isso não aparecem aqui.",
+  "tipo": "exato",
+  "en": "Manual entries, sync across devices and the full dashboard are in every plan, including Semente. Collaboration and custom reports don't exist in the product yet, so they don't appear here.",
+  "fr": "La saisie manuelle, la synchronisation entre appareils et le tableau de bord complet sont dans toutes les formules, y compris Semente. La collaboration et les rapports personnalisés n'existent pas encore dans le produit, c'est pourquoi ils n'apparaissent pas ici.",
+  "es": "Los movimientos manuales, la sincronización entre dispositivos y el panel completo están en todos los planes, incluido Semente. La colaboración y los informes personalizados todavía no existen en el producto y por eso no aparecen aquí."
+ },
+ {
+  "pt": "Você já tem uma conta. O Semente é o plano padrão.",
+  "tipo": "exato",
+  "en": "You already have an account. Semente is the default plan.",
+  "fr": "Vous avez déjà un compte. Semente est la formule par défaut.",
+  "es": "Ya tienes una cuenta. Semente es el plan predeterminado."
+ },
+ {
+  "pt": "Entre na sua conta para assinar.",
+  "tipo": "exato",
+  "en": "Sign in to your account to subscribe.",
+  "fr": "Connectez-vous à votre compte pour vous abonner.",
+  "es": "Inicia sesión en tu cuenta para suscribirte."
+ },
+ {
+  "pt": "Você já assina o {0}",
+  "tipo": "padrao",
+  "en": "You're already subscribed to {0}",
+  "fr": "Vous êtes déjà abonné à {0}",
+  "es": "Ya estás suscrito a {0}"
+ },
+ {
+  "pt": "Para trocar de plano, cancele a assinatura atual em Configurações. Você continua com ela até o fim do período pago e pode assinar o {0} em seguida.",
+  "tipo": "padrao",
+  "en": "To switch plans, cancel your current subscription in Settings. You keep it until the end of the paid period and can subscribe to {0} right after.",
+  "fr": "Pour changer de formule, annulez l'abonnement actuel dans Paramètres. Vous le gardez jusqu'à la fin de la période payée et pouvez vous abonner à {0} ensuite.",
+  "es": "Para cambiar de plan, cancela la suscripción actual en Configuración. La mantienes hasta el fin del período pagado y puedes suscribirte a {0} después."
+ },
+ {
+  "pt": "Abrir Configurações",
+  "tipo": "exato",
+  "en": "Open Settings",
+  "fr": "Ouvrir les paramètres",
+  "es": "Abrir Configuración"
+ },
+ {
+  "pt": "por ano",
+  "tipo": "exato",
+  "en": "per year",
+  "fr": "par an",
+  "es": "por año"
+ },
+ {
+  "pt": "Código do cupom",
+  "tipo": "exato",
+  "en": "Coupon code",
+  "fr": "Code promo",
+  "es": "Código del cupón"
+ },
+ {
+  "pt": "Código do cupom de desconto",
+  "tipo": "exato",
+  "en": "Discount coupon code",
+  "fr": "Code de réduction",
+  "es": "Código del cupón de descuento"
+ },
+ {
+  "pt": "Aplicar",
+  "tipo": "exato",
+  "en": "Apply",
+  "fr": "Appliquer",
+  "es": "Aplicar"
+ },
+ {
+  "pt": "Tenho um cupom de desconto",
+  "tipo": "exato",
+  "en": "I have a discount coupon",
+  "fr": "J'ai un code de réduction",
+  "es": "Tengo un cupón de descuento"
+ },
+ {
+  "pt": "Cupom removido.",
+  "tipo": "exato",
+  "en": "Coupon removed.",
+  "fr": "Code retiré.",
+  "es": "Cupón quitado."
+ },
+ {
+  "pt": "Digite o código como recebeu, sem espaços.",
+  "tipo": "exato",
+  "en": "Type the code as you received it, without spaces.",
+  "fr": "Saisissez le code tel que vous l'avez reçu, sans espaces.",
+  "es": "Escribe el código como lo recibiste, sin espacios."
+ },
+ {
+  "pt": "Conferindo o cupom…",
+  "tipo": "exato",
+  "en": "Checking the coupon…",
+  "fr": "Vérification du code…",
+  "es": "Verificando el cupón…"
+ },
+ {
+  "pt": "no primeiro ano",
+  "tipo": "exato",
+  "en": "for the first year",
+  "fr": "la première année",
+  "es": "el primer año"
+ },
+ {
+  "pt": "no primeiro mês",
+  "tipo": "exato",
+  "en": "for the first month",
+  "fr": "le premier mois",
+  "es": "el primer mes"
+ },
+ {
+  "pt": "desconto aplicado",
+  "tipo": "exato",
+  "en": "discount applied",
+  "fr": "réduction appliquée",
+  "es": "descuento aplicado"
+ },
+ {
+  "pt": "Esse cupom não existe ou não vale mais.",
+  "tipo": "exato",
+  "en": "That coupon doesn't exist or is no longer valid.",
+  "fr": "Ce code n'existe pas ou n'est plus valable.",
+  "es": "Ese cupón no existe o ya no es válido."
+ },
+ {
+  "pt": "Não foi possível conferir o cupom agora.",
+  "tipo": "exato",
+  "en": "Couldn't check the coupon right now.",
+  "fr": "Impossible de vérifier le code pour le moment.",
+  "es": "No se pudo verificar el cupón ahora."
+ },
+ {
+  "pt": ", no cartão de crédito. Renova sozinho; cancele quando quiser em Configurações.",
+  "tipo": "exato",
+  "en": ", by credit card. Renews automatically; cancel anytime in Settings.",
+  "fr": ", par carte de crédit. Se renouvelle automatiquement ; annulez quand vous voulez dans Paramètres.",
+  "es": ", con tarjeta de crédito. Se renueva solo; cancela cuando quieras en Configuración."
+ },
+ {
+  "pt": "Você informa os dados de pagamento na página segura da Stripe. Número do cartão e código de segurança não passam pelo OAZE.",
+  "tipo": "exato",
+  "en": "You enter your payment details on Stripe's secure page. Your card number and security code never pass through OAZE.",
+  "fr": "Vous saisissez vos informations de paiement sur la page sécurisée de Stripe. Le numéro de carte et le code de sécurité ne passent jamais par OAZE.",
+  "es": "Ingresas tus datos de pago en la página segura de Stripe. El número de la tarjeta y el código de seguridad no pasan por OAZE."
+ },
+ {
+  "pt": "Cobrança internacional: seu banco pode somar imposto e taxa de câmbio ao valor acima.",
+  "tipo": "exato",
+  "en": "International charge: your bank may add taxes and currency conversion fees to the amount above.",
+  "fr": "Paiement international : votre banque peut ajouter taxes et frais de change au montant ci-dessus.",
+  "es": "Cobro internacional: tu banco puede sumar impuestos y comisión de cambio al monto de arriba."
+ },
+ {
+  "pt": "Continuar para o pagamento",
+  "tipo": "exato",
+  "en": "Continue to payment",
+  "fr": "Continuer vers le paiement",
+  "es": "Continuar al pago"
+ },
+ {
+  "pt": "Preparando o pagamento…",
+  "tipo": "exato",
+  "en": "Preparing payment…",
+  "fr": "Préparation du paiement…",
+  "es": "Preparando el pago…"
+ },
+ {
+  "pt": "Abrindo o pagamento seguro…",
+  "tipo": "exato",
+  "en": "Opening secure payment…",
+  "fr": "Ouverture du paiement sécurisé…",
+  "es": "Abriendo el pago seguro…"
+ },
+ {
+  "pt": "Não foi possível abrir o pagamento agora. Nada foi cobrado.",
+  "tipo": "exato",
+  "en": "Couldn't open the payment right now. Nothing was charged.",
+  "fr": "Impossible d'ouvrir le paiement pour le moment. Rien n'a été facturé.",
+  "es": "No se pudo abrir el pago ahora. No se cobró nada."
+ },
+ {
+  "pt": "Falha ao falar com o servidor. Nada foi cobrado.",
+  "tipo": "exato",
+  "en": "Couldn't reach the server. Nothing was charged.",
+  "fr": "Échec de communication avec le serveur. Rien n'a été facturé.",
+  "es": "Error al comunicarse con el servidor. No se cobró nada."
+ }
+]

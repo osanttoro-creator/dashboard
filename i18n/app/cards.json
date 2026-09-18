@@ -1,0 +1,629 @@
+[
+ {
+  "pt": "Midnight",
+  "tipo": "exato",
+  "en": "Midnight",
+  "fr": "Minuit",
+  "es": "Medianoche"
+ },
+ {
+  "pt": "Deep Teal",
+  "tipo": "exato",
+  "en": "Deep Teal",
+  "fr": "Sarcelle profond",
+  "es": "Verde azulado"
+ },
+ {
+  "pt": "Oásis",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Earth",
+  "tipo": "exato",
+  "en": "Earth",
+  "fr": "Terre",
+  "es": "Tierra"
+ },
+ {
+  "pt": "Terracota",
+  "tipo": "exato",
+  "en": "Terracotta",
+  "fr": "Terre cuite",
+  "es": "Terracota"
+ },
+ {
+  "pt": "Sage",
+  "tipo": "exato",
+  "en": "Sage",
+  "fr": "Sauge",
+  "es": "Salvia"
+ },
+ {
+  "pt": "Areia",
+  "tipo": "exato",
+  "en": "Sand",
+  "fr": "Sable",
+  "es": "Arena"
+ },
+ {
+  "pt": "Índigo",
+  "tipo": "exato",
+  "en": "Indigo",
+  "fr": "Indigo",
+  "es": "Índigo"
+ },
+ {
+  "pt": "Pinho",
+  "tipo": "exato",
+  "en": "Pine",
+  "fr": "Pin",
+  "es": "Pino"
+ },
+ {
+  "pt": "Cobre",
+  "tipo": "exato",
+  "en": "Copper",
+  "fr": "Cuivre",
+  "es": "Cobre"
+ },
+ {
+  "pt": "Ardósia",
+  "tipo": "exato",
+  "en": "Slate",
+  "fr": "Ardoise",
+  "es": "Pizarra"
+ },
+ {
+  "pt": "Ameixa",
+  "tipo": "exato",
+  "en": "Plum",
+  "fr": "Prune",
+  "es": "Ciruela"
+ },
+ {
+  "pt": "Vinho",
+  "tipo": "exato",
+  "en": "Wine",
+  "fr": "Bordeaux",
+  "es": "Vino"
+ },
+ {
+  "pt": "Jade",
+  "tipo": "exato",
+  "en": "Jade",
+  "fr": "Jade",
+  "es": "Jade"
+ },
+ {
+  "pt": "Azul-noite",
+  "tipo": "exato",
+  "en": "Night blue",
+  "fr": "Bleu nuit",
+  "es": "Azul noche"
+ },
+ {
+  "pt": "Ferrugem",
+  "tipo": "exato",
+  "en": "Rust",
+  "fr": "Rouille",
+  "es": "Óxido"
+ },
+ {
+  "pt": "Oliva",
+  "tipo": "exato",
+  "en": "Olive",
+  "fr": "Olive",
+  "es": "Oliva"
+ },
+ {
+  "pt": "Carvão",
+  "tipo": "exato",
+  "en": "Charcoal",
+  "fr": "Charbon",
+  "es": "Carbón"
+ },
+ {
+  "pt": "Lagoa",
+  "tipo": "exato",
+  "en": "Lagoon",
+  "fr": "Lagune",
+  "es": "Laguna"
+ },
+ {
+  "pt": "Café",
+  "tipo": "exato",
+  "en": "Coffee",
+  "fr": "Café",
+  "es": "Café"
+ },
+ {
+  "pt": "Orquídea",
+  "tipo": "exato",
+  "en": "Orchid",
+  "fr": "Orchidée",
+  "es": "Orquídea"
+ },
+ {
+  "pt": "Névoa",
+  "tipo": "exato",
+  "en": "Mist",
+  "fr": "Brume",
+  "es": "Niebla"
+ },
+ {
+  "pt": "banco:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "banco:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Crédito · {0}",
+  "tipo": "padrao",
+  "en": "Credit · {0}",
+  "fr": "Crédit · {0}",
+  "es": "Crédito · {0}"
+ },
+ {
+  "pt": "{0} · fatura de {1}",
+  "tipo": "padrao",
+  "en": "{0} · {1} bill",
+  "fr": "{0} · relevé de {1}",
+  "es": "{0} · factura de {1}"
+ },
+ {
+  "pt": "Paga",
+  "tipo": "exato",
+  "en": "Paid",
+  "fr": "Payé",
+  "es": "Pagada"
+ },
+ {
+  "pt": "Vencida",
+  "tipo": "exato",
+  "en": "Overdue",
+  "fr": "En retard",
+  "es": "Vencida"
+ },
+ {
+  "pt": "Parcial",
+  "tipo": "exato",
+  "en": "Partial",
+  "fr": "Partiel",
+  "es": "Parcial"
+ },
+ {
+  "pt": "Aberta",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "Ouvert",
+  "es": "Abierta"
+ },
+ {
+  "pt": "A pagar",
+  "tipo": "exato",
+  "en": "To pay",
+  "fr": "À payer",
+  "es": "Por pagar"
+ },
+ {
+  "pt": "Fora dos totais",
+  "tipo": "exato",
+  "en": "Not in totals",
+  "fr": "Hors des totaux",
+  "es": "Fuera de los totales"
+ },
+ {
+  "pt": "Limite livre",
+  "tipo": "exato",
+  "en": "Available limit",
+  "fr": "Plafond disponible",
+  "es": "Límite disponible"
+ },
+ {
+  "pt": "Vence",
+  "tipo": "exato",
+  "en": "Due",
+  "fr": "Échéance",
+  "es": "Vence"
+ },
+ {
+  "pt": "Falta · fatura {0}",
+  "tipo": "padrao",
+  "en": "Left · {0} bill",
+  "fr": "Reste · relevé {0}",
+  "es": "Falta · factura {0}"
+ },
+ {
+  "pt": "{0} · saldo em {1}",
+  "tipo": "padrao",
+  "en": "{0} · balance on {1}",
+  "fr": "{0} · solde au {1}",
+  "es": "{0} · saldo al {1}"
+ },
+ {
+  "pt": "Saldo em",
+  "tipo": "exato",
+  "en": "Balance on",
+  "fr": "Solde au",
+  "es": "Saldo al"
+ },
+ {
+  "pt": "Carteira de cartões",
+  "tipo": "exato",
+  "en": "Card wallet",
+  "fr": "Portefeuille de cartes",
+  "es": "Cartera de tarjetas"
+ },
+ {
+  "pt": "account:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "card:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Contas de débito e cartões de crédito",
+  "tipo": "exato",
+  "en": "Debit accounts and credit cards",
+  "fr": "Comptes de débit et cartes de crédit",
+  "es": "Cuentas de débito y tarjetas de crédito"
+ },
+ {
+  "pt": "Paga em {0}",
+  "tipo": "padrao",
+  "en": "Paid on {0}",
+  "fr": "Payé le {0}",
+  "es": "Pagada el {0}"
+ },
+ {
+  "pt": "Paga em parte",
+  "tipo": "exato",
+  "en": "Partly paid",
+  "fr": "Payé en partie",
+  "es": "Pagada en parte"
+ },
+ {
+  "pt": "Fechada · a pagar",
+  "tipo": "exato",
+  "en": "Closed · to pay",
+  "fr": "Arrêté · à payer",
+  "es": "Cerrada · por pagar"
+ },
+ {
+  "pt": "Fatura anterior",
+  "tipo": "exato",
+  "en": "Previous bill",
+  "fr": "Relevé précédent",
+  "es": "Factura anterior"
+ },
+ {
+  "pt": "Próxima fatura",
+  "tipo": "exato",
+  "en": "Next bill",
+  "fr": "Relevé suivant",
+  "es": "Próxima factura"
+ },
+ {
+  "pt": "Fatura de",
+  "tipo": "exato",
+  "en": "Bill for",
+  "fr": "Relevé de",
+  "es": "Factura de"
+ },
+ {
+  "pt": "Total da fatura",
+  "tipo": "exato",
+  "en": "Bill total",
+  "fr": "Total du relevé",
+  "es": "Total de la factura"
+ },
+ {
+  "pt": "Em reais",
+  "tipo": "exato",
+  "en": "In reais",
+  "fr": "En reais",
+  "es": "En reales"
+ },
+ {
+  "pt": "Já pago",
+  "tipo": "exato",
+  "en": "Already paid",
+  "fr": "Déjà payé",
+  "es": "Ya pagado"
+ },
+ {
+  "pt": "Compras feitas",
+  "tipo": "exato",
+  "en": "Purchases made",
+  "fr": "Achats effectués",
+  "es": "Compras hechas"
+ },
+ {
+  "pt": "Falta pagar",
+  "tipo": "exato",
+  "en": "Left to pay",
+  "fr": "Reste à payer",
+  "es": "Falta pagar"
+ },
+ {
+  "pt": "Vencimento",
+  "tipo": "exato",
+  "en": "Due date",
+  "fr": "Échéance",
+  "es": "Vencimiento"
+ },
+ {
+  "pt": "Limite disponível",
+  "tipo": "exato",
+  "en": "Available limit",
+  "fr": "Plafond disponible",
+  "es": "Límite disponible"
+ },
+ {
+  "pt": "Cotação usada nas compras novas: {0} por 1 {1}. Compras já lançadas guardam a conversão do dia em que foram feitas.",
+  "tipo": "padrao",
+  "en": "Rate used for new purchases: {0} per 1 {1}. Purchases already recorded keep the conversion from the day they were made.",
+  "fr": "Taux utilisé pour les nouveaux achats : {0} pour 1 {1}. Les achats déjà saisis gardent la conversion du jour où ils ont été faits.",
+  "es": "Cotización usada en las compras nuevas: {0} por 1 {1}. Las compras ya registradas conservan la conversión del día en que se hicieron."
+ },
+ {
+  "pt": "Sem cotação cadastrada: informe no cadastro do cartão para converter as compras em reais.",
+  "tipo": "exato",
+  "en": "No exchange rate set: add one in the card settings to convert purchases to reais.",
+  "fr": "Aucun taux de change enregistré : indiquez-le dans la fiche de la carte pour convertir les achats en reais.",
+  "es": "Sin cotización registrada: indícala en la ficha de la tarjeta para convertir las compras a reales."
+ },
+ {
+  "pt": "Entram nesta fatura as compras de {0} a {1}.",
+  "tipo": "padrao",
+  "en": "This bill includes purchases from {0} to {1}.",
+  "fr": "Ce relevé comprend les achats du {0} au {1}.",
+  "es": "Entran en esta factura las compras del {0} al {1}."
+ },
+ {
+  "pt": "{0} já foram adiantados em compras avulsas.",
+  "tipo": "padrao",
+  "en": "{0} was already paid early on individual purchases.",
+  "fr": "{0} ont déjà été anticipés sur des achats isolés.",
+  "es": "Ya se adelantaron {0} en compras sueltas."
+ },
+ {
+  "pt": "Pagar o que falta",
+  "tipo": "exato",
+  "en": "Pay what's left",
+  "fr": "Payer le reste",
+  "es": "Pagar lo que falta"
+ },
+ {
+  "pt": "Pagar fatura",
+  "tipo": "exato",
+  "en": "Pay bill",
+  "fr": "Payer le relevé",
+  "es": "Pagar factura"
+ },
+ {
+  "pt": "Desfazer pagamentos",
+  "tipo": "exato",
+  "en": "Undo payments",
+  "fr": "Annuler les paiements",
+  "es": "Deshacer pagos"
+ },
+ {
+  "pt": "Isto apaga todos os pagamentos e adiantamentos registrados nesta fatura. Os lançamentos continuam onde estão.",
+  "tipo": "exato",
+  "en": "This erases every payment and early payment recorded on this bill. The entries stay where they are.",
+  "fr": "Cela efface tous les paiements et anticipations enregistrés sur ce relevé. Les écritures restent où elles sont.",
+  "es": "Esto borra todos los pagos y adelantos registrados en esta factura. Los movimientos siguen donde están."
+ },
+ {
+  "pt": "Desfazer",
+  "tipo": "exato",
+  "en": "Undo",
+  "fr": "Annuler",
+  "es": "Deshacer"
+ },
+ {
+  "pt": "Pagamentos desfeitos.",
+  "tipo": "exato",
+  "en": "Payments undone.",
+  "fr": "Paiements annulés.",
+  "es": "Pagos deshechos."
+ },
+ {
+  "pt": "Encerrar fatura",
+  "tipo": "exato",
+  "en": "Close bill",
+  "fr": "Clôturer le relevé",
+  "es": "Cerrar factura"
+ },
+ {
+  "pt": "Marca como encerrada mesmo faltando valor — para quando a diferença foi estorno ou desconto",
+  "tipo": "exato",
+  "en": "Marks it as closed even with an amount left — for when the difference was a refund or discount",
+  "fr": "Marque le relevé comme clôturé même s'il reste un montant — quand la différence vient d'un remboursement ou d'une remise",
+  "es": "La marca como cerrada aunque falte un monto — para cuando la diferencia fue un reembolso o descuento"
+ },
+ {
+  "pt": "Fatura encerrada.",
+  "tipo": "exato",
+  "en": "Bill closed.",
+  "fr": "Relevé clôturé.",
+  "es": "Factura cerrada."
+ },
+ {
+  "pt": "+ Lançar no crédito",
+  "tipo": "exato",
+  "en": "+ Add credit purchase",
+  "fr": "+ Saisir un achat à crédit",
+  "es": "+ Registrar en crédito"
+ },
+ {
+  "pt": "✎ Editar cartão",
+  "tipo": "exato",
+  "en": "✎ Edit card",
+  "fr": "✎ Modifier la carte",
+  "es": "✎ Editar tarjeta"
+ },
+ {
+  "pt": "Pago em {0}",
+  "tipo": "padrao",
+  "en": "Paid on {0}",
+  "fr": "Payé le {0}",
+  "es": "Pagado el {0}"
+ },
+ {
+  "pt": "da conta {0}",
+  "tipo": "padrao",
+  "en": "from account {0}",
+  "fr": "depuis le compte {0}",
+  "es": "de la cuenta {0}"
+ },
+ {
+  "pt": "sem conta informada",
+  "tipo": "exato",
+  "en": "no account given",
+  "fr": "aucun compte indiqué",
+  "es": "sin cuenta indicada"
+ },
+ {
+  "pt": "Nenhum lançamento nesta fatura.",
+  "tipo": "exato",
+  "en": "No entries on this bill.",
+  "fr": "Aucune écriture sur ce relevé.",
+  "es": "Ningún movimiento en esta factura."
+ },
+ {
+  "pt": "Cobrança",
+  "tipo": "exato",
+  "en": "Billing",
+  "fr": "Prélèvement",
+  "es": "Cobro"
+ },
+ {
+  "pt": "Marcar compra como feita: {0}",
+  "tipo": "padrao",
+  "en": "Mark purchase as made: {0}",
+  "fr": "Marquer l'achat comme effectué : {0}",
+  "es": "Marcar compra como hecha: {0}"
+ },
+ {
+  "pt": "Compra feita",
+  "tipo": "exato",
+  "en": "Purchase made",
+  "fr": "Achat effectué",
+  "es": "Compra hecha"
+ },
+ {
+  "pt": "{0} · compra em {1}{2}",
+  "tipo": "padrao",
+  "en": "{0} · purchased on {1}{2}",
+  "fr": "{0} · acheté le {1}{2}",
+  "es": "{0} · compra el {1}{2}"
+ },
+ {
+  "pt": "· adiantado {0}{1}",
+  "tipo": "padrao",
+  "en": "· paid early {0}{1}",
+  "fr": "· anticipé {0}{1}",
+  "es": "· adelantado {0}{1}"
+ },
+ {
+  "pt": ", faltam {0}",
+  "tipo": "padrao",
+  "en": ", {0} left",
+  "fr": ", reste {0}",
+  "es": ", faltan {0}"
+ },
+ {
+  "pt": "Previsto",
+  "tipo": "exato",
+  "en": "Planned",
+  "fr": "Prévu",
+  "es": "Previsto"
+ },
+ {
+  "pt": "Adiantada em parte",
+  "tipo": "exato",
+  "en": "Partly paid early",
+  "fr": "Anticipé en partie",
+  "es": "Adelantada en parte"
+ },
+ {
+  "pt": "Adiantada",
+  "tipo": "exato",
+  "en": "Paid early",
+  "fr": "Anticipé",
+  "es": "Adelantada"
+ },
+ {
+  "pt": "≈ {0} nos totais",
+  "tipo": "padrao",
+  "en": "≈ {0} in totals",
+  "fr": "≈ {0} dans les totaux",
+  "es": "≈ {0} en los totales"
+ },
+ {
+  "pt": "Desfazer o adiantamento desta compra",
+  "tipo": "exato",
+  "en": "Undo the early payment on this purchase",
+  "fr": "Annuler l'anticipation de cet achat",
+  "es": "Deshacer el adelanto de esta compra"
+ },
+ {
+  "pt": "Desfazer o adiantamento de {0}",
+  "tipo": "padrao",
+  "en": "Undo the early payment on {0}",
+  "fr": "Annuler l'anticipation de {0}",
+  "es": "Deshacer el adelanto de {0}"
+ },
+ {
+  "pt": "Adiantamento desfeito.",
+  "tipo": "exato",
+  "en": "Early payment undone.",
+  "fr": "Anticipation annulée.",
+  "es": "Adelanto deshecho."
+ },
+ {
+  "pt": "Adiantar o pagamento desta compra",
+  "tipo": "exato",
+  "en": "Pay this purchase early",
+  "fr": "Anticiper le paiement de cet achat",
+  "es": "Adelantar el pago de esta compra"
+ },
+ {
+  "pt": "Adiantar o pagamento de {0}",
+  "tipo": "padrao",
+  "en": "Pay {0} early",
+  "fr": "Anticiper le paiement de {0}",
+  "es": "Adelantar el pago de {0}"
+ },
+ {
+  "pt": "Editar",
+  "tipo": "exato",
+  "en": "Edit",
+  "fr": "Modifier",
+  "es": "Editar"
+ },
+ {
+  "pt": "Total da fatura ({0} itens)",
+  "tipo": "padrao",
+  "en": "Bill total ({0} items)",
+  "fr": "Total du relevé ({0} articles)",
+  "es": "Total de la factura ({0} ítems)"
+ },
+ {
+  "pt": "Fatura quitada",
+  "tipo": "exato",
+  "en": "Bill paid off",
+  "fr": "Relevé soldé",
+  "es": "Factura saldada"
+ }
+]

@@ -1,0 +1,454 @@
+[
+ {
+  "pt": "Petróleo",
+  "tipo": "exato",
+  "en": "Petrol blue",
+  "fr": "Bleu pétrole",
+  "es": "Azul petróleo"
+ },
+ {
+  "pt": "Âmbar",
+  "tipo": "exato",
+  "en": "Amber",
+  "fr": "Ambre",
+  "es": "Ámbar"
+ },
+ {
+  "pt": "Couro",
+  "tipo": "exato",
+  "en": "Leather",
+  "fr": "Cuir",
+  "es": "Cuero"
+ },
+ {
+  "pt": "Musgo",
+  "tipo": "exato",
+  "en": "Moss",
+  "fr": "Mousse",
+  "es": "Musgo"
+ },
+ {
+  "pt": "Terra",
+  "tipo": "exato",
+  "en": "Earth",
+  "fr": "Terre",
+  "es": "Tierra"
+ },
+ {
+  "pt": "Maré",
+  "tipo": "exato",
+  "en": "Tide",
+  "fr": "Marée",
+  "es": "Marea"
+ },
+ {
+  "pt": "Eucalipto",
+  "tipo": "exato",
+  "en": "Eucalyptus",
+  "fr": "Eucalyptus",
+  "es": "Eucalipto"
+ },
+ {
+  "pt": "Uva",
+  "tipo": "exato",
+  "en": "Grape",
+  "fr": "Raisin",
+  "es": "Uva"
+ },
+ {
+  "pt": "Céu profundo",
+  "tipo": "exato",
+  "en": "Deep sky",
+  "fr": "Ciel profond",
+  "es": "Cielo profundo"
+ },
+ {
+  "pt": "Bronze",
+  "tipo": "exato",
+  "en": "Bronze",
+  "fr": "Bronze",
+  "es": "Bronce"
+ },
+ {
+  "pt": "Abissal",
+  "tipo": "exato",
+  "en": "Abyssal",
+  "fr": "Abyssal",
+  "es": "Abisal"
+ },
+ {
+  "pt": "Bradesco",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Santander",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Caixa",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Banco do Brasil",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Inter",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "C6 Bank",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "BTG Pactual",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sicredi",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sicoob",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Original",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "PicPay",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Mercado Pago",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Safra",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Neon",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nomad",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Wise",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "PagBank",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Dólar americano",
+  "tipo": "exato",
+  "en": "US dollar",
+  "fr": "Dollar américain",
+  "es": "Dólar estadounidense"
+ },
+ {
+  "pt": "Euro",
+  "tipo": "exato",
+  "en": "Euro",
+  "fr": "Euro",
+  "es": "Euro"
+ },
+ {
+  "pt": "Libra esterlina",
+  "tipo": "exato",
+  "en": "British pound",
+  "fr": "Livre sterling",
+  "es": "Libra esterlina"
+ },
+ {
+  "pt": "Dólar canadense",
+  "tipo": "exato",
+  "en": "Canadian dollar",
+  "fr": "Dollar canadien",
+  "es": "Dólar canadiense"
+ },
+ {
+  "pt": "Dólar australiano",
+  "tipo": "exato",
+  "en": "Australian dollar",
+  "fr": "Dollar australien",
+  "es": "Dólar australiano"
+ },
+ {
+  "pt": "Franco suíço",
+  "tipo": "exato",
+  "en": "Swiss franc",
+  "fr": "Franc suisse",
+  "es": "Franco suizo"
+ },
+ {
+  "pt": "Iene",
+  "tipo": "exato",
+  "en": "Japanese yen",
+  "fr": "Yen japonais",
+  "es": "Yen japonés"
+ },
+ {
+  "pt": "Peso argentino",
+  "tipo": "exato",
+  "en": "Argentine peso",
+  "fr": "Peso argentin",
+  "es": "Peso argentino"
+ },
+ {
+  "pt": "Peso chileno",
+  "tipo": "exato",
+  "en": "Chilean peso",
+  "fr": "Peso chilien",
+  "es": "Peso chileno"
+ },
+ {
+  "pt": "Peso uruguaio",
+  "tipo": "exato",
+  "en": "Uruguayan peso",
+  "fr": "Peso uruguayen",
+  "es": "Peso uruguayo"
+ },
+ {
+  "pt": "Peso mexicano",
+  "tipo": "exato",
+  "en": "Mexican peso",
+  "fr": "Peso mexicain",
+  "es": "Peso mexicano"
+ },
+ {
+  "pt": "Yuan",
+  "tipo": "exato",
+  "en": "Yuan",
+  "fr": "Yuan",
+  "es": "Yuan"
+ },
+ {
+  "pt": "Conta poupança",
+  "tipo": "exato",
+  "en": "Savings account",
+  "fr": "Compte d'épargne",
+  "es": "Cuenta de ahorro"
+ },
+ {
+  "pt": "Conta de pagamento",
+  "tipo": "exato",
+  "en": "Payment account",
+  "fr": "Compte de paiement",
+  "es": "Cuenta de pago"
+ },
+ {
+  "pt": "Carteira / dinheiro",
+  "tipo": "exato",
+  "en": "Wallet / cash",
+  "fr": "Portefeuille / espèces",
+  "es": "Billetera / efectivo"
+ },
+ {
+  "pt": "Conta investimento",
+  "tipo": "exato",
+  "en": "Investment account",
+  "fr": "Compte d'investissement",
+  "es": "Cuenta de inversión"
+ },
+ {
+  "pt": "Tesouro Direto",
+  "tipo": "exato",
+  "en": "Treasury bonds",
+  "fr": "Obligations d'État",
+  "es": "Bonos del Tesoro"
+ },
+ {
+  "pt": "Fundo de investimento",
+  "tipo": "exato",
+  "en": "Investment fund",
+  "fr": "Fonds d'investissement",
+  "es": "Fondo de inversión"
+ },
+ {
+  "pt": "Ações",
+  "tipo": "exato",
+  "en": "Stocks",
+  "fr": "Actions",
+  "es": "Acciones"
+ },
+ {
+  "pt": "FIIs",
+  "tipo": "exato",
+  "en": "REITs",
+  "fr": "SCPI",
+  "es": "FIBRAs"
+ },
+ {
+  "pt": "Criptomoeda",
+  "tipo": "exato",
+  "en": "Crypto",
+  "fr": "Cryptomonnaie",
+  "es": "Criptomoneda"
+ },
+ {
+  "pt": "Previdência",
+  "tipo": "exato",
+  "en": "Retirement plan",
+  "fr": "Épargne retraite",
+  "es": "Plan de pensiones"
+ },
+ {
+  "pt": "Poupança",
+  "tipo": "exato",
+  "en": "Savings",
+  "fr": "Livret d'épargne",
+  "es": "Ahorro"
+ },
+ {
+  "pt": "Moradia",
+  "tipo": "exato",
+  "en": "Housing",
+  "fr": "Logement",
+  "es": "Vivienda"
+ },
+ {
+  "pt": "Alimentação",
+  "tipo": "exato",
+  "en": "Food",
+  "fr": "Alimentation",
+  "es": "Alimentación"
+ },
+ {
+  "pt": "Transporte",
+  "tipo": "exato",
+  "en": "Transportation",
+  "fr": "Transport",
+  "es": "Transporte"
+ },
+ {
+  "pt": "Saúde",
+  "tipo": "exato",
+  "en": "Health",
+  "fr": "Santé",
+  "es": "Salud"
+ },
+ {
+  "pt": "Educação",
+  "tipo": "exato",
+  "en": "Education",
+  "fr": "Éducation",
+  "es": "Educación"
+ },
+ {
+  "pt": "Lazer",
+  "tipo": "exato",
+  "en": "Leisure",
+  "fr": "Loisirs",
+  "es": "Ocio"
+ },
+ {
+  "pt": "Compras",
+  "tipo": "exato",
+  "en": "Shopping",
+  "fr": "Achats",
+  "es": "Compras"
+ },
+ {
+  "pt": "Impostos e taxas",
+  "tipo": "exato",
+  "en": "Taxes and fees",
+  "fr": "Impôts et taxes",
+  "es": "Impuestos y tasas"
+ },
+ {
+  "pt": "Outros",
+  "tipo": "exato",
+  "en": "Other",
+  "fr": "Autres",
+  "es": "Otros"
+ },
+ {
+  "pt": "Salário",
+  "tipo": "exato",
+  "en": "Salary",
+  "fr": "Salaire",
+  "es": "Salario"
+ },
+ {
+  "pt": "Freelance / PJ",
+  "tipo": "exato",
+  "en": "Freelance",
+  "fr": "Freelance",
+  "es": "Freelance"
+ },
+ {
+  "pt": "Rendimentos",
+  "tipo": "exato",
+  "en": "Investment income",
+  "fr": "Revenus de placements",
+  "es": "Rendimientos"
+ },
+ {
+  "pt": "Reembolso",
+  "tipo": "exato",
+  "en": "Refund",
+  "fr": "Remboursement",
+  "es": "Reembolso"
+ },
+ {
+  "pt": "Vendas",
+  "tipo": "exato",
+  "en": "Sales",
+  "fr": "Ventes",
+  "es": "Ventas"
+ },
+ {
+  "pt": "PJ / Autônomo",
+  "tipo": "exato",
+  "en": "Self-employed",
+  "fr": "Indépendant",
+  "es": "Autónomo"
+ },
+ {
+  "pt": "(sem descrição)",
+  "tipo": "exato",
+  "en": "(no description)",
+  "fr": "(sans description)",
+  "es": "(sin descripción)"
+ },
+ {
+  "pt": "Não foi possível ler o localStorage:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Falha ao salvar:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não foi possível salvar neste navegador (armazenamento cheio ou bloqueado). Entre na sua conta para não perder o trabalho.",
+  "tipo": "exato",
+  "en": "Couldn't save in this browser (storage full or blocked). Sign in to your account so you don't lose your work.",
+  "fr": "Impossible d'enregistrer dans ce navigateur (stockage plein ou bloqué). Connectez-vous à votre compte pour ne pas perdre votre travail.",
+  "es": "No se pudo guardar en este navegador (almacenamiento lleno o bloqueado). Inicia sesión en tu cuenta para no perder tu trabajo."
+ }
+]

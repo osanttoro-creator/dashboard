@@ -167,7 +167,7 @@
     if (m < 60) return 'há ' + m + ' min';
     const h = Math.round(m / 60);
     if (h < 24) return 'há ' + h + ' h';
-    return 'em ' + new Date(ms).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    return 'em ' + new Date(ms).toLocaleDateString(((window.U && U.LOCALE) || 'pt-BR'), { day: '2-digit', month: '2-digit' });
   }
 
   let sincronizando = false;

@@ -49,6 +49,7 @@ const VERIFICACOES = [
   ['tools/testes/uglez-openai.js', 'UGLEZ chama a OpenAI pelo servidor e envia só agregados'],
   ['tools/conferir-planos.js', 'site público e planos.js concordam'],
   ['tools/gen-idiomas.js --conferir', 'inglês, francês e espanhol em dia com o português'],
+  ['tools/gen-idiomas-app.js --conferir', 'o app fala inglês, francês e espanhol em tudo o que escreve'],
   ['tools/testes/confere-planos.js', 'planos.js e o banco concordam'],
   ['tools/testes/contraste.js', 'contraste mínimo nos dois temas'],
   ['tools/testes/ida-e-volta.js', 'dados voltam iguais do banco'],

@@ -537,8 +537,12 @@ function gerar(soConferir) {
   return { faltas: [...faltas], diferentes, reaisPerdidos };
 }
 
-const arg = process.argv[2];
-if (arg === '--extrair') {
+/* Só age quando chamado direto: tools/gen-idiomas-app.js importa o
+   analisador daqui e não pode regerar o site como efeito colateral. */
+const arg = require.main === module ? process.argv[2] : null;
+if (require.main !== module) {
+  /* importado: nada a fazer */
+} else if (arg === '--extrair') {
   extrair();
 } else if (arg === '--conferir') {
   const r = gerar(true);

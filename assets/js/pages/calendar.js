@@ -24,7 +24,8 @@
 
   const CHAVE_VISTA = 'oaze.calendario.vista';
   const VISTAS = ['semana', 'mes', 'ano'];
-  const DIAS_CURTOS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  /* na língua da tela (utils.js); em português, os mesmos de sempre */
+  const DIAS_CURTOS = U.WEEKDAYS_SHORT;
 
   /* A escala é uma conveniência de quem olha, não um dado: fica no
      aparelho e, se o armazenamento falhar, a página abre no mês. */
@@ -356,7 +357,7 @@
 
     const di = U.parseISO(ini), df = U.parseISO(fim);
     const titulo = di.getMonth() === df.getMonth()
-      ? `${di.getDate()} a ${df.getDate()} de ${U.MONTHS[df.getMonth()].toLowerCase()}`
+      ? `${di.getDate()} a ${df.getDate()} de ${U.mesNaFrase(df.getMonth())}`
       : `${di.getDate()} de ${U.MONTHS_SHORT[di.getMonth()]} a ${df.getDate()} de ${U.MONTHS_SHORT[df.getMonth()]}`;
     document.getElementById('calTitle').textContent = 'Semana de ' + titulo;
     document.getElementById('calSemanaTitulo').textContent = hoje >= ini && hoje <= fim ? 'Esta semana' : 'Semana';
@@ -432,7 +433,7 @@
     const extra = el('div', { class: 'cal-resumo-fig' }, [
       el('span', { class: 'k', text: 'Gasto médio por mês' }),
       el('span', { class: 'v', text: U.fmtBRL(media) }),
-      el('span', { class: 's', text: maior ? 'maior em ' + U.MONTHS[U.ymParts(maior.ym).m].toLowerCase() : 'sem despesas no ano' })
+      el('span', { class: 's', text: maior ? 'maior em ' + U.mesNaFrase(U.ymParts(maior.ym).m) : 'sem despesas no ano' })
     ]);
     pintaResumo(doAno, 'do ano', extra);
 
@@ -525,7 +526,7 @@
         }, [
           el('span', { class: 'cal-mes-dia', text: e.date.slice(8, 10) }),
           el('span', { class: 'cal-mes-nome' }, [
-            el('span', { class: 't', text: e.description }),
+            el('span', { class: 't', text: e.description, translate: 'no' }),
             e.recurring ? el('span', { class: 'cal-mini-tag', text: 'fixa' }) : null,
             e.installment ? el('span', { class: 'cal-mini-tag', text: `${e.installment.index}/${e.installment.total}` }) : null,
             !e.confirmed ? el('span', { class: 'cal-mini-tag is-pend', text: 'prevista' }) : null

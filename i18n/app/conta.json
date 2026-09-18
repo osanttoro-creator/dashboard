@@ -1,0 +1,349 @@
+[
+ {
+  "pt": "type=recovery",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "nova senha",
+  "tipo": "exato",
+  "en": "new password",
+  "fr": "nouveau mot de passe",
+  "es": "nueva contraseña"
+ },
+ {
+  "pt": "repita a senha",
+  "tipo": "exato",
+  "en": "repeat the password",
+  "fr": "répétez le mot de passe",
+  "es": "repite la contraseña"
+ },
+ {
+  "pt": "Definir nova senha",
+  "tipo": "exato",
+  "en": "Set a new password",
+  "fr": "Définir un nouveau mot de passe",
+  "es": "Definir nueva contraseña"
+ },
+ {
+  "pt": "Você chegou aqui pelo link de recuperação. Escolha uma senha nova para esta conta.",
+  "tipo": "exato",
+  "en": "You got here through the recovery link. Choose a new password for this account.",
+  "fr": "Vous êtes arrivé ici par le lien de récupération. Choisissez un nouveau mot de passe pour ce compte.",
+  "es": "Llegaste aquí por el enlace de recuperación. Elige una contraseña nueva para esta cuenta."
+ },
+ {
+  "pt": "Nova senha",
+  "tipo": "exato",
+  "en": "New password",
+  "fr": "Nouveau mot de passe",
+  "es": "Nueva contraseña"
+ },
+ {
+  "pt": "Repita",
+  "tipo": "exato",
+  "en": "Repeat",
+  "fr": "Répétez",
+  "es": "Repite"
+ },
+ {
+  "pt": "Salvar senha",
+  "tipo": "exato",
+  "en": "Save password",
+  "fr": "Enregistrer le mot de passe",
+  "es": "Guardar contraseña"
+ },
+ {
+  "pt": "A senha precisa de pelo menos 6 caracteres.",
+  "tipo": "exato",
+  "en": "The password needs at least 6 characters.",
+  "fr": "Le mot de passe doit contenir au moins 6 caractères.",
+  "es": "La contraseña necesita al menos 6 caracteres."
+ },
+ {
+  "pt": "As duas senhas não são iguais.",
+  "tipo": "exato",
+  "en": "The two passwords don't match.",
+  "fr": "Les deux mots de passe ne correspondent pas.",
+  "es": "Las dos contraseñas no coinciden."
+ },
+ {
+  "pt": "Sem conexão com o servidor.",
+  "tipo": "exato",
+  "en": "No connection to the server.",
+  "fr": "Pas de connexion au serveur.",
+  "es": "Sin conexión con el servidor."
+ },
+ {
+  "pt": "Senha alterada. Ela já vale no próximo login.",
+  "tipo": "exato",
+  "en": "Password changed. It works from your next sign-in.",
+  "fr": "Mot de passe modifié. Il vaut dès la prochaine connexion.",
+  "es": "Contraseña cambiada. Ya vale en el próximo inicio de sesión."
+ },
+ {
+  "pt": "Real (R$)",
+  "tipo": "exato",
+  "en": "Real (R$)",
+  "fr": "Réal (R$)",
+  "es": "Real (R$)"
+ },
+ {
+  "pt": "Dólar (US$)",
+  "tipo": "exato",
+  "en": "Dollar (US$)",
+  "fr": "Dollar (US$)",
+  "es": "Dólar (US$)"
+ },
+ {
+  "pt": "Euro (€)",
+  "tipo": "exato",
+  "en": "Euro (€)",
+  "fr": "Euro (€)",
+  "es": "Euro (€)"
+ },
+ {
+  "pt": "Brasil",
+  "tipo": "exato",
+  "en": "Brazil",
+  "fr": "Brésil",
+  "es": "Brasil"
+ },
+ {
+  "pt": "Portugal",
+  "tipo": "exato",
+  "en": "Portugal",
+  "fr": "Portugal",
+  "es": "Portugal"
+ },
+ {
+  "pt": "Estados Unidos",
+  "tipo": "exato",
+  "en": "United States",
+  "fr": "États-Unis",
+  "es": "Estados Unidos"
+ },
+ {
+  "pt": "Seu perfil",
+  "tipo": "exato",
+  "en": "Your profile",
+  "fr": "Votre profil",
+  "es": "Tu perfil"
+ },
+ {
+  "pt": "Conta: {0}",
+  "tipo": "padrao",
+  "en": "Account: {0}",
+  "fr": "Compte : {0}",
+  "es": "Cuenta: {0}"
+ },
+ {
+  "pt": "Moeda",
+  "tipo": "exato",
+  "en": "Currency",
+  "fr": "Devise",
+  "es": "Moneda"
+ },
+ {
+  "pt": "País",
+  "tipo": "exato",
+  "en": "Country",
+  "fr": "Pays",
+  "es": "País"
+ },
+ {
+  "pt": "O e-mail não muda por aqui: trocá-lo exige confirmar o novo endereço, e isso é assunto do provedor de login.",
+  "tipo": "exato",
+  "en": "Your email doesn't change here: changing it requires confirming the new address, and that's up to the sign-in provider.",
+  "fr": "L'e-mail ne se change pas ici : le modifier exige de confirmer la nouvelle adresse, ce qui relève du fournisseur de connexion.",
+  "es": "El correo no cambia por aquí: cambiarlo exige confirmar la nueva dirección, y eso es cosa del proveedor de inicio de sesión."
+ },
+ {
+  "pt": "America/Sao_Paulo",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Perfil salvo.",
+  "tipo": "exato",
+  "en": "Profile saved.",
+  "fr": "Profil enregistré.",
+  "es": "Perfil guardado."
+ },
+ {
+  "pt": "Não foi possível salvar agora: {0}",
+  "tipo": "padrao",
+  "en": "Couldn't save right now: {0}",
+  "fr": "Impossible d'enregistrer pour le moment : {0}",
+  "es": "No se pudo guardar ahora: {0}"
+ },
+ {
+  "pt": "Entre na sua conta primeiro.",
+  "tipo": "exato",
+  "en": "Sign in to your account first.",
+  "fr": "Connectez-vous d'abord à votre compte.",
+  "es": "Inicia sesión en tu cuenta primero."
+ },
+ {
+  "pt": "Excluir a conta",
+  "tipo": "exato",
+  "en": "Delete the account",
+  "fr": "Supprimer le compte",
+  "es": "Eliminar la cuenta"
+ },
+ {
+  "pt": "Isto apaga tudo, e não tem volta.",
+  "tipo": "exato",
+  "en": "This deletes everything, and there's no going back.",
+  "fr": "Cela supprime tout, et c'est irréversible.",
+  "es": "Esto borra todo, y no tiene vuelta atrás."
+ },
+ {
+  "pt": "Espaços, contas, cartões, categorias, lançamentos, investimentos, faturas, orçamentos, metas e a assinatura. Em todos os aparelhos.",
+  "tipo": "exato",
+  "en": "Spaces, accounts, cards, categories, entries, investments, bills, budgets, goals and the subscription. On every device.",
+  "fr": "Espaces, comptes, cartes, catégories, écritures, investissements, relevés, budgets, objectifs et l'abonnement. Sur tous les appareils.",
+  "es": "Espacios, cuentas, tarjetas, categorías, movimientos, inversiones, facturas, presupuestos, metas y la suscripción. En todos los dispositivos."
+ },
+ {
+  "pt": "Baixe o backup antes.",
+  "tipo": "exato",
+  "en": "Download the backup first.",
+  "fr": "Téléchargez la sauvegarde avant.",
+  "es": "Descarga la copia de seguridad antes."
+ },
+ {
+  "pt": "Depois de excluir, não existe de onde recuperar — nem para nós.",
+  "tipo": "exato",
+  "en": "After deleting, there's nowhere to recover it from — not even for us.",
+  "fr": "Après la suppression, il n'y a aucun moyen de récupérer — même pour nous.",
+  "es": "Después de eliminar, no hay de dónde recuperar — ni siquiera para nosotros."
+ },
+ {
+  "pt": "↓ Baixar backup agora",
+  "tipo": "exato",
+  "en": "↓ Download backup now",
+  "fr": "↓ Télécharger la sauvegarde",
+  "es": "↓ Descargar copia ahora"
+ },
+ {
+  "pt": "Backup baixado. Confira o arquivo antes de continuar.",
+  "tipo": "exato",
+  "en": "Backup downloaded. Check the file before continuing.",
+  "fr": "Sauvegarde téléchargée. Vérifiez le fichier avant de continuer.",
+  "es": "Copia descargada. Revisa el archivo antes de continuar."
+ },
+ {
+  "pt": "Digite {0} para confirmar",
+  "tipo": "padrao",
+  "en": "Type {0} to confirm",
+  "fr": "Tapez {0} pour confirmer",
+  "es": "Escribe {0} para confirmar"
+ },
+ {
+  "pt": "Excluir para sempre",
+  "tipo": "exato",
+  "en": "Delete forever",
+  "fr": "Supprimer définitivement",
+  "es": "Eliminar para siempre"
+ },
+ {
+  "pt": "O e-mail não confere.",
+  "tipo": "exato",
+  "en": "The email doesn't match.",
+  "fr": "L'e-mail ne correspond pas.",
+  "es": "El correo no coincide."
+ },
+ {
+  "pt": "Excluindo…",
+  "tipo": "exato",
+  "en": "Deleting…",
+  "fr": "Suppression…",
+  "es": "Eliminando…"
+ },
+ {
+  "pt": "O servidor não confirmou a exclusão. Nada foi apagado.",
+  "tipo": "exato",
+  "en": "The server didn't confirm the deletion. Nothing was deleted.",
+  "fr": "Le serveur n'a pas confirmé la suppression. Rien n'a été supprimé.",
+  "es": "El servidor no confirmó la eliminación. No se borró nada."
+ },
+ {
+  "pt": "financas.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze.onboarding.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze.fila.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Conta excluída",
+  "tipo": "exato",
+  "en": "Account deleted",
+  "fr": "Compte supprimé",
+  "es": "Cuenta eliminada"
+ },
+ {
+  "pt": "Apagamos {0} lançamento(s) e tudo mais ligado à conta.",
+  "tipo": "padrao",
+  "en": "We deleted {0} entry(ies) and everything else tied to the account.",
+  "fr": "Nous avons supprimé {0} écriture(s) et tout ce qui était lié au compte.",
+  "es": "Borramos {0} movimiento(s) y todo lo demás ligado a la cuenta."
+ },
+ {
+  "pt": "Obrigado por ter usado o OAZE. Se um dia voltar, é só criar outra conta.",
+  "tipo": "exato",
+  "en": "Thanks for using OAZE. If you ever come back, just create another account.",
+  "fr": "Merci d'avoir utilisé OAZE. Si vous revenez un jour, il suffit de créer un autre compte.",
+  "es": "Gracias por haber usado OAZE. Si algún día vuelves, solo crea otra cuenta."
+ },
+ {
+  "pt": "Falha ao falar com o servidor: {0}",
+  "tipo": "padrao",
+  "en": "Couldn't reach the server: {0}",
+  "fr": "Échec de communication avec le serveur : {0}",
+  "es": "Error al comunicarse con el servidor: {0}"
+ },
+ {
+  "pt": "Servidor não configurado.",
+  "tipo": "exato",
+  "en": "Server not configured.",
+  "fr": "Serveur non configuré.",
+  "es": "Servidor no configurado."
+ },
+ {
+  "pt": "Sua sessão expirou.",
+  "tipo": "exato",
+  "en": "Your session expired.",
+  "fr": "Votre session a expiré.",
+  "es": "Tu sesión expiró."
+ },
+ {
+  "pt": "Pagamento enviado. Seu plano é liberado assim que a Stripe confirmar.",
+  "tipo": "exato",
+  "en": "Payment sent. Your plan unlocks as soon as Stripe confirms.",
+  "fr": "Paiement envoyé. Votre formule est activée dès que Stripe confirme.",
+  "es": "Pago enviado. Tu plan se habilita en cuanto Stripe lo confirme."
+ },
+ {
+  "pt": "Plano {0} liberado.",
+  "tipo": "padrao",
+  "en": "{0} plan unlocked.",
+  "fr": "Formule {0} activée.",
+  "es": "Plan {0} habilitado."
+ },
+ {
+  "pt": "A confirmação está demorando. Quando a Stripe aprovar, o plano aparece ao abrir o app de novo.",
+  "tipo": "exato",
+  "en": "Confirmation is taking a while. Once Stripe approves, the plan shows up when you open the app again.",
+  "fr": "La confirmation prend du temps. Quand Stripe l'aura approuvée, la formule apparaîtra à la prochaine ouverture de l'app.",
+  "es": "La confirmación está tardando. Cuando Stripe lo apruebe, el plan aparece al abrir la app de nuevo."
+ }
+]

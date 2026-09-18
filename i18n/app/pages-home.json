@@ -1,0 +1,352 @@
+[
+ {
+  "pt": "{0} recebidos e {1} pagos neste mês · em {2}",
+  "tipo": "padrao",
+  "en": "{0} received and {1} paid this month · as of {2}",
+  "fr": "{0} reçus et {1} payés ce mois-ci · au {2}",
+  "es": "{0} recibidos y {1} pagados este mes · al {2}"
+ },
+ {
+  "pt": "desde o fim de {0}",
+  "tipo": "padrao",
+  "en": "since the end of {0}",
+  "fr": "depuis la fin de {0}",
+  "es": "desde el fin de {0}"
+ },
+ {
+  "pt": "no fim de {0}",
+  "tipo": "padrao",
+  "en": "at the end of {0}",
+  "fr": "à la fin de {0}",
+  "es": "a fin de {0}"
+ },
+ {
+  "pt": "+ {0} a receber",
+  "tipo": "padrao",
+  "en": "+ {0} to receive",
+  "fr": "+ {0} à recevoir",
+  "es": "+ {0} por cobrar"
+ },
+ {
+  "pt": "− {0} a pagar",
+  "tipo": "padrao",
+  "en": "− {0} to pay",
+  "fr": "− {0} à payer",
+  "es": "− {0} por pagar"
+ },
+ {
+  "pt": "− {0} de fatura",
+  "tipo": "padrao",
+  "en": "− {0} in card bills",
+  "fr": "− {0} de relevé",
+  "es": "− {0} de factura"
+ },
+ {
+  "pt": "Como o OAZE Score é calculado",
+  "tipo": "exato",
+  "en": "How the OAZE Score is calculated",
+  "fr": "Comment le OAZE Score est calculé",
+  "es": "Cómo se calcula el OAZE Score"
+ },
+ {
+  "pt": "Cinco perguntas, 20 pontos cada, todas respondidas a partir dos seus próprios lançamentos. Nada vem de fora e nada é opinião.",
+  "tipo": "exato",
+  "en": "Five questions, 20 points each, all answered from your own entries. Nothing comes from outside and nothing is opinion.",
+  "fr": "Cinq questions, 20 points chacune, toutes répondues à partir de vos propres écritures. Rien ne vient de l'extérieur et rien n'est une opinion.",
+  "es": "Cinco preguntas, 20 puntos cada una, todas respondidas a partir de tus propios movimientos. Nada viene de afuera y nada es opinión."
+ },
+ {
+  "pt": "Faixas: 80+ excelente · 60+ saudável · 40+ atenção · abaixo de 40, frágil.",
+  "tipo": "exato",
+  "en": "Ranges: 80+ excellent · 60+ healthy · 40+ watch out · below 40, fragile.",
+  "fr": "Paliers : 80+ excellent · 60+ sain · 40+ attention · en dessous de 40, fragile.",
+  "es": "Rangos: 80+ excelente · 60+ saludable · 40+ atención · por debajo de 40, frágil."
+ },
+ {
+  "pt": "Patrimônio líquido",
+  "tipo": "exato",
+  "en": "Net worth",
+  "fr": "Patrimoine net",
+  "es": "Patrimonio neto"
+ },
+ {
+  "pt": "{0} disponível · {1} investido",
+  "tipo": "padrao",
+  "en": "{0} available · {1} invested",
+  "fr": "{0} disponible · {1} investi",
+  "es": "{0} disponible · {1} invertido"
+ },
+ {
+  "pt": "Receitas do mês",
+  "tipo": "exato",
+  "en": "Income this month",
+  "fr": "Revenus du mois",
+  "es": "Ingresos del mes"
+ },
+ {
+  "pt": "vs. mês anterior",
+  "tipo": "exato",
+  "en": "vs. last month",
+  "fr": "vs. mois précédent",
+  "es": "vs. mes anterior"
+ },
+ {
+  "pt": "+ {0} previsto",
+  "tipo": "padrao",
+  "en": "+ {0} expected",
+  "fr": "+ {0} prévu",
+  "es": "+ {0} previsto"
+ },
+ {
+  "pt": "Despesas do mês",
+  "tipo": "exato",
+  "en": "Expenses this month",
+  "fr": "Dépenses du mois",
+  "es": "Gastos del mes"
+ },
+ {
+  "pt": "vs. anterior",
+  "tipo": "exato",
+  "en": "vs. previous",
+  "fr": "vs. précédent",
+  "es": "vs. anterior"
+ },
+ {
+  "pt": "Débito — sai da conta",
+  "tipo": "exato",
+  "en": "Debit — comes out of the account",
+  "fr": "Débit — sort du compte",
+  "es": "Débito — sale de la cuenta"
+ },
+ {
+  "pt": "Déb {0}",
+  "tipo": "padrao",
+  "en": "Deb {0}",
+  "fr": "Déb {0}",
+  "es": "Déb {0}"
+ },
+ {
+  "pt": "Crédito — entra na fatura",
+  "tipo": "exato",
+  "en": "Credit — goes on the card bill",
+  "fr": "Crédit — s'ajoute au relevé",
+  "es": "Crédito — entra en la factura"
+ },
+ {
+  "pt": "Créd {0}",
+  "tipo": "padrao",
+  "en": "Cred {0}",
+  "fr": "Créd {0}",
+  "es": "Créd {0}"
+ },
+ {
+  "pt": "Sobra em caixa",
+  "tipo": "exato",
+  "en": "Cash left over",
+  "fr": "Reste en trésorerie",
+  "es": "Sobrante en caja"
+ },
+ {
+  "pt": "− {0} de fatura paga",
+  "tipo": "padrao",
+  "en": "− {0} in paid card bills",
+  "fr": "− {0} de relevé payé",
+  "es": "− {0} de factura pagada"
+ },
+ {
+  "pt": "− faturas pagas",
+  "tipo": "exato",
+  "en": "− paid card bills",
+  "fr": "− relevés payés",
+  "es": "− facturas pagadas"
+ },
+ {
+  "pt": "Receitas − despesas no débito{0}",
+  "tipo": "padrao",
+  "en": "Income − debit expenses{0}",
+  "fr": "Revenus − dépenses au débit{0}",
+  "es": "Ingresos − gastos en débito{0}"
+ },
+ {
+  "pt": "{0}: sobraram {1}",
+  "tipo": "padrao",
+  "en": "{0}: {1} left over",
+  "fr": "{0} : il est resté {1}",
+  "es": "{0}: sobraron {1}"
+ },
+ {
+  "pt": "{0}: faltaram {1}",
+  "tipo": "padrao",
+  "en": "{0}: {1} short",
+  "fr": "{0} : il a manqué {1}",
+  "es": "{0}: faltaron {1}"
+ },
+ {
+  "pt": "Saldo do mês",
+  "tipo": "exato",
+  "en": "Month balance",
+  "fr": "Solde du mois",
+  "es": "Saldo del mes"
+ },
+ {
+  "pt": "{0} concentra {1} dos gastos",
+  "tipo": "padrao",
+  "en": "{0} takes {1} of spending",
+  "fr": "{0} concentre {1} des dépenses",
+  "es": "{0} concentra el {1} de los gastos"
+ },
+ {
+  "pt": "{0} · {1} confirmados",
+  "tipo": "padrao",
+  "en": "{0} · {1} confirmed",
+  "fr": "{0} · {1} confirmés",
+  "es": "{0} · {1} confirmados"
+ },
+ {
+  "pt": "Débito {0}",
+  "tipo": "padrao",
+  "en": "Debit {0}",
+  "fr": "Débit {0}",
+  "es": "Débito {0}"
+ },
+ {
+  "pt": "Crédito {0}",
+  "tipo": "padrao",
+  "en": "Credit {0}",
+  "fr": "Crédit {0}",
+  "es": "Crédito {0}"
+ },
+ {
+  "pt": "Débito (conta)",
+  "tipo": "exato",
+  "en": "Debit (account)",
+  "fr": "Débit (compte)",
+  "es": "Débito (cuenta)"
+ },
+ {
+  "pt": "Crédito (cartão)",
+  "tipo": "exato",
+  "en": "Credit (card)",
+  "fr": "Crédit (carte)",
+  "es": "Crédito (tarjeta)"
+ },
+ {
+  "pt": "Nada a pagar nos próximos dias.",
+  "tipo": "exato",
+  "en": "Nothing to pay in the next few days.",
+  "fr": "Rien à payer dans les prochains jours.",
+  "es": "Nada por pagar en los próximos días."
+ },
+ {
+  "pt": "+{0} depois destes.",
+  "tipo": "padrao",
+  "en": "+{0} after these.",
+  "fr": "+{0} après ceux-ci.",
+  "es": "+{0} después de estos."
+ },
+ {
+  "pt": "Sobrou no mês",
+  "tipo": "exato",
+  "en": "Left over this month",
+  "fr": "Reste du mois",
+  "es": "Sobró en el mes"
+ },
+ {
+  "pt": "Faltou no mês",
+  "tipo": "exato",
+  "en": "Short this month",
+  "fr": "Manque du mois",
+  "es": "Faltó en el mes"
+ },
+ {
+  "pt": "A confirmar",
+  "tipo": "exato",
+  "en": "To confirm",
+  "fr": "À confirmer",
+  "es": "Por confirmar"
+ },
+ {
+  "pt": "Revisar {0} pendente(s)",
+  "tipo": "padrao",
+  "en": "Review {0} pending",
+  "fr": "Vérifier {0} en attente",
+  "es": "Revisar {0} pendiente(s)"
+ },
+ {
+  "pt": "Sua carteira está vazia.",
+  "tipo": "exato",
+  "en": "Your wallet is empty.",
+  "fr": "Votre portefeuille est vide.",
+  "es": "Tu cartera está vacía."
+ },
+ {
+  "pt": "Cadastrar conta",
+  "tipo": "exato",
+  "en": "Add account",
+  "fr": "Ajouter un compte",
+  "es": "Agregar cuenta"
+ },
+ {
+  "pt": "Explore o baralho e selecione um cartão para trazê-lo à frente.",
+  "tipo": "exato",
+  "en": "Browse the deck and select a card to bring it to the front.",
+  "fr": "Parcourez le paquet et sélectionnez une carte pour la mettre au premier plan.",
+  "es": "Explora el mazo y selecciona una tarjeta para traerla al frente."
+ },
+ {
+  "pt": "Nenhuma movimentação registrada ainda.",
+  "tipo": "exato",
+  "en": "No activity recorded yet.",
+  "fr": "Aucun mouvement enregistré pour l'instant.",
+  "es": "Ningún movimiento registrado todavía."
+ },
+ {
+  "pt": "Cadastrar onde seu dinheiro está",
+  "tipo": "exato",
+  "en": "Add where your money is",
+  "fr": "Ajouter où se trouve votre argent",
+  "es": "Registrar dónde está tu dinero"
+ },
+ {
+  "pt": "Registrar a primeira movimentação",
+  "tipo": "exato",
+  "en": "Record your first transaction",
+  "fr": "Enregistrer le premier mouvement",
+  "es": "Registrar el primer movimiento"
+ },
+ {
+  "pt": "Definir uma meta ou um orçamento",
+  "tipo": "exato",
+  "en": "Set a goal or a budget",
+  "fr": "Définir un objectif ou un budget",
+  "es": "Definir una meta o un presupuesto"
+ },
+ {
+  "pt": "Seu painel começa aqui",
+  "tipo": "exato",
+  "en": "Your dashboard starts here",
+  "fr": "Votre tableau de bord commence ici",
+  "es": "Tu panel empieza aquí"
+ },
+ {
+  "pt": "Ainda não há nada para mostrar — e é por isso que não estamos mostrando gráficos zerados. Assim que houver movimentação, esta página se preenche sozinha.",
+  "tipo": "exato",
+  "en": "There's nothing to show yet — which is why we aren't showing empty charts. As soon as there's activity, this page fills itself in.",
+  "fr": "Il n'y a encore rien à montrer — c'est pourquoi nous n'affichons pas de graphiques vides. Dès qu'il y aura des mouvements, cette page se remplira toute seule.",
+  "es": "Todavía no hay nada que mostrar — por eso no mostramos gráficos en cero. En cuanto haya movimientos, esta página se completa sola."
+ },
+ {
+  "pt": "Configurar em alguns minutos",
+  "tipo": "exato",
+  "en": "Set up in a few minutes",
+  "fr": "Configurer en quelques minutes",
+  "es": "Configurar en unos minutos"
+ },
+ {
+  "pt": "Cadastrar um cartão",
+  "tipo": "exato",
+  "en": "Add a card",
+  "fr": "Ajouter une carte",
+  "es": "Agregar una tarjeta"
+ }
+]

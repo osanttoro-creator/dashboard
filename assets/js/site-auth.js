@@ -20,6 +20,14 @@
 (function (global) {
   'use strict';
 
+  /* A língua desta página vira a língua do app para quem ainda não
+     escolheu uma em Configurações (o <head> do app.html lê isto). Ler
+     o site em inglês e abrir o app em português seria uma porta que
+     muda de língua no meio. É preferência de tela, não rastreio. */
+  try {
+    localStorage.setItem('oaze.idioma.site', (document.documentElement.lang || 'pt').slice(0, 2).toLowerCase());
+  } catch (e) { /* sem armazenamento: o app decide pelo navegador */ }
+
   var A = {};
   var cliente = null;
   var POLITICA_PRIVACIDADE_VERSAO = '2026-09-15';

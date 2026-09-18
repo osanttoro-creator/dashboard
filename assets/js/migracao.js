@@ -134,7 +134,10 @@
         qtd_registros: qtd
       });
       decisaoCache = { status: 'dispensada' };
-      UI.toast('Entendido. Você pode trazer esses dados depois, em Configurações → Dados.', 'success', 7000);
+      /* "Configurações → Dados" saiu do texto: o cartão Dados não existe
+         mais, e prometer um caminho que não existe é pior do que não
+         prometer nenhum. A cópia fica guardada neste aparelho. */
+      UI.toast('Entendido. Os dados continuam guardados neste aparelho.', 'success', 7000);
     } catch (e) {
       /* Sem rede a decisão não sobe, e o convite volta na próxima
          sessão. É chato e é o lado certo de errar: o outro lado
