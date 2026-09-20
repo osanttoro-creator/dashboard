@@ -48,7 +48,13 @@ if (!/body\[data-page="uglez"\]\s*\{[^}]*height:\s*100dvh[^}]*overflow:\s*hidden
 if (!/\.uglez-page\s*\{[^}]*height:\s*100%[^}]*overflow:\s*hidden/.test(css)) {
   falhas.push('câmara UGLEZ não ocupa somente a área disponível');
 }
-if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-stage\s*\{[^}]*grid-template-rows:\s*132px\s+minmax\(0,\s*1fr\)/.test(css)) {
+/* A faixa do topo no celular era de 132px e passou a 104px em
+   20/09/2026. Na tela de 390×844 sobravam 162px de conversa — menos
+   que uma pergunta e uma resposta curta — porque a maior parte da
+   altura estava no cabeçalho. O número continua fixado aqui de
+   propósito: ele é o que sobra para a conversa, e mudá-lo sem medir
+   o que resta é exatamente o erro que este teste existe para pegar. */
+if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-stage\s*\{[^}]*grid-template-rows:\s*104px\s+minmax\(0,\s*1fr\)/.test(css)) {
   falhas.push('layout móvel da câmara não está declarado');
 }
 if (/id=["']uglez(?:Leitura|Insights)["']/.test(html)) {

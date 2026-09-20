@@ -152,6 +152,55 @@
   "es": "Niebla"
  },
  {
+  "pt": "Prata",
+  "tipo": "exato",
+  "en": "Silver",
+  "fr": "Argent",
+  "es": "Plata"
+ },
+ {
+  "pt": "Champanhe",
+  "tipo": "exato",
+  "en": "Champagne",
+  "fr": "Champagne",
+  "es": "Champán"
+ },
+ {
+  "pt": "Marfim",
+  "tipo": "exato",
+  "en": "Ivory",
+  "fr": "Ivoire",
+  "es": "Marfil"
+ },
+ {
+  "pt": "Gelo",
+  "tipo": "exato",
+  "en": "Ice",
+  "fr": "Glace",
+  "es": "Hielo"
+ },
+ {
+  "pt": "Rosé",
+  "tipo": "exato",
+  "en": "Rosé",
+  "fr": "Rosé",
+  "es": "Rosado"
+ },
+ {
+  "pt": "Safira",
+  "tipo": "exato",
+  "en": "Sapphire",
+  "fr": "Saphir",
+  "es": "Zafiro"
+ },
+ {
+  "pt": "Ouro velho",
+  "tipo": "exato",
+  "en": "Antique gold",
+  "fr": "Vieil or",
+  "es": "Oro viejo"
+ },
+ {
   "pt": "banco:{0}",
   "tipo": "padrao",
   "ignorar": true

@@ -36,7 +36,7 @@ const ESPERADO = {
       ai_queries_per_month: 10, history_months: 3, comparison_months: 1, collaborators: 0
     },
     recursos: {
-      export_csv: false, export_pdf: false, cartoes_internacionais: false,
+      export_csv: false, export_pdf: false, cartoes_internacionais: true,
       calendario: false, uglez_assistente_flutuante: false,
       comparacao_mensal: false, comparacao_anual: false,
       analises_avancadas: false, ia_simulacoes: false, colaboracao: false,

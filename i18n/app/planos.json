@@ -232,13 +232,6 @@
   "es": "Exportar en CSV y PDF, calendario financiero"
  },
  {
-  "pt": "Cartões internacionais em dólar, euro e outras moedas",
-  "tipo": "exato",
-  "en": "International cards in dollars, euros and other currencies",
-  "fr": "Cartes internationales en dollar, en euro et dans d'autres devises",
-  "es": "Tarjetas internacionales en dólar, euro y otras monedas"
- },
- {
   "pt": "60 consultas ao UGLEZ por mês, com assistente flutuante",
   "tipo": "exato",
   "en": "60 UGLEZ questions per month, with the floating assistant",

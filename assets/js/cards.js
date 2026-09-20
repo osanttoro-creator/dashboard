@@ -52,7 +52,24 @@
     { key: 'lagoa', name: 'Lagoa', a: '#17656B', b: '#0A3134' },
     { key: 'cafe', name: 'Café', a: '#5A4432', b: '#2C2118' },
     { key: 'orquidea', name: 'Orquídea', a: '#8E4A6B', b: '#482435' },
-    { key: 'nevoa', name: 'Névoa', a: '#4F7A92', b: '#273D49' }
+    { key: 'nevoa', name: 'Névoa', a: '#4F7A92', b: '#273D49' },
+    /* Terceira leva (20/09/2026): o baralho inteiro era escuro. Um
+       cartão de verdade também é prata, champanhe, marfim — e sem
+       nenhum claro aqui, duas carteiras diferentes ainda pareciam a
+       mesma pilha de plástico escuro.
+       Nestes cinco claros a tinta do cartão vira ESCURA sozinha, pela
+       mesma conta que já decidia a tinta do cartão de banco (ver
+       comTinta, logo abaixo). A conta de contraste segue igual, só
+       que do outro lado: a ponta mais escura de cada claro fica
+       acima de 4,5:1 com a tinta escura DEPOIS da camada de 18% do
+       CSS, que a aproxima do texto. O pior caso é a Prata, 5,00:1. */
+    { key: 'prata', name: 'Prata', a: '#CBD1D7', b: '#97A2AB' },
+    { key: 'champanhe', name: 'Champanhe', a: '#E4D5B3', b: '#BBA57C' },
+    { key: 'marfim', name: 'Marfim', a: '#EFE7D8', b: '#CBBFA8' },
+    { key: 'gelo', name: 'Gelo', a: '#D6E2EA', b: '#A6BAC8' },
+    { key: 'rose', name: 'Rosé', a: '#E8C2B4', b: '#C99A88' },
+    { key: 'safira', name: 'Safira', a: '#1E3E90', b: '#0C1D4C' },
+    { key: 'ouro-velho', name: 'Ouro velho', a: '#8A6B2F', b: '#463618' }
   ];
 
   Cards.gradientByKey = (key) => Cards.GRADIENTS.find((g) => g.key === key) || null;
@@ -133,22 +150,44 @@
     return (desenhos[chave] = { key: 'banco:' + chave, name: bankName, a, b, tinta: escura ? 'escura' : 'clara' });
   };
 
+  /* A tinta (clara ou escura) de uma cor da paleta. O cartão de banco
+     já fazia esta conta; agora ela vale para a paleta inteira, porque
+     a paleta ganhou cores claras — sem isso, um cartão prata sairia
+     com texto branco sobre cinza claro. Guardada por chave: é
+     contraste relativo, não muda entre renders. */
+  const tintaPorChave = {};
+  function comTinta(g) {
+    if (!g || g.tinta) return g;
+    if (tintaPorChave[g.key]) return tintaPorChave[g.key];
+    const meio = mistura(hexRgb(g.a), hexRgb(g.b), 0.5);
+    const comPelicula = mistura(meio, [5, 15, 22], 0.18);
+    const escura = contraste(TINTA_ESCURA, meio) > contraste([255, 255, 255], comPelicula) + 0.6;
+    tintaPorChave[g.key] = Object.assign({}, g, { tinta: escura ? 'escura' : 'clara' });
+    return tintaPorChave[g.key];
+  }
+
   /**
-   * Gradiente efetivo do cartão. Banco conhecido: o desenho do banco,
-   * sempre. "Outro": o escolhido pela pessoa, senão um derivado da cor
-   * guardada, senão um estável pelo id (sem sorteio, para o cartão não
-   * trocar de cor a cada render).
+   * Gradiente efetivo do cartão, nesta ordem:
+   *
+   *   1. a cor ESCOLHIDA pela pessoa — em qualquer banco. O desenho do
+   *      banco é um bom padrão, não uma regra: dois cartões do mesmo
+   *      banco ficavam idênticos no baralho, e quem tem dois precisa
+   *      justamente distinguir um do outro de relance;
+   *   2. o desenho do banco, quando ela não escolheu ("auto");
+   *   3. um derivado da cor guardada;
+   *   4. um estável pelo id (sem sorteio, para o cartão não trocar de
+   *      cor a cada render).
    */
   Cards.gradientFor = function (card) {
+    const chosen = Cards.gradientByKey(card.gradient);
+    if (chosen) return comTinta(chosen);
     const doBanco = Cards.bankDesign(card.bank);
     if (doBanco) return doBanco;
-    const chosen = Cards.gradientByKey(card.gradient);
-    if (chosen) return chosen;
     const near = nearestGradient(card.color);
-    if (near) return near;
+    if (near) return comTinta(near);
     let h = 0;
     String(card.id || card.name || '').split('').forEach((ch) => { h = (h * 31 + ch.charCodeAt(0)) >>> 0; });
-    return Cards.GRADIENTS[h % Cards.GRADIENTS.length];
+    return comTinta(Cards.GRADIENTS[h % Cards.GRADIENTS.length]);
   };
 
   function rgb(hex) {
@@ -214,6 +253,13 @@
         el('span', { class: 'cc-sub', text: o.sub || '' })
       ]),
       el('span', { class: 'cc-corner' }, canto)
+    ]));
+
+    /* Chip e antena: é o que faz o olho ler "cartão" antes de ler
+       qualquer palavra. Decoração pura — aria-hidden, sem foco. */
+    filhos.push(el('span', { class: 'cc-fisico', 'aria-hidden': 'true' }, [
+      el('span', { class: 'cc-chip' }),
+      el('span', { class: 'cc-antena' })
     ]));
 
     filhos.push(el('span', { class: 'cc-number', text: o.number }));

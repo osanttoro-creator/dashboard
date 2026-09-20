@@ -1182,6 +1182,12 @@
   "es": "⟦s0⟧ Tarjetas internacionales en dólares, euros y otras monedas"
  },
  {
+  "pt": "⟦s0⟧ Cartões em dólar, euro e outras moedas",
+  "en": "⟦s0⟧ Cards in dollars, euros and other currencies",
+  "fr": "⟦s0⟧ Cartes en dollars, euros et autres devises",
+  "es": "⟦s0⟧ Tarjetas en dólares, euros y otras monedas"
+ },
+ {
   "pt": "⟦s0⟧ 60 consultas ao UGLEZ por mês, com assistente flutuante",
   "en": "⟦s0⟧ 60 UGLEZ queries per month, with the floating assistant",
   "fr": "⟦s0⟧ 60 requêtes UGLEZ par mois, avec l'assistant flottant",

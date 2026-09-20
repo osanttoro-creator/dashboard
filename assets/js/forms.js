@@ -558,7 +558,7 @@
         type: fType._control.value,
         color: bankSel.value === 'Outro' || !Cards.bankDesign(bankSel.value)
           ? picker.getValue() : Cards.bankDesign(bankSel.value).a,
-        gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
+        gradient: grads.getValue(),
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         considerado: cbConsiderado._input.checked
@@ -581,17 +581,21 @@
         }
       });
     }
-    /* A cor só existe para "Outro": banco conhecido usa o cartão do
-       banco (Cards.bankDesign), e oferecer cor ali seria oferecer uma
-       escolha que não muda nada. */
+    /* A cor da carteira é escolha em qualquer banco: "auto" mantém as
+       cores do banco, e quem tem duas contas no mesmo banco consegue
+       separar uma da outra de relance. */
+    /* O aviso mora sob as CORES, não sob a prévia: ele explica o que
+       "auto" faz, e quem lê isso está olhando para os quadradinhos. Sob
+       a prévia ele ficava fora da tela no celular. */
     const avisoCor = el('p', { class: 'hint' });
-    fPreview.appendChild(avisoCor);
+    fGrad.insertBefore(avisoCor, fGrad._error);
     function syncBank() {
       const outro = bankSel.value === 'Outro';
       fCustomBank.hidden = !outro;
       fColor.hidden = !outro;
-      fGrad.hidden = !outro;
-      avisoCor.textContent = outro ? '' : 'O cartão usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
+      avisoCor.textContent = outro
+        ? 'Escolha a cor do plástico. Em "auto", uma cor é derivada do nome.'
+        : 'Em "auto", a carteira usa as cores do ' + bankSel.value + '. Escolha uma cor para diferenciá-la das outras.';
       paintPreview();
     }
     bankSel.addEventListener('change', syncBank);
@@ -765,15 +769,19 @@
     paintPreview();
 
     const fGrad = field('Cor do cartão', gradWrap, { span2: true });
+    /* Ver a nota no formulário da conta: o aviso fica sob as cores. */
     const avisoCorCartao = el('p', { class: 'hint' });
+    fGrad.insertBefore(avisoCorCartao, fGrad._error);
     const fPreview = el('div', { class: 'field span-2' }, [
-      el('span', { class: 'field-label', text: 'Prévia' }), cardPreview, avisoCorCartao
+      el('span', { class: 'field-label', text: 'Prévia' }), cardPreview
     ]);
-    /* Mesma regra da conta: cor só para "Outro". */
+    /* A cor é escolha em qualquer banco; "auto" usa as do banco. */
     function syncCorCartao() {
-      const outro = bankSel.value === 'Outro';
-      fGrad.hidden = !outro;
-      avisoCorCartao.textContent = outro ? '' : 'O cartão usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
+      const banco = bankSel.value;
+      const temDesenho = banco !== 'Outro' && !!Cards.bankDesign(banco);
+      avisoCorCartao.textContent = temDesenho
+        ? 'Em "auto", o cartão usa as cores do ' + banco + '. Escolha uma cor para diferenciá-lo dos outros.'
+        : 'Escolha a cor do plástico. Em "auto", uma cor é derivada do nome.';
     }
     bankSel.addEventListener('change', syncCorCartao);
     syncCorCartao();
@@ -802,7 +810,7 @@
       const data = {
         name, bank: bankSel.value,
         color: desenho ? desenho.a : (preset ? preset.color : '#C9794A'),
-        gradient: bankSel.value === 'Outro' ? gradWrap.getValue() : null,
+        gradient: gradWrap.getValue(),
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: closing, dueDay: due,

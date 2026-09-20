@@ -85,7 +85,11 @@
       },
       recursos: {
         export_csv: false, export_pdf: false,
-        cartoes_internacionais: false,
+        /* Cartão em dólar, euro ou libra desde o plano grátis: quem tem
+           uma conta no exterior tem UMA conta, e era justamente essa
+           pessoa que o limite deixava de fora. Não custa nada a mais no
+           servidor — a conversão é conta feita no navegador. */
+        cartoes_internacionais: true,
         calendario: false,
         uglez_assistente_flutuante: false,
         comparacao_mensal: false, comparacao_anual: false,
@@ -381,6 +385,7 @@
       'Até 100 movimentações por mês',
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
+      'Cartões em dólar, euro e outras moedas',
       '10 consultas ao UGLEZ por mês, na página do UGLEZ'
     ],
     basic: [
@@ -389,7 +394,6 @@
       '20 orçamentos, 10 metas e 30 recorrências',
       'Histórico de 24 meses e comparação entre meses',
       'Exportar em CSV e PDF, calendário financeiro',
-      'Cartões internacionais em dólar, euro e outras moedas',
       '60 consultas ao UGLEZ por mês, com assistente flutuante'
     ],
     pro: [
