@@ -109,13 +109,57 @@
     };
   }
 
-  /** Cria (ou recria) um gráfico no canvas com o id informado. */
+  /* ============================================================
+     O GRÁFICO ESPERA A PÁGINA APARECER
+     ------------------------------------------------------------
+     Medido num celular médio (processador freado 6×), entrar em
+     "Financeiro" pela primeira vez levava 3,8 SEGUNDOS de tela
+     parada — e 3,6 deles eram os quatro gráficos sendo construídos
+     antes do primeiro quadro. Investimentos: 1,4s. Relatórios:
+     0,7s. A pessoa tocava no menu e o aparelho parecia travado.
+
+     A causa não é o gráfico ser caro — é ele ser construído DENTRO
+     do mesmo quadro em que a página deveria aparecer. Agora a
+     construção é agendada: a página pinta, e cada gráfico entra num
+     quadro seguinte, um por vez, para o toque seguinte nunca
+     esperar quatro construções em fila.
+
+     O que NÃO espera é a alternativa textual (aria-label + tabela):
+     ela é barata e é o gráfico inteiro para quem usa leitor de tela.
+     Adiá-la seria trocar velocidade por acesso.
+     ============================================================ */
+  const pendentes = new Map();
+  let quadroAgendado = 0;
+
+  function construirPendente() {
+    quadroAgendado = 0;
+    const proximo = pendentes.keys().next();
+    if (proximo.done) return;
+    const canvasId = proximo.value;
+    const config = pendentes.get(canvasId);
+    pendentes.delete(canvasId);
+
+    const canvas = document.getElementById(canvasId);
+    if (canvas && Charts.available()) {
+      const prev = registry.get(canvasId);
+      if (prev) { prev.destroy(); registry.delete(canvasId); }
+      registry.set(canvasId, new Chart(canvas.getContext('2d'), config));
+    }
+    if (pendentes.size) agendarConstrucao();
+  }
+
+  function agendarConstrucao() {
+    if (quadroAgendado) return;
+    /* Dois quadros: o primeiro é o que mostra a página. Construir já
+       no primeiro devolveria o travamento pelo outro lado. */
+    quadroAgendado = requestAnimationFrame(() => requestAnimationFrame(construirPendente));
+  }
+
+  /** Agenda (ou reagenda) um gráfico no canvas com o id informado. */
   Charts.render = function (canvasId, config) {
     if (!Charts.available()) return null;
     const canvas = document.getElementById(canvasId);
     if (!canvas) return null;
-    const prev = registry.get(canvasId);
-    if (prev) { prev.destroy(); registry.delete(canvasId); }
     if (config && config.data && Array.isArray(config.data.datasets)) {
       config.data.datasets.forEach((d) => { if (d && typeof d.label === 'string') d.label = trExato(d.label); });
     }
@@ -124,10 +168,15 @@
     if (config && config.data && Array.isArray(config.data.labels)) {
       config.data.labels = config.data.labels.map((l) => (typeof l === 'string' ? trExato(l) : l));
     }
-    const chart = new Chart(canvas.getContext('2d'), config);
-    registry.set(canvasId, chart);
     descrever(canvas, config);
-    return chart;
+    pendentes.set(canvasId, config);
+    agendarConstrucao();
+    return null;
+  };
+
+  /** Constrói agora tudo o que estiver na fila (impressão, PDF, teste). */
+  Charts.agora = function () {
+    while (pendentes.size) construirPendente();
   };
 
   /* ============================================================
@@ -243,6 +292,9 @@
   }
 
   Charts.destroy = function (canvasId) {
+    /* Também cancela o que estava na fila: um gráfico mandado embora
+       antes de existir não pode nascer um quadro depois. */
+    pendentes.delete(canvasId);
     const c = registry.get(canvasId);
     if (c) { c.destroy(); registry.delete(canvasId); }
   };

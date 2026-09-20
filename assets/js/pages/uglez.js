@@ -387,8 +387,23 @@
 
   Ug.render = function () {
     ligarUmaVez();
-    const visual = garantirFormacao();
-    if (visual && visual.medir) visual.medir();
+    /* A esfera WebGL custava 699ms no primeiro render de um celular
+       médio (processador freado 6×) — quase toda a espera de quem
+       tocava em "UGLEZ" no menu e via a tela parada. Ela é a
+       presença da página, não o conteúdo dela: a conversa aparece
+       primeiro e o campo entra no quadro seguinte.
+
+       Quem pergunta antes disso não perde nada: estadoParticulas()
+       chama garantirFormacao() de novo, e aí ela já existe. */
+    if (formacao) {
+      if (formacao.medir) formacao.medir();
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (App.page !== 'uglez') return;   // saiu antes; não monta à toa
+        const visual = garantirFormacao();
+        if (visual && visual.medir) visual.medir();
+      }));
+    }
     pintaEscopo();
     renderContexto();
     renderHistorico();

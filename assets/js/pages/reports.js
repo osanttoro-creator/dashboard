@@ -233,6 +233,11 @@
     /* O print é síncrono e bloqueia; o adiamento deixa o navegador
        terminar de pintar a troca de página antes de fotografar. */
     setTimeout(() => {
+      /* Os gráficos são construídos um quadro depois da página, para o
+         celular não travar ao entrar. Aqui a espera não serve: o
+         papel não tem quadro seguinte, e sairia com os retangulos
+         vazios. Charts.agora() constrói a fila inteira na hora. */
+      if (global.Charts && Charts.agora) Charts.agora();
       try { global.print(); } catch (e) {
         devolver();
         UI.toast('Este navegador não abriu a janela de impressão.', 'error');
