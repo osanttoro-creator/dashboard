@@ -296,8 +296,15 @@
         const forte = document.createElement('strong');
         forte.textContent = 'Estes dados estão só neste aparelho. ';
         texto.appendChild(forte);
-        texto.appendChild(document.createTextNode(
-          'Entre com a mesma conta do computador ou do tablet para ver tudo sincronizado aqui.'));
+        /* A segunda frase vive num envelope próprio porque uma tela
+           precisa esconder SÓ ela: na câmara da UGLEZ, no celular, o
+           aviso inteiro custava 136px da conversa. Sem o envelope, o
+           CSS só poderia esconder o parágrafo todo — e aí ficariam
+           dois botões soltos, sem dizer do que se trata. */
+        const detalhe = document.createElement('span');
+        detalhe.className = 'aviso-conta-detalhe';
+        detalhe.textContent = 'Entre com a mesma conta do computador ou do tablet para ver tudo sincronizado aqui.';
+        texto.appendChild(detalhe);
         aviso.appendChild(texto);
         const acoes = document.createElement('div');
         acoes.className = 'aviso-conta-acoes';

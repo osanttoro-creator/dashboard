@@ -301,11 +301,18 @@
   "es": "Buenas noches"
  },
  {
-  "pt": "{0} Sobre o que vamos conversar?",
+  "pt": "{0}, {1}. Sobre o que vamos conversar?",
   "tipo": "padrao",
-  "en": "{0} What shall we talk about?",
-  "fr": "{0} De quoi allons-nous parler ?",
-  "es": "{0} ¿De qué vamos a hablar?"
+  "en": "{0}, {1}. What shall we talk about?",
+  "fr": "{0} {1}. De quoi allons-nous parler ?",
+  "es": "{0}, {1}. ¿De qué vamos a hablar?"
+ },
+ {
+  "pt": "{0}. Sobre o que vamos conversar?",
+  "tipo": "padrao",
+  "en": "{0}. What shall we talk about?",
+  "fr": "{0}. De quoi allons-nous parler ?",
+  "es": "{0}. ¿De qué vamos a hablar?"
  },
  {
   "pt": "lançamento",

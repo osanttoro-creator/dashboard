@@ -399,7 +399,14 @@
       const nome = String(Store.ownerName() || '').trim().split(/\s+/)[0];
       const h = new Date().getHours();
       const periodo = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-      saudacao.textContent = (nome ? `${periodo}, ${nome}.` : `${periodo}.`) + ' Sobre o que vamos conversar?';
+      /* A frase existe INTEIRA no código, nas duas formas, porque é dela
+         que o dicionário parte. Montada como "(saudação + ponto) + resto",
+         o ponto entrava junto do valor capturado: o dicionário tinha
+         "Boa noite", o valor era "Boa noite." e nada casava — em inglês
+         lia-se "Boa noite. What shall we talk about?". */
+      saudacao.textContent = nome
+        ? `${periodo}, ${nome}. Sobre o que vamos conversar?`
+        : `${periodo}. Sobre o que vamos conversar?`;
     }
 
     /* ESTADO SEM DADOS. A regra é a mesma do resto do app: sem

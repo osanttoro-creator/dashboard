@@ -3472,12 +3472,9 @@ body[data-page="uglez"] .fab-wrap { display: none; }
   body[data-page="uglez"] .pill-select-month select,
   body[data-page="uglez"] .pill-select-year select { width: 100%; min-width: 0; padding-inline: 7px 20px; }
 
-  /* A faixa da presença encolhe: 132px de identidade tiravam da
-     conversa a altura de três mensagens numa tela de 844px. */
-  .uglez-stage {
-    grid-template-columns: 1fr; grid-template-rows: 104px minmax(0, 1fr);
-    border-radius: 18px;
-  }
+  /* Uma coluna só; a ALTURA da faixa é decidida na seção 27.13, no
+     fim do arquivo, junto com o resto da geometria do celular. */
+  .uglez-stage { grid-template-columns: 1fr; border-radius: 18px; }
   .uglez-presenca {
     min-height: 0; border-right: 0;
     border-bottom: 1px solid rgba(168, 187, 209, .13);
@@ -3551,7 +3548,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 
 @media (max-width: 430px) {
   body[data-page="uglez"] .main { padding-inline: 8px; }
-  .uglez-stage { grid-template-rows: 124px minmax(0, 1fr); border-radius: 16px; }
+  .uglez-stage { border-radius: 16px; }
   .uglez-presenca-conteudo { padding: 10px 11px 9px; }
   .uglez-identidade h2 { font-size: 28px; }
   .uglez-metricas > div { padding: 5px 6px; }
@@ -3563,11 +3560,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 }
 
 @media (max-width: 820px) and (max-height: 700px) {
-  .uglez-stage { grid-template-rows: 92px minmax(0, 1fr); }
-  .uglez-identidade h2 { font-size: 27px; }
-  .uglez-metricas > div { padding-block: 4px; }
-  .uglez-console-topo { padding-block: 7px; }
-  .uglez-compositor { padding-block: 7px 8px; }
+  /* Faixa e cabeçalho: seção 27.13. Aqui fica só o que é do campo. */
   .uglez-page .ai-ask textarea,
   .uglez-page .btn-ai { min-height: 48px; height: 48px; }
   .uglez-rodape { margin-top: 4px; }
@@ -4670,9 +4663,15 @@ html:not([data-theme="dark"]) .uglez-enviar { background: rgba(17, 38, 47, .08);
 html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; color: #fff; }
 
 @media (max-width: 820px) {
-  /* A câmara no celular volta a ter o cabeçalho completo do app —
-     busca e avisos inclusive — e a conversa ganha a ordem natural:
-     mensagens no meio, campo embaixo, perto do polegar. */
+  /* A conversa ganha a ordem natural: mensagens no meio, campo
+     embaixo, perto do polegar.
+
+     Por um tempo este bloco também devolvia busca e avisos ao
+     cabeçalho ("volta a ter o cabeçalho completo do app"). Ele vinha
+     DEPOIS do bloco que compactava a barra e desfazia aquilo sem
+     dizer — o resultado era 107px de cabeçalho em duas linhas numa
+     tela onde a altura é o produto. A geometria do celular agora
+     mora num lugar só, no fim deste arquivo (seção 27.13). */
   body[data-page="uglez"] .main {
     padding: 0 max(12px, env(safe-area-inset-right, 0px)) calc(84px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   }
@@ -4680,8 +4679,6 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
     position: sticky; margin: 0 calc(-1 * max(12px, env(safe-area-inset-right, 0px))) 8px calc(-1 * max(12px, env(safe-area-inset-left, 0px)));
     padding: calc(env(safe-area-inset-top, 0px) + 6px) max(12px, env(safe-area-inset-right, 0px)) 8px max(12px, env(safe-area-inset-left, 0px));
   }
-  body[data-page="uglez"] #btnSearch,
-  body[data-page="uglez"] #btnNotif { display: inline-flex; }
   body[data-page="uglez"] .pill-espaco { padding: 0; min-height: 0; }
   body[data-page="uglez"] .pill-espaco .pill-select-wrap { width: auto; }
   body[data-page="uglez"] .pill-espaco .pill-select-wrap select { width: auto; }
@@ -4721,9 +4718,7 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-compositor { padding: 8px 10px 10px; }
   .uglez-caixa { padding: 5px 5px 5px 14px; }
   .uglez-page .uglez-rodape { margin-top: 6px; }
-  .uglez-page.tem-conversa .uglez-stage { grid-template-rows: 58px minmax(0, 1fr); }
-  .uglez-page.tem-conversa .uglez-metricas { display: none; }
-  .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 22px; }
+  /* A faixa com conversa aberta: seção 27.13. */
 }
 
 /* =============================================================
@@ -4980,22 +4975,87 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-compositor { border-top: 1px solid rgba(173, 194, 211, .14); }
 }
 
-/* Altura é o recurso escasso no celular: numa tela de 844px, a faixa
-   de identidade, o cabeçalho do console e o campo de pergunta comiam
-   680px e sobravam 162px para a conversa — três linhas de texto. Aqui
-   cada um devolve o que não estava usando. O "Lendo o ano de 2026"
-   sai porque os botões Mês/Ano/Tudo ao lado dizem o mesmo. */
+/* =============================================================
+   27.13 · A CÂMARA NO CELULAR — UM PASSE SÓ
+   -------------------------------------------------------------
+   Esta rota tinha TRÊS passes de celular em pontos diferentes do
+   arquivo, e eles se desfaziam: um compactava a barra, o seguinte
+   devolvia busca e avisos, um terceiro fixava a faixa de identidade
+   em 92px por cima do 58px que valia com conversa aberta. Medido num
+   390×844 real, sobravam 248px para a conversa — menos de um terço
+   da tela, com 107px de cabeçalho, 136px de aviso de conta e 92px de
+   marca acima dela.
+
+   A regra desta seção: no celular, esta tela é uma CONVERSA. Tudo o
+   que não for a conversa paga o seu lugar em pixels.
+
+     cabeçalho do app   107 → 48   (uma linha: espaço + período)
+     aviso de conta     136 → 44   (fica o botão; o texto está no rodapé)
+     faixa de marca      92 → 46   (40 com conversa aberta)
+     conversa           248 → ~510
+
+   O que sai do cabeçalho nesta rota — marca, busca e avisos — está a
+   um toque na barra de baixo. O que NÃO sai é o seletor de mês: o
+   escopo "Mês" da UGLEZ responde sobre o período dele, e sem ele a
+   pessoa perderia a única forma de perguntar sobre outro mês.
+   ============================================================= */
 @media (max-width: 820px) {
-  .uglez-stage { grid-template-rows: 92px minmax(0, 1fr); }
-  .uglez-presenca-conteudo { padding: 9px 12px 10px; }
-  .uglez-identidade h2 { font-size: 24px; letter-spacing: .16em; }
-  .uglez-metricas > div { padding: 5px 8px; }
-  .uglez-console-topo { padding: 8px 12px; gap: 10px; row-gap: 0; flex-wrap: nowrap; }
+  /* --- cabeçalho do app: uma linha --- */
+  body[data-page="uglez"] .topnav-brand,
+  body[data-page="uglez"] #btnSearch,
+  body[data-page="uglez"] #btnNotif { display: none; }
+  body[data-page="uglez"] .topbar {
+    display: flex; flex-wrap: nowrap; align-items: center; gap: 8px;
+    padding-block: calc(env(safe-area-inset-top, 0px) + 4px) 6px;
+    margin-bottom: 6px;
+  }
+  body[data-page="uglez"] .pill-espaco { flex: 0 1 auto; min-width: 0; }
+  body[data-page="uglez"] .pill-period { flex: 1 1 auto; min-width: 0; }
+
+  /* --- aviso de conta: fica a ação, sai o parágrafo ---
+     A frase inteira vale a rolagem em qualquer outra página; aqui ela
+     custaria 90px da conversa, e o rodapé do campo já diz "Entre na
+     sua conta para conversar" a três dedos de distância. */
+  body[data-page="uglez"] .aviso-conta { padding: 7px 9px; gap: 8px; margin-bottom: 8px; }
+  body[data-page="uglez"] .aviso-conta p { font-size: 12.5px; line-height: 1.35; flex: 1 1 140px; }
+  body[data-page="uglez"] .aviso-conta .aviso-conta-detalhe { display: none; }
+  body[data-page="uglez"] .aviso-conta .btn { min-height: 34px; padding-block: 4px; font-size: 12.5px; }
+
+  /* --- faixa de marca --- */
+  .uglez-stage { grid-template-rows: 46px minmax(0, 1fr); }
+  .uglez-presenca-conteudo {
+    display: flex; flex-direction: row; align-items: center;
+    justify-content: flex-start; padding: 0 12px;
+  }
+  .uglez-identidade { margin: 0; max-width: none; }
+  .uglez-identidade h2 { font-size: 16px; letter-spacing: .3em; }
+  /* Mês, Base e Leitura repetem o que o seletor de período e os
+     botões Mês/Ano/Tudo já mostram, um dedo acima e um abaixo. */
+  .uglez-metricas { display: none; }
+
+  /* --- console --- */
+  .uglez-console-topo { padding: 7px 12px; gap: 10px; row-gap: 0; flex-wrap: nowrap; }
   .uglez-console-id p { display: none; }
   .uglez-escopo { order: 0; width: auto; flex: 0 1 auto; }
   .uglez-page .uglez-escopo button { flex: none; padding: 5px 10px; font-size: 11.5px; }
   .uglez-compositor { padding: 8px 10px 9px; }
   .uglez-page .uglez-rodape { margin-top: 5px; font-size: 10.5px; }
+
+  /* Com conversa aberta a marca encolhe mais: quem já está
+     conversando não precisa que lhe digam com quem. */
+  .uglez-page.tem-conversa .uglez-stage { grid-template-rows: 40px minmax(0, 1fr); }
+  .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 15px; }
+}
+
+/* Tela baixa (iPhone SE de pé, qualquer aparelho deitado): a marca
+   vira uma linha de 36px e o campo perde a folga de baixo. */
+@media (max-width: 820px) and (max-height: 700px) {
+  .uglez-stage,
+  .uglez-page.tem-conversa .uglez-stage { grid-template-rows: 36px minmax(0, 1fr); }
+  .uglez-identidade h2,
+  .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 14px; }
+  .uglez-console-topo { padding-block: 6px; }
+  .uglez-compositor { padding-block: 7px 8px; }
 }
 
 @media (max-width: 820px) {
