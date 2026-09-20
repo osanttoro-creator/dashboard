@@ -66,10 +66,16 @@ const perfilOriginal = {
   accounts: [
     { id: 'acc_1', name: 'Nubank', bank: 'Nubank', type: 'Conta corrente',
       color: '#8A05BE', gradient: null, last4: '1234',
-      openingBalance: 1250.75, openedAt: '2024-01-15', archived: false },
+      openingBalance: 1250.75, openedAt: '2024-01-15', archived: false,
+      moeda: 'BRL', cotacao: null, considerado: true },
+    /* Conta em outra moeda, fora dos totais: estes três campos
+       existiam só no aparelho até 20/09/2026, e quem entrava noutro
+       computador recebia a conta em dólar de volta como conta em
+       real — com o saldo em dólar lido como reais. */
     { id: 'acc_2', name: 'Reserva', bank: 'Inter', type: 'Poupança',
       color: '#FF7A00', gradient: 'linear-gradient(90deg,#a,#b)', last4: '',
-      openingBalance: 0, openedAt: '2025-06-01', archived: true }
+      openingBalance: 0, openedAt: '2025-06-01', archived: true,
+      moeda: 'USD', cotacao: 5.4321, considerado: false }
   ],
   categories: [
     { id: 'cat_1', name: 'Alimentação', kind: 'expense', color: '#C4936A', icon: 'utensils' },
@@ -78,13 +84,17 @@ const perfilOriginal = {
   cards: [
     { id: 'card_1', name: 'Nubank Ultravioleta', bank: 'Nubank',
       color: '#4B0082', gradient: null, last4: '9876',
-      limit: 5000, closingDay: 28, dueDay: 5, accountId: 'acc_1' },
+      limit: 5000, closingDay: 28, dueDay: 5, accountId: 'acc_1',
+      moeda: 'BRL', cotacao: null, considerado: true },
     /* limite ZERO: um `|| 0` mal colocado no mapeamento devolveria o
        mesmo resultado, mas um `|| 1000` não -- e cartão sem limite
        cadastrado é caso real. */
-    { id: 'card_2', name: 'Cartão sem limite', bank: '',
+    /* Cartão em euro: o limite 1200 é EM EURO, e é a cotação que o
+       traduz. Sem ela na volta, o limite viraria R$ 1.200. */
+    { id: 'card_2', name: 'Cartão em euro', bank: '',
       color: '#333333', gradient: null, last4: '',
-      limit: 0, closingDay: 1, dueDay: 10, accountId: null }
+      limit: 1200, closingDay: 1, dueDay: 10, accountId: null,
+      moeda: 'EUR', cotacao: 6.12, considerado: false }
   ],
   transactions: [
     { id: 'tx_1', kind: 'expense', description: 'Mercado do mês', amount: 432.19,
@@ -97,7 +107,11 @@ const perfilOriginal = {
       date: '2026-09-05', categoryId: 'cat_2', method: 'account',
       accountId: 'acc_1', toAccountId: null, cardId: null,
       recurring: true, recurEnd: '2027-12', confirmed: true,
-      occ: { '2026-09': true }, installment: null, notes: '', source: 'manual' },
+      occ: { '2026-09': true }, installment: null, notes: '', source: 'manual',
+      /* Recebimento numa conta em dólar: `amount` é o equivalente em
+         reais e `valorMoeda` é o que de fato entrou na conta. É o
+         segundo que o extrato dela mostra. */
+      moeda: 'USD', valorMoeda: 1362.53 },
     { id: 'tx_3', kind: 'transfer', description: 'Para a reserva', amount: 500,
       date: '2026-09-06', categoryId: null, method: 'account',
       accountId: 'acc_1', toAccountId: 'acc_2', cardId: null,

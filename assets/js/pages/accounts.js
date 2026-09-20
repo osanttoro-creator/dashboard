@@ -92,6 +92,11 @@
     const from = U.monthStart(U.addMonths(App.ym, -2));
     const to = App.balanceDate();
     const rows = Calc.accountStatement(App.accHistoryId, from, to);
+    /* Conta em outra moeda: a coluna mostra o que saiu da conta, na
+       moeda dela. O valor em real continua existindo na linha e é o
+       que os relatórios somam. */
+    const conta = Store.accounts.get(App.accHistoryId);
+    const moeda = conta && conta.moeda && conta.moeda !== 'BRL' ? conta.moeda : null;
 
     if (!rows.length) {
       tbody.appendChild(UI.emptyRow(5, `Sem movimentações confirmadas entre ${U.fmtDateBR(from)} e ${U.fmtDateBR(to)}.`));
@@ -102,8 +107,10 @@
         el('td', { text: U.fmtDateBR(r.date) }),
         el('td', { text: r.desc, translate: 'no' }),
         el('td', { text: r.cat }),
-        el('td', { class: 'num ' + U.signClass(r.delta), text: (r.delta >= 0 ? '+ ' : '− ') + U.fmtBRL(Math.abs(r.delta)) }),
-        el('td', { class: 'num', text: U.fmtBRL(r.balance) })
+        el('td', { class: 'num ' + U.signClass(r.delta),
+          text: (r.delta >= 0 ? '+ ' : '− ')
+            + U.fmtMoeda(Math.abs(moeda ? (r.deltaMoeda || 0) : r.delta), moeda || 'BRL') }),
+        el('td', { class: 'num', text: U.fmtMoeda(moeda ? (r.balanceMoeda || 0) : r.balance, moeda || 'BRL') })
       ]));
     });
   }

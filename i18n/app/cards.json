@@ -288,6 +288,13 @@
   "es": "Falta · factura {0}"
  },
  {
+  "pt": "Débito · {0}",
+  "tipo": "padrao",
+  "en": "Debit · {0}",
+  "fr": "Débit · {0}",
+  "es": "Débito · {0}"
+ },
+ {
   "pt": "{0} · saldo em {1}",
   "tipo": "padrao",
   "en": "{0} · balance on {1}",

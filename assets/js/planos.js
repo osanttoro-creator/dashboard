@@ -371,7 +371,7 @@
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },
     { chave: 'analises_avancadas',     rotulo: 'Tendências, simulações e projeções', tipo: 'recurso' },
     { chave: 'calendario',             rotulo: 'Calendário financeiro',          tipo: 'recurso' },
-    { chave: 'cartoes_internacionais', rotulo: 'Cartões em dólar, euro e outras moedas', tipo: 'recurso' },
+    { chave: 'cartoes_internacionais', rotulo: 'Contas e cartões em dólar, euro e outras moedas', tipo: 'recurso' },
     { chave: 'export_csv',             rotulo: 'Exportar em CSV',                tipo: 'recurso' },
     { chave: 'export_pdf',             rotulo: 'Exportar em PDF',                tipo: 'recurso' },
     { chave: 'acesso_antecipado',      rotulo: 'Acesso antecipado a novidades',  tipo: 'recurso' },
@@ -385,7 +385,7 @@
       'Até 100 movimentações por mês',
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
-      'Cartões em dólar, euro e outras moedas',
+      'Contas e cartões em dólar, euro e outras moedas',
       '10 consultas ao UGLEZ por mês, na página do UGLEZ'
     ],
     basic: [

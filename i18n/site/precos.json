@@ -276,10 +276,10 @@
   "es": "⟦s0⟧ Tarjetas internacionales en dólares, euros y otras monedas"
  },
  {
-  "pt": "⟦s0⟧ Cartões em dólar, euro e outras moedas",
-  "en": "⟦s0⟧ Cards in dollars, euros and other currencies",
-  "fr": "⟦s0⟧ Cartes en dollars, euros et autres devises",
-  "es": "⟦s0⟧ Tarjetas en dólares, euros y otras monedas"
+  "pt": "⟦s0⟧ Contas e cartões em dólar, euro e outras moedas",
+  "en": "⟦s0⟧ Accounts and cards in dollars, euros and other currencies",
+  "fr": "⟦s0⟧ Comptes et cartes en dollars, euros et autres devises",
+  "es": "⟦s0⟧ Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
   "pt": "⟦s0⟧ 60 consultas ao UGLEZ por mês, com assistente flutuante",
@@ -600,10 +600,10 @@
   "es": "Calendario financiero"
  },
  {
-  "pt": "Cartões em dólar, euro e outras moedas",
-  "en": "Cards in dollars, euros and other currencies",
-  "fr": "Cartes en dollars, euros et autres devises",
-  "es": "Tarjetas en dólares, euros y otras monedas"
+  "pt": "Contas e cartões em dólar, euro e outras moedas",
+  "en": "Accounts and cards in dollars, euros and other currencies",
+  "fr": "Comptes et cartes en dollars, euros et autres devises",
+  "es": "Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
   "pt": "Exportação CSV",

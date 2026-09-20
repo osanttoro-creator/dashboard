@@ -228,10 +228,14 @@
       ? { total: +t.installment.total, index: +t.installment.index || 1, groupId: t.installment.groupId || null }
       : null;
     t.notes = String(t.notes || '');
-    /* Compra num cartão em outra moeda: `amount` continua em REAIS
-       (é ele que todos os totais somam), e o valor original fica ao
-       lado para a fatura mostrar o que o cartão cobrou de verdade. */
-    t.moeda = t.method === 'card' && /^[A-Z]{3}$/.test(t.moeda || '') && t.moeda !== 'BRL' ? t.moeda : null;
+    /* Lançamento em outra moeda: `amount` continua em REAIS (é ele
+       que todos os totais somam), e o valor original fica ao lado para
+       a fatura e o extrato mostrarem o que foi cobrado de verdade.
+       Nasceu para a compra em cartão internacional e em 20/09/2026
+       passou a valer também para o movimento de uma conta em outra
+       moeda — quem tem conta fora costuma ter só ela, e o extrato
+       precisa falar na moeda em que o dinheiro se move. */
+    t.moeda = /^[A-Z]{3}$/.test(t.moeda || '') && t.moeda !== 'BRL' ? t.moeda : null;
     t.valorMoeda = t.moeda && Number.isFinite(+t.valorMoeda) ? U.round2(Math.abs(+t.valorMoeda)) : null;
     if (!t.valorMoeda) t.moeda = null;
     t.source = t.source || 'manual';
@@ -324,7 +328,14 @@
          terceiros, a poupança do filho — dinheiro que aparece no
          banco e não é seu para gastar. Ausente = considerada, que
          é o que todo dado antigo significa. */
-      considerado: a.considerado !== false
+      considerado: a.considerado !== false,
+      /* Conta em outra moeda — quem mora fora, quem recebe de fora,
+         quem tem Wise ou Nomad. O saldo inicial e o extrato são na
+         moeda dela (como o limite do cartão internacional é na moeda
+         do cartão), e a cotação converte para os totais do app, que
+         são em real. Ausente = real, que é o que toda conta antiga é. */
+      moeda: /^[A-Z]{3}$/.test(a.moeda || '') ? a.moeda : 'BRL',
+      cotacao: +a.cotacao > 0 ? Math.round(+a.cotacao * 10000) / 10000 : null
     }));
     prof.cards = (Array.isArray(prof.cards) ? prof.cards : []).map((c) => ({
       id: c.id || U.uid('card'),

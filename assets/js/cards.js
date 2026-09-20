@@ -169,20 +169,24 @@
   /**
    * Gradiente efetivo do cartão, nesta ordem:
    *
-   *   1. a cor ESCOLHIDA pela pessoa — em qualquer banco. O desenho do
-   *      banco é um bom padrão, não uma regra: dois cartões do mesmo
-   *      banco ficavam idênticos no baralho, e quem tem dois precisa
-   *      justamente distinguir um do outro de relance;
-   *   2. o desenho do banco, quando ela não escolheu ("auto");
+   *   1. o DESENHO DO BANCO, quando o banco é conhecido. O cartão na
+   *      tela tem a cara do cartão na carteira — é assim que a pessoa
+   *      acha o dela sem ler o nome. Em 20/09/2026 a ordem chegou a
+   *      ser invertida, para quem tem dois cartões do mesmo banco
+   *      poder separá-los; a decisão foi voltar atrás no mesmo dia:
+   *      um Nubank roxo que a pessoa pintou de verde deixa de ser
+   *      reconhecível, e reconhecer vale mais do que distinguir;
+   *   2. a cor escolhida por ela, que é oferecida quando o banco é
+   *      "Outro" — ali não há desenho nenhum a respeitar;
    *   3. um derivado da cor guardada;
    *   4. um estável pelo id (sem sorteio, para o cartão não trocar de
    *      cor a cada render).
    */
   Cards.gradientFor = function (card) {
-    const chosen = Cards.gradientByKey(card.gradient);
-    if (chosen) return comTinta(chosen);
     const doBanco = Cards.bankDesign(card.bank);
     if (doBanco) return doBanco;
+    const chosen = Cards.gradientByKey(card.gradient);
+    if (chosen) return comTinta(chosen);
     const near = nearestGradient(card.color);
     if (near) return comTinta(near);
     let h = 0;
@@ -360,13 +364,17 @@
    */
   Cards.account = function (acc, upto, opts) {
     const o = opts || {};
+    /* Conta em outra moeda fala na moeda dela: é o número que o
+       extrato do banco mostra. O equivalente em real existe, e vive
+       nos totais — não na cara do cartão. */
+    const moeda = acc.moeda && acc.moeda !== 'BRL' ? acc.moeda : null;
     const saldo = Store.accounts && Store.accounts.get(acc.id)
-      ? Calc.accountBalance(acc.id, upto)
+      ? (moeda ? Calc.accountBalanceMoeda(acc.id, upto) : Calc.accountBalance(acc.id, upto))
       : U.round2(+acc.openingBalance || 0);
     const grad = Cards.gradientFor({ id: acc.id, name: acc.name, color: acc.color, gradient: acc.gradient });
 
     return shell({
-      kind: 'Débito',
+      kind: moeda ? 'Débito · ' + moeda : 'Débito',
       title: acc.name,
       sub: acc.bank ? `${acc.bank} · ${acc.type}` : acc.type,
       bank: acc.bank || acc.name,
@@ -377,7 +385,7 @@
       number: accountNumber(acc),
       barPct: null,
       footLeft: { k: 'Saldo em', v: U.fmtDateBR(upto) },
-      footRight: { k: 'Saldo atual', v: U.fmtBRL(saldo) },
+      footRight: { k: 'Saldo atual', v: U.fmtMoeda(saldo, moeda || 'BRL') },
       onClick: () => { if (o.onClick) o.onClick(acc); }
     });
   };

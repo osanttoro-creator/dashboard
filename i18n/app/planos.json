@@ -127,11 +127,11 @@
   "es": "Calendario financiero"
  },
  {
-  "pt": "Cartões em dólar, euro e outras moedas",
+  "pt": "Contas e cartões em dólar, euro e outras moedas",
   "tipo": "exato",
-  "en": "Cards in dollars, euros and other currencies",
-  "fr": "Cartes en dollar, en euro et dans d'autres devises",
-  "es": "Tarjetas en dólar, euro y otras monedas"
+  "en": "Accounts and cards in dollars, euros and other currencies",
+  "fr": "Comptes et cartes en dollars, euros et autres devises",
+  "es": "Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
   "pt": "Exportar em CSV",

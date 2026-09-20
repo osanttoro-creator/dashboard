@@ -162,25 +162,30 @@
 
     const fAmount = field('Valor (R$) *', moneyInput(editing
       ? (editing.moeda && editing.valorMoeda ? editing.valorMoeda : editing.amount) : d.amount));
-    /* Compra em cartão de outra moeda: o valor é digitado na moeda do
-       cartão, e o equivalente em reais aparece embaixo, já com a
-       cotação do cadastro. É esse equivalente que vai para os totais. */
+    /* Lançamento em outra moeda: o valor é digitado na moeda do cartão
+       — ou da CONTA, desde 20/09/2026 — e o equivalente em reais
+       aparece embaixo, já com a cotação do cadastro. É esse equivalente
+       que vai para os totais.
+
+       Numa transferência, quem manda é a conta de ORIGEM: é dela que o
+       dinheiro sai, e é na moeda dela que a pessoa sabe quanto foi. */
     const conversao = el('p', { class: 'hint', role: 'status', hidden: true });
     fAmount.appendChild(conversao);
-    function cartaoEstrangeiro() {
-      if (!(currentKind === 'expense' && method === 'card')) return null;
-      const c = Store.cards.get(fCard._control.value);
-      return c && c.moeda && c.moeda !== 'BRL' ? c : null;
+    function instrumentoEstrangeiro() {
+      const alvo = currentKind === 'expense' && method === 'card'
+        ? Store.cards.get(fCard._control.value)
+        : Store.accounts.get(fAccount._control.value);
+      return alvo && alvo.moeda && alvo.moeda !== 'BRL' ? alvo : null;
     }
     function syncMoedaDaCompra() {
-      const c = cartaoEstrangeiro();
+      const c = instrumentoEstrangeiro();
       fAmount.querySelector('.field-label').textContent = 'Valor (' + (c ? c.moeda : 'R$') + ') *';
       conversao.hidden = !c;
       if (!c) return;
       const v = U.parseMoney(fAmount._control.value) || 0;
       conversao.textContent = c.cotacao
         ? '≈ ' + U.fmtBRL(v * c.cotacao) + ' nos totais, pela cotação de ' + U.fmtBRL(c.cotacao) + ' por 1 ' + c.moeda + '.'
-        : 'Este cartão não tem cotação: cadastre uma para converter em reais.';
+        : 'Sem cotação cadastrada: cadastre uma para converter em reais.';
     }
     fAmount._control.addEventListener('input', () => syncMoedaDaCompra());
     const fDate = field('Data *', input({ type: 'date', value: editing ? editing.date : (d.date || App.selectedDateOrToday()) }));
@@ -343,6 +348,9 @@
         : 'Vence em ' + U.fmtDateBR(venc) + '.';
     }
     fCard._control.addEventListener('change', () => { preencheFaturas(); avisaFatura(); syncMoedaDaCompra(); });
+    /* Trocar de conta troca a moeda do valor: sem isto, quem escolhe a
+       conta em dólar depois de digitar vê "Valor (R$)" e lança errado. */
+    fAccount._control.addEventListener('change', syncMoedaDaCompra);
     fDate._control.addEventListener('change', () => {
       if (!marcouAMao && U.isValidISO(fDate._control.value)) {
         cbConfirmed._input.checked = fDate._control.value <= U.todayISO();
@@ -404,12 +412,13 @@
       if (viraRecorrente && !jaEraRecorrente &&
           global.Limites && !Limites.exigirEspaco('recurring_items')) return false;
 
-      /* Em cartão de outra moeda, o digitado é o valor na moeda; o
-         `amount` guardado é o equivalente em reais, que é o que os
-         totais somam. Sem cotação não há como converter: pede antes. */
-      const estrangeiro = cartaoEstrangeiro();
+      /* Em cartão ou conta de outra moeda, o digitado é o valor na
+         moeda; o `amount` guardado é o equivalente em reais, que é o
+         que os totais somam. Sem cotação não há como converter: pede
+         antes de deixar salvar. */
+      const estrangeiro = instrumentoEstrangeiro();
       if (estrangeiro && !estrangeiro.cotacao) {
-        setError(fAmount, 'Cadastre a cotação do cartão ' + estrangeiro.name + ' antes de lançar em ' + estrangeiro.moeda + '.');
+        setError(fAmount, 'Cadastre a cotação de ' + estrangeiro.name + ' antes de lançar em ' + estrangeiro.moeda + '.');
         return false;
       }
       const emReais = (v) => (estrangeiro ? U.round2(v * estrangeiro.cotacao) : v);
@@ -513,6 +522,43 @@
     const fType = field('Tipo', select(Store.ACCOUNT_TYPES.map((t) => ({ value: t, label: t })), editing ? editing.type : null));
     const fBalance = field('Saldo inicial (R$)', moneyInput(editing ? editing.openingBalance : 0),
       { hint: 'Saldo que a conta tinha na data de abertura abaixo.' });
+
+    /* ============================================================
+       CONTA EM OUTRA MOEDA
+       ------------------------------------------------------------
+       O cartão internacional nasceu primeiro, e por um tempo a conta
+       ficou de fora — o que não fazia sentido nenhum: quem tem cartão
+       em dólar tem CONTA em dólar, e era ela que aparecia zerada na
+       carteira. O saldo e o extrato passam a ser na moeda da conta; a
+       cotação converte para real, que é a moeda dos totais do app.
+
+       A cotação é digitada, e não buscada na internet, pelo mesmo
+       motivo do cartão: a que importa é a que o banco dela aplicou, e
+       nenhuma fonte pública sabe qual foi.
+       ============================================================ */
+    const moedaSel = select([{ value: 'BRL', label: 'Real (R$)' }]
+      .concat(Store.MOEDAS.map((m) => ({ value: m.code, label: m.nome + ' (' + m.code + ')' }))),
+    editing ? editing.moeda || 'BRL' : 'BRL');
+    const fMoeda = field('Moeda da conta', moedaSel,
+      { hint: 'Para contas em dólar, euro e outras moedas.' });
+    const fCotacao = field('Cotação (R$ por 1 unidade) *', input({
+      type: 'text', inputmode: 'decimal', placeholder: '5,45',
+      value: editing && editing.cotacao ? String(editing.cotacao).replace('.', ',') : ''
+    }), { hint: 'A que o seu banco usa. Vale para os lançamentos novos; os antigos guardam a do dia.' });
+    let moedaAnterior = moedaSel.value;
+    function syncMoeda() {
+      const m = moedaSel.value;
+      if (m !== 'BRL' && moedaAnterior === 'BRL' && global.Limites
+          && !Limites.exigirRecurso('cartoes_internacionais', 'Conta em outra moeda')) {
+        moedaSel.value = 'BRL';
+      }
+      moedaAnterior = moedaSel.value;
+      const estrangeira = moedaSel.value !== 'BRL';
+      fCotacao.hidden = !estrangeira;
+      fBalance.querySelector('.field-label').textContent = 'Saldo inicial (' + (estrangeira ? moedaSel.value : 'R$') + ')';
+      paintPreview();
+    }
+    moedaSel.addEventListener('change', syncMoeda);
     const fDate = field('Considerar a partir de', input({ type: 'date', value: editing ? editing.openedAt : U.todayISO() }));
     const fLast4 = field('4 últimos dígitos', input({
       inputmode: 'numeric', maxlength: 4, placeholder: '4352',
@@ -558,10 +604,12 @@
         type: fType._control.value,
         color: bankSel.value === 'Outro' || !Cards.bankDesign(bankSel.value)
           ? picker.getValue() : Cards.bankDesign(bankSel.value).a,
-        gradient: grads.getValue(),
+        gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
-        considerado: cbConsiderado._input.checked
+        considerado: cbConsiderado._input.checked,
+        moeda: moedaSel.value,
+        cotacao: moedaSel.value === 'BRL' ? null : U.parseMoney(fCotacao._control.value)
       };
     }
     function paintPreview() {
@@ -581,21 +629,23 @@
         }
       });
     }
-    /* A cor da carteira é escolha em qualquer banco: "auto" mantém as
-       cores do banco, e quem tem duas contas no mesmo banco consegue
-       separar uma da outra de relance. */
-    /* O aviso mora sob as CORES, não sob a prévia: ele explica o que
-       "auto" faz, e quem lê isso está olhando para os quadradinhos. Sob
-       a prévia ele ficava fora da tela no celular. */
+    /* A cor só existe para "Outro": banco conhecido usa o cartão do
+       banco (Cards.bankDesign), e oferecer cor ali seria oferecer uma
+       escolha que não muda nada.
+
+       O aviso vive FORA do campo de cor, porque é justamente quando o
+       campo está escondido que ele precisa ser lido — é ele que
+       explica o sumiço. */
     const avisoCor = el('p', { class: 'hint' });
-    fGrad.insertBefore(avisoCor, fGrad._error);
+    const fAvisoCor = el('div', { class: 'field span-2' }, avisoCor);
     function syncBank() {
       const outro = bankSel.value === 'Outro';
       fCustomBank.hidden = !outro;
       fColor.hidden = !outro;
+      fGrad.hidden = !outro;
       avisoCor.textContent = outro
         ? 'Escolha a cor do plástico. Em "auto", uma cor é derivada do nome.'
-        : 'Em "auto", a carteira usa as cores do ' + bankSel.value + '. Escolha uma cor para diferenciá-la das outras.';
+        : 'A carteira usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
       paintPreview();
     }
     bankSel.addEventListener('change', syncBank);
@@ -605,14 +655,19 @@
     cbConsiderado._input.addEventListener('change', paintPreview);
     U.$$('.color-opt', picker).forEach((b) => b.addEventListener('click', paintPreview));
     syncBank();
+    syncMoeda();
 
     const grid = el('div', { class: 'form-grid' },
-      [fName, fBank, fCustomBank, fType, fLast4, fBalance, fDate, fConsiderado, fColor, fGrad, fPreview]);
+      [fName, fBank, fCustomBank, fType, fMoeda, fCotacao, fLast4, fBalance, fDate,
+        fConsiderado, fColor, fGrad, fAvisoCor, fPreview]);
 
     function submit() {
-      clearErrors([fName, fDate]);
+      clearErrors([fName, fDate, fCotacao]);
       const name = fName._control.value.trim();
+      const moeda = moedaSel.value;
+      const cotacao = moeda === 'BRL' ? null : U.parseMoney(fCotacao._control.value);
       if (!name) { setError(fName, 'Informe o nome da conta.'); return; }
+      if (moeda !== 'BRL' && !(cotacao > 0)) { setError(fCotacao, 'Informe quantos reais vale 1 ' + moeda + '.'); return; }
       if (!U.isValidISO(fDate._control.value)) { setError(fDate, 'Data inválida.'); return; }
 
       const data = {
@@ -620,12 +675,14 @@
         bank: bankSel.value === 'Outro' ? (fCustomBank._control.value.trim() || 'Outro') : bankSel.value,
         type: fType._control.value,
         color: picker.getValue(),
-        gradient: grads.getValue(),
+        gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         openedAt: fDate._control.value,
         considerado: cbConsiderado._input.checked,
-        archived: editing ? editing.archived : false
+        archived: editing ? editing.archived : false,
+        moeda,
+        cotacao
       };
       if (editing) { Store.accounts.update(editing.id, data); UI.toast('Conta atualizada.', 'success'); }
       else { Store.accounts.add(data); UI.toast('Conta criada.', 'success'); }
@@ -737,7 +794,7 @@
         name: fName._control.value.trim() || 'Cartão',
         bank: bankSel.value,
         color: '#C9794A',
-        gradient: gradWrap.getValue(),
+        gradient: bankSel.value === 'Outro' ? gradWrap.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: Math.min(31, Math.max(1, parseInt(fClosing._control.value, 10) || 1)),
@@ -769,25 +826,25 @@
     paintPreview();
 
     const fGrad = field('Cor do cartão', gradWrap, { span2: true });
-    /* Ver a nota no formulário da conta: o aviso fica sob as cores. */
+    /* Mesma regra da conta: a cor só é escolhida em "Outro", e o
+       aviso fica fora do campo para continuar visível quando ele some. */
     const avisoCorCartao = el('p', { class: 'hint' });
-    fGrad.insertBefore(avisoCorCartao, fGrad._error);
+    const fAvisoCor = el('div', { class: 'field span-2' }, avisoCorCartao);
     const fPreview = el('div', { class: 'field span-2' }, [
       el('span', { class: 'field-label', text: 'Prévia' }), cardPreview
     ]);
-    /* A cor é escolha em qualquer banco; "auto" usa as do banco. */
     function syncCorCartao() {
-      const banco = bankSel.value;
-      const temDesenho = banco !== 'Outro' && !!Cards.bankDesign(banco);
-      avisoCorCartao.textContent = temDesenho
-        ? 'Em "auto", o cartão usa as cores do ' + banco + '. Escolha uma cor para diferenciá-lo dos outros.'
-        : 'Escolha a cor do plástico. Em "auto", uma cor é derivada do nome.';
+      const outro = bankSel.value === 'Outro';
+      fGrad.hidden = !outro;
+      avisoCorCartao.textContent = outro
+        ? 'Escolha a cor do plástico. Em "auto", uma cor é derivada do nome.'
+        : 'O cartão usa as cores do ' + bankSel.value + '. A cor só é escolhida quando o banco é "Outro".';
     }
     bankSel.addEventListener('change', syncCorCartao);
     syncCorCartao();
 
     const grid = el('div', { class: 'form-grid' }, [
-      fName, fBank, fMoeda, fCotacao, fLast4, fLimit, fAccount, fClosing, fDue, fConsiderado, fGrad, fPreview
+      fName, fBank, fMoeda, fCotacao, fLast4, fLimit, fAccount, fClosing, fDue, fConsiderado, fGrad, fAvisoCor, fPreview
     ]);
     syncMoeda();
 
@@ -810,7 +867,7 @@
       const data = {
         name, bank: bankSel.value,
         color: desenho ? desenho.a : (preset ? preset.color : '#C9794A'),
-        gradient: gradWrap.getValue(),
+        gradient: bankSel.value === 'Outro' ? gradWrap.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         limit: U.parseMoney(fLimit._control.value) || 0,
         closingDay: closing, dueDay: due,

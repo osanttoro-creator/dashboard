@@ -192,7 +192,7 @@
     if (e.kind !== 'transfer') meta.push(el('span', { text: Calc.categoryName(e.categoryId) }));
     if (e.recurring) meta.push(UI.badge('Fixa', 'fix'));
     if (e.installment) meta.push(UI.badge(`${e.installment.index}/${e.installment.total}`, 'inst'));
-    /* compra em cartão de outra moeda: o valor que o cartão cobrou */
+    /* lançamento em outra moeda (cartão ou conta): o valor de origem */
     if (e.tx && e.tx.moeda && e.tx.valorMoeda) meta.push(UI.badge(U.fmtMoeda(e.tx.valorMoeda, e.tx.moeda), 'inst'));
     if (e.kind === 'expense') {
       const card = e.cardId ? Store.cards.get(e.cardId) : null;

@@ -68,11 +68,11 @@
   "es": "≈ {0} en los totales, a una cotización de {1} por 1 {2}."
  },
  {
-  "pt": "Este cartão não tem cotação: cadastre uma para converter em reais.",
+  "pt": "Sem cotação cadastrada: cadastre uma para converter em reais.",
   "tipo": "exato",
-  "en": "This card has no exchange rate: add one to convert to reais.",
-  "fr": "Cette carte n'a pas de taux de change : ajoutez-en un pour convertir en reais.",
-  "es": "Esta tarjeta no tiene cotización: agrega una para convertir a reales."
+  "en": "No exchange rate saved: add one to convert into reais.",
+  "fr": "Aucun taux de change enregistré : ajoutez-en un pour convertir en réals.",
+  "es": "Sin cotización guardada: agrega una para convertir a reales."
  },
  {
   "pt": "Data *",
@@ -334,11 +334,11 @@
   "es": "Cada cuota quedaría por debajo de R$ 0,01."
  },
  {
-  "pt": "Cadastre a cotação do cartão {0} antes de lançar em {1}.",
+  "pt": "Cadastre a cotação de {0} antes de lançar em {1}.",
   "tipo": "padrao",
-  "en": "Add the exchange rate for card {0} before recording in {1}.",
-  "fr": "Ajoutez le taux de change de la carte {0} avant de saisir en {1}.",
-  "es": "Registra la cotización de la tarjeta {0} antes de registrar en {1}."
+  "en": "Add the exchange rate for {0} before recording in {1}.",
+  "fr": "Ajoutez le taux de change de {0} avant de saisir en {1}.",
+  "es": "Agrega la cotización de {0} antes de registrar en {1}."
  },
  {
   "pt": "Lançamento atualizado.",
@@ -479,6 +479,48 @@
   "es": "El saldo que tenía la cuenta en la fecha de apertura de abajo."
  },
  {
+  "pt": "Moeda da conta",
+  "tipo": "exato",
+  "en": "Account currency",
+  "fr": "Devise du compte",
+  "es": "Moneda de la cuenta"
+ },
+ {
+  "pt": "Para contas em dólar, euro e outras moedas.",
+  "tipo": "exato",
+  "en": "For accounts in dollars, euros and other currencies.",
+  "fr": "Pour les comptes en dollar, en euro et dans d’autres devises.",
+  "es": "Para cuentas en dólar, euro y otras monedas."
+ },
+ {
+  "pt": "Cotação (R$ por 1 unidade) *",
+  "tipo": "exato",
+  "en": "Exchange rate (R$ per 1 unit) *",
+  "fr": "Taux de change (R$ pour 1 unité) *",
+  "es": "Cotización (R$ por 1 unidad) *"
+ },
+ {
+  "pt": "A que o seu banco usa. Vale para os lançamentos novos; os antigos guardam a do dia.",
+  "tipo": "exato",
+  "en": "The one your bank uses. It applies to new entries; older ones keep the rate of their day.",
+  "fr": "Celui de votre banque. Il vaut pour les nouvelles écritures ; les anciennes gardent celui du jour.",
+  "es": "La que usa tu banco. Vale para los movimientos nuevos; los anteriores conservan la del día."
+ },
+ {
+  "pt": "Conta em outra moeda",
+  "tipo": "exato",
+  "en": "Account in another currency",
+  "fr": "Compte dans une autre devise",
+  "es": "Cuenta en otra moneda"
+ },
+ {
+  "pt": "Saldo inicial ({0})",
+  "tipo": "padrao",
+  "en": "Opening balance ({0})",
+  "fr": "Solde initial ({0})",
+  "es": "Saldo inicial ({0})"
+ },
+ {
   "pt": "Considerar a partir de",
   "tipo": "exato",
   "en": "Count from",
@@ -542,11 +584,11 @@
   "es": "Elige el color del plástico. En \"auto\", un color se deduce del nombre."
  },
  {
-  "pt": "Em \"auto\", a carteira usa as cores do {0}. Escolha uma cor para diferenciá-la das outras.",
+  "pt": "A carteira usa as cores do {0}. A cor só é escolhida quando o banco é \"Outro\".",
   "tipo": "padrao",
-  "en": "On \"auto\", the wallet uses {0}’s colors. Pick a color to tell it apart from the others.",
-  "fr": "En « auto », le portefeuille reprend les couleurs de {0}. Choisissez une couleur pour le distinguer des autres.",
-  "es": "En \"auto\", la cartera usa los colores de {0}. Elige un color para diferenciarla de las demás."
+  "en": "The wallet uses {0}’s colors. The color is only chosen when the bank is \"Other\".",
+  "fr": "Le portefeuille reprend les couleurs de {0}. La couleur ne se choisit que lorsque la banque est « Autre ».",
+  "es": "La cartera usa los colores de {0}. El color solo se elige cuando el banco es \"Otro\"."
  },
  {
   "pt": "Informe o nome da conta.",
@@ -554,6 +596,13 @@
   "en": "Enter the account name.",
   "fr": "Saisissez le nom du compte.",
   "es": "Ingresa el nombre de la cuenta."
+ },
+ {
+  "pt": "Informe quantos reais vale 1 {0}.",
+  "tipo": "padrao",
+  "en": "Enter how many reais 1 {0} is worth.",
+  "fr": "Indiquez combien de reais vaut 1 {0}.",
+  "es": "Indica cuántos reales vale 1 {0}."
  },
  {
   "pt": "Conta atualizada.",
@@ -666,13 +715,6 @@
   "es": "Para tarjetas de cuentas en dólar, euro y otras monedas."
  },
  {
-  "pt": "Cotação (R$ por 1 unidade) *",
-  "tipo": "exato",
-  "en": "Exchange rate (R$ per 1 unit) *",
-  "fr": "Taux de change (R$ pour 1 unité) *",
-  "es": "Cotización (R$ por 1 unidad) *"
- },
- {
   "pt": "A que o seu banco usa. Vale para as compras novas; as antigas guardam a do dia.",
   "tipo": "exato",
   "en": "The one your bank uses. It applies to new purchases; older ones keep the rate of their day.",
@@ -764,18 +806,11 @@
   "es": "Color de la tarjeta"
  },
  {
-  "pt": "Em \"auto\", o cartão usa as cores do {0}. Escolha uma cor para diferenciá-lo dos outros.",
+  "pt": "O cartão usa as cores do {0}. A cor só é escolhida quando o banco é \"Outro\".",
   "tipo": "padrao",
-  "en": "On \"auto\", the card uses {0}’s colors. Pick a color to tell it apart from the others.",
-  "fr": "En « auto », la carte reprend les couleurs de {0}. Choisissez une couleur pour la distinguer des autres.",
-  "es": "En \"auto\", la tarjeta usa los colores de {0}. Elige un color para diferenciarla de las demás."
- },
- {
-  "pt": "Informe quantos reais vale 1 {0}.",
-  "tipo": "padrao",
-  "en": "Enter how many reais 1 {0} is worth.",
-  "fr": "Indiquez combien de reais vaut 1 {0}.",
-  "es": "Indica cuántos reales vale 1 {0}."
+  "en": "The card uses {0}’s colors. The color is only chosen when the bank is \"Other\".",
+  "fr": "La carte reprend les couleurs de {0}. La couleur ne se choisit que lorsque la banque est « Autre ».",
+  "es": "La tarjeta usa los colores de {0}. El color solo se elige cuando el banco es \"Otro\"."
  },
  {
   "pt": "Informe o nome do cartão.",

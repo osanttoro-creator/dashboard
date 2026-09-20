@@ -317,7 +317,7 @@
 
   function calcularCumulativeFlow(uptoISO, prof) {
     const opening = prof.accounts.reduce(
-      (s, a) => s + (a.openedAt <= uptoISO ? (+a.openingBalance || 0) : 0), 0);
+      (s, a) => s + (a.openedAt <= uptoISO ? Calc.aberturaEmReais(a) : 0), 0);
     const from = Calc.earliestDate(prof);
     if (uptoISO < from) return U.round2(opening);
     let flow = 0;
@@ -460,40 +460,79 @@
     const prof = profile || P();
     const upto = uptoISO || U.todayISO();
     return lembrar(prof, 'ab|' + accountId + '|' + upto,
-      () => calcularAccountBalance(accountId, upto, prof));
+      () => calcularAccountBalance(accountId, upto, prof, false));
   };
 
-  function calcularAccountBalance(accountId, upto, prof) {
+  /**
+   * O mesmo saldo, na moeda da conta. Para a conta em real é o mesmo
+   * número; para a conta em dólar ou euro é o único número que ela
+   * reconhece — o extrato do banco dela não fala em reais.
+   */
+  Calc.accountBalanceMoeda = function (accountId, uptoISO, profile) {
+    const prof = profile || P();
+    const upto = uptoISO || U.todayISO();
+    return lembrar(prof, 'abm|' + accountId + '|' + upto,
+      () => calcularAccountBalance(accountId, upto, prof, true));
+  };
+
+  /**
+   * Conta em outra moeda: o saldo inicial é guardado NA MOEDA dela,
+   * como o limite do cartão internacional. Os totais do app são em
+   * real, e é a cotação do cadastro que faz a ponte.
+   */
+  Calc.aberturaEmReais = function (acc) {
+    const v = +acc.openingBalance || 0;
+    return acc && acc.moeda && acc.moeda !== 'BRL' && acc.cotacao ? U.round2(v * acc.cotacao) : v;
+  };
+
+  /**
+   * @param {boolean} emMoeda  true devolve na moeda da conta; false, em reais.
+   *
+   * O mesmo caminho serve às duas: o que muda é a conversão de cada
+   * movimento. Um movimento lançado na moeda da conta guarda o valor
+   * original (valorMoeda) e é esse que vale — ele é exato. Os demais
+   * (fatura paga, aporte, dinheiro guardado numa meta) nascem em real
+   * e voltam pela cotação.
+   */
+  function calcularAccountBalance(accountId, upto, prof, emMoeda) {
     const acc = prof.accounts.find((a) => a.id === accountId);
     if (!acc) return 0;
-    let bal = acc.openedAt <= upto ? (+acc.openingBalance || 0) : 0;
+    const moeda = emMoeda && acc.moeda && acc.moeda !== 'BRL' ? acc.moeda : null;
+    const conv = (brl, e) => {
+      if (!moeda) return brl;
+      if (e && e.moeda === moeda && e.valorMoeda) return e.valorMoeda;
+      return acc.cotacao ? brl / acc.cotacao : 0;
+    };
+    let bal = acc.openedAt <= upto
+      ? (emMoeda ? (+acc.openingBalance || 0) : Calc.aberturaEmReais(acc))
+      : 0;
 
     Calc.entries(Calc.earliestDate(prof), upto, prof).forEach((e) => {
       if (!e.confirmed) return;
-      if (e.kind === 'income' && e.accountId === accountId) bal += e.amount;
-      else if (e.kind === 'expense' && e.method === 'account' && e.accountId === accountId) bal -= e.amount;
+      if (e.kind === 'income' && e.accountId === accountId) bal += conv(e.amount, e);
+      else if (e.kind === 'expense' && e.method === 'account' && e.accountId === accountId) bal -= conv(e.amount, e);
       else if (e.kind === 'transfer') {
-        if (e.accountId === accountId) bal -= e.amount;
-        if (e.toAccountId === accountId) bal += e.amount;
+        if (e.accountId === accountId) bal -= conv(e.amount, e);
+        if (e.toAccountId === accountId) bal += conv(e.amount, e.moeda === moeda ? e : null);
       }
     });
 
     // faturas pagas e compras adiantadas debitadas desta conta
     Object.keys(prof.invoices).forEach((k) => {
       movimentosDoRegistro(prof.invoices[k]).forEach((m) => {
-        if (m.accountId === accountId && m.at <= upto) bal -= m.amount;
+        if (m.accountId === accountId && m.at <= upto) bal -= conv(m.amount, null);
       });
     });
 
     // aportes debitados desta conta
     prof.investments.forEach((iv) => {
-      if (iv.accountId === accountId && iv.date <= upto) bal -= (+iv.amount || 0);
+      if (iv.accountId === accountId && iv.date <= upto) bal -= conv(+iv.amount || 0, null);
     });
 
     // dinheiro guardado em metas, quando a pessoa disse de onde ele saiu
     prof.goals.forEach((g) => {
       (g.deposits || []).forEach((d) => {
-        if (d.accountId === accountId && d.at <= upto) bal -= d.amount;
+        if (d.accountId === accountId && d.at <= upto) bal -= conv(d.amount, null);
       });
     });
 
@@ -576,31 +615,47 @@
     return a ? a.name : '—';
   };
 
-  /** Extrato de uma conta com saldo corrente linha a linha. */
+  /**
+   * Extrato de uma conta com saldo corrente linha a linha.
+   *
+   * Conta em outra moeda: cada linha ganha `deltaMoeda` e
+   * `balanceMoeda` ao lado dos valores em real. Os dois convivem de
+   * propósito — a tela mostra a moeda da conta, e os relatórios, que
+   * somam contas diferentes, continuam somando reais.
+   */
   Calc.accountStatement = function (accountId, fromISO, toISO, profile) {
     const prof = profile || P();
     const acc = prof.accounts.find((a) => a.id === accountId);
     const rows = [];
+    const moeda = acc && acc.moeda && acc.moeda !== 'BRL' ? acc.moeda : null;
+    /* Mesma regra do saldo: o valor original quando o lançamento nasceu
+       na moeda da conta, e a cotação quando nasceu em real. */
+    const naMoeda = (brl, e) => {
+      if (!moeda) return null;
+      if (e && e.moeda === moeda && e.valorMoeda) return brl < 0 ? -e.valorMoeda : e.valorMoeda;
+      return acc.cotacao ? U.round2(brl / acc.cotacao) : 0;
+    };
 
     // Se a conta "nasce" dentro da janela, o saldo inicial é uma linha do
     // extrato — sem isso o saldo corrente não fecha com Calc.accountBalance.
     if (acc && acc.openedAt >= fromISO && acc.openedAt <= toISO && (+acc.openingBalance || 0) !== 0) {
       rows.push({
         date: acc.openedAt, desc: tr('Saldo inicial da conta'), cat: 'Abertura',
-        delta: +acc.openingBalance || 0
+        delta: Calc.aberturaEmReais(acc),
+        deltaMoeda: moeda ? (+acc.openingBalance || 0) : null
       });
     }
 
     Calc.entries(fromISO, toISO, prof).forEach((e) => {
       if (!e.confirmed) return;
       if (e.kind === 'income' && e.accountId === accountId) {
-        rows.push({ date: e.date, desc: e.description, cat: Calc.categoryName(e.categoryId, prof), delta: e.amount });
+        rows.push({ date: e.date, desc: e.description, cat: Calc.categoryName(e.categoryId, prof), delta: e.amount, deltaMoeda: naMoeda(e.amount, e) });
       } else if (e.kind === 'expense' && e.method === 'account' && e.accountId === accountId) {
-        rows.push({ date: e.date, desc: e.description, cat: Calc.categoryName(e.categoryId, prof), delta: -e.amount });
+        rows.push({ date: e.date, desc: e.description, cat: Calc.categoryName(e.categoryId, prof), delta: -e.amount, deltaMoeda: naMoeda(-e.amount, e) });
       } else if (e.kind === 'transfer' && e.accountId === accountId) {
-        rows.push({ date: e.date, desc: `${e.description} → ${Calc.accountName(e.toAccountId, prof)}`, cat: 'Transferência', delta: -e.amount });
+        rows.push({ date: e.date, desc: `${e.description} → ${Calc.accountName(e.toAccountId, prof)}`, cat: 'Transferência', delta: -e.amount, deltaMoeda: naMoeda(-e.amount, e) });
       } else if (e.kind === 'transfer' && e.toAccountId === accountId) {
-        rows.push({ date: e.date, desc: `${e.description} ← ${Calc.accountName(e.accountId, prof)}`, cat: 'Transferência', delta: e.amount });
+        rows.push({ date: e.date, desc: `${e.description} ← ${Calc.accountName(e.accountId, prof)}`, cat: 'Transferência', delta: e.amount, deltaMoeda: naMoeda(e.amount, e.moeda === moeda ? e : null) });
       }
     });
 
@@ -617,7 +672,7 @@
           desc: m.tipo === 'adiantamento'
             ? tr(`Compra adiantada ${nome} (fatura de ${U.monthLabel(ref, true)})`)
             : tr(`Pagamento fatura ${nome} (${U.monthLabel(ref, true)})`),
-          cat: 'Fatura', delta: -m.amount
+          cat: 'Fatura', delta: -m.amount, deltaMoeda: naMoeda(-m.amount, null)
         });
       });
     });
@@ -625,20 +680,27 @@
     prof.investments.forEach((iv) => {
       if (iv.accountId !== accountId) return;
       if (iv.date < fromISO || iv.date > toISO) return;
-      rows.push({ date: iv.date, desc: tr(`Aporte: ${iv.name}`), cat: 'Investimento', delta: -(+iv.amount || 0) });
+      rows.push({ date: iv.date, desc: tr(`Aporte: ${iv.name}`), cat: 'Investimento', delta: -(+iv.amount || 0), deltaMoeda: naMoeda(-(+iv.amount || 0), null) });
     });
 
     prof.goals.forEach((g) => {
       (g.deposits || []).forEach((d) => {
         if (d.accountId !== accountId) return;
         if (d.at < fromISO || d.at > toISO) return;
-        rows.push({ date: d.at, desc: tr(`Guardado em ${g.name}`), cat: 'Reserva', delta: -d.amount });
+        rows.push({ date: d.at, desc: tr(`Guardado em ${g.name}`), cat: 'Reserva', delta: -d.amount, deltaMoeda: naMoeda(-d.amount, null) });
       });
     });
 
     rows.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
     let running = Calc.accountBalance(accountId, U.addDaysISO(fromISO, -1), prof);
-    rows.forEach((r) => { running = U.round2(running + r.delta); r.balance = running; });
+    let naMoedaCorrente = moeda ? Calc.accountBalanceMoeda(accountId, U.addDaysISO(fromISO, -1), prof) : 0;
+    rows.forEach((r) => {
+      running = U.round2(running + r.delta);
+      r.balance = running;
+      if (!moeda) return;
+      naMoedaCorrente = U.round2(naMoedaCorrente + (r.deltaMoeda || 0));
+      r.balanceMoeda = naMoedaCorrente;
+    });
     return rows;
   };
 

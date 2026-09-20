@@ -48,6 +48,11 @@
 
   const dataOu = (v, alt) => (U.isValidISO(v) ? v : alt);
   const num = (v) => U.round2(+v || 0);
+  /* A coluna é `not null default 'BRL'` e tem check de ISO 4217: um
+     valor estranho aqui derrubaria a gravação do espaço inteiro, não
+     só a linha. O app já normaliza; isto é o cinto. */
+  const moedaOu = (v) => (/^[A-Z]{3}$/.test(v || '') ? v : 'BRL');
+  const cotacaoOu = (v) => (+v > 0 ? Math.round(+v * 10000) / 10000 : null);
 
   /* ============================================================
      1 · APP → BANCO
@@ -64,6 +69,13 @@
       saldo_inicial: num(a.openingBalance),
       aberta_em: dataOu(a.openedAt, U.todayISO()),
       arquivada: !!a.archived,
+      /* Conta em outra moeda: o saldo acima é NA MOEDA dela, e a
+         cotação é o que traduz para os totais em real. Sem estes dois
+         campos aqui, a conta voltava do banco como conta em real — e
+         o saldo, que era em dólar, passava a ser lido como reais. */
+      moeda: moedaOu(a.moeda),
+      cotacao: cotacaoOu(a.cotacao),
+      considerado: a.considerado !== false,
       origem: Repo.origem()
     }),
 
@@ -77,6 +89,9 @@
       dia_fechamento: Math.min(31, Math.max(1, +c.closingDay || 1)),
       dia_vencimento: Math.min(31, Math.max(1, +c.dueDay || 10)),
       account_id: idDe.contas[c.accountId] || null,
+      moeda: moedaOu(c.moeda),
+      cotacao: cotacaoOu(c.cotacao),
+      considerado: c.considerado !== false,
       origem: Repo.origem()
     }),
 
@@ -102,6 +117,10 @@
       recorrente: !!t.recurring,
       recorrencia_fim: t.recurEnd || null,
       confirmado: t.confirmed !== false,
+      /* Só existem quando o lançamento nasceu em outra moeda. `valor`
+         continua em reais, sempre: é ele que os totais somam. */
+      moeda: t.moeda && /^[A-Z]{3}$/.test(t.moeda) && t.moeda !== 'BRL' ? t.moeda : null,
+      valor_moeda: t.valorMoeda != null ? num(t.valorMoeda) : null,
       /* Atributos da linha, não entidades — ver o cabeçalho. */
       ocorrencias: t.occ && typeof t.occ === 'object' ? t.occ : {},
       parcelamento: t.installment || null,
@@ -385,7 +404,10 @@
         color: a.cor, gradient: a.gradiente || null,
         last4: String(a.last4 || ''),
         openingBalance: +a.saldo_inicial || 0,
-        openedAt: a.aberta_em, archived: !!a.arquivada
+        openedAt: a.aberta_em, archived: !!a.arquivada,
+        moeda: a.moeda || 'BRL',
+        cotacao: +a.cotacao > 0 ? +a.cotacao : null,
+        considerado: a.considerado !== false
       })),
 
       categories: cats.map((c) => ({
@@ -401,7 +423,10 @@
         limit: +c.limite || 0,
         closingDay: +c.dia_fechamento || 1,
         dueDay: +c.dia_vencimento || 10,
-        accountId: de[c.account_id] || null
+        accountId: de[c.account_id] || null,
+        moeda: c.moeda || 'BRL',
+        cotacao: +c.cotacao > 0 ? +c.cotacao : null,
+        considerado: c.considerado !== false
       })),
 
       transactions: txs.map((t) => ({
@@ -417,6 +442,8 @@
         recurring: !!t.recorrente,
         recurEnd: t.recorrencia_fim || null,
         confirmed: t.confirmado !== false,
+        moeda: t.moeda || null,
+        valorMoeda: t.valor_moeda != null ? +t.valor_moeda : null,
         occ: t.ocorrencias && typeof t.ocorrencias === 'object' ? t.ocorrencias : {},
         installment: t.parcelamento || null,
         notes: t.notas || '',
