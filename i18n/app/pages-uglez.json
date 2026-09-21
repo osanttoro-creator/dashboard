@@ -1,5 +1,10 @@
 [
  {
+  "pt": "(max-width: 820px)",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Reunindo os dados do mês…",
   "tipo": "exato",
   "en": "Gathering the month's data…",
@@ -210,6 +215,34 @@
   "es": "Según mi saldo y los compromisos del mes, ¿qué monto inicial cabe en el presupuesto para empezar a invertir?"
  },
  {
+  "pt": "Lendo",
+  "tipo": "exato",
+  "en": "Reading",
+  "fr": "Lecture de",
+  "es": "Leyendo"
+ },
+ {
+  "pt": "Só o mês que está no alto da tela. Bom para perguntas do tipo \"onde gastei mais agora\".",
+  "tipo": "exato",
+  "en": "Only the month shown at the top of the screen. Good for questions like \"where did I spend most right now\".",
+  "fr": "Seulement le mois affiché en haut de l’écran. Utile pour « où ai-je le plus dépensé en ce moment ».",
+  "es": "Solo el mes que está arriba en la pantalla. Bueno para preguntas como \"dónde gasté más ahora\"."
+ },
+ {
+  "pt": "Os doze meses do ano: tendência, meses fora do padrão e o que já está previsto.",
+  "tipo": "exato",
+  "en": "The twelve months of the year: trend, months out of pattern and what is already scheduled.",
+  "fr": "Les douze mois de l’année : tendance, mois hors norme et ce qui est déjà prévu.",
+  "es": "Los doce meses del año: tendencia, meses fuera del patrón y lo que ya está previsto."
+ },
+ {
+  "pt": "O ano e os anteriores. Mais contexto, resposta mais lenta.",
+  "tipo": "exato",
+  "en": "The year and the previous ones. More context, slower answer.",
+  "fr": "L’année et les précédentes. Plus de contexte, réponse plus lente.",
+  "es": "El año y los anteriores. Más contexto, respuesta más lenta."
+ },
+ {
   "pt": "Lendo o ano de {0}",
   "tipo": "padrao",
   "en": "Reading the year {0}",
@@ -236,6 +269,90 @@
   "en": "{0} of {1} questions left this month. Our errors or outages don't use up a question.",
   "fr": "{0} sur {1} questions restantes ce mois-ci. Nos erreurs ou indisponibilités ne consomment pas de question.",
   "es": "{0} de {1} consultas restantes este mes. Errores nuestros o caídas no consumen consulta."
+ },
+ {
+  "pt": "Entrou",
+  "tipo": "exato",
+  "en": "In",
+  "fr": "Entré",
+  "es": "Entró"
+ },
+ {
+  "pt": "Saiu",
+  "tipo": "exato",
+  "en": "Out",
+  "fr": "Sorti",
+  "es": "Salió"
+ },
+ {
+  "pt": "Sobrou",
+  "tipo": "exato",
+  "en": "Left",
+  "fr": "Reste",
+  "es": "Quedó"
+ },
+ {
+  "pt": "E em {0}?",
+  "tipo": "padrao",
+  "en": "And in {0}?",
+  "fr": "Et en {0} ?",
+  "es": "¿Y en {0}?"
+ },
+ {
+  "pt": "Como foi {0} comparado com {1}?",
+  "tipo": "padrao",
+  "en": "How was {0} compared with {1}?",
+  "fr": "Comment s’est passé {0} par rapport à {1} ?",
+  "es": "¿Cómo fue {0} comparado con {1}?"
+ },
+ {
+  "pt": "O mês mais caro",
+  "tipo": "exato",
+  "en": "The most expensive month",
+  "fr": "Le mois le plus cher",
+  "es": "El mes más caro"
+ },
+ {
+  "pt": "Qual foi o mês mais caro de {0}, e o que explica a diferença?",
+  "tipo": "padrao",
+  "en": "Which was the most expensive month of {0}, and what explains the difference?",
+  "fr": "Quel a été le mois le plus cher de {0}, et qu’est-ce qui explique l’écart ?",
+  "es": "¿Cuál fue el mes más caro de {0}, y qué explica la diferencia?"
+ },
+ {
+  "pt": "Por que {0} pesou",
+  "tipo": "padrao",
+  "en": "Why {0} weighed",
+  "fr": "Pourquoi {0} a pesé",
+  "es": "Por qué {0} pesó"
+ },
+ {
+  "pt": "Por que {0} pesou tanto, e o que dá para fazer a respeito?",
+  "tipo": "padrao",
+  "en": "Why did {0} weigh so much, and what can be done about it?",
+  "fr": "Pourquoi {0} a-t-il autant pesé, et que peut-on y faire ?",
+  "es": "¿Por qué {0} pesó tanto, y qué se puede hacer al respecto?"
+ },
+ {
+  "pt": "E se eu guardar mais?",
+  "tipo": "exato",
+  "en": "What if I save more?",
+  "fr": "Et si j’épargnais plus ?",
+  "es": "¿Y si guardo más?"
+ },
+ {
+  "pt": "Quanto eu conseguiria guardar por mês sem apertar as contas fixas?",
+  "tipo": "exato",
+  "en": "How much could I save each month without squeezing the fixed bills?",
+  "fr": "Combien pourrais-je épargner par mois sans serrer les charges fixes ?",
+  "es": "¿Cuánto podría guardar por mes sin apretar las cuentas fijas?"
+ },
+ {
+  "pt": "O que foi lido · {0}",
+  "tipo": "padrao",
+  "en": "What was read · {0}",
+  "fr": "Ce qui a été lu · {0}",
+  "es": "Lo que se leyó · {0}"
  },
  {
   "pt": "Copiar resposta",

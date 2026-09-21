@@ -64,11 +64,35 @@ if (!/\.uglez-page\s*\{[^}]*height:\s*100%[^}]*overflow:\s*hidden/.test(css)) {
    rota. Os números ficam fixados aqui porque cada pixel que eles
    crescem sai da conversa — mudá-los sem medir o que resta é
    exatamente o erro que este teste existe para pegar. */
-if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-stage\s*\{[^}]*grid-template-rows:\s*46px\s+minmax\(0,\s*1fr\)/.test(css)) {
-  falhas.push('faixa de identidade do celular não está declarada');
+/* No celular a faixa de identidade NÃO existe mais: o console ocupa
+   a peça inteira e a marca é o orbe de 24px do cabeçalho. Se a faixa
+   voltar, volta com ela o hemisfério que comia metade da conversa. */
+if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-presenca\s*\{\s*display:\s*none/.test(css)) {
+  falhas.push('a faixa de identidade voltou ao celular');
 }
-if (!/\.uglez-page\.tem-conversa\s+\.uglez-stage\s*\{[^}]*grid-template-rows:\s*40px/.test(css)) {
-  falhas.push('a faixa não encolhe com a conversa aberta');
+if (!/@media\s*\(max-width:\s*820px\)[\s\S]*?\.uglez-stage\s*\{[^}]*grid-template-rows:\s*minmax\(0,\s*1fr\)/.test(css)) {
+  falhas.push('o console não ocupa a peça inteira no celular');
+}
+/* A presença precisa continuar existindo em ALGUM lugar: sem o
+   hemisfério, o orbe é a única marca da UGLEZ na tela. */
+if (!/\.uglez-orbe\s*\{/.test(css) || !/id="uglezOrbe"/.test(html)) {
+  falhas.push('a presença de 24px (orbe) sumiu do cabeçalho');
+}
+/* Uma decisão, um controle: o alcance mora na folha, e não também
+   num segundo seletor no cabeçalho. */
+if (/id="uglezEscopo"/.test(html)) {
+  falhas.push('voltou um segundo seletor de alcance ao cabeçalho');
+}
+if (!/id="uglezFolha"/.test(html) || !/id="btnUglezContexto"/.test(html)) {
+  falhas.push('a linha de contexto ou a folha do alcance sumiram');
+}
+/* A tira de números é o retrato do que foi enviado, e vem do Calc —
+   nunca do texto do modelo. */
+if (!/uglez-numeros/.test(css) || !/uglez-numeros/.test(pagina)) {
+  falhas.push('a tira do que foi lido sumiu da resposta');
+}
+if (!/matchMedia\('\(max-width: 820px\)'\)/.test(pagina) || !/noCelular\(\)/.test(pagina)) {
+  falhas.push('a esfera WebGL voltou a ser montada no celular');
 }
 if (!/body\[data-page="uglez"\]\s*\.topnav-brand[^{]*#btnNotif\s*\{\s*display:\s*none/.test(css)) {
   falhas.push('o cabeçalho do app voltou a ocupar duas linhas na câmara');

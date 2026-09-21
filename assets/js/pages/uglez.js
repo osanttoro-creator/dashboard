@@ -29,8 +29,15 @@
 
   let formacao = null;
 
+  /* O telefone não monta a esfera: ela custava 699ms no primeiro
+     render de um aparelho médio, e no celular o hemisfério que a
+     abrigava nem existe mais — a presença ali é o orbe de 24px do
+     cabeçalho, que é CSS e diz o mesmo (inclusive o estado). */
+  const noCelular = () => global.matchMedia && global.matchMedia('(max-width: 820px)').matches;
+
   function garantirFormacao() {
     if (formacao) return formacao;
+    if (noCelular()) return null;
     const caixa = document.getElementById('uglezFormacao');
     if (!caixa) return null;
     /* A esfera WebGL é a presença principal desta página. A
@@ -54,7 +61,19 @@
    * — senão o silêncio entre a pergunta e a resposta é
    * indistinguível de uma falha.
    */
+  /* O orbe do cabeçalho é a presença que sobra quando não há
+     hemisfério: um <span> com gradiente, sem canvas e sem custo. */
+  function pintarOrbe(estado) {
+    const orbe = document.getElementById('uglezOrbe');
+    if (!orbe) return;
+    orbe.dataset.estado =
+      estado === 'pensando' || estado === 'lendo' ? 'pensando'
+        : estado === 'erro' ? 'erro' : 'pronto';
+  }
+  Ug.pintarOrbe = pintarOrbe;
+
   Ug.estadoParticulas = function (estado) {
+    pintarOrbe(estado);
     const f = garantirFormacao();
     if (f) {
       if (estado === 'sucesso' || estado === 'erro') f.pulsar(estado, 1.2);
@@ -167,12 +186,124 @@
 
   function pintaEscopo() {
     const atual = Ug.escopo();
-    U.$$('#uglezEscopo [data-escopo]').forEach((b) => {
+    U.$$('#uglezEscopoFolha [data-escopo]').forEach((b) => {
       const ativo = b.dataset.escopo === atual;
       b.classList.toggle('is-active', ativo);
       b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
     });
+    pintaContexto();
   }
+
+  /** Troca o alcance e repinta tudo o que depende dele. */
+  Ug.setEscopo = function (v) {
+    if (!['mes', 'ano', 'geral'].includes(v)) return;
+    escopoAtual = v;
+    try { localStorage.setItem(CHAVE_ESCOPO, v); } catch (e) { /* segue na memória */ }
+    pintaEscopo();
+    renderContexto();
+    renderCartoes();
+  };
+
+  /* ============================================================
+     O QUE ESTÁ SENDO LIDO — na linha acima do campo
+     ------------------------------------------------------------
+     Esta informação já existia em dois lugares distantes: a barra
+     de mês, no alto do app, e os botões Mês/Ano/Tudo, no canto do
+     cabeçalho. Duas decisões sobre a MESMA pergunta, longe do
+     lugar onde a pergunta é feita — e no celular a segunda ainda
+     custava uma linha inteira da conversa.
+
+     Agora são uma frase só, encostada no campo: "Lendo setembro de
+     2026 · 7 lançamentos". Tocar nela abre a folha do alcance.
+     ============================================================ */
+  function baseDoEscopo() {
+    const escopo = Ug.escopo();
+    const p = U.ymParts(App.ym);
+    /* Os mesmos meses que o alcance manda para o servidor: um, os
+       doze do ano, ou do primeiro lançamento até o mês exibido. */
+    let lista = [App.ym];
+    if (escopo === 'ano') {
+      lista = Array.from({ length: 12 }, (_, i) => U.addMonths(p.y + '-01', i));
+    } else if (escopo === 'geral') {
+      const inicio = U.ymOf(Calc.earliestDate(Store.profile()));
+      lista = [];
+      for (let m = inicio; m <= App.ym && lista.length < 240; m = U.addMonths(m, 1)) lista.push(m);
+      if (!lista.length) lista = [App.ym];
+    }
+    let entradas = 0, saidas = 0, quantos = 0;
+    lista.forEach((ym) => {
+      const t = Calc.monthTotals(ym);
+      entradas += t.income;
+      saidas += t.expense;
+      quantos += (t.entries || []).length;
+    });
+    return {
+      escopo,
+      periodo: escopo === 'mes' ? U.smartCase(U.monthLabel(App.ym))
+        : escopo === 'ano' ? 'o ano de ' + p.y
+          : 'o ano e os meses anteriores',
+      entradas: U.round2(entradas),
+      saidas: U.round2(saidas),
+      saldo: U.round2(entradas - saidas),
+      lancamentos: quantos
+    };
+  }
+  Ug.baseDoEscopo = baseDoEscopo;
+
+  function pintaContexto() {
+    const alvo = document.getElementById('uglezContextoTexto');
+    if (!alvo) return;
+    const b = baseDoEscopo();
+    /* Cada pedaço é uma unidade inteira para o dicionário: "Lendo"
+       com o espaço colado não casava com entrada nenhuma, e o
+       tradutor deixava a palavra em português no meio da frase. */
+    U.clear(alvo);
+    alvo.appendChild(el('span', { text: 'Lendo' }));
+    alvo.appendChild(document.createTextNode(' '));
+    alvo.appendChild(el('strong', { text: b.periodo }));
+    alvo.appendChild(document.createTextNode(' · '));
+    alvo.appendChild(el('span', {
+      text: b.lancamentos === 1 ? '1 lançamento' : b.lancamentos + ' lançamentos'
+    }));
+
+    const nota = document.getElementById('uglezFolhaNota');
+    if (nota) {
+      nota.textContent = b.escopo === 'mes'
+        ? 'Só o mês que está no alto da tela. Bom para perguntas do tipo "onde gastei mais agora".'
+        : b.escopo === 'ano'
+          ? 'Os doze meses do ano: tendência, meses fora do padrão e o que já está previsto.'
+          : 'O ano e os anteriores. Mais contexto, resposta mais lenta.';
+    }
+  }
+
+  /* ---------------- a folha ---------------- */
+  function abrirFolha() {
+    const folha = document.getElementById('uglezFolha');
+    const botao = document.getElementById('btnUglezContexto');
+    if (!folha) return;
+    /* position: fixed não alcança a janela quando algum ancestral tem
+       backdrop-filter — e o console tem. Dentro do cartão, a folha
+       abria com as bordas recuadas e a barra de baixo por cima dela.
+       Mudar o cartão seria mexer no material da página inteira por
+       causa de um painel; mais barato é a folha subir um nível. */
+    if (folha.parentNode !== document.body) document.body.appendChild(folha);
+    folha.hidden = false;
+    if (botao) botao.setAttribute('aria-expanded', 'true');
+    const ativo = folha.querySelector('.is-active') || folha.querySelector('button');
+    if (ativo) ativo.focus({ preventScroll: true });
+  }
+
+  function fecharFolha(devolveFoco) {
+    const folha = document.getElementById('uglezFolha');
+    const botao = document.getElementById('btnUglezContexto');
+    if (!folha || folha.hidden) return;
+    folha.hidden = true;
+    if (botao) {
+      botao.setAttribute('aria-expanded', 'false');
+      if (devolveFoco) botao.focus({ preventScroll: true });
+    }
+  }
+  Ug.fecharFolha = () => fecharFolha(false);
 
   /* Mantido para quem ainda lê Ug.SUGESTOES. É uma leitura da mesma
      fonte, não uma segunda lista. */
@@ -262,6 +393,77 @@
 
   const hora = (d) => d.toLocaleTimeString(((window.U && U.LOCALE) || 'pt-BR'), { hour: '2-digit', minute: '2-digit' });
 
+  /* ============================================================
+     A TIRA DO QUE FOI LIDO
+     ------------------------------------------------------------
+     Três números acima da resposta: entrou, saiu, sobrou — no
+     alcance em que a pergunta foi feita.
+
+     Eles NÃO são uma afirmação do modelo: são os totais que o OAZE
+     calculou e enviou. Por isso vêm antes do texto e com rótulo
+     próprio. Duas coisas de uma vez: o olho lê o número antes da
+     prosa (é um app de dinheiro, não um chat), e a promessa de
+     transparência deixa de ser uma frase e vira o próprio conteúdo
+     da tela — está ali o que foi enviado.
+     ============================================================ */
+  function tiraDeNumeros(base) {
+    const cel = (rotulo, valor, classe) => el('div', {}, [
+      el('dt', { text: rotulo }),
+      el('dd', { class: classe || '', text: U.fmtBRL(valor) })
+    ]);
+    return el('dl', { class: 'uglez-numeros' }, [
+      cel('Entrou', base.entradas, 'is-entrada'),
+      cel('Saiu', base.saidas, 'is-saida'),
+      cel('Sobrou', base.saldo, base.saldo < 0 ? 'is-saida' : '')
+    ]);
+  }
+
+  /* ============================================================
+     PERGUNTAS DE SEGUIMENTO
+     ------------------------------------------------------------
+     Saem dos DADOS, não do modelo: a categoria que mais pesou, o
+     mês anterior, o alcance vizinho. Sendo deterministas, nunca
+     sugerem algo que a UGLEZ não possa responder — e não custam
+     uma consulta a mais para serem geradas.
+     ============================================================ */
+  function seguimentos(base) {
+    const lista = [];
+    const p = U.ymParts(App.ym);
+    const anterior = U.addMonths(App.ym, -1);
+
+    let maior = null;
+    try {
+      const cats = Calc.categoryTotals('expense', U.monthStart(App.ym), App.balanceDate());
+      maior = (cats || [])[0] || null;
+    } catch (e) { maior = null; }
+
+    if (base.escopo === 'mes') {
+      lista.push({
+        rotulo: 'E em ' + U.mesNaFrase(U.ymParts(anterior).m) + '?',
+        q: 'Como foi ' + U.smartCase(U.monthLabel(anterior)) + ' comparado com ' + U.smartCase(U.monthLabel(App.ym)) + '?'
+      });
+    } else {
+      lista.push({
+        rotulo: 'O mês mais caro',
+        q: 'Qual foi o mês mais caro de ' + p.y + ', e o que explica a diferença?'
+      });
+    }
+
+    if (maior && maior.name) {
+      lista.push({
+        rotulo: 'Por que ' + maior.name + ' pesou',
+        q: 'Por que ' + maior.name + ' pesou tanto, e o que dá para fazer a respeito?'
+      });
+    }
+
+    lista.push({
+      rotulo: 'E se eu guardar mais?',
+      q: 'Quanto eu conseguiria guardar por mês sem apertar as contas fixas?'
+    });
+
+    return lista.slice(0, 3);
+  }
+
   function rolaParaOFim() {
     const corpo = document.getElementById('uglezCorpo');
     if (!corpo) return;
@@ -279,6 +481,9 @@
     if (!box) return null;
     const troca = { pergunta, resposta: null, quando: new Date() };
     conversa.push(troca);
+    /* Os totais são lidos AGORA, no alcance desta pergunta: trocar o
+       mês depois não pode reescrever o que já foi respondido. */
+    const base = Ug.baseDoEscopo();
 
     box.appendChild(el('div', { class: 'uglez-msg is-pessoa' }, [
       el('div', { class: 'uglez-bolha', text: pergunta }),
@@ -287,13 +492,21 @@
 
     const caixa = el('div', { class: 'ai-answer' });
     const acoes = el('div', { class: 'uglez-msg-acoes', hidden: true });
+    const seguir = el('div', { class: 'uglez-seguir', hidden: true });
+    const numeros = base.lancamentos
+      ? [
+        el('span', { class: 'uglez-numeros-rotulo', text: 'O que foi lido · ' + base.periodo }),
+        tiraDeNumeros(base)
+      ]
+      : [];
     box.appendChild(el('div', { class: 'uglez-msg is-uglez' }, [
       el('span', { class: 'uglez-avatar', 'aria-hidden': 'true' }),
-      el('div', { class: 'uglez-msg-corpo' }, [
+      el('div', { class: 'uglez-msg-corpo' }, numeros.concat([
         el('span', { class: 'uglez-msg-nome', text: 'UGLEZ' }),
         caixa,
-        acoes
-      ])
+        acoes,
+        seguir
+      ]))
     ]));
     renderHistorico();
     rolaParaOFim();
@@ -331,6 +544,17 @@
           type: 'button', class: 'uglez-acao', 'aria-label': 'Perguntar de novo',
           onclick: () => AI.ask(pergunta)
         }, [Icons.lucide('repeat', 14), el('span', { text: 'Refazer' })]));
+
+        /* O seguimento só aparece na ÚLTIMA troca: deixá-lo em todas
+           encheria a conversa de botões de perguntas já feitas. */
+        U.$$('.uglez-seguir', box).forEach((n) => { n.hidden = true; });
+        U.clear(seguir);
+        seguimentos(base).forEach((s) => {
+          seguir.appendChild(el('button', {
+            type: 'button', text: s.rotulo, onclick: () => AI.ask(s.q)
+          }));
+        });
+        seguir.hidden = false;
         rolaParaOFim();
       },
       aoTerminar: () => { rolaParaOFim(); }
@@ -351,6 +575,7 @@
   }
 
   function novaConversa() {
+    fecharFolha(false);
     conversa.length = 0;
     const box = document.getElementById('uglezHistorico');
     if (box) U.clear(box);
@@ -383,10 +608,33 @@
     }));
     const nova = document.getElementById('btnUglezNova');
     if (nova) nova.addEventListener('click', novaConversa);
+
+    const contexto = document.getElementById('btnUglezContexto');
+    if (contexto) contexto.addEventListener('click', abrirFolha);
+    const fundo = document.getElementById('uglezFolhaFundo');
+    if (fundo) fundo.addEventListener('click', () => fecharFolha(true));
+    const fechar = document.getElementById('btnUglezFolhaFechar');
+    if (fechar) fechar.addEventListener('click', () => fecharFolha(true));
+    U.$$('#uglezEscopoFolha [data-escopo]').forEach((b) => {
+      b.addEventListener('click', () => { Ug.setEscopo(b.dataset.escopo); fecharFolha(true); });
+    });
+    const dados = document.getElementById('btnUglezFolhaDados');
+    if (dados) {
+      dados.addEventListener('click', () => {
+        fecharFolha(false);
+        const b = document.getElementById('btnAiConfig');
+        if (b) b.click();
+      });
+    }
+    document.addEventListener('keydown', (ev) => {
+      const folha = document.getElementById('uglezFolha');
+      if (ev.key === 'Escape' && folha && !folha.hidden) { ev.preventDefault(); fecharFolha(true); }
+    });
   }
 
   Ug.render = function () {
     ligarUmaVez();
+    fecharFolha(false);   /* nenhuma folha sobrevive a uma troca de tela */
     /* A esfera WebGL custava 699ms no primeiro render de um celular
        médio (processador freado 6×) — quase toda a espera de quem
        tocava em "UGLEZ" no menu e via a tela parada. Ela é a

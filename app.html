@@ -958,18 +958,17 @@
 
         <section class="uglez-console" aria-labelledby="uglezConversaTitulo">
           <header class="uglez-console-topo">
+            <!-- A presença em 24px. No celular ela é a Única marca da
+                 UGLEZ na tela: a faixa de identidade custava 92px de
+                 conversa e só dizia o nome. -->
+            <span class="uglez-orbe" id="uglezOrbe" data-estado="pronto" aria-hidden="true"></span>
+            <!-- A palavra só aparece no celular, onde ela é a única marca
+                 da UGLEZ na tela. O título "Conversa" ao lado continua
+                 nomeando a seção para quem usa leitor de tela. -->
+            <span class="uglez-marca" aria-hidden="true">UGLEZ</span>
             <div class="uglez-console-id">
               <h3 id="uglezConversaTitulo">Conversa</h3>
               <p id="uglezPeriodo"></p>
-            </div>
-            <!-- O alcance da leitura. "Mês" responde sobre o período do
-                 cabeçalho; "Ano" e "Tudo" levam os meses do ano e os
-                 anteriores — sempre agregados, nunca lançamento a
-                 lançamento. -->
-            <div class="seg uglez-escopo" id="uglezEscopo" role="group" aria-label="O que a UGLEZ considera">
-              <button type="button" data-escopo="mes" aria-pressed="true" class="is-active">Mês</button>
-              <button type="button" data-escopo="ano" aria-pressed="false">Ano</button>
-              <button type="button" data-escopo="geral" aria-pressed="false">Tudo</button>
             </div>
             <button type="button" class="icon-btn uglez-nova" id="btnUglezNova" aria-label="Começar nova conversa" title="Nova conversa" hidden><span data-ico="plus"></span></button>
             <span class="uglez-estado" id="uglezEstadoTexto" role="status" aria-live="polite">Pronto para analisar</span>
@@ -1008,6 +1007,19 @@
 
           <div class="uglez-compositor">
             <p class="uglez-cota" id="uglezCota" hidden></p>
+
+            <!-- O QUE ESTÁ SENDO LIDO, onde a pergunta é feita.
+                 Antes isto vivia em dois lugares distantes: a barra de
+                 mês do app, no topo, e os botões Mês/Ano/Tudo, no
+                 cabeçalho. É no instante de perguntar que importa. -->
+            <button type="button" class="uglez-contexto" id="btnUglezContexto"
+              aria-expanded="false" aria-controls="uglezFolha">
+              <span class="uglez-contexto-ponto" aria-hidden="true"></span>
+              <span class="uglez-contexto-texto" id="uglezContextoTexto"></span>
+              <span class="uglez-contexto-seta" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+            </button>
             <div class="uglez-caixa">
               <textarea class="uglez-campo-texto" id="aiQuestion" rows="1"
                 aria-label="Sua pergunta para a UGLEZ"
@@ -1022,6 +1034,32 @@
               <span class="uglez-orientacao">A UGLEZ pode errar. Orientação, não consultoria.</span>
               <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
             </p>
+          </div>
+
+          <!-- A FOLHA DO ALCANCE. Um controle só para as duas telas: no
+               celular ela sobe da base, no computador ela abre ancorada
+               à linha de contexto. Os botões Mês/Ano/Tudo do cabeçalho
+               viraram estes — dois controles para a mesma decisão é como
+               a tela chegou a ter dois seletores de período. -->
+          <div class="uglez-folha" id="uglezFolha" hidden>
+            <div class="uglez-folha-fundo" id="uglezFolhaFundo"></div>
+            <div class="uglez-folha-painel" role="dialog" aria-modal="true" aria-labelledby="uglezFolhaTitulo">
+              <span class="uglez-folha-alca" aria-hidden="true"></span>
+              <div class="uglez-folha-topo">
+                <h3 id="uglezFolhaTitulo">O que a UGLEZ lê</h3>
+                <button type="button" class="icon-btn" id="btnUglezFolhaFechar" aria-label="Fechar">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div class="seg uglez-escopo-folha" id="uglezEscopoFolha" role="group" aria-label="O que a UGLEZ considera">
+                <button type="button" data-escopo="mes">Este mês</button>
+                <button type="button" data-escopo="ano">O ano</button>
+                <button type="button" data-escopo="geral">Tudo</button>
+              </div>
+              <p class="uglez-folha-nota" id="uglezFolhaNota"></p>
+              <p class="uglez-folha-nota is-privacidade">Sempre totais por categoria e por mês. Nunca a descrição de um lançamento, nem nome de pessoa ou empresa.</p>
+              <button class="btn btn-ghost btn-sm" id="btnUglezFolhaDados">Ver exatamente o que é enviado</button>
+            </div>
           </div>
         </section>
       </div>

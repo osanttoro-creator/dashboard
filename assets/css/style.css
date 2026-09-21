@@ -3472,7 +3472,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
   body[data-page="uglez"] .pill-select-month select,
   body[data-page="uglez"] .pill-select-year select { width: 100%; min-width: 0; padding-inline: 7px 20px; }
 
-  /* Uma coluna só; a ALTURA da faixa é decidida na seção 27.13, no
+  /* Uma coluna só; a ALTURA da faixa é decidida na seção 27.14, no
      fim do arquivo, junto com o resto da geometria do celular. */
   .uglez-stage { grid-template-columns: 1fr; border-radius: 18px; }
   .uglez-presenca {
@@ -3560,7 +3560,7 @@ body[data-page="uglez"] .fab-wrap { display: none; }
 }
 
 @media (max-width: 820px) and (max-height: 700px) {
-  /* Faixa e cabeçalho: seção 27.13. Aqui fica só o que é do campo. */
+  /* Faixa e cabeçalho: seção 27.14. Aqui fica só o que é do campo. */
   .uglez-page .ai-ask textarea,
   .uglez-page .btn-ai { min-height: 48px; height: 48px; }
   .uglez-rodape { margin-top: 4px; }
@@ -4671,7 +4671,7 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
      DEPOIS do bloco que compactava a barra e desfazia aquilo sem
      dizer — o resultado era 107px de cabeçalho em duas linhas numa
      tela onde a altura é o produto. A geometria do celular agora
-     mora num lugar só, no fim deste arquivo (seção 27.13). */
+     mora num lugar só, no fim deste arquivo (seção 27.14). */
   body[data-page="uglez"] .main {
     padding: 0 max(12px, env(safe-area-inset-right, 0px)) calc(84px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   }
@@ -4718,7 +4718,7 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-compositor { padding: 8px 10px 10px; }
   .uglez-caixa { padding: 5px 5px 5px 14px; }
   .uglez-page .uglez-rodape { margin-top: 6px; }
-  /* A faixa com conversa aberta: seção 27.13. */
+  /* A faixa com conversa aberta: seção 27.14. */
 }
 
 /* =============================================================
@@ -4975,88 +4975,6 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-compositor { border-top: 1px solid rgba(173, 194, 211, .14); }
 }
 
-/* =============================================================
-   27.13 · A CÂMARA NO CELULAR — UM PASSE SÓ
-   -------------------------------------------------------------
-   Esta rota tinha TRÊS passes de celular em pontos diferentes do
-   arquivo, e eles se desfaziam: um compactava a barra, o seguinte
-   devolvia busca e avisos, um terceiro fixava a faixa de identidade
-   em 92px por cima do 58px que valia com conversa aberta. Medido num
-   390×844 real, sobravam 248px para a conversa — menos de um terço
-   da tela, com 107px de cabeçalho, 136px de aviso de conta e 92px de
-   marca acima dela.
-
-   A regra desta seção: no celular, esta tela é uma CONVERSA. Tudo o
-   que não for a conversa paga o seu lugar em pixels.
-
-     cabeçalho do app   107 → 48   (uma linha: espaço + período)
-     aviso de conta     136 → 44   (fica o botão; o texto está no rodapé)
-     faixa de marca      92 → 46   (40 com conversa aberta)
-     conversa           248 → ~510
-
-   O que sai do cabeçalho nesta rota — marca, busca e avisos — está a
-   um toque na barra de baixo. O que NÃO sai é o seletor de mês: o
-   escopo "Mês" da UGLEZ responde sobre o período dele, e sem ele a
-   pessoa perderia a única forma de perguntar sobre outro mês.
-   ============================================================= */
-@media (max-width: 820px) {
-  /* --- cabeçalho do app: uma linha --- */
-  body[data-page="uglez"] .topnav-brand,
-  body[data-page="uglez"] #btnSearch,
-  body[data-page="uglez"] #btnNotif { display: none; }
-  body[data-page="uglez"] .topbar {
-    display: flex; flex-wrap: nowrap; align-items: center; gap: 8px;
-    padding-block: calc(env(safe-area-inset-top, 0px) + 4px) 6px;
-    margin-bottom: 6px;
-  }
-  body[data-page="uglez"] .pill-espaco { flex: 0 1 auto; min-width: 0; }
-  body[data-page="uglez"] .pill-period { flex: 1 1 auto; min-width: 0; }
-
-  /* --- aviso de conta: fica a ação, sai o parágrafo ---
-     A frase inteira vale a rolagem em qualquer outra página; aqui ela
-     custaria 90px da conversa, e o rodapé do campo já diz "Entre na
-     sua conta para conversar" a três dedos de distância. */
-  body[data-page="uglez"] .aviso-conta { padding: 7px 9px; gap: 8px; margin-bottom: 8px; }
-  body[data-page="uglez"] .aviso-conta p { font-size: 12.5px; line-height: 1.35; flex: 1 1 140px; }
-  body[data-page="uglez"] .aviso-conta .aviso-conta-detalhe { display: none; }
-  body[data-page="uglez"] .aviso-conta .btn { min-height: 34px; padding-block: 4px; font-size: 12.5px; }
-
-  /* --- faixa de marca --- */
-  .uglez-stage { grid-template-rows: 46px minmax(0, 1fr); }
-  .uglez-presenca-conteudo {
-    display: flex; flex-direction: row; align-items: center;
-    justify-content: flex-start; padding: 0 12px;
-  }
-  .uglez-identidade { margin: 0; max-width: none; }
-  .uglez-identidade h2 { font-size: 16px; letter-spacing: .3em; }
-  /* Mês, Base e Leitura repetem o que o seletor de período e os
-     botões Mês/Ano/Tudo já mostram, um dedo acima e um abaixo. */
-  .uglez-metricas { display: none; }
-
-  /* --- console --- */
-  .uglez-console-topo { padding: 7px 12px; gap: 10px; row-gap: 0; flex-wrap: nowrap; }
-  .uglez-console-id p { display: none; }
-  .uglez-escopo { order: 0; width: auto; flex: 0 1 auto; }
-  .uglez-page .uglez-escopo button { flex: none; padding: 5px 10px; font-size: 11.5px; }
-  .uglez-compositor { padding: 8px 10px 9px; }
-  .uglez-page .uglez-rodape { margin-top: 5px; font-size: 10.5px; }
-
-  /* Com conversa aberta a marca encolhe mais: quem já está
-     conversando não precisa que lhe digam com quem. */
-  .uglez-page.tem-conversa .uglez-stage { grid-template-rows: 40px minmax(0, 1fr); }
-  .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 15px; }
-}
-
-/* Tela baixa (iPhone SE de pé, qualquer aparelho deitado): a marca
-   vira uma linha de 36px e o campo perde a folga de baixo. */
-@media (max-width: 820px) and (max-height: 700px) {
-  .uglez-stage,
-  .uglez-page.tem-conversa .uglez-stage { grid-template-rows: 36px minmax(0, 1fr); }
-  .uglez-identidade h2,
-  .uglez-page.tem-conversa .uglez-identidade h2 { font-size: 14px; }
-  .uglez-console-topo { padding-block: 6px; }
-  .uglez-compositor { padding-block: 7px 8px; }
-}
 
 @media (max-width: 820px) {
   /* A saudação é uma frase, não um título de capa: em pé ela ocupa
@@ -5155,4 +5073,224 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
      junto do número, sem roubar a altura que mostra o nome. */
   .cc-chip { width: 29px; height: 21px; }
   .cc-antena { width: 13px; height: 15px; }
+}
+
+/* =============================================================
+   27.14 · A CÂMARA COMO CONVERSA
+   -------------------------------------------------------------
+   Desenhada a partir da proposta de 20/09/2026, e do que as
+   interfaces de conversa com IA convergiram em 2026: estado vazio
+   com sugestões (não histórico vazio), status honesto em vez de
+   ampulheta, ações sempre visíveis no celular (não há hover), erro
+   que diz a causa, e o campo colado no polegar.
+
+   A regra: no celular esta tela é uma CONVERSA, e tudo o que não
+   for a conversa paga o seu lugar em pixels. No computador a mesma
+   peça respira — a esfera grande volta ao hemisfério esquerdo — mas
+   os COMPONENTES são os mesmos, e não dois desenhos paralelos que
+   divergem no primeiro ajuste.
+
+   Regiões (os nomes valem para as duas telas):
+     .uglez-orbe        a presença em 24px, no cabeçalho
+     .uglez-contexto    o que está sendo lido, acima do campo
+     .uglez-folha       a folha que o contexto abre (alcance)
+     .uglez-numeros     a tira do que foi lido, dentro da resposta
+     .uglez-seguir      as perguntas de seguimento, após a resposta
+   ============================================================= */
+
+/* ---- a presença em 24px ---- */
+.uglez-orbe {
+  flex: none; width: 24px; height: 24px; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #D6E4FF 0%, var(--uglez) 46%, #16266E 100%);
+  box-shadow: 0 0 0 1px rgba(70, 105, 240, .35), 0 0 14px rgba(70, 105, 240, .35);
+}
+.uglez-orbe[data-estado="pensando"] { animation: orbe-pulsa 1.5s var(--ease-out) infinite; }
+@keyframes orbe-pulsa {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(70, 105, 240, .35), 0 0 14px rgba(70, 105, 240, .35); }
+  50%      { box-shadow: 0 0 0 4px rgba(70, 105, 240, .18), 0 0 22px rgba(70, 105, 240, .55); }
+}
+.uglez-orbe[data-estado="erro"] {
+  background: radial-gradient(circle at 34% 30%, #F5C7AE 0%, #C4703F 52%, #5C2E14 100%);
+  box-shadow: 0 0 0 1px rgba(196, 112, 63, .4);
+}
+@media (prefers-reduced-motion: reduce) {
+  .uglez-orbe[data-estado="pensando"] { animation: none; }
+}
+
+/* ---- o que está sendo lido, onde a pergunta é feita ---- */
+.uglez-contexto {
+  display: flex; align-items: center; gap: 7px;
+  margin: 0 2px 8px; min-height: 32px; padding: 5px 11px;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--plane-2); color: var(--ink-2);
+  font-size: 12.5px; text-align: left;
+}
+.uglez-contexto:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.uglez-contexto:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.uglez-contexto-ponto { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--good-text); }
+.uglez-contexto-texto { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.uglez-contexto-texto strong { font-weight: 640; color: var(--ink); }
+.uglez-contexto-seta { flex: none; display: grid; place-items: center; color: var(--muted); }
+
+/* ---- a folha do alcance ---- */
+.uglez-folha[hidden] { display: none; }
+.uglez-folha { position: fixed; inset: 0; z-index: 120; display: flex; align-items: flex-end; }
+.uglez-folha-fundo { position: absolute; inset: 0; background: rgba(3, 10, 15, .58); animation: scrim-in .18s var(--ease-out); }
+.uglez-folha-painel {
+  position: relative; width: 100%; max-height: 86dvh; overflow-y: auto; box-sizing: border-box;
+  padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--glass-line);
+  border-radius: 18px 18px 0 0;
+  background: var(--bg);
+  box-shadow: var(--shadow-lift);
+  animation: menu-sobe .26s var(--ease-out);
+}
+.uglez-folha-alca {
+  display: block; width: 40px; height: 4px; margin: 2px auto 12px;
+  border-radius: 2px; background: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+.uglez-folha-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.uglez-folha-topo h3 { margin: 0; font-family: var(--font-titulo); font-size: 21px; font-weight: 500; letter-spacing: -.01em; }
+.uglez-escopo-folha { display: flex; gap: 6px; }
+.uglez-escopo-folha button {
+  flex: 1; min-height: 44px; padding: 10px 8px;
+  border: 1px solid var(--border); border-radius: 11px;
+  background: var(--plane-2); color: var(--ink-2);
+  font-size: 13.5px; cursor: pointer;
+}
+.uglez-escopo-folha button.is-active {
+  border-color: color-mix(in srgb, var(--uglez) 55%, transparent);
+  background: color-mix(in srgb, var(--uglez) 18%, transparent);
+  color: var(--uglez-texto); font-weight: 620;
+}
+.uglez-escopo-folha button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.uglez-folha-nota { margin: 10px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.uglez-folha-nota.is-privacidade { margin-top: 6px; }
+#btnUglezFolhaDados { margin-top: 10px; padding-inline: 0; }
+
+/* ---- a tira do que foi lido, dentro da resposta ----
+   Ela NÃO é uma afirmação do modelo: é o retrato dos totais que o
+   OAZE calculou e enviou. Por isso vem antes do texto, com rótulo
+   próprio — quem lê sabe o que é conta da casa e o que é leitura
+   da UGLEZ. */
+.uglez-numeros-rotulo {
+  display: block; margin: 0 0 6px;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted);
+}
+.uglez-numeros {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px; margin: 0 0 12px; overflow: hidden;
+  border-radius: 12px; background: var(--border); border: 1px solid var(--border);
+}
+.uglez-numeros > div { padding: 8px 10px; background: var(--n1); }
+.uglez-numeros dt {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.uglez-numeros dd { margin: 3px 0 0; font-size: 13.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.uglez-numeros .is-entrada { color: var(--good-text); }
+.uglez-numeros .is-saida { color: var(--warning-text); }
+
+/* ---- perguntas de seguimento ---- */
+.uglez-seguir { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.uglez-seguir button {
+  min-height: 36px; padding: 7px 13px; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--uglez) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--uglez) 12%, transparent);
+  color: var(--uglez-texto); font-size: 13px;
+}
+.uglez-seguir button:hover { background: color-mix(in srgb, var(--uglez) 20%, transparent); }
+.uglez-seguir button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* =============================================================
+   A CÂMARA NO CELULAR — a conversa ocupa a tela
+   ------------------------------------------------------------
+   Substitui a seção 27.14: lá a faixa de identidade tinha
+   encolhido de 92 para 46px; aqui ela SAI. O nome da UGLEZ passou
+   para o orbe de 24px no cabeçalho, que diz a mesma coisa e ainda
+   mostra o estado — e a esfera WebGL, que custava 699ms no
+   primeiro render de um celular médio, não é montada no telefone.
+   ============================================================= */
+@media (max-width: 820px) {
+  /* --- cabeçalho do app: uma linha --- */
+  body[data-page="uglez"] .topnav-brand,
+  body[data-page="uglez"] #btnSearch,
+  body[data-page="uglez"] #btnNotif { display: none; }
+  body[data-page="uglez"] .topbar {
+    display: flex; flex-wrap: nowrap; align-items: center; gap: 8px;
+    padding-block: calc(env(safe-area-inset-top, 0px) + 4px) 6px;
+    margin-bottom: 6px;
+  }
+  body[data-page="uglez"] .pill-espaco { flex: 0 1 auto; min-width: 0; }
+  body[data-page="uglez"] .pill-period { flex: 1 1 auto; min-width: 0; }
+
+  /* --- aviso de conta: fica a ação, sai o parágrafo --- */
+  body[data-page="uglez"] .aviso-conta { padding: 7px 9px; gap: 8px; margin-bottom: 8px; }
+  body[data-page="uglez"] .aviso-conta p { font-size: 12.5px; line-height: 1.35; flex: 1 1 140px; }
+  body[data-page="uglez"] .aviso-conta .aviso-conta-detalhe { display: none; }
+  body[data-page="uglez"] .aviso-conta .btn { min-height: 34px; padding-block: 4px; font-size: 12.5px; }
+
+  /* --- a faixa de identidade sai; o console é a peça inteira --- */
+  .uglez-stage { grid-template-rows: minmax(0, 1fr); }
+  .uglez-presenca { display: none; }
+
+  /* --- o cabeçalho do console vira a barra da conversa --- */
+  .uglez-console-topo { padding: 9px 12px; gap: 9px; row-gap: 0; flex-wrap: nowrap; }
+  .uglez-console-id { min-width: 0; }
+  .uglez-console-id { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .uglez-marca {
+    flex-grow: 1; min-width: 0;
+    font-family: var(--font-mono); font-size: 11.5px; font-weight: 500;
+    letter-spacing: .26em; text-transform: uppercase; color: var(--ink);
+  }
+
+  .uglez-compositor { padding: 8px 10px 9px; }
+  .uglez-page .uglez-rodape { margin-top: 5px; font-size: 10.5px; }
+  .uglez-numeros dd { font-size: 13px; }
+}
+
+/* Tela baixa: o campo perde a folga de baixo. */
+@media (max-width: 820px) and (max-height: 700px) {
+  .uglez-console-topo { padding-block: 7px; }
+  .uglez-compositor { padding-block: 7px 8px; }
+}
+
+/* =============================================================
+   A MESMA CÂMARA NO COMPUTADOR
+   ------------------------------------------------------------
+   O hemisfério da presença continua — ali a esfera tem espaço e é
+   o que faz a tela ser a UGLEZ e não um chat qualquer. O que muda
+   é que o console adota as mesmas partes do celular: a linha de
+   contexto acima do campo (no lugar de dois seletores de período
+   em cantos opostos da tela) e a folha do alcance, que aqui não
+   sobe da base — abre centrada, do tamanho do que tem dentro.
+   ============================================================= */
+@media (min-width: 821px) {
+  .uglez-console-topo .uglez-orbe,
+  .uglez-marca { display: none; }
+
+  /* O período sai do cabeçalho: ele passou a viver na linha de
+     contexto, colado no campo. Mantê-lo nos dois lugares seria
+     repetir a informação que esta reforma juntou. O elemento
+     continua no HTML porque o leitor de tela o anuncia junto do
+     título da seção. */
+  .uglez-console-id p {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+  }
+
+  /* A tira é um resumo, não uma tabela: esticada por 1000px os três
+     números deixam de ser lidos juntos. */
+  .uglez-numeros { max-width: 520px; }
+  .uglez-folha { align-items: center; justify-content: center; }
+  .uglez-folha-painel {
+    width: min(420px, calc(100vw - 48px));
+    max-height: min(560px, calc(100dvh - 80px));
+    padding: 18px 22px 22px;
+    border: 1px solid var(--glass-line); border-radius: var(--radius-lg);
+    animation: busca-in .18s var(--ease-out);
+  }
+  .uglez-folha-alca { display: none; }
+  .uglez-contexto { margin-bottom: 10px; }
 }

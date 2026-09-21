@@ -1303,13 +1303,6 @@
   "es": "Conversación"
  },
  {
-  "pt": "O que a UGLEZ considera",
-  "tipo": "exato",
-  "en": "What UGLEZ takes into account",
-  "fr": "Ce que UGLEZ prend en compte",
-  "es": "Lo que UGLEZ tiene en cuenta"
- },
- {
   "pt": "Começar nova conversa",
   "tipo": "exato",
   "en": "Start a new conversation",
@@ -1413,6 +1406,55 @@
   "en": "Data used",
   "fr": "Données utilisées",
   "es": "Datos usados"
+ },
+ {
+  "pt": "O que a UGLEZ lê",
+  "tipo": "exato",
+  "en": "What UGLEZ reads",
+  "fr": "Ce que lit UGLEZ",
+  "es": "Lo que lee UGLEZ"
+ },
+ {
+  "pt": "Fechar",
+  "tipo": "exato",
+  "en": "Close",
+  "fr": "Fermer",
+  "es": "Cerrar"
+ },
+ {
+  "pt": "O que a UGLEZ considera",
+  "tipo": "exato",
+  "en": "What UGLEZ takes into account",
+  "fr": "Ce que UGLEZ prend en compte",
+  "es": "Lo que UGLEZ tiene en cuenta"
+ },
+ {
+  "pt": "Este mês",
+  "tipo": "exato",
+  "en": "This month",
+  "fr": "Ce mois-ci",
+  "es": "Este mes"
+ },
+ {
+  "pt": "O ano",
+  "tipo": "exato",
+  "en": "The year",
+  "fr": "L’année",
+  "es": "El año"
+ },
+ {
+  "pt": "Sempre totais por categoria e por mês. Nunca a descrição de um lançamento, nem nome de pessoa ou empresa.",
+  "tipo": "exato",
+  "en": "Always totals by category and by month. Never the description of an entry, nor the name of a person or company.",
+  "fr": "Toujours des totaux par catégorie et par mois. Jamais le libellé d’une écriture, ni un nom de personne ou d’entreprise.",
+  "es": "Siempre totales por categoría y por mes. Nunca la descripción de un movimiento, ni nombre de persona o empresa."
+ },
+ {
+  "pt": "Ver exatamente o que é enviado",
+  "tipo": "exato",
+  "en": "See exactly what is sent",
+  "fr": "Voir exactement ce qui est envoyé",
+  "es": "Ver exactamente lo que se envía"
  },
  {
   "pt": "Perfil",
@@ -1614,13 +1656,6 @@
   "en": "Title",
   "fr": "Titre",
   "es": "Título"
- },
- {
-  "pt": "Fechar",
-  "tipo": "exato",
-  "en": "Close",
-  "fr": "Fermer",
-  "es": "Cerrar"
  },
  {
   "pt": "Chart.js não pôde ser carregado (sem internet). Tabelas e números continuam funcionando; os gráficos ficam ocultos.",
