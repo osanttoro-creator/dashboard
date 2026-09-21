@@ -94,6 +94,22 @@
     return new Promise((resolve) => {
       const marcado = U.el('input', { type: 'checkbox', id: 'consentimentoPrivacidadeApp' });
       const status = U.el('p', { class: 'consentimento-status', role: 'alert', hidden: true });
+
+      /* A preferência de cookies entra AQUI, e não numa barra separada
+         por baixo deste modal (ver cookies.js). Duas regras que a LGPD
+         pede e que esta caixa segue: ela é SEPARADA do aceite da
+         política (consentimento específico, nunca embutido) e vem
+         DESMARCADA (sem escolha pré-feita). Só aparece se a pessoa
+         ainda não respondeu — quem veio do site já respondeu lá. */
+      const perguntaCookies = !!(global.OazeCookies && !OazeCookies.respondido());
+      const opcionais = U.el('input', { type: 'checkbox', id: 'consentimentoOpcionaisApp' });
+      const blocoCookies = perguntaCookies ? U.el('label', { class: 'consentimento-opcao is-opcional', for: 'consentimentoOpcionaisApp' }, [
+        opcionais,
+        U.el('span', {}, [
+          document.createTextNode('Permitir tecnologias opcionais no futuro — não é obrigatório. Hoje o OAZE não usa analytics nem publicidade. '),
+          U.el('a', { href: '/privacidade#cookies', target: '_blank', rel: 'noopener', text: 'Política de cookies' })
+        ])
+      ]) : null;
       const corpo = U.el('div', { class: 'consentimento-app' }, [
         U.el('p', { text: 'Antes de continuar, leia como o OAZE trata seus dados financeiros e seus direitos.' }),
         U.el('label', { class: 'consentimento-opcao', for: 'consentimentoPrivacidadeApp' }, [
@@ -104,11 +120,12 @@
             document.createTextNode('.')
           ])
         ]),
+        blocoCookies,
         U.el('p', { class: 'hint', text: user
           ? 'O aceite será vinculado à sua conta. Você pode consultar a política a qualquer momento.'
           : 'Sem conta, este aceite vale apenas neste navegador.' }),
         status
-      ]);
+      ].filter(Boolean));
 
       UI.openModal({
         title: 'Privacidade antes de começar',
@@ -148,6 +165,9 @@
                   salvarAceiteLocal();
                 }
                 limparPendente();
+                if (perguntaCookies && global.OazeCookies) {
+                  OazeCookies.registrar(opcionais.checked ? 'aceitos' : 'recusados');
+                }
                 UI.closeModal(true);
                 resolve(true);
               } catch (e) {

@@ -5362,17 +5362,15 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
     visibility: visible;
     pointer-events: auto;
   }
-  /* A animação de entrada só roda quando o elemento é desenhado
-     pela primeira vez — e agora isso acontece no aquecimento, com
-     a folha invisível. O movimento passa a ser transição, que
-     dispara toda vez que o estado muda. */
+  /* A folha já nasce desenhada e inerte. Uma transição curta dá
+     resposta imediata ao toque sem sacrificar a leitura do movimento. */
   .menu-movel.esta-pronta .menu-movel-painel {
     animation: none;
-    transition: transform .26s var(--ease-out), opacity .26s var(--ease-out);
+    transition: transform .18s var(--ease-out), opacity .16s var(--ease-out);
   }
   .menu-movel.esta-pronta .menu-movel-scrim {
     animation: none;
-    transition: opacity .18s var(--ease-out);
+    transition: opacity .14s var(--ease-out);
   }
   .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-painel { transform: translateY(14px); opacity: 0; }
   .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-scrim { opacity: 0; }
@@ -5458,3 +5456,9 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-stage { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); }
   .uglez-page.tem-conversa .uglez-stage { grid-template-columns: minmax(0, 280px) minmax(0, 1fr); }
 }
+
+/* A preferência de cookies dentro do modal de privacidade (ver
+   consentimento.js): mesma forma do aceite, peso menor. Ela é
+   opcional e vem desmarcada — não pode disputar atenção com o que
+   é obrigatório. */
+.consentimento-opcao.is-opcional { margin-top: 10px; font-size: 13px; line-height: 1.45; color: var(--ink-2); }

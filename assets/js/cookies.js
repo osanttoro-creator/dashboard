@@ -58,15 +58,21 @@
     aviso.remove();
   }
 
-  function iniciar() {
+  function respondido() {
     try {
       var salvo = localStorage.getItem(CHAVE);
-      if (salvo === 'aceitos' || salvo === 'recusados') {
-        aplicar(salvo);
-        return;
-      }
-    } catch (e) {}
+      return salvo === 'aceitos' || salvo === 'recusados' ? salvo : null;
+    } catch (e) { return null; }
+  }
 
+  function iniciar() {
+    var salvo = respondido();
+    if (salvo) { aplicar(salvo); return; }
+    if (document.querySelector('.aviso-cookies')) return;   // já está na tela
+    montarAviso();
+  }
+
+  function montarAviso() {
     var aviso = document.createElement('section');
     aviso.className = 'aviso-cookies';
     aviso.setAttribute('role', 'region');
@@ -107,6 +113,44 @@
     document.body.appendChild(aviso);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
-  else iniciar();
+  /* ============================================================
+     NO APP, A PERGUNTA VAI DENTRO DO MODAL DE PRIVACIDADE
+     ------------------------------------------------------------
+     Quem abria o app direto recebia, AO MESMO TEMPO, o modal de
+     privacidade (obrigatório), este aviso de cookies por baixo e o
+     aviso de conta atrás — e depois o assistente. Três perguntas
+     empilhadas antes de a pessoa ver o produto.
+
+     O app.html marca <html data-cookies-no-aceite>. Aí este aviso
+     não se mostra sozinho: a preferência vira uma caixa opcional,
+     desmarcada, no mesmo modal de privacidade (consentimento.js), e
+     é gravada pelo registrar() abaixo. Quem já aceitou a
+     privacidade antes e nunca respondeu aos cookies recebe o aviso
+     depois, pelo mostrar() — um de cada vez, nunca empilhado.
+
+     No site público nada muda: o aviso aparece como sempre.
+     ============================================================ */
+  window.OazeCookies = {
+    respondido: respondido,
+    registrar: function (valor) {
+      if (valor !== 'aceitos' && valor !== 'recusados') return;
+      try { localStorage.setItem(CHAVE, valor); } catch (e) {}
+      aplicar(valor);
+      var aviso = document.querySelector('.aviso-cookies');
+      if (aviso) aviso.remove();
+    },
+    mostrar: iniciar
+  };
+
+  function comecar() {
+    if (document.documentElement.hasAttribute('data-cookies-no-aceite')) {
+      var salvo = respondido();
+      if (salvo) aplicar(salvo);
+      return;
+    }
+    iniciar();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', comecar);
+  else comecar();
 })();

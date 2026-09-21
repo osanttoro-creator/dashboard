@@ -166,13 +166,6 @@
   "es": "Ponle un nombre a la cuenta."
  },
  {
-  "pt": "Conta corrente",
-  "tipo": "exato",
-  "en": "Checking account",
-  "fr": "Compte courant",
-  "es": "Cuenta corriente"
- },
- {
   "pt": "Estas categorias já vêm prontas. Remova as que não fazem sentido para você — dá para criar outras a qualquer momento.",
   "tipo": "exato",
   "en": "These categories come ready-made. Remove the ones that don't make sense for you — you can create others anytime.",

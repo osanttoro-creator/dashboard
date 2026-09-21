@@ -149,8 +149,12 @@
     let method = editing ? editing.method : (d.method || 'account');
 
     if (!prof.accounts.length && !prof.cards.length) {
-      UI.toast('Cadastre uma conta ou cartão antes de lançar.', 'error');
-      App.goTo('accounts');
+      /* Sem a conta de fábrica (ver makeInitialState), este é o caminho
+         de todo mundo que pula o assistente. Levar à página e parar ali
+         era deixar a pessoa procurando o botão; o formulário já abre. */
+      UI.toast('Cadastre uma conta ou cartão antes de lançar.', 'info');
+      App.goTo('accounts', { tab: 'accounts' });
+      setTimeout(() => Forms.openAccount(), 250);
       return;
     }
 
@@ -510,6 +514,38 @@
      CONTA BANCÁRIA
      ============================================================ */
 
+  /* ============================================================
+     A CONTA DE FÁBRICA QUE NINGUÉM USOU
+     ------------------------------------------------------------
+     Até 21/09/2026 todo navegador novo nascia com uma "Conta corrente
+     — Itaú" de saldo zero (ver makeInitialState no store.js). Quem
+     já a tem no aparelho e cadastra a primeira conta de verdade não
+     precisa mais dela — e ela, sendo a primeira da lista, vinha
+     pré-selecionada no lançamento e ficava negativa.
+
+     Ela só sai se for EXATAMENTE a de fábrica e nunca tiver sido
+     tocada: mesmo nome, mesmo banco, saldo zero, sem número, e
+     nenhum lançamento, cartão, fatura, aporte ou meta apontando para
+     ela. É a mesma regra que o assistente já usava para reaproveitá-la
+     (onboarding.js, etapa "conta"). Qualquer sinal de uso, e ela fica.
+     ============================================================ */
+  function contaDeFabricaIntocada(prof, novaId) {
+    const ref = new Set();
+    prof.transactions.forEach((t) => { if (t.accountId) ref.add(t.accountId); if (t.toAccountId) ref.add(t.toAccountId); });
+    prof.cards.forEach((c) => { if (c.accountId) ref.add(c.accountId); });
+    (prof.investments || []).forEach((i) => { if (i.accountId) ref.add(i.accountId); });
+    (prof.goals || []).forEach((g) => {
+      if (g.accountId) ref.add(g.accountId);
+      (g.deposits || []).forEach((d) => { if (d.accountId) ref.add(d.accountId); });
+    });
+    Object.keys(prof.invoices || {}).forEach((k) => {
+      (Calc.invoiceMovements(prof.invoices[k]) || []).forEach((m) => { if (m.accountId) ref.add(m.accountId); });
+    });
+    return prof.accounts.find((a) => a.id !== novaId && !a.archived
+      && a.name === 'Conta corrente' && a.bank === 'Itaú'
+      && !(+a.openingBalance) && !a.last4 && !ref.has(a.id)) || null;
+  }
+
   Forms.openAccount = function (accountId) {
     if (!accountId && global.Limites && !Limites.exigirEspaco('accounts')) return;
     const editing = accountId ? Store.accounts.get(accountId) : null;
@@ -689,7 +725,16 @@
         cotacao
       };
       if (editing) { Store.accounts.update(editing.id, data); UI.toast('Conta atualizada.', 'success'); }
-      else { Store.accounts.add(data); UI.toast('Conta criada.', 'success'); }
+      else {
+        const criada = Store.accounts.add(data);
+        const fantasma = contaDeFabricaIntocada(Store.profile(), criada && criada.id);
+        if (fantasma) {
+          Store.accounts.remove(fantasma.id);
+          UI.toast('Conta criada. A "Conta corrente — Itaú" de exemplo, que nunca foi usada, saiu da lista.', 'success', 6000);
+        } else {
+          UI.toast('Conta criada.', 'success');
+        }
+      }
       UI.closeModal();
     }
 

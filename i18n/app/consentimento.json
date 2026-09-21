@@ -5,6 +5,25 @@
   "ignorar": true
  },
  {
+  "pt": "Permitir tecnologias opcionais no futuro — não é obrigatório. Hoje o OAZE não usa analytics nem publicidade.",
+  "tipo": "exato",
+  "en": "Allow optional technologies in the future — not required. Today OAZE uses no analytics and no advertising.",
+  "fr": "Autoriser des technologies optionnelles à l’avenir — facultatif. Aujourd’hui, OAZE n’utilise ni analytique ni publicité.",
+  "es": "Permitir tecnologías opcionales en el futuro — no es obligatorio. Hoy OAZE no usa analytics ni publicidad."
+ },
+ {
+  "pt": "_blank",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Política de cookies",
+  "tipo": "exato",
+  "en": "Cookie policy",
+  "fr": "Politique de cookies",
+  "es": "Política de cookies"
+ },
+ {
   "pt": "Antes de continuar, leia como o OAZE trata seus dados financeiros e seus direitos.",
   "tipo": "exato",
   "en": "Before continuing, read how OAZE handles your financial data and your rights.",
@@ -17,11 +36,6 @@
   "en": "I have read and accept the",
   "fr": "J'ai lu et j'accepte la",
   "es": "He leído y acepto la"
- },
- {
-  "pt": "_blank",
-  "tipo": "exato",
-  "ignorar": true
  },
  {
   "pt": "Política de privacidade",

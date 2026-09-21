@@ -288,7 +288,13 @@
 
     const aviso = document.getElementById('avisoConta');
     if (aviso) {
-      const mostrar = temSync && !restaurando && !u && !avisoFechadoRecente();
+      /* Só quando já há algo a perder. "Estes dados estão só neste
+         aparelho" dito a quem ainda não lançou nada é um aviso sobre
+         nada — e ele chegava junto do modal de privacidade e do
+         assistente, empilhando uma terceira pergunta na chegada. Depois
+         do primeiro lançamento ele passa a ser verdade, e aparece. */
+      const temAlgoGuardado = !!(global.Store && Store.profile && Store.profile().transactions.length);
+      const mostrar = temSync && !restaurando && !u && temAlgoGuardado && !avisoFechadoRecente();
       aviso.hidden = !mostrar;
       aviso.textContent = '';
       if (mostrar) {
@@ -398,6 +404,9 @@
     if (global.Sync && Sync.aoMudarEstado) Sync.aoMudarEstado(ES.pintar);
     global.addEventListener('online', ES.pintar);
     global.addEventListener('offline', ES.pintar);
+    /* O primeiro lançamento é o que torna o aviso de conta verdadeiro:
+       sem ouvir o Store, ele só apareceria no próximo recarregar. */
+    if (global.Store && Store.onChange) Store.onChange(ES.pintar);
     ES.pintar();
   };
 

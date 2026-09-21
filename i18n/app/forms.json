@@ -432,6 +432,18 @@
   "es": "Guardar y nuevo"
  },
  {
+  "pt": "Conta corrente",
+  "tipo": "exato",
+  "en": "Checking account",
+  "fr": "Compte courant",
+  "es": "Cuenta corriente"
+ },
+ {
+  "pt": "Itaú",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Nome da conta *",
   "tipo": "exato",
   "en": "Account name *",
@@ -444,11 +456,6 @@
   "en": "e.g. Checking account",
   "fr": "Ex. : Compte courant",
   "es": "Ej.: Cuenta corriente"
- },
- {
-  "pt": "Itaú",
-  "tipo": "exato",
-  "ignorar": true
  },
  {
   "pt": "Banco",
@@ -610,6 +617,13 @@
   "en": "Account updated.",
   "fr": "Compte mis à jour.",
   "es": "Cuenta actualizada."
+ },
+ {
+  "pt": "Conta criada. A \"Conta corrente — Itaú\" de exemplo, que nunca foi usada, saiu da lista.",
+  "tipo": "exato",
+  "en": "Account created. The sample \"Conta corrente — Itaú\" account, which was never used, was removed from the list.",
+  "fr": "Compte créé. Le compte d’exemple « Conta corrente — Itaú », jamais utilisé, a été retiré de la liste.",
+  "es": "Cuenta creada. La cuenta de ejemplo \"Conta corrente — Itaú\", que nunca se usó, salió de la lista."
  },
  {
   "pt": "Conta criada.",

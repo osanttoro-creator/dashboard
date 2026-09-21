@@ -825,6 +825,11 @@
     setTimeout(async () => {
       try {
         const autorizado = !global.Consentimento || await Consentimento.garantir();
+        /* Quem aceitou a privacidade antes e nunca respondeu aos cookies
+           recebe o aviso agora — depois do modal, nunca junto dele. Quem
+           acabou de aceitar já respondeu dentro do próprio modal, e aí
+           isto não mostra nada. */
+        if (autorizado && global.OazeCookies) OazeCookies.mostrar();
         if (autorizado && global.Ob && Ob.talvezOferecer) Ob.talvezOferecer();
       } catch (e) {
         console.error('Consentimento/início:', e);

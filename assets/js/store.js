@@ -206,10 +206,14 @@
   function makeInitialState() {
     const pessoal = makeProfile(tr('Pessoal'));
     const pj = makeProfile('PJ / Autônomo');
-    pessoal.accounts.push({
-      id: U.uid('acc'), name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente',
-      color: '#9A5F35', openingBalance: 0, openedAt: U.todayISO(), archived: false
-    });
+    /* Até 21/09/2026 o espaço Pessoal nascia com uma "Conta corrente —
+       Itaú" de saldo zero. Quem pulava o assistente e cadastrava o banco
+       de verdade ficava com as duas, e o primeiro lançamento caía na
+       fantasma (ela era a primeira da lista, logo a pré-selecionada) e a
+       deixava no negativo — numa conta de um banco que a pessoa nem tem.
+       O espaço PJ já nascia sem conta, então o app inteiro já sabia
+       funcionar assim: o assistente cria a primeira, e o formulário de
+       lançamento pede uma antes de lançar. */
     return {
       version: VERSION,
       theme: 'dark',            // noite no deserto é o tema principal
@@ -329,33 +333,33 @@
       const banco = String(a.bank || '');
       const preset = bankPreset(banco);
       return {
-      id: a.id || U.uid('acc'),
-      name: String(a.name || 'Conta'),
-      bank: banco,
-      type: String(a.type || 'Conta corrente'),
-      /* Dados antigos também obedecem à regra: banco conhecido usa
-         o preset; só uma conta personalizada conserva sua escolha. */
-      color: preset ? preset.color : migrateColor(a.color || '#8A7A62'),
-      gradient: preset ? null : (a.gradient ? String(a.gradient) : null),
-      last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
-      openingBalance: U.round2(+a.openingBalance || 0),
-      openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
-      archived: !!a.archived,
-      /* Fora dos totais: a conta continua existindo, com extrato e
-         saldo, mas o que passa por ela não entra nas receitas e
-         despesas do mês. É para a conta da empresa, a conta de
-         terceiros, a poupança do filho — dinheiro que aparece no
-         banco e não é seu para gastar. Ausente = considerada, que
-         é o que todo dado antigo significa. */
-      considerado: a.considerado !== false,
-      /* Conta em outra moeda — quem mora fora, quem recebe de fora,
-         quem tem Wise ou Nomad. O saldo inicial e o extrato são na
-         moeda dela (como o limite do cartão internacional é na moeda
-         do cartão), e a cotação converte para os totais do app, que
-         são em real. Ausente = real, que é o que toda conta antiga é. */
-      moeda: /^[A-Z]{3}$/.test(a.moeda || '') ? a.moeda : 'BRL',
-      cotacao: +a.cotacao > 0 ? Math.round(+a.cotacao * 10000) / 10000 : null
-    };
+        id: a.id || U.uid('acc'),
+        name: String(a.name || 'Conta'),
+        bank: banco,
+        type: String(a.type || 'Conta corrente'),
+        /* Dados antigos também obedecem à regra: banco conhecido usa
+           o preset; só uma conta personalizada conserva sua escolha. */
+        color: preset ? preset.color : migrateColor(a.color || '#8A7A62'),
+        gradient: preset ? null : (a.gradient ? String(a.gradient) : null),
+        last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
+        openingBalance: U.round2(+a.openingBalance || 0),
+        openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
+        archived: !!a.archived,
+        /* Fora dos totais: a conta continua existindo, com extrato e
+           saldo, mas o que passa por ela não entra nas receitas e
+           despesas do mês. É para a conta da empresa, a conta de
+           terceiros, a poupança do filho — dinheiro que aparece no
+           banco e não é seu para gastar. Ausente = considerada, que
+           é o que todo dado antigo significa. */
+        considerado: a.considerado !== false,
+        /* Conta em outra moeda — quem mora fora, quem recebe de fora,
+           quem tem Wise ou Nomad. O saldo inicial e o extrato são na
+           moeda dela (como o limite do cartão internacional é na moeda
+           do cartão), e a cotação converte para os totais do app, que
+           são em real. Ausente = real, que é o que toda conta antiga é. */
+        moeda: /^[A-Z]{3}$/.test(a.moeda || '') ? a.moeda : 'BRL',
+        cotacao: +a.cotacao > 0 ? Math.round(+a.cotacao * 10000) / 10000 : null
+      };
     });
     prof.cards = (Array.isArray(prof.cards) ? prof.cards : []).map((c) => ({
       id: c.id || U.uid('card'),

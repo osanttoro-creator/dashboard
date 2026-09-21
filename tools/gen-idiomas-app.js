@@ -47,9 +47,9 @@ const SAIDA = path.join(RAIZ, 'assets', 'js', 'i18n');
 const LINGUAS = ['en', 'fr', 'es'];
 
 /* Arquivos do app, na ordem em que um texto repetido fica com o
-   primeiro que o disser. Site, landing e cookies ficam de fora: têm o
+   primeiro que o disser. Site, landing, cookies e contato ficam de fora: têm o
    próprio dicionário (gen-idiomas.js) ou o próprio mapa (cookies.js). */
-const FORA = new Set(['site.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'idioma.js',
+const FORA = new Set(['site.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'contato.js', 'idioma.js',
   'supabase-config.js', 'icons.js', 'uglez-particulas.js', 'uglez-erosao.js', 'uglez-neon.js']);
 
 function arquivosDoApp() {

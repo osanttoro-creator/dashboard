@@ -25,3 +25,11 @@ verify_jwt = true
 # A Stripe não possui sessão do Supabase. A função valida o corpo
 # cru com STRIPE_WEBHOOK_SECRET antes de interpretar o evento.
 verify_jwt = false
+
+[functions.oaze-contato]
+# Pública de propósito: quem escreve para o suporte muitas vezes é
+# justamente quem não consegue entrar. O que protege a rota é a
+# origem (OAZE_ALLOWED_ORIGINS), o limite de 5 envios por hora por
+# origem, o campo-isca e os limites de tamanho — ver o cabeçalho de
+# supabase/functions/oaze-contato/index.ts.
+verify_jwt = false
