@@ -5294,3 +5294,72 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .uglez-folha-alca { display: none; }
   .uglez-contexto { margin-bottom: 10px; }
 }
+
+/* =============================================================
+   28 · A FOLHA DO MENU JÁ NASCE MEDIDA
+   -------------------------------------------------------------
+   Medido no site no ar, num celular médio (processador freado 6×):
+   o PRIMEIRO toque em "Menu" levava de 1,0 a 1,9 SEGUNDO até a
+   folha aparecer. O segundo toque era rápido — por isso a medição
+   antiga, feita com a página já aquecida, não via o problema.
+
+   A causa não era a animação (sem ela o tempo era o mesmo) nem o
+   conteúdo ser caro (nenhum vidro, nenhum filtro, uma sombra só).
+   Era o `display: none`: cada abertura mandava o navegador
+   calcular do zero o estilo e o layout dos 95 nós da folha, e num
+   aparelho lento isso é meio segundo de tela parada.
+
+   Agora a folha entra no layout UMA vez, quando o aparelho está
+   ocioso depois do primeiro desenho, e fica lá invisível. Abrir
+   passou a ser trocar visibilidade: 59 a 315ms.
+
+   Enquanto o aquecimento não aconteceu (ou se ele nunca acontecer,
+   num navegador sem requestIdleCallback e com a aba fechada antes
+   do tempo), a folha continua com `display: none` e o toque ainda
+   funciona — só paga o preço antigo. Nada depende do aquecimento
+   para estar correto; ele só antecipa o trabalho.
+   ============================================================= */
+@media (max-width: 820px) {
+  /* Fechada e já medida: continua no layout, invisível e inerte.
+     NÃO usa [hidden] — a regra global `[hidden] { display: none
+     !important }` (linha 214) venceria qualquer coisa escrita aqui,
+     e foi exatamente assim que a primeira tentativa deste conserto
+     não serviu para nada: a classe entrava, o layout continuava
+     sendo refeito a cada toque. */
+  .menu-movel.esta-pronta {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .menu-movel.esta-pronta.esta-aberta {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  /* A animação de entrada só roda quando o elemento é desenhado
+     pela primeira vez — e agora isso acontece no aquecimento, com
+     a folha invisível. O movimento passa a ser transição, que
+     dispara toda vez que o estado muda. */
+  .menu-movel.esta-pronta .menu-movel-painel {
+    animation: none;
+    transition: transform .26s var(--ease-out), opacity .26s var(--ease-out);
+  }
+  .menu-movel.esta-pronta .menu-movel-scrim {
+    animation: none;
+    transition: opacity .18s var(--ease-out);
+  }
+  .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-painel { transform: translateY(14px); opacity: 0; }
+  .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-scrim { opacity: 0; }
+}
+
+@media (max-width: 820px) and (prefers-reduced-motion: reduce) {
+  .menu-movel.esta-pronta .menu-movel-painel,
+  .menu-movel.esta-pronta .menu-movel-scrim { transition: none; }
+}
+
+/* A folha aquecida perde o atributo `hidden`, e com ele a regra
+   global que a escondia. No computador ela não tem layout nenhum
+   declarado (as regras da folha vivem todas no bloco do celular),
+   e sem isto apareceria como um bloco solto no fim da página ao
+   virar o aparelho ou alargar a janela. */
+@media (min-width: 821px) {
+  .menu-movel { display: none !important; }
+}
