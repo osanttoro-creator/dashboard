@@ -1583,3 +1583,26 @@ p.leve { color: var(--bruma); }
 @media (max-width: 640px) {
   .rodape-fim .idiomas { margin-left: 0; }
 }
+
+/* ---------------------------------------------------------------
+   Formulário de contato (página de suporte)
+   ---------------------------------------------------------------
+   Os campos são os mesmos das telas de conta (.campo); aqui só entra
+   a área de texto, que o .campo não previa, e o campo-isca. */
+.campo textarea {
+  width: 100%; min-height: 150px; padding: 12px 14px;
+  border-radius: var(--raio-campo); border: 1px solid var(--borda-forte);
+  background: var(--noite); color: var(--tinta);
+  font: 400 1rem/1.5 var(--fonte-ui);
+  resize: vertical;
+  transition: border-color .16s var(--curva);
+}
+.campo textarea:hover { border-color: rgba(241, 236, 227, .32); }
+.campo textarea:focus { border-color: var(--ouro); }
+.campo textarea[aria-invalid="true"] { border-color: var(--critico); }
+.contato { margin-top: 14px; }
+.contato .btn { width: 100%; justify-content: center; }
+.contato-prazo { margin-top: 18px; }
+/* Fora da tela, e não display:none: alguns robôs pulam campos
+   escondidos com display:none justamente para não cair na isca. */
+.contato-isca { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

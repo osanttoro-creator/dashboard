@@ -298,5 +298,71 @@
   "en": "Made in Brazil · amounts in Brazilian reais (BRL)",
   "fr": "Fait au Brésil · montants en réais brésiliens (BRL)",
   "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
+ },
+ {
+  "pt": "Fale com a gente",
+  "en": "Contact us",
+  "fr": "Nous contacter",
+  "es": "Habla con nosotros"
+ },
+ {
+  "pt": "Escreva para a gente",
+  "en": "Write to us",
+  "fr": "Écrivez-nous",
+  "es": "Escríbenos"
+ },
+ {
+  "pt": "Seu nome",
+  "en": "Your name",
+  "fr": "Votre nom",
+  "es": "Tu nombre"
+ },
+ {
+  "pt": "Diga como podemos te chamar.",
+  "en": "Tell us what to call you.",
+  "fr": "Dites-nous comment vous appeler.",
+  "es": "Dinos cómo llamarte."
+ },
+ {
+  "pt": "Seu e-mail",
+  "en": "Your email",
+  "fr": "Votre e-mail",
+  "es": "Tu correo"
+ },
+ {
+  "pt": "É para ele que respondemos.",
+  "en": "This is where we reply.",
+  "fr": "C’est à cette adresse que nous répondons.",
+  "es": "Es a este correo que respondemos."
+ },
+ {
+  "pt": "Confira o e-mail: é por ele que vamos responder.",
+  "en": "Check your email address: it is where we will reply.",
+  "fr": "Vérifiez l’adresse e-mail : c’est là que nous répondrons.",
+  "es": "Revisa el correo: es por ahí que vamos a responder."
+ },
+ {
+  "pt": "Mensagem",
+  "en": "Message",
+  "fr": "Message",
+  "es": "Mensaje"
+ },
+ {
+  "pt": "Escreva um pouco mais — pelo menos uma frase.",
+  "en": "Write a little more — at least one sentence.",
+  "fr": "Écrivez un peu plus — au moins une phrase.",
+  "es": "Escribe un poco más — al menos una frase."
+ },
+ {
+  "pt": "Deixe em branco",
+  "en": "Leave blank",
+  "fr": "Laisser vide",
+  "es": "Déjalo en blanco"
+ },
+ {
+  "pt": "Enviar mensagem",
+  "en": "Send message",
+  "fr": "Envoyer le message",
+  "es": "Enviar mensaje"
  }
 ]

@@ -75,10 +75,38 @@
   <section class="secao" style="padding-top:0">
     <div class="env">
       <div class="grade grade-editorial">
-        <article class="carta revela">
-          <h3>E-mail</h3>
-          <p><a href="mailto:suporte@oaze.site">suporte@oaze.site</a></p>
-          <p>Respondemos em até <strong>2 dias úteis</strong>. Pedidos ligados à LGPD, em
+        <!-- O FORMULÁRIO GRAVA NO SUPABASE ANTES DE MANDAR O E-MAIL
+             (função oaze-contato). Se o envio falhar, a mensagem continua
+             guardada: nenhuma se perde por causa do correio. -->
+        <article class="carta revela" id="contato">
+          <h3>Escreva para a gente</h3>
+          <form class="contato" id="formContato" novalidate>
+            <div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div>
+            <div class="campo">
+              <label for="contatoNome">Seu nome</label>
+              <input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required>
+              <p class="erro" id="contatoNomeErro" hidden>Diga como podemos te chamar.</p>
+            </div>
+            <div class="campo">
+              <label for="contatoEmail">Seu e-mail</label>
+              <input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica">
+              <p class="dica" id="contatoEmailDica">É para ele que respondemos.</p>
+              <p class="erro" id="contatoEmailErro" hidden>Confira o e-mail: é por ele que vamos responder.</p>
+            </div>
+            <div class="campo">
+              <label for="contatoMensagem">Mensagem</label>
+              <textarea id="contatoMensagem" name="mensagem" rows="6" minlength="10" maxlength="5000" required></textarea>
+              <p class="erro" id="contatoMensagemErro" hidden>Escreva um pouco mais — pelo menos uma frase.</p>
+            </div>
+            <!-- campo-isca: fora da tela e fora da ordem de Tab. Pessoas não o
+                 veem; robôs o preenchem, e a função os descarta em silêncio. -->
+            <div class="contato-isca" aria-hidden="true">
+              <label for="contatoSite">Deixe em branco</label>
+              <input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-principal" id="contatoEnviar">Enviar mensagem</button>
+          </form>
+          <p class="contato-prazo">Respondemos em até <strong>2 dias úteis</strong>. Pedidos ligados à LGPD, em
           até <strong>15 dias</strong>, como manda a lei.</p>
         </article>
 
@@ -172,12 +200,13 @@
     <div class="rodape-fim">
       <p>© <span data-ano>2026</span> OAZE</p>
       <p>Feito no Brasil · valores em reais</p>
-      <p><a href="mailto:suporte@oaze.site">suporte@oaze.site</a></p>
+      <p><a href="/suporte#contato">Fale com a gente</a></p>
     <!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Idioma"><a data-idioma href="/suporte" hreflang="pt-BR" lang="pt-BR" aria-current="true">Português</a><a data-idioma href="/en/suporte" hreflang="en" lang="en">English</a><a data-idioma href="/fr/suporte" hreflang="fr" lang="fr">Français</a><a data-idioma href="/es/suporte" hreflang="es" lang="es">Español</a></nav><!-- /seletor-idioma --></div>
   </div>
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/contato.js" defer></script>
 <script src="/assets/js/cookies.js" defer></script>
 </body>
 </html>

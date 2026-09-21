@@ -75,10 +75,38 @@
   <section class="secao" style="padding-top:0">
     <div class="env">
       <div class="grade grade-editorial">
-        <article class="carta revela">
-          <h3>E-mail</h3>
-          <p><a href="mailto:suporte@oaze.site">suporte@oaze.site</a></p>
-          <p>Nous répondons sous <strong>2 jours ouvrés</strong>. Les demandes liées à la loi brésilienne de protection des données (LGPD), sous <strong>15 jours</strong>, comme l'exige la loi.</p>
+        <!-- O FORMULÁRIO GRAVA NO SUPABASE ANTES DE MANDAR O E-MAIL
+             (função oaze-contato). Se o envio falhar, a mensagem continua
+             guardada: nenhuma se perde por causa do correio. -->
+        <article class="carta revela" id="contato">
+          <h3>Écrivez-nous</h3>
+          <form class="contato" id="formContato" novalidate>
+            <div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div>
+            <div class="campo">
+              <label for="contatoNome">Votre nom</label>
+              <input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required>
+              <p class="erro" id="contatoNomeErro" hidden>Dites-nous comment vous appeler.</p>
+            </div>
+            <div class="campo">
+              <label for="contatoEmail">Votre e-mail</label>
+              <input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica">
+              <p class="dica" id="contatoEmailDica">C’est à cette adresse que nous répondons.</p>
+              <p class="erro" id="contatoEmailErro" hidden>Vérifiez l’adresse e-mail : c’est là que nous répondrons.</p>
+            </div>
+            <div class="campo">
+              <label for="contatoMensagem">Message</label>
+              <textarea id="contatoMensagem" name="mensagem" rows="6" minlength="10" maxlength="5000" required></textarea>
+              <p class="erro" id="contatoMensagemErro" hidden>Écrivez un peu plus — au moins une phrase.</p>
+            </div>
+            <!-- campo-isca: fora da tela e fora da ordem de Tab. Pessoas não o
+                 veem; robôs o preenchem, e a função os descarta em silêncio. -->
+            <div class="contato-isca" aria-hidden="true">
+              <label for="contatoSite">Laisser vide</label>
+              <input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-principal" id="contatoEnviar">Envoyer le message</button>
+          </form>
+          <p class="contato-prazo">Nous répondons sous <strong>2 jours ouvrés</strong>. Les demandes liées à la loi brésilienne de protection des données (LGPD), sous <strong>15 jours</strong>, comme l'exige la loi.</p>
         </article>
 
         <article class="carta revela">
@@ -156,12 +184,13 @@
     <div class="rodape-fim">
       <p>© <span data-ano>2026</span> OAZE</p>
       <p>Fait au Brésil · montants en réais brésiliens (BRL)</p>
-      <p><a href="mailto:suporte@oaze.site">suporte@oaze.site</a></p>
+      <p><a href="/fr/suporte#contato">Nous contacter</a></p>
     <!-- seletor-idioma: gerado --><nav class="idiomas" data-idiomas aria-label="Langue"><a data-idioma href="/suporte" hreflang="pt-BR" lang="pt-BR">Português</a><a data-idioma href="/en/suporte" hreflang="en" lang="en">English</a><a data-idioma href="/fr/suporte" hreflang="fr" lang="fr" aria-current="true">Français</a><a data-idioma href="/es/suporte" hreflang="es" lang="es">Español</a></nav><!-- /seletor-idioma --></div>
   </div>
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/contato.js" defer></script>
 <script src="/assets/js/cookies.js" defer></script>
 </body>
 </html>
