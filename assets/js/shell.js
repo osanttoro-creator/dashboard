@@ -573,27 +573,26 @@
 
       const marcarFechada = () => {
         menu.classList.remove('esta-aberta');
-        if (menu.classList.contains('esta-pronta')) {
-          menu.setAttribute('aria-hidden', 'true');
-          menu.inert = true;
-        } else {
-          menu.hidden = true;
-        }
+        menu.setAttribute('aria-hidden', 'true');
+        menu.inert = true;
       };
 
       const abrir = () => {
         fecha();
-        menu.hidden = false;
         menu.inert = false;
         menu.removeAttribute('aria-hidden');
         menu.classList.add('esta-aberta');
         botao.setAttribute('aria-expanded', 'true');
         document.body.classList.add('menu-movel-aberto');
         const ativo = menu.querySelector('.nav-item.is-active') || menu.querySelector('.nav-item');
-        if (ativo) ativo.focus({ preventScroll: true });
+        /* Mostra primeiro; mover o foco no mesmo clique forçava o
+           layout antes de o primeiro pixel da folha aparecer. */
+        if (ativo) requestAnimationFrame(() => {
+          if (estaAberta()) ativo.focus({ preventScroll: true });
+        });
       };
       const fechar = (devolveFoco) => {
-        if (!estaAberta() && menu.hidden) return;
+        if (!estaAberta()) return;
         marcarFechada();
         botao.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('menu-movel-aberto');
@@ -617,40 +616,8 @@
          baixo; a folha aberta ficaria órfã sobre a página. */
       global.addEventListener('resize', () => { if (global.innerWidth > 820) fechar(false); });
 
-      /* ========================================================
-         A FOLHA JÁ NASCE MEDIDA
-         --------------------------------------------------------
-         Com `display: none`, cada abertura mandava o navegador
-         calcular do zero o estilo e o layout dos 95 nós da folha.
-         Medido no ar, num celular médio: 1,0 a 1,9 SEGUNDO no
-         primeiro toque. O segundo era rápido — por isso a medição
-         com a página já aquecida não via o problema.
-
-         Aqui esse trabalho é feito uma vez, quando o aparelho
-         está ocioso depois do primeiro desenho. Sem pressa e sem
-         ninguém esperando: a classe põe a folha no layout
-         (invisível, ver a seção 28 do CSS) e a leitura força o
-         cálculo agora em vez de no toque.
-
-         Se o aquecimento não acontecer, nada quebra: a folha
-         continua abrindo pelo caminho antigo.
-         ======================================================== */
-      const aquecerFolha = () => {
-        if (menu.classList.contains('esta-pronta') || estaAberta()) return;
-        if (global.innerWidth > 820) return;   // no computador ela nem existe
-        if (!menu.querySelector('.nav-item')) return;   // ainda não montada
-        menu.classList.add('esta-pronta');
-        menu.hidden = false;              /* sai do display:none, entra no layout */
-        menu.inert = true;                /* … sem entrar na ordem de Tab */
-        menu.setAttribute('aria-hidden', 'true');
-        const painel = menu.querySelector('.menu-movel-painel');
-        if (painel) painel.getBoundingClientRect();   /* paga o layout agora */
-      };
-      if (global.requestIdleCallback) global.requestIdleCallback(aquecerFolha, { timeout: 4000 });
-      else setTimeout(aquecerFolha, 1500);
-      /* Quem chega no computador e só depois estreita a janela
-         (ou vira o aparelho) também ganha o aquecimento. */
-      global.addEventListener('resize', () => { if (global.innerWidth <= 820) aquecerFolha(); });
+      /* A folha já vem medida e inerte do HTML. O primeiro toque e
+         os seguintes percorrem exatamente o mesmo caminho. */
     }
 
     /* Cabeçalho que sai da frente ao rolar para baixo e volta ao

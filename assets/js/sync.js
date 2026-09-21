@@ -681,8 +681,16 @@
     ligarReleituras();
 
     /* A partir daqui, e até o backend responder, a pergunta "tem
-       conta neste aparelho" não tem resposta. Ver Sync.restaurando(). */
-    restaurando = true;
+       conta neste aparelho" não tem resposta. Ver Sync.restaurando().
+
+       EXCETO quando não há sessão guardada nenhuma: aí a resposta
+       já é conhecida — é um visitante — e esperar a rede para dizê-la
+       custava caro. O aviso "estes dados estão só neste aparelho"
+       aparecia segundos depois da página, quando a verificação
+       voltava, e empurrava tudo 88px para baixo: um salto de layout
+       medido num 4G lento. Sabendo na hora, ele nasce junto com a
+       página. */
+    restaurando = !(backend.temSessaoGuardada && !backend.temSessaoGuardada());
     setState('signed-out');
     // reconecta sozinho se já havia sessão neste aparelho
     backend.conectar().catch((e) => {

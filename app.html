@@ -63,12 +63,31 @@
 })();
 </script>
 <style>html[data-traduzindo] body { visibility: hidden; }</style>
+<!-- O conteúdo das páginas é todo desenhado pelo JavaScript. Pintado antes
+     disso, ele aparecia vazio e pulava quando era preenchido (CLS 0,83).
+     A barra do topo continua visível desde o primeiro quadro; só o miolo
+     espera o primeiro desenho. Se o boot falhar, a rede de segurança
+     mostra o que houver depois de 4s — nunca uma tela que não volta. -->
+<style>html:not(.app-pronto) #content { visibility: hidden; }</style>
+<!-- O relógio começa no DOMContentLoaded, e não aqui: num aparelho lento
+     os scripts podem levar mais de 4s para chegar, e uma rede de segurança
+     que dispara ANTES do boot revelava o miolo vazio — e era exatamente o
+     salto que ela existe para evitar. -->
+<script>document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () { document.documentElement.classList.add('app-pronto'); }, 3000);
+});</script>
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 
-<!-- fontes vendorizadas (IBM Plex Sans, Newsreader, IBM Plex Mono — embutidas
-     em base64 por tools/gen-fonte.js): sem CDN, funciona em file:// -->
+<!-- fontes vendorizadas (IBM Plex Sans, Newsreader, IBM Plex Mono), por URL.
+     Até 21/09/2026 iam em base64 dentro do CSS: 190 KB bloqueando a
+     primeira pintura (7,5s num 4G lento). O porquê está em
+     tools/gen-fonte.js. O preload das duas que aparecem na primeira
+     tela faz a troca de fonte acontecer antes do primeiro desenho, e
+     não depois — cada troca tardia é um salto de layout. -->
+<link rel="preload" href="/assets/vendor/fontes/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/vendor/fontes/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/vendor/fonte.css">
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -1173,7 +1192,7 @@
      botões são .nav-item com data-page, como os das outras duas
      navegações: o roteador liga o clique e acende o ativo aqui
      também, sem código próprio de navegação. -->
-<div class="menu-movel" id="menuMovel" hidden>
+<div class="menu-movel esta-pronta" id="menuMovel" aria-hidden="true" inert>
   <div class="menu-movel-scrim" data-fechar-menu></div>
   <div class="menu-movel-painel" role="dialog" aria-modal="true" aria-labelledby="menuMovelTitulo">
     <div class="menu-movel-alca" aria-hidden="true"></div>
@@ -1241,9 +1260,19 @@
 <!-- primeiro de todos: traduz o HTML fixo antes de qualquer script
      guardar referência a um elemento ou ligar um evento nele -->
 <script src="/assets/js/idioma.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<!-- sem internet (avião, celular offline), cai para a cópia local -->
-<script>window.Chart || document.write('<script src="assets\/vendor\/chart.umd.min.js"><\/script>');</script>
+<!-- Chart.js vem do PRÓPRIO domínio, e com defer.
+     Antes vinha do jsDelivr, síncrono, antes de todo o app: uma conexão
+     nova (DNS + TCP + TLS, uns 450ms num 4G lento) e 70 KB no caminho de
+     tudo o que vinha depois. O cache compartilhado entre sites, que era
+     o argumento para o CDN, não existe mais — os navegadores separam o
+     cache por site desde 2020.
+     Com defer ele executa depois dos scripts do app e ANTES do
+     DOMContentLoaded, que é quando o boot roda: quando a primeira
+     página pede um gráfico, o Chart já existe. Nenhum script do app
+     usa Chart ao carregar (só dentro de funções). A cópia local já
+     existia como reserva para quando o CDN falhava; agora ela é a
+     única, e o document.write que a injetava saiu. -->
+<script src="/assets/vendor/chart.umd.min.js" defer></script>
 <!-- ícones vendorizados (bancos + Lucide): sem CDN em runtime -->
 <script src="/assets/vendor/bancos.js"></script>
 <script src="/assets/vendor/icons.js"></script>

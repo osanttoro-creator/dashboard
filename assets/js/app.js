@@ -806,6 +806,13 @@
        erro nenhum. Ler primeiro, navegar depois. */
     const rotaInicial = App.paginaDaUrl && App.paginaDaUrl();
     App.goTo(rotaInicial && PAGES[rotaInicial] ? rotaInicial : 'home', { semUrl: true });
+    /* O conteúdo só aparece depois do primeiro desenho. Antes, a
+       página era pintada vazia e o JavaScript a preenchia um instante
+       depois, empurrando título e rodapé: um salto de layout de 0,83
+       medido num 4G lento (o limite do que o Google considera bom é
+       0,1). Conteúdo que APARECE não é salto; conteúdo que se MOVE é.
+       Ver o <head> do app.html para a rede de segurança. */
+    document.documentElement.classList.add('app-pronto');
 
     /* Primeira visita sem dados: configuração progressiva.
        Antes daqui havia um modal que oferecia "carregar dados de

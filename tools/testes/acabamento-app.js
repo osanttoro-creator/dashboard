@@ -10,6 +10,10 @@ const html = ler('app.html');
 const app = ler('assets/js/app.js');
 const css = ler('assets/css/style.css');
 const settings = ler('assets/js/pages/settings.js');
+const store = ler('assets/js/store.js');
+const forms = ler('assets/js/forms.js');
+const cards = ler('assets/js/cards.js');
+const shell = ler('assets/js/shell.js');
 const falhas = [];
 const exigir = (cond, msg) => { if (!cond) falhas.push(msg); };
 
@@ -25,6 +29,13 @@ exigir(/limitarEntradasNumericas/.test(app) && /\[inputmode="decimal"\]/.test(ap
 exigir(/grid-template-columns:\s*30px minmax\(0, 1fr\)/.test(css), 'categoria ainda não reserva espaço para o ícone');
 exigir(/\.pill-btn > \[data-ico\]/.test(css) && /\.notif-count\s*\{[^}]*position:\s*absolute/s.test(css),
   'ícones ou contador do cabeçalho continuam sem alinhamento explícito');
+exigir(/Store\.accountColor\s*=/.test(store) && /color:\s*preset\s*\?\s*preset\.color/.test(store),
+  'contas conhecidas não normalizam para a cor predeterminada');
+exigir(/const corDaConta\s*=/.test(forms) && /color:\s*corDaConta\(\)/.test(forms) &&
+  /bank:\s*acc\.bank/.test(cards), 'formulário ou cartão da conta ainda ignora a cor do banco');
+exigir(/class="menu-movel esta-pronta"/.test(html) &&
+  /id="menuMovel"[^>]*aria-hidden="true"[^>]*inert/.test(html) &&
+  !/requestIdleCallback\(aquecerFolha/.test(shell), 'menu móvel ainda depende de aquecimento tardio');
 
 console.log('\n  acabamento final do app');
 if (falhas.length) {

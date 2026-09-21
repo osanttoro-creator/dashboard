@@ -515,8 +515,9 @@
     const editing = accountId ? Store.accounts.get(accountId) : null;
 
     const fName = field('Nome da conta *', input({ value: editing ? editing.name : '', placeholder: 'Ex.: Conta corrente', maxlength: 50 }));
+    const bancoConhecido = editing && Store.bankPreset(editing.bank);
     const bankSel = select(Store.BANK_PRESETS.map((b) => ({ value: b.name, label: b.name })),
-      editing ? editing.bank : 'Itaú');
+      editing ? (bancoConhecido ? bancoConhecido.name : 'Outro') : 'Itaú');
     const fBank = field('Banco', bankSel);
     const fCustomBank = field('Nome do banco', input({ value: editing && !Store.BANK_PRESETS.some((b) => b.name === editing.bank) ? editing.bank : '' }));
     const fType = field('Tipo', select(Store.ACCOUNT_TYPES.map((t) => ({ value: t, label: t })), editing ? editing.type : null));
@@ -565,7 +566,7 @@
       value: editing ? editing.last4 : ''
     }), { hint: 'Só para reconhecer a conta na carteira. Opcional.' });
 
-    const picker = UI.colorPicker(editing ? editing.color : '#A68B6B');
+    const picker = UI.colorPicker(editing ? editing.color : '#8A7A62');
     const fColor = field('Cor identificadora', picker, { span2: true });
 
     /* ============================================================
@@ -589,6 +590,10 @@
     ]);
 
     const nomeBanco = () => (bankSel.value === 'Outro' ? fCustomBank._control.value : bankSel.value);
+    const corDaConta = () => {
+      const preset = Store.bankPreset(bankSel.value);
+      return preset ? preset.color : picker.getValue();
+    };
 
     /* cor do cartão + prévia ao vivo — a conta é desenhada como carteira */
     const grads = gradPicker(editing ? editing.gradient : null, () => paintPreview());
@@ -602,8 +607,7 @@
         name: fName._control.value.trim() || 'Conta',
         bank: nomeBanco(),
         type: fType._control.value,
-        color: bankSel.value === 'Outro' || !Cards.bankDesign(bankSel.value)
-          ? picker.getValue() : Cards.bankDesign(bankSel.value).a,
+        color: corDaConta(),
         gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
@@ -674,7 +678,7 @@
         name,
         bank: bankSel.value === 'Outro' ? (fCustomBank._control.value.trim() || 'Outro') : bankSel.value,
         type: fType._control.value,
-        color: picker.getValue(),
+        color: corDaConta(),
         gradient: bankSel.value === 'Outro' ? grads.getValue() : null,
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,

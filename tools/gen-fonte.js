@@ -1,20 +1,33 @@
 /* =============================================================
-   gen-fonte.js — embute as fontes da identidade como CSS base64
+   gen-fonte.js — as fontes da identidade para o app
    ------------------------------------------------------------
-   Por que embutir em base64 em vez de apontar para um .woff2:
+   ATÉ 21/09/2026 este gerador embutia as fontes em base64 dentro
+   do CSS, pelo motivo abaixo:
 
-   · o app precisa funcionar aberto em file://, e fonte em arquivo
-     separado é bloqueada por CORS nesse esquema na maioria dos
-     navegadores — o texto cairia para a fonte do sistema
-     justamente no cenário offline.
+     · o app precisa funcionar aberto em file://, e fonte em
+       arquivo separado é bloqueada por CORS nesse esquema na
+       maioria dos navegadores.
+
+   O motivo caducou. O app.html usa caminhos absolutos (/assets/…)
+   e carrega o Supabase por CDN: aberto em file:// ele já não
+   funciona, com ou sem fonte. E o preço do base64 ficou alto:
+
+     · o fonte.css tinha 190 KB comprimidos e bloqueava a primeira
+       pintura. Medido num 4G lento (1,6 Mbps, processador 4×), o
+       app levava 7,5 SEGUNDOS para pintar alguma coisa;
+     · a fonte embutida não é cacheada à parte: cada mudança no
+       CSS obrigava a baixar as três fontes de novo;
+     · o site público já usa os MESMOS .woff2 por URL. Quem chegava
+       pela página de vendas baixava as fontes duas vezes.
+
+   Agora o gerador escreve @font-face apontando para os .woff2 —
+   o CSS cai para ~1 KB, as fontes baixam em paralelo, ficam em
+   cache por sete dias e são compartilhadas com o site.
 
    As fontes vêm de assets/vendor/fontes/ (subconjunto "latin",
-   que cobre todos os acentos do português). O site público usa os
-   mesmos arquivos por URL; só o app precisa do base64.
-
-   Entram três: IBM Plex Sans (interface), Newsreader (títulos) e
-   IBM Plex Mono (rótulos). O itálico da Newsreader fica de fora do
-   app — ele só aparece nos títulos do site — e economiza ~190 KB.
+   que cobre todos os acentos do português). O itálico da
+   Newsreader continua de fora do app: ele só aparece nos títulos
+   do site.
 
    Uso (a partir da raiz do projeto):
      node tools/gen-fonte.js
@@ -45,8 +58,9 @@ let css = `/* =============================================================
    fonte.css — GERADO por tools/gen-fonte.js. Nao edite a mao.
    ------------------------------------------------------------
    IBM Plex Sans, Newsreader e IBM Plex Mono (SIL Open Font
-   License 1.1) — subconjunto latin, embutidas em base64 para
-   funcionar offline e em file://. Ver o porque no gerador.
+   License 1.1) — subconjunto latin, por URL. Ate 21/09/2026 eram
+   embutidas em base64 (190 KB bloqueando a primeira pintura);
+   o porque da mudanca esta no gerador.
    ============================================================= */
 `;
 
@@ -61,11 +75,11 @@ for (const f of faces) {
   font-style: ${f.estilo};
   font-display: swap;   /* o texto aparece na hora, na fonte do sistema */
   font-weight: ${f.peso};
-  src: url(data:font/woff2;base64,${fs.readFileSync(arquivo).toString('base64')}) format('woff2');
+  src: url('/assets/vendor/fontes/${f.arquivo}') format('woff2');
   unicode-range: ${range};
 }
 `;
 }
 
 fs.writeFileSync(saida, css, 'utf8');
-console.log('OK - assets/vendor/fonte.css  (' + Math.round(Buffer.byteLength(css) / 1024) + ' KB)');
+console.log('OK - assets/vendor/fonte.css  (' + (Buffer.byteLength(css) / 1024).toFixed(1) + ' KB)');

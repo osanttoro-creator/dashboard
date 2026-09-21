@@ -316,8 +316,10 @@
      mas ganha o rótulo e o brilho já próprios do UGLEZ. */
   F.aoNavegar = function (page) {
     /* Na Visão geral ele é parte estrutural do painel em todos os
-       planos. Fora dela continua obedecendo ao recurso do plano. */
-    const mostrar = page === 'home' || temDireito();
+       planos. Fora dela continua obedecendo ao recurso do plano.
+       Na própria UGLEZ ele some: um segundo UGLEZ cobriria a mesma
+       conversa que a pessoa já abriu. */
+    const mostrar = page !== 'uglez' && (page === 'home' || temDireito());
     if (mostrar && !raiz) construir();
     if (!raiz) return;
     if (!mostrar) F.fechar(false);

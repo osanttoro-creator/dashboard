@@ -352,6 +352,21 @@
     cliente: () => cliente,
     isConfigured: () => !!cfg(),
 
+    /* Há uma sessão guardada NESTE aparelho? Responde sem rede e sem
+       SDK: é só olhar a gaveta onde o cliente a guarda. "Não" é uma
+       resposta definitiva (visitante); "sim" ainda precisa ser
+       confirmado pelo servidor, porque a sessão pode ter expirado.
+       A volta do login pelo Google (código na URL) conta como "sim":
+       a sessão existe, só não foi gravada ainda. */
+    temSessaoGuardada() {
+      try {
+        if (/[?&]code=|access_token=/.test(location.search + location.hash)) return true;
+        const c = cfg();
+        const chave = (c && c.storageKey) || 'oaze.supabase.auth';
+        return !!localStorage.getItem(chave);
+      } catch (e) { return true; }   // na dúvida, espera o servidor
+    },
+
     async conectar() {
       const c = cfg();
       if (!c) throw new Error('Supabase não configurado.');

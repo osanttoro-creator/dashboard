@@ -371,7 +371,10 @@
     const saldo = Store.accounts && Store.accounts.get(acc.id)
       ? (moeda ? Calc.accountBalanceMoeda(acc.id, upto) : Calc.accountBalance(acc.id, upto))
       : U.round2(+acc.openingBalance || 0);
-    const grad = Cards.gradientFor({ id: acc.id, name: acc.name, color: acc.color, gradient: acc.gradient });
+    const grad = Cards.gradientFor({
+      id: acc.id, name: acc.name, bank: acc.bank,
+      color: acc.color, gradient: acc.gradient
+    });
 
     return shell({
       kind: moeda ? 'Débito · ' + moeda : 'Débito',

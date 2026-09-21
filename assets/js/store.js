@@ -110,6 +110,14 @@
     { name: 'Outro', color: '#8A7A62' }
   ];
 
+  /** Banco conhecido tem cor estável. "Outro" é a entrada para a
+      escolha da pessoa e, por isso, nunca vira preset. */
+  function bankPreset(name) {
+    const chave = U.norm(name || '');
+    if (!chave || chave === 'outro') return null;
+    return BANK_PRESETS.find((b) => U.norm(b.name) === chave) || null;
+  }
+
   /* Moedas dos cartões internacionais, na ordem em que aparecem
      para quem mora no Brasil e viaja ou tem conta fora. */
   const MOEDAS = [
@@ -154,6 +162,12 @@
     CATEGORIAS_PADRAO_PT: NOMES_PADRAO_PT
   };
 
+  Store.bankPreset = bankPreset;
+  Store.accountColor = (account) => {
+    const preset = bankPreset(account && account.bank);
+    return preset ? preset.color : migrateColor(account && account.color ? account.color : '#8A7A62');
+  };
+
   /** Nome da cor para rótulo e dica; o hex é o fallback honesto. */
   Store.colorName = (hex) => COLOR_NAMES[String(hex || '').toUpperCase()] || String(hex || '');
 
@@ -194,7 +208,7 @@
     const pj = makeProfile('PJ / Autônomo');
     pessoal.accounts.push({
       id: U.uid('acc'), name: 'Conta corrente', bank: 'Itaú', type: 'Conta corrente',
-      color: '#B07C3E', openingBalance: 0, openedAt: U.todayISO(), archived: false
+      color: '#9A5F35', openingBalance: 0, openedAt: U.todayISO(), archived: false
     });
     return {
       version: VERSION,
@@ -311,13 +325,18 @@
     const prof = Object.assign(makeProfile(p && p.name), p || {});
     prof.id = prof.id || U.uid('prf');
     prof.updatedAt = +(p && p.updatedAt) || 0;
-    prof.accounts = (Array.isArray(prof.accounts) ? prof.accounts : []).map((a) => ({
+    prof.accounts = (Array.isArray(prof.accounts) ? prof.accounts : []).map((a) => {
+      const banco = String(a.bank || '');
+      const preset = bankPreset(banco);
+      return {
       id: a.id || U.uid('acc'),
       name: String(a.name || 'Conta'),
-      bank: String(a.bank || ''),
+      bank: banco,
       type: String(a.type || 'Conta corrente'),
-      color: migrateColor(a.color || '#A68B6B'),
-      gradient: a.gradient ? String(a.gradient) : null,          // null = deduzido da cor
+      /* Dados antigos também obedecem à regra: banco conhecido usa
+         o preset; só uma conta personalizada conserva sua escolha. */
+      color: preset ? preset.color : migrateColor(a.color || '#8A7A62'),
+      gradient: preset ? null : (a.gradient ? String(a.gradient) : null),
       last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
       openingBalance: U.round2(+a.openingBalance || 0),
       openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
@@ -336,7 +355,8 @@
          são em real. Ausente = real, que é o que toda conta antiga é. */
       moeda: /^[A-Z]{3}$/.test(a.moeda || '') ? a.moeda : 'BRL',
       cotacao: +a.cotacao > 0 ? Math.round(+a.cotacao * 10000) / 10000 : null
-    }));
+    };
+    });
     prof.cards = (Array.isArray(prof.cards) ? prof.cards : []).map((c) => ({
       id: c.id || U.uid('card'),
       name: String(c.name || 'Cartão'),

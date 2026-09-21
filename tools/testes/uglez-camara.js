@@ -17,6 +17,7 @@ const html = ler('app.html');
 const css = ler('assets', 'css', 'style.css');
 const pagina = ler('assets', 'js', 'pages', 'uglez.js');
 const erosao = ler('assets', 'js', 'uglez-erosao.js');
+const flutuante = ler('assets', 'js', 'uglez-flutuante.js');
 const estadoSync = ler('assets', 'js', 'estado-sync.js');
 const falhas = [];
 
@@ -108,6 +109,14 @@ if (!/\.aviso-conta-detalhe\s*\{\s*display:\s*none/.test(css)) {
    botões sem dizer do que se tratam. */
 if (!/aviso-conta-detalhe/.test(estadoSync)) {
   falhas.push('a segunda frase do aviso de conta perdeu o envelope próprio');
+}
+if (!/page\s*!==\s*['"]uglez['"]/.test(flutuante) ||
+    !/body\[data-page=["']uglez["']\]\s+\.uglez-flut\s*\{\s*display:\s*none\s*!important/.test(css)) {
+  falhas.push('o botão flutuante do UGLEZ ainda pode aparecer dentro da própria UGLEZ');
+}
+if (!/\.uglez-cartao\s*\{[^}]*grid-template-columns:\s*30px minmax\(0,\s*1fr\)/s.test(css) ||
+    !/\.uglez-campo-texto\s*\{[^}]*font-size:\s*16px/s.test(css)) {
+  falhas.push('a conversa não está compactada e protegida contra zoom no celular');
 }
 if (/id=["']uglez(?:Leitura|Insights)["']/.test(html)) {
   falhas.push('uma seção de sinais ainda existe abaixo da câmara');
