@@ -5363,3 +5363,70 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 @media (min-width: 821px) {
   .menu-movel { display: none !important; }
 }
+
+/* =============================================================
+   29 · O COMPUTADOR: A ESFERA FICA, O RESTO VIRA CONVERSA
+   -------------------------------------------------------------
+   A primeira adaptação para o computador foi conservadora demais:
+   manteve os dois hemisférios com o mesmo peso, e quem abria a
+   tela no computador via — com razão — a mesma coisa de antes.
+
+   Agora a esfera continua, porque é ela que faz esta tela ser a
+   UGLEZ e não um chat qualquer, mas ocupa o que precisa: uma
+   coluna de 260px, com a marca em cima e nada mais. O que sobra é
+   conversa.
+
+   A coluna de leitura fica em 72 caracteres — a medida que as
+   interfaces de conversa usam porque é a largura em que o olho
+   volta para o começo da linha sem se perder. Sem ela, numa tela
+   de 1440px a resposta virava uma faixa de texto de 900px, que é
+   desconfortável de ler e não parece conversa nenhuma.
+
+   O que sai do hemisfério: as três métricas (MÊS / BASE /
+   LEITURA), que a linha de contexto acima do campo já diz com mais
+   precisão, e a instrução de passar o cursor sobre a formação, que
+   pedia uma interação sem consequência.
+   ============================================================= */
+@media (min-width: 821px) {
+  .uglez-stage {
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  }
+  .uglez-page.tem-conversa .uglez-stage {
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  }
+
+  .uglez-presenca-conteudo { padding: 26px 22px; justify-content: space-between; }
+  .uglez-identidade { max-width: none; margin-bottom: 0; }
+  .uglez-identidade h2 { font-size: clamp(30px, 2.6vw, 42px); letter-spacing: .12em; }
+  .uglez-identidade p { font-size: 12.5px; line-height: 1.5; max-width: 22ch; }
+  .uglez-page.tem-conversa .uglez-identidade p { display: none; }
+
+  /* Ditas de novo, e pior, do que na linha de contexto. */
+  .uglez-metricas,
+  .uglez-interacao { display: none; }
+
+  /* A coluna estreitou; o enquadramento da formação era o de uma
+     coluna larga, e a esfera ficava pequena e caída no rodapé. Aqui
+     ela sangra pelas laterais e ocupa a altura que sobrou. */
+  .uglez-campo { inset: 14% -55% 12% -55%; }
+  .uglez-campo.is-fallback { inset: 18% -30% 16% -30%; }
+
+  /* A coluna de leitura. O corpo continua com a largura toda (a
+     rolagem e a borda pertencem a ele); quem se alinha são as
+     mensagens e o campo. */
+  .uglez-console-corpo > * ,
+  .uglez-compositor > * {
+    width: 100%; max-width: 72ch; margin-inline: auto;
+  }
+  .uglez-console-corpo { padding-inline: 24px; }
+  .uglez-msg.is-uglez .uglez-msg-corpo { max-width: none; }
+  .uglez-bolha { max-width: min(84%, 480px); }
+}
+
+/* Telas largas: a conversa não vira uma faixa perdida no meio de
+   dois vazios — ela para de crescer e o hemisfério fica com a
+   folga, que é onde a esfera tem o que fazer. */
+@media (min-width: 1500px) {
+  .uglez-stage { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); }
+  .uglez-page.tem-conversa .uglez-stage { grid-template-columns: minmax(0, 280px) minmax(0, 1fr); }
+}
