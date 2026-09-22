@@ -7,11 +7,18 @@
   "es": "Ninguna cuenta registrada todavía. Agrega la primera para empezar a registrar movimientos."
  },
  {
-  "pt": "Explore o baralho e escolha uma conta para abrir o extrato.",
+  "pt": "Saldo somado em contas",
   "tipo": "exato",
-  "en": "Browse the deck and choose an account to open its statement.",
-  "fr": "Parcourez le paquet et choisissez un compte pour ouvrir son relevé.",
-  "es": "Explora el mazo y elige una cuenta para abrir su extracto."
+  "en": "Total balance in accounts",
+  "fr": "Solde total des comptes",
+  "es": "Saldo sumado en cuentas"
+ },
+ {
+  "pt": "Abra a carteira e escolha uma conta para ver o extrato.",
+  "tipo": "exato",
+  "en": "Open the wallet and pick an account to see its statement.",
+  "fr": "Ouvrez le portefeuille et choisissez un compte pour voir le relevé.",
+  "es": "Abre la cartera y elige una cuenta para ver el extracto."
  },
  {
   "pt": "Ver extrato",
@@ -26,13 +33,6 @@
   "en": "✎ Edit",
   "fr": "✎ Modifier",
   "es": "✎ Editar"
- },
- {
-  "pt": "Saldo somado em contas:",
-  "tipo": "exato",
-  "en": "Combined account balance:",
-  "fr": "Solde cumulé des comptes :",
-  "es": "Saldo sumado en cuentas:"
  },
  {
   "pt": "Cadastre uma conta para ver o extrato.",
@@ -61,17 +61,17 @@
   "es": "Ninguna tarjeta registrada. Agrega una para seguir facturas, límite y vencimientos."
  },
  {
-  "pt": "Explore o baralho e escolha um cartão para abrir a fatura.",
+  "pt": "Faturas em aberto",
   "tipo": "exato",
-  "en": "Browse the deck and choose a card to open its bill.",
-  "fr": "Parcourez le paquet et choisissez une carte pour ouvrir son relevé.",
-  "es": "Explora el mazo y elige una tarjeta para abrir su factura."
+  "en": "Open statements",
+  "fr": "Factures ouvertes",
+  "es": "Facturas abiertas"
  },
  {
-  "pt": "Comprometido em faturas em aberto:",
+  "pt": "Abra a carteira e escolha um cartão para ver a fatura.",
   "tipo": "exato",
-  "en": "Committed on open bills:",
-  "fr": "Engagé sur les relevés en cours :",
-  "es": "Comprometido en facturas pendientes:"
+  "en": "Open the wallet and pick a card to see its statement.",
+  "fr": "Ouvrez le portefeuille et choisissez une carte pour voir la facture.",
+  "es": "Abre la cartera y elige una tarjeta para ver la factura."
  }
 ]

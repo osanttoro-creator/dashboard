@@ -448,8 +448,148 @@
       deck.appendChild(cartao);
     });
     if (stacked) deck.dataset.focusedId = o.focusedId || '';
+    if (stacked && o.carteira && list.length) return emCarteira(deck, list, o);
     return deck;
   }
+
+  /* =============================================================
+     A CARTEIRA DE COURO
+     -------------------------------------------------------------
+     O baralho sozinho mostrava cartões soltos no ar. Aqui eles
+     nascem DENTRO de alguma coisa: um porta-cartões de couro fosco
+     que cobre a metade de baixo do baralho e só deixa as faixas de
+     cima à mostra — banco, nome e tipo —, exatamente o que se vê
+     ao abrir uma carteira de verdade.
+
+     A CARA DO BOLSO É O TOTAL
+     Quem olha a carteira quer um número antes de querer seis. O
+     bolso mostra o somado; com o ponteiro sobre um cartão, ele
+     troca para o valor DAQUELE cartão e volta ao total quando o
+     ponteiro sai. É a mesma pergunta feita de perto.
+
+     ABRIR É UM BOTÃO, NÃO SÓ UM HOVER
+     No computador o couro se abre ao passar o mouse (CSS). No
+     celular não existe passar o mouse, e uma carteira que só abre
+     por hover seria uma carteira trancada: por isso o bolso traz
+     um botão de verdade, que funciona no toque e no teclado, com
+     aria-expanded dizendo em que estado ela está.
+     ============================================================= */
+  /* Aberta ou fechada, por superfície. Escolher um cartão redesenha
+     a página inteira; sem esta memória a carteira se fechava na cara
+     de quem acabou de abri-la para escolher. */
+  const carteirasAbertas = {};
+
+  function emCarteira(deck, list, o) {
+    const c = o.carteira || {};
+    const superficie = o.surface || 'wallet';
+    const totalRotulo = c.rotulo || 'Total na carteira';
+    const totalValor = c.total || '';
+
+    const elRotulo = el('span', { class: 'carteira-rotulo', text: totalRotulo });
+    const elValor = el('strong', { class: 'carteira-total', text: totalValor, translate: 'no' });
+    const mostrar = (r, v) => { elRotulo.textContent = r; elValor.textContent = v; };
+    const voltar = () => mostrar(totalRotulo, totalValor);
+
+    if (typeof c.doItem === 'function') {
+      const nos = deck.querySelectorAll('.wallet-card');
+      list.forEach((item, i) => {
+        const no = nos[i];
+        const dado = no && c.doItem(item);
+        if (!dado) return;
+        const entrar = () => mostrar(dado.rotulo, dado.valor);
+        no.addEventListener('mouseenter', entrar);
+        no.addEventListener('focus', entrar);
+        no.addEventListener('mouseleave', voltar);
+        no.addEventListener('blur', voltar);
+      });
+    }
+
+    /* =============================================================
+       ABRIR E FECHAR É ESTADO, NÃO :hover
+       -------------------------------------------------------------
+       A primeira versão abria por :hover e :focus-within no CSS, e
+       as duas se voltaram contra o botão: clicar em "Fechar" deixava
+       o foco NO botão, :focus-within continuava valendo, e a
+       carteira não fechava. No celular era pior — o :hover do toque
+       gruda no último elemento tocado e a carteira nascia aberta.
+
+       Agora existe um estado só, a classe .esta-aberta, e três
+       coisas mexem nele: o botão (que trava, e o mouse não desfaz),
+       o ponteiro entrando e saindo (só onde há ponteiro de verdade)
+       e o foco pousando num cartão — quem chega pelo teclado precisa
+       ver o que está selecionando.
+       ============================================================= */
+    let travada = !!carteirasAbertas[superficie];
+    const temPonteiro = !!(global.matchMedia && matchMedia('(hover: hover)').matches);
+
+    function aplicar(aberta) {
+      caixa.classList.toggle('esta-aberta', aberta);
+      abrir.setAttribute('aria-expanded', aberta ? 'true' : 'false');
+      texto.textContent = aberta ? 'Fechar a carteira' : 'Ver os cartões';
+    }
+
+    const texto = el('span', { class: 'carteira-abrir-texto', text: 'Ver os cartões' });
+    const abrir = el('button', {
+      type: 'button', class: 'carteira-abrir', 'aria-expanded': 'false',
+      onclick: () => {
+        travada = !caixa.classList.contains('esta-aberta');
+        carteirasAbertas[superficie] = travada;
+        aplicar(travada);
+      }
+    }, [texto, el('span', { class: 'carteira-abrir-seta', 'aria-hidden': 'true' })]);
+
+    const caixa = el('div', {
+      class: 'carteira',
+      'data-wallet-surface': superficie,
+      style: { '--carteira-pecas': String(list.length) }
+    }, [
+      el('div', { class: 'carteira-palco' }, deck),
+      el('div', { class: 'carteira-bolso' }, [
+        el('span', { class: 'carteira-couro', 'aria-hidden': 'true' }),
+        el('span', { class: 'carteira-costura', 'aria-hidden': 'true' }),
+        el('span', { class: 'carteira-face' }, [elRotulo, elValor]),
+        abrir
+      ])
+    ]);
+
+    if (temPonteiro) {
+      caixa.addEventListener('mouseenter', () => aplicar(true));
+      caixa.addEventListener('mouseleave', () => { if (!travada) aplicar(false); });
+    }
+    deck.addEventListener('focusin', () => aplicar(true));
+    deck.addEventListener('focusout', () => {
+      /* O foco que sai de um cartão para outro passa por fora por um
+         instante; sem o adiamento, a carteira piscaria fechada. */
+      setTimeout(() => {
+        if (travada || caixa.contains(document.activeElement)) return;
+        aplicar(false);
+      }, 0);
+    });
+    if (travada) aplicar(true);
+    return caixa;
+  }
+
+  /* Os dois números que o bolso mostra de perto. Ficam aqui, e não
+     em cada página, porque são os MESMOS que a cara do cartão
+     escreve — e dois lugares diferentes acabariam discordando. */
+  Cards.valorDaConta = function (acc, upto) {
+    const moeda = acc.moeda && acc.moeda !== 'BRL' ? acc.moeda : null;
+    const saldo = Store.accounts && Store.accounts.get(acc.id)
+      ? (moeda ? Calc.accountBalanceMoeda(acc.id, upto) : Calc.accountBalance(acc.id, upto))
+      : U.round2(+acc.openingBalance || 0);
+    return { rotulo: acc.name + ' · saldo', valor: U.fmtMoeda(saldo, moeda || 'BRL') };
+  };
+
+  Cards.valorDoCartao = function (card, ref) {
+    const inv = Calc.invoice(card.id, ref);
+    const moeda = inv && inv.moeda;
+    const centro = inv ? (inv.parcial ? inv.restante : inv.planned) : 0;
+    const naMoeda = inv && (inv.parcial ? inv.restanteMoeda : inv.plannedMoeda);
+    return {
+      rotulo: card.name + ' · ' + (inv && inv.parcial ? 'falta na fatura ' : 'fatura ') + U.monthLabel(ref, true),
+      valor: moeda ? U.fmtMoeda(naMoeda || 0, moeda) : U.fmtBRL(centro)
+    };
+  };
 
   /** Baralho de cartões de crédito. */
   Cards.deck = function (cards, baseYM, opts) {

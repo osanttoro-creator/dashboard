@@ -1,10 +1,5 @@
 [
  {
-  "pt": "(max-width: 820px)",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
   "pt": "Reunindo os dados do mês…",
   "tipo": "exato",
   "en": "Gathering the month's data…",

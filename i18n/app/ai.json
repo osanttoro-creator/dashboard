@@ -429,11 +429,6 @@
   "ignorar": true
  },
  {
-  "pt": "(hover: none)",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
   "pt": "Enter",
   "tipo": "exato",
   "ignorar": true

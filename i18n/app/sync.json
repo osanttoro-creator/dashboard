@@ -50,6 +50,13 @@
   "es": "La app funciona normalmente sin iniciar sesión. Haz clic para entender."
  },
  {
+  "pt": "Entrar com outra conta",
+  "tipo": "exato",
+  "en": "Sign in with another account",
+  "fr": "Se connecter avec un autre compte",
+  "es": "Entrar con otra cuenta"
+ },
+ {
   "pt": "Sair desta conta",
   "tipo": "exato",
   "en": "Sign out of this account",
@@ -72,6 +79,34 @@
   "en": "unknown error",
   "fr": "erreur inconnue",
   "es": "error desconocido"
+ },
+ {
+  "pt": "Você sai desta conta e entra com outra.",
+  "tipo": "exato",
+  "en": "You sign out of this account and sign in with another.",
+  "fr": "Vous quittez ce compte et vous connectez avec un autre.",
+  "es": "Sales de esta cuenta y entras con otra."
+ },
+ {
+  "pt": "Nada é apagado",
+  "tipo": "exato",
+  "en": "Nothing is deleted",
+  "fr": "Rien n’est effacé",
+  "es": "Nada se borra"
+ },
+ {
+  "pt": ": os dados desta conta continuam na nuvem dela, e os deste aparelho continuam aqui.",
+  "tipo": "exato",
+  "en": ": this account’s data stays in its own cloud, and this device’s data stays here.",
+  "fr": " : les données de ce compte restent dans son cloud, et celles de cet appareil restent ici.",
+  "es": ": los datos de esta cuenta siguen en su nube, y los de este dispositivo siguen aquí."
+ },
+ {
+  "pt": "Sair e entrar com outra",
+  "tipo": "exato",
+  "en": "Sign out and use another",
+  "fr": "Se déconnecter et en utiliser un autre",
+  "es": "Salir y entrar con otra"
  },
  {
   "pt": "Sair da conta",

@@ -711,7 +711,6 @@
       <div class="tabpane is-active" data-tab="accounts">
         <div class="toolbar">
           <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewAccount">+ Nova conta</button></div>
-          <div class="toolbar-right"><span class="muted" id="accTotalLabel"></span></div>
         </div>
         <div class="wallet-grid wallet-grid-deck" id="accountGrid"></div>
         <div class="card">
@@ -732,7 +731,6 @@
       <div class="tabpane" data-tab="cards">
         <div class="toolbar">
           <div class="toolbar-left"><button class="btn btn-primary btn-sm" id="btnNewCard">+ Novo cartão</button></div>
-          <div class="toolbar-right"><span class="muted" id="cardTotalLabel"></span></div>
         </div>
         <div class="card" id="cardDeckCard">
           <div id="cardDeck"></div>
@@ -1141,6 +1139,15 @@
 
     </section>
 
+    <!-- ══════ PLANO E LIMITES ══════
+         O destino de quem bateu num teto. Fica ao lado de Planos de
+         propósito: as duas respondem à mesma pergunta por lados
+         diferentes — uma diz o que cabe hoje, a outra o que caberia. -->
+    <section class="page" data-page="limites" aria-labelledby="limitesTitulo">
+      <h2 class="sr-only" id="limitesTitulo">Plano e limites</h2>
+      <div class="limites-conteudo" id="limitesConteudo"></div>
+    </section>
+
       <!-- A segunda frase era FIXA: "Dados salvos apenas neste
            navegador (localStorage)". Deixou de ser verdade quando o
            banco virou a fonte, e continuar afirmando isso fazia
@@ -1225,6 +1232,7 @@
       <button class="nav-item is-uglez" data-page="uglez"><span class="nav-ico" data-ico="sparkles" data-ico-size="19"></span><span class="nav-long">UGLEZ</span><span class="menu-movel-desc">Seu assistente</span></button>
       <button class="nav-item" data-page="settings"><span class="nav-ico" data-ico="settings" data-ico-size="19"></span><span class="nav-long">Configurações</span><span class="menu-movel-desc">Conta e tema</span></button>
       <button class="nav-item" data-page="precos"><span class="nav-ico" data-ico="star" data-ico-size="19"></span><span class="nav-long">Planos</span><span class="menu-movel-desc">Seu plano</span></button>
+      <button class="nav-item" data-page="limites"><span class="nav-ico" data-ico="percent" data-ico-size="19"></span><span class="nav-long">Limites</span><span class="menu-movel-desc">Quanto cabe</span></button>
     </div>
   </div>
 </div>
@@ -1316,6 +1324,8 @@
 <script src="/assets/js/pages/reports.js"></script>
 <script src="/assets/js/pages/uglez.js"></script>
 <script src="/assets/js/pages/precos.js"></script>
+<script src="/assets/js/pages/limites.js"></script>
+<script src="/assets/js/idioma-esfera.js" defer></script>
 <script src="/assets/js/pages/settings.js"></script>
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/cookies.js" defer></script>

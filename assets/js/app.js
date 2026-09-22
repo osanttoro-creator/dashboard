@@ -35,7 +35,8 @@
     uglez:        { title: 'UGLEZ',         sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
     categories:   { title: 'Categorias',    sub: () => 'Organização e peso histórico',                       render: () => Cat.render() },
     settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() },
-    precos:       { title: 'Planos',        sub: () => 'Escolha o tamanho do seu OAZE',                      render: () => Precos.render() }
+    precos:       { title: 'Planos',        sub: () => 'Escolha o tamanho do seu OAZE',                      render: () => Precos.render() },
+    limites:      { title: 'Plano e limites', sub: () => 'O que cabe, o que parou e como abrir espaço',      render: () => Lim.render() }
   };
 
   /* ---------------- navegação ---------------- */
@@ -70,7 +71,7 @@
     budget: '/app/orcamento', goals: '/app/metas', recurring: '/app/recorrencias',
     calendar: '/app/calendario', investments: '/app/investimentos',
     reports: '/app/analises', uglez: '/app/uglez', categories: '/app/categorias',
-    settings: '/app/configuracoes', precos: '/app/planos'
+    settings: '/app/configuracoes', precos: '/app/planos', limites: '/app/limites'
   };
 
   const PAGINA_DE = Object.keys(App.URLS)

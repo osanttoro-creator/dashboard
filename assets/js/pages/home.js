@@ -400,6 +400,13 @@
     box.appendChild(Cards.walletDeck(prof.accounts, prof.cards, ym, upto, {
       limit: 4,
       focusedId: App.walletFocusId,
+      carteira: {
+        rotulo: 'Saldo somado em contas',
+        total: U.fmtBRL(Calc.totalAccountsBalance(upto)),
+        doItem: (item) => (item.kind === 'account'
+          ? Cards.valorDaConta(item.data, upto)
+          : Cards.valorDoCartao(item.data, Calc.currentInvoiceRef(item.data, ym)))
+      },
       onClick: (item) => {
         App.walletFocusId = item.key;
         if (item.kind === 'account') App.accHistoryId = item.data.id;
@@ -411,7 +418,7 @@
     if (chaves.length > 1) {
       box.appendChild(el('p', {
         class: 'deck-hint',
-        text: 'Explore o baralho e selecione um cartão para trazê-lo à frente.'
+        text: 'Abra a carteira e escolha um cartão para trazê-lo à frente.'
       }));
     }
   }

@@ -241,6 +241,18 @@
     box.appendChild(linha('Consumo do plano',
       'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', detalhes));
 
+    /* As barras acima dizem quanto foi usado. A tela de limites diz
+       o que ACONTECE quando uma delas enche — e é para lá que os
+       avisos de limite mandam. As duas precisam se encontrar. */
+    box.appendChild(linha(
+      'Plano e limites',
+      'O que está bloqueado agora, o que cada teto impede e onde abrir espaço.',
+      el('button', {
+        class: 'btn btn-outline btn-sm', type: 'button', text: 'Abrir',
+        onclick: () => App.goTo('limites')
+      })
+    ));
+
     if (p.id === 'free') {
       box.appendChild(linha(
         'Coqueiro e Oásis',
@@ -359,6 +371,18 @@
     ));
 
     /* O plano aparece uma vez só, no cartão Plano. */
+
+    box.appendChild(linha(
+      'Trocar de conta',
+      'Sai desta conta e abre a entrada para outra. Nada é apagado dos dois lados.',
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Trocar…', onclick: () => Sync.trocarConta() })
+    ));
+
+    box.appendChild(linha(
+      'Sair desta conta',
+      'Este aparelho para de sincronizar e continua funcionando com os dados que já estão nele.',
+      el('button', { class: 'btn btn-outline btn-sm', text: 'Sair', onclick: () => Sync.signOut() })
+    ));
 
     box.appendChild(linha(
       'Excluir a conta',

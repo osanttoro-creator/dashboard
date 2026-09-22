@@ -316,6 +316,41 @@
   "es": "Cartera de tarjetas"
  },
  {
+  "pt": "Total na carteira",
+  "tipo": "exato",
+  "en": "Wallet total",
+  "fr": "Total du portefeuille",
+  "es": "Total de la cartera"
+ },
+ {
+  "pt": "Fechar a carteira",
+  "tipo": "exato",
+  "en": "Close the wallet",
+  "fr": "Fermer le portefeuille",
+  "es": "Cerrar la cartera"
+ },
+ {
+  "pt": "Ver os cartões",
+  "tipo": "exato",
+  "en": "See the cards",
+  "fr": "Voir les cartes",
+  "es": "Ver las tarjetas"
+ },
+ {
+  "pt": "{0} · saldo",
+  "tipo": "padrao",
+  "en": "{0} · balance",
+  "fr": "{0} · solde",
+  "es": "{0} · saldo"
+ },
+ {
+  "pt": "falta na fatura",
+  "tipo": "exato",
+  "en": "still due on statement",
+  "fr": "reste dû sur la facture",
+  "es": "falta en la factura"
+ },
+ {
   "pt": "account:{0}",
   "tipo": "padrao",
   "ignorar": true

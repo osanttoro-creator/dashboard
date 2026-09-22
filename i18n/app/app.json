@@ -77,6 +77,13 @@
   "es": "Perfil, apariencia, datos e integraciones"
  },
  {
+  "pt": "O que cabe, o que parou e como abrir espaço",
+  "tipo": "exato",
+  "en": "What fits, what stopped and how to free up space",
+  "fr": "Ce qui tient, ce qui s’est arrêté et comment faire de la place",
+  "es": "Qué cabe, qué se detuvo y cómo liberar espacio"
+ },
+ {
   "pt": "Erro ao desenhar a página \"{0}\":",
   "tipo": "padrao",
   "en": "Error drawing the \"{0}\" page:",

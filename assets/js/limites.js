@@ -139,8 +139,14 @@
     return v === undefined ? null : v;
   };
 
-  /** Quantos itens deste tipo já existem no perfil ativo. */
-  Limites.contar = function (tipo) {
+  /**
+   * Quantos itens deste tipo já existem no perfil ativo.
+   * `ym` só vale para o que é contado por mês: lançar no dia 3 de
+   * outubro estando com setembro na barra do topo precisa consultar
+   * OUTUBRO, senão o app barra um mês que está vazio e libera um que
+   * está cheio.
+   */
+  Limites.contar = function (tipo, ym) {
     const p = Store.profile();
     if (!p) return 0;
     switch (Planos.chave(tipo)) {
@@ -151,8 +157,8 @@
          seria outro produto, e travaria alguém no segundo ano de
          uso por causa do primeiro. */
       case 'transactions_per_month': {
-        const ym = (global.App && App.ym) || U.todayYM();
-        return (p.transactions || []).filter((t) => U.ymOf(t.date) === ym).length;
+        const mes = ym || (global.App && App.ym) || U.todayYM();
+        return (p.transactions || []).filter((t) => U.ymOf(t.date) === mes).length;
       }
       case 'accounts': return (p.accounts || []).length;
       case 'credit_cards': return (p.cards || []).length;
@@ -170,15 +176,16 @@
     }
   };
 
-  /** Ainda cabe mais um? */
-  Limites.cabe = function (tipo) {
+  /** Ainda cabe mais um? `ym` como em contar(). */
+  Limites.cabe = function (tipo, ym) {
     const teto = Limites.limite(tipo);
     if (teto === null) return true;
-    return Limites.contar(tipo) < teto;
+    return Limites.contar(tipo, ym) < teto;
   };
 
-  Limites.uso = function (tipo) {
-    return { usado: Limites.contar(tipo), limite: Limites.limite(tipo) };
+
+  Limites.uso = function (tipo, ym) {
+    return { usado: Limites.contar(tipo, ym), limite: Limites.limite(tipo) };
   };
 
   /* ---------------- explicação ---------------- */
@@ -211,22 +218,31 @@
    * quanto está usando, de quanto, e o que o próximo plano dá.
    * Um "limite atingido" seco manda a pessoa adivinhar.
    */
-  Limites.exigirEspaco = function (chave) {
+  Limites.exigirEspaco = function (chave, ym) {
     const tipo = Planos.chave(chave);
-    if (Limites.cabe(tipo)) return true;
+    if (Limites.cabe(tipo, ym)) return true;
 
     const teto = Limites.limite(tipo);
     const nome = NOMES[tipo] || ['item', 'itens'];
-    const plural = teto === 1 ? nome[0] : nome[1];
-    const prox = proximoQueResolve(tipo);
     const planoAtual = Planos.get(direitos.plano);
+    /* "neste mês" mentiria quando o mês cheio é outro: quem está
+       olhando setembro e lança em outubro precisa ler "de outubro
+       de 2026". E o fecho da frase muda junto — um teto mensal não
+       é uma cota "disponível no plano", é o máximo de um mês. */
+    const porMes = ym && nome[1].indexOf('neste mês') >= 0;
+    const plural = (teto === 1 ? nome[0] : nome[1])
+      .replace('neste mês', porMes ? 'de ' + U.monthLabel(ym) : 'neste mês');
+    const fecho = porMes
+      ? ' — o máximo que o plano ' + planoAtual.nome + ' permite em um mês.'
+      : ' disponíveis no plano ' + planoAtual.nome + '.';
+    const prox = proximoQueResolve(tipo);
 
     const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
       el('p', {}, [
         /* O uso real, não o teto repetido: quem tem 2 espaços num plano
            que permite 1 lia "usando 1 de 1" e achava que o app errou. */
-        el('strong', { text: 'Você está usando ' + Math.max(teto, Limites.contar(tipo)) + ' de ' + teto + ' ' + plural }),
-        el('span', { text: ' disponíveis no plano ' + planoAtual.nome + '.' })
+        el('strong', { text: 'Você está usando ' + Math.max(teto, Limites.contar(tipo, ym)) + ' de ' + teto + ' ' + plural }),
+        el('span', { text: fecho })
       ]),
       prox
         ? el('p', { style: { marginTop: '10px' } }, [
@@ -238,11 +254,19 @@
       el('p', { style: { marginTop: '10px' }, text: 'Nada foi apagado, e o resto do app continua funcionando. Você também pode excluir um dos que já existem para abrir espaço.' })
     ].filter(Boolean));
 
+    /* O modal explica O QUE parou. A tela de limites explica o
+       CONJUNTO: tudo o que está cheio, o que cada teto impede e
+       onde abrir espaço. Sem esta porta, fechar o modal era um beco
+       sem saída — a pessoa sabia do teto e não tinha para onde ir. */
     UI.openModal({
       title: 'Limite do plano ' + planoAtual.nome,
       body: corpo,
       buttons: [
-        { label: 'Entendi', class: 'btn-outline', onClick: UI.closeModal },
+        { label: 'Entendi', class: 'btn-ghost', onClick: UI.closeModal },
+        {
+          label: 'Ver meus limites', class: 'btn-outline',
+          onClick: () => { UI.closeModal(); App.goTo('limites'); }
+        },
         prox
           ? {
             label: 'Ver planos', class: 'btn-primary',
@@ -271,7 +295,8 @@
         el('p', { style: { marginTop: '10px' }, text: 'Seus dados continuam intactos e o resto do app segue funcionando normalmente.' })
       ].filter(Boolean)),
       buttons: [
-        { label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal },
+        { label: 'Fechar', class: 'btn-ghost', onClick: UI.closeModal },
+        { label: 'Ver meus limites', class: 'btn-outline', onClick: () => { UI.closeModal(); App.goTo('limites'); } },
         prox ? { label: 'Ver planos', class: 'btn-primary', onClick: () => { UI.closeModal(); App.goTo('precos'); } } : null
       ].filter(Boolean)
     });

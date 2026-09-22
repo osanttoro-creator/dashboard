@@ -220,6 +220,10 @@
         el('span', { class: 'account-mail', text: user.email || '' })
       ]),
       el('button', {
+        class: 'icon-btn', type: 'button', title: 'Entrar com outra conta',
+        'aria-label': 'Trocar de conta', onclick: () => Sync.trocarConta()
+      }, Icons.lucide('user', 15)),
+      el('button', {
         class: 'icon-btn', type: 'button', title: 'Sair desta conta', text: '⏻',
         'aria-label': 'Sair', onclick: () => Sync.signOut()
       })
@@ -288,6 +292,38 @@
       setState('signed-out', msg);
       if (!e || !e.silencioso) UI.toast(msg, 'error', 8000);
     }
+  };
+
+  /* =============================================================
+     TROCAR DE CONTA
+     -------------------------------------------------------------
+     Entrar uma vez num aparelho era um caminho sem volta: o único
+     botão de sair morava no rodapé da barra lateral, que não existe
+     nem no celular nem no computador desde a navegação nova. Quem
+     entrasse com a conta errada — ou emprestasse o aparelho — não
+     tinha por onde trocar.
+
+     Sair e entrar são dois passos, e é assim que a pessoa pensa
+     ("quero entrar com a outra"), não "quero sair". Por isso existe
+     esta função além de signOut: ela encerra a sessão e abre o
+     formulário de entrada na sequência, sem exigir que alguém
+     descubra sozinho que precisa fazer as duas coisas.
+
+     NADA É APAGADO NOS DOIS LADOS. Os dados da conta que sai
+     continuam na nuvem dela; os deste aparelho continuam aqui. É o
+     que a confirmação diz, porque é exatamente o medo de quem vai
+     clicar num botão de sair dentro de um app de dinheiro. */
+  Sync.trocarConta = async function () {
+    if (!backend) { Sync.openHelp(); return; }
+    const ok = await UI.confirm({
+      title: 'Trocar de conta',
+      message: 'Você sai desta conta e entra com outra. <strong>Nada é apagado</strong>: os dados desta conta continuam na nuvem dela, e os deste aparelho continuam aqui.',
+      confirmLabel: 'Sair e entrar com outra'
+    });
+    if (!ok) return;
+    solta();
+    try { await backend.sair(); } catch (e) { /* sair local já basta */ }
+    Sync.signIn();
   };
 
   Sync.signOut = async function () {

@@ -1527,6 +1527,13 @@
   "es": "Preguntas frecuentes"
  },
  {
+  "pt": "Plano e limites",
+  "tipo": "exato",
+  "en": "Plan and limits",
+  "fr": "Forfait et limites",
+  "es": "Plan y límites"
+ },
+ {
   "pt": "Buscar no OAZE",
   "tipo": "exato",
   "en": "Search OAZE",
@@ -1635,6 +1642,20 @@
   "en": "Your plan",
   "fr": "Votre formule",
   "es": "Tu plan"
+ },
+ {
+  "pt": "Limites",
+  "tipo": "exato",
+  "en": "Limits",
+  "fr": "Limites",
+  "es": "Límites"
+ },
+ {
+  "pt": "Quanto cabe",
+  "tipo": "exato",
+  "en": "What fits",
+  "fr": "Ce qui tient",
+  "es": "Cuánto cabe"
  },
  {
   "pt": "Ações rápidas",

@@ -287,11 +287,11 @@
   "es": "Agregar cuenta"
  },
  {
-  "pt": "Explore o baralho e selecione um cartão para trazê-lo à frente.",
+  "pt": "Abra a carteira e escolha um cartão para trazê-lo à frente.",
   "tipo": "exato",
-  "en": "Browse the deck and select a card to bring it to the front.",
-  "fr": "Parcourez le paquet et sélectionnez une carte pour la mettre au premier plan.",
-  "es": "Explora el mazo y selecciona una tarjeta para traerla al frente."
+  "en": "Open the wallet and pick a card to bring it to the front.",
+  "fr": "Ouvrez le portefeuille et choisissez une carte pour la mettre devant.",
+  "es": "Abre la cartera y elige una tarjeta para traerla al frente."
  },
  {
   "pt": "Nenhuma movimentação registrada ainda.",

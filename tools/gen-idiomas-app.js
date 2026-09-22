@@ -49,7 +49,12 @@ const LINGUAS = ['en', 'fr', 'es'];
 /* Arquivos do app, na ordem em que um texto repetido fica com o
    primeiro que o disser. Site, landing, cookies e contato ficam de fora: têm o
    próprio dicionário (gen-idiomas.js) ou o próprio mapa (cookies.js). */
+/* 'idioma-esfera.js' entra aqui pelo mesmo motivo de contato.js: ele
+   carrega a própria tabela nas quatro línguas, porque desenha o
+   controle que escolhe a língua — e precisa falar todas antes de
+   qualquer dicionário ser carregado. */
 const FORA = new Set(['site.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'contato.js', 'idioma.js',
+  'idioma-esfera.js',
   'supabase-config.js', 'icons.js', 'uglez-particulas.js', 'uglez-erosao.js', 'uglez-neon.js']);
 
 function arquivosDoApp() {
@@ -227,7 +232,7 @@ function pareceCodigo(v) {
   if (/^(select|insert|update|delete)\b/i.test(t)) return true;   // SQL
   if (/^--[\w-]+$/.test(t) || /^__\w+__$/.test(t)) return true;   // variável CSS, sentinela
   if (/^[\w-]+\|/.test(t)) return true;                            // chave de cache "mt|..."
-  if (/:not\(|\[[\w-]+(=|\])|^\(prefers-|^h[1-6],\s/.test(t)) return true;  // seletor, media query
+  if (/:not\(|\[[\w-]+(=|\])|^\((prefers-|hover:|pointer:|min-width|max-width)|^h[1-6],\s/.test(t)) return true;  // seletor, media query
   if (/\.\d+s\b|;charset=|-apple-system|sans-serif/.test(t)) return true;   // CSS
   if (/^&[#\w]+;$/.test(t)) return true;                          // entidade HTML
   if (/^[\w./-]+\.(js|css|json|png|svg|webp|jpg|html|sql)$/.test(t)) return true;  // arquivo

@@ -280,6 +280,14 @@
             const fim = function () { b.disabled = false; b.textContent = 'Sincronizar agora'; ES.pintar(); };
             Promise.resolve(Sync.atualizarAgora && Sync.atualizarAgora(true)).then(fim, fim);
           }));
+          /* O topo do menu é onde o celular diz de quem é esta
+             sessão. Era também o único lugar onde ela NÃO podia ser
+             trocada — dizer o nome da conta e não oferecer a troca
+             é mostrar a porta e esconder a maçaneta. */
+          menu.appendChild(botao('btn btn-ghost btn-sm conta-acao', 'Trocar de conta', function () {
+            if (global.Shell && Shell.fecharMenuMovel) Shell.fecharMenuMovel();
+            Sync.trocarConta();
+          }));
         } else if (!restaurando) {
           menu.appendChild(botao('btn btn-primary btn-sm conta-acao', 'Entrar', entrar));
         }

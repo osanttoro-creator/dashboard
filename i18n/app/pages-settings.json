@@ -145,20 +145,6 @@
   "es": "Sin cuenta, la app usa los límites del plan Semente en este dispositivo."
  },
  {
-  "pt": "UGLEZ neste mês",
-  "tipo": "exato",
-  "en": "UGLEZ this month",
-  "fr": "UGLEZ ce mois-ci",
-  "es": "UGLEZ este mes"
- },
- {
-  "pt": "Orçamentos",
-  "tipo": "exato",
-  "en": "Budgets",
-  "fr": "Budgets",
-  "es": "Presupuestos"
- },
- {
   "pt": "Acompanhar recursos utilizados",
   "tipo": "exato",
   "en": "Track resources used",
@@ -178,6 +164,13 @@
   "en": "The UGLEZ quota resets on the 1st of every month, Brasília time.",
   "fr": "Le quota UGLEZ se réinitialise le 1er de chaque mois, heure de Brasília.",
   "es": "La cuota de UGLEZ se reinicia cada día 1, en horario de Brasilia."
+ },
+ {
+  "pt": "O que está bloqueado agora, o que cada teto impede e onde abrir espaço.",
+  "tipo": "exato",
+  "en": "What is blocked now, what each cap prevents and where to free up space.",
+  "fr": "Ce qui est bloqué, ce que chaque plafond empêche et où faire de la place.",
+  "es": "Qué está bloqueado ahora, qué impide cada tope y dónde liberar espacio."
  },
  {
   "pt": "Coqueiro e Oásis",
@@ -374,6 +367,27 @@
   "en": "Edit profile",
   "fr": "Modifier le profil",
   "es": "Editar perfil"
+ },
+ {
+  "pt": "Sai desta conta e abre a entrada para outra. Nada é apagado dos dois lados.",
+  "tipo": "exato",
+  "en": "Signs out of this account and opens sign-in for another. Nothing is deleted on either side.",
+  "fr": "Vous déconnecte de ce compte et ouvre la connexion à un autre. Rien n’est effacé des deux côtés.",
+  "es": "Sale de esta cuenta y abre la entrada para otra. Nada se borra de los dos lados."
+ },
+ {
+  "pt": "Trocar…",
+  "tipo": "exato",
+  "en": "Switch…",
+  "fr": "Changer…",
+  "es": "Cambiar…"
+ },
+ {
+  "pt": "Este aparelho para de sincronizar e continua funcionando com os dados que já estão nele.",
+  "tipo": "exato",
+  "en": "This device stops syncing and keeps working with the data already on it.",
+  "fr": "Cet appareil cesse de se synchroniser et continue de fonctionner avec les données qu’il contient déjà.",
+  "es": "Este dispositivo deja de sincronizar y sigue funcionando con los datos que ya tiene."
  },
  {
   "pt": "Apaga a conta e todos os dados do servidor, em todos os aparelhos, e encerra a assinatura. Não tem volta.",

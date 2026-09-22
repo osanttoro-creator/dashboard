@@ -84,11 +84,25 @@
   "es": "recurrentes"
  },
  {
-  "pt": "Você está usando {0} de {1} {2}",
+  "pt": "neste mês",
+  "tipo": "exato",
+  "en": "this month",
+  "fr": "ce mois-ci",
+  "es": "este mes"
+ },
+ {
+  "pt": "de {0}",
   "tipo": "padrao",
-  "en": "You're using {0} of {1} {2}",
-  "fr": "Vous utilisez {0} sur {1} {2}",
-  "es": "Estás usando {0} de {1} {2}"
+  "en": "of {0}",
+  "fr": "sur {0}",
+  "es": "de {0}"
+ },
+ {
+  "pt": "— o máximo que o plano {0} permite em um mês.",
+  "tipo": "padrao",
+  "en": "— the most the {0} plan allows in a single month.",
+  "fr": "— le maximum que le forfait {0} permet en un mois.",
+  "es": "— el máximo que el plan {0} permite en un mes."
  },
  {
   "pt": "disponíveis no plano {0}.",
@@ -96,6 +110,13 @@
   "en": "available on the {0} plan.",
   "fr": "disponibles dans la formule {0}.",
   "es": "disponibles en el plan {0}."
+ },
+ {
+  "pt": "Você está usando {0} de {1} {2}",
+  "tipo": "padrao",
+  "en": "You're using {0} of {1} {2}",
+  "fr": "Vous utilisez {0} sur {1} {2}",
+  "es": "Estás usando {0} de {1} {2}"
  },
  {
   "pt": "No {0}, você pode cadastrar",
@@ -138,6 +159,13 @@
   "en": "Got it",
   "fr": "Compris",
   "es": "Entendido"
+ },
+ {
+  "pt": "Ver meus limites",
+  "tipo": "exato",
+  "en": "See my limits",
+  "fr": "Voir mes limites",
+  "es": "Ver mis límites"
  },
  {
   "pt": "Disponível em outro plano",

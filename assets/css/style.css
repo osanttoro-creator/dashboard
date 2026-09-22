@@ -5462,3 +5462,312 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
    opcional e vem desmarcada — não pode disputar atenção com o que
    é obrigatório. */
 .consentimento-opcao.is-opcional { margin-top: 10px; font-size: 13px; line-height: 1.45; color: var(--ink-2); }
+
+/* =============================================================
+   30 · A CARTEIRA DE COURO
+   -------------------------------------------------------------
+   O baralho (seção 28) organizava cartões soltos no ar. Aqui eles
+   passam a morar dentro de um porta-cartões: um bolso de couro
+   fosco cobre a metade de baixo e deixa à mostra só as faixas de
+   cima — ladrilho do banco, nome e tipo. É o que se vê ao abrir
+   uma carteira de verdade, e é o que faz a pessoa reconhecer o
+   cartão dela antes de ler qualquer palavra.
+
+   DOIS ESTADOS, UMA FÓRMULA SÓ
+     fechada   cada cartão espia 14px acima do da frente
+     aberta    .esta-aberta — o mesmo leque, com degrau de 46px
+
+   Quem liga e desliga .esta-aberta é o JavaScript (ver emCarteira
+   em cards.js), e não :hover: o :hover do toque gruda no celular, e
+   :focus-within impedia o próprio botão de fechar a carteira.
+
+   POR QUE TODA REGRA COMEÇA COM .carteira
+   As regras da seção 28 usam :hover e :not(), o que lhes dá
+   especificidade (0,4,0). Uma regra nova só com `.wallet-card`
+   perderia em silêncio — foi assim que o menu do celular levou
+   três tentativas em 20/09/2026. Aqui cada estado tem o par
+   correspondente, prefixado, sempre com um seletor a mais.
+
+   O BOLSO NÃO INTERCEPTA O PONTEIRO
+   pointer-events: none nele inteiro, auto só no botão. Sem isso a
+   metade de baixo dos cartões viraria uma área morta, e um cartão
+   clicável pela metade é pior do que um cartão que não é clicável.
+   ============================================================= */
+.carteira {
+  --carteira-espia: 14px;     /* degrau com a carteira fechada */
+  --carteira-passo: 46px;     /* degrau com a carteira aberta */
+  --carteira-faixa: 104px;    /* quanto de cada cartão fica à mostra */
+  --carteira-bolso: 132px;
+  --couro-a: #3A2A22;
+  --couro-b: #150E0A;
+  --couro-tinta: #F0E7D6;
+  position: relative;
+  /* A carteira é um OBJETO, não uma faixa: esticada na largura da
+     página ela deixava de parecer couro e voltava a parecer caixa.
+     O limite acompanha a largura do cartão (340px) com folga. */
+  max-width: 420px;
+  margin-inline: auto;
+  padding-bottom: var(--carteira-bolso);
+}
+[data-theme="dark"] .carteira { --couro-a: #1B2422; --couro-b: #070C0B; }
+
+/* O palco é um contexto de empilhamento próprio: assim nenhum
+   z-index de cartão consegue passar por cima do couro. */
+.carteira-palco { position: relative; z-index: 1; isolation: isolate; }
+
+/* Dentro da carteira, o baralho perde a moldura: quem emoldura
+   agora é o couro. */
+.carteira .wallet-deck-stack {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  min-height: calc(var(--carteira-faixa) + (var(--carteira-pecas, 1) - 1) * var(--carteira-espia));
+}
+.carteira .wallet-deck-stack::before { display: none; }
+
+/* UMA FÓRMULA SÓ, PARA OS DOIS ESTADOS
+   O cartão escolhido tem slot 0 e é o da FRENTE: fica mais embaixo,
+   com os outros espiando por cima dele, que é como uma carteira se
+   apresenta na mão. Abrir não reordena nada — só aumenta o degrau,
+   de 14px para 46px. Por isso a animação é um movimento só, e o
+   cartão em foco nunca fica coberto: não há nada abaixo dele. */
+.carteira .wallet-deck-stack .wallet-card,
+.carteira .wallet-deck-stack .wallet-card:not(.is-focused),
+.carteira .wallet-deck-stack .wallet-card.is-focused {
+  top: 0;
+  transform: translate(-50%, calc((var(--carteira-pecas, 1) - 1 - var(--deck-slot, 0)) * var(--carteira-espia)));
+  z-index: calc(var(--carteira-pecas, 1) - var(--deck-slot, 0));
+}
+
+.carteira.esta-aberta .wallet-deck-stack {
+  min-height: calc(214px + (var(--carteira-pecas, 1) - 1) * var(--carteira-passo));
+}
+.carteira.esta-aberta .wallet-deck-stack .wallet-card,
+.carteira.esta-aberta .wallet-deck-stack .wallet-card:not(.is-focused),
+.carteira.esta-aberta .wallet-deck-stack .wallet-card.is-focused {
+  transform: translate(-50%, calc((var(--carteira-pecas, 1) - 1 - var(--deck-slot, 0)) * var(--carteira-passo)));
+}
+
+/* ---------------- o couro ---------------- */
+
+.carteira-bolso {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--carteira-bolso);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 clamp(16px, 4vw, 26px);
+  border-radius: calc(var(--radius-lg) + 4px);
+  background: linear-gradient(168deg, var(--couro-a) 0%, var(--couro-b) 72%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .07),
+    inset 0 -1px 0 rgba(0, 0, 0, .5),
+    0 -22px 34px -24px rgba(0, 0, 0, .8),
+    var(--shadow-lift);
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform .42s var(--ease-out), box-shadow .42s var(--ease-out);
+}
+.carteira.esta-aberta .carteira-bolso { transform: translateY(3px); }
+
+/* O grão do couro. feTurbulence em SVG embutido: trezentos bytes
+   de texto, nenhum pedido de rede, e continua nítido em qualquer
+   densidade de tela — o que uma textura em PNG não faz. */
+.carteira-couro {
+  position: absolute; inset: 0;
+  opacity: .5; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)' opacity='.42'/%3E%3C/svg%3E");
+}
+/* A costura: a linha que diz "isto é costurado", não "isto é uma
+   caixa". Tracejada por dentro da borda, como no couro de verdade. */
+.carteira-costura {
+  position: absolute; inset: 9px;
+  border: 1px dashed rgba(240, 231, 214, .22);
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+/* A fenda de onde os cartões saem. */
+.carteira-bolso::before {
+  content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 3px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .65), transparent);
+  pointer-events: none;
+}
+
+.carteira-face {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 4px; min-width: 0;
+}
+.carteira-rotulo {
+  font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(240, 231, 214, .72);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.carteira-total {
+  font-size: clamp(22px, 4.6vw, 30px); font-weight: 600; letter-spacing: -.01em;
+  color: var(--couro-tinta);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .55);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.carteira-abrir {
+  position: relative; z-index: 1; pointer-events: auto;
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  padding: 9px 14px; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 12.5px; font-weight: 600;
+  color: var(--couro-tinta);
+  background: rgba(240, 231, 214, .1);
+  border: 1px solid rgba(240, 231, 214, .3);
+  transition: background .18s var(--ease-out), border-color .18s var(--ease-out);
+}
+.carteira-abrir:hover { background: rgba(240, 231, 214, .18); }
+.carteira-abrir:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+.carteira-abrir-seta {
+  width: 0; height: 0; border-left: 4.5px solid transparent; border-right: 4.5px solid transparent;
+  border-bottom: 6px solid currentColor;
+  transition: transform .28s var(--ease-out);
+}
+.carteira.esta-aberta .carteira-abrir-seta { transform: rotate(180deg); }
+
+/* O celular não tem ponteiro: a promessa de "passe o mouse" seria
+   mentira, e o botão é o único caminho. Por isso ele cresce. */
+@media (max-width: 720px) {
+  .carteira {
+    --carteira-espia: 12px;
+    --carteira-passo: 52px;
+    --carteira-faixa: 92px;
+    --carteira-bolso: 124px;
+  }
+  .carteira.esta-aberta .wallet-deck-stack {
+    min-height: calc(198px + (var(--carteira-pecas, 1) - 1) * var(--carteira-passo));
+  }
+  .carteira-bolso { flex-wrap: wrap; align-content: center; gap: 8px; padding: 0 16px; }
+  .carteira-abrir { padding: 10px 14px; }
+}
+
+/* Movimento reduzido: a carteira abre e fecha do mesmo jeito, só
+   que sem deslizar. Esconder o conteúdo seria tirar função de
+   quem apenas pediu menos animação. */
+@media (prefers-reduced-motion: reduce) {
+  .carteira .wallet-deck-stack .wallet-card,
+  .carteira .wallet-deck-stack .wallet-card:not(.is-focused),
+  .carteira .wallet-deck-stack .wallet-card.is-focused,
+  .carteira-bolso,
+  .carteira-abrir-seta { transition: none; }
+}
+
+/* =============================================================
+   31 · PLANO E LIMITES (pages/limites.js)
+   -------------------------------------------------------------
+   Três caixas empilhadas, na ordem em que a pergunta chega: qual é
+   o meu plano, o que parou, quanto ainda cabe. A caixa dos
+   bloqueios muda de cor quando há algo bloqueado — e só então: um
+   painel permanentemente alaranjado ensina a ignorar a cor.
+   ============================================================= */
+.limites-conteudo { display: grid; gap: 16px; max-width: 860px; }
+
+.limites-plano {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.limites-plano-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.limites-plano-rotulo {
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+}
+.limites-plano-nome { font-size: 22px; line-height: 1.2; }
+
+.limites-bloqueios h3, .limites-calma h3 { margin: 0 0 6px; font-size: 16px; }
+.limites-bloqueios.is-cheio {
+  border-color: color-mix(in srgb, var(--terracotta) 46%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--terracotta) 20%, transparent), var(--shadow);
+}
+
+.limites-lista { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 12px; }
+.limites-lista > li {
+  display: grid; gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--plane-2);
+}
+.limites-item-topo { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.limites-item-para { font-size: 13px; color: var(--ink-2); }
+.limites-item-saida { font-size: 13px; color: var(--muted); }
+.limites-item-acao { margin-top: 4px; }
+
+.limites-calma-lista {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 8px;
+  font-size: 13.5px; line-height: 1.55; color: var(--ink-2);
+}
+.limites-calma-lista > li { padding-left: 18px; position: relative; }
+.limites-calma-lista > li::before {
+  content: ''; position: absolute; left: 2px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: color-mix(in srgb, var(--oasis) 70%, transparent);
+}
+
+@media (max-width: 720px) {
+  .limites-plano { align-items: flex-start; }
+  .limites-plano-nome { font-size: 20px; }
+}
+
+/* =============================================================
+   32 · A BANDEIRA REDONDA DO TOPO (assets/js/idioma-esfera.js)
+   -------------------------------------------------------------
+   O mesmo controle do site público, com o material do app. Mora
+   dentro da .topbar, que já é a camada que flutua: assim ele é
+   "suspenso no alto" sem um position:fixed que um dia cairia por
+   cima do sino ou da busca.
+
+   Trocar a língua aqui grava a moeda junto (ver o cabeçalho do
+   idioma-esfera.js): a página de planos do app passa a mostrar
+   dólar para quem escolheu inglês, como as páginas públicas já
+   faziam.
+   ============================================================= */
+.idioma-esfera { position: relative; flex: none; }
+
+.idioma-esfera-botao {
+  display: grid; place-items: center;
+  width: 34px; height: 34px; padding: 0;
+  border-radius: 50%; overflow: hidden; cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  transition: transform .2s var(--ease-out), border-color .2s var(--ease-out);
+}
+.idioma-esfera-botao svg { width: 100%; height: 100%; display: block; }
+.idioma-esfera-botao:hover { transform: translateY(-1px); border-color: var(--ouro); }
+.idioma-esfera-botao:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+
+.idioma-esfera-painel {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 80;
+  min-width: 190px; padding: 6px;
+  display: grid; gap: 2px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  -webkit-backdrop-filter: blur(var(--n1-blur)); backdrop-filter: blur(var(--n1-blur));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
+}
+.idioma-esfera-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 10px;
+  border: 0; border-radius: 10px; cursor: pointer;
+  font: inherit; font-size: 14px; text-align: left;
+  color: var(--ink); background: transparent;
+}
+.idioma-esfera-item svg { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.idioma-esfera-item:hover { background: var(--plane-2); }
+.idioma-esfera-item:focus-visible { outline: 2px solid var(--ouro); outline-offset: -2px; }
+.idioma-esfera-item.is-atual { font-weight: 600; }
+
+/* No celular a .topbar é estreita e as pílulas de texto já se
+   recolhem; a bandeira acompanha, sem virar o item que empurra o
+   sino para fora. */
+@media (max-width: 720px) {
+  .idioma-esfera-botao { width: 32px; height: 32px; }
+  .idioma-esfera-painel { right: 0; min-width: 172px; }
+}

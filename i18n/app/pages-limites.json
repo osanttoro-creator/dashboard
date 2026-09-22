@@ -1,0 +1,233 @@
+[
+ {
+  "pt": "Criar outro espaço (Pessoal, PJ…).",
+  "tipo": "exato",
+  "en": "Creating another space (Personal, Business…).",
+  "fr": "Créer un autre espace (Personnel, Pro…).",
+  "es": "Crear otro espacio (Personal, Empresa…)."
+ },
+ {
+  "pt": "Cadastrar uma conta nova.",
+  "tipo": "exato",
+  "en": "Adding a new account.",
+  "fr": "Ajouter un nouveau compte.",
+  "es": "Registrar una cuenta nueva."
+ },
+ {
+  "pt": "Ver minhas contas",
+  "tipo": "exato",
+  "en": "See my accounts",
+  "fr": "Voir mes comptes",
+  "es": "Ver mis cuentas"
+ },
+ {
+  "pt": "Cadastrar um cartão novo.",
+  "tipo": "exato",
+  "en": "Adding a new card.",
+  "fr": "Ajouter une nouvelle carte.",
+  "es": "Registrar una tarjeta nueva."
+ },
+ {
+  "pt": "Ver meus cartões",
+  "tipo": "exato",
+  "en": "See my cards",
+  "fr": "Voir mes cartes",
+  "es": "Ver mis tarjetas"
+ },
+ {
+  "pt": "Movimentações no mês",
+  "tipo": "exato",
+  "en": "Transactions in the month",
+  "fr": "Mouvements du mois",
+  "es": "Movimientos en el mes"
+ },
+ {
+  "pt": "Lançar mais movimentações NESTE mês. O mês que vem começa zerado.",
+  "tipo": "exato",
+  "en": "Posting more transactions THIS month. Next month starts from zero.",
+  "fr": "Saisir d’autres mouvements CE mois-ci. Le mois prochain repart de zéro.",
+  "es": "Registrar más movimientos ESTE mes. El mes que viene empieza en cero."
+ },
+ {
+  "pt": "Ver as movimentações do mês",
+  "tipo": "exato",
+  "en": "See this month’s transactions",
+  "fr": "Voir les mouvements du mois",
+  "es": "Ver los movimientos del mes"
+ },
+ {
+  "pt": "Criar outra categoria sua. As que vêm prontas não contam.",
+  "tipo": "exato",
+  "en": "Creating another category of your own. The built-in ones don’t count.",
+  "fr": "Créer une autre catégorie à vous. Celles fournies ne comptent pas.",
+  "es": "Crear otra categoría tuya. Las que vienen listas no cuentan."
+ },
+ {
+  "pt": "Ver minhas categorias",
+  "tipo": "exato",
+  "en": "See my categories",
+  "fr": "Voir mes catégories",
+  "es": "Ver mis categorías"
+ },
+ {
+  "pt": "Orçamentos",
+  "tipo": "exato",
+  "en": "Budgets",
+  "fr": "Budgets",
+  "es": "Presupuestos"
+ },
+ {
+  "pt": "Definir o orçamento de mais uma categoria.",
+  "tipo": "exato",
+  "en": "Setting a budget for one more category.",
+  "fr": "Définir le budget d’une catégorie de plus.",
+  "es": "Definir el presupuesto de otra categoría."
+ },
+ {
+  "pt": "Ver meus orçamentos",
+  "tipo": "exato",
+  "en": "See my budgets",
+  "fr": "Voir mes budgets",
+  "es": "Ver mis presupuestos"
+ },
+ {
+  "pt": "Criar outra meta.",
+  "tipo": "exato",
+  "en": "Creating another goal.",
+  "fr": "Créer un autre objectif.",
+  "es": "Crear otra meta."
+ },
+ {
+  "pt": "Ver minhas metas",
+  "tipo": "exato",
+  "en": "See my goals",
+  "fr": "Voir mes objectifs",
+  "es": "Ver mis metas"
+ },
+ {
+  "pt": "Marcar mais um lançamento como recorrente.",
+  "tipo": "exato",
+  "en": "Marking one more entry as recurring.",
+  "fr": "Marquer une écriture de plus comme récurrente.",
+  "es": "Marcar otro movimiento como recurrente."
+ },
+ {
+  "pt": "Ver minhas recorrências",
+  "tipo": "exato",
+  "en": "See my recurring items",
+  "fr": "Voir mes récurrences",
+  "es": "Ver mis recurrencias"
+ },
+ {
+  "pt": "Mudar de plano",
+  "tipo": "exato",
+  "en": "Change plan",
+  "fr": "Changer de forfait",
+  "es": "Cambiar de plan"
+ },
+ {
+  "pt": "Sem conta, o app usa os limites do plano Semente neste aparelho. Entrando, os limites passam a ser os do seu plano.",
+  "tipo": "exato",
+  "en": "Without an account, the app uses the Semente plan limits on this device. Once you sign in, your plan’s limits apply.",
+  "fr": "Sans compte, l’application utilise les limites du forfait Semente sur cet appareil. En vous connectant, ce sont les limites de votre forfait qui s’appliquent.",
+  "es": "Sin cuenta, la app usa los límites del plan Semente en este dispositivo. Al entrar, pasan a valer los límites de tu plan."
+ },
+ {
+  "pt": "O que está bloqueado agora",
+  "tipo": "exato",
+  "en": "What is blocked right now",
+  "fr": "Ce qui est bloqué en ce moment",
+  "es": "Qué está bloqueado ahora"
+ },
+ {
+  "pt": "Nada bloqueado",
+  "tipo": "exato",
+  "en": "Nothing blocked",
+  "fr": "Rien de bloqué",
+  "es": "Nada bloqueado"
+ },
+ {
+  "pt": "Você está dentro de todos os limites do plano {0}. Quando algum encher, ele aparece aqui dizendo o que parou e onde abrir espaço.",
+  "tipo": "padrao",
+  "en": "You are within every limit of the {0} plan. When one fills up it shows here, saying what stopped and where to free up space.",
+  "fr": "Vous êtes dans toutes les limites du forfait {0}. Dès qu’une limite est atteinte, elle apparaît ici avec ce qui s’est arrêté et où faire de la place.",
+  "es": "Estás dentro de todos los límites del plan {0}. Cuando alguno se llene, aparece aquí diciendo qué se detuvo y dónde liberar espacio."
+ },
+ {
+  "pt": "Parou: {0}",
+  "tipo": "padrao",
+  "en": "Stopped: {0}",
+  "fr": "Arrêté : {0}",
+  "es": "Se detuvo: {0}"
+ },
+ {
+  "pt": "No {0}: {1}.",
+  "tipo": "padrao",
+  "en": "On {0}: {1}.",
+  "fr": "Dans {0} : {1}.",
+  "es": "En {0}: {1}."
+ },
+ {
+  "pt": "sem limite",
+  "tipo": "exato",
+  "en": "no limit",
+  "fr": "sans limite",
+  "es": "sin límite"
+ },
+ {
+  "pt": "Quanto cabe no seu plano",
+  "tipo": "exato",
+  "en": "How much fits in your plan",
+  "fr": "Ce qui tient dans votre forfait",
+  "es": "Cuánto cabe en tu plan"
+ },
+ {
+  "pt": "A contagem de movimentações é a do mês que está na barra do topo — {0}. A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.",
+  "tipo": "padrao",
+  "en": "The transaction count is for the month shown in the top bar — {0}. The UGLEZ quota resets on the 1st of each month, Brasília time.",
+  "fr": "Le décompte des mouvements porte sur le mois affiché en haut — {0}. Le quota d’UGLEZ est réinitialisé le 1er de chaque mois, heure de Brasília.",
+  "es": "El conteo de movimientos es el del mes que está en la barra superior — {0}. La cuota de UGLEZ se reinicia todo día 1º, en horario de Brasilia."
+ },
+ {
+  "pt": "UGLEZ neste mês",
+  "tipo": "exato",
+  "en": "UGLEZ this month",
+  "fr": "UGLEZ ce mois-ci",
+  "es": "UGLEZ este mes"
+ },
+ {
+  "pt": "O que o limite NÃO faz",
+  "tipo": "exato",
+  "en": "What the limit does NOT do",
+  "fr": "Ce que la limite ne fait PAS",
+  "es": "Lo que el límite NO hace"
+ },
+ {
+  "pt": "Não apaga nada. Nem depois de trocar para um plano menor.",
+  "tipo": "exato",
+  "en": "It deletes nothing. Not even after moving to a smaller plan.",
+  "fr": "Elle n’efface rien. Même après être passé à un forfait plus petit.",
+  "es": "No borra nada. Ni después de cambiar a un plan menor."
+ },
+ {
+  "pt": "Não esconde nada. Tudo o que já existe continua na tela e continua sendo somado.",
+  "tipo": "exato",
+  "en": "It hides nothing. Everything that already exists stays on screen and keeps being counted.",
+  "fr": "Elle ne cache rien. Tout ce qui existe déjà reste à l’écran et continue d’être pris en compte.",
+  "es": "No esconde nada. Todo lo que ya existe sigue en pantalla y se sigue sumando."
+ },
+ {
+  "pt": "Não trava o app. Editar, pagar, lançar em outro mês e sair com seus dados continuam funcionando.",
+  "tipo": "exato",
+  "en": "It doesn’t lock the app. Editing, paying, posting in another month and leaving with your data all keep working.",
+  "fr": "Elle ne bloque pas l’application. Modifier, payer, saisir sur un autre mois et repartir avec vos données continuent de fonctionner.",
+  "es": "No traba la app. Editar, pagar, registrar en otro mes y salir con tus datos siguen funcionando."
+ },
+ {
+  "pt": "O que para é só a criação de itens novos daquele tipo — e volta assim que você abrir espaço ou mudar de plano.",
+  "tipo": "exato",
+  "en": "What stops is only creating new items of that kind — and it comes back as soon as you free up space or change plan.",
+  "fr": "Ce qui s’arrête, c’est seulement la création de nouveaux éléments de ce type — et cela revient dès que vous faites de la place ou changez de forfait.",
+  "es": "Lo que para es solo la creación de ítems nuevos de ese tipo — y vuelve en cuanto liberes espacio o cambies de plan."
+ }
+]

@@ -91,13 +91,6 @@
   "es": "categoría eliminada"
  },
  {
-  "pt": "de {0}",
-  "tipo": "padrao",
-  "en": "of {0}",
-  "fr": "sur {0}",
-  "es": "de {0}"
- },
- {
   "pt": "{0} usado",
   "tipo": "padrao",
   "en": "{0} used",

@@ -250,6 +250,13 @@
   "es": "Sincronizar ahora"
  },
  {
+  "pt": "Trocar de conta",
+  "tipo": "exato",
+  "en": "Switch account",
+  "fr": "Changer de compte",
+  "es": "Cambiar de cuenta"
+ },
+ {
   "pt": "Estes dados estão só neste aparelho.",
   "tipo": "exato",
   "en": "This data is only on this device.",

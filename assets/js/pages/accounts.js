@@ -39,22 +39,31 @@
         el('p', { class: 'empty-note', text: 'Nenhuma conta cadastrada ainda. Cadastre a primeira para começar a lançar movimentações.' }),
         el('button', { class: 'btn btn-primary btn-sm', text: '+ Nova conta', onclick: () => Forms.openAccount() })
       ]));
-      document.getElementById('accTotalLabel').textContent = '';
       return;
     }
 
     if (!prof.accounts.some((a) => a.id === App.accHistoryId)) App.accHistoryId = prof.accounts[0].id;
 
+    const totalContas = Calc.totalAccountsBalance(upto);
     grid.appendChild(Cards.accountDeck(prof.accounts, upto, {
       stacked: true,
       focusedId: App.accHistoryId,
+      /* O couro da carteira mostra o somado; com o ponteiro sobre uma
+         conta, o saldo dela. O rótulo de cima some quando a carteira
+         já diz a mesma coisa — dois totais iguais na mesma tela é um
+         a mais para a pessoa conferir. */
+      carteira: {
+        rotulo: 'Saldo somado em contas',
+        total: U.fmtBRL(totalContas),
+        doItem: (account) => Cards.valorDaConta(account, upto)
+      },
       onClick: (account) => { App.accHistoryId = account.id; Acc.render(); }
     }));
 
     if (prof.accounts.length > 1) {
       grid.appendChild(el('p', {
         class: 'deck-hint',
-        text: 'Explore o baralho e escolha uma conta para abrir o extrato.'
+        text: 'Abra a carteira e escolha uma conta para ver o extrato.'
       }));
     }
 
@@ -67,9 +76,6 @@
       el('button', { class: 'btn btn-ghost btn-sm', text: '✎ Editar', onclick: () => Forms.openAccount(ativa.id) })
     ]));
 
-    const total = Calc.totalAccountsBalance(upto);
-    document.getElementById('accTotalLabel').innerHTML =
-      `Saldo somado em contas: <strong class="${U.signClass(total)}">${U.fmtBRL(total)}</strong>`;
   }
 
   /** Ladrilho do banco na cor da marca. */
@@ -123,10 +129,8 @@
     const prof = Store.profile();
     const deckBox = U.clear(document.getElementById('cardDeck'));
     const detail = U.clear(document.getElementById('cardDetail'));
-    const label = document.getElementById('cardTotalLabel');
 
     if (!prof.cards.length) {
-      label.textContent = '';
       deckBox.appendChild(el('p', { class: 'empty-note', text: 'Nenhum cartão cadastrado. Cadastre para acompanhar faturas, limite e vencimentos.' }));
       deckBox.appendChild(el('button', { class: 'btn btn-primary btn-sm', text: '+ Novo cartão', onclick: () => Forms.openCard() }));
       return;
@@ -137,10 +141,17 @@
     const card = Store.cards.get(App.cardFocusId);
     if (!App.invoiceRef) App.invoiceRef = Calc.currentInvoiceRef(card, App.ym);
 
+    const totalAberto = prof.cards.reduce((s, c) => s + Calc.cardUsed(c.id), 0);
+    const refDe = (c) => (c.id === App.cardFocusId ? App.invoiceRef : Calc.currentInvoiceRef(c, App.ym));
     deckBox.appendChild(Cards.deck(prof.cards, App.ym, {
       stacked: true,
       focusedId: App.cardFocusId,
-      refFor: (c) => (c.id === App.cardFocusId ? App.invoiceRef : Calc.currentInvoiceRef(c, App.ym)),
+      refFor: refDe,
+      carteira: {
+        rotulo: 'Faturas em aberto',
+        total: U.fmtBRL(totalAberto),
+        doItem: (c) => Cards.valorDoCartao(c, refDe(c))
+      },
       onClick: (c) => {
         App.cardFocusId = c.id;
         App.invoiceRef = Calc.currentInvoiceRef(c, App.ym);
@@ -148,15 +159,13 @@
       }
     }));
     if (prof.cards.length > 1) {
-      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Explore o baralho e escolha um cartão para abrir a fatura.' }));
+      deckBox.appendChild(el('p', { class: 'deck-hint', text: 'Abra a carteira e escolha um cartão para ver a fatura.' }));
     }
 
     detail.appendChild(Cards.invoicePanel(card, App.invoiceRef, {
       onNav: (n) => { App.invoiceRef = U.addMonths(App.invoiceRef, n); renderCardDeck(); }
     }));
 
-    const totalAberto = prof.cards.reduce((s, c) => s + Calc.cardUsed(c.id), 0);
-    label.innerHTML = `Comprometido em faturas em aberto: <strong class="val-neg">${U.fmtBRL(totalAberto)}</strong>`;
   }
 
   Acc.refreshCards = renderCardDeck;

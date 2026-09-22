@@ -416,6 +416,25 @@
       if (viraRecorrente && !jaEraRecorrente &&
           global.Limites && !Limites.exigirEspaco('recurring_items')) return false;
 
+      /* O teto de movimentações por mês existia no plano, no banco e
+         no texto da página de preços — e em lugar nenhum do app. Era
+         o único limite anunciado que não acontecia.
+
+         Conta por MÊS DA DATA, não pelo mês da barra do topo: quem
+         está olhando setembro e lança dia 3 de outubro consome
+         outubro. E editar não conta: mudar o valor de um lançamento
+         que já existe não cria nada. */
+      if (!editing && global.Limites) {
+        const meses = [];
+        const nMeses = (!viraRecorrente && nInst > 1) ? nInst : 1;
+        for (let k = 0; k < nMeses; k++) meses.push(U.addMonths(U.ymOf(date), k));
+        /* Cada parcela cai num mês diferente, uma em cada: a pergunta
+           é se cabe mais uma em CADA um deles. O primeiro que não
+           couber é o que a explicação precisa citar. */
+        const cheio = meses.find((m) => !Limites.cabe('transactions_per_month', m));
+        if (cheio && !Limites.exigirEspaco('transactions_per_month', cheio)) return false;
+      }
+
       /* Em cartão ou conta de outra moeda, o digitado é o valor na
          moeda; o `amount` guardado é o equivalente em reais, que é o
          que os totais somam. Sem cotação não há como converter: pede
