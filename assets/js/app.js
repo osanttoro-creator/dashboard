@@ -437,6 +437,14 @@
       const pos = separador(campo);
       if (pos >= 0) campo.setSelectionRange(pos, pos);
     };
+    const posicaoCentavo = (campo, apagando) => {
+      const pos = separador(campo);
+      const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
+      const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
+      if (pos < 0 || (inicio <= pos && fim <= pos)) return -1;
+      const deslocamento = apagando && inicio === fim ? 2 : 1;
+      return Math.max(0, Math.min(1, inicio - pos - deslocamento));
+    };
     const emitir = (campo) => {
       campo.dispatchEvent(new InputEvent('input', {
         bubbles: true, inputType: 'insertReplacementText', data: null
@@ -456,8 +464,6 @@
 
       if (inserindo && (dado === ',' || dado === '.')) {
         ev.preventDefault();
-        campo.dataset.moneyParte = 'centavos';
-        campo.dataset.moneyCentavo = '0';
         const pos = separador(campo);
         if (pos >= 0) campo.setSelectionRange(pos + 1, campo.value.length);
         return;
@@ -465,12 +471,20 @@
 
       if (inserindo && /^\d$/.test(dado)) {
         ev.preventDefault();
-        if (campo.dataset.moneyParte === 'centavos') {
-          const posicao = +(campo.dataset.moneyCentavo || 0);
-          if (posicao >= 2) return;
-          campo.value = U.moneySetCent(campo.value, dado, posicao);
-          campo.dataset.moneyCentavo = String(posicao + 1);
+        /* Selecionar o valor inteiro significa começar outro valor,
+           mesmo que a seleção também atravesse os centavos. */
+        const posicao = tudoSelecionado ? -1 : posicaoCentavo(campo, false);
+        if (posicao >= 0) {
+          const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
+          const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
           const pos = separador(campo);
+          if (fim > inicio) {
+            const ultimo = Math.max(posicao, Math.min(1, fim - pos - 2));
+            for (let i = posicao; i <= ultimo; i++) {
+              campo.value = U.moneySetCent(campo.value, '0', i);
+            }
+          }
+          campo.value = U.moneySetCent(campo.value, dado, posicao);
           campo.setSelectionRange(pos + 2 + posicao, pos + 2 + posicao);
         } else {
           campo.value = U.moneyGrow(campo.value, dado, tudoSelecionado);
@@ -482,13 +496,21 @@
 
       if (ev.inputType === 'deleteContentBackward') {
         ev.preventDefault();
-        if (campo.dataset.moneyParte === 'centavos') {
-          const atual = +(campo.dataset.moneyCentavo || 0);
-          const posicao = Math.max(0, atual - 1);
-          campo.value = U.moneySetCent(campo.value, '0', posicao);
-          campo.dataset.moneyCentavo = String(posicao);
+        if (tudoSelecionado) {
+          campo.value = U.fmtNum(0);
+          cursorInteiro(campo);
+        } else if (posicaoCentavo(campo, true) >= 0) {
+          const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
+          const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
           const pos = separador(campo);
-          campo.setSelectionRange(pos + 1 + posicao, pos + 1 + posicao);
+          const primeiro = posicaoCentavo(campo, true);
+          const ultimo = inicio === fim
+            ? primeiro
+            : Math.max(primeiro, Math.min(1, fim - pos - 2));
+          for (let i = primeiro; i <= ultimo; i++) {
+            campo.value = U.moneySetCent(campo.value, '0', i);
+          }
+          campo.setSelectionRange(pos + 1 + primeiro, pos + 1 + primeiro);
         } else {
           campo.value = U.moneyShrink(campo.value);
           cursorInteiro(campo);
@@ -528,15 +550,6 @@
       const campo = ev.target;
       if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
       if (!campo.value.trim()) campo.value = U.fmtNum(0);
-      campo.dataset.moneyParte = 'inteiro';
-      campo.dataset.moneyCentavo = '0';
-      requestAnimationFrame(() => cursorInteiro(campo));
-    });
-    document.addEventListener('focusout', (ev) => {
-      const campo = ev.target;
-      if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
-      delete campo.dataset.moneyParte;
-      delete campo.dataset.moneyCentavo;
     });
     document.addEventListener('keydown', (ev) => {
       if (ev.target instanceof HTMLInputElement && ev.target.type === 'number' &&

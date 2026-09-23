@@ -47,6 +47,12 @@ const forms = ler('assets/js/forms.js');
 if (!/addEventListener\('beforeinput'/.test(app) || !/U\.moneyGrow/.test(app)) {
   falhas.push('o controlador real não usa a máscara testada');
 }
+if (!/const posicaoCentavo\s*=/.test(app) ||
+    !/posicaoCentavo\(campo, false\)/.test(app) ||
+    !/tudoSelecionado \? -1 : posicaoCentavo\(campo, false\)/.test(app) ||
+    /requestAnimationFrame\(\(\) => cursorInteiro\(campo\)\)/.test(app)) {
+  falhas.push('o cursor ainda não permite editar os centavos diretamente');
+}
 const inputMarcado = (id) => {
   const tag = html.match(new RegExp(`<input[^>]*id=["']${id}["'][^>]*>|<input[^>]*data-money=["']true["'][^>]*id=["']${id}["'][^>]*>`));
   return tag && /data-money=["']true["']/.test(tag[0]);
