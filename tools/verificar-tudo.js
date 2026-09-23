@@ -56,7 +56,7 @@ const VERIFICACOES = [
   ['tools/testes/trava-sobrescrita.js', 'o banco não apaga o aparelho'],
   ['tools/testes/sincronizacao-entre-aparelhos.js', 'aparelho novo abre os dados reais da conta'],
   ['tools/testes/sincronizacao-movel.js', 'celular retoma e reconcilia sem sobrescrever dados'],
-  ['tools/testes/entrada-monetaria.js', 'valores crescem antes da vírgula sem afetar taxas'],
+  ['tools/testes/entrada-monetaria.js', 'reais e centavos avançam juntos sem afetar taxas'],
   ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos']
 ];
 

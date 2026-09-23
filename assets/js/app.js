@@ -432,18 +432,9 @@
 
   function limitarEntradasNumericas() {
     const money = (campo) => campo.matches('[data-money="true"]');
-    const separador = (campo) => campo.value.lastIndexOf(U.moneyDecimalSeparator);
-    const cursorInteiro = (campo) => {
-      const pos = separador(campo);
-      if (pos >= 0) campo.setSelectionRange(pos, pos);
-    };
-    const posicaoCentavo = (campo, apagando) => {
-      const pos = separador(campo);
-      const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
-      const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
-      if (pos < 0 || (inicio <= pos && fim <= pos)) return -1;
-      const deslocamento = apagando && inicio === fim ? 2 : 1;
-      return Math.max(0, Math.min(1, inicio - pos - deslocamento));
+    const cursorFim = (campo) => {
+      const fim = campo.value.length;
+      campo.setSelectionRange(fim, fim);
     };
     const emitir = (campo) => {
       campo.dispatchEvent(new InputEvent('input', {
@@ -452,8 +443,8 @@
     };
 
     /* No teclado do celular `beforeinput` chega antes de o navegador
-       mexer no texto. Interceptar aqui evita o salto de cursor e faz
-       o valor crescer no lado inteiro: 1,00 → 10,00 → 100,00. */
+       mexer no texto. Cada dígito entra na mesma fila monetária:
+       0,01 → 0,12 → 1,23 → 12,34. */
     document.addEventListener('beforeinput', (ev) => {
       const campo = ev.target;
       if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
@@ -464,32 +455,14 @@
 
       if (inserindo && (dado === ',' || dado === '.')) {
         ev.preventDefault();
-        const pos = separador(campo);
-        if (pos >= 0) campo.setSelectionRange(pos + 1, campo.value.length);
+        cursorFim(campo);
         return;
       }
 
       if (inserindo && /^\d$/.test(dado)) {
         ev.preventDefault();
-        /* Selecionar o valor inteiro significa começar outro valor,
-           mesmo que a seleção também atravesse os centavos. */
-        const posicao = tudoSelecionado ? -1 : posicaoCentavo(campo, false);
-        if (posicao >= 0) {
-          const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
-          const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
-          const pos = separador(campo);
-          if (fim > inicio) {
-            const ultimo = Math.max(posicao, Math.min(1, fim - pos - 2));
-            for (let i = posicao; i <= ultimo; i++) {
-              campo.value = U.moneySetCent(campo.value, '0', i);
-            }
-          }
-          campo.value = U.moneySetCent(campo.value, dado, posicao);
-          campo.setSelectionRange(pos + 2 + posicao, pos + 2 + posicao);
-        } else {
-          campo.value = U.moneyGrow(campo.value, dado, tudoSelecionado);
-          cursorInteiro(campo);
-        }
+        campo.value = U.moneyGrow(campo.value, dado, tudoSelecionado);
+        cursorFim(campo);
         emitir(campo);
         return;
       }
@@ -498,23 +471,10 @@
         ev.preventDefault();
         if (tudoSelecionado) {
           campo.value = U.fmtNum(0);
-          cursorInteiro(campo);
-        } else if (posicaoCentavo(campo, true) >= 0) {
-          const inicio = campo.selectionStart == null ? 0 : campo.selectionStart;
-          const fim = campo.selectionEnd == null ? inicio : campo.selectionEnd;
-          const pos = separador(campo);
-          const primeiro = posicaoCentavo(campo, true);
-          const ultimo = inicio === fim
-            ? primeiro
-            : Math.max(primeiro, Math.min(1, fim - pos - 2));
-          for (let i = primeiro; i <= ultimo; i++) {
-            campo.value = U.moneySetCent(campo.value, '0', i);
-          }
-          campo.setSelectionRange(pos + 1 + primeiro, pos + 1 + primeiro);
         } else {
           campo.value = U.moneyShrink(campo.value);
-          cursorInteiro(campo);
         }
+        cursorFim(campo);
         emitir(campo);
       }
     });
@@ -550,6 +510,7 @@
       const campo = ev.target;
       if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
       if (!campo.value.trim()) campo.value = U.fmtNum(0);
+      requestAnimationFrame(() => cursorFim(campo));
     });
     document.addEventListener('keydown', (ev) => {
       if (ev.target instanceof HTMLInputElement && ev.target.type === 'number' &&

@@ -92,10 +92,11 @@
     return neg ? -Math.abs(n) : n;
   };
 
-  /* Digitação monetária no sentido natural do valor: 1 vira 1,00;
-     acrescentar 0 vira 10,00, depois 100,00 e 1.000,00. Centavos
-     continuam acessíveis ao tocar vírgula/ponto. Estas funções são
-     puras para que o comportamento possa ser testado sem navegador. */
+  /* Digitação monetária como uma sequência única de algarismos. Os
+     dois últimos são sempre os centavos: 1 → 0,01; 12 → 0,12;
+     123 → 1,23. Assim reais e centavos avançam juntos, sem dois
+     editores escondidos no mesmo campo. Estas funções são puras para
+     que o comportamento possa ser testado sem navegador. */
   const SEPARADOR_DECIMAL = nfNum.formatToParts(1.1)
     .find((p) => p.type === 'decimal').value;
   U.moneyDecimalSeparator = SEPARADOR_DECIMAL;
@@ -116,15 +117,22 @@
     return nfNum.format(Number(i) + Number(c) / 100);
   };
 
-  U.moneyGrow = function (raw, digito, substituir) {
+  U.moneyDigits = function (raw) {
     const p = U.moneyParts(raw);
-    const base = substituir || p.inteiro === '0' ? '' : p.inteiro;
-    return U.moneyFormatParts(base + String(digito).replace(/\D/g, '').slice(-1), substituir ? '00' : p.centavos);
+    return (p.inteiro + p.centavos).replace(/^0+/, '') || '0';
+  };
+
+  U.moneyGrow = function (raw, digito, substituir) {
+    const novo = String(digito).replace(/\D/g, '').slice(-1);
+    if (!novo) return U.moneyFormatParts(U.moneyParts(raw).inteiro, U.moneyParts(raw).centavos);
+    const base = substituir ? '' : U.moneyDigits(raw).replace(/^0+/, '');
+    const todos = (base + novo).replace(/^0+/, '').slice(-17) || '0';
+    return U.moneyFormatParts(todos.slice(0, -2) || '0', todos.slice(-2).padStart(2, '0'));
   };
 
   U.moneyShrink = function (raw) {
-    const p = U.moneyParts(raw);
-    return U.moneyFormatParts(p.inteiro.slice(0, -1), p.centavos);
+    const todos = U.moneyDigits(raw).slice(0, -1) || '0';
+    return U.moneyFormatParts(todos.slice(0, -2) || '0', todos.slice(-2).padStart(2, '0'));
   };
 
   U.moneySetCent = function (raw, digito, posicao) {

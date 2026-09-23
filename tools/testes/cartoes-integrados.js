@@ -29,6 +29,12 @@ if (!/Cards\.deck\(prof\.cards[\s\S]*?stacked:\s*true/.test(accounts)) {
 if (!/data-wallet-surface/.test(cards) || !/aria-posinset/.test(cards) || !/aria-setsize/.test(cards)) {
   falhas.push('o baralho integrado perdeu identificação ou posição acessível');
 }
+if (!/carteira-marca[\s\S]*?\/assets\/img\/oaze-mark\.svg/.test(cards) ||
+    !/\.carteira-marca\s*\{/.test(css) ||
+    !/--couro-a:\s*#23394D/.test(css) ||
+    !/\.carteira-couro::after/.test(css)) {
+  falhas.push('a carteira perdeu a marca, as cores ou o relevo OAZE');
+}
 if (!/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.wallet-deck-stack/.test(css)) {
   falhas.push('o baralho não respeita movimento reduzido');
 }

@@ -27,14 +27,17 @@ const igual = (atual, esperado, caso) => {
 };
 
 let valor = U.moneyGrow('', '1', true);
-igual(valor, '1,00', 'primeiro dígito');
-valor = U.moneyGrow(valor, '0', false);
-igual(valor, '10,00', 'segundo dígito');
-valor = U.moneyGrow(valor, '0', false);
-igual(valor, '100,00', 'terceiro dígito');
-valor = U.moneyGrow(valor, '0', false);
-igual(valor, '1.000,00', 'milhar');
-igual(U.moneyShrink(valor), '100,00', 'apagar inteiro');
+igual(valor, '0,01', 'primeiro dígito');
+valor = U.moneyGrow(valor, '2', false);
+igual(valor, '0,12', 'segundo dígito');
+valor = U.moneyGrow(valor, '3', false);
+igual(valor, '1,23', 'reais e centavos juntos');
+valor = U.moneyGrow(valor, '4', false);
+igual(valor, '12,34', 'dezena com centavos');
+valor = U.moneyGrow(valor, '5', false);
+valor = U.moneyGrow(valor, '6', false);
+igual(valor, '1.234,56', 'milhar com centavos');
+igual(U.moneyShrink(valor), '123,45', 'apagar desloca toda a sequência');
 
 valor = U.moneyFormatParts('1234', '00');
 valor = U.moneySetCent(valor, '5', 0);
@@ -47,11 +50,10 @@ const forms = ler('assets/js/forms.js');
 if (!/addEventListener\('beforeinput'/.test(app) || !/U\.moneyGrow/.test(app)) {
   falhas.push('o controlador real não usa a máscara testada');
 }
-if (!/const posicaoCentavo\s*=/.test(app) ||
-    !/posicaoCentavo\(campo, false\)/.test(app) ||
-    !/tudoSelecionado \? -1 : posicaoCentavo\(campo, false\)/.test(app) ||
-    /requestAnimationFrame\(\(\) => cursorInteiro\(campo\)\)/.test(app)) {
-  falhas.push('o cursor ainda não permite editar os centavos diretamente');
+if (!/U\.moneyGrow\(campo\.value, dado, tudoSelecionado\)/.test(app) ||
+    !/U\.moneyShrink\(campo\.value\)/.test(app) ||
+    /posicaoCentavo|moneyParte|moneyCentavo/.test(app)) {
+  falhas.push('reais e centavos ainda são tratados como blocos separados');
 }
 const inputMarcado = (id) => {
   const tag = html.match(new RegExp(`<input[^>]*id=["']${id}["'][^>]*>|<input[^>]*data-money=["']true["'][^>]*id=["']${id}["'][^>]*>`));
@@ -72,4 +74,4 @@ if (falhas.length) {
   process.exit(1);
 }
 
-console.log('OK — valores crescem antes da vírgula; taxas e cotações mantêm entrada decimal.');
+console.log('OK — reais e centavos avançam juntos; taxas e cotações mantêm entrada decimal.');

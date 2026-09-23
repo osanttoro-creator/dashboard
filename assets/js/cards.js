@@ -547,6 +547,13 @@
       el('div', { class: 'carteira-bolso' }, [
         el('span', { class: 'carteira-couro', 'aria-hidden': 'true' }),
         el('span', { class: 'carteira-costura', 'aria-hidden': 'true' }),
+        /* A marca oficial fica na face da carteira, como no objeto
+           aprovado. É decorativa aqui: o nome OAZE já existe na
+           navegação e repetir isso para leitor de tela seria ruído. */
+        el('img', {
+          class: 'carteira-marca', src: '/assets/img/oaze-mark.svg',
+          alt: '', 'aria-hidden': 'true', width: '56', height: '56'
+        }),
         el('span', { class: 'carteira-face' }, [elRotulo, elValor]),
         abrir
       ])
