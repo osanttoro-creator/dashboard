@@ -182,7 +182,7 @@
      ============================================================= */
   function depositar(g) {
     const prof = Store.profile();
-    const campo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', placeholder: '0,00' });
+    const campo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', placeholder: '0,00' });
     const data = el('input', { class: 'input', type: 'date', value: U.todayISO() });
     const conta = el('select', { class: 'input' });
     UI.fillSelect(conta,
@@ -246,8 +246,8 @@
     const g = id ? Store.goals.get(id) : null;
 
     const nome = el('input', { class: 'input', type: 'text', maxlength: '60', value: g ? g.name : '', placeholder: 'Ex.: Reserva de emergência' });
-    const alvo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', value: g ? U.fmtNum(g.target) : '' });
-    const guardado = el('input', { class: 'input', type: 'text', inputmode: 'decimal', value: g ? U.fmtNum(g.saved) : '0,00' });
+    const alvo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', value: g ? U.fmtNum(g.target) : '' });
+    const guardado = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', value: g ? U.fmtNum(g.saved) : '0,00' });
     const prazo = el('input', { class: 'input', type: 'date', value: g && g.deadline ? g.deadline : '' });
     const cor = UI.colorPicker(g ? g.color : Store.PALETTE[0]);
 
@@ -279,7 +279,7 @@
       g ? g.accountId : '', 'Nenhuma conta em especial');
 
     const contribValor = el('input', {
-      class: 'input', type: 'text', inputmode: 'decimal',
+      class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true',
       placeholder: '0,00',
       value: g && g.contribution ? U.fmtNum(g.contribution.amount) : ''
     });

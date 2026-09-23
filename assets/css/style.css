@@ -3966,13 +3966,17 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
   .topbar {
     position: sticky; top: 0; z-index: 70;
     display: grid;
-    /* A terceira coluna fica vazia no HTML: é o lugar da esfera da
-       UGLEZ, que é fixa e pousa exatamente ali (ver 24.3). */
-    grid-template-columns: auto minmax(0, 1fr) 42px 42px 42px;
+    /* A coluna "uglez" fica vazia no HTML: é o lugar da esfera da
+       UGLEZ, que é fixa e pousa exatamente ali (ver 24.3). A
+       bandeira do idioma tem coluna PRÓPRIA, à esquerda dela — sem
+       isso ela caía justamente no lugar da esfera, e as duas
+       ficavam uma por cima da outra. A conta do "right" da esfera
+       não muda: ela soma só o que está à DIREITA da coluna dela. */
+    grid-template-columns: auto minmax(0, 1fr) 32px 42px 42px 42px;
     grid-template-areas:
-      "marca espaco uglez busca avisos"
-      "periodo periodo periodo periodo periodo";
-    align-items: center; gap: 6px;
+      "marca espaco idioma uglez busca avisos"
+      "periodo periodo periodo periodo periodo periodo";
+    align-items: center; gap: 5px;
     margin: 0 calc(-1 * max(14px, env(safe-area-inset-right, 0px))) 6px calc(-1 * max(14px, env(safe-area-inset-left, 0px)));
     padding: calc(env(safe-area-inset-top, 0px) + 6px) max(14px, env(safe-area-inset-right, 0px)) 8px max(14px, env(safe-area-inset-left, 0px));
     /* Vidro, mas vidro que se lê: 86% do fundo da página por trás do
@@ -4017,8 +4021,10 @@ html:not([data-theme="dark"]) .uglez-rodape { color: #5A6B72; }
     font-size: 20px; font-weight: 500; letter-spacing: -.01em; color: var(--ink);
   }
   .topbar .pill-espaco .pill-select-wrap::after { right: 6px; }
-  .topbar #btnProfiles { min-width: 36px; min-height: 36px; width: 36px; height: 36px; color: var(--muted); }
+  .topbar #btnProfiles { min-width: 32px; min-height: 32px; width: 32px; height: 32px; color: var(--muted); }
 
+  .topbar .idioma-esfera { grid-area: idioma; justify-self: center; }
+  .topbar .idioma-esfera-botao { width: 32px; height: 32px; }
   .topbar #btnSearch { grid-area: busca; }
   .topbar #btnNotif { grid-area: avisos; position: relative; }
   .topbar .pill-btn {
@@ -5230,10 +5236,9 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   body[data-page="uglez"] .pill-period { flex: 1 1 auto; min-width: 0; }
 
   /* --- aviso de conta: fica a ação, sai o parágrafo --- */
-  body[data-page="uglez"] .aviso-conta { padding: 7px 9px; gap: 8px; margin-bottom: 8px; }
-  body[data-page="uglez"] .aviso-conta p { font-size: 12.5px; line-height: 1.35; flex: 1 1 140px; }
-  body[data-page="uglez"] .aviso-conta .aviso-conta-detalhe { display: none; }
-  body[data-page="uglez"] .aviso-conta .btn { min-height: 34px; padding-block: 4px; font-size: 12.5px; }
+  /* O mesmo aviso continua no Menu e nas demais páginas. Dentro da
+     câmara ele tomava mais de 100px e quebrava a tela única. */
+  body[data-page="uglez"] .aviso-conta { display: none !important; }
 
   /* --- a faixa de identidade sai; o console é a peça inteira --- */
   .uglez-stage { grid-template-rows: minmax(0, 1fr); border-radius: 14px; }
@@ -5253,20 +5258,24 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   }
 
   .uglez-console-corpo {
-    padding: 12px; gap: 10px; scroll-padding-block: 12px;
+    padding: 11px 12px; gap: 8px; scroll-padding-block: 11px;
     -webkit-overflow-scrolling: touch;
   }
   .uglez-boasvindas { max-width: none; margin: 0; }
-  .uglez-cartoes { grid-template-columns: 1fr; gap: 7px; margin-top: 8px; }
+  .uglez-saudacao { font-size: clamp(19px, 5.4vw, 22px); }
+  .uglez-saudacao-sub { font-size: 12px; line-height: 1.4; }
+  .uglez-cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 7px; }
   .uglez-cartao {
-    grid-template-columns: 30px minmax(0, 1fr); grid-template-rows: auto auto;
-    min-height: 56px; padding: 9px 11px; column-gap: 10px; row-gap: 1px;
+    grid-template-columns: 28px minmax(0, 1fr); grid-template-rows: auto;
+    min-height: 52px; padding: 8px 9px; column-gap: 8px; row-gap: 0;
     touch-action: manipulation;
   }
-  .uglez-cartao-ico { grid-row: 1 / 3; }
-  .uglez-contexto { min-height: 40px; margin: 0 0 7px; }
-  .uglez-compositor { padding: 8px 10px 9px; }
-  .uglez-caixa { border-radius: 16px; padding-left: 13px; }
+  .uglez-cartao-ico { grid-row: auto; width: 28px; height: 28px; border-radius: 8px; }
+  .uglez-cartao-t { font-size: 12.5px; line-height: 1.25; }
+  .uglez-cartao-s { display: none; }
+  .uglez-contexto { min-height: 38px; margin: 0 0 6px; }
+  .uglez-compositor { padding: 7px 9px 8px; }
+  .uglez-caixa { border-radius: 16px; padding-left: 12px; }
   .uglez-campo-texto { min-height: 42px; height: 42px; padding-block: 9px; font-size: 16px; }
   .uglez-enviar { width: 42px; height: 42px; touch-action: manipulation; }
   .uglez-page .uglez-rodape { margin-top: 5px; font-size: 10.5px; }
@@ -5277,8 +5286,7 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 @media (max-width: 820px) and (max-height: 700px) {
   .uglez-console-topo { padding-block: 7px; }
   .uglez-console-corpo { padding-block: 9px; }
-  .uglez-saudacao-sub,
-  .uglez-cartao-s { display: none; }
+  .uglez-saudacao-sub { display: none; }
   .uglez-cartao { min-height: 46px; grid-template-rows: auto; }
   .uglez-cartao-ico { grid-row: auto; }
   .uglez-contexto { min-height: 36px; margin-bottom: 5px; }
@@ -5337,42 +5345,31 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
    calcular do zero o estilo e o layout dos 95 nós da folha, e num
    aparelho lento isso é meio segundo de tela parada.
 
-   Agora a folha entra no layout UMA vez, quando o aparelho está
-   ocioso depois do primeiro desenho, e fica lá invisível. Abrir
-   passou a ser trocar visibilidade: 59 a 315ms.
-
-   Enquanto o aquecimento não aconteceu (ou se ele nunca acontecer,
-   num navegador sem requestIdleCallback e com a aba fechada antes
-   do tempo), a folha continua com `display: none` e o toque ainda
-   funciona — só paga o preço antigo. Nada depende do aquecimento
-   para estar correto; ele só antecipa o trabalho.
+   Agora a folha já nasce composta e inerte. Abrir troca apenas
+   opacidade e transform; o conteúdo só entra na árvore de
+   acessibilidade depois que o primeiro quadro visual foi pedido.
    ============================================================= */
 @media (max-width: 820px) {
-  /* Fechada e já medida: continua no layout, invisível e inerte.
-     NÃO usa [hidden] — a regra global `[hidden] { display: none
-     !important }` (linha 214) venceria qualquer coisa escrita aqui,
-     e foi exatamente assim que a primeira tentativa deste conserto
-     não serviu para nada: a classe entrava, o layout continuava
-     sendo refeito a cada toque. */
+  /* Fechada, a folha continua composta. Opacidade e transform mudam
+     no toque; não há display, visibility ou layout para reconstruir. */
   .menu-movel.esta-pronta {
-    visibility: hidden;
     pointer-events: none;
   }
   .menu-movel.esta-pronta.esta-aberta {
-    visibility: visible;
     pointer-events: auto;
   }
-  /* A folha já nasce desenhada e inerte. Uma transição curta dá
-     resposta imediata ao toque sem sacrificar a leitura do movimento. */
   .menu-movel.esta-pronta .menu-movel-painel {
     animation: none;
-    transition: transform .18s var(--ease-out), opacity .16s var(--ease-out);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transition: transform .12s var(--ease-out), opacity .1s linear;
   }
   .menu-movel.esta-pronta .menu-movel-scrim {
     animation: none;
-    transition: opacity .14s var(--ease-out);
+    will-change: opacity;
+    transition: opacity .1s linear;
   }
-  .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-painel { transform: translateY(14px); opacity: 0; }
+  .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-painel { transform: translate3d(0, 10px, 0); opacity: 0; }
   .menu-movel.esta-pronta:not(.esta-aberta) .menu-movel-scrim { opacity: 0; }
 }
 
@@ -5381,11 +5378,7 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
   .menu-movel.esta-pronta .menu-movel-scrim { transition: none; }
 }
 
-/* A folha aquecida perde o atributo `hidden`, e com ele a regra
-   global que a escondia. No computador ela não tem layout nenhum
-   declarado (as regras da folha vivem todas no bloco do celular),
-   e sem isto apareceria como um bloco solto no fim da página ao
-   virar o aparelho ou alargar a janela. */
+/* No computador a folha não participa do layout. */
 @media (min-width: 821px) {
   .menu-movel { display: none !important; }
 }
@@ -5774,4 +5767,221 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #2842BE; col
 @media (max-width: 720px) {
   .idioma-esfera-botao { width: 32px; height: 32px; }
   .idioma-esfera-painel { right: 0; min-width: 172px; }
+}
+
+/* =============================================================
+   33 · A VISÃO GERAL NO CELULAR
+   -------------------------------------------------------------
+   Quatro peças que vieram de uma referência de app bancário, todas
+   traduzidas para o mundo do OAZE: petróleo, areia e o ouro único.
+   Nada de lima, menta ou uma segunda tipografia — a estrutura é
+   que foi emprestada, não a identidade.
+
+     1. o saldo como PAINEL, com profundidade vinda de luz
+     2. quatro atalhos em discos, cada um com a cor do que faz
+     3. sete barras para a semana, com um só pico em ouro
+     4. a movimentação como LINHA, não como célula de tabela
+
+   POR QUE O HERÓI DEIXOU DE SER VIDRO
+   Ele era uma superfície translúcida com desfoque por trás. Vidro
+   sobre o número mais importante da tela contraria a regra "Dados
+   Antes do Vidro" da DESIGN.md, e num celular o desfoque ainda
+   custa uma camada de composição a cada rolagem. Agora a
+   profundidade vem de um gradiente e de dois halos desfocados —
+   luz, não translucidez. É mais barato e lê melhor.
+
+   ESTE CARTÃO É ESCURO NOS DOIS TEMAS
+   Proposital: é o instrumento onde mora o número que decide, e ele
+   se lê igual no claro e no escuro. O petróleo e a areia continuam
+   sendo os dois mundos do app — este é o único painel que não
+   troca de lado, como o mostrador de um relógio.
+   ============================================================= */
+
+/* ---------------- 1 · o painel do saldo ---------------- */
+
+.hero {
+  /* Sem vidro: gradiente + halos. A borda continua fina e fria. */
+  background:
+    radial-gradient(60% 70% at 88% 6%, rgba(216, 180, 94, .16), transparent 62%),
+    radial-gradient(64% 76% at 4% 96%, rgba(59, 101, 88, .30), transparent 64%),
+    linear-gradient(152deg, #16384A 0%, #0F2A38 54%, #071822 100%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: rgba(241, 236, 227, .12);
+  box-shadow:
+    inset 0 1px 0 rgba(241, 236, 227, .10),
+    0 2px 6px rgba(7, 24, 34, .35),
+    0 26px 50px -22px rgba(7, 24, 34, .55);
+}
+/* OS MEIO-TONS FORAM MEDIDOS, NÃO ESCOLHIDOS
+   O pior fundo deste cartão não é o petróleo do meio: é o canto
+   claro do gradiente (#16384A) com o halo dourado por cima, que dá
+   rgb(53, 76, 77). Sobre ele, a tinta clara a 58% media 3,81:1 —
+   abaixo dos 4,5:1 que a WCAG pede para texto normal. A 70% são
+   4,76:1, e o texto continua sendo claramente secundário. */
+.hero .hero-label { color: rgba(241, 236, 227, .70); }
+.hero .hero-value { color: #F1ECE3; }
+.hero .hero-sub { color: rgba(241, 236, 227, .70); }
+.hero .hero-delta .muted { color: rgba(241, 236, 227, .70); }
+
+/* Os centavos: mesmo tamanho, menos peso. Escondê-los seria mentir
+   sobre o saldo; recuá-los só tira do caminho o que quase nunca
+   decide. */
+.hero-centavos { color: rgba(241, 236, 227, .56); }
+
+.hero .hero-projecao { border-top-color: rgba(241, 236, 227, .12); }
+.hero .hero-projecao-k { color: rgba(241, 236, 227, .70); }
+.hero .hero-projecao-v { color: #F1ECE3; }
+.hero .hero-projecao-s { color: rgba(241, 236, 227, .70); }
+.hero .hero-trend.is-flat { background: rgba(241, 236, 227, .10); color: rgba(241, 236, 227, .72); }
+.hero .hero-trend.is-up { background: rgba(134, 207, 164, .16); color: #A8DCBE; }
+.hero .hero-trend.is-down { background: rgba(233, 161, 120, .16); color: #F0B994; }
+
+/* De onde vem o número: a carteira que o soma, e o caminho até ela. */
+.hero-carteira {
+  display: inline-flex; align-items: center; gap: 8px;
+  justify-self: start; margin-top: 10px;
+  padding: 7px 10px 7px 11px; border-radius: 999px;
+  font: inherit; font-size: 12.5px; font-weight: 560;
+  color: rgba(241, 236, 227, .82);
+  background: rgba(241, 236, 227, .07);
+  border: 1px solid rgba(241, 236, 227, .18);
+  cursor: pointer;
+  transition: background .18s var(--ease-out), border-color .18s var(--ease-out);
+}
+.hero-carteira[hidden] { display: none; }
+.hero-carteira:hover { background: rgba(241, 236, 227, .12); border-color: rgba(241, 236, 227, .3); }
+.hero-carteira:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+.hero-carteira-ico { display: inline-flex; color: var(--ouro); }
+.hero-carteira-seta { display: inline-flex; opacity: .6; }
+
+/* A linha do saldo sobre o petróleo: o spark herdava a cor da
+   tinta do tema claro e sumia sobre o fundo escuro. */
+.hero-spark { opacity: .38; }
+
+/* ---------------- 2 · os quatro atalhos ---------------- */
+
+@media (max-width: 820px) {
+  .hero-acoes {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px; margin-top: 16px;
+  }
+  .hero-acao {
+    display: grid; justify-items: center; gap: 7px;
+    padding: 2px 0; background: none; border: 0; cursor: pointer;
+    font: inherit; font-size: 11.5px; font-weight: 560;
+    color: rgba(241, 236, 227, .86);
+  }
+  /* Disco de 46px: alvo de toque confortável sem virar botão de
+     mesa. A cor de cada um diz o que ele faz — entrada em sálvia,
+     saída em terracota, os neutros em fio claro. O ouro não entra
+     aqui: ele já é do "+" no centro da barra de baixo, e dois
+     dourados na mesma tela deixam de ser um acento. */
+  .hero-acao-ico {
+    display: grid; place-items: center;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(241, 236, 227, .07);
+    border: 1px solid rgba(241, 236, 227, .18);
+    color: rgba(241, 236, 227, .92);
+    transition: transform .16s var(--ease-out), background .16s var(--ease-out);
+  }
+  .hero-acao-ico.is-income {
+    background: rgba(134, 207, 164, .14);
+    border-color: rgba(134, 207, 164, .34);
+    color: #A8DCBE;
+  }
+  .hero-acao-ico.is-expense {
+    background: rgba(233, 161, 120, .14);
+    border-color: rgba(233, 161, 120, .34);
+    color: #F0B994;
+  }
+  .hero-acao:active .hero-acao-ico { transform: scale(.93); }
+  .hero-acao:focus-visible { outline: none; }
+  .hero-acao:focus-visible .hero-acao-ico { outline: 2px solid var(--ouro); outline-offset: 2px; }
+}
+
+/* ---------------- 3 · os sete dias ---------------- */
+
+.semana-card .card-head { align-items: baseline; }
+.semana-total {
+  font-size: 17px; font-weight: 640; letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.semana-barras {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px; align-items: end; margin-top: 4px;
+  /* Esticado na largura do computador, cada dia virava um retângulo
+     de 162px por 104 — um gráfico deitado, que se lê como tabela.
+     O teto mantém a proporção vertical que faz a coluna dizer
+     "quanto", e a folga fica onde não atrapalha. */
+  max-width: 560px;
+}
+.semana-dia { display: grid; gap: 7px; justify-items: center; min-width: 0; }
+.semana-trilho {
+  display: flex; align-items: flex-end; justify-content: center;
+  width: 100%; height: 104px;
+  border-radius: 8px; background: var(--plane-2);
+}
+.semana-trilho > i {
+  display: block; width: 100%;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  transition: height .5s var(--ease-out);
+}
+.semana-letra {
+  font-size: 11px; font-weight: 600; letter-spacing: .04em;
+  color: var(--muted); text-transform: lowercase;
+}
+/* O pico, e só ele. Sem gasto nenhum não há pico: a regra depende
+   da classe, que o JS só põe quando o maior valor é maior que zero. */
+.semana-dia.e-pico .semana-trilho > i { background: var(--ouro); }
+.semana-dia.e-pico .semana-letra { color: var(--ouro-tinta); font-weight: 700; }
+[data-theme="dark"] .semana-dia.e-pico .semana-letra { color: var(--ouro); }
+
+@media (prefers-reduced-motion: reduce) {
+  .semana-trilho > i { transition: none; }
+}
+
+/* ---------------- 4 · a movimentação como linha ---------------- */
+
+.linhas { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.linha {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: 12px;
+  width: 100%; padding: 10px 10px;
+  border: 0; border-radius: 14px; background: transparent; cursor: pointer;
+  font: inherit; text-align: left; color: inherit;
+  transition: background .16s var(--ease-out);
+}
+.linha:hover { background: var(--plane-2); }
+.linha:focus-visible { outline: 2px solid var(--ouro); outline-offset: -2px; }
+.linha-ico { display: inline-flex; flex: none; }
+.linha-meio { display: grid; gap: 2px; min-width: 0; }
+.linha-nome {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.linha-sub {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.linha-ponto { opacity: .6; }
+.linha-dir { display: grid; justify-items: end; gap: 2px; flex: none; }
+.linha-valor {
+  font-size: 14.5px; font-weight: 640; letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+.linha-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted);
+}
+/* Prevista: o valor perde peso, não legibilidade. Opacidade no
+   conjunto apagaria também a descrição, que continua sendo o que a
+   pessoa lê para reconhecer a linha. */
+.linha.e-prevista .linha-valor { font-weight: 560; opacity: .8; }
+
+@media (max-width: 720px) {
+  .linha { padding: 10px 6px; gap: 10px; }
+  .linha-nome { font-size: 13.5px; }
 }

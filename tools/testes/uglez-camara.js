@@ -101,8 +101,8 @@ if (!/body\[data-page="uglez"\]\s*\.topnav-brand[^{]*#btnNotif\s*\{\s*display:\s
 if (/#btnNotif\s*\{\s*display:\s*inline-flex/.test(css)) {
   falhas.push('um segundo passe está devolvendo busca e avisos ao cabeçalho');
 }
-if (!/\.aviso-conta-detalhe\s*\{\s*display:\s*none/.test(css)) {
-  falhas.push('o aviso de conta voltou a ocupar a conversa inteira');
+if (!/body\[data-page="uglez"\]\s+\.aviso-conta\s*\{\s*display:\s*none\s*!important/.test(css)) {
+  falhas.push('o aviso de conta voltou a ocupar a conversa no celular');
 }
 /* O envelope da segunda frase precisa existir no JS: sem ele o CSS
    acima só poderia esconder o parágrafo inteiro, e sobrariam dois
@@ -114,7 +114,9 @@ if (!/page\s*!==\s*['"]uglez['"]/.test(flutuante) ||
     !/body\[data-page=["']uglez["']\]\s+\.uglez-flut\s*\{\s*display:\s*none\s*!important/.test(css)) {
   falhas.push('o botão flutuante do UGLEZ ainda pode aparecer dentro da própria UGLEZ');
 }
-if (!/\.uglez-cartao\s*\{[^}]*grid-template-columns:\s*30px minmax\(0,\s*1fr\)/s.test(css) ||
+if (!/\.uglez-cartoes\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s.test(css) ||
+    !/\.uglez-cartao\s*\{[^}]*grid-template-columns:\s*28px minmax\(0,\s*1fr\)/s.test(css) ||
+    !/\.uglez-cartao-s\s*\{\s*display:\s*none/s.test(css) ||
     !/\.uglez-campo-texto\s*\{[^}]*font-size:\s*16px/s.test(css)) {
   falhas.push('a conversa não está compactada e protegida contra zoom no celular');
 }

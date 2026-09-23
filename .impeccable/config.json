@@ -26,6 +26,107 @@
         ],
         "createdAt": "2026-09-11T18:44:57.706Z",
         "reason": "Claude: o .aviso tem só um fio no topo e o texto fica 18px abaixo dele; não há borda lateral para o texto encostar (mesmo padrão da .grade-editorial)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "font-family: cascadia mono is not declared in design.md typography",
+        "createdAt": "2026-09-22T23:46:51.967Z"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.347Z"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.433Z"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.656Z"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.768Z"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.900Z"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:02.990Z"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.087Z"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.181Z"
+      },
+      {
+        "rule": "gpt-thin-border-wide-shadow",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.310Z"
+      },
+      {
+        "rule": "gpt-thin-border-wide-shadow",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.431Z"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "assets/css/style.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.551Z"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "assets/css/site.css"
+        ],
+        "createdAt": "2026-09-22T23:47:03.686Z"
       }
     ]
   }

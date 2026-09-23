@@ -1,0 +1,265 @@
+/* =============================================================
+   Referencias de interface 1-6, adaptadas ao produto OAZE.
+   A folha e aditiva: nao redefine o sistema inteiro e pode ser
+   removida sem alterar os contratos dos componentes existentes.
+   ============================================================= */
+
+:root {
+  --editorial-ease: cubic-bezier(.19, 1, .22, 1);
+}
+
+/* 1 · loader iridescente — somente durante sincronizacao real */
+.sync-chip.is-sincronizando .sync-chip-sinal {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ouro-claro) 28%, transparent), color-mix(in srgb, var(--uglez) 20%, transparent));
+  box-shadow: 0 0 18px rgba(216, 180, 94, .22), 0 10px 22px -14px rgba(70, 105, 240, .8);
+  animation: oaze-loader-cor 6s ease-in-out infinite;
+}
+
+.sync-chip.is-sincronizando .sync-chip-sinal::before,
+.sync-chip.is-sincronizando .sync-chip-sinal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.sync-chip.is-sincronizando .sync-chip-sinal::before {
+  border: 1px solid color-mix(in srgb, var(--ouro-claro) 75%, transparent);
+  border-radius: inherit;
+  background: conic-gradient(from 90deg, var(--ouro), var(--uglez), var(--ancora), var(--ouro-claro), var(--ouro));
+  animation: oaze-loader-gira 1.15s linear infinite;
+}
+
+.sync-chip.is-sincronizando .sync-chip-sinal::after {
+  inset: 6px;
+  border-radius: 42% 58% 64% 36% / 56% 38% 62% 44%;
+  background: var(--n2, #0F2A38);
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 227, .12);
+  animation: oaze-loader-materia .7s linear infinite alternate;
+}
+
+@keyframes oaze-loader-gira { to { transform: rotate(1turn); } }
+@keyframes oaze-loader-materia {
+  to { transform: rotate(110deg) scale(.78); border-radius: 66% 34% 38% 62% / 38% 62% 42% 58%; }
+}
+@keyframes oaze-loader-cor {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(-24deg); }
+}
+
+/* 2 · loader floral — leitura da UGLEZ, com texto de estado ao lado */
+.uglez-loader-flor {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 28px;
+  flex: 0 0 38px;
+  filter: drop-shadow(0 0 8px rgba(70, 105, 240, .32));
+}
+
+.uglez-loader-flor i {
+  position: absolute;
+  left: 11px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 16%, currentColor 0 18%, transparent 20%),
+    radial-gradient(circle at 84% 50%, currentColor 0 18%, transparent 20%),
+    radial-gradient(circle at 50% 84%, currentColor 0 18%, transparent 20%),
+    radial-gradient(circle at 16% 50%, currentColor 0 18%, transparent 20%),
+    radial-gradient(circle, var(--ouro-claro) 0 13%, transparent 15%);
+  color: var(--uglez);
+  opacity: 0;
+}
+
+.uglez-loader-flor i:nth-child(1) { animation: oaze-flor-centro 1.2s linear infinite; }
+.uglez-loader-flor i:nth-child(2) { animation: oaze-flor-esquerda 1.2s linear .36s infinite; }
+.uglez-loader-flor i:nth-child(3) { animation: oaze-flor-direita 1.2s linear .72s infinite; }
+
+@keyframes oaze-flor-centro {
+  0% { opacity: 0; transform: translateY(-12px) scale(.45); }
+  30%, 62% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(12px) scale(.25); }
+}
+@keyframes oaze-flor-esquerda {
+  0% { opacity: 0; transform: translate(-12px, -10px) rotate(-10deg) scale(.45); }
+  30%, 62% { opacity: 1; transform: translate(-4px, 0) rotate(0) scale(.9); }
+  100% { opacity: 0; transform: translate(5px, 12px) rotate(12deg) scale(.2); }
+}
+@keyframes oaze-flor-direita {
+  0% { opacity: 0; transform: translate(12px, -10px) rotate(10deg) scale(.45); }
+  30%, 62% { opacity: 1; transform: translate(4px, 0) rotate(0) scale(.9); }
+  100% { opacity: 0; transform: translate(-5px, 12px) rotate(-12deg) scale(.2); }
+}
+
+/* 3 · FAB expansivel no desktop; no toque ele continua circular */
+.fab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  padding-inline: 19px;
+  transition:
+    width .7s var(--editorial-ease),
+    border-radius .7s var(--editorial-ease),
+    gap .7s var(--editorial-ease),
+    transform .3s var(--ease-out),
+    box-shadow .3s var(--ease-out);
+}
+
+.fab-text {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: currentColor;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  transform: translateX(8px);
+  transition: opacity .28s ease, transform .7s var(--editorial-ease);
+}
+
+.fab-text::before { content: "Novo"; }
+html[data-idioma="en"] .fab-text::before { content: "New"; }
+html[data-idioma="es"] .fab-text::before { content: "Nuevo"; }
+html[data-idioma="fr"] .fab-text::before { content: "Nouveau"; }
+
+@media (hover: hover) and (min-width: 821px) {
+  .fab:hover,
+  .fab:focus-visible,
+  .fab[aria-expanded="true"] {
+    width: 126px;
+    border-radius: 999px;
+    gap: 12px;
+  }
+
+  .fab:hover .fab-text,
+  .fab:focus-visible .fab-text,
+  .fab[aria-expanded="true"] .fab-text {
+    width: 58px;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 4 + 6 · chamada editorial para abrir o produto */
+.oaze-app-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: min(72svh, 760px);
+  display: grid;
+  place-items: center;
+  padding: clamp(72px, 10vw, 152px) var(--gutter, 24px);
+  border-block: 1px solid var(--borda, rgba(241, 236, 227, .1));
+  background: var(--poco, #050F16);
+  color: var(--tinta, #F1ECE3);
+}
+
+.oaze-app-band::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -28%;
+  background:
+    radial-gradient(ellipse 38% 44% at 24% 42%, rgba(35, 57, 77, .92), transparent 72%),
+    radial-gradient(ellipse 34% 40% at 58% 56%, rgba(216, 180, 94, .42), transparent 70%),
+    radial-gradient(ellipse 28% 42% at 82% 30%, color-mix(in srgb, var(--despesa, #E9A178) 28%, transparent), transparent 72%);
+  filter: blur(46px) saturate(115%);
+  transform: rotate(-5deg) scale(1.08);
+}
+
+.oaze-app-band-inner {
+  width: min(1078px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(30px, 8vw, 96px);
+}
+
+.oaze-app-band h2 {
+  max-width: 10ch;
+  margin: 0;
+  color: var(--tinta, #F1ECE3);
+  font: 400 clamp(3rem, 8vw, 6rem)/.9 var(--fonte-titulo, "Newsreader", Georgia, serif);
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.oaze-app-band-copy { display: grid; gap: 22px; justify-items: start; }
+.oaze-app-band-copy p { max-width: 40ch; margin: 0; color: color-mix(in srgb, var(--tinta, #F1ECE3) 72%, transparent); }
+
+.oaze-app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 10px 24px;
+  border: 1px solid color-mix(in srgb, var(--tinta, #F1ECE3) 34%, transparent);
+  border-radius: 75px;
+  background: rgba(5, 15, 22, .44);
+  color: var(--tinta, #F1ECE3);
+  text-decoration: none;
+  transition: background .8s var(--editorial-ease), color .8s var(--editorial-ease), border-color .8s var(--editorial-ease), transform .8s var(--editorial-ease);
+}
+
+.oaze-app-button:hover {
+  border-color: var(--tinta, #F1ECE3);
+  background: var(--tinta, #F1ECE3);
+  color: var(--noite, #071822);
+  transform: translateY(-2px);
+}
+.oaze-app-button:focus-visible { outline: 2px solid var(--ouro-claro, #F0DA9B); outline-offset: 4px; }
+.oaze-app-button svg { width: 24px; height: 24px; flex: none; }
+.oaze-app-button-text { display: grid; gap: 3px; line-height: 1; }
+.oaze-app-button-text small { font: 500 11px/1 var(--fonte-mono, ui-monospace, monospace); letter-spacing: .13em; text-transform: uppercase; }
+.oaze-app-button-text strong { font-size: 16px; font-weight: 600; }
+
+/* 5 · gradiente reservado ao CTA principal, dentro da paleta OAZE */
+.btn-ref-gradiente {
+  border-color: color-mix(in srgb, var(--ouro-claro) 38%, transparent);
+  background: linear-gradient(105deg, var(--ouro-fundo), var(--ouro) 24%, var(--ouro-claro) 48%, var(--ouro) 70%, var(--ouro-fundo)) no-repeat;
+  background-size: 280% 100%;
+  background-position: left center;
+  color: var(--noite);
+  box-shadow: 0 22px 30px -24px rgba(216, 180, 94, .72);
+  transition: background-position .8s var(--editorial-ease), box-shadow .8s var(--editorial-ease), transform .18s ease;
+}
+.btn-ref-gradiente:hover {
+  background-position: right center;
+  color: var(--noite);
+  box-shadow: 0 26px 36px -24px rgba(240, 218, 155, .78);
+}
+.btn-ref-gradiente svg { width: 19px; height: 19px; transition: transform .8s var(--editorial-ease); }
+.btn-ref-gradiente:hover svg { transform: translateX(3px); }
+
+@media (max-width: 760px) {
+  .oaze-app-band { min-height: 620px; }
+  .oaze-app-band-inner { grid-template-columns: 1fr; align-items: start; }
+  .oaze-app-band-copy { justify-items: stretch; }
+  .oaze-app-button { width: 100%; justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sync-chip.is-sincronizando .sync-chip-sinal,
+  .sync-chip.is-sincronizando .sync-chip-sinal::before,
+  .sync-chip.is-sincronizando .sync-chip-sinal::after,
+  .uglez-loader-flor i { animation: none; }
+  .sync-chip.is-sincronizando .sync-chip-sinal::before { background: #D8B45E; }
+  .sync-chip.is-sincronizando .sync-chip-sinal::after { transform: none; }
+  .uglez-loader-flor i:first-child { opacity: 1; transform: none; }
+  .fab,
+  .fab-text,
+  .oaze-app-button,
+  .btn-ref-gradiente,
+  .btn-ref-gradiente svg { transition-duration: .01ms; }
+}

@@ -27,7 +27,7 @@
   function input(attrs) { return el('input', Object.assign({ class: 'input', type: 'text' }, attrs)); }
 
   function moneyInput(value) {
-    const i = input({ inputmode: 'decimal', placeholder: '0,00', value: value != null ? U.fmtNum(value) : '' });
+    const i = input({ inputmode: 'decimal', 'data-money': 'true', placeholder: '0,00', value: value != null ? U.fmtNum(value) : '' });
     i.addEventListener('blur', () => {
       const n = U.parseMoney(i.value);
       if (n != null) i.value = U.fmtNum(Math.abs(n));

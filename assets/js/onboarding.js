@@ -281,7 +281,7 @@
       const d = estado.dados;
       const nome = el('input', { class: 'input', type: 'text', maxlength: '40', value: d.contaNome || '', placeholder: 'Ex.: Conta corrente' });
       const banco = el('input', { class: 'input', type: 'text', maxlength: '40', value: d.contaBanco || '', placeholder: 'Ex.: Itaú' });
-      const saldo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', value: d.contaSaldo || '', placeholder: '0,00' });
+      const saldo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', value: d.contaSaldo || '', placeholder: '0,00' });
 
       box.appendChild(el('p', { class: 'ob-texto', text: 'Cadastre onde seu dinheiro está hoje. O saldo que você informar é o ponto de partida — tudo que entrar e sair depois é contado a partir dele.' }));
       box.appendChild(campo('Nome da conta', nome));
@@ -378,7 +378,7 @@
       const d = estado.dados;
       const p = Store.profile();
       const desc = el('input', { class: 'input', type: 'text', maxlength: '80', value: d.lancDesc || '', placeholder: 'Ex.: Salário, Aluguel, Mercado' });
-      const valor = el('input', { class: 'input', type: 'text', inputmode: 'decimal', value: d.lancValor || '', placeholder: '0,00' });
+      const valor = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', value: d.lancValor || '', placeholder: '0,00' });
       const tipo = el('select', { class: 'input' });
       const cat = el('select', { class: 'input' });
 
@@ -437,7 +437,7 @@
       const d = estado.dados;
       const p = Store.profile();
       const meta = el('input', { class: 'input', type: 'text', maxlength: '40', value: d.metaNome || '', placeholder: 'Ex.: Reserva de emergência' });
-      const alvo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', value: d.metaAlvo || '', placeholder: '0,00' });
+      const alvo = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true', value: d.metaAlvo || '', placeholder: '0,00' });
 
       box.appendChild(el('p', { class: 'ob-texto', text: 'Uma meta dá direção ao dinheiro que sobra. Você pode criar uma agora ou deixar para depois.' }));
       box.appendChild(campo('Nome da meta', meta));

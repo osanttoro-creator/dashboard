@@ -579,16 +579,18 @@
 
       const abrir = () => {
         fecha();
-        menu.inert = false;
-        menu.removeAttribute('aria-hidden');
+        /* O primeiro pixel aparece antes de reconstruirmos a árvore de
+           acessibilidade dos itens. Em celulares fracos, inverter esta
+           ordem era a parte perceptível da demora. */
         menu.classList.add('esta-aberta');
         botao.setAttribute('aria-expanded', 'true');
         document.body.classList.add('menu-movel-aberto');
         const ativo = menu.querySelector('.nav-item.is-active') || menu.querySelector('.nav-item');
-        /* Mostra primeiro; mover o foco no mesmo clique forçava o
-           layout antes de o primeiro pixel da folha aparecer. */
-        if (ativo) requestAnimationFrame(() => {
-          if (estaAberta()) ativo.focus({ preventScroll: true });
+        requestAnimationFrame(() => {
+          if (!estaAberta()) return;
+          menu.inert = false;
+          menu.removeAttribute('aria-hidden');
+          if (ativo) ativo.focus({ preventScroll: true });
         });
       };
       const fechar = (devolveFoco) => {

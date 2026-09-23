@@ -35,7 +35,10 @@ exigir(/const corDaConta\s*=/.test(forms) && /color:\s*corDaConta\(\)/.test(form
   /bank:\s*acc\.bank/.test(cards), 'formulário ou cartão da conta ainda ignora a cor do banco');
 exigir(/class="menu-movel esta-pronta"/.test(html) &&
   /id="menuMovel"[^>]*aria-hidden="true"[^>]*inert/.test(html) &&
-  !/requestIdleCallback\(aquecerFolha/.test(shell), 'menu móvel ainda depende de aquecimento tardio');
+  !/requestIdleCallback\(aquecerFolha/.test(shell) &&
+  /menu\.classList\.add\('esta-aberta'\)[\s\S]*requestAnimationFrame\(\(\) => \{[\s\S]*menu\.inert = false/.test(shell) &&
+  !/\.menu-movel\.esta-pronta\s*\{[^}]*visibility:/s.test(css) &&
+  /transition:\s*transform\s*\.12s/.test(css), 'menu móvel ainda reconstrói layout ou demora para mostrar o primeiro quadro');
 
 console.log('\n  acabamento final do app');
 if (falhas.length) {

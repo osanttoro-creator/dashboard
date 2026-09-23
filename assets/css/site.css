@@ -477,7 +477,7 @@ p.leve { color: var(--bruma); }
 
 .rodape { border-top: 1px solid var(--borda); padding: clamp(40px, 5vw, 60px) 0 32px; background: var(--poco); }
 .rodape-grade { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 32px; margin-bottom: 36px; }
-.rodape h4 { margin: 0 0 14px; font: 400 .7rem/1.4 var(--fonte-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bruma-2); }
+.rodape h3 { margin: 0 0 14px; font: 400 .7rem/1.4 var(--fonte-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--bruma-2); }
 .rodape ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
 .rodape a { color: var(--bruma); font-size: .93rem; }
 .rodape a:hover { color: var(--tinta); }

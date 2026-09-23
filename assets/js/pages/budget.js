@@ -168,7 +168,7 @@
     if (categoryId) sel.disabled = true;
 
     const valor = el('input', {
-      class: 'input', type: 'text', inputmode: 'decimal',
+      class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true',
       value: U.fmtNum(Store.budgets.get(atual) || 0)
     });
 

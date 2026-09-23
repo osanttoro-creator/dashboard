@@ -515,7 +515,7 @@
       caixa,
       aoCarregar: (alvo, texto) => {
         U.clear(alvo);
-        alvo.appendChild(el('span', { class: 'uglez-digitando', 'aria-hidden': 'true' }, [el('i'), el('i'), el('i')]));
+        alvo.appendChild(el('span', { class: 'uglez-digitando uglez-loader-flor', 'aria-hidden': 'true' }, [el('i'), el('i'), el('i')]));
         alvo.appendChild(el('span', { class: 'uglez-digitando-texto', text: texto + '…' }));
       },
       aoResponder: (alvo, texto) => {

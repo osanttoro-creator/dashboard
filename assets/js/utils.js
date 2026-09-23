@@ -92,6 +92,49 @@
     return neg ? -Math.abs(n) : n;
   };
 
+  /* Digitação monetária no sentido natural do valor: 1 vira 1,00;
+     acrescentar 0 vira 10,00, depois 100,00 e 1.000,00. Centavos
+     continuam acessíveis ao tocar vírgula/ponto. Estas funções são
+     puras para que o comportamento possa ser testado sem navegador. */
+  const SEPARADOR_DECIMAL = nfNum.formatToParts(1.1)
+    .find((p) => p.type === 'decimal').value;
+  U.moneyDecimalSeparator = SEPARADOR_DECIMAL;
+
+  U.moneyParts = function (raw) {
+    const n = Math.abs(U.parseMoney(raw) || 0);
+    const total = Math.round(n * 100);
+    return {
+      inteiro: String(Math.floor(total / 100)),
+      centavos: String(total % 100).padStart(2, '0')
+    };
+  };
+
+  U.moneyFormatParts = function (inteiro, centavos) {
+    const i = (String(inteiro == null ? '' : inteiro).replace(/\D/g, '')
+      .replace(/^0+(?=\d)/, '') || '0').slice(0, 15);
+    const c = (String(centavos == null ? '' : centavos).replace(/\D/g, '') + '00').slice(0, 2);
+    return nfNum.format(Number(i) + Number(c) / 100);
+  };
+
+  U.moneyGrow = function (raw, digito, substituir) {
+    const p = U.moneyParts(raw);
+    const base = substituir || p.inteiro === '0' ? '' : p.inteiro;
+    return U.moneyFormatParts(base + String(digito).replace(/\D/g, '').slice(-1), substituir ? '00' : p.centavos);
+  };
+
+  U.moneyShrink = function (raw) {
+    const p = U.moneyParts(raw);
+    return U.moneyFormatParts(p.inteiro.slice(0, -1), p.centavos);
+  };
+
+  U.moneySetCent = function (raw, digito, posicao) {
+    const p = U.moneyParts(raw);
+    const pos = Math.max(0, Math.min(1, +posicao || 0));
+    const c = p.centavos.split('');
+    c[pos] = String(digito).replace(/\D/g, '').slice(-1) || '0';
+    return U.moneyFormatParts(p.inteiro, c.join(''));
+  };
+
   U.round2 = (n) => Math.round((+n + Number.EPSILON) * 100) / 100;
 
   /* ---------------- datas ---------------- */

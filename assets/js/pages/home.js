@@ -26,6 +26,7 @@
     renderHero(ym);
     renderScore(ym);
     renderKpis(ym);
+    renderSemana();
     renderFlow(ym);
     Ug.renderHome(ym);
     renderCategoryPie(ym);
@@ -46,7 +47,22 @@
     const pct = antes !== 0 ? (dif / Math.abs(antes)) * 100 : null;
     const t = Calc.monthTotals(ym);
 
-    UI.setValue('heroValue', U.fmtBRL(saldo));
+    /* OS CENTAVOS EM MEIO-TOM
+       "R$ 23.800,35" tem onze caracteres e dois deles quase nunca
+       importam. Recuar os centavos não esconde nada — eles continuam
+       ali, no mesmo tamanho, só com menos peso — e faz o olho parar
+       no número que decide. O corte é pelo separador decimal do
+       próprio formatador, e não por posição: em outra língua a
+       vírgula vira ponto e a conta continua certa. */
+    const texto = U.fmtBRL(saldo);
+    const corte = Math.max(texto.lastIndexOf(','), texto.lastIndexOf('.'));
+    const alvo = U.clear(document.getElementById('heroValue'));
+    if (corte > 0 && texto.length - corte === 3) {
+      alvo.appendChild(document.createTextNode(texto.slice(0, corte)));
+      alvo.appendChild(el('span', { class: 'hero-centavos', text: texto.slice(corte) }));
+    } else {
+      alvo.textContent = texto;
+    }
 
     /* O que já passou pelas contas neste mês, em palavras: é o que
        prova que o número acima está "calculado", não estimado. Pago
@@ -86,9 +102,84 @@
       document.getElementById('heroProjecaoDetalhe').textContent = partes.join(' · ');
     }
 
+    /* De onde o saldo vem: quantas contas e cartões o somam. Sem
+       nenhum dos dois a linha não aparece — "0 contas" dentro do
+       cartão do saldo é ruído, e quem não tem conta já recebe o
+       convite para criar uma logo abaixo. */
+    const prof = Store.profile();
+    const nContas = (prof.accounts || []).length;
+    const nCartoes = (prof.cards || []).length;
+    const carteira = document.getElementById('heroCarteira');
+    if (carteira) {
+      carteira.hidden = !(nContas || nCartoes);
+      if (!carteira.hidden) {
+        const partes = [];
+        if (nContas) partes.push(nContas + (nContas > 1 ? ' contas' : ' conta'));
+        if (nCartoes) partes.push(nCartoes + (nCartoes > 1 ? ' cartões' : ' cartão'));
+        document.getElementById('heroCarteiraTexto').textContent = partes.join(' · ');
+      }
+    }
+
     const meses = [];
     for (let i = 11; i >= 0; i--) meses.push(U.monthEnd(U.addMonths(ym, -i)));
     Charts.spark('chartHeroSpark', meses.map((m) => Calc.currentBalance(m)));
+  }
+
+  /* ---------------- 1b · os sete dias ----------------
+     Sete barras em HTML, sem Chart.js. Não é economia de bytes: um
+     gráfico com eixo, escala e legenda pede para ser examinado, e
+     esta pergunta se responde de relance — "em que dia eu gastei
+     demais?". O dia mais caro é o único em ouro, e só ganha ouro se
+     houver gasto; uma semana zerada não tem pico a apontar.
+
+     A janela são os SETE DIAS ATÉ A DATA EM TELA, e não a semana do
+     calendário: quem abre numa quarta-feira veria três dias com
+     dados e quatro vazios, o que parece queda e é só o calendário.  */
+  function renderSemana() {
+    const barras = U.clear(document.getElementById('semanaBarras'));
+    const rotuloTotal = document.getElementById('semanaTotal');
+    if (!barras) return;
+
+    const fim = App.balanceDate();
+    const inicio = U.addDaysISO(fim, -6);
+    const porDia = {};
+    for (let i = 0; i < 7; i++) porDia[U.addDaysISO(inicio, i)] = 0;
+
+    Calc.entries(inicio, fim).forEach((e) => {
+      if (e.kind !== 'expense') return;
+      /* O DIA DA COMPRA, não o da cobrança. Calc.dataDeExibicao
+         devolve a data da FATURA para compras no crédito — e, além
+         de estar em texto e não em ISO, responderia outra pergunta:
+         "quando isto sai da conta". Aqui a pergunta é "em que dia eu
+         gastei", e a resposta é o dia em que se passou o cartão. */
+      if (porDia[e.date] === undefined) return;
+      const d = e.date;
+      porDia[d] = U.round2(porDia[d] + e.amount);
+    });
+
+    const dias = Object.keys(porDia).sort();
+    const valores = dias.map((d) => porDia[d]);
+    const maior = Math.max.apply(null, valores);
+    const total = U.round2(valores.reduce((a, b) => a + b, 0));
+    if (rotuloTotal) rotuloTotal.textContent = U.fmtBRL(total);
+
+    const leitura = [];
+    dias.forEach((d, i) => {
+      const v = valores[i];
+      const pico = maior > 0 && v === maior;
+      /* Uma barra de 0px não se lê como "zero", se lê como falha de
+         desenho. O mínimo de 3% mostra o trilho sem fingir gasto. */
+      const altura = maior > 0 ? Math.max(3, Math.round((v / maior) * 100)) : 3;
+      const letra = U.WEEKDAYS_SHORT[U.parseISO(d).getDay()];
+      leitura.push(letra + ' ' + U.fmtBRL(v));
+      barras.appendChild(el('div', { class: 'semana-dia' + (pico ? ' e-pico' : '') }, [
+        el('div', { class: 'semana-trilho' }, el('i', { style: { height: altura + '%' } })),
+        el('span', { class: 'semana-letra', text: letra })
+      ]));
+    });
+    barras.setAttribute('aria-label',
+      'Gastos por dia, de ' + U.fmtDayMonth(inicio) + ' a ' + U.fmtDayMonth(fim) +
+      ': ' + leitura.join(', ') + '. Total ' + U.fmtBRL(total) + '.');
   }
 
   /* ---------------- 2 · OAZE Score ---------------- */
@@ -435,30 +526,49 @@
       box.appendChild(UI.empty('Nenhuma movimentação registrada ainda.'));
       return;
     }
-    const table = el('table', { class: 'table table-compact' }, [
-      el('thead', {}, el('tr', {}, [
-        el('th', { text: 'Data' }), el('th'), el('th', { text: 'Descrição' }),
-        el('th', { text: 'Categoria' }), el('th', { class: 'num', text: 'Valor' })
-      ])),
-      el('tbody')
-    ]);
-    const tbody = table.querySelector('tbody');
+    /* =============================================================
+       LINHA, E NÃO TABELA
+       -------------------------------------------------------------
+       Isto era uma tabela de cinco colunas. Num celular de 375px,
+       cinco colunas viram cinco colunas espremidas: a descrição
+       quebrava em três linhas e o valor — a única coisa que a pessoa
+       veio conferir — terminava cortado na borda.
+
+       A forma certa para esta leitura é a linha: o ícone da
+       categoria à esquerda, descrição sobre data e categoria no
+       meio, e o valor sozinho à direita, alinhado com o de cima e o
+       de baixo. A mesma linha serve o computador, onde a folga
+       simplesmente aparece entre as colunas — não é uma versão
+       móvel de nada, é a forma da informação.
+
+       O botão inteiro é clicável e abre o lançamento: a linha já era
+       a unidade que a pessoa tentava tocar.
+       ============================================================= */
+    const lista = el('ul', { class: 'linhas' });
     entradas.slice(0, 8).forEach((e) => {
-      tbody.appendChild(el('tr', { class: e.confirmed ? '' : 'is-pending' }, [
-        el('td', { text: Calc.dataDeExibicao(e) }),
-        el('td', {}, Icons.categoryBadge(e.categoryId, 24)),
-        el('td', {}, [
-          document.createTextNode(e.description + ' '),
-          !e.confirmed ? UI.badge('Previsto', 'pend') : null
-        ].filter(Boolean)),
-        el('td', { text: Calc.categoryName(e.categoryId) }),
-        el('td', {
-          class: 'num ' + (e.kind === 'income' ? 'val-pos' : e.kind === 'expense' ? 'val-neg' : ''),
-          text: (e.kind === 'income' ? '+ ' : e.kind === 'expense' ? '− ' : '') + U.fmtBRL(e.amount)
-        })
-      ]));
+      const sinal = e.kind === 'income' ? '+ ' : e.kind === 'expense' ? '− ' : '';
+      const classe = e.kind === 'income' ? 'val-pos' : e.kind === 'expense' ? 'val-neg' : '';
+      lista.appendChild(el('li', {}, el('button', {
+        type: 'button',
+        class: 'linha' + (e.confirmed ? '' : ' e-prevista'),
+        onclick: () => Forms.openTransaction(null, e.txId || e.id)
+      }, [
+        el('span', { class: 'linha-ico' }, Icons.categoryBadge(e.categoryId, 38)),
+        el('span', { class: 'linha-meio' }, [
+          el('span', { class: 'linha-nome', text: e.description, translate: 'no' }),
+          el('span', { class: 'linha-sub' }, [
+            el('span', { text: Calc.dataDeExibicao(e) }),
+            el('span', { class: 'linha-ponto', 'aria-hidden': 'true', text: '·' }),
+            el('span', { text: Calc.categoryName(e.categoryId) })
+          ])
+        ]),
+        el('span', { class: 'linha-dir' }, [
+          el('span', { class: 'linha-valor ' + classe, text: sinal + U.fmtBRL(e.amount) }),
+          !e.confirmed ? el('span', { class: 'linha-tag', text: 'Previsto' }) : null
+        ].filter(Boolean))
+      ])));
     });
-    box.appendChild(el('div', { class: 'table-wrap' }, table));
+    box.appendChild(lista);
   }
 
   /* ---------------- primeiro uso ---------------- */

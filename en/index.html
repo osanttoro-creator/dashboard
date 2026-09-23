@@ -44,6 +44,7 @@
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/prompts-ui.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -141,7 +142,7 @@
               Personal finance with accounts, cards, budgets and goals in a single dashboard — with your month already read before you ask. No spreadsheet, no broken formula, no starting over every January.
             </p>
             <div class="hero-botoes">
-              <a class="btn btn-principal btn-grande" href="/en/cadastro">Create a free account</a>
+              <a class="btn btn-principal btn-grande btn-ref-gradiente" href="/en/cadastro">Create a free account <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
               <a class="btn btn-fantasma btn-grande" href="/en/recursos">See the features</a>
             </div>
             <p class="hero-nota">No credit card. The free plan never expires.</p>
@@ -787,6 +788,19 @@
 
     <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/en/cadastro">Create a free account</a></p>
   </section>
+
+  <section class="oaze-app-band" aria-labelledby="abrir-oaze-titulo">
+    <div class="oaze-app-band-inner">
+      <h2 id="abrir-oaze-titulo">Your money, whole. Wherever you are.</h2>
+      <div class="oaze-app-band-copy">
+        <p>OAZE runs directly in your phone or computer browser. Your data and choices stay together in the same place.</p>
+        <a class="oaze-app-button" href="/app">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="oaze-app-button-text"><small>Available now</small><strong>Open OAZE</strong></span>
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <!-- ============================ rodapé ============================ -->
@@ -802,7 +816,7 @@
       </div>
 
       <div>
-        <h4>Product</h4>
+        <h3>Product</h3>
         <ul>
           <li><a href="/en/recursos">Features</a></li>
           <li><a href="/en/precos">Pricing</a></li>
@@ -812,7 +826,7 @@
       </div>
 
       <div>
-        <h4>Account</h4>
+        <h3>Account</h3>
         <ul>
           <li><a href="/en/entrar">Sign in</a></li>
           <li><a href="/en/cadastro">Create account</a></li>
@@ -821,7 +835,7 @@
       </div>
 
       <div>
-        <h4>Legal</h4>
+        <h3>Legal</h3>
         <ul>
           <li><a href="/en/termos">Terms of use</a></li>
           <li><a href="/en/privacidade">Privacy policy</a></li>

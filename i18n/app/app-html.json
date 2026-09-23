@@ -421,6 +421,13 @@
   "es": "Cómo se calcula el score"
  },
  {
+ "pt": "Gastos dos últimos 7 dias",
+ "tipo": "exato",
+  "en": "Spending over the last 7 days",
+  "fr": "Dépenses des 7 derniers jours",
+  "es": "Gastos de los últimos 7 días"
+ },
+ {
   "pt": "Fluxo financeiro",
   "tipo": "exato",
   "en": "Cash flow",

@@ -102,6 +102,12 @@
   "es": "Crear cuenta gratis"
  },
  {
+  "pt": "Criar conta grátis ⟦s0⟧",
+  "en": "Create a free account ⟦s0⟧",
+  "fr": "Créer un compte gratuit ⟦s0⟧",
+  "es": "Crear cuenta gratis ⟦s0⟧"
+ },
+ {
   "pt": "Seu dinheiro faz sentido <em>quando você o vê inteiro</em>",
   "en": "Your money makes sense <em>when you see all of it</em>",
   "fr": "Votre argent prend du sens <em>quand vous le voyez en entier</em>",
@@ -1426,6 +1432,30 @@
   "en": "Your month is calculated on your device. Balance, statement and projection do not wait for any server to appear. Fewer round trips to reach the same number.",
   "fr": "Le calcul de votre mois se fait sur votre appareil. Solde, relevé et projection n'attendent aucun serveur pour s'afficher. Moins d'allers-retours pour arriver au même chiffre.",
   "es": "El cálculo de tu mes ocurre en tu dispositivo. Saldo, resumen y proyección no esperan a ningún servidor para aparecer. Menos ida y vuelta de datos para llegar al mismo número."
+ },
+ {
+  "pt": "Seu dinheiro, inteiro. Onde você estiver.",
+  "en": "Your money, whole. Wherever you are.",
+  "fr": "Votre argent, en entier. Où que vous soyez.",
+  "es": "Tu dinero, completo. Donde estés."
+ },
+ {
+  "pt": "O OAZE funciona direto no navegador do celular ou do computador. Seus dados e suas escolhas continuam no mesmo lugar.",
+  "en": "OAZE runs directly in your phone or computer browser. Your data and choices stay together in the same place.",
+  "fr": "OAZE fonctionne directement dans le navigateur de votre téléphone ou ordinateur. Vos données et vos choix restent réunis.",
+  "es": "OAZE funciona directamente en el navegador del móvil o del ordenador. Tus datos y decisiones permanecen juntos."
+ },
+ {
+  "pt": "Disponível agora",
+  "en": "Available now",
+  "fr": "Disponible maintenant",
+  "es": "Disponible ahora"
+ },
+ {
+  "pt": "Abrir OAZE",
+  "en": "Open OAZE",
+  "fr": "Ouvrir OAZE",
+  "es": "Abrir OAZE"
  },
  {
   "pt": "Um painel para enxergar o próprio dinheiro sem virar planilha.",

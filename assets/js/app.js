@@ -431,9 +431,81 @@
   }
 
   function limitarEntradasNumericas() {
+    const money = (campo) => campo.matches('[data-money="true"]');
+    const separador = (campo) => campo.value.lastIndexOf(U.moneyDecimalSeparator);
+    const cursorInteiro = (campo) => {
+      const pos = separador(campo);
+      if (pos >= 0) campo.setSelectionRange(pos, pos);
+    };
+    const emitir = (campo) => {
+      campo.dispatchEvent(new InputEvent('input', {
+        bubbles: true, inputType: 'insertReplacementText', data: null
+      }));
+    };
+
+    /* No teclado do celular `beforeinput` chega antes de o navegador
+       mexer no texto. Interceptar aqui evita o salto de cursor e faz
+       o valor crescer no lado inteiro: 1,00 → 10,00 → 100,00. */
+    document.addEventListener('beforeinput', (ev) => {
+      const campo = ev.target;
+      if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
+
+      const dado = String(ev.data == null ? '' : ev.data);
+      const tudoSelecionado = campo.selectionStart === 0 && campo.selectionEnd === campo.value.length;
+      const inserindo = ev.inputType === 'insertText' || ev.inputType === 'insertCompositionText';
+
+      if (inserindo && (dado === ',' || dado === '.')) {
+        ev.preventDefault();
+        campo.dataset.moneyParte = 'centavos';
+        campo.dataset.moneyCentavo = '0';
+        const pos = separador(campo);
+        if (pos >= 0) campo.setSelectionRange(pos + 1, campo.value.length);
+        return;
+      }
+
+      if (inserindo && /^\d$/.test(dado)) {
+        ev.preventDefault();
+        if (campo.dataset.moneyParte === 'centavos') {
+          const posicao = +(campo.dataset.moneyCentavo || 0);
+          if (posicao >= 2) return;
+          campo.value = U.moneySetCent(campo.value, dado, posicao);
+          campo.dataset.moneyCentavo = String(posicao + 1);
+          const pos = separador(campo);
+          campo.setSelectionRange(pos + 2 + posicao, pos + 2 + posicao);
+        } else {
+          campo.value = U.moneyGrow(campo.value, dado, tudoSelecionado);
+          cursorInteiro(campo);
+        }
+        emitir(campo);
+        return;
+      }
+
+      if (ev.inputType === 'deleteContentBackward') {
+        ev.preventDefault();
+        if (campo.dataset.moneyParte === 'centavos') {
+          const atual = +(campo.dataset.moneyCentavo || 0);
+          const posicao = Math.max(0, atual - 1);
+          campo.value = U.moneySetCent(campo.value, '0', posicao);
+          campo.dataset.moneyCentavo = String(posicao);
+          const pos = separador(campo);
+          campo.setSelectionRange(pos + 1 + posicao, pos + 1 + posicao);
+        } else {
+          campo.value = U.moneyShrink(campo.value);
+          cursorInteiro(campo);
+        }
+        emitir(campo);
+      }
+    });
+
     document.addEventListener('input', (ev) => {
       const campo = ev.target;
       if (!(campo instanceof HTMLInputElement)) return;
+      if (money(campo)) {
+        /* Fallback para colar, ditado e navegadores sem beforeinput. */
+        const n = U.parseMoney(campo.value);
+        if (n != null) campo.value = U.fmtNum(Math.abs(n));
+        return;
+      }
       const decimal = campo.matches('[inputmode="decimal"]');
       const inteiro = campo.matches('[inputmode="numeric"]');
       if (!decimal && !inteiro) return;
@@ -451,6 +523,20 @@
           : antesDoCursor.replace(/\D/g, '');
         campo.setSelectionRange(limpoAntes.length, limpoAntes.length);
       }
+    });
+    document.addEventListener('focusin', (ev) => {
+      const campo = ev.target;
+      if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
+      if (!campo.value.trim()) campo.value = U.fmtNum(0);
+      campo.dataset.moneyParte = 'inteiro';
+      campo.dataset.moneyCentavo = '0';
+      requestAnimationFrame(() => cursorInteiro(campo));
+    });
+    document.addEventListener('focusout', (ev) => {
+      const campo = ev.target;
+      if (!(campo instanceof HTMLInputElement) || !money(campo)) return;
+      delete campo.dataset.moneyParte;
+      delete campo.dataset.moneyCentavo;
     });
     document.addEventListener('keydown', (ev) => {
       if (ev.target instanceof HTMLInputElement && ev.target.type === 'number' &&

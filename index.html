@@ -44,6 +44,7 @@
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/prompts-ui.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -143,7 +144,7 @@
               Sem planilha, sem fórmula quebrada, sem começar de novo todo janeiro.
             </p>
             <div class="hero-botoes">
-              <a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a>
+              <a class="btn btn-principal btn-grande btn-ref-gradiente" href="/cadastro">Criar conta grátis <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
               <a class="btn btn-fantasma btn-grande" href="/recursos">Ver os recursos</a>
             </div>
             <p class="hero-nota">Sem cartão de crédito. O plano grátis não expira.</p>
@@ -814,6 +815,19 @@
 
     <p class="cap-cta revela"><a class="btn btn-principal btn-grande" href="/cadastro">Criar conta grátis</a></p>
   </section>
+
+  <section class="oaze-app-band" aria-labelledby="abrir-oaze-titulo">
+    <div class="oaze-app-band-inner">
+      <h2 id="abrir-oaze-titulo">Seu dinheiro, inteiro. Onde você estiver.</h2>
+      <div class="oaze-app-band-copy">
+        <p>O OAZE funciona direto no navegador do celular ou do computador. Seus dados e suas escolhas continuam no mesmo lugar.</p>
+        <a class="oaze-app-button" href="/app">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="oaze-app-button-text"><small>Disponível agora</small><strong>Abrir OAZE</strong></span>
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <!-- ============================ rodapé ============================ -->
@@ -829,7 +843,7 @@
       </div>
 
       <div>
-        <h4>Produto</h4>
+        <h3>Produto</h3>
         <ul>
           <li><a href="/recursos">Recursos</a></li>
           <li><a href="/precos">Preços</a></li>
@@ -839,7 +853,7 @@
       </div>
 
       <div>
-        <h4>Conta</h4>
+        <h3>Conta</h3>
         <ul>
           <li><a href="/entrar">Entrar</a></li>
           <li><a href="/cadastro">Criar conta</a></li>
@@ -848,7 +862,7 @@
       </div>
 
       <div>
-        <h4>Legal</h4>
+        <h3>Legal</h3>
         <ul>
           <li><a href="/termos">Termos de uso</a></li>
           <li><a href="/privacidade">Política de privacidade</a></li>

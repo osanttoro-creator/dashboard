@@ -90,6 +90,7 @@
 <link rel="preload" href="/assets/vendor/fontes/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/vendor/fonte.css">
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/prompts-ui.css">
 </head>
 <body>
 
@@ -409,6 +410,15 @@
             <p class="hero-value" id="heroValue">—</p>
             <p class="hero-sub" id="heroSub"></p>
             <p class="hero-delta" id="heroDelta"></p>
+            <!-- A linha que diz DE ONDE vem o número grande. No cartão
+                 físico é o número mascarado; aqui é a carteira que o
+                 soma, e é um atalho para ela. -->
+            <button type="button" class="hero-carteira" id="heroCarteira" hidden
+                    data-goto="accounts" data-aba="accounts">
+              <span class="hero-carteira-ico" data-ico="wallet" data-ico-size="15" aria-hidden="true"></span>
+              <span class="hero-carteira-txt" id="heroCarteiraTexto"></span>
+              <span class="hero-carteira-seta" data-ico="chevron-right" data-ico-size="14" aria-hidden="true"></span>
+            </button>
             <div class="hero-projecao" id="heroProjecao" hidden>
               <span class="hero-projecao-k">Se tudo se confirmar</span>
               <strong class="hero-projecao-v" id="heroProjecaoValor">—</strong>
@@ -455,6 +465,23 @@
       </div>
 
       <div data-home-conteudo class="kpi-row kpi-row-4" id="homeKpis"></div>
+
+      <!-- ══════ OS SETE DIAS ══════
+           Sete barras em HTML puro, sem Chart.js: é uma leitura de
+           relance ("gastei demais na quinta"), não um gráfico para
+           examinar. O dia mais caro é o único em ouro — um destaque
+           que só existe quando há um pico de verdade.
+
+           A altura de cada barra sai inline, em porcentagem, porque
+           ela É o dado; o resto é CSS. O texto do aria-label repete
+           a série inteira, para quem não vê as barras. -->
+      <section data-home-conteudo class="card semana-card" aria-labelledby="semanaTitulo">
+        <div class="card-head">
+          <h2 id="semanaTitulo">Gastos dos últimos 7 dias</h2>
+          <strong class="semana-total" id="semanaTotal"></strong>
+        </div>
+        <div class="semana-barras" id="semanaBarras" role="img" aria-label=""></div>
+      </section>
 
       <!-- fluxo financeiro do ano -->
       <div data-home-conteudo class="card">
@@ -675,9 +702,9 @@
         <div class="proj-layout">
           <form class="proj-form" id="projForm">
             <label class="field"><span class="field-label">Valor inicial (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" data-money="true" id="projInitial" aria-label="Valor inicial da projeção" value="10.000,00"></label>
             <label class="field"><span class="field-label">Aporte mensal (R$)</span>
-              <input class="input" type="text" inputmode="decimal" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
+              <input class="input" type="text" inputmode="decimal" data-money="true" id="projMonthly" aria-label="Aporte mensal da projeção" value="1.000,00"></label>
             <label class="field"><span class="field-label">Taxa de juros</span>
               <div class="row gap-6">
                 <input class="input" type="text" inputmode="decimal" id="projRate" aria-label="Taxa de rendimento da projeção" value="10,00">
@@ -1245,6 +1272,7 @@
   <div class="fab-menu" id="fabMenu" hidden role="menu" aria-label="Ações rápidas"></div>
   <button class="fab" id="fabBtn" aria-expanded="false" aria-haspopup="menu" aria-label="Ações rápidas" title="Ações rápidas (N)">
     <span class="fab-plus" aria-hidden="true"></span>
+    <span class="fab-text" aria-hidden="true"></span>
   </button>
 </div>
 
