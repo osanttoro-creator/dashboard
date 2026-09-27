@@ -149,7 +149,7 @@
       const perfis = [];
       for (let i = 0; i < espacos.length; i++) {
         const e = espacos[i];
-        perfis.push(await Repo.carregarEspaco(e.id, e.name, e.legacy_id));
+        perfis.push(await Repo.carregarEspaco(e.id, e.name, e.legacy_id, e.automation_data));
       }
 
       /* Última checagem antes de trocar. A leitura levou tempo; se

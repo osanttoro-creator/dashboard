@@ -7,6 +7,83 @@
   "es": "Suscripciones y mensualidades"
  },
  {
+  "pt": "Ainda não há três ocorrências com ritmo estável para sugerir.",
+  "tipo": "exato",
+  "en": "There are not yet three occurrences with a stable pattern to suggest.",
+  "fr": "Il n'y a pas encore trois occurrences au rythme stable à suggérer.",
+  "es": "Aún no hay tres ocurrencias con un ritmo estable para sugerir."
+ },
+ {
+  "pt": "{0} {1} · mediana {2} · {3} confiança",
+  "tipo": "padrao",
+  "en": "{0} {1} · median {2} · {3} confidence",
+  "fr": "{0} {1} · médiane {2} · confiance {3}",
+  "es": "{0} {1} · mediana {2} · confianza {3}"
+ },
+ {
+  "pt": "{0} Valores entre {1} e {2}. Próxima janela: {3}.",
+  "tipo": "padrao",
+  "en": "{0} Values between {1} and {2}. Next window: {3}.",
+  "fr": "{0} Valeurs entre {1} et {2}. Prochaine fenêtre : {3}.",
+  "es": "{0} Valores entre {1} y {2}. Próxima ventana: {3}."
+ },
+ {
+  "pt": "O modelo atual só cria recorrências mensais. Este padrão fica apenas informativo.",
+  "tipo": "exato",
+  "en": "The current model only creates monthly recurrences. This pattern is informational only.",
+  "fr": "Le modèle actuel ne crée que des récurrences mensuelles. Ce schéma reste informatif.",
+  "es": "El modelo actual solo crea recurrencias mensuales. Este patrón queda como informativo."
+ },
+ {
+  "pt": "Criar recorrência",
+  "tipo": "exato",
+  "en": "Create recurrence",
+  "fr": "Créer la récurrence",
+  "es": "Crear recurrencia"
+ },
+ {
+  "pt": "Revisar ocorrências",
+  "tipo": "exato",
+  "en": "Review occurrences",
+  "fr": "Examiner les occurrences",
+  "es": "Revisar ocurrencias"
+ },
+ {
+  "pt": "Não é recorrente",
+  "tipo": "exato",
+  "en": "Not recurring",
+  "fr": "Non récurrent",
+  "es": "No es recurrente"
+ },
+ {
+  "pt": "Não sugerir de novo",
+  "tipo": "exato",
+  "en": "Do not suggest again",
+  "fr": "Ne plus suggérer",
+  "es": "No volver a sugerir"
+ },
+ {
+  "pt": "Ocorrências usadas",
+  "tipo": "exato",
+  "en": "Occurrences used",
+  "fr": "Occurrences utilisées",
+  "es": "Ocurrencias utilizadas"
+ },
+ {
+  "pt": "Esta recorrência já foi criada.",
+  "tipo": "exato",
+  "en": "This recurrence has already been created.",
+  "fr": "Cette récurrence a déjà été créée.",
+  "es": "Esta recurrencia ya fue creada."
+ },
+ {
+  "pt": "Recorrência criada a partir da próxima ocorrência. O histórico foi preservado.",
+  "tipo": "exato",
+  "en": "Recurrence created from the next occurrence. History was preserved.",
+  "fr": "Récurrence créée à partir de la prochaine occurrence. L'historique a été conservé.",
+  "es": "Recurrencia creada desde la próxima ocurrencia. El historial fue preservado."
+ },
+ {
   "pt": "Compromisso mensal",
   "tipo": "exato",
   "en": "Monthly commitment",
@@ -110,13 +187,6 @@
   "en": "day {0}",
   "fr": "le {0}",
   "es": "día {0}"
- },
- {
-  "pt": "Encerrar",
-  "tipo": "exato",
-  "en": "End",
-  "fr": "Arrêter",
-  "es": "Terminar"
  },
  {
   "pt": "Encerrar {0}",

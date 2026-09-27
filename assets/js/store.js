@@ -199,7 +199,8 @@
       categories: makeCategories(),
       transactions: [],
       investments: [],
-      invoices: {}
+      invoices: {},
+      automation: { categoryRules: [], merchantAliases: [], recurrenceDecisions: {} }
     };
   }
 
@@ -257,6 +258,21 @@
     t.valorMoeda = t.moeda && Number.isFinite(+t.valorMoeda) ? U.round2(Math.abs(+t.valorMoeda)) : null;
     if (!t.valorMoeda) t.moeda = null;
     t.source = t.source || 'manual';
+    const merchant = global.Estabelecimento && Estabelecimento.normalizar
+      ? Estabelecimento.normalizar(t.description) : null;
+    t.merchantKey = String(t.merchantKey || (merchant && merchant.merchantKey) || '') || null;
+    t.classification = t.classification && typeof t.classification === 'object'
+      ? {
+        source: String(t.classification.source || 'manual'),
+        confidence: ['high', 'medium', 'low'].includes(t.classification.confidence) ? t.classification.confidence : 'low',
+        evidence: String(t.classification.evidence || '').slice(0, 300)
+      } : null;
+    t.recurrenceEvidence = t.recurrenceEvidence && typeof t.recurrenceEvidence === 'object'
+      ? {
+        candidateId: String(t.recurrenceEvidence.candidateId || ''),
+        transactionIds: Array.isArray(t.recurrenceEvidence.transactionIds) ? t.recurrenceEvidence.transactionIds.map(String).slice(0, 24) : [],
+        periodicity: String(t.recurrenceEvidence.periodicity || '')
+      } : null;
     t.createdAt = t.createdAt || new Date().toISOString();
     return t;
   };
@@ -405,6 +421,19 @@
     }));
     prof.invoices = normalizeInvoices(prof.invoices);
 
+    const auto = prof.automation && typeof prof.automation === 'object' ? prof.automation : {};
+    prof.automation = {
+      categoryRules: (Array.isArray(auto.categoryRules) ? auto.categoryRules : []).filter((r) => r && r.merchantKey && r.categoryId).map((r) => ({
+        id: r.id || U.uid('rule'), merchantKey: String(r.merchantKey), kind: r.kind === 'income' ? 'income' : 'expense',
+        categoryId: String(r.categoryId), active: r.active !== false, confirmedAt: r.confirmedAt || null
+      })),
+      merchantAliases: (Array.isArray(auto.merchantAliases) ? auto.merchantAliases : []).filter((a) => a && a.aliasKey).map((a) => ({
+        aliasKey: String(a.aliasKey), canonicalKey: String(a.canonicalKey || a.aliasKey),
+        kind: a.kind === 'income' ? 'income' : 'expense', categoryId: a.categoryId || null
+      })),
+      recurrenceDecisions: (auto.recurrenceDecisions && typeof auto.recurrenceDecisions === 'object') ? auto.recurrenceDecisions : {}
+    };
+
     /* Orçamento: um limite mensal por categoria. Guardado como mapa
        porque a pergunta é sempre "qual o limite DESTA categoria". */
     const orc = (prof.budgets && typeof prof.budgets === 'object') ? prof.budgets : {};
@@ -439,6 +468,21 @@
           day: Math.min(31, Math.max(1, parseInt(g.contribution.day, 10) || 1))
         }
         : null,
+      automation: (g.automation && typeof g.automation === 'object') ? {
+        active: !!g.automation.active,
+        status: g.automation.status === 'ended' ? 'ended' : (g.automation.status === 'paused' ? 'paused' : 'active'),
+        amount: U.round2(Math.max(0, +g.automation.amount || 0)),
+        day: Math.min(31, Math.max(1, parseInt(g.automation.day, 10) || 1)),
+        accountId: g.automation.accountId || null,
+        floor: U.round2(Math.max(0, +g.automation.floor || 0))
+      } : null,
+      proposals: (Array.isArray(g.proposals) ? g.proposals : []).filter((p) => p && p.id && /^\d{4}-\d{2}$/.test(p.ym || '')).map((p) => ({
+        id: String(p.id), ym: p.ym,
+        status: ['pending', 'confirmed', 'rejected', 'dismissed', 'paused'].includes(p.status) ? p.status : 'pending',
+        amount: U.round2(Math.max(0, +p.amount || 0)), accountId: p.accountId || null,
+        floor: U.round2(Math.max(0, +p.floor || 0)), reason: String(p.reason || '').slice(0, 300),
+        createdAt: p.createdAt || null, resolvedAt: p.resolvedAt || null
+      })),
       /* De onde o dinheiro saiu, a cada aporte. Sem isto, "guardar
          numa meta" era um número que crescia sozinho: a reserva
          subia e nenhuma conta baixava, e ninguém sabia dizer de
@@ -449,7 +493,8 @@
       deposits: (Array.isArray(g.deposits) ? g.deposits : []).map((d) => ({
         at: U.isValidISO(d && d.at) ? d.at : U.todayISO(),
         amount: U.round2(+(d && d.amount) || 0),
-        accountId: (d && d.accountId) || null
+        accountId: (d && d.accountId) || null,
+        proposalId: (d && d.proposalId) || null
       })).filter((d) => d.amount !== 0),
       createdAt: g.createdAt || U.todayISO()
     }));
@@ -763,6 +808,7 @@
     deposit: function (id, valor, opts) {
       const g = Store.goals.get(id);
       if (!g) return null;
+      if (opts && opts.proposalId && (g.deposits || []).some((d) => d.proposalId === opts.proposalId)) return g;
       const v = U.round2(+valor || 0);
       if (!v) return g;
       const anterior = g.saved;
@@ -773,7 +819,8 @@
         g.deposits.push({
           at: (opts && U.isValidISO(opts.at)) ? opts.at : U.todayISO(),
           amount: efetivo,
-          accountId: (opts && opts.accountId) || null
+          accountId: (opts && opts.accountId) || null,
+          proposalId: (opts && opts.proposalId) || null
         });
       }
       Store.commit('goal');

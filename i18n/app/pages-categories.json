@@ -14,6 +14,55 @@
   "es": "historial completo"
  },
  {
+  "pt": "média",
+  "tipo": "exato",
+  "en": "medium",
+  "fr": "moyenne",
+  "es": "media"
+ },
+ {
+  "pt": "Nenhuma sugestão segura para revisar agora.",
+  "tipo": "exato",
+  "en": "No reliable suggestions to review right now.",
+  "fr": "Aucune suggestion fiable à examiner pour le moment.",
+  "es": "No hay sugerencias fiables para revisar ahora."
+ },
+ {
+  "pt": "{0} · confiança {1} · {2}",
+  "tipo": "padrao",
+  "en": "{0} · {1} confidence · {2}",
+  "fr": "{0} · confiance {1} · {2}",
+  "es": "{0} · confianza {1} · {2}"
+ },
+ {
+  "pt": "Categoria aplicada. O restante do histórico não foi alterado.",
+  "tipo": "exato",
+  "en": "Category applied. The rest of your history was not changed.",
+  "fr": "Catégorie appliquée. Le reste de votre historique n'a pas été modifié.",
+  "es": "Categoría aplicada. El resto del historial no fue modificado."
+ },
+ {
+  "pt": "Aplicar aos parecidos",
+  "tipo": "exato",
+  "en": "Apply to similar entries",
+  "fr": "Appliquer aux écritures similaires",
+  "es": "Aplicar a movimientos parecidos"
+ },
+ {
+  "pt": "Regra confirmada por você.",
+  "tipo": "exato",
+  "en": "Rule confirmed by you.",
+  "fr": "Règle confirmée par vous.",
+  "es": "Regla confirmada por ti."
+ },
+ {
+  "pt": "Regra salva para os próximos lançamentos. O passado não foi reclassificado.",
+  "tipo": "exato",
+  "en": "Rule saved for future entries. Past entries were not reclassified.",
+  "fr": "Règle enregistrée pour les prochaines écritures. Le passé n'a pas été reclassé.",
+  "es": "Regla guardada para próximos movimientos. El pasado no fue reclasificado."
+ },
+ {
   "pt": "Nenhuma categoria cadastrada.",
   "tipo": "exato",
   "en": "No categories yet.",

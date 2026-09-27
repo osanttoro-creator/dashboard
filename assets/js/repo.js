@@ -126,6 +126,9 @@
       parcelamento: t.installment || null,
       notas: String(t.notes || ''),
       origem_registro: String(t.source || 'manual'),
+      merchant_key: t.merchantKey || null,
+      classificacao: t.classification || null,
+      evidencia_recorrencia: t.recurrenceEvidence || null,
       origem: Repo.origem()
     }),
 
@@ -149,6 +152,11 @@
       prazo: U.isValidISO(g.deadline) ? g.deadline : null,
       cor: g.color, icone: g.icon || 'target',
       account_id: idDe.contas[g.accountId] || null,
+      category_id: idDe.categorias[g.categoryId] || null,
+      contribuicao: g.contribution || null,
+      depositos: Array.isArray(g.deposits) ? g.deposits : [],
+      automacao: g.automation || null,
+      propostas: Array.isArray(g.proposals) ? g.proposals : [],
       origem: Repo.origem()
     })
   };
@@ -177,6 +185,7 @@
       owner_id: userId,
       legacy_id: perfil.id,
       name: String(perfil.name || 'Pessoal').slice(0, 60),
+      automation_data: perfil.automation || { categoryRules: [], merchantAliases: [], recurrenceDecisions: {} },
       origem: Repo.origem()
     }, { onConflict: 'owner_id,legacy_id' }).select('id').single();
     if (eWs) throw new Error('espaço: ' + eWs.message);
@@ -369,7 +378,7 @@
    * Lê um espaço inteiro e devolve no formato que o Store espera.
    * O inverso exato de Repo.mapa.
    */
-  Repo.carregarEspaco = async function (wsId, nome, legacyDoEspaco) {
+  Repo.carregarEspaco = async function (wsId, nome, legacyDoEspaco, automationData) {
     const sb = cliente();
 
     /* Em paralelo: são consultas independentes, e em série o tempo
@@ -397,6 +406,7 @@
       /* O uuid do espaço não é do formato do app, mas o app nunca o
          lê -- quem usa é a sincronização, para saber onde gravar. */
       workspaceId: wsId,
+      automation: automationData && typeof automationData === 'object' ? automationData : {},
 
       accounts: contas.map((a) => ({
         id: idApp(a),
@@ -447,7 +457,10 @@
         occ: t.ocorrencias && typeof t.ocorrencias === 'object' ? t.ocorrencias : {},
         installment: t.parcelamento || null,
         notes: t.notas || '',
-        source: t.origem_registro || 'manual'
+        source: t.origem_registro || 'manual',
+        merchantKey: t.merchant_key || null,
+        classification: t.classificacao || null,
+        recurrenceEvidence: t.evidencia_recorrencia || null
       })),
 
       investments: invs.map((i) => ({
@@ -463,7 +476,12 @@
         target: +g.alvo || 0, saved: +g.guardado || 0,
         deadline: g.prazo || null,
         color: g.cor, icon: g.icone || 'target',
-        accountId: de[g.account_id] || null
+        accountId: de[g.account_id] || null,
+        categoryId: de[g.category_id] || null,
+        contribution: g.contribuicao || null,
+        deposits: Array.isArray(g.depositos) ? g.depositos : [],
+        automation: g.automacao || null,
+        proposals: Array.isArray(g.propostas) ? g.propostas : []
       })),
 
       /* Faturas e orçamentos voltam a ser MAPAS, não listas -- é
@@ -504,7 +522,7 @@
   Repo.listarEspacos = async function (userId) {
     const sb = cliente();
     const { data, error } = await sb.from('workspaces')
-      .select('id, name, legacy_id, posicao, created_at')
+      .select('id, name, legacy_id, posicao, created_at, automation_data')
       .eq('owner_id', userId)
       .is('deleted_at', null)
       .order('posicao', { ascending: true })

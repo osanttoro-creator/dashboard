@@ -57,6 +57,8 @@ const VERIFICACOES = [
   ['tools/testes/sincronizacao-entre-aparelhos.js', 'aparelho novo abre os dados reais da conta'],
   ['tools/testes/sincronizacao-movel.js', 'celular retoma e reconcilia sem sobrescrever dados'],
   ['tools/testes/entrada-monetaria.js', 'reais e centavos avançam juntos sem afetar taxas'],
+  ['tools/testes/automacoes-financeiras.js', 'automações financeiras são conservadoras e idempotentes'],
+  ['tools/testes/funcao-existe.js', 'nenhum módulo chama o ajudante privado de outro'],
   ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos']
 ];
 

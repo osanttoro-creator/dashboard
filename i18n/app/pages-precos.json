@@ -187,13 +187,6 @@
   "es": "Código del cupón de descuento"
  },
  {
-  "pt": "Aplicar",
-  "tipo": "exato",
-  "en": "Apply",
-  "fr": "Appliquer",
-  "es": "Aplicar"
- },
- {
   "pt": "Tenho um cupom de desconto",
   "tipo": "exato",
   "en": "I have a discount coupon",

@@ -31,10 +31,74 @@
 
     renderKpis(fixas, lista, despesas, receitas);
     renderLista(lista);
+    renderSugestoes();
 
     document.getElementById('recTitle').textContent =
       App.recTab === 'subs' ? 'Assinaturas e mensalidades' : 'Lançamentos fixos';
   };
+
+  function decidir(candidato, status) {
+    const p = Store.profile();
+    p.automation = p.automation || { categoryRules: [], merchantAliases: [], recurrenceDecisions: {} };
+    p.automation.recurrenceDecisions = p.automation.recurrenceDecisions || {};
+    p.automation.recurrenceDecisions[candidato.id] = { status, at: new Date().toISOString() };
+    Store.commit('automation');
+  }
+
+  function renderSugestoes() {
+    const box = U.clear(document.getElementById('recSuggestions'));
+    const candidatos = DetectorRecorrencias.detectar(Store.profile().transactions, Store.profile());
+    if (!candidatos.length) {
+      box.appendChild(UI.empty('Ainda não há três ocorrências com ritmo estável para sugerir.'));
+      return;
+    }
+    candidatos.forEach((c) => {
+      const suportada = c.periodicity === 'monthly';
+      box.appendChild(el('article', { class: 'automation-row recurrence-candidate' }, [
+        el('div', { class: 'automation-main' }, [
+          el('strong', { text: c.name, translate: 'no' }),
+          el('span', { text: `${c.kind === 'income' ? 'Receita' : 'Despesa'} ${c.periodicityLabel} · mediana ${U.fmtBRL(c.median)} · ${c.confidence} confiança` }),
+          el('span', { class: 'muted', text: `${c.reason} Valores entre ${U.fmtBRL(c.min)} e ${U.fmtBRL(c.max)}. Próxima janela: ${U.fmtDateBR(c.nextDate)}.` }),
+          !suportada ? el('span', { class: 'hint', text: 'O modelo atual só cria recorrências mensais. Este padrão fica apenas informativo.' }) : null
+        ].filter(Boolean)),
+        suportada ? el('button', { class: 'btn btn-primary btn-sm', text: 'Criar recorrência', onclick: () => criar(c) }) : null,
+        el('button', { class: 'btn btn-outline btn-sm', text: 'Revisar ocorrências', onclick: () => revisar(c) }),
+        el('button', { class: 'btn btn-ghost btn-sm', text: 'Não é recorrente', onclick: () => decidir(c, 'dismissed') }),
+        el('button', { class: 'btn btn-ghost btn-sm', text: 'Não sugerir de novo', onclick: () => decidir(c, 'blocked') })
+      ].filter(Boolean)));
+    });
+  }
+
+  function revisar(c) {
+    const itens = c.evidenceIds.map((id) => Store.transactions.get(id)).filter(Boolean);
+    UI.openModal({
+      title: 'Ocorrências usadas',
+      body: el('div', { class: 'automation-evidence' }, itens.map((t) => el('p', {}, [
+        el('strong', { text: U.fmtDateBR(t.date) + ' · ' + U.fmtBRL(t.amount) }),
+        document.createTextNode(' — ' + t.description)
+      ]))),
+      buttons: [{ label: 'Fechar', class: 'btn-outline', onClick: UI.closeModal }]
+    });
+  }
+
+  function criar(c) {
+    if (global.Limites && !Limites.exigirEspaco('recurring_items')) return;
+    const existe = Store.profile().transactions.some((t) => t.recurrenceEvidence && t.recurrenceEvidence.candidateId === c.id);
+    if (existe) { decidir(c, 'accepted'); UI.toast('Esta recorrência já foi criada.', 'info'); return; }
+    Store.transactions.add({
+      kind: c.kind, description: c.name, amount: c.median, date: c.nextDate,
+      categoryId: c.categoryId || null, method: c.method,
+      accountId: c.method === 'account' ? c.accountId : null,
+      cardId: c.method === 'card' ? c.cardId : null,
+      recurring: true, confirmed: false, source: 'automation', merchantKey: c.merchantKey,
+      recurrenceEvidence: { candidateId: c.id, transactionIds: c.evidenceIds, periodicity: c.periodicity },
+      classification: { source: 'history', confidence: 'high', evidence: c.reason }
+    }, true);
+    const p = Store.profile();
+    p.automation.recurrenceDecisions[c.id] = { status: 'accepted', at: new Date().toISOString() };
+    Store.commit('automation');
+    UI.toast('Recorrência criada a partir da próxima ocorrência. O histórico foi preservado.', 'success');
+  }
 
   function renderKpis(todas, lista, despesas, receitas) {
     const saidaMes = U.sum(despesas, (t) => t.amount);

@@ -25,8 +25,45 @@
     document.getElementById('catRangeSelect').value = App.catRange;
     renderList('expense', 'catListExpense', r);
     renderList('income', 'catListIncome', r);
+    renderReview();
     renderChart(r);
   };
+
+  /* 'high'/'medium' são os nomes INTERNOS da confiança, e estavam
+     vazando para a tela em inglês no meio de uma frase em português.
+     A pessoa lê o grau; o código continua comparando o token. */
+  const GRAU = { high: 'alta', medium: 'média', low: 'baixa' };
+
+  function renderReview() {
+    const box = U.clear(document.getElementById('categoryReview'));
+    const pendentes = Store.profile().transactions.filter((t) => t.kind !== 'transfer' && !t.categoryId)
+      .map((t) => ({ t, s: Categorizacao.sugerir(t.description, t.kind, Store.profile(), { excludeId: t.id }) }))
+      .filter((x) => x.s.categoryId && x.s.confidence !== 'low').slice(0, 20);
+    if (!pendentes.length) {
+      box.appendChild(UI.empty('Nenhuma sugestão segura para revisar agora.'));
+      return;
+    }
+    pendentes.forEach(({ t, s }) => {
+      const cat = Calc.categoryById(s.categoryId);
+      box.appendChild(el('div', { class: 'automation-row' }, [
+        el('div', { class: 'automation-main' }, [
+          el('strong', { text: t.description, translate: 'no' }),
+          el('span', { class: 'muted', text: `${cat.name} · confiança ${GRAU[s.confidence] || s.confidence} · ${s.evidence}` })
+        ]),
+        el('button', { class: 'btn btn-outline btn-sm', text: 'Aplicar', onclick: () => {
+          Store.transactions.update(t.id, { categoryId: cat.id, merchantKey: s.merchantKey,
+            classification: { source: s.source, confidence: s.confidence, evidence: s.evidence } });
+          UI.toast('Categoria aplicada. O restante do histórico não foi alterado.', 'success');
+        } }),
+        el('button', { class: 'btn btn-ghost btn-sm', text: 'Aplicar aos parecidos', onclick: () => {
+          Categorizacao.confirmarRegra(Store.profile(), s.merchantKey, t.kind, cat.id);
+          Store.transactions.update(t.id, { categoryId: cat.id, merchantKey: s.merchantKey,
+            classification: { source: 'confirmed-rule', confidence: 'high', evidence: 'Regra confirmada por você.' } });
+          UI.toast('Regra salva para os próximos lançamentos. O passado não foi reclassificado.', 'success');
+        } })
+      ]));
+    });
+  }
 
   function renderList(kind, containerId, r) {
     const box = U.clear(document.getElementById(containerId));

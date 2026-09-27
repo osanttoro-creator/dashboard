@@ -82,6 +82,34 @@
   "es": "Fecha *"
  },
  {
+  "pt": "Aplicar também aos lançamentos parecidos",
+  "tipo": "exato",
+  "en": "Also apply to similar entries",
+  "fr": "Appliquer aussi aux écritures similaires",
+  "es": "Aplicar también a movimientos parecidos"
+ },
+ {
+  "pt": "Categoria aplicada",
+  "tipo": "exato",
+  "en": "Category applied",
+  "fr": "Catégorie appliquée",
+  "es": "Categoría aplicada"
+ },
+ {
+  "pt": "Sugestão",
+  "tipo": "exato",
+  "en": "Suggestion",
+  "fr": "Suggestion",
+  "es": "Sugerencia"
+ },
+ {
+  "pt": "Aplicar",
+  "tipo": "exato",
+  "en": "Apply",
+  "fr": "Appliquer",
+  "es": "Aplicar"
+ },
+ {
   "pt": "⌂ Débito",
   "tipo": "exato",
   "en": "⌂ Debit",
@@ -339,6 +367,13 @@
   "en": "Add the exchange rate for {0} before recording in {1}.",
   "fr": "Ajoutez le taux de change de {0} avant de saisir en {1}.",
   "es": "Agrega la cotización de {0} antes de registrar en {1}."
+ },
+ {
+  "pt": "Categoria escolhida manualmente.",
+  "tipo": "exato",
+  "en": "Category selected manually.",
+  "fr": "Catégorie sélectionnée manuellement.",
+  "es": "Categoría seleccionada manualmente."
  },
  {
   "pt": "Lançamento atualizado.",

@@ -138,6 +138,17 @@
   --sidebar-w: 244px;
 }
 
+/* Automações financeiras: usam as mesmas superfícies e botões do app. */
+.category-suggestion{display:flex;align-items:flex-start;gap:8px;margin-top:8px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:12px;background:color-mix(in srgb,var(--accent) 7%,transparent);font-size:12px;line-height:1.45}
+.category-suggestion>span{flex:1}.category-learn{margin-top:8px}.btn-xs{min-height:28px;padding:3px 8px;font-size:11px}
+.automation-card{margin-top:16px}.automation-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.automation-row:last-child{border-bottom:0}.automation-main{display:grid;gap:4px;min-width:0;flex:1}.automation-main>span{font-size:12px;line-height:1.45}
+.goal-automation-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}
+.goal-automation-summary>div{display:grid;gap:3px}.goal-automation-summary span{font-size:11px;color:var(--muted)}.goal-automation-summary strong{font-size:13px}.goal-automation-summary .span-2{grid-column:1/-1;margin:0}
+.goal-proposal{display:grid;gap:6px;padding:12px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--accent) 8%,transparent);font-size:12px}.goal-proposal.is-paused{border-left-color:var(--warning)}
+.goal-proposal-actions{display:flex;gap:8px;flex-wrap:wrap}.automation-form{padding-top:8px;border-top:1px solid var(--border)}.automation-evidence{display:grid;gap:8px}.automation-evidence p{margin:0}
+@media(max-width:700px){.automation-row{align-items:stretch;flex-direction:column}.automation-row>.btn{width:100%}.goal-automation-summary{grid-template-columns:1fr}.goal-automation-summary .span-2{grid-column:auto}}
+
 /* ------------------------------------------------------------
    2 · TOKENS — tema escuro (o principal)
    Noite de Oásis como fundo, Petróleo como conteúdo, Âncora como

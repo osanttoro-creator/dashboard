@@ -42,8 +42,8 @@
   "es": "− {0} de factura"
  },
  {
- "pt": "Gastos por dia, de {0} a {1}: {2}. Total {3}.",
- "tipo": "padrao",
+  "pt": "Gastos por dia, de {0} a {1}: {2}. Total {3}.",
+  "tipo": "padrao",
   "en": "Daily spending from {0} to {1}: {2}. Total {3}.",
   "fr": "Dépenses par jour, du {0} au {1} : {2}. Total {3}.",
   "es": "Gastos por día, del {0} al {1}: {2}. Total {3}."
@@ -308,8 +308,8 @@
   "es": "Ningún movimiento registrado todavía."
  },
  {
- "pt": "linha{0}",
- "tipo": "padrao",
+  "pt": "linha{0}",
+  "tipo": "padrao",
   "ignorar": true
  },
  {

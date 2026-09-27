@@ -196,6 +196,54 @@
 
     const fCategory = field('Categoria', select(categoryOptions(currentKind),
       editing ? editing.categoryId : d.categoryId, 'Sem categoria'));
+    const categoriaSugestao = el('div', { class: 'category-suggestion', role: 'status', 'aria-live': 'polite', hidden: true });
+    const lembrarCategoria = checkbox('Aplicar também aos lançamentos parecidos', false);
+    lembrarCategoria.classList.add('category-learn');
+    lembrarCategoria.hidden = true;
+    fCategory.appendChild(categoriaSugestao);
+    fCategory.appendChild(lembrarCategoria);
+    let sugestaoAtual = null;
+    let categoriaAlterada = !!(editing && editing.categoryId);
+    let categoriaAntesDaSugestao = fCategory._control.value;
+
+    function atualizarSugestao() {
+      if (currentKind === 'transfer' || !global.Categorizacao) {
+        categoriaSugestao.hidden = true; lembrarCategoria.hidden = true; sugestaoAtual = null; return;
+      }
+      sugestaoAtual = Categorizacao.sugerir(fDesc._control.value, currentKind, prof, { excludeId: editing && editing.id });
+      const cat = sugestaoAtual.categoryId && Calc.categoryById(sugestaoAtual.categoryId, prof);
+      if (!cat || sugestaoAtual.confidence === 'low') {
+        categoriaSugestao.hidden = true;
+        lembrarCategoria.hidden = !sugestaoAtual.merchantKey || !fCategory._control.value;
+        return;
+      }
+      categoriaSugestao.hidden = false;
+      categoriaSugestao.replaceChildren(
+        el('span', { text: `${sugestaoAtual.confidence === 'high' ? 'Categoria aplicada' : 'Sugestão'}: ${cat.name}. ${sugestaoAtual.evidence}` }),
+        el('button', { type: 'button', class: 'btn btn-ghost btn-xs', text: sugestaoAtual.confidence === 'high' ? 'Desfazer' : 'Aplicar', onclick: () => {
+          if (sugestaoAtual.confidence === 'high' && fCategory._control.value === cat.id) {
+            fCategory._control.value = categoriaAntesDaSugestao || '';
+            categoriaAlterada = true;
+          } else {
+            categoriaAntesDaSugestao = fCategory._control.value;
+            fCategory._control.value = cat.id;
+            categoriaAlterada = true;
+          }
+          lembrarCategoria.hidden = false;
+        } })
+      );
+      if (sugestaoAtual.confidence === 'high' && !categoriaAlterada && !fCategory._control.value) {
+        categoriaAntesDaSugestao = '';
+        fCategory._control.value = cat.id;
+      }
+      lembrarCategoria.hidden = !sugestaoAtual.merchantKey || !fCategory._control.value;
+    }
+    let sugestaoTimer = null;
+    fDesc._control.addEventListener('input', () => {
+      clearTimeout(sugestaoTimer);
+      sugestaoTimer = setTimeout(atualizarSugestao, 120);
+    });
+    fCategory._control.addEventListener('change', () => { categoriaAlterada = true; atualizarSugestao(); });
 
     const methodSeg = UI.segmented(
       [{ value: 'account', label: '⌂ Débito' }, { value: 'card', label: '▭ Crédito' }],
@@ -288,6 +336,8 @@
     ], currentKind, (v) => {
       currentKind = v;
       UI.fillSelect(fCategory._control, categoryOptions(v), null, 'Sem categoria');
+      categoriaAlterada = false;
+      atualizarSugestao();
       syncVisibility();
     });
 
@@ -363,6 +413,7 @@
     fInstallments._control.addEventListener('input', avisaFatura);
     cbRecurring._input.addEventListener('change', syncVisibility);
     syncVisibility();
+    atualizarSugestao();
 
     /* --- salvar --- */
     function submit(closeAfter) {
@@ -460,8 +511,21 @@
         recurEnd: cbRecurring._input.checked ? (fRecurEnd._control.value || null) : null,
         confirmed: cbConfirmed._input.checked,
         notes: fNotes._control.value.trim(),
-        source: editing ? (editing.source || 'manual') : (d.source || 'manual')
+        source: editing ? (editing.source || 'manual') : (d.source || 'manual'),
+        merchantKey: sugestaoAtual ? sugestaoAtual.merchantKey : null,
+        classification: currentKind === 'transfer' ? null : {
+          source: sugestaoAtual && sugestaoAtual.categoryId === (fCategory._control.value || null)
+            ? sugestaoAtual.source : 'manual',
+          confidence: sugestaoAtual && sugestaoAtual.categoryId === (fCategory._control.value || null)
+            ? sugestaoAtual.confidence : 'high',
+          evidence: sugestaoAtual && sugestaoAtual.categoryId === (fCategory._control.value || null)
+            ? sugestaoAtual.evidence : 'Categoria escolhida manualmente.'
+        }
       };
+
+      if (lembrarCategoria._input.checked && base.merchantKey && base.categoryId) {
+        Categorizacao.confirmarRegra(prof, base.merchantKey, currentKind, base.categoryId);
+      }
 
       if (editing) {
         Store.transactions.update(editing.id, base);

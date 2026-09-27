@@ -127,6 +127,38 @@
           "assets/css/site.css"
         ],
         "createdAt": "2026-09-22T23:47:03.686Z"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-27T14:47:07.239Z"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "app.html"
+        ],
+        "createdAt": "2026-09-27T14:47:07.428Z"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-27T14:47:07.646Z"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "app.html"
+        ],
+        "createdAt": "2026-09-27T14:47:07.867Z"
       }
     ]
   }

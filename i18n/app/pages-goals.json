@@ -77,11 +77,116 @@
   "es": "Planeaste {0} cada día {1}"
  },
  {
+  "pt": "Ritmo necessário",
+  "tipo": "exato",
+  "en": "Required pace",
+  "fr": "Rythme nécessaire",
+  "es": "Ritmo necesario"
+ },
+ {
+  "pt": "Sem prazo",
+  "tipo": "exato",
+  "en": "No deadline",
+  "fr": "Sans échéance",
+  "es": "Sin plazo"
+ },
+ {
+  "pt": "Planejado por você",
+  "tipo": "exato",
+  "en": "Planned by you",
+  "fr": "Prévu par vous",
+  "es": "Planificado por ti"
+ },
+ {
+  "pt": "Não definido",
+  "tipo": "exato",
+  "en": "Not set",
+  "fr": "Non défini",
+  "es": "No definido"
+ },
+ {
+  "pt": "Valor sugerido pelo UGLEZ",
+  "tipo": "exato",
+  "en": "Amount suggested by UGLEZ",
+  "fr": "Montant suggéré par UGLEZ",
+  "es": "Valor sugerido por UGLEZ"
+ },
+ {
+  "pt": "{0} Impacto previsto no mês: {1}.",
+  "tipo": "padrao",
+  "en": "{0} Expected impact this month: {1}.",
+  "fr": "{0} Impact prévu ce mois-ci : {1}.",
+  "es": "{0} Impacto previsto este mes: {1}."
+ },
+ {
+  "pt": "Sugestão pausada",
+  "tipo": "exato",
+  "en": "Suggestion paused",
+  "fr": "Suggestion suspendue",
+  "es": "Sugerencia pausada"
+ },
+ {
+  "pt": "Aporte aguardando sua confirmação",
+  "tipo": "exato",
+  "en": "Contribution awaiting your confirmation",
+  "fr": "Versement en attente de votre confirmation",
+  "es": "Aporte pendiente de tu confirmación"
+ },
+ {
+  "pt": "Confirmar aporte",
+  "tipo": "exato",
+  "en": "Confirm contribution",
+  "fr": "Confirmer le versement",
+  "es": "Confirmar aporte"
+ },
+ {
+  "pt": "Dispensar este mês",
+  "tipo": "exato",
+  "en": "Skip this month",
+  "fr": "Ignorer ce mois-ci",
+  "es": "Omitir este mes"
+ },
+ {
   "pt": "+ Guardar",
   "tipo": "exato",
   "en": "+ Save",
   "fr": "+ Mettre de côté",
   "es": "+ Ahorrar"
+ },
+ {
+  "pt": "Pausar automação",
+  "tipo": "exato",
+  "en": "Pause automation",
+  "fr": "Suspendre l'automatisation",
+  "es": "Pausar automatización"
+ },
+ {
+  "pt": "Retomar automação",
+  "tipo": "exato",
+  "en": "Resume automation",
+  "fr": "Reprendre l'automatisation",
+  "es": "Reanudar automatización"
+ },
+ {
+  "pt": "Encerrar automação",
+  "tipo": "exato",
+  "en": "End automation",
+  "fr": "Arrêter l'automatisation",
+  "es": "Finalizar automatización"
+ },
+ {
+  "pt": "As propostas futuras param. Aportes já feitos continuam no histórico.",
+  "tipo": "exato",
+  "en": "Future suggestions stop. Contributions already made remain in your history.",
+  "fr": "Les futures propositions s'arrêtent. Les versements déjà effectués restent dans l'historique.",
+  "es": "Las propuestas futuras se detienen. Los aportes ya realizados siguen en el historial."
+ },
+ {
+  "pt": "Encerrar",
+  "tipo": "exato",
+  "en": "End",
+  "fr": "Arrêter",
+  "es": "Terminar"
  },
  {
   "pt": "Excluir meta",
@@ -110,6 +215,13 @@
   "en": "Goal deleted.",
   "fr": "Objectif supprimé.",
   "es": "Meta eliminada."
+ },
+ {
+  "pt": "Aporte confirmado. O dinheiro foi reservado uma única vez.",
+  "tipo": "exato",
+  "en": "Contribution confirmed. The money was set aside only once.",
+  "fr": "Versement confirmé. L'argent n'a été mis de côté qu'une seule fois.",
+  "es": "Aporte confirmado. El dinero se reservó una sola vez."
  },
  {
   "pt": "Não tirar de nenhuma conta",
@@ -187,6 +299,27 @@
   "en": "No particular account",
   "fr": "Aucun compte en particulier",
   "es": "Ninguna cuenta en especial"
+ },
+ {
+  "pt": "Gerar uma proposta mensal para eu confirmar",
+  "tipo": "exato",
+  "en": "Create a monthly suggestion for me to confirm",
+  "fr": "Créer une proposition mensuelle à confirmer",
+  "es": "Crear una propuesta mensual para que la confirme"
+ },
+ {
+  "pt": "Usar sugestão sustentável",
+  "tipo": "exato",
+  "en": "Use sustainable suggestion",
+  "fr": "Utiliser la suggestion soutenable",
+  "es": "Usar sugerencia sostenible"
+ },
+ {
+  "pt": "Sem conta de origem",
+  "tipo": "exato",
+  "en": "No source account",
+  "fr": "Aucun compte source",
+  "es": "Sin cuenta de origen"
  },
  {
   "pt": "Ícone {0}",
@@ -278,6 +411,41 @@
   "en": "Just the reminder: you still confirm each contribution.",
   "fr": "Seulement le rappel : c'est toujours vous qui confirmez le versement.",
   "es": "Solo el recordatorio: el aporte lo sigues confirmando tú."
+ },
+ {
+  "pt": "Automação da meta",
+  "tipo": "exato",
+  "en": "Goal automation",
+  "fr": "Automatisation de l'objectif",
+  "es": "Automatización de la meta"
+ },
+ {
+  "pt": "O OAZE prepara a proposta. O saldo só muda quando você confirmar.",
+  "tipo": "exato",
+  "en": "OAZE prepares the suggestion. Your balance changes only when you confirm.",
+  "fr": "OAZE prépare la proposition. Votre solde ne change que lorsque vous confirmez.",
+  "es": "OAZE prepara la propuesta. Tu saldo solo cambia cuando confirmas."
+ },
+ {
+  "pt": "Valor fixo da proposta",
+  "tipo": "exato",
+  "en": "Fixed suggestion amount",
+  "fr": "Montant fixe de la proposition",
+  "es": "Valor fijo de la propuesta"
+ },
+ {
+  "pt": "Dia da proposta",
+  "tipo": "exato",
+  "en": "Suggestion day",
+  "fr": "Jour de la proposition",
+  "es": "Día de la propuesta"
+ },
+ {
+  "pt": "Piso mínimo de saldo",
+  "tipo": "exato",
+  "en": "Minimum balance floor",
+  "fr": "Seuil minimal de solde",
+  "es": "Piso mínimo de saldo"
  },
  {
   "pt": "Informe o nome da meta.",

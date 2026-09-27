@@ -12,8 +12,28 @@
   const el = U.el;
   const Goals = {};
 
+  /* O mesmo desenho de caixa de marcar dos formulários. Ele existe em
+     forms.js, mas PRIVADO dentro da IIFE de lá — e chamá-lo daqui era
+     um ReferenceError que só aparecia ao abrir o modal da meta, com o
+     formulário inteiro morrendo junto. Seis linhas repetidas custam
+     menos do que expor o utilitário e criar dependência entre páginas. */
+  function checkbox(rotulo, marcado) {
+    const cb = el('input', { type: 'checkbox' });
+    cb.checked = !!marcado;
+    const wrap = el('label', { class: 'check' }, [cb, el('span', { text: rotulo })]);
+    wrap._input = cb;
+    return wrap;
+  }
+
   Goals.render = function () {
     const metas = Store.goals.all();
+    let criouProposta = false;
+    metas.forEach((g) => {
+      const antes = (g.proposals || []).length;
+      MetasAutomaticas.ensureProposal(g, Store.profile(), U.todayYM());
+      if ((g.proposals || []).length !== antes) criouProposta = true;
+    });
+    if (criouProposta) { Store.commit('goal-automation'); return; }
     const grid = U.clear(document.getElementById('goalGrid'));
     const nota = document.getElementById('goalsNote');
 
@@ -80,6 +100,9 @@
       el('span', { class: 'goal-ring-num', text: Math.round(pct) + '%' })
     ]);
 
+    const analise = MetasAutomaticas.sugerir(g, Store.profile(), App.ym);
+    const proposta = (g.proposals || []).find((p) => p.ym === U.todayYM() && ['pending', 'paused'].includes(p.status));
+
     return el('article', { class: 'card goal-card' + (completa ? ' is-done' : '') }, [
       el('div', { class: 'goal-head' }, [
         el('span', {
@@ -141,9 +164,38 @@
         ])
         : null,
 
+      falta > 0 ? el('div', { class: 'goal-automation-summary' }, [
+        el('div', {}, [el('span', { text: 'Ritmo necessário' }), el('strong', { text: analise.necessary == null ? 'Sem prazo' : U.fmtBRL(analise.necessary) + '/mês' })]),
+        el('div', {}, [el('span', { text: 'Planejado por você' }), el('strong', { text: analise.planned ? U.fmtBRL(analise.planned) + '/mês' : 'Não definido' })]),
+        el('div', {}, [el('span', { text: 'Valor sugerido pelo UGLEZ' }), el('strong', { text: U.fmtBRL(analise.suggested) + '/mês' })]),
+        el('p', { class: 'hint span-2', text: analise.reason + ' Impacto previsto no mês: ' + U.fmtBRL(analise.projectedImpact) + '.' })
+      ]) : null,
+
+      proposta ? el('div', { class: 'goal-proposal ' + (proposta.status === 'paused' ? 'is-paused' : '') }, [
+        el('strong', { text: proposta.status === 'paused' ? 'Sugestão pausada' : 'Aporte aguardando sua confirmação' }),
+        el('span', { text: U.fmtBRL(proposta.amount) + ' · ' + proposta.reason }),
+        proposta.status === 'pending' ? el('div', { class: 'goal-proposal-actions' }, [
+          el('button', { class: 'btn btn-primary btn-sm', text: 'Confirmar aporte', onclick: () => confirmarProposta(g, proposta) }),
+          el('button', { class: 'btn btn-ghost btn-sm', text: 'Dispensar este mês', onclick: () => resolverProposta(g, proposta, 'dismissed') })
+        ]) : null
+      ].filter(Boolean)) : null,
+
       el('div', { class: 'goal-actions' }, [
         el('button', { class: 'btn btn-primary btn-sm', text: '+ Guardar', onclick: () => depositar(g) }),
         el('button', { class: 'btn btn-ghost btn-sm', text: 'Editar', onclick: () => Goals.open(g.id) }),
+        g.automation && g.automation.status !== 'ended' ? el('button', {
+          class: 'btn btn-ghost btn-sm',
+          text: g.automation.active ? 'Pausar automação' : 'Retomar automação',
+          onclick: () => Store.goals.update(g.id, { automation: Object.assign({}, g.automation, {
+            active: !g.automation.active, status: g.automation.active ? 'paused' : 'active'
+          }) })
+        }) : null,
+        g.automation && g.automation.status !== 'ended' ? el('button', {
+          class: 'btn btn-ghost btn-sm', text: 'Encerrar automação', onclick: async () => {
+            const ok = await UI.confirm({ title: 'Encerrar automação', message: 'As propostas futuras param. Aportes já feitos continuam no histórico.', confirmLabel: 'Encerrar' });
+            if (ok) Store.goals.update(g.id, { automation: Object.assign({}, g.automation, { active: false, status: 'ended' }) });
+          }
+        }) : null,
         el('button', {
           class: 'icon-btn danger', title: 'Excluir meta', 'aria-label': 'Excluir ' + g.name,
           onclick: async () => {
@@ -155,8 +207,25 @@
             if (ok) { Store.goals.remove(g.id); UI.toast('Meta excluída.'); }
           }
         }, Icons.lucide('trash-2', 15))
-      ])
+      ].filter(Boolean))
     ].filter(Boolean));
+  }
+
+  function resolverProposta(g, proposta, status) {
+    if (proposta.status !== 'pending' && status === 'confirmed') return;
+    proposta.status = status;
+    proposta.resolvedAt = new Date().toISOString();
+    Store.commit('goal-automation');
+  }
+
+  function confirmarProposta(g, proposta) {
+    if (proposta.status !== 'pending') return;
+    proposta.status = 'confirmed';
+    proposta.resolvedAt = new Date().toISOString();
+    Store.goals.deposit(g.id, proposta.amount, {
+      accountId: proposta.accountId || null, at: U.todayISO(), proposalId: proposta.id
+    });
+    UI.toast('Aporte confirmado. O dinheiro foi reservado uma única vez.', 'success');
   }
 
   function mesesAte(iso) {
@@ -287,6 +356,16 @@
       class: 'input', type: 'number', min: '1', max: '31',
       value: g && g.contribution ? String(g.contribution.day) : '5'
     });
+    const autoAtual = g && g.automation;
+    const autoAtiva = checkbox('Gerar uma proposta mensal para eu confirmar', !!(autoAtual && autoAtual.active));
+    const autoValor = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true',
+      placeholder: 'Usar sugestão sustentável', value: autoAtual && autoAtual.amount ? U.fmtNum(autoAtual.amount) : '' });
+    const autoDia = el('input', { class: 'input', type: 'number', min: '1', max: '31', value: String((autoAtual && autoAtual.day) || 5) });
+    const autoPiso = el('input', { class: 'input', type: 'text', inputmode: 'decimal', 'data-money': 'true',
+      placeholder: '0,00', value: autoAtual && autoAtual.floor ? U.fmtNum(autoAtual.floor) : '' });
+    const autoConta = el('select', { class: 'input' });
+    UI.fillSelect(autoConta, (prof.accounts || []).filter((a) => !a.archived).map((a) => ({ value: a.id, label: a.name })),
+      (autoAtual && autoAtual.accountId) || (g && g.accountId) || '', 'Sem conta de origem');
 
     const icones = ['target', 'flag', 'piggy-bank', 'plane', 'house', 'car', 'graduation-cap', 'heart-pulse', 'gift', 'shield'];
     let iconeAtual = g ? (g.icon || 'target') : 'target';
@@ -331,6 +410,14 @@
         ]),
         el('div', { class: 'field' }, [el('span', { class: 'field-label', text: 'Cor' }), cor]),
         el('div', { class: 'field span-2' }, [el('span', { class: 'field-label', text: 'Ícone' }), iconeBox])
+        ,el('div', { class: 'field span-2 automation-form' }, [
+          el('span', { class: 'field-label', text: 'Automação da meta' }), autoAtiva,
+          el('p', { class: 'hint', text: 'O OAZE prepara a proposta. O saldo só muda quando você confirmar.' })
+        ]),
+        el('label', { class: 'field' }, [el('span', { class: 'field-label', text: 'Valor fixo da proposta' }), autoValor]),
+        el('label', { class: 'field' }, [el('span', { class: 'field-label', text: 'Dia da proposta' }), autoDia]),
+        el('label', { class: 'field' }, [el('span', { class: 'field-label', text: 'Conta de origem' }), autoConta]),
+        el('label', { class: 'field' }, [el('span', { class: 'field-label', text: 'Piso mínimo de saldo' }), autoPiso])
       ]),
       buttons: [
         { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
@@ -354,7 +441,14 @@
                  mês" apareceria no cartão como se fosse um plano. */
               contribution: aporte > 0
                 ? { amount: aporte, day: Math.min(31, Math.max(1, parseInt(contribDia.value, 10) || 1)) }
-                : null
+                : null,
+              automation: autoAtiva._input.checked ? {
+                active: true, status: autoAtual && autoAtual.status === 'paused' ? 'paused' : 'active',
+                amount: U.parseMoney(autoValor.value) || 0,
+                day: Math.min(31, Math.max(1, parseInt(autoDia.value, 10) || 1)),
+                accountId: autoConta.value || null,
+                floor: U.parseMoney(autoPiso.value) || 0
+              } : (autoAtual ? Object.assign({}, autoAtual, { active: false, status: 'paused' }) : null)
             };
             if (g) { Store.goals.update(g.id, dados); UI.toast('Meta atualizada.', 'success'); }
             else { Store.goals.add(dados); UI.toast('Meta criada.', 'success'); }

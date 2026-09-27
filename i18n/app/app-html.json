@@ -421,8 +421,8 @@
   "es": "Cómo se calcula el score"
  },
  {
- "pt": "Gastos dos últimos 7 dias",
- "tipo": "exato",
+  "pt": "Gastos dos últimos 7 dias",
+  "tipo": "exato",
   "en": "Spending over the last 7 days",
   "fr": "Dépenses des 7 derniers jours",
   "es": "Gastos de los últimos 7 días"
@@ -1030,6 +1030,20 @@
   "es": "Categorías de ingreso"
  },
  {
+  "pt": "Revisar lançamentos sem categoria",
+  "tipo": "exato",
+  "en": "Review uncategorized entries",
+  "fr": "Examiner les écritures sans catégorie",
+  "es": "Revisar movimientos sin categoría"
+ },
+ {
+  "pt": "Sugestões explicáveis; seu histórico só muda quando você aplica",
+  "tipo": "exato",
+  "en": "Explainable suggestions; your history changes only when you apply one",
+  "fr": "Suggestions explicables ; votre historique ne change que lorsque vous les appliquez",
+  "es": "Sugerencias explicables; tu historial solo cambia cuando las aplicas"
+ },
+ {
   "pt": "Peso histórico de cada categoria de despesa",
   "tipo": "exato",
   "en": "Historical weight of each expense category",
@@ -1091,6 +1105,20 @@
   "en": "They repeat every month until you end them",
   "fr": "Elles se répètent chaque mois jusqu'à ce que vous les arrêtiez",
   "es": "Se repiten cada mes hasta que los termines"
+ },
+ {
+  "pt": "Sugestões encontradas",
+  "tipo": "exato",
+  "en": "Suggestions found",
+  "fr": "Suggestions trouvées",
+  "es": "Sugerencias encontradas"
+ },
+ {
+  "pt": "Padrões detectados no seu histórico; nada é criado sem sua confirmação",
+  "tipo": "exato",
+  "en": "Patterns detected in your history; nothing is created without your confirmation",
+  "fr": "Tendances détectées dans votre historique ; rien n'est créé sans votre confirmation",
+  "es": "Patrones detectados en tu historial; no se crea nada sin tu confirmación"
  },
  {
   "pt": "Escala do calendário",

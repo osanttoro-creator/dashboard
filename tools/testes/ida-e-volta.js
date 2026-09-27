@@ -102,7 +102,9 @@ const perfilOriginal = {
       accountId: null, toAccountId: null, cardId: 'card_1',
       recurring: false, recurEnd: null, confirmed: true,
       occ: {}, installment: { n: 3, de: 1 }, notes: 'com acento é importante',
-      source: 'import' },
+      source: 'import', merchantKey: 'mercado-do-mes',
+      classification: { source: 'history', confidence: 'high', evidence: '3 de 3' },
+      recurrenceEvidence: null },
     { id: 'tx_2', kind: 'income', description: 'Salário', amount: 7400,
       date: '2026-09-05', categoryId: 'cat_2', method: 'account',
       accountId: 'acc_1', toAccountId: null, cardId: null,
@@ -128,7 +130,11 @@ const perfilOriginal = {
   ],
   goals: [
     { id: 'goal_1', name: 'Viagem', target: 8000, saved: 2350.40,
-      deadline: '2027-01-31', color: '#5FD4E8', icon: 'plane', accountId: 'acc_2' },
+      deadline: '2027-01-31', color: '#5FD4E8', icon: 'plane', accountId: 'acc_2', categoryId: 'cat_1',
+      contribution: { amount: 500, day: 5 },
+      deposits: [{ at: '2026-09-05', amount: 350.40, accountId: 'acc_1', proposalId: 'goal_1|2026-09' }],
+      automation: { active: true, status: 'active', amount: 500, day: 5, accountId: 'acc_1', floor: 1000 },
+      proposals: [{ id: 'goal_1|2026-09', ym: '2026-09', status: 'confirmed', amount: 350.40, accountId: 'acc_1', floor: 1000, reason: 'teste' }] },
     { id: 'goal_2', name: 'Sem prazo', target: 1000, saved: 0,
       deadline: null, color: '#A98BFF', icon: 'target', accountId: null }
   ],
@@ -147,7 +153,11 @@ const perfilOriginal = {
       adiantamentos: {}, quitada: false
     }
   },
-  budgets: { cat_1: 900 }
+  budgets: { cat_1: 900 },
+  automation: {
+    categoryRules: [{ id: 'rule_1', merchantKey: 'netflix', kind: 'expense', categoryId: 'cat_1', active: true }],
+    merchantAliases: [], recurrenceDecisions: { rec_1: { status: 'blocked' } }
+  }
 };
 
 /* ---------------------------------------------------------------
@@ -271,7 +281,8 @@ function comparaLista(nome, antes, depois, chave) {
 
   await Repo.enviarEspaco(perfilOriginal, 'user-teste');
   const wsId = 'uuid-workspaces-prf_1';
-  const volta = await Repo.carregarEspaco(wsId, 'Pessoal', 'prf_1');
+  const workspace = sb.linhas.workspaces[0];
+  const volta = await Repo.carregarEspaco(wsId, 'Pessoal', 'prf_1', workspace.automation_data);
 
   comparaLista('contas',        perfilOriginal.accounts,     volta.accounts,     'id');
   comparaLista('categorias',    perfilOriginal.categories,   volta.categories,   'id');
@@ -282,6 +293,7 @@ function comparaLista(nome, antes, depois, chave) {
 
   igual('invoices', perfilOriginal.invoices, volta.invoices);
   igual('budgets',  perfilOriginal.budgets,  volta.budgets);
+  igual('automation', perfilOriginal.automation, volta.automation);
 
   const quantos = [
     ['contas', perfilOriginal.accounts.length],
