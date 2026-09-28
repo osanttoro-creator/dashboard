@@ -1,0 +1,784 @@
+/* =============================================================
+   OAZE — site de apresentação
+   -------------------------------------------------------------
+   A ESTRUTURA VEM DA LP DO PIERRE; O MUNDO É O DO OAZE.
+   O que foi emprestado é a GRAMÁTICA, e ela cabe em quatro regras:
+
+     1. tudo em DUAS colunas — nunca três, nunca quatro;
+     2. título grande com entrelinha 1.0 e tracking negativo,
+        quebrado à mão em duas linhas curtas;
+     3. cartão sem caixa: ícone, título e texto soltos no fundo,
+        sem borda e sem superfície. A caixa só aparece onde existe
+        decisão (plano) ou dobra (FAQ);
+     4. a mesma ação volta depois de cada seção, sempre redonda.
+
+   O que NÃO foi emprestado, e por quê:
+     · "100+ bancos conectados" e "regulado pelo Bacen" — o OAZE
+       não tem Open Finance. Anunciar isso seria mentira;
+     · a esteira de imprensa — não há imprensa sobre o OAZE, e
+       PRODUCT.md proíbe prova social fabricada.
+   No lugar deles entram as três verdades que o OAZE tem hoje.
+
+   VISIBILIDADE EM VÁRIAS MÍDIAS
+   Pedido explícito: a página precisa continuar legível no celular,
+   no tablet e no computador. As duas colunas viram uma abaixo de
+   900px, os títulos usam clamp em vez de tamanho fixo, e a quebra
+   manual das linhas é desligada no celular — <br> em tela estreita
+   produz uma linha órfã de duas palavras.
+   ============================================================= */
+
+/* ---------------- fontes do kit (OFL, servidas daqui) ---------------- */
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('/assets/fonts/Unbounded-Regular.ttf') format('truetype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Unbounded';
+  src: url('/assets/fonts/Unbounded-Medium.ttf') format('truetype');
+  font-weight: 500; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/assets/fonts/InstrumentSans-Regular.ttf') format('truetype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/assets/fonts/InstrumentSans-Medium.ttf') format('truetype');
+  font-weight: 500; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/assets/fonts/InstrumentSans-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/assets/fonts/IBMPlexMono-Regular.ttf') format('truetype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/assets/fonts/IBMPlexMono-Medium.ttf') format('truetype');
+  font-weight: 500; font-display: swap;
+}
+
+/* ---------------- tokens ---------------- */
+
+:root {
+  color-scheme: dark;
+
+  --night: #0D1821;
+  --milk: #F0E5CF;
+  --mineral: #355565;
+  --teal: #5FA99B;
+  --tangerine: #E9875E;
+
+  --sup: #13232F;
+  --sup-alta: #162936;
+  --sup-baixa: #101F2A;
+  --linha: rgba(240, 229, 207, .09);
+  --linha-forte: rgba(240, 229, 207, .18);
+  --tinta-2: #9DAFB5;
+
+  --fonte-titulo: 'Unbounded', system-ui, sans-serif;
+  --fonte-corpo: 'Instrument Sans', system-ui, sans-serif;
+  --fonte-dado: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --env: min(1120px, calc(100% - 44px));
+  --curva: cubic-bezier(.22, .61, .36, 1);
+
+  /* O ritmo do Pierre: muito ar entre blocos, pouco dentro deles. */
+  --respiro: clamp(64px, 10vw, 132px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--milk);
+  font: 400 17px/1.6 var(--fonte-corpo);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* height:auto junto dos atributos width/height do HTML: sem ele a
+   imagem encolhe na largura e mantém a altura declarada. */
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--teal); text-decoration: none; }
+a:not(.btn):hover { color: var(--milk); }
+
+::selection { background: var(--teal); color: var(--night); }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+
+.env { width: var(--env); margin-inline: auto; }
+
+/* Recortado, não jogado para fora da tela: o off-screen antigo
+   estica a página e obriga a um overflow:hidden que corta menus. */
+.pular {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+  background: var(--milk); color: var(--night);
+  padding: 10px 16px; border-radius: 0 0 12px 0; font-weight: 600;
+}
+a.pular:hover, a.pular:focus { color: var(--night); }
+.pular:focus {
+  width: auto; height: auto; overflow: visible; clip-path: none;
+  left: 0; top: 0; z-index: 200;
+}
+
+/* ---------------- tipografia ---------------- */
+
+/* Unbounded em caixa baixa é a voz da marca. A entrelinha 1.0 e o
+   tracking negativo são do Pierre: título grande só funciona
+   apertado, senão vira um parágrafo em corpo grande. */
+h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 500; text-transform: lowercase; margin: 0; }
+h1 {
+  font-size: clamp(2.5rem, 6.6vw, 4.2rem);
+  line-height: 1; letter-spacing: -.03em;
+}
+h2 {
+  font-size: clamp(2rem, 4.4vw, 3rem);
+  line-height: 1.02; letter-spacing: -.028em;
+}
+h3 { font-size: clamp(1.1rem, 1.6vw, 1.28rem); line-height: 1.25; letter-spacing: -.01em; }
+
+p { margin: 0; }
+
+.rotulo {
+  font: 500 12px/1.5 var(--fonte-dado);
+  text-transform: uppercase; letter-spacing: .17em; color: var(--tinta-2);
+}
+.dado { font-family: var(--fonte-dado); font-variant-numeric: tabular-nums; }
+.grande { font-size: clamp(1.02rem, 1.5vw, 1.15rem); color: var(--tinta-2); max-width: 46ch; }
+
+/* A quebra manual das linhas é do desktop. No celular ela deixaria
+   uma linha órfã de duas palavras. */
+@media (max-width: 720px) { .quebra { display: none; } }
+
+/* ---------------- botões ---------------- */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  min-height: 52px; padding: 14px 28px;
+  border: 1px solid transparent; border-radius: 999px;
+  font: 600 16px/1 var(--fonte-corpo); cursor: pointer;
+  transition: transform .18s var(--curva), background-color .18s var(--curva), border-color .18s var(--curva);
+}
+.btn:active { transform: translateY(1px); }
+.btn-claro { background: var(--milk); color: var(--night); }
+.btn-claro:hover { background: #fff; }
+.btn-linha { background: transparent; color: var(--milk); border-color: var(--linha-forte); }
+.btn-linha:hover { border-color: var(--milk); }
+
+/* ---------------- cabeçalho ---------------- */
+
+.topo {
+  position: sticky; top: 0; z-index: 90;
+  background: color-mix(in srgb, var(--night) 84%, transparent);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--curva);
+}
+.topo.rolou { border-bottom-color: var(--linha); }
+.topo .env { display: flex; align-items: center; gap: 22px; height: 76px; }
+
+.marca { display: inline-flex; align-items: center; flex: none; }
+.marca img { height: 30px; width: auto; }
+
+.menu { display: flex; gap: 26px; margin-left: auto; }
+.menu a { color: var(--tinta-2); font-size: 15.5px; font-weight: 500; transition: color .16s var(--curva); }
+.menu a:hover { color: var(--milk); }
+
+.acoes-topo { display: flex; align-items: center; gap: 10px; flex: none; }
+.acoes-topo .btn { min-height: 44px; padding: 11px 20px; font-size: 15px; }
+
+.hamburguer {
+  display: none; width: 44px; height: 44px; margin-left: auto;
+  align-items: center; justify-content: center;
+  background: transparent; border: 1px solid var(--linha-forte);
+  border-radius: 12px; color: var(--milk); cursor: pointer;
+}
+
+/* ---------------- herói ---------------- */
+
+.heroi { position: relative; padding: clamp(40px, 6vw, 76px) 0 var(--respiro); }
+.heroi::before {
+  content: ''; position: absolute; inset: -18% 0 auto 0; height: 760px; z-index: -1;
+  background:
+    radial-gradient(50% 42% at 76% 14%, rgba(95, 169, 155, .17), transparent 66%),
+    radial-gradient(44% 38% at 10% 2%, rgba(53, 85, 101, .32), transparent 70%);
+  pointer-events: none;
+}
+
+.heroi .env {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+  gap: clamp(30px, 5vw, 64px); align-items: center;
+}
+.heroi-texto { display: grid; gap: 24px; justify-items: start; }
+.heroi h1 em { font-style: normal; color: var(--teal); }
+.heroi-acoes { display: flex; flex-wrap: wrap; gap: 12px; }
+.heroi-tela { justify-self: center; width: min(100%, 380px); }
+.heroi-tela img { border-radius: 26px; }
+
+/* ---------------- barra de confiança ----------------
+   Três provas, no lugar onde o Pierre põe "100+ bancos". As dele
+   não cabem aqui: o OAZE não conecta banco e não é regulado pelo
+   Bacen. Estas são verdade hoje, e é isso que as torna úteis. */
+
+.provas { border-block: 1px solid var(--linha); }
+.provas .env {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px; padding: clamp(26px, 3.4vw, 40px) 0;
+}
+.prova { display: grid; gap: 5px; justify-items: center; text-align: center; }
+.prova strong {
+  font: 500 clamp(1.15rem, 2vw, 1.5rem)/1.1 var(--fonte-titulo);
+  text-transform: lowercase; color: var(--milk); letter-spacing: -.02em;
+}
+.prova span { font: 500 11px/1.4 var(--fonte-dado); text-transform: uppercase; letter-spacing: .15em; color: var(--tinta-2); }
+
+/* ---------------- seções ---------------- */
+
+.secao { padding: var(--respiro) 0; }
+.secao-topo { display: grid; gap: 14px; max-width: 54ch; margin-bottom: clamp(34px, 4.6vw, 62px); }
+.secao-topo p { color: var(--tinta-2); font-size: clamp(1rem, 1.3vw, 1.1rem); }
+
+/* Ação repetida ao fim de cada bloco, como no Pierre: a pessoa
+   decide no momento em que o argumento acabou de convencer. */
+.fecho { display: flex; justify-content: center; margin-top: clamp(36px, 5vw, 60px); }
+
+/* ---------------- recursos: 2×2, sem caixa ----------------
+   Os cartões do Pierre não têm borda nem fundo — é o ar entre eles
+   que separa. Caixa em volta de tudo é o que faz uma página parecer
+   um painel de administração. */
+
+.recursos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(36px, 4.6vw, 56px) 26px; }
+.recurso { display: grid; gap: 14px; align-content: start; }
+/* A COCO NO LUGAR DO LADRILHO DE ÍCONE
+   A primeira versão punha um quadrado de 46px com um ícone genérico
+   acima de cada título — o cartão de recurso que qualquer produto
+   poderia ter. A Coco existe e faz exatamente estas quatro coisas;
+   mostrá-la fazendo diz mais e é só do OAZE. A mancha por trás é o
+   único lugar onde o tangerina aparece, e ele chega por ela. */
+.recurso-coco {
+  position: relative; width: 132px; height: 132px; margin: 0 0 2px;
+}
+.recurso-coco img { width: 100%; height: 100%; object-fit: contain; }
+.recurso-coco::before {
+  content: ''; position: absolute; inset: 12% 6% 4% 6%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(95, 169, 155, .26), rgba(233, 135, 94, .08) 54%, transparent 72%);
+  filter: blur(18px);
+}
+.recurso p { color: var(--tinta-2); font-size: 15.5px; max-width: 42ch; }
+
+/* ---------------- garantias ----------------
+   Segurança não é recurso: são afirmações. Sem ícone e sem caixa —
+   um fio em cima de cada uma, que é o que o olho precisa para saber
+   onde uma termina e a outra começa. */
+.garantias { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 3.6vw, 44px) 26px; }
+.garantia { display: grid; gap: 10px; align-content: start; padding-top: 20px; border-top: 1px solid var(--linha-forte); }
+.garantia p { color: var(--tinta-2); font-size: 15.5px; max-width: 42ch; }
+
+/* ---------------- blocos alternados ---------------- */
+
+.bloco { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(30px, 5vw, 60px); align-items: center; }
+.bloco + .bloco { margin-top: var(--respiro); }
+.bloco-texto { display: grid; gap: 20px; justify-items: start; align-content: center; }
+.bloco-texto p { color: var(--tinta-2); font-size: clamp(1rem, 1.3vw, 1.08rem); max-width: 44ch; }
+.bloco-tela img { border-radius: 24px; }
+.bloco.invertido .bloco-tela { order: -1; }
+
+.lista-limpa { margin: 0; padding: 0; list-style: none; display: grid; gap: 11px; }
+.lista-limpa li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 11px; color: var(--tinta-2); font-size: 15.5px; }
+.lista-limpa svg { width: 20px; height: 20px; color: var(--teal); margin-top: 2px; }
+.lista-limpa strong { color: var(--milk); font-weight: 600; }
+
+/* ---------------- a Coco ---------------- */
+
+.coco-retrato { position: relative; justify-self: center; width: min(100%, 340px); }
+.coco-retrato::before {
+  content: ''; position: absolute; inset: 10% 4% 2% 4%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(95, 169, 155, .3), rgba(233, 135, 94, .1) 52%, transparent 72%);
+  filter: blur(24px);
+}
+/* A fala da Coco no formato do app: balão claro, tinta escura. */
+/* `.bloco-texto p` pesa (0,2,0) e vencia um `.coco-fala` de (0,1,0):
+   a tinta secundária cinza caía sobre o creme do balão, 1,82:1.
+   O seletor precisa do contexto e do elemento para ganhar. */
+.bloco-texto p.coco-fala, .coco-fala {
+  padding: 18px 20px; background: var(--milk); color: var(--night);
+  border-radius: 18px 18px 18px 6px; font-size: 16px; line-height: 1.5; max-width: 46ch;
+}
+.coco-fala strong { font-weight: 600; }
+
+/* ---------------- planos ---------------- */
+
+.ciclo {
+  display: inline-flex; gap: 4px; padding: 5px; margin-bottom: 26px;
+  border: 1px solid var(--linha); border-radius: 999px; background: var(--sup);
+}
+.ciclo button {
+  min-height: 40px; padding: 9px 20px; border: 0; border-radius: 999px; cursor: pointer;
+  font: 600 14.5px/1 var(--fonte-corpo); color: var(--tinta-2); background: transparent;
+  transition: background-color .18s var(--curva), color .18s var(--curva);
+}
+.ciclo button[aria-pressed="true"] { background: var(--milk); color: var(--night); }
+/* Dentro do botão ATIVO o fundo vira creme, e o selo com tinta
+   creme por cima dele media 1,76:1. Ele herda a tinta do botão em
+   vez de fixar a sua. */
+.ciclo button[aria-pressed="true"] .economia {
+  /* Teal sólido, sem alfa: a mistura com o creme por baixo parava
+     em 4,33:1 para um texto de 11px. Sólido são 6,53:1. */
+  background: var(--teal);
+  color: var(--night);
+}
+.ciclo .economia {
+  margin-left: 7px; padding: 3px 7px; border-radius: 999px;
+  background: color-mix(in srgb, var(--teal) 24%, transparent);
+  font: 500 11px/1 var(--fonte-dado); color: var(--milk);
+}
+
+/* Três planos, não dois: o básico existe no catálogo e some da
+   página se a grade for de duas colunas. */
+.planos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+@media (max-width: 1000px) { .planos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.plano {
+  display: grid; align-content: start; gap: 6px;
+  padding: clamp(26px, 3vw, 36px);
+  background: var(--sup); border: 1px solid var(--linha); border-radius: 24px;
+}
+.plano.e-destaque {
+  background: linear-gradient(152deg, var(--sup-alta), var(--sup-baixa));
+  border-color: color-mix(in srgb, var(--teal) 42%, transparent);
+}
+.plano-cabeca { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.plano-selo {
+  padding: 5px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--teal) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--teal) 34%, transparent);
+  font: 500 11px/1 var(--fonte-dado); letter-spacing: .12em; text-transform: uppercase; color: var(--milk);
+}
+.preco-valor { font: 500 clamp(2.2rem, 4.2vw, 2.9rem)/1 var(--fonte-titulo); letter-spacing: -.03em; color: var(--milk); }
+.preco-ciclo { color: var(--tinta-2); font-size: 15px; }
+.preco-nota { margin-top: 10px; font-size: 13.5px; color: var(--tinta-2); }
+.plano .btn { margin-top: 20px; width: 100%; }
+.plano-lista { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.plano-lista li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; color: var(--tinta-2); font-size: 15.5px; }
+.plano-lista svg { width: 18px; height: 18px; color: var(--teal); margin-top: 3px; }
+.plano-teto { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--linha); font-size: 14px; color: var(--tinta-2); }
+
+/* ---------------- perguntas ---------------- */
+
+.perguntas { display: grid; gap: 0; max-width: 780px; }
+.pergunta { border-bottom: 1px solid var(--linha); }
+.pergunta summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 22px 0; cursor: pointer; list-style: none;
+  font: 500 clamp(1rem, 1.5vw, 1.12rem)/1.4 var(--fonte-corpo); color: var(--milk);
+}
+.pergunta summary::-webkit-details-marker { display: none; }
+.pergunta summary::after {
+  content: ''; flex: none; width: 11px; height: 11px;
+  border-right: 2px solid var(--tinta-2); border-bottom: 2px solid var(--tinta-2);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .22s var(--curva);
+}
+.pergunta[open] summary::after { transform: rotate(225deg) translateY(-2px); }
+.pergunta p { padding: 0 0 24px; color: var(--tinta-2); font-size: 16px; max-width: 68ch; }
+
+/* ---------------- chamada final ---------------- */
+
+.final { padding: var(--respiro) 0; border-top: 1px solid var(--linha); background: var(--sup-baixa); }
+.final .env { display: grid; gap: 22px; justify-items: center; text-align: center; }
+.final h2 { max-width: 16ch; }
+.final p { color: var(--tinta-2); max-width: 44ch; }
+/* Sem versal: 67 caracteres em caixa alta perdem a silhueta das
+   palavras e viram uma barra cinza. O mono e o tracking bastam
+   para marcar que é um selo, não um parágrafo. */
+.final-selo { font: 500 13px/1.6 var(--fonte-dado); letter-spacing: .04em; color: var(--tinta-2); }
+
+/* ---------------- rodapé ---------------- */
+
+.rodape { padding: clamp(40px, 6vw, 64px) 0 34px; border-top: 1px solid var(--linha); }
+.rodape-grade { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 30px; }
+.rodape h3 {
+  font-family: var(--fonte-dado); font-size: 12px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--tinta-2); margin-bottom: 14px;
+}
+.rodape ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+.rodape a { color: var(--milk); font-size: 15px; }
+.rodape a:hover { color: var(--teal); }
+.rodape-sobre { color: var(--tinta-2); font-size: 15px; max-width: 34ch; margin-top: 14px; }
+.rodape-fim {
+  display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center;
+  margin-top: 38px; padding-top: 22px; border-top: 1px solid var(--linha);
+  font-size: 14px; color: var(--tinta-2);
+}
+
+/* ---------------- revelar ao rolar ---------------- */
+
+.anima .revela { opacity: 0; transform: translateY(18px); }
+.anima .revela.visivel {
+  opacity: 1; transform: none;
+  transition: opacity .62s var(--curva), transform .62s var(--curva);
+}
+@media (prefers-reduced-motion: reduce) {
+  .anima .revela, .anima .revela.visivel { opacity: 1; transform: none; transition: none; }
+}
+
+/* =============================================================
+   VISIBILIDADE EM VÁRIAS MÍDIAS
+   Duas colunas viram uma; a quebra manual some; o menu do topo
+   passa a crescer em FLUXO, sem position:absolute — dois painéis
+   absolutos com deslocamento fixo se cruzam na primeira mudança de
+   altura, e foi exatamente o que aconteceu na versão anterior.
+   ============================================================= */
+
+@media (max-width: 900px) {
+  :root { --env: calc(100% - 36px); }
+  .heroi .env,
+  .recursos,
+  .garantias,
+  .bloco,
+  .planos,
+  .rodape-grade { grid-template-columns: minmax(0, 1fr); }
+  .bloco.invertido .bloco-tela { order: 0; }
+  .bloco-tela, .coco-retrato { max-width: 420px; margin-inline: auto; }
+  .provas .env { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .prova { grid-template-columns: auto; }
+  .menu, .acoes-topo { display: none; }
+  .hamburguer { display: inline-flex; }
+
+  .topo.aberto .env { flex-wrap: wrap; height: auto; padding-bottom: 16px; }
+  .topo.aberto .menu {
+    display: grid; gap: 2px; flex: 1 0 100%; order: 3;
+    margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--linha);
+  }
+  .topo.aberto .menu a { padding: 12px 4px; min-height: 44px; display: flex; align-items: center; }
+  .topo.aberto .acoes-topo { display: grid; gap: 8px; flex: 1 0 100%; order: 4; margin-top: 10px; }
+  .topo.aberto .acoes-topo .btn { width: 100%; min-height: 46px; }
+
+  /* 40px passa no ponteiro e não passa no polegar. */
+  .ciclo button { min-height: 44px; }
+}
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .rodape-grade { grid-template-columns: minmax(0, 1fr); }
+  .heroi-acoes .btn, .fecho .btn { width: 100%; }
+  .fecho { display: grid; }
+}
+
+/* =============================================================
+   MOTION
+   -------------------------------------------------------------
+   Quatro peças, e todas com a mesma regra: existem para provar
+   alguma coisa que uma imagem parada não prova. Nenhuma é enfeite,
+   e nenhuma se mexe embaixo de um texto que está sendo lido.
+
+   Tudo aqui morre em prefers-reduced-motion, no fim do arquivo.
+   ============================================================= */
+
+/* ---------------- o hello ----------------
+   Um traço só, escrito do começo ao fim, como no OAZE 1. Aqui ele é
+   menor e verde-água: lá era ouro sobre preto e tomava a tela
+   inteira; nesta página é uma saudação antes da manchete, e quem
+   manda é a manchete. */
+
+.hello-linha { margin: 0 0 -6px; }
+.hello { display: block; width: clamp(190px, 26vw, 300px); height: auto; overflow: visible; }
+.hello-traco {
+  fill: none; stroke: url(#hello-tinta);
+  stroke-width: 11; stroke-linecap: round; stroke-linejoin: round;
+  /* pathLength normaliza o traço no site.js: o tracejado deixa de
+     depender do comprimento real do caminho, que muda se alguém
+     redesenhar a letra. */
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+.anima .hello-traco { animation: escrever 2.1s var(--curva) .25s forwards; }
+@keyframes escrever { to { stroke-dashoffset: 0; } }
+
+/* ---------------- o palco do herói ---------------- */
+
+.heroi-palco { position: relative; justify-self: center; width: min(100%, 400px); }
+
+.heroi-tela {
+  position: relative; margin: 0 auto; width: min(100%, 380px);
+  aspect-ratio: 820 / 1728;
+}
+.heroi-tela .quadro {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border-radius: 26px; opacity: 0;
+  transition: opacity .6s var(--curva);
+}
+.heroi-tela .quadro.is-ativo { opacity: 1; }
+
+/* A COCO NÃO SOME AO ROLAR
+   Ela fica acenando enquanto o herói passa. Antes era um desenho
+   parado que o primeiro gesto de rolagem levava embora — a primeira
+   coisa que o produto tem de própria saía de cena antes de ser
+   vista. */
+.coco-acena {
+  position: absolute; left: -14%; bottom: -6%; width: 44%; margin: 0;
+  z-index: 2; pointer-events: none;
+  transform-origin: 62% 88%;
+}
+.coco-acena img { display: block; width: 100%; height: auto; }
+.coco-acena::before {
+  content: ''; position: absolute; inset: 14% 6% 2% 6%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(95, 169, 155, .3), rgba(233, 135, 94, .1) 55%, transparent 72%);
+  filter: blur(20px);
+}
+.anima .coco-acena { animation: acenar 2.6s ease-in-out infinite; }
+@keyframes acenar {
+  0%, 62%, 100% { transform: rotate(0deg); }
+  70% { transform: rotate(-7deg); }
+  78% { transform: rotate(5deg); }
+  86% { transform: rotate(-5deg); }
+  94% { transform: rotate(2deg); }
+}
+
+/* ---------------- os cartões entrando no OAZE ----------------
+   Rodapé do primeiro quadro, por baixo do texto, opacidade baixa. O
+   ciclo é longo de propósito: a 14% e quinze segundos por volta ele é
+   percebido sem disputar a leitura. */
+
+.fundindo {
+  position: absolute; left: 0; right: 0; bottom: 0; height: clamp(180px, 22vw, 280px);
+  z-index: -1; opacity: .14; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 38%, #000 76%, transparent);
+          mask-image: linear-gradient(to bottom, transparent, #000 38%, #000 76%, transparent);
+}
+.fundindo .carta {
+  position: absolute; left: 50%; top: 42%;
+  width: clamp(112px, 13vw, 168px); aspect-ratio: 1.585;
+  margin-left: calc(clamp(112px, 13vw, 168px) / -2);
+  border-radius: 12px; border: 1px solid rgba(240, 229, 207, .22);
+  transform: translate(var(--x), var(--y)) rotate(var(--r));
+}
+/* Mesma conta do app: matiz da marca, saturação e claridade do OAZE.
+   Aqui os valores são fixos porque o site não tem os bancos de
+   ninguém — é uma cena, não a carteira de uma pessoa. */
+.fundindo .itau   { background: linear-gradient(135deg, hsl(28 34% 72%), hsl(28 31% 60%)); }
+.fundindo .nubank { background: linear-gradient(135deg, hsl(276 34% 72%), hsl(276 31% 60%)); }
+.fundindo .inter  { background: linear-gradient(135deg, hsl(29 34% 72%), hsl(29 31% 60%)); }
+.fundindo .c6     { background: linear-gradient(135deg, hsl(202 16% 72%), hsl(202 15% 60%)); }
+.fundindo .bb     { background: linear-gradient(135deg, hsl(51 34% 72%), hsl(51 31% 60%)); }
+.fundindo .oaze {
+  background: linear-gradient(135deg, var(--teal), var(--mineral));
+  display: grid; place-items: center; opacity: 0;
+  border-color: rgba(240, 229, 207, .4);
+  --x: 0%; --y: 0%; --r: 0deg;
+}
+.fundindo .oaze b {
+  font: 500 clamp(13px, 1.5vw, 19px)/1 var(--fonte-titulo);
+  color: var(--night); letter-spacing: -.02em;
+}
+
+.fundindo .c1 { --x: -190%; --y: -52%; --r: -17deg; }
+.fundindo .c2 { --x: -88%;  --y: 34%;  --r: 9deg; }
+.fundindo .c3 { --x: 12%;   --y: -46%; --r: -6deg; }
+.fundindo .c4 { --x: 104%;  --y: 30%;  --r: 14deg; }
+.fundindo .c5 { --x: 196%;  --y: -30%; --r: -11deg; }
+
+/* Cada cartão sai do seu lugar e some no centro; o OAZE aparece
+   quando o último chega. Os atrasos são escalonados para a fusão ter
+   direção: os de fora entram por último. */
+.anima .fundindo .carta:not(.oaze) { animation: convergir 15s var(--curva) infinite; }
+.anima .fundindo .c1 { animation-delay: 0s; }
+.anima .fundindo .c2 { animation-delay: .5s; }
+.anima .fundindo .c3 { animation-delay: 1s; }
+.anima .fundindo .c4 { animation-delay: 1.5s; }
+.anima .fundindo .c5 { animation-delay: 2s; }
+.anima .fundindo .oaze { animation: virar-oaze 15s var(--curva) infinite; }
+
+@keyframes convergir {
+  0%, 12%   { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); opacity: 1; }
+  34%, 60%  { transform: translate(0, 0) rotate(0deg) scale(.92); opacity: 0; }
+  74%       { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); opacity: 0; }
+  86%, 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); opacity: 1; }
+}
+@keyframes virar-oaze {
+  0%, 26%   { opacity: 0; transform: translate(0, 0) scale(.86); }
+  38%, 58%  { opacity: 1; transform: translate(0, 0) scale(1); }
+  70%, 100% { opacity: 0; transform: translate(0, 0) scale(.86); }
+}
+
+/* ---------------- a cena dos aparelhos ----------------
+   O motion do OAZE 1, de volta. A rolagem alimenta --a (o notebook
+   abrindo) e --b (o celular chegando); o site.js só escreve os
+   números, quem desenha é o CSS. Parada, a cena fica na composição
+   final, com --a e --b valendo 1. */
+
+.cena {
+  position: relative; aspect-ratio: 4 / 3; --a: 1; --b: 1;
+}
+.cena-luz {
+  position: absolute; inset: 6% 0 12%; z-index: 0; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(95, 169, 155, .26), transparent 72%);
+  filter: blur(26px);
+}
+.cena .aparelho { position: absolute; }
+.cena .aparelho-tela { display: block; overflow: hidden; background: var(--night); }
+.cena .aparelho-tela img { display: block; width: 100%; height: auto; }
+
+.cena .notebook {
+  width: 84%; left: 8%; top: 14%;
+  opacity: var(--a);
+  transform: translateY(calc((1 - var(--a)) * 28px));
+}
+.cena .notebook-tampa {
+  position: relative; border: 1px solid var(--linha-forte); border-radius: 12px 12px 3px 3px;
+  background: #0A141C; padding: 9px 9px 7px;
+  transform-origin: 50% 100%;
+  /* fechada a 76 graus, aberta a zero: é o gesto de levantar a tampa. */
+  transform: perspective(1100px) rotateX(calc((1 - var(--a)) * 76deg));
+}
+.cena .notebook-camera {
+  position: absolute; left: 50%; top: 3px; width: 4px; height: 4px; margin-left: -2px;
+  border-radius: 50%; background: rgba(240, 229, 207, .3);
+}
+.cena .notebook-tampa .aparelho-tela { border-radius: 5px; }
+.cena .notebook-base {
+  display: block; height: 9px; margin: 0 -5%; border-radius: 0 0 9px 9px;
+  background: linear-gradient(#1A2C38, #0C1820);
+  border: 1px solid var(--linha-forte); border-top: 0;
+}
+
+.cena .celular {
+  width: 21%; right: 2%; bottom: 2%; z-index: 2;
+  opacity: var(--b);
+  transform: translateY(calc((1 - var(--b)) * 46px));
+}
+.cena .celular .aparelho-tela {
+  position: relative; border: 1px solid var(--linha-forte); border-radius: 18px; padding: 4px;
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, .85);
+}
+.cena .celular .aparelho-tela { aspect-ratio: 820 / 1728; }
+.cena .celular .quadro {
+  position: absolute; inset: 4px; width: auto; height: auto;
+  border-radius: 14px; opacity: 0;
+  transition: opacity .55s var(--curva);
+}
+.cena .celular .quadro.is-ativo { opacity: 1; }
+.cena .celular-ilha {
+  position: absolute; left: 50%; top: 9px; width: 26%; height: 5px; margin-left: -13%;
+  border-radius: 3px; background: #0A141C; z-index: 3;
+}
+
+@media (max-width: 860px) {
+  .heroi-palco { width: min(100%, 340px); }
+  .coco-acena { left: -8%; width: 38%; }
+  .cena { aspect-ratio: 5 / 4; }
+  .cena .celular { width: 26%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Parado, tudo fica no estado final: o hello escrito, a Coco de pé
+     com a pata levantada, a cena montada, e o fundo dos cartões sem
+     ciclo nenhum. */
+  .hello-traco { stroke-dashoffset: 0; }
+  .anima .hello-traco,
+  .anima .coco-acena,
+  .anima .fundindo .carta,
+  .anima .fundindo .oaze { animation: none; }
+  .fundindo .carta:not(.oaze) { opacity: 1; }
+  .fundindo .oaze { opacity: 0; }
+  .heroi-tela .quadro:not(.is-ativo), .cena .celular .quadro:not(.is-ativo) { opacity: 0; }
+  .cena { --a: 1; --b: 1; }
+}
+
+/* =============================================================
+   HERDADOS DO SITE NO AR
+   -------------------------------------------------------------
+   Duas peças que o JavaScript injeta e que não podiam sumir na
+   troca da página: o aviso de cookies (assets/js/cookies.js) e a
+   bandeira redonda de idioma (assets/js/idioma-esfera.js).
+
+   O CSS original delas vive em assets/css/site.css e é escrito
+   nos tokens do v1 — --ouro, --bruma, --raso, --borda-ouro. Aqui
+   nenhum desses existe, e o ouro saiu da marca na V2.1. Então elas
+   foram reescritas nos tokens desta página, e não portadas: CSS
+   apontando para variáveis inexistentes não quebra com erro, ele
+   simplesmente pinta de preto no preto e ninguém vê o aviso legal.
+   ============================================================= */
+
+/* ---------------- aviso de cookies ---------------- */
+
+.aviso-cookies {
+  position: fixed; z-index: 10000; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
+  width: min(760px, calc(100% - 28px)); transform: translateX(-50%);
+  display: flex; align-items: center; gap: 18px; padding: 16px 18px;
+  color: var(--milk); background: color-mix(in srgb, var(--sup) 96%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--linha-forte); border-radius: 14px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .5);
+}
+.aviso-cookies p { margin: 0; font-size: .88rem; line-height: 1.55; color: var(--tinta-2); }
+.aviso-cookies a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+.aviso-cookies a:hover { color: var(--milk); }
+.aviso-cookies-acoes { display: flex; flex: none; gap: 8px; }
+.aviso-cookies-botao {
+  min-height: 42px; padding: 8px 16px; border-radius: 999px;
+  border: 1px solid transparent;
+  font: 600 .82rem/1.15 var(--fonte-corpo); cursor: pointer;
+  transition: background-color .18s var(--curva), border-color .18s var(--curva);
+}
+/* Aceitar e recusar têm o MESMO peso visual. Um "recusar" apagado
+   ao lado de um "aceitar" cheio é escolha encenada, não oferecida. */
+.aviso-cookies-aceitar { color: var(--night); background: var(--milk); }
+.aviso-cookies-aceitar:hover { background: #FFF6E4; }
+.aviso-cookies-recusar { color: var(--milk); background: transparent; border-color: var(--linha-forte); }
+.aviso-cookies-recusar:hover { border-color: var(--milk); }
+.aviso-cookies-botao:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+@media (max-width: 620px) {
+  .aviso-cookies { align-items: stretch; flex-direction: column; gap: 12px; }
+  .aviso-cookies-acoes { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------------- a bandeira redonda ----------------
+   Ela se pendura sozinha em .topo .env, que já é fixo. Um elemento
+   solto em position:fixed acabaria por cima do "Começar grátis" em
+   alguma largura, e isso só se descobre depois de publicado. */
+
+.idioma-esfera { position: relative; flex: none; }
+
+.idioma-esfera-botao {
+  display: grid; place-items: center;
+  width: 38px; height: 38px; padding: 0;
+  border-radius: 50%; overflow: hidden; cursor: pointer;
+  background: var(--sup); border: 1px solid var(--linha-forte);
+  box-shadow: 0 2px 10px rgba(5, 15, 22, .45);
+  transition: transform .2s var(--curva), border-color .2s var(--curva);
+}
+.idioma-esfera-botao svg { width: 100%; height: 100%; display: block; }
+.idioma-esfera-botao:hover { transform: translateY(-1px); border-color: var(--teal); }
+.idioma-esfera-botao:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.idioma-esfera-painel {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 60;
+  min-width: 190px; padding: 6px;
+  background: var(--sup-alta); border: 1px solid var(--linha-forte);
+  border-radius: 14px; box-shadow: 0 18px 44px rgba(0, 0, 0, .55);
+  display: none;
+}
+.idioma-esfera.esta-aberta .idioma-esfera-painel { display: block; }
+
+.idioma-esfera-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 10px; border: 0; border-radius: 10px;
+  background: transparent; color: var(--milk);
+  font: 500 15px/1 var(--fonte-corpo); text-align: left; cursor: pointer;
+}
+.idioma-esfera-item:hover { background: rgba(240, 229, 207, .07); }
+.idioma-esfera-item svg { flex: none; border-radius: 50%; }
+.idioma-esfera-item.is-atual { color: var(--teal); }
+.idioma-esfera-item:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }

@@ -138,6 +138,12 @@
   "es": "Anual <span class=\"economia\">−16%</span>"
  },
  {
+  "pt": "Planos e preços",
+  "en": "Plans and pricing",
+  "fr": "Forfaits et tarifs",
+  "es": "Planes y precios"
+ },
+ {
   "pt": "Semente",
   "en": "Semente",
   "fr": "Semente",
@@ -190,6 +196,12 @@
   "en": "⟦s0⟧ History for the last 3 months",
   "fr": "⟦s0⟧ Historique des 3 derniers mois",
   "es": "⟦s0⟧ Historial de los últimos 3 meses"
+ },
+ {
+  "pt": "⟦s0⟧ Contas e cartões em dólar, euro e outras moedas",
+  "en": "⟦s0⟧ Accounts and cards in dollars, euros and other currencies",
+  "fr": "⟦s0⟧ Comptes et cartes en dollars, euros et autres devises",
+  "es": "⟦s0⟧ Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
   "pt": "⟦s0⟧ 10 consultas ao UGLEZ por mês",
@@ -268,18 +280,6 @@
   "en": "⟦s0⟧ Export to CSV and PDF, financial calendar",
   "fr": "⟦s0⟧ Export en CSV et PDF, calendrier financier",
   "es": "⟦s0⟧ Exportar en CSV y PDF, calendario financiero"
- },
- {
-  "pt": "⟦s0⟧ Cartões internacionais em dólar, euro e outras moedas",
-  "en": "⟦s0⟧ International cards in dollars, euros and other currencies",
-  "fr": "⟦s0⟧ Cartes internationales en dollars, euros et autres devises",
-  "es": "⟦s0⟧ Tarjetas internacionales en dólares, euros y otras monedas"
- },
- {
-  "pt": "⟦s0⟧ Contas e cartões em dólar, euro e outras moedas",
-  "en": "⟦s0⟧ Accounts and cards in dollars, euros and other currencies",
-  "fr": "⟦s0⟧ Comptes et cartes en dollars, euros et autres devises",
-  "es": "⟦s0⟧ Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
   "pt": "⟦s0⟧ 60 consultas ao UGLEZ por mês, com assistente flutuante",
@@ -768,27 +768,15 @@
   "es": "Hecho en Brasil · importes en reales brasileños (BRL)"
  },
  {
-  "pt": "suporte@oaze.site",
-  "en": "suporte@oaze.site",
-  "fr": "suporte@oaze.site",
-  "es": "suporte@oaze.site"
- },
- {
-  "pt": "Você está no plano ",
-  "en": "You're on the plan ",
-  "fr": "Vous êtes sur la formule ",
-  "es": "Estás en el plan "
- },
- {
   "pt": "Fale com a gente",
   "en": "Contact us",
   "fr": "Nous contacter",
   "es": "Habla con nosotros"
  },
  {
-  "pt": "Planos e preços",
-  "en": "Plans and pricing",
-  "fr": "Forfaits et tarifs",
-  "es": "Planes y precios"
+  "pt": "Você está no plano ",
+  "en": "You're on the plan ",
+  "fr": "Vous êtes sur la formule ",
+  "es": "Estás en el plan "
  }
 ]

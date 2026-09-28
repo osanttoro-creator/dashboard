@@ -53,7 +53,9 @@ const LINGUAS = ['en', 'fr', 'es'];
    carrega a própria tabela nas quatro línguas, porque desenha o
    controle que escolhe a língua — e precisa falar todas antes de
    qualquer dicionário ser carregado. */
-const FORA = new Set(['site.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'contato.js', 'idioma.js',
+/* v3.js e a folha de rosto do site, nao do app: quem traduz a
+   pagina publica e gen-idiomas.js, gerando /en, /fr e /es. */
+const FORA = new Set(['site.js', 'v3.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'contato.js', 'idioma.js',
   'idioma-esfera.js',
   'supabase-config.js', 'icons.js', 'uglez-particulas.js', 'uglez-erosao.js', 'uglez-neon.js']);
 
