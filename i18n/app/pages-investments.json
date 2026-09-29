@@ -1,10 +1,10 @@
 [
  {
-  "pt": "Ainda sem aportes. O UGLEZ pode calcular um começo que respeite o seu mês.",
+  "pt": "Ainda sem aportes. A Coco pode calcular um começo que respeite o seu mês.",
   "tipo": "exato",
-  "en": "No contributions yet. UGLEZ can work out a start that fits your month.",
-  "fr": "Pas encore de versements. UGLEZ peut calculer un début qui respecte votre mois.",
-  "es": "Todavía sin aportes. UGLEZ puede calcular un comienzo que respete tu mes."
+  "en": "No contributions yet. Coco can work out a starting point that fits your month.",
+  "fr": "Aucun apport pour l’instant. Coco peut calculer un point de départ adapté à votre mois.",
+  "es": "Aún no hay aportes. Coco puede calcular un punto de partida que se ajuste a tu mes."
  },
  {
   "pt": "{0} tipo{1} · {2} hoje ·",

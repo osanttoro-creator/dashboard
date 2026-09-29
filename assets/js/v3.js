@@ -115,14 +115,7 @@
 
   var querMenos = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------------------------------------------------------------
-     1 · o hello
-     ---------------------------------------------------------------
-     pathLength = 1 normaliza o caminho: o dasharray do CSS deixa de
-     depender do comprimento real da letra. Sem isso, redesenhar o
-     traço quebra a escrita, e o defeito só aparece na animação. */
-  var traco = document.querySelector('.hello-traco');
-  if (traco) traco.setAttribute('pathLength', '1');
+  /* O hello passou a ser escrito pela lente, no fim deste arquivo. */
 
   if (querMenos) return;
 
@@ -212,4 +205,102 @@
   desenhar();
 
   revezar(cena.querySelector('.celular'), 2800);
+})();
+
+/* =============================================================
+   A LENTE
+   -------------------------------------------------------------
+   Duas coisas, e só: escrever o hello e converter a rolagem em raio.
+   Quem desenha é o CSS.
+   ============================================================= */
+(function () {
+  'use strict';
+
+  var lente = document.querySelector('[data-lente]');
+  if (!lente) return;
+
+  var palco = lente.querySelector('.lente-palco');
+  var saudacao = lente.querySelector('.lente-saudacao');
+  var traco = lente.querySelector('.lente-saudacao .hello-traco');
+  var menos = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (menos) return;
+
+  /* Avisa o CSS que há script vivo. Sem este aviso a cortina se
+     recolhe sozinha em 4 s — uma tela preta presa por um script que
+     não carregou deixaria o site inacessível. */
+  document.documentElement.classList.add('lente-viva');
+
+  /* ---- 1 · o hello, escrito à mão ----
+     Usa o comprimento REAL do caminho, e não pathLength="1": o Safari
+     levou anos para respeitar pathLength no tracejado, e sem isso o
+     hello viraria uma linha pontilhada. O tracejado entra antes da
+     primeira pintura, então o traço não pisca inteiro e some. */
+  if (traco && traco.getTotalLength) {
+    var comprimento = traco.getTotalLength();
+    traco.style.strokeDasharray = comprimento + ' ' + comprimento * 2;
+    traco.style.strokeDashoffset = String(comprimento);
+
+    var ATRASO = 320;
+    var DURACAO = 2400;
+    var inicio = null;
+
+    var escrever = function (agora) {
+      if (inicio === null) inicio = agora;
+      var t = Math.max(0, Math.min(1, (agora - inicio - ATRASO) / DURACAO));
+      /* ease-in-out: a caneta arranca devagar, corre no meio e pousa
+         devagar — o ritmo de quem escreve, não o de uma máquina. */
+      var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      traco.style.strokeDashoffset = (comprimento * (1 - e)).toFixed(2);
+      if (t < 1) requestAnimationFrame(escrever);
+      else if (saudacao) saudacao.classList.add('escrito');
+    };
+    requestAnimationFrame(escrever);
+  } else if (saudacao) {
+    saudacao.classList.add('escrito');
+  }
+
+  /* ---- 2 · a rolagem vira raio ---- */
+  var pendente = false;
+
+  var desenhar = function () {
+    pendente = false;
+    var curso = Math.max(1, lente.offsetHeight - window.innerHeight);
+    var andado = window.scrollY - lente.offsetTop;
+    var p = Math.max(0, Math.min(1, andado / curso));
+    var suave = 1 - Math.pow(1 - p, 4);
+    /* 1.5x a maior dimensão: o furo precisa passar dos cantos, senão
+       sobra uma moldura preta quando a abertura termina. */
+    var raio = Math.max(window.innerWidth, window.innerHeight) * 1.5 * suave;
+
+    /* O hello some nos primeiros 12% da rolagem. Com mais que isso a
+       lente — que abre rápido no começo — já mostraria a página
+       enquanto ainda sobra um pedaço dele na tela. A máscara garante
+       que ele nunca fica POR CIMA; este prazo curto garante que ele
+       nem divide a tela com ela. */
+    var passagem = Math.min(1, p / 0.12);
+
+    palco.style.setProperty('--lente-raio', raio.toFixed(1) + 'px');
+    palco.style.setProperty('--lente-progresso', suave.toFixed(4));
+    palco.style.setProperty('--hello-opacidade', (1 - passagem).toFixed(3));
+    palco.style.setProperty('--hello-escala', (1 + passagem * 0.16).toFixed(4));
+  };
+
+  var pedir = function () {
+    if (pendente) return;
+    pendente = true;
+    requestAnimationFrame(desenhar);
+  };
+
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', pedir);
+
+  /* Alguém que chega pelo teclado e tabula para dentro do herói não
+     pode ficar preso atrás da cortina. */
+  lente.addEventListener('focusin', function () {
+    palco.style.setProperty('--lente-raio', '220vmax');
+    palco.style.setProperty('--hello-opacidade', '0');
+  });
+
+  desenhar();
 })();

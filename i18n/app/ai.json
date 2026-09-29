@@ -124,11 +124,11 @@
   "es": "Registra la cuenta antes de revisar este movimiento."
  },
  {
-  "pt": "Lançamento preparado pelo UGLEZ",
+  "pt": "Lançamento preparado pela Coco",
   "tipo": "exato",
-  "en": "Entry prepared by UGLEZ",
-  "fr": "Écriture préparée par UGLEZ",
-  "es": "Movimiento preparado por UGLEZ"
+  "en": "Entry prepared by Coco",
+  "fr": "Opération préparée par Coco",
+  "es": "Movimiento preparado por Coco"
  },
  {
   "pt": "Receita preparada",
@@ -335,11 +335,11 @@
   "ignorar": true
  },
  {
-  "pt": "O UGLEZ precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.",
+  "pt": "A Coco precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.",
   "tipo": "exato",
-  "en": "UGLEZ needs your account to work. It's not a sales lock: it's how the server knows whose usage limit it is and which data the question refers to.",
-  "fr": "UGLEZ a besoin de votre compte pour fonctionner. Ce n'est pas un verrou commercial : c'est ainsi que le serveur sait à qui appartient la limite d'usage et à quelles données la question se rapporte.",
-  "es": "UGLEZ necesita tu cuenta para funcionar. No es un bloqueo comercial: así el servidor sabe de quién es el límite de uso y a qué datos se refiere la pregunta."
+  "en": "Coco needs your account to work. This is not a sales lock: it lets the server check your usage limit and which data your question refers to.",
+  "fr": "Coco a besoin de votre compte pour fonctionner. Ce n’est pas une restriction commerciale : le serveur peut ainsi vérifier votre limite d’utilisation et les données concernées par votre question.",
+  "es": "Coco necesita tu cuenta para funcionar. No es una restricción comercial: así el servidor verifica tu límite de uso y a qué datos se refiere tu pregunta."
  },
  {
   "pt": "O assistente ainda não está configurado neste ambiente.",
@@ -370,11 +370,11 @@
   "es": "(tu pregunta)"
  },
  {
-  "pt": "O que a UGLEZ recebe",
+  "pt": "O que a Coco recebe",
   "tipo": "exato",
-  "en": "What UGLEZ receives",
-  "fr": "Ce que reçoit UGLEZ",
-  "es": "Lo que recibe UGLEZ"
+  "en": "What Coco receives",
+  "fr": "Ce que Coco reçoit",
+  "es": "Lo que recibe Coco"
  },
  {
   "pt": "Ao perguntar, sai daqui um resumo agregado — e só ele:",

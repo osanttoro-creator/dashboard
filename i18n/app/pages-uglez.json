@@ -713,11 +713,11 @@
   "es": "Sin lecturas para este mes"
  },
  {
-  "pt": "Lance receitas e despesas para o UGLEZ ter o que analisar.",
+  "pt": "Lance receitas e despesas para a Coco ter o que analisar.",
   "tipo": "exato",
-  "en": "Record income and expenses so UGLEZ has something to analyze.",
-  "fr": "Saisissez revenus et dépenses pour que UGLEZ ait de quoi analyser.",
-  "es": "Registra ingresos y gastos para que UGLEZ tenga qué analizar."
+  "en": "Add income and expenses so Coco has something to analyze.",
+  "fr": "Ajoutez des revenus et des dépenses pour que Coco ait des données à analyser.",
+  "es": "Registra ingresos y gastos para que Coco tenga datos que analizar."
  },
  {
   "pt": "Oportunidade",

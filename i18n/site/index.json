@@ -102,12 +102,6 @@
   "es": "Empezar gratis"
  },
  {
-  "pt": "hello",
-  "en": "hello",
-  "fr": "hello",
-  "es": "hello"
- },
- {
   "pt": "a coco organiza <br class=\"quebra\">seu dinheiro. <br class=\"quebra\"><em>você confirma.</em>",
   "en": "coco organises <br class=\"quebra\">your money. <br class=\"quebra\"><em>you confirm.</em>",
   "fr": "coco organise <br class=\"quebra\">votre argent. <br class=\"quebra\"><em>vous confirmez.</em>",
@@ -136,6 +130,18 @@
   "en": "oaze",
   "fr": "oaze",
   "es": "oaze"
+ },
+ {
+  "pt": "hello",
+  "en": "hello",
+  "fr": "hello",
+  "es": "hello"
+ },
+ {
+  "pt": "⟦s0⟧ role para revelar",
+  "en": "⟦s0⟧ scroll to reveal",
+  "fr": "⟦s0⟧ faites défiler pour révéler",
+  "es": "⟦s0⟧ desliza para revelar"
  },
  {
   "pt": "O que o OAZE garante",

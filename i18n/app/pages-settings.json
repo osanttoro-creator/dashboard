@@ -159,11 +159,11 @@
   "es": "Consumo del plan"
  },
  {
-  "pt": "A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.",
+  "pt": "A cota da Coco reinicia todo dia 1º, no horário de Brasília.",
   "tipo": "exato",
-  "en": "The UGLEZ quota resets on the 1st of every month, Brasília time.",
-  "fr": "Le quota UGLEZ se réinitialise le 1er de chaque mois, heure de Brasília.",
-  "es": "La cuota de UGLEZ se reinicia cada día 1, en horario de Brasilia."
+  "en": "Coco’s quota resets on the 1st of each month, Brasília time.",
+  "fr": "Le quota de Coco est réinitialisé le 1er de chaque mois, heure de Brasília.",
+  "es": "La cuota de Coco se restablece el día 1 de cada mes, hora de Brasilia."
  },
  {
   "pt": "O que está bloqueado agora, o que cada teto impede e onde abrir espaço.",
@@ -341,11 +341,11 @@
   "es": "Sin cuenta en este dispositivo"
  },
  {
-  "pt": "O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar o UGLEZ.",
+  "pt": "O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar a Coco.",
   "tipo": "exato",
-  "en": "The dashboard works anyway. An account lets you see the same data on your computer and phone, and use UGLEZ.",
-  "fr": "Le tableau de bord fonctionne quand même. Un compte sert à voir les mêmes données sur l'ordinateur et le téléphone, et à utiliser UGLEZ.",
-  "es": "El panel funciona igual. Una cuenta sirve para ver los mismos datos en la computadora y el celular, y para usar UGLEZ."
+  "en": "The dashboard works without an account. Sign in to see the same data on your computer and phone, and to use Coco.",
+  "fr": "Le tableau de bord fonctionne sans compte. Connectez-vous pour retrouver les mêmes données sur ordinateur et téléphone, et pour utiliser Coco.",
+  "es": "El panel funciona sin una cuenta. Inicia sesión para ver los mismos datos en la computadora y el móvil, y para usar Coco."
  },
  {
   "pt": "Entrar ou criar conta",

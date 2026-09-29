@@ -239,7 +239,7 @@
       caixa
     ]);
     box.appendChild(linha('Consumo do plano',
-      'A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.', detalhes));
+      'A cota da Coco reinicia todo dia 1º, no horário de Brasília.', detalhes));
 
     /* As barras acima dizem quanto foi usado. A tela de limites diz
        o que ACONTECE quando uma delas enche — e é para lá que os
@@ -358,7 +358,7 @@
     if (!u) {
       box.appendChild(linha(
         'Sem conta neste aparelho',
-        'O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar o UGLEZ.',
+        'O painel funciona assim mesmo. Uma conta serve para ver os mesmos dados no computador e no celular, e para usar a Coco.',
         el('button', { class: 'btn btn-primary btn-sm', text: 'Entrar ou criar conta', onclick: () => Sync.signIn() })
       ));
       return;

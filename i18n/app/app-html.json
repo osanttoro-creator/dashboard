@@ -54,13 +54,6 @@
   "es": "Principal"
  },
  {
-  "pt": "Visão geral",
-  "tipo": "exato",
-  "en": "Overview",
-  "fr": "Vue d'ensemble",
-  "es": "Resumen general"
- },
- {
   "pt": "Início",
   "tipo": "exato",
   "en": "Home",
@@ -68,18 +61,11 @@
   "es": "Inicio"
  },
  {
-  "pt": "Financeiro",
+  "pt": "Lançamentos",
   "tipo": "exato",
-  "en": "Finances",
-  "fr": "Finances",
-  "es": "Finanzas"
- },
- {
-  "pt": "Contas e cartões",
-  "tipo": "exato",
-  "en": "Accounts and cards",
-  "fr": "Comptes et cartes",
-  "es": "Cuentas y tarjetas"
+  "en": "Entries",
+  "fr": "Écritures",
+  "es": "Movimientos"
  },
  {
   "pt": "Carteira",
@@ -180,9 +166,11 @@
   "es": "Sistema"
  },
  {
-  "pt": "UGLEZ",
+  "pt": "Coco",
   "tipo": "exato",
-  "ignorar": true
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
   "pt": "Configurações",
@@ -199,18 +187,18 @@
   "es": "Config."
  },
  {
-  "pt": "Abrir todas as seções",
+  "pt": "Abrir mais seções",
   "tipo": "exato",
-  "en": "Open all sections",
-  "fr": "Ouvrir toutes les sections",
-  "es": "Abrir todas las secciones"
+  "en": "Open more sections",
+  "fr": "Ouvrir plus de sections",
+  "es": "Abrir más secciones"
  },
  {
-  "pt": "Menu",
+  "pt": "Mais",
   "tipo": "exato",
-  "en": "Menu",
-  "fr": "Menu",
-  "es": "Menú"
+  "en": "More",
+  "fr": "Plus",
+  "es": "Más"
  },
  {
   "pt": "Controles",
@@ -360,6 +348,48 @@
   "es": "Cuenta y sincronización"
  },
  {
+  "pt": "SEU DINHEIRO, NUM LUGAR SÓ",
+  "tipo": "exato",
+  "en": "YOUR MONEY, ALL IN ONE PLACE",
+  "fr": "VOTRE ARGENT, AU MÊME ENDROIT",
+  "es": "TU DINERO, EN UN SOLO LUGAR"
+ },
+ {
+  "pt": "Sua carteira",
+  "tipo": "exato",
+  "en": "Your wallet",
+  "fr": "Votre portefeuille",
+  "es": "Tu cartera"
+ },
+ {
+  "pt": "Abrir carteira →",
+  "tipo": "exato",
+  "en": "Open wallet →",
+  "fr": "Ouvrir le portefeuille →",
+  "es": "Abrir cartera →"
+ },
+ {
+  "pt": "VISÃO DO ANO",
+  "tipo": "exato",
+  "en": "YEAR AT A GLANCE",
+  "fr": "VUE DE L’ANNÉE",
+  "es": "VISTA DEL AÑO"
+ },
+ {
+  "pt": "Fluxo financeiro",
+  "tipo": "exato",
+  "en": "Cash flow",
+  "fr": "Flux financier",
+  "es": "Flujo financiero"
+ },
+ {
+  "pt": "Entradas, saídas e saldo de cada mês",
+  "tipo": "exato",
+  "en": "Income, spending and balance each month",
+  "fr": "Entrées, sorties et solde de chaque mois",
+  "es": "Ingresos, gastos y saldo de cada mes"
+ },
+ {
   "pt": "Saldo atual",
   "tipo": "exato",
   "en": "Current balance",
@@ -428,20 +458,6 @@
   "es": "Gastos de los últimos 7 días"
  },
  {
-  "pt": "Fluxo financeiro",
-  "tipo": "exato",
-  "en": "Cash flow",
-  "fr": "Flux financier",
-  "es": "Flujo financiero"
- },
- {
-  "pt": "Entradas, saídas e o saldo de cada mês",
-  "tipo": "exato",
-  "en": "Money in, money out and each month's balance",
-  "fr": "Entrées, sorties et le solde de chaque mois",
-  "es": "Entradas, salidas y el saldo de cada mes"
- },
- {
   "pt": "Analisando o mês…",
   "tipo": "exato",
   "en": "Analyzing the month…",
@@ -489,20 +505,6 @@
   "en": "Month summary",
   "fr": "Résumé du mois",
   "es": "Resumen del mes"
- },
- {
-  "pt": "Sua carteira",
-  "tipo": "exato",
-  "en": "Your wallet",
-  "fr": "Votre portefeuille",
-  "es": "Tu cartera"
- },
- {
-  "pt": "Gerenciar →",
-  "tipo": "exato",
-  "en": "Manage →",
-  "fr": "Gérer →",
-  "es": "Administrar →"
  },
  {
   "pt": "Movimentações recentes",
@@ -673,11 +675,11 @@
   "es": "Todos los tipos"
  },
  {
-  "pt": "UGLEZ na sua carteira",
+  "pt": "Coco na sua carteira",
   "tipo": "exato",
-  "en": "UGLEZ in your portfolio",
-  "fr": "UGLEZ dans votre portefeuille",
-  "es": "UGLEZ en tu cartera"
+  "en": "Coco in your portfolio",
+  "fr": "Coco dans votre portefeuille",
+  "es": "Coco en tu cartera"
  },
  {
   "pt": "Lendo aportes, distribuição e espaço do mês para investir.",
@@ -1324,11 +1326,11 @@
   "es": "Local"
  },
  {
-  "pt": "Mova o cursor sobre a formação para observar o campo de análise.",
+  "pt": "A Coco ajuda a ler os dados do período.",
   "tipo": "exato",
-  "en": "Move the cursor over the shape to watch the analysis field.",
-  "fr": "Passez le curseur sur la forme pour observer le champ d'analyse.",
-  "es": "Mueve el cursor sobre la forma para observar el campo de análisis."
+  "en": "Coco helps you read the data for this period.",
+  "fr": "Coco vous aide à comprendre les données de cette période.",
+  "es": "Coco te ayuda a entender los datos de este período."
  },
  {
   "pt": "Conversa",
@@ -1408,11 +1410,11 @@
   "es": "Mensajes de la conversación"
  },
  {
-  "pt": "Sua pergunta para a UGLEZ",
+  "pt": "Sua pergunta para a Coco",
   "tipo": "exato",
-  "en": "Your question for UGLEZ",
-  "fr": "Votre question pour UGLEZ",
-  "es": "Tu pregunta para UGLEZ"
+  "en": "Your question for Coco",
+  "fr": "Votre question pour Coco",
+  "es": "Tu pregunta para Coco"
  },
  {
   "pt": "Pergunte sobre o seu dinheiro…",
@@ -1429,11 +1431,11 @@
   "es": "Enviar pregunta"
  },
  {
-  "pt": "A UGLEZ pode errar. Orientação, não consultoria.",
+  "pt": "A Coco pode errar. Orientação, não consultoria.",
   "tipo": "exato",
-  "en": "UGLEZ can make mistakes. Guidance, not financial advice.",
-  "fr": "UGLEZ peut se tromper. Une orientation, pas un conseil financier.",
-  "es": "UGLEZ puede equivocarse. Orientación, no asesoría."
+  "en": "Coco can make mistakes. Guidance, not financial advice.",
+  "fr": "Coco peut se tromper. Des indications, pas un conseil financier.",
+  "es": "Coco puede equivocarse. Orientación, no asesoramiento financiero."
  },
  {
   "pt": "Dados usados",
@@ -1443,11 +1445,11 @@
   "es": "Datos usados"
  },
  {
-  "pt": "O que a UGLEZ lê",
+  "pt": "O que a Coco lê",
   "tipo": "exato",
-  "en": "What UGLEZ reads",
-  "fr": "Ce que lit UGLEZ",
-  "es": "Lo que lee UGLEZ"
+  "en": "What Coco reads",
+  "fr": "Ce que Coco lit",
+  "es": "Lo que lee Coco"
  },
  {
   "pt": "Fechar",
@@ -1457,11 +1459,11 @@
   "es": "Cerrar"
  },
  {
-  "pt": "O que a UGLEZ considera",
+  "pt": "O que a Coco considera",
   "tipo": "exato",
-  "en": "What UGLEZ takes into account",
-  "fr": "Ce que UGLEZ prend en compte",
-  "es": "Lo que UGLEZ tiene en cuenta"
+  "en": "What Coco considers",
+  "fr": "Ce que Coco prend en compte",
+  "es": "Lo que Coco tiene en cuenta"
  },
  {
   "pt": "Este mês",
@@ -1520,11 +1522,11 @@
   "es": "Elige el tamaño de tu OAZE"
  },
  {
-  "pt": "Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.",
+  "pt": "Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto a Coco analisa.",
   "tipo": "exato",
-  "en": "Every plan keeps your data the same way. What changes is how much fits and how much UGLEZ analyzes.",
-  "fr": "Toutes les formules conservent vos données de la même façon. Ce qui change, c'est ce qui tient dedans et ce que UGLEZ analyse.",
-  "es": "Todos los planes guardan tus datos de la misma forma. Lo que cambia es cuánto cabe y cuánto analiza UGLEZ."
+  "en": "All plans store your data the same way. What changes is the capacity and how much Coco can analyze.",
+  "fr": "Tous les forfaits conservent vos données de la même façon. Seules la capacité et l’étendue des analyses de Coco changent.",
+  "es": "Todos los planes guardan tus datos de la misma forma. Lo que cambia es la capacidad y cuánto puede analizar Coco."
  },
  {
   "pt": "Ciclo de cobrança",
@@ -1651,10 +1653,10 @@
   "es": "El año consolidado"
  },
  {
-  "pt": "Seu assistente",
+  "pt": "Sua assistente",
   "tipo": "exato",
   "en": "Your assistant",
-  "fr": "Votre assistant",
+  "fr": "Votre assistante",
   "es": "Tu asistente"
  },
  {

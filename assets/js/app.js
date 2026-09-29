@@ -23,16 +23,16 @@
   };
 
   const PAGES = {
-    home:         { title: 'Visão geral',   sub: () => U.smartCase(U.monthLabel(App.ym)),                    render: () => Home.render() },
-    transactions: { title: 'Financeiro',    sub: () => 'Receitas, despesas e transferências de ' + U.monthLabel(App.ym), render: () => Tx.render() },
-    accounts:     { title: 'Contas e cartões', sub: () => 'Carteira, faturas e limites',                       render: () => Acc.render() },
+    home:         { title: 'Início',         sub: () => U.smartCase(U.monthLabel(App.ym)),                    render: () => Home.render() },
+    transactions: { title: 'Lançamentos',   sub: () => 'Receitas, despesas e transferências de ' + U.monthLabel(App.ym), render: () => Tx.render() },
+    accounts:     { title: 'Carteira',      sub: () => 'Contas, cartões, faturas e limites',                 render: () => Acc.render() },
     budget:       { title: 'Orçamento',     sub: () => 'Limites de ' + U.monthLabel(App.ym),                 render: () => Bud.render() },
     goals:        { title: 'Metas',         sub: () => 'Onde você quer chegar',                              render: () => Goals.render() },
     recurring:    { title: 'Recorrências',  sub: () => 'O que se repete todo mês',                           render: () => Rec.render() },
     calendar:     { title: 'Calendário',    sub: () => 'Semana, mês e ano do seu dinheiro',                  render: () => Cal.render() },
     investments:  { title: 'Investimentos', sub: () => 'Carteira, evolução e projeções',                     render: () => Inv.render() },
     reports:      { title: 'Análises',      sub: () => 'Consolidado de ' + U.ymParts(App.ym).y,              render: () => Rep.render() },
-    uglez:        { title: 'UGLEZ',         sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
+    uglez:        { title: 'Coco',          sub: () => 'Leitura do seu dinheiro',                            render: () => Ug.render() },
     categories:   { title: 'Categorias',    sub: () => 'Organização e peso histórico',                       render: () => Cat.render() },
     settings:     { title: 'Configurações', sub: () => 'Perfil, aparência, dados e integrações',             render: () => Cfg.render() },
     precos:       { title: 'Planos',        sub: () => 'Escolha o tamanho do seu OAZE',                      render: () => Precos.render() },

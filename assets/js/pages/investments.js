@@ -34,7 +34,7 @@
     if (!resumo || !box) return;
 
     if (!lista.length) {
-      resumo.textContent = 'Ainda sem aportes. O UGLEZ pode calcular um começo que respeite o seu mês.';
+      resumo.textContent = 'Ainda sem aportes. A Coco pode calcular um começo que respeite o seu mês.';
     } else {
       const ganho = U.round2(valor - aportado);
       resumo.textContent = `${tipos.size} tipo${tipos.size === 1 ? '' : 's'} · ${U.fmtBRL(valor)} hoje · ` +

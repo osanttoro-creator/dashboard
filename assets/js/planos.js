@@ -366,7 +366,7 @@
     { chave: 'recurring_items',        rotulo: 'Recorrências',                   tipo: 'limite' },
     { chave: 'history_months',         rotulo: 'Histórico disponível',           tipo: 'meses' },
     { chave: 'ai_queries_per_month',   rotulo: 'Coconutz por mês',               tipo: 'limite' },
-    { chave: 'uglez_assistente_flutuante', rotulo: 'UGLEZ flutuante no app',     tipo: 'recurso' },
+    { chave: 'uglez_assistente_flutuante', rotulo: 'Coco flutuante no app',      tipo: 'recurso' },
     { chave: 'comparacao_mensal',      rotulo: 'Comparação entre meses',         tipo: 'recurso' },
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },
     { chave: 'analises_avancadas',     rotulo: 'Tendências, simulações e projeções', tipo: 'recurso' },
@@ -386,7 +386,7 @@
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
       'Contas e cartões em dólar, euro e outras moedas',
-      '10 consultas ao UGLEZ por mês, na página do UGLEZ'
+      '10 consultas à Coco por mês, na página da Coco'
     ],
     basic: [
       '10 contas e 10 cartões',
@@ -394,15 +394,15 @@
       '20 orçamentos, 10 metas e 30 recorrências',
       'Histórico de 24 meses e comparação entre meses',
       'Exportar em CSV e PDF, calendário financeiro',
-      '60 consultas ao UGLEZ por mês, com assistente flutuante'
+      '60 consultas à Coco por mês, com assistente flutuante'
     ],
     pro: [
       'Até 5 espaços financeiros e 50 contas',
       'Cartões e movimentações sem limite',
       '100 orçamentos, 50 metas e 150 recorrências',
       'Histórico completo e comparação anual',
-      'Tendências, simulações e projeções do UGLEZ',
-      '200 consultas ao UGLEZ por mês, com assistente flutuante',
+      'Tendências, simulações e projeções da Coco',
+      '200 consultas à Coco por mês, com assistente flutuante',
       'Acesso antecipado e atendimento prioritário'
     ]
   };
@@ -422,11 +422,11 @@
     },
     {
       p: 'Meus dados financeiros são enviados para a inteligência artificial?',
-      r: 'Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela do UGLEZ mostra o que segue junto antes de você enviar.'
+      r: 'Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela da Coco mostra o que segue junto antes de você enviar.'
     },
     {
       p: 'Preciso de conta para usar o OAZE?',
-      r: 'Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com o UGLEZ.'
+      r: 'Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com a Coco.'
     }
   ];
 

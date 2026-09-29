@@ -407,7 +407,7 @@
       });
     };
 
-    return el('section', { class: 'uglez-proposta', 'aria-label': 'Lançamento preparado pelo UGLEZ' }, [
+    return el('section', { class: 'uglez-proposta', 'aria-label': 'Lançamento preparado pela Coco' }, [
       el('div', { class: 'uglez-proposta-topo' }, [
         el('span', { class: 'uglez-proposta-sinal' }, [Icons.lucide('receipt-text', 16)]),
         el('div', {}, [
@@ -680,11 +680,11 @@
   /** Explica por que não dá para perguntar, e o que fazer. */
   AI.explicarIndisponivel = function (modo) {
     UI.openModal({
-      title: 'UGLEZ',
+      title: 'Coco',
       body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
         el('p', {
           text: modo.chave === 'sem-sessao'
-            ? 'O UGLEZ precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.'
+            ? 'A Coco precisa da sua conta para funcionar. Não é uma trava comercial: é assim que o servidor sabe de quem é o limite de uso e a quais dados a pergunta se refere.'
             : 'O assistente ainda não está configurado neste ambiente.'
         }),
         el('p', { style: { marginTop: '10px' }, text: 'A análise acontece no servidor. Nenhuma chave de IA existe neste navegador, e nenhuma pergunta sai daqui sem passar por ele.' })
@@ -702,7 +702,7 @@
   AI.mostrarDados = function () {
     const r = AI.corpoDaPergunta('(sua pergunta)');
     UI.openModal({
-      title: 'O que a UGLEZ recebe',
+      title: 'O que a Coco recebe',
       body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
         el('p', { text: 'Ao perguntar, sai daqui um resumo agregado — e só ele:' }),
         el('ul', { style: { marginTop: '8px', paddingLeft: '18px', listStyle: 'disc' } },

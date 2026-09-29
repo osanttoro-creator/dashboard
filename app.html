@@ -91,8 +91,9 @@
 <link rel="stylesheet" href="/assets/vendor/fonte.css">
 <link rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" href="/assets/css/prompts-ui.css">
+<link rel="stylesheet" href="/assets/css/app-vnext.css">
 </head>
-<body>
+<body class="app-vnext">
 
 <!-- tempestade de areia atravessando o fundo -->
 <!-- ambiente: o céu do oásis. Luz, nunca textura. -->
@@ -121,15 +122,15 @@
       <p class="nav-group">Principal</p>
       <button class="nav-item" data-page="home">
         <span class="nav-ico" data-ico="layout-dashboard"></span>
-        <span class="nav-long">Visão geral</span><span class="nav-short">Início</span>
+        <span class="nav-long">Início</span><span class="nav-short">Início</span>
       </button>
       <button class="nav-item" data-page="transactions">
         <span class="nav-ico" data-ico="arrow-left-right"></span>
-        <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+        <span class="nav-long">Lançamentos</span><span class="nav-short">Lançamentos</span>
       </button>
       <button class="nav-item" data-page="accounts">
         <span class="nav-ico" data-ico="wallet"></span>
-        <span class="nav-long">Contas e cartões</span><span class="nav-short">Carteira</span>
+        <span class="nav-long">Carteira</span><span class="nav-short">Carteira</span>
       </button>
 
       <p class="nav-group">Crescer</p>
@@ -165,9 +166,9 @@
       </button>
 
       <p class="nav-group">Sistema</p>
-      <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
-        <span class="nav-ico" data-ico="sparkles"></span>
-        <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+      <button class="nav-item is-uglez" data-page="uglez" title="Coco" aria-label="Coco">
+        <span class="nav-ico coco-nav-icon" aria-hidden="true"></span>
+        <span class="nav-long">Coco</span><span class="nav-short">Coco</span>
       </button>
       <button class="nav-item" data-page="settings">
         <span class="nav-ico" data-ico="settings"></span>
@@ -178,11 +179,11 @@
            cabem treze destinos: esta abre o resto do app numa folha
            que sobe da base, sem esconder nenhuma função. -->
       <button type="button" class="nav-menu-movel" id="btnMenuMovel"
-              aria-expanded="false" aria-controls="menuMovel" aria-label="Abrir todas as seções">
+              aria-expanded="false" aria-controls="menuMovel" aria-label="Abrir mais seções">
         <span class="nav-ico" aria-hidden="true">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>
         </span>
-        <span class="nav-short">Menu</span>
+        <span class="nav-short">Mais</span>
       </button>
     </nav>
 
@@ -211,13 +212,13 @@
       </button>
 
       <nav class="topnav-menu" id="topnavMenu" aria-label="Seções">
-        <button class="nav-item" data-page="home" title="Visão geral" aria-label="Visão geral">
+        <button class="nav-item" data-page="home" title="Início" aria-label="Início">
           <span class="nav-ico" data-ico="layout-dashboard"></span>
-          <span class="nav-long">Visão geral</span><span class="nav-short">Visão geral</span>
+          <span class="nav-long">Início</span><span class="nav-short">Início</span>
         </button>
-        <button class="nav-item" data-page="transactions" title="Financeiro" aria-label="Financeiro">
+        <button class="nav-item" data-page="transactions" title="Lançamentos" aria-label="Lançamentos">
           <span class="nav-ico" data-ico="arrow-left-right"></span>
-          <span class="nav-long">Financeiro</span><span class="nav-short">Financeiro</span>
+          <span class="nav-long">Lançamentos</span><span class="nav-short">Lançamentos</span>
         </button>
         <button class="nav-item" data-page="accounts" title="Carteira" aria-label="Carteira">
           <span class="nav-ico" data-ico="wallet"></span>
@@ -274,9 +275,9 @@
 
         <!-- O assistente vem imediatamente antes das configurações:
              primeiro o recurso, depois os ajustes do sistema. -->
-        <button class="nav-item is-uglez" data-page="uglez" title="UGLEZ" aria-label="UGLEZ">
-          <span class="nav-ico" data-ico="sparkles"></span>
-          <span class="nav-long">UGLEZ</span><span class="nav-short">UGLEZ</span>
+        <button class="nav-item is-uglez" data-page="uglez" title="Coco" aria-label="Coco">
+          <span class="nav-ico coco-nav-icon" aria-hidden="true"></span>
+          <span class="nav-long">Coco</span><span class="nav-short">Coco</span>
         </button>
         <button class="nav-item" data-page="settings" title="Configurações" aria-label="Configurações">
           <span class="nav-ico" data-ico="settings"></span>
@@ -351,7 +352,7 @@
       <div class="page-head">
         <div class="page-head-textos">
           <p class="page-hello">Olá, <span id="ownerName">visitante</span></p>
-          <h1 id="pageTitle">Visão geral</h1>
+          <h1 id="pageTitle">Início</h1>
           <p class="page-sub" id="pageSub"></p>
         </div>
 
@@ -396,6 +397,30 @@
            há lançamento nenhum: zeros e um score calculado sobre
            nada não são informação, são a aparência de defeito. -->
       <div id="homeVazia" hidden></div>
+
+      <div data-home-conteudo class="home-feature">
+        <section class="card home-wallet-card" aria-labelledby="homeWalletTitle">
+          <div class="card-head">
+            <div>
+              <p class="home-eyebrow">SEU DINHEIRO, NUM LUGAR SÓ</p>
+              <h2 id="homeWalletTitle">Sua carteira</h2>
+            </div>
+            <button class="btn btn-ghost btn-sm" data-goto="accounts">Abrir carteira →</button>
+          </div>
+          <div id="homeCards"></div>
+        </section>
+
+        <section class="card home-flow-card" aria-labelledby="homeFlowTitle">
+          <div class="card-head">
+            <div>
+              <p class="home-eyebrow">VISÃO DO ANO</p>
+              <h2 id="homeFlowTitle">Fluxo financeiro</h2>
+            </div>
+            <span class="card-note">Entradas, saídas e saldo de cada mês</span>
+          </div>
+          <div class="chart-box chart-box-xl"><canvas id="chartFlow"></canvas></div>
+        </section>
+      </div>
 
       <div data-home-conteudo class="grid grid-hero" id="homeConteudo">
         <!-- patrimônio líquido: o número que manda na página -->
@@ -483,21 +508,12 @@
         <div class="semana-barras" id="semanaBarras" role="img" aria-label=""></div>
       </section>
 
-      <!-- fluxo financeiro do ano -->
-      <div data-home-conteudo class="card">
-        <div class="card-head">
-          <h2 id="homeFlowTitle">Fluxo financeiro</h2>
-          <span class="card-note">Entradas, saídas e o saldo de cada mês</span>
-        </div>
-        <div class="chart-box chart-box-xl"><canvas id="chartFlow"></canvas></div>
-      </div>
-
-      <!-- UGLEZ: painel de leitura, não caixa de chat -->
+      <!-- Coco: leitura contextual com os dados reais do período. -->
       <section data-home-conteudo class="uglez-panel" aria-labelledby="uglezTitle">
         <div class="uglez-head">
-          <span class="uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
+          <span class="uglez-orb coco-portrait" aria-hidden="true"></span>
           <div class="uglez-read">
-            <p class="uglez-name" id="uglezTitle">UGLEZ</p>
+            <p class="uglez-name" id="uglezTitle">Coco</p>
             <p class="uglez-line" id="uglezInsight">Analisando o mês…</p>
             <p class="uglez-sub" id="uglezInsightSub"></p>
           </div>
@@ -528,22 +544,12 @@
         </div>
       </div>
 
-      <div data-home-conteudo class="grid grid-wide-right">
-        <div class="card">
-          <div class="card-head">
-            <h2>Resumo do mês</h2>
-            <span class="card-note" id="monthSummaryNote"></span>
-          </div>
-          <div id="monthSummary"></div>
+      <div data-home-conteudo class="card home-summary-card">
+        <div class="card-head">
+          <h2>Resumo do mês</h2>
+          <span class="card-note" id="monthSummaryNote"></span>
         </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2>Sua carteira</h2>
-            <button class="btn btn-ghost btn-sm" data-goto="accounts">Gerenciar →</button>
-          </div>
-          <div id="homeCards"></div>
-        </div>
+        <div id="monthSummary"></div>
       </div>
 
       <div data-home-conteudo class="card">
@@ -650,7 +656,7 @@
         <div class="inv-uglez-intro">
           <span class="inv-uglez-orb" aria-hidden="true"><span data-ico="sparkles"></span></span>
           <div>
-            <h2 id="invUglezTitle">UGLEZ na sua carteira</h2>
+            <h2 id="invUglezTitle">Coco na sua carteira</h2>
             <p id="invUglezResumo">Lendo aportes, distribuição e espaço do mês para investir.</p>
           </div>
         </div>
@@ -964,34 +970,19 @@
       </div>
     </section>
 
-    <!-- ─────────── UGLEZ ─────────── -->
-    <!-- ═══════════════ UGLEZ ═══════════════
-         Reorganizada: a página é UMA CONVERSA, e não um mural de
-         cartões. Antes o conteúdo principal era uma grade de quatro
-         "insights" e a caixa de perguntar vinha no fim, abaixo da
-         dobra — ou seja, a coisa que dá nome à página era a última
-         a aparecer.
-
-         Ordem agora: quem é (partículas + mês analisado) · a
-         conversa · o que perguntar · o campo · o que será
-         analisado. A leitura calculada localmente continua
-         existindo, mas depois da conversa e SÓ QUANDO HÁ DADO:
-         quatro cartões afirmando coisas sobre um mês vazio é o
-         defeito que o brief chama de "análise falsa".
-
-         O UGLEZ NÃO TEM MASCOTE. A identidade visual aqui é a
-         formação de partículas, desenhada em canvas. Nenhum rosto,
-         robô, personagem ou logotipo próprio. -->
+    <!-- Coco: a conversa e o contexto financeiro conservam os IDs
+         antigos para não interromper rotas, histórico ou integração. -->
     <section class="page uglez-page" data-page="uglez">
 
       <div class="uglez-stage">
         <section class="uglez-presenca" aria-labelledby="uglezNome">
           <div class="uglez-campo" id="uglezFormacao" aria-hidden="true"></div>
           <div class="uglez-presenca-sombra" aria-hidden="true"></div>
+          <img class="coco-stage-art" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="" aria-hidden="true">
 
           <div class="uglez-presenca-conteudo">
             <div class="uglez-identidade">
-              <h2 id="uglezNome">UGLEZ</h2>
+              <h2 id="uglezNome">Coco</h2>
               <p>Inteligência financeira que lê o contexto antes de responder.</p>
             </div>
 
@@ -1010,7 +1001,7 @@
               </div>
             </dl>
 
-            <p class="uglez-interacao">Mova o cursor sobre a formação para observar o campo de análise.</p>
+            <p class="uglez-interacao">A Coco ajuda a ler os dados do período.</p>
           </div>
         </section>
 
@@ -1023,7 +1014,7 @@
             <!-- A palavra só aparece no celular, onde ela é a única marca
                  da UGLEZ na tela. O título "Conversa" ao lado continua
                  nomeando a seção para quem usa leitor de tela. -->
-            <span class="uglez-marca" aria-hidden="true">UGLEZ</span>
+            <span class="uglez-marca" aria-hidden="true">Coco</span>
             <div class="uglez-console-id">
               <h3 id="uglezConversaTitulo">Conversa</h3>
               <p id="uglezPeriodo"></p>
@@ -1080,7 +1071,7 @@
             </button>
             <div class="uglez-caixa">
               <textarea class="uglez-campo-texto" id="aiQuestion" rows="1"
-                aria-label="Sua pergunta para a UGLEZ"
+                aria-label="Sua pergunta para a Coco"
                 placeholder="Pergunte sobre o seu dinheiro…"></textarea>
               <button type="button" class="uglez-enviar" id="btnAiAsk" aria-label="Enviar pergunta" data-icone="sim">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
@@ -1089,7 +1080,7 @@
             <p class="uglez-rodape">
               <span id="uglezMode"></span>
               <span class="dot-sep">·</span>
-              <span class="uglez-orientacao">A UGLEZ pode errar. Orientação, não consultoria.</span>
+              <span class="uglez-orientacao">A Coco pode errar. Orientação, não consultoria.</span>
               <button class="btn btn-ghost btn-sm" id="btnAiConfig">Dados usados</button>
             </p>
           </div>
@@ -1104,12 +1095,12 @@
             <div class="uglez-folha-painel" role="dialog" aria-modal="true" aria-labelledby="uglezFolhaTitulo">
               <span class="uglez-folha-alca" aria-hidden="true"></span>
               <div class="uglez-folha-topo">
-                <h3 id="uglezFolhaTitulo">O que a UGLEZ lê</h3>
+                <h3 id="uglezFolhaTitulo">O que a Coco lê</h3>
                 <button type="button" class="icon-btn" id="btnUglezFolhaFechar" aria-label="Fechar">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
               </div>
-              <div class="seg uglez-escopo-folha" id="uglezEscopoFolha" role="group" aria-label="O que a UGLEZ considera">
+              <div class="seg uglez-escopo-folha" id="uglezEscopoFolha" role="group" aria-label="O que a Coco considera">
                 <button type="button" data-escopo="mes">Este mês</button>
                 <button type="button" data-escopo="ano">O ano</button>
                 <button type="button" data-escopo="geral">Tudo</button>
@@ -1153,7 +1144,7 @@
 
       <div class="precos-topo">
         <h2 class="precos-titulo" id="precosTitulo">Escolha o tamanho do seu OAZE</h2>
-        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto o UGLEZ analisa.</p>
+        <p class="precos-sub">Todos os planos guardam seus dados do mesmo jeito. O que muda é quanto cabe e quanto a Coco analisa.</p>
 
         <div class="precos-ciclo" role="group" aria-label="Ciclo de cobrança">
           <button class="ciclo-btn is-active" data-ciclo="monthly" aria-pressed="true">Mensal</button>
@@ -1270,7 +1261,7 @@
 
     <p class="menu-movel-grupo">Sistema</p>
     <div class="menu-movel-grade">
-      <button class="nav-item is-uglez" data-page="uglez"><span class="nav-ico" data-ico="sparkles" data-ico-size="19"></span><span class="nav-long">UGLEZ</span><span class="menu-movel-desc">Seu assistente</span></button>
+      <button class="nav-item is-uglez" data-page="uglez"><span class="nav-ico coco-nav-icon" aria-hidden="true"></span><span class="nav-long">Coco</span><span class="menu-movel-desc">Sua assistente</span></button>
       <button class="nav-item" data-page="settings"><span class="nav-ico" data-ico="settings" data-ico-size="19"></span><span class="nav-long">Configurações</span><span class="menu-movel-desc">Conta e tema</span></button>
       <button class="nav-item" data-page="precos"><span class="nav-ico" data-ico="star" data-ico-size="19"></span><span class="nav-long">Planos</span><span class="menu-movel-desc">Seu plano</span></button>
       <button class="nav-item" data-page="limites"><span class="nav-ico" data-ico="percent" data-ico-size="19"></span><span class="nav-long">Limites</span><span class="menu-movel-desc">Quanto cabe</span></button>

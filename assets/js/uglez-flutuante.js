@@ -62,7 +62,7 @@
 
     campo = el('textarea', {
       class: 'input textarea-plain', id: 'uglezFlutCampo', rows: 2,
-      'aria-label': 'Sua pergunta para o UGLEZ',
+      'aria-label': 'Sua pergunta para a Coco',
       placeholder: 'Pergunte sobre o mês que você está vendo…'
     });
     campo.addEventListener('keydown', (ev) => {
@@ -82,15 +82,15 @@
 
     painel = el('div', {
       class: 'uglez-flut-painel', id: 'uglezFlutPainel', hidden: true,
-      role: 'dialog', 'aria-label': 'UGLEZ', 'aria-modal': 'false'
+      role: 'dialog', 'aria-label': 'Coco', 'aria-modal': 'false'
     }, [
       el('div', { class: 'uglez-flut-topo' }, [
         el('span', { class: 'uglez-flut-marca', id: 'uglezFlutMarca', 'aria-hidden': 'true' }),
         el('div', { class: 'uglez-flut-id' }, [
-          el('strong', { text: 'UGLEZ' })
+          el('strong', { text: 'Coco' })
         ]),
         el('button', {
-          class: 'icon-btn', type: 'button', 'aria-label': 'Fechar UGLEZ',
+          class: 'icon-btn', type: 'button', 'aria-label': 'Fechar Coco',
           text: '✕', onclick: () => F.fechar(true)
         })
       ]),
@@ -113,16 +113,16 @@
        tem texto alternativo possível. */
     botao = el('button', {
       class: 'uglez-flut-botao', id: 'uglezFlutBotao', type: 'button',
-      'aria-label': 'Abrir UGLEZ',
+      'aria-label': 'Abrir Coco',
       'aria-expanded': 'false',
       'aria-controls': 'uglezFlutPainel',
-      title: 'Abrir UGLEZ'
+      title: 'Abrir Coco'
     });
 
     /* Tooltip próprio além do title: o title do navegador demora
        ~1s e não aparece no foco por teclado. Quem chega aqui de Tab
        precisa ver o rótulo. */
-    const dica = el('span', { class: 'uglez-flut-dica', 'aria-hidden': 'true', text: 'Abrir UGLEZ' });
+    const dica = el('span', { class: 'uglez-flut-dica', 'aria-hidden': 'true', text: 'Abrir Coco' });
 
     raiz = el('div', { class: 'uglez-flut', id: 'uglezFlut' }, [painel, botao, dica]);
     document.body.appendChild(raiz);
@@ -137,10 +137,14 @@
 
     document.addEventListener('keydown', aoTeclar);
 
-    const celular = global.innerWidth < 768;
-    particulas = formacao(botao, qtdBotao(), celular ? 360 : 480);
-    particulasPainel = formacao(painel.querySelector('#uglezFlutMarca'), 18, 260);
-    neon = global.UglezNeon ? UglezNeon.montar(painel) : null;
+    // A identidade vNext usa a ilustração aprovada da Coco; não monta
+    // WebGL/canvas oculto atrás da imagem nem mantém um loop inútil.
+    if (!document.body.classList.contains('app-vnext')) {
+      const celular = global.innerWidth < 768;
+      particulas = formacao(botao, qtdBotao(), celular ? 360 : 480);
+      particulasPainel = formacao(painel.querySelector('#uglezFlutMarca'), 18, 260);
+      neon = global.UglezNeon ? UglezNeon.montar(painel) : null;
+    }
   }
 
   /**
@@ -181,8 +185,8 @@
        digitar do bottom sheet. Ver style.css, .uglez-flut. */
     document.body.classList.add('uglez-aberto');
     botao.setAttribute('aria-expanded', 'true');
-    botao.setAttribute('aria-label', 'Fechar UGLEZ');
-    botao.title = 'Fechar UGLEZ';
+    botao.setAttribute('aria-label', 'Fechar Coco');
+    botao.title = 'Fechar Coco';
     if (particulas) particulas.estado('repouso');
     /* O painel estava hidden até agora: a formação de dentro dele
        foi construída sem tamanho. O ResizeObserver já cobre isso,
@@ -213,8 +217,8 @@
     document.body.classList.remove('uglez-aberto');
     if (neon) neon.desligar();
     botao.setAttribute('aria-expanded', 'false');
-    botao.setAttribute('aria-label', 'Abrir UGLEZ');
-    botao.title = 'Abrir UGLEZ';
+    botao.setAttribute('aria-label', 'Abrir Coco');
+    botao.title = 'Abrir Coco';
     if (particulas) particulas.estado('repouso');
     if (devolveFoco) {
       /* De volta ao botão, não ao que tinha o foco antes: no

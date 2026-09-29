@@ -37,6 +37,7 @@
 
   function garantirFormacao() {
     if (formacao) return formacao;
+    if (document.body.classList.contains('app-vnext')) return null;
     if (noCelular()) return null;
     const caixa = document.getElementById('uglezFormacao');
     if (!caixa) return null;
@@ -502,7 +503,7 @@
     box.appendChild(el('div', { class: 'uglez-msg is-uglez' }, [
       el('span', { class: 'uglez-avatar', 'aria-hidden': 'true' }),
       el('div', { class: 'uglez-msg-corpo' }, numeros.concat([
-        el('span', { class: 'uglez-msg-nome', text: 'UGLEZ' }),
+        el('span', { class: 'uglez-msg-nome', text: 'Coco' }),
         caixa,
         acoes,
         seguir
@@ -945,7 +946,7 @@
       box.appendChild(el('div', { class: 'card empty-state' }, [
         el('span', { class: 'empty-ico' }, Icons.lucide('sparkles', 26)),
         el('p', { class: 'empty-title', text: 'Sem leituras para este mês' }),
-        el('p', { class: 'empty-sub', text: 'Lance receitas e despesas para o UGLEZ ter o que analisar.' })
+        el('p', { class: 'empty-sub', text: 'Lance receitas e despesas para a Coco ter o que analisar.' })
       ]));
       return;
     }

@@ -7,11 +7,11 @@
   "es": "Ingresos, gastos y transferencias de {0}"
  },
  {
-  "pt": "Carteira, faturas e limites",
+  "pt": "Contas, cartões, faturas e limites",
   "tipo": "exato",
-  "en": "Wallet, bills and limits",
-  "fr": "Portefeuille, relevés et plafonds",
-  "es": "Cartera, facturas y límites"
+  "en": "Accounts, cards, bills and limits",
+  "fr": "Comptes, cartes, factures et plafonds",
+  "es": "Cuentas, tarjetas, facturas y límites"
  },
  {
   "pt": "Limites de {0}",

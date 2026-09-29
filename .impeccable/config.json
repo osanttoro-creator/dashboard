@@ -189,6 +189,15 @@
         ],
         "createdAt": "2026-09-28T23:45:22.201Z",
         "reason": "Claude: tipografia do kit V2.1 da marca (Unbounded para titulos, Instrument Sans para texto, IBM Plex Mono para valores). Escolha de marca ja feita, nao decisao desta pagina. Limitado a index.html e app.html: as demais paginas seguem o sistema v1 do DESIGN.md, e a regra continua valendo la. DESIGN.md precisa ser reescrito quando a v3 for ao ar."
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "app.html"
+        ],
+        "createdAt": "2026-09-29T01:36:25.561Z",
+        "reason": "Claude: os tres casos acima de .05em fora de caixa alta sao (1) .cc-number, o numero gravado no plastico do cartao, onde o espacamento imita o digito em relevo e o texto tem 16 caracteres, e (2) .uglez-identidade h2, um titulo de 42 a 78px. Nenhum e texto corrido. Escopo limitado ao app.html: as demais paginas seguem cobertas pela regra."
       }
     ]
   }

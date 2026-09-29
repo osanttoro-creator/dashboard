@@ -92,11 +92,11 @@
   "es": "Coconutz por mes"
  },
  {
-  "pt": "UGLEZ flutuante no app",
+  "pt": "Coco flutuante no app",
   "tipo": "exato",
-  "en": "Floating UGLEZ in the app",
-  "fr": "UGLEZ flottant dans l'app",
-  "es": "UGLEZ flotante en la app"
+  "en": "Floating Coco assistant in the app",
+  "fr": "Assistante Coco flottante dans l’application",
+  "es": "Asistente Coco flotante en la app"
  },
  {
   "pt": "Comparação entre meses",
@@ -190,11 +190,11 @@
   "es": "Historial de los últimos 3 meses"
  },
  {
-  "pt": "10 consultas ao UGLEZ por mês, na página do UGLEZ",
+  "pt": "10 consultas à Coco por mês, na página da Coco",
   "tipo": "exato",
-  "en": "10 UGLEZ questions per month, on the UGLEZ page",
-  "fr": "10 questions à UGLEZ par mois, sur la page UGLEZ",
-  "es": "10 consultas a UGLEZ por mes, en la página de UGLEZ"
+  "en": "10 Coco questions per month, on Coco’s page",
+  "fr": "10 questions à Coco par mois, sur sa page",
+  "es": "10 consultas a Coco al mes, en su página"
  },
  {
   "pt": "10 contas e 10 cartões",
@@ -232,11 +232,11 @@
   "es": "Exportar en CSV y PDF, calendario financiero"
  },
  {
-  "pt": "60 consultas ao UGLEZ por mês, com assistente flutuante",
+  "pt": "60 consultas à Coco por mês, com assistente flutuante",
   "tipo": "exato",
-  "en": "60 UGLEZ questions per month, with the floating assistant",
-  "fr": "60 questions à UGLEZ par mois, avec l'assistant flottant",
-  "es": "60 consultas a UGLEZ por mes, con asistente flotante"
+  "en": "60 Coco questions per month, with the floating assistant",
+  "fr": "60 questions à Coco par mois, avec l’assistante flottante",
+  "es": "60 consultas a Coco al mes, con asistente flotante"
  },
  {
   "pt": "Até 5 espaços financeiros e 50 contas",
@@ -267,18 +267,18 @@
   "es": "Historial completo y comparación anual"
  },
  {
-  "pt": "Tendências, simulações e projeções do UGLEZ",
+  "pt": "Tendências, simulações e projeções da Coco",
   "tipo": "exato",
-  "en": "UGLEZ trends, simulations and projections",
-  "fr": "Tendances, simulations et projections d'UGLEZ",
-  "es": "Tendencias, simulaciones y proyecciones de UGLEZ"
+  "en": "Trends, simulations and projections from Coco",
+  "fr": "Tendances, simulations et projections de Coco",
+  "es": "Tendencias, simulaciones y proyecciones de Coco"
  },
  {
-  "pt": "200 consultas ao UGLEZ por mês, com assistente flutuante",
+  "pt": "200 consultas à Coco por mês, com assistente flutuante",
   "tipo": "exato",
-  "en": "200 UGLEZ questions per month, with the floating assistant",
-  "fr": "200 questions à UGLEZ par mois, avec l'assistant flottant",
-  "es": "200 consultas a UGLEZ por mes, con asistente flotante"
+  "en": "200 Coco questions per month, with the floating assistant",
+  "fr": "200 questions à Coco par mois, avec l’assistante flottante",
+  "es": "200 consultas a Coco al mes, con asistente flotante"
  },
  {
   "pt": "Acesso antecipado e atendimento prioritário",
@@ -337,11 +337,11 @@
   "es": "¿Mis datos financieros se envían a la inteligencia artificial?"
  },
  {
-  "pt": "Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela do UGLEZ mostra o que segue junto antes de você enviar.",
+  "pt": "Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela da Coco mostra o que segue junto antes de você enviar.",
   "tipo": "exato",
-  "en": "Only an aggregated summary of the month you're looking at — totals, combined categories and goals. Never the list of entries, account names or your email. The UGLEZ screen shows what goes along before you send.",
-  "fr": "Seulement un résumé agrégé du mois que vous regardez — totaux, catégories consolidées et objectifs. Jamais la liste des écritures, les noms de comptes ni votre e-mail. L'écran d'UGLEZ montre ce qui part avant l'envoi.",
-  "es": "Solo un resumen agregado del mes que estás mirando — totales, categorías consolidadas y metas. Nunca la lista de movimientos, nombres de cuentas ni tu correo. La pantalla de UGLEZ muestra lo que se envía antes de que lo mandes."
+  "en": "Only an aggregated summary of the month you’re viewing — totals, category summaries and goals. Never your entry list, account names or email. Coco’s screen shows what will be sent before you submit.",
+  "fr": "Seul un résumé agrégé du mois consulté est envoyé : totaux, catégories regroupées et objectifs. Jamais la liste des opérations, les noms de comptes ou votre e-mail. L’écran de Coco vous montre ce qui sera envoyé avant validation.",
+  "es": "Solo se envía un resumen agregado del mes que estás viendo: totales, categorías consolidadas y metas. Nunca la lista de movimientos, nombres de cuentas ni tu correo. La pantalla de Coco muestra qué se enviará antes de confirmar."
  },
  {
   "pt": "Preciso de conta para usar o OAZE?",
@@ -351,10 +351,10 @@
   "es": "¿Necesito una cuenta para usar OAZE?"
  },
  {
-  "pt": "Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com o UGLEZ.",
+  "pt": "Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com a Coco.",
   "tipo": "exato",
-  "en": "No. The dashboard works on this device without any account. An account lets you see the same data on your computer and phone, and talk to UGLEZ.",
-  "fr": "Non. Le tableau de bord fonctionne sur cet appareil sans aucun compte. Un compte sert à voir les mêmes données sur l'ordinateur et le téléphone, et à discuter avec UGLEZ.",
-  "es": "No. El panel funciona en este dispositivo sin ninguna cuenta. La cuenta sirve para ver los mismos datos en la computadora y el celular, y para conversar con UGLEZ."
+  "en": "No. The dashboard works on this device without an account. Sign in to see the same data on your computer and phone, and to talk with Coco.",
+  "fr": "Non. Le tableau de bord fonctionne sur cet appareil sans compte. Connectez-vous pour retrouver les mêmes données sur ordinateur et téléphone, et pour parler à Coco.",
+  "es": "No. El panel funciona en este dispositivo sin una cuenta. Inicia sesión para ver los mismos datos en la computadora y el móvil, y para hablar con Coco."
  }
 ]
