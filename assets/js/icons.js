@@ -314,68 +314,32 @@
    *                         o coqueiro ainda lê como coqueiro
    * @param {string} variante 'cor' (padrão) ou 'mono'
    */
+  /* A MARCA DEIXOU DE SER DESENHADA AQUI
+     -------------------------------------------------------------
+     Até a V2.1 a marca era um medalhão dourado com a copa do
+     coqueiro, montado path a path neste arquivo. Os três elementos
+     — medalhão, coqueiro e ouro — saíram da identidade, e um
+     logotipo redesenhado em código diverge do arquivo oficial no
+     dia seguinte ao redesenho.
+
+     Agora ela é o arquivo do kit, servido como imagem. A variante
+     mono existe para fundos onde o isologo colorido não lê. */
   Icons.oaze = function (px, variante) {
     const lado = px || 24;
-    const mono = variante === 'mono';
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 64 64');
-    svg.setAttribute('width', String(lado));
-    svg.setAttribute('height', String(lado));
-    /* Decorativo por padrão: a marca quase sempre acompanha o texto
-       "OAZE" ou vive num botão que já tem aria-label. Anunciá-la de
-       novo faria o leitor de tela dizer "OAZE OAZE". */
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('focusable', 'false');
-
-    const caminho = (d, fill) => {
-      const p = document.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      if (fill) p.setAttribute('fill', fill);
-      return p;
-    };
-    const circulo = (r, fill) => {
-      const c = document.createElementNS(NS, 'circle');
-      c.setAttribute('cx', '32'); c.setAttribute('cy', '32'); c.setAttribute('r', String(r));
-      c.setAttribute('fill', fill);
-      return c;
-    };
-
-    if (mono) {
-      const g = document.createElementNS(NS, 'g');
-      g.setAttribute('fill', 'currentColor');
-      g.appendChild(caminho(MARCA_ANEL_MONO));
-      MARCA_COPA.forEach((d) => g.appendChild(caminho(d)));
-      svg.appendChild(g);
-      return svg;
-    }
-
-    /* Cada instância precisa do próprio id de gradiente: dois SVGs
-       com o mesmo id fazem o segundo herdar o primeiro, e o segundo
-       some quando o primeiro sai do DOM. */
-    const id = 'oazeGold' + (++gradiente);
-    const defs = document.createElementNS(NS, 'defs');
-    const grad = document.createElementNS(NS, 'linearGradient');
-    grad.setAttribute('id', id);
-    grad.setAttribute('x1', '10'); grad.setAttribute('y1', '4');
-    grad.setAttribute('x2', '54'); grad.setAttribute('y2', '60');
-    grad.setAttribute('gradientUnits', 'userSpaceOnUse');
-    [['0', '#F0DA9B'], ['.45', '#D8B45E'], ['1', '#B8912F']].forEach(([off, cor]) => {
-      const s = document.createElementNS(NS, 'stop');
-      s.setAttribute('offset', off); s.setAttribute('stop-color', cor);
-      grad.appendChild(s);
-    });
-    defs.appendChild(grad);
-    svg.appendChild(defs);
-
-    const ouro = 'url(#' + id + ')';
-    svg.appendChild(circulo(31, ouro));
-    svg.appendChild(circulo(27.2, '#23394D'));
-    svg.appendChild(circulo(25.6, ouro));
-    const g = document.createElementNS(NS, 'g');
-    g.setAttribute('fill', '#23394D');
-    MARCA_COPA.forEach((d) => g.appendChild(caminho(d)));
-    svg.appendChild(g);
-    return svg;
+    const img = document.createElement('img');
+    img.src = variante === 'mono'
+      ? '/assets/brand/oaze-isologo-mono-milk.svg'
+      : '/assets/brand/oaze-isologo.svg';
+    img.width = lado;
+    img.height = lado;
+    img.alt = '';
+    /* Decorativa por padrão: a marca quase sempre acompanha a
+       palavra "OAZE" ou vive num botão que já tem aria-label.
+       Anunciá-la de novo faria o leitor de tela dizer "OAZE OAZE". */
+    img.setAttribute('aria-hidden', 'true');
+    img.setAttribute('decoding', 'async');
+    img.style.display = 'block';
+    return img;
   };
 
   /** Pinta todo elemento com data-oaze-mark. Chamado no boot. */
