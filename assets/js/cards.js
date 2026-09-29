@@ -126,12 +126,57 @@
   const TINTA_ESCURA = [16, 22, 28];
   const desenhos = {};
 
+  /* A COR DA MARCA, DOMADA
+     -------------------------------------------------------------
+     O plástico de verdade é berrante: #820AD1 do Nubank encostado
+     no #EC7000 do Itaú e no #F8D117 do Banco do Brasil transforma a
+     carteira num mosaico de logotipos alheios. Mas a cor é o
+     primeiro reconhecimento — você acha o seu cartão pela cor antes
+     de ler o nome —, então ela não pode simplesmente sair.
+
+     O que entra é só o MATIZ. Saturação e claridade passam a ser
+     fixas, na família pastel do OAZE: o roxo do Nubank vira lilás
+     empoeirado, o laranja do Itaú vira pêssego. Reconhecíveis de
+     relance, e nenhum deles gritando.
+
+     A CATEGORIA mexe na profundidade, não no matiz: débito mais
+     claro, crédito mais fundo. No mesmo banco, os dois deixam de se
+     confundir — que era o motivo de alguém querer pintar o cartão à
+     mão. A tinta continua sendo decidida por contraste medido, como
+     já era: pastel claro pede tinta escura. */
+  const PASTEL = {
+    debito:  { alto: 0.83, baixo: 0.72, sat: 0.34 },
+    credito: { alto: 0.72, baixo: 0.60, sat: 0.34 }
+  };
+
+  function matizSaturacao(hex) {
+    const c = hexRgb(hex);
+    if (!c) return null;
+    const [r, g, b] = c.map((v) => v / 255);
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+    if (!d) return [0, 0];
+    const h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    const l = (mx + mn) / 2;
+    return [h * 60, d / (1 - Math.abs(2 * l - 1))];
+  }
+
+  function hslHex(h, s, l) {
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = l - c / 2;
+    const [r, g, b] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x]
+      : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+    return paraHex([(r + m) * 255, (g + m) * 255, (b + m) * 255]);
+  }
+
   /** Desenho do cartão do banco, ou null quando o banco não é conhecido. */
-  Cards.bankDesign = function (bankName) {
+  Cards.bankDesign = function (bankName, categoria) {
     if (!bankName || U.norm(bankName) === 'outro' || !global.Icons || !Icons.bankKey) return null;
     const chave = Icons.bankKey(bankName);
     if (!chave) return null;
-    if (desenhos[chave]) return desenhos[chave];
+    const cat = categoria === 'debito' ? 'debito' : 'credito';
+    const cacheKey = chave + ':' + cat;
+    if (desenhos[cacheKey]) return desenhos[cacheKey];
 
     let a, b;
     if (PLASTICO[chave]) [a, b] = PLASTICO[chave];
@@ -144,10 +189,24 @@
       a = paraHex(fundo);
       b = paraHex(mistura(fundo, [0, 0, 0], 0.3));
     }
+    /* Daqui em diante a cor crua só serve como fonte do matiz. Uma
+       marca acromática (C6, XP) não ganha matiz inventado: fica no
+       azul mineral do OAZE, e quem separa as duas é o selo do banco
+       no canto do cartão. */
+    const hs = matizSaturacao(a);
+    if (hs) {
+      const faixa = PASTEL[cat];
+      const acromatica = hs[1] < 0.12;
+      const h = acromatica ? 202 : hs[0];
+      const s = acromatica ? 0.16 : faixa.sat;
+      a = hslHex(h, s, faixa.alto);
+      b = hslHex(h, s * 0.92, faixa.baixo);
+    }
+
     const meio = mistura(hexRgb(a), hexRgb(b), 0.5);
     const comPelicula = mistura(meio, [5, 15, 22], 0.18);
     const escura = contraste(TINTA_ESCURA, meio) > contraste([255, 255, 255], comPelicula) + 0.6;
-    return (desenhos[chave] = { key: 'banco:' + chave, name: bankName, a, b, tinta: escura ? 'escura' : 'clara' });
+    return (desenhos[cacheKey] = { key: 'banco:' + chave, name: bankName, a, b, tinta: escura ? 'escura' : 'clara' });
   };
 
   /* A tinta (clara ou escura) de uma cor da paleta. O cartão de banco
@@ -182,8 +241,8 @@
    *   4. um estável pelo id (sem sorteio, para o cartão não trocar de
    *      cor a cada render).
    */
-  Cards.gradientFor = function (card) {
-    const doBanco = Cards.bankDesign(card.bank);
+  Cards.gradientFor = function (card, categoria) {
+    const doBanco = Cards.bankDesign(card.bank, categoria);
     if (doBanco) return doBanco;
     const chosen = Cards.gradientByKey(card.gradient);
     if (chosen) return comTinta(chosen);
@@ -327,7 +386,7 @@
       title: card.name,
       sub: card.bank || 'Cartão de crédito',
       bank: card.bank || card.name,
-      grad: Cards.gradientFor(card),
+      grad: Cards.gradientFor(card, 'credito'),
       focused: o.focused,
       hint: `${card.name} · fatura de ${U.monthLabel(ref)}`,
       status: [
@@ -374,7 +433,7 @@
     const grad = Cards.gradientFor({
       id: acc.id, name: acc.name, bank: acc.bank,
       color: acc.color, gradient: acc.gradient
-    });
+    }, 'debito');
 
     return shell({
       kind: moeda ? 'Débito · ' + moeda : 'Débito',

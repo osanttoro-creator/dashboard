@@ -265,13 +265,17 @@
     const c = Limites.consumoIA();
     if (c.limite === null || c.limite === undefined) { alvo.hidden = true; return; }
     const resta = Math.max(0, c.limite - c.usado);
-    /* Com folga, a cota não é notícia. */
-    if (resta > 2) { alvo.hidden = true; return; }
+    /* O SALDO FICA À VISTA, SEMPRE
+       Antes ele só aparecia com dois coconutz ou menos — quem tinha
+       folga não via nada e descobria o teto quando ele chegava. É o
+       oposto do que as outras IAs fazem, e do que quem paga espera:
+       o saldo é informação de decisão, e serve ANTES de escrever a
+       pergunta, não depois de não poder mais fazê-la. */
     alvo.hidden = false;
     alvo.className = 'uglez-cota' + (resta === 0 ? ' is-esgotada' : resta <= 2 ? ' is-pouca' : '');
     alvo.textContent = resta === 0
-      ? 'Você usou as ' + c.limite + ' consultas do seu plano neste mês. Elas voltam no dia 1º.'
-      : resta + ' de ' + c.limite + ' consultas restantes neste mês.';
+      ? 'Você usou os ' + c.limite + ' coconutz do seu plano neste mês. Eles voltam no dia 1º.'
+      : resta + ' de ' + c.limite + ' coconutz neste mês.';
   };
 
   function perguntar() {

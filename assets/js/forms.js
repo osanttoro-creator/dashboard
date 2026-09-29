@@ -1115,7 +1115,64 @@
       { hint: 'Se escolher, o aporte sai do saldo da conta.' });
     const fNotes = field('Observações', input({ value: editing ? editing.notes : '' }), { span2: true });
 
-    const grid = el('div', { class: 'form-grid' }, [fName, fType, fAmount, fDate, fRate, fCurrent, fAccount, fNotes]);
+    /* OS JUROS APARECEM DENTRO DO APORTE
+       -------------------------------------------------------------
+       O formulário já pedia a taxa, mas ela só servia para estimar o
+       valor de HOJE. Quem registra um aporte quer saber a outra
+       coisa: quanto isso vira. A conta existia na página, num
+       simulador separado — longe do momento em que a pergunta
+       aparece, que é aqui, com o valor e a taxa já digitados.
+
+       Só aparece quando há valor e taxa: um "R$ 0,00 vira R$ 0,00"
+       não informa nada e ainda ocupa a altura do modal. */
+    const prazos = [[12, '1 ano'], [24, '2 anos'], [60, '5 anos'], [120, '10 anos']];
+    let prazo = 24;
+
+    const chips = el('div', { class: 'chips' }, prazos.map(([meses, rotulo]) =>
+      el('button', {
+        type: 'button', class: 'chip', text: rotulo,
+        'aria-pressed': meses === prazo ? 'true' : 'false',
+        onclick: (ev) => {
+          prazo = meses;
+          Array.prototype.forEach.call(chips.children, (b) => b.setAttribute('aria-pressed', 'false'));
+          ev.currentTarget.setAttribute('aria-pressed', 'true');
+          recalcular();
+        }
+      })));
+
+    const projVira = el('strong', { class: 'dado' });
+    const projJuros = el('strong', { class: 'dado' });
+    projJuros.classList.add('positivo');
+    const projLinha = el('p', { class: 'hint' });
+    const fProjecao = field('Quanto isso vira', el('div', {}, [
+      chips,
+      el('div', { class: 'proj-valores' }, [
+        el('span', {}, [el('small', { text: 'vira ' }), projVira]),
+        el('span', {}, [el('small', { text: 'de juros ' }), projJuros])
+      ]),
+      projLinha
+    ]), { span2: true });
+
+    function recalcular() {
+      const valor = U.parseMoney(fAmount._control.value) || 0;
+      const taxa = U.parseMoney(fRate._control.value) || 0;
+      if (valor <= 0 || taxa <= 0) {
+        fProjecao.hidden = true;
+        return;
+      }
+      fProjecao.hidden = false;
+      const linhas = Calc.projection(valor, 0, Calc.yearRateToMonth(taxa), prazo);
+      const fim = linhas[linhas.length - 1];
+      projVira.textContent = U.fmtBRL(fim.value);
+      projJuros.textContent = U.fmtBRL(fim.value - valor);
+      projLinha.textContent = 'Estimativa com juros compostos e a taxa acima parada. A taxa real muda, e o OAZE não promete rendimento.';
+    }
+
+    fAmount._control.addEventListener('input', recalcular);
+    fRate._control.addEventListener('input', recalcular);
+
+    const grid = el('div', { class: 'form-grid' }, [fName, fType, fAmount, fDate, fRate, fProjecao, fCurrent, fAccount, fNotes]);
+    recalcular();
 
     function submit() {
       clearErrors([fName, fAmount, fDate]);

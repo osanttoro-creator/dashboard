@@ -222,7 +222,7 @@
     /* --- consumo --- */
     const consumo = Limites.consumoIA();
     const caixa = el('div', { class: 'uso-caixa' }, [
-      Limites.barra('UGLEZ neste mês', consumo.usado, consumo.limite, 'consultas'),
+      Limites.barra('Coconutz neste mês', consumo.usado, consumo.limite, 'coconutz'),
       Limites.barra('Espaços financeiros', Limites.contar('workspaces'), Limites.limite('workspaces')),
       Limites.barra('Contas', Limites.contar('accounts'), Limites.limite('accounts')),
       Limites.barra('Cartões', Limites.contar('credit_cards'), Limites.limite('credit_cards')),
@@ -256,7 +256,7 @@
     if (p.id === 'free') {
       box.appendChild(linha(
         'Coqueiro e Oásis',
-        'Mais contas, histórico e consultas ao UGLEZ. No cartão, cancele quando quiser.',
+        'Mais contas, histórico e coconutz. No cartão, cancele quando quiser.',
         el('button', {
           class: 'btn btn-outline btn-sm', type: 'button', text: 'Ver planos',
           onclick: () => App.goTo('precos')

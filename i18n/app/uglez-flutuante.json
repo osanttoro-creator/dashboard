@@ -35,17 +35,17 @@
   "es": "Abrir UGLEZ"
  },
  {
-  "pt": "Você usou as {0} consultas do seu plano neste mês. Elas voltam no dia 1º.",
+  "pt": "Você usou os {0} coconutz do seu plano neste mês. Eles voltam no dia 1º.",
   "tipo": "padrao",
-  "en": "You've used your plan's {0} questions this month. They come back on the 1st.",
-  "fr": "Vous avez utilisé les {0} questions de votre formule ce mois-ci. Elles reviennent le 1er.",
-  "es": "Usaste las {0} consultas de tu plan este mes. Vuelven el día 1."
+  "en": "You have used all {0} coconutz on your plan this month. They come back on the 1st.",
+  "fr": "Vous avez utilisé les {0} coconutz de votre formule ce mois-ci. Ils reviennent le 1er.",
+  "es": "Usaste los {0} coconutz de tu plan este mes. Vuelven el día 1."
  },
  {
-  "pt": "{0} de {1} consultas restantes neste mês.",
+  "pt": "{0} de {1} coconutz neste mês.",
   "tipo": "padrao",
-  "en": "{0} of {1} questions left this month.",
-  "fr": "{0} sur {1} questions restantes ce mois-ci.",
-  "es": "{0} de {1} consultas restantes este mes."
+  "en": "{0} of {1} coconutz this month.",
+  "fr": "{0} des {1} coconutz ce mois-ci.",
+  "es": "{0} de {1} coconutz este mes."
  }
 ]

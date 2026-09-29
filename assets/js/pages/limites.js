@@ -169,7 +169,7 @@
       el('h3', { text: 'Quanto cabe no seu plano' }),
       el('p', { class: 'hint', text: 'A contagem de movimentações é a do mês que está na barra do topo — ' + U.monthLabel(App.ym) + '. A cota do UGLEZ reinicia todo dia 1º, no horário de Brasília.' }),
       el('div', { class: 'uso-caixa' },
-        [Limites.barra('UGLEZ neste mês', consumo.usado, consumo.limite, 'consultas')]
+        [Limites.barra('Coconutz neste mês', consumo.usado, consumo.limite, 'coconutz')]
           .concat(LINHAS.map((l) => Limites.barra(l.rotulo, Limites.contar(l.chave), Limites.limite(l.chave)))))
     ]);
     raiz.appendChild(uso);

@@ -245,25 +245,25 @@
   "es": "Leyendo el año {0}"
  },
  {
-  "pt": "Você usou as {0} consultas do plano {1} neste mês",
+  "pt": "Você usou os {0} coconutz do plano {1} neste mês",
   "tipo": "padrao",
-  "en": "You've used the {0} questions on the {1} plan this month",
-  "fr": "Vous avez utilisé les {0} questions de la formule {1} ce mois-ci",
-  "es": "Usaste las {0} consultas del plan {1} este mes"
+  "en": "You have used all {0} coconutz on the {1} plan this month",
+  "fr": "Vous avez utilisé les {0} coconutz de la formule {1} ce mois-ci",
+  "es": "Usaste los {0} coconutz del plan {1} este mes"
  },
  {
-  "pt": "Elas voltam no dia 1º. Nada foi apagado, e o restante do OAZE continua funcionando normalmente — a leitura do mês abaixo é calculada aqui mesmo e não consome consulta.",
+  "pt": "Eles voltam no dia 1º. Nada foi apagado, e o restante do OAZE continua funcionando normalmente — a leitura do mês abaixo é calculada aqui mesmo e não gasta coconut.",
   "tipo": "exato",
-  "en": "They come back on the 1st. Nothing was deleted, and the rest of OAZE keeps working normally — the month reading below is calculated right here and doesn't use up a question.",
-  "fr": "Elles reviennent le 1er. Rien n'a été supprimé, et le reste d'OAZE fonctionne normalement — la lecture du mois ci-dessous est calculée ici même et ne consomme pas de question.",
-  "es": "Vuelven el día 1. No se borró nada, y el resto de OAZE sigue funcionando normalmente — la lectura del mes de abajo se calcula aquí mismo y no consume consulta."
+  "en": "They come back on the 1st. Nothing was deleted, and the rest of OAZE keeps working as usual — the reading of the month below is worked out right here and spends no coconut.",
+  "fr": "Ils reviennent le 1er. Rien n’a été supprimé, et le reste d’OAZE continue de fonctionner normalement — la lecture du mois ci-dessous est calculée ici même et ne consomme pas de coconut.",
+  "es": "Vuelven el día 1. No se borró nada, y el resto de OAZE sigue funcionando normalmente — la lectura del mes de abajo se calcula aquí mismo y no gasta coconut."
  },
  {
-  "pt": "{0} de {1} consultas restantes neste mês. Erro nosso ou indisponibilidade não consomem consulta.",
+  "pt": "{0} de {1} coconutz neste mês. Erro nosso ou indisponibilidade não gastam coconut.",
   "tipo": "padrao",
-  "en": "{0} of {1} questions left this month. Our errors or outages don't use up a question.",
-  "fr": "{0} sur {1} questions restantes ce mois-ci. Nos erreurs ou indisponibilités ne consomment pas de question.",
-  "es": "{0} de {1} consultas restantes este mes. Errores nuestros o caídas no consumen consulta."
+  "en": "{0} of {1} coconutz this month. Our errors and outages never spend a coconut.",
+  "fr": "{0} des {1} coconutz ce mois-ci. Une erreur de notre part ou une indisponibilité ne consomme jamais de coconut.",
+  "es": "{0} de {1} coconutz este mes. Un error nuestro o una caída nunca gastan coconut."
  },
  {
   "pt": "Entrou",

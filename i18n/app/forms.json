@@ -1100,6 +1100,55 @@
   "es": "Si eliges una, el aporte sale del saldo de la cuenta."
  },
  {
+  "pt": "1 ano",
+  "tipo": "exato",
+  "en": "1 year",
+  "fr": "1 an",
+  "es": "1 año"
+ },
+ {
+  "pt": "2 anos",
+  "tipo": "exato",
+  "en": "2 years",
+  "fr": "2 ans",
+  "es": "2 años"
+ },
+ {
+  "pt": "5 anos",
+  "tipo": "exato",
+  "en": "5 years",
+  "fr": "5 ans",
+  "es": "5 años"
+ },
+ {
+  "pt": "10 anos",
+  "tipo": "exato",
+  "en": "10 years",
+  "fr": "10 ans",
+  "es": "10 años"
+ },
+ {
+  "pt": "Quanto isso vira",
+  "tipo": "exato",
+  "en": "What this becomes",
+  "fr": "Ce que cela devient",
+  "es": "En cuánto se convierte"
+ },
+ {
+  "pt": "de juros",
+  "tipo": "exato",
+  "en": "in interest",
+  "fr": "d’intérêts",
+  "es": "de intereses"
+ },
+ {
+  "pt": "Estimativa com juros compostos e a taxa acima parada. A taxa real muda, e o OAZE não promete rendimento.",
+  "tipo": "exato",
+  "en": "An estimate with compound interest and the rate above held still. The real rate moves, and OAZE promises no return.",
+  "fr": "Une estimation à intérêts composés, avec le taux ci-dessus figé. Le taux réel bouge, et OAZE ne promet aucun rendement.",
+  "es": "Estimación con interés compuesto y la tasa de arriba quieta. La tasa real cambia, y OAZE no promete rendimiento."
+ },
+ {
   "pt": "Investimento atualizado.",
   "tipo": "exato",
   "en": "Investment updated.",

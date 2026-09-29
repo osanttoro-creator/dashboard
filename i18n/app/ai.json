@@ -236,11 +236,11 @@
   "es": "Tu sesión expiró. Entra de nuevo para continuar."
  },
  {
-  "pt": "Você usou {0} de {1} consultas do seu plano neste mês. Elas voltam no dia 1º. Erro nosso ou indisponibilidade não consomem consulta.",
+  "pt": "Você usou {0} de {1} coconutz do seu plano neste mês. Eles voltam no dia 1º. Erro nosso ou indisponibilidade não gastam coconut.",
   "tipo": "padrao",
-  "en": "You've used {0} of {1} questions on your plan this month. They come back on the 1st. Our errors or outages don't use up a question.",
-  "fr": "Vous avez utilisé {0} sur {1} questions de votre formule ce mois-ci. Elles reviennent le 1er. Nos erreurs ou indisponibilités ne consomment pas de question.",
-  "es": "Usaste {0} de {1} consultas de tu plan este mes. Vuelven el día 1. Errores nuestros o caídas no consumen consulta."
+  "en": "You have used {0} of {1} coconutz on your plan this month. They come back on the 1st. Our errors and outages never spend a coconut.",
+  "fr": "Vous avez utilisé {0} des {1} coconutz de votre formule ce mois-ci. Ils reviennent le 1er. Une erreur de notre part ou une indisponibilité ne consomme jamais de coconut.",
+  "es": "Usaste {0} de {1} coconutz de tu plan este mes. Vuelven el día 1. Un error nuestro o una caída nunca gastan coconut."
  },
  {
   "pt": "O assistente está indisponível agora.",

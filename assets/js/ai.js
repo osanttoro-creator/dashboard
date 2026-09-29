@@ -576,8 +576,8 @@
         const usado = r.usado != null ? r.usado : '?';
         const teto = r.limite != null ? r.limite : '?';
         renderError(box, 'Você usou ' + usado + ' de ' + teto +
-          ' consultas do seu plano neste mês. Elas voltam no dia 1º. ' +
-          'Erro nosso ou indisponibilidade não consomem consulta.');
+          ' coconutz do seu plano neste mês. Eles voltam no dia 1º. ' +
+          'Erro nosso ou indisponibilidade não gastam coconut.');
         if (global.Ug && Ug.renderContexto) Ug.renderContexto();
         encerrar('erro');
         return;

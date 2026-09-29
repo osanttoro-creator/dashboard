@@ -104,7 +104,7 @@
      das quatro perguntas antigas ("comparar com o mês anterior" e
      "planejar o próximo mês") dependem de comparação entre
      períodos, que é um DIREITO de plano: oferecidas no Grátis, elas
-     gastam uma das cinco consultas do mês para receber de volta
+     gastam um dos cinco coconutz do mês para receber de volta
      "isso está em outro plano".
 
      Agora a lista é montada a partir dos direitos e dos dados que
@@ -361,18 +361,18 @@
       limite.hidden = false;
       const plano = Planos.get(Limites.plano());
       document.getElementById('uglezLimiteTitulo').textContent =
-        'Você usou as ' + c.limite + ' consultas do plano ' + plano.nome + ' neste mês';
+        'Você usou os ' + c.limite + ' coconutz do plano ' + plano.nome + ' neste mês';
       document.getElementById('uglezLimiteTexto').textContent =
-        'Elas voltam no dia 1º. Nada foi apagado, e o restante do OAZE continua funcionando ' +
-        'normalmente — a leitura do mês abaixo é calculada aqui mesmo e não consome consulta.';
+        'Eles voltam no dia 1º. Nada foi apagado, e o restante do OAZE continua funcionando ' +
+        'normalmente — a leitura do mês abaixo é calculada aqui mesmo e não gasta coconut.';
       return;
     }
 
     limite.hidden = true;
     cota.hidden = false;
     cota.className = 'uglez-cota' + (resta <= 2 ? ' is-pouca' : '');
-    cota.textContent = resta + ' de ' + c.limite + ' consultas restantes neste mês. ' +
-      'Erro nosso ou indisponibilidade não consomem consulta.';
+    cota.textContent = resta + ' de ' + c.limite + ' coconutz neste mês. ' +
+      'Erro nosso ou indisponibilidade não gastam coconut.';
   }
   Ug.renderContexto = renderContexto;
 
@@ -424,7 +424,7 @@
      Saem dos DADOS, não do modelo: a categoria que mais pesou, o
      mês anterior, o alcance vizinho. Sendo deterministas, nunca
      sugerem algo que a UGLEZ não possa responder — e não custam
-     uma consulta a mais para serem geradas.
+     um coconut a mais para serem geradas.
      ============================================================ */
   function seguimentos(base) {
     const lista = [];
