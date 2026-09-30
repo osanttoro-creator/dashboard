@@ -198,6 +198,15 @@
         ],
         "createdAt": "2026-09-29T01:36:25.561Z",
         "reason": "Claude: os tres casos acima de .05em fora de caixa alta sao (1) .cc-number, o numero gravado no plastico do cartao, onde o espacamento imita o digito em relevo e o texto tem 16 caracteres, e (2) .uglez-identidade h2, um titulo de 42 a 78px. Nenhum e texto corrido. Escopo limitado ao app.html: as demais paginas seguem cobertas pela regra."
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-30T23:10:48.036Z",
+        "reason": "Claude: os quatro recortes desta pagina existem para PRODUZIR o efeito, nao para conter layout. .portal-palco e .portal-mundo sao o portal (um portal que nao recorta nao abre nada); .fundindo mascara os cartoes que convergem; .ap-tela e a tela do aparelho (sem recorte a captura vaza por cima da moldura). Verificado no navegador em 30/09/2026: o cabecalho, o menu de navegacao e o painel da bandeira de idioma estao TODOS fora de qualquer container com overflow hidden, entao nenhum menu ou popover fica preso. Escopo limitado ao index.html: as demais paginas seguem cobertas pela regra."
       }
     ]
   }

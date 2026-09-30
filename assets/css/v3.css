@@ -179,15 +179,42 @@ p { margin: 0; }
 
 /* ---------------- cabeçalho ---------------- */
 
+/* ---------------- o topo suspenso ----------------
+   Uma barra colada no alto, da borda esquerda à direita, divide a
+   tela em duas faixas e come a primeira linha do conteúdo. Suspensa,
+   ela vira um objeto sobre a página: o conteúdo passa POR BAIXO e
+   continua inteiro, e a barra ganha um lado de fora.
+
+   O vidro precisa de três coisas para ler como vidro, e não como um
+   retângulo cinza: o desfoque do que passa atrás, uma saturação
+   levemente aumentada (senão a cor de trás chega lavada) e um fio
+   claro na borda de cima, que é onde a luz bate primeiro. */
 .topo {
-  position: sticky; top: 0; z-index: 90;
-  background: color-mix(in srgb, var(--night) 84%, transparent);
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s var(--curva);
+  position: fixed; top: clamp(10px, 1.6vh, 18px); left: 50%; z-index: 90;
+  width: min(var(--env), 100% - 24px); transform: translateX(-50%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sup) 58%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(165%);
+          backdrop-filter: blur(20px) saturate(165%);
+  border: 1px solid rgba(240, 229, 207, .1);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 229, 207, .14),
+    0 18px 40px -22px rgba(0, 0, 0, .9);
+  transition: background-color .3s var(--curva), border-color .3s var(--curva);
 }
-.topo.rolou { border-bottom-color: var(--linha); }
-.topo .env { display: flex; align-items: center; gap: 22px; height: 76px; }
+/* Rolando, o vidro fecha um pouco: sobre conteúdo claro um vidro
+   muito aberto deixa o menu ilegível. */
+.topo.rolou {
+  background: color-mix(in srgb, var(--sup) 78%, transparent);
+  border-color: rgba(240, 229, 207, .16);
+}
+.topo .env { display: flex; align-items: center; gap: 22px; height: 62px; width: auto; padding-inline: clamp(14px, 2vw, 26px); }
+
+/* O conteúdo passa por baixo da barra, então o primeiro bloco precisa
+   do espaço dela de volta. O portal não: ele é tela cheia e a barra
+   flutua sobre a marca de propósito. */
+body { padding-top: 0; }
+main > .secao:first-child { padding-top: calc(var(--respiro) + 62px); }
 
 .marca { display: inline-flex; align-items: center; flex: none; }
 .marca img { height: 30px; width: auto; }
@@ -783,226 +810,266 @@ p { margin: 0; }
 .idioma-esfera-item.is-atual { color: var(--teal); }
 .idioma-esfera-item:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
 
+
 /* =============================================================
-   A ABERTURA — A LENTE
+   O PORTAL
    -------------------------------------------------------------
-   Tela preta, o hello escrito à mão, a Coco de figurinha. Rolar não
-   empurra a página: abre um círculo, e o OAZE aparece por dentro
-   dele. É a abertura do OAZE 1, com o herói da v3 no miolo.
+   A página começa fechada. Preto, "bem-vindo ao" pequeno, OAZE
+   ocupando a tela. Rolar abre dois painéis para as bordas enquanto
+   o letreiro cresce, aperta o espaçamento e se parte em duas
+   metades que viajam para lados opostos.
 
-   COMO FUNCIONA
-   A seção é alta (250vh) e o palco fica preso no topo enquanto ela
-   passa. O site.js converte o quanto já rolou em --lente-raio, e a
-   cortina tem uma máscara radial com um furo desse tamanho. Aumentar
-   o raio abre o furo. A saudação leva A MESMA máscara, ao contrário
-   da primeira versão do OAZE 1: assim, dentro do círculo existe só a
-   página, e fora dele só o hello — nunca os dois sobrepostos.
+   Crescer e apertar AO MESMO TEMPO é o efeito inteiro. Fazer só um
+   dos dois vira zoom, e zoom qualquer página tem.
 
-   A SEGURANÇA QUE NÃO PODE SAIR DAQUI
-   Sem JavaScript, a cortina se recolhe sozinha em 4 segundos. Uma
-   tela preta presa por um script que não carregou deixaria o site
-   inacessível, e nenhuma animação de entrada vale isso.
+   Todo valor sai da POSIÇÃO da rolagem, escrita pelo site.js em
+   --p (0 a 1). Nada aqui depende de relógio, então a abertura anda
+   para a frente e para trás na velocidade do dedo de quem lê.
    ============================================================= */
 
-.lente {
+.portal {
   position: relative;
-  /* O curso da rolagem. Mais que isto e a abertura vira trabalho;
-     menos, e ela termina antes de a pessoa perceber que abriu. */
+  /* Duas telas e meia de curso. Menos que isso e a abertura termina
+     antes de ser percebida; mais, e vira trabalho. */
   height: 250vh;
 }
-.lente-palco {
-  position: sticky; top: 0; height: 100vh; overflow: hidden;
-  --lente-raio: 0px;
-  --hello-opacidade: 1;
-  --hello-escala: 1;
-  --lente-progresso: 0;
+.portal-palco {
+  position: sticky; top: 0; height: 100vh;
+  overflow: hidden; isolation: isolate;
+  --p: 0;
 }
-.lente-mundo { position: absolute; inset: 0; overflow: hidden; display: grid; align-content: center; }
-/* Dentro do palco o herói não tem altura própria: ele preenche. */
-.lente-mundo .heroi { padding-block: 0; }
+.portal-mundo { position: absolute; inset: 0; display: grid; align-content: center; overflow: hidden; }
 
-.lente-cortina {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+/* O HERÓI PRECISA CABER EM UMA TELA
+   Dentro do portal ele não pode transbordar: o palco tem altura fixa
+   de 100vh e o que passa disso é CORTADO — foi assim que a manchete
+   sumiu por cima na primeira montagem, sem erro nenhum aparecer.
+   Então aqui a manchete é menor que a da página solta, os respiros
+   encolhem, e a cena dos aparelhos ganha teto em vh: numa tela baixa
+   ela diminui junto, em vez de empurrar o texto para fora. */
+.portal-mundo .heroi { padding-block: 0; }
+.portal-mundo .heroi .env { gap: clamp(18px, 3.4vh, 34px); }
+.portal-mundo .heroi h1 { font-size: clamp(28px, 3.3vw, 46px); }
+.portal-mundo .heroi .grande { font-size: clamp(.95rem, 1.2vw, 1.05rem); }
+.portal-mundo .heroi-texto { gap: clamp(12px, 2vh, 20px); }
+
+/* ---- os dois painéis ----
+   Começam encostados no meio, então a cena nasce fechada. Cada um
+   tem um pouco mais de metade da largura e sai ANDANDO ALÉM DA
+   PRÓPRIA LARGURA, para limpar a moldura inteira: parar em 100%
+   deixaria um fio do painel na borda em telas largas. */
+.portal-painel {
+  position: absolute; top: 0; bottom: 0; width: 52vw; z-index: 3;
   background: var(--night);
-  -webkit-mask-image: radial-gradient(circle at 50% 46%, transparent 0, transparent var(--lente-raio), #000 calc(var(--lente-raio) + 1px));
-          mask-image: radial-gradient(circle at 50% 46%, transparent 0, transparent var(--lente-raio), #000 calc(var(--lente-raio) + 1px));
+  will-change: transform;
+}
+.portal-painel-esq { left: 0;  transform: translate3d(calc(var(--p) * -106%), 0, 0); }
+.portal-painel-dir { right: 0; transform: translate3d(calc(var(--p) * 106%), 0, 0); }
+
+/* ---- o letreiro ---- */
+.portal-letreiro {
+  position: absolute; inset: 0; z-index: 4;
+  display: grid; align-content: center; justify-items: center;
+  pointer-events: none;
+  opacity: clamp(0, calc(1 - var(--p) * 1.9), 1);
+}
+.portal-boas {
+  margin: 0 0 clamp(4px, 1.2vh, 14px);
+  font: 500 clamp(11px, 1.5vw, 15px)/1 var(--fonte-dado);
+  letter-spacing: .42em; text-transform: uppercase;
+  color: var(--tinta-2);
+  /* o subtítulo sobe e some antes da marca: dois textos saindo
+     juntos brigam por atenção na saída */
+  transform: translateY(calc(var(--p) * -40px));
+  opacity: clamp(0, calc(1 - var(--p) * 3.4), 1);
+}
+/* só para leitor de tela: a marca é imagem decorativa, e o nome
+   precisa existir como texto em algum lugar do h1 */
+.sr-so {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
 }
 
-.lente-saudacao {
-  position: absolute; inset: 0; z-index: 4; pointer-events: none;
-  display: grid; place-items: center; align-content: center; gap: clamp(20px, 4vh, 38px);
-  opacity: var(--hello-opacidade);
-  -webkit-mask-image: radial-gradient(circle at 50% 46%, transparent 0, transparent var(--lente-raio), #000 calc(var(--lente-raio) + 1px));
-          mask-image: radial-gradient(circle at 50% 46%, transparent 0, transparent var(--lente-raio), #000 calc(var(--lente-raio) + 1px));
+.portal-marca {
+  position: relative; margin: 0;
+  width: min(86vw, 900px); aspect-ratio: 1200 / 300;
+  /* CRESCE enquanto abre. Uma imagem não tem espaçamento entre letras
+     para apertar, então quem faz o papel do aperto é a escala das
+     duas metades andando para fora: o miolo some e o olho lê a marca
+     se partindo, não uma foto aumentando. */
+  transform: scale(calc(1 + var(--p) * .38));
+  will-change: transform;
 }
-/* A escala da passagem vive no SVG, e não no contêiner: escalar o
-   contêiner escalaria a máscara junto, e o furo sairia do lugar do
-   furo da cortina. */
-.lente-saudacao .hello { width: min(74vw, 620px); transform: scale(var(--hello-escala)); }
-.lente-saudacao .hello-traco { stroke-width: 15; }
-.lente-saudacao .hello-linha { margin: 0; }
+.portal-logo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain;
+  /* A marca NASCE VISÍVEL. A entrada é um acréscimo, e por isso
+     mora atrás de .anima, que só existe quando há script vivo: uma
+     logo que depende de uma animação para aparecer é uma logo que
+     some quando a animação não roda, e aí não sobra marca nenhuma. */
+  opacity: 1;
+  will-change: transform, opacity, filter;
+}
+/* Cada cópia mostra METADE da marca, e as duas metades viajam para
+   lados opostos conforme o portal abre. */
+.portal-logo-esq { clip-path: inset(0 50% 0 0); }
+.portal-logo-dir { clip-path: inset(0 0 0 50%); }
 
-/* A COCO DE FIGURINHA
-   Contorno grosso em Coconut Milk e 4° de inclinação, como adesivo
-   colado torto. Ela chega depois do hello, com uma mola curta — é
-   uma figurinha sendo colada, não um elemento aparecendo. */
-.lente-coco {
-  width: clamp(120px, 17vw, 190px); margin: 0;
-  transform: rotate(-4deg) scale(.6); opacity: 0;
-}
-.lente-coco img {
-  display: block; width: 100%; height: auto;
-  filter:
-    drop-shadow(0 0 0 var(--milk)) drop-shadow(0 0 0 var(--milk))
-    drop-shadow(0 0 0 var(--milk)) drop-shadow(0 0 0 var(--milk))
-    drop-shadow(0 10px 22px rgba(0, 0, 0, .55));
-}
-.lente-saudacao.escrito .lente-coco {
-  animation: colar-figurinha .62s cubic-bezier(.34, 1.5, .5, 1) forwards;
-}
-@keyframes colar-figurinha {
-  0%   { opacity: 0; transform: rotate(-14deg) scale(.6); }
-  60%  { opacity: 1; transform: rotate(2deg) scale(1.06); }
-  100% { opacity: 1; transform: rotate(-4deg) scale(1); }
-}
+/* A ENTRADA: a marca chega depois do "bem-vindo ao", subindo e
+   ganhando foco. Sem isto ela aparece pronta junto com a página, e
+   não há o que assistir. */
+.anima .portal-logo { opacity: 0; animation: portal-marca-entra 1.15s cubic-bezier(.2, .7, .25, 1) .45s forwards; }
 
-.lente-saudacao small {
-  display: inline-flex; align-items: center; gap: 10px;
-  color: var(--tinta-2); font: 500 .7rem/1.4 var(--fonte-dado);
-  letter-spacing: .24em; text-transform: uppercase;
-  opacity: 0; transform: translateY(8px);
-  transition: opacity .7s var(--curva), transform .7s var(--curva);
-  transition-delay: .5s;
+@keyframes portal-marca-entra {
+  0%   { opacity: 0; transform: translateY(22px) scale(.94); filter: blur(12px); }
+  100% { opacity: 1; transform: none; filter: blur(0); }
 }
-.lente-saudacao small svg { width: 13px; height: 13px; }
-.lente-saudacao.escrito small { opacity: 1; transform: none; }
+/* A viagem só entra depois da animação de chegada; somar as duas num
+   transform só faria uma sobrescrever a outra. Por isso ela mora num
+   elemento à parte — o wrapper de cada metade. */
+.anima .portal-logo-esq { translate: calc(var(--p) * -46%) 0; }
+.anima .portal-logo-dir { translate: calc(var(--p) * 46%) 0; }
 
-.lente-barra {
+.portal-dica {
+  position: absolute; z-index: 4; left: 50%; bottom: clamp(48px, 9vh, 88px);
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 10px; margin: 0;
+  font: 500 .68rem/1 var(--fonte-dado); letter-spacing: .24em; text-transform: uppercase;
+  color: var(--tinta-2); pointer-events: none;
+  opacity: clamp(0, calc(1 - var(--p) * 5), 1);
+}
+.portal-dica svg { width: 13px; height: 13px; }
+
+.portal-barra {
   position: absolute; z-index: 5; left: 50%; bottom: 24px;
   width: min(240px, 48vw); height: 1px; transform: translateX(-50%);
   background: rgba(240, 229, 207, .12);
 }
-.lente-barra i { display: block; width: calc(var(--lente-progresso) * 100%); height: 100%; background: var(--teal); }
-
-/* O traço só se desenha quando o script assume. Sem ele o hello já
-   nasce escrito, porque ficar invisível para sempre é pior. */
-.lente-viva .lente-saudacao .hello-traco { stroke-dasharray: none; }
-html:not(.lente-viva) .lente-cortina,
-html:not(.lente-viva) .lente-saudacao { animation: recolher-cortina .8s var(--curva) 4s forwards; }
-@keyframes recolher-cortina { to { opacity: 0; visibility: hidden; } }
-
-@media (max-width: 860px) {
-  .lente { height: 220vh; }
-  .lente-coco { width: clamp(104px, 30vw, 150px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* Sem movimento não há abertura: a página começa aberta. */
-  .lente { height: auto; }
-  .lente-palco { position: static; height: auto; }
-  .lente-mundo { position: static; }
-  .lente-cortina, .lente-saudacao, .lente-barra { display: none; }
-}
+.portal-barra i { display: block; width: calc(var(--p) * 100%); height: 100%; background: var(--teal); }
 
 /* =============================================================
-   OS APARELHOS, REFEITOS
+   OS TRÊS APARELHOS
    -------------------------------------------------------------
-   A primeira versão era um retângulo com borda de 1px e uma barra
-   de 9px embaixo fazendo as vezes de notebook. De longe passava;
-   de perto era papelão, e é isso que faz uma cena inteira parecer
-   barata mesmo quando a captura dentro dela está boa.
+   Notebook atrás, tablet ao lado, celular na frente — a ordem em
+   que eles existem na mesa de quem usa. Cada um entra numa fase,
+   e as fases se sobrepõem de propósito: se não, a cena para num
+   quadro vazio no meio do caminho.
 
-   O que um aparelho precisa para ler como objeto, e não como div:
-     · moldura com ESPESSURA — duas bordas, uma clara em cima e uma
-       escura embaixo, porque é assim que um material curvo devolve
-       a luz;
-     · a tela AFUNDADA na moldura, com sombra interna no topo;
-     · um reflexo diagonal fraco, que é o que denuncia vidro;
-     · e, no notebook, uma dobradiça de verdade entre a tampa e a
-       base — a base não é um traço, é um volume visto de cima, e
-       por isso ela é um trapézio e não um retângulo.
-
-   Tudo com gradiente e sombra, nada com imagem: a cena responde à
-   rolagem e precisa continuar barata de desenhar.
+   As molduras são CSS, não imagem: a cena responde à rolagem e
+   precisa continuar barata de desenhar. O que faz um aparelho ler
+   como objeto é a espessura — uma borda clara em cima e uma escura
+   embaixo, que é como material curvo devolve a luz — mais a tela
+   afundada e um reflexo diagonal fraco.
    ============================================================= */
 
-.cena .aparelho-tela {
-  display: block; overflow: hidden; background: #060D12;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+.palco3 {
+  position: relative; grid-column: 1 / -1;
+  width: 100%; height: min(46vh, 430px);
+  --a: 1; --b: 1; --c: 1;
 }
-.cena .aparelho-tela img { display: block; width: 100%; height: auto; }
-
-/* O vidro. Um brilho diagonal fraco, e nada mais: reflexo forte
-   come a captura que está por baixo, que é o conteúdo que a seção
-   existe para mostrar. */
-.cena .aparelho-tela::after {
+.palco3 .ap { position: absolute; }
+.palco3 .ap-tela {
+  position: relative; display: block; overflow: hidden;
+  background: #060D12; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.palco3 .ap-tela img { display: block; width: 100%; height: auto; }
+/* o vidro: um brilho diagonal fraco, e nada mais — reflexo forte
+   come a captura que está por baixo, que é o conteúdo a mostrar */
+.palco3 .ap-tela::after {
   content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: linear-gradient(112deg, rgba(255, 255, 255, .1) 0%, rgba(255, 255, 255, .02) 26%, transparent 46%);
 }
 
-/* ---------------- notebook ---------------- */
-
-.cena .notebook-tampa {
-  position: relative;
-  padding: 10px 10px 12px;
-  border-radius: 13px 13px 4px 4px;
+/* ---- notebook ---- */
+.palco3 .ap-note {
+  left: 10%; top: 0; width: 58%; z-index: 1;
+  opacity: var(--a);
+  transform: translateY(calc((1 - var(--a)) * 26px));
+}
+.palco3 .ap-tampa {
+  position: relative; padding: 9px 9px 11px;
+  border-radius: 12px 12px 4px 4px;
   background: linear-gradient(170deg, #2B3F4C 0%, #1B2B36 42%, #101C25 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(240, 229, 207, .16),
-    inset 0 -1px 0 rgba(0, 0, 0, .6),
-    0 22px 46px -22px rgba(0, 0, 0, .9);
+  box-shadow: inset 0 1px 0 rgba(240, 229, 207, .16), inset 0 -1px 0 rgba(0, 0, 0, .6), 0 22px 46px -22px rgba(0, 0, 0, .9);
   transform-origin: 50% 100%;
-  transform: perspective(1100px) rotateX(calc((1 - var(--a)) * 76deg));
+  transform: perspective(1100px) rotateX(calc((1 - var(--a)) * 74deg));
 }
-.cena .notebook-camera {
-  position: absolute; left: 50%; top: 4px; width: 5px; height: 5px; margin-left: -2.5px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #4C6675, #0A1218 68%);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
+.palco3 .ap-camera {
+  position: absolute; left: 50%; top: 3.5px; width: 5px; height: 5px; margin-left: -2.5px;
+  border-radius: 50%; background: radial-gradient(circle at 36% 32%, #4C6675, #0A1218 68%);
 }
-.cena .notebook-tampa .aparelho-tela { position: relative; border-radius: 4px; }
-
-/* A BASE É UM VOLUME, NÃO UM TRAÇO
-   Vista de cima e em perspectiva, a base de um notebook é mais
-   estreita atrás do que na frente. Um retângulo ali entrega na hora
-   que aquilo é um desenho. O trapézio custa uma linha de clip-path. */
-.cena .notebook-base {
-  display: block; position: relative;
-  height: 13px; margin: 0 -7%;
+.palco3 .ap-tampa .ap-tela { border-radius: 4px; }
+/* A base é um VOLUME, não um traço: vista em perspectiva ela é mais
+   estreita atrás, e um retângulo ali entrega que aquilo é desenho. */
+.palco3 .ap-base {
+  display: block; position: relative; height: 12px; margin: 0 -6%;
   background: linear-gradient(#263A47 0%, #16242E 38%, #0C161D 100%);
-  clip-path: polygon(3.2% 0, 96.8% 0, 100% 100%, 0 100%);
+  clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%);
   box-shadow: 0 18px 30px -18px rgba(0, 0, 0, .95);
 }
-/* O encaixe do polegar, no meio da borda da frente. */
-.cena .notebook-base::after {
-  content: ''; position: absolute; left: 50%; bottom: 0; width: 13%; height: 3px;
-  margin-left: -6.5%; border-radius: 3px 3px 0 0;
-  background: rgba(0, 0, 0, .55);
+.palco3 .ap-base::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; width: 12%; height: 3px;
+  margin-left: -6%; border-radius: 3px 3px 0 0; background: rgba(0, 0, 0, .55);
 }
 
-/* ---------------- celular ---------------- */
-
-.cena .celular .aparelho-tela {
-  position: relative; padding: 5px;
-  border-radius: 21px;
-  aspect-ratio: 820 / 1728;
-  background: linear-gradient(158deg, #334856 0%, #1A2A35 46%, #0C161D 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(240, 229, 207, .2),
-    inset 0 -1px 0 rgba(0, 0, 0, .7),
-    0 26px 50px -24px rgba(0, 0, 0, .95);
+/* ---- tablet ---- */
+.palco3 .ap-tablet {
+  right: 0; top: 15%; width: 30%; z-index: 2;
+  opacity: var(--b);
+  transform: translateY(calc((1 - var(--b)) * 34px)) rotate(calc((1 - var(--b)) * 4deg));
 }
-.cena .celular .quadro {
-  position: absolute; inset: 5px; width: auto; height: auto;
-  border-radius: 16px; opacity: 0;
+.palco3 .ap-tablet .ap-tela {
+  padding: 8px; border-radius: 16px;
+  background: linear-gradient(158deg, #35495A 0%, #1C2C38 46%, #0D171F 100%);
+  box-shadow: inset 0 1px 0 rgba(240, 229, 207, .18), inset 0 -1px 0 rgba(0, 0, 0, .7), 0 24px 44px -22px rgba(0, 0, 0, .9);
+}
+.palco3 .ap-tablet img { border-radius: 9px; }
+
+/* ---- celular ---- */
+.palco3 .ap-fone {
+  left: 0; bottom: 0; width: 12%; z-index: 3;
+  opacity: var(--c);
+  transform: translateY(calc((1 - var(--c)) * 46px));
+}
+.palco3 .ap-fone .ap-tela {
+  padding: 4px; border-radius: 19px; aspect-ratio: 820 / 1728;
+  background: linear-gradient(158deg, #3A4A58 0%, #1E2E3A 46%, #0C161D 100%);
+  box-shadow: inset 0 1px 0 rgba(240, 229, 207, .22), inset 0 -1px 0 rgba(0, 0, 0, .75), 0 26px 50px -22px rgba(0, 0, 0, .95);
+}
+.palco3 .ap-fone .quadro {
+  position: absolute; inset: 4px; width: auto; height: auto;
+  border-radius: 15px; opacity: 0;
   object-fit: cover; object-position: top center;
   transition: opacity .55s var(--curva);
 }
-.cena .celular .quadro.is-ativo { opacity: 1; }
-.cena .celular .aparelho-tela::after { border-radius: 21px; }
-
-/* A ilha fica POR CIMA da captura, como no aparelho de verdade. */
-.cena .celular-ilha {
-  position: absolute; left: 50%; top: 11px; width: 30%; height: 6px; margin-left: -15%;
+.palco3 .ap-fone .quadro.is-ativo { opacity: 1; }
+/* a ilha fica POR CIMA da captura, como no aparelho de verdade */
+.palco3 .ap-ilha {
+  position: absolute; left: 50%; top: 9px; width: 30%; height: 6px; margin-left: -15%;
   border-radius: 4px; background: #05090D; z-index: 3;
+}
+/* os botões laterais: dois de volume à esquerda, o de ligar à direita */
+.palco3 .ap-bt { position: absolute; width: 2px; border-radius: 2px; background: #2C3B47; }
+.palco3 .ap-bt-a { left: -2px; top: 22%; height: 7%; }
+.palco3 .ap-bt-b { left: -2px; top: 31%; height: 7%; }
+.palco3 .ap-bt-c { right: -2px; top: 26%; height: 10%; }
+
+@media (max-width: 860px) {
+  .portal { height: 210vh; }
+  .portal-marca { font-size: clamp(64px, 30vw, 200px); }
+  .palco3 { height: min(40vh, 320px); }
+  .palco3 .ap-note { width: 72%; left: 6%; top: 0; }
+  .palco3 .ap-tablet { width: 34%; top: 20%; }
+  .palco3 .ap-fone { width: 17%; left: 0; bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sem movimento não há portal: a página começa aberta e a cena
+     começa montada. É o estado final, não um buraco. */
+  .portal { height: auto; }
+  .portal-palco { position: static; height: auto; }
+  .portal-mundo { position: static; }
+  .portal-painel, .portal-letreiro, .portal-dica, .portal-barra { display: none; }
+  .palco3 { --a: 1; --b: 1; --c: 1; }
+  .palco3 .ap-fone .quadro:not(.is-ativo) { opacity: 0; }
 }

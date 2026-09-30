@@ -122,23 +122,27 @@
 
 <main id="conteudo">
 
-  <!-- ══════ A ABERTURA ══════
-       Tela preta, o hello se escrevendo à mão, a Coco chegando de
-       figurinha. A rolagem não empurra a página: ela ABRE UM CÍRCULO,
-       e é por dentro dele que o OAZE aparece.
+  <!-- ══════ O PORTAL ══════
+       A página começa FECHADA: preto, "bem-vindo ao" pequeno e OAZE
+       ocupando a tela. Rolar não empurra nada — abre. Dois painéis
+       sólidos partem para as bordas e, ao mesmo tempo, o letreiro
+       CRESCE enquanto o espaçamento entre as letras APERTA e as duas
+       metades viajam para lados opostos.
 
-       A ideia é do OAZE 1 e volta inteira. O que mudou é o miolo: por
-       dentro do furo agora está o herói da v3, não o do v1.
+       Crescer e apertar ao mesmo tempo é o efeito inteiro: fazer só um
+       dos dois vira zoom, e zoom qualquer página tem. É a diferença
+       entre um título que se abre e uma imagem que aumenta.
 
-       Quem tem "menos movimento" ligado, ou está sem JavaScript, não
-       vê preto nenhum: o site.js só assume a cortina depois de avisar
-       que está vivo (.lente-viva), e sem esse aviso o CSS a recolhe em
-       4 segundos. Uma cortina presa por falha de script deixaria a
-       página inacessível, e isso não é uma troca aceitável por uma
-       animação de entrada. -->
-  <section class="lente" data-lente>
-   <div class="lente-palco">
-    <div class="lente-mundo">
+       Tudo preso à POSIÇÃO da rolagem, nunca a um relógio: quem sobe
+       de volta vê o portal fechar na ordem inversa. Um relógio faria a
+       abertura acontecer sozinha enquanto a pessoa lê parada.
+
+       SEM JAVASCRIPT, OU COM "MENOS MOVIMENTO", NÃO HÁ PORTAL: a
+       página nasce aberta. Tela preta presa por um script que não
+       carregou deixa o site inacessível, e nenhuma entrada vale isso. -->
+  <section class="portal" data-portal aria-label="Bienvenido a OAZE">
+   <div class="portal-palco">
+    <div class="portal-mundo">
   <section class="heroi">
     <div class="env">
       <div class="heroi-texto">
@@ -152,28 +156,46 @@
         </div>
       </div>
 
-      <div class="heroi-palco">
-        <!-- O CELULAR NÃO É MAIS UM PRINT PARADO
-             Uma captura sozinha prova que a tela existe; ela não prova
-             que o app funciona. Os três quadros se revezam sozinhos —
-             início, carteira, Coco — que é o percurso real de quem usa.
-             O alt descreve os três, porque quem não vê recebe a
-             sequência inteira de uma vez. -->
-        <figure class="heroi-tela" data-quadros
-                role="img"
-                aria-label="OAZE funcionando en el móvil: el inicio con la cartera y el saldo total, la cartera con las tarjetas abiertas, y una conversación con Coco.">
-          <img class="quadro is-ativo" src="/assets/telas/celular-inicio.png" alt="" width="820" height="1728" fetchpriority="high" decoding="async">
-          <img class="quadro" src="/assets/telas/celular-carteira.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
-          <img class="quadro" src="/assets/telas/celular-coco.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
-        </figure>
+      <!-- ══════ A DEMONSTRAÇÃO ══════
+           Três aparelhos, com o app andando dentro dos três. Uma
+           captura parada prova que a tela existe; ela não prova que o
+           app funciona, e é isso que alguém que nunca entrou precisa
+           ver.
 
-        <!-- A Coco acenando. Ela não some quando a página rola: fica
-             grudada no topo do herói até a próxima seção, acenando o
-             tempo todo. Quem tem "menos movimento" ligado vê a mesma
-             Coco, parada, com a pata levantada. -->
-        <figure class="coco-acena" aria-hidden="true">
-          <img src="/assets/coco/corpo-alerta_gentil.webp" width="600" height="600" alt="" loading="eager" decoding="async">
-        </figure>
+           Os quadros do celular se revezam no percurso real de quem
+           usa — início, carteira, Coco. A ENTRADA é ligada à rolagem,
+           não a um relógio: quem sobe de volta vê a cena se desmontar
+           na mesma ordem em que montou.
+
+           O alt descreve os três de uma vez, porque quem não enxerga
+           recebe a cena inteira numa frase só, e não em três. -->
+      <div class="palco3" data-palco3
+           role="img"
+           aria-label="OAZE funcionando en tres aparatos: en el ordenador, la barra lateral con las secciones y el mes de un vistazo; en la tableta, la misma vista a pantalla completa; en el móvil, el inicio con la cartera, la cartera de tarjetas abierta y una conversación con Coco.">
+
+        <div class="ap ap-note">
+          <div class="ap-tampa">
+            <span class="ap-camera"></span>
+            <span class="ap-tela"><img src="/assets/telas/computador-inicio.png" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></span>
+          </div>
+          <span class="ap-base"></span>
+        </div>
+
+        <div class="ap ap-tablet">
+          <span class="ap-tela"><img src="/assets/telas/computador-inicio.png" alt="" width="1440" height="900" loading="lazy" decoding="async"></span>
+        </div>
+
+        <div class="ap ap-fone">
+          <span class="ap-tela">
+            <img class="quadro is-ativo" src="/assets/telas/celular-inicio.png" alt="" width="820" height="1728" fetchpriority="high" decoding="async">
+            <img class="quadro" src="/assets/telas/celular-carteira.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
+            <img class="quadro" src="/assets/telas/celular-coco.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
+          </span>
+          <span class="ap-ilha"></span>
+          <span class="ap-bt ap-bt-a"></span>
+          <span class="ap-bt ap-bt-b"></span>
+          <span class="ap-bt ap-bt-c"></span>
+        </div>
       </div>
     </div>
 
@@ -194,43 +216,33 @@
   </section>
     </div>
 
-    <!-- A cortina e a saudação levam a MESMA máscara: dentro do
-         círculo existe só a página; fora dele, só o hello. Nunca os
-         dois sobrepostos, que era o defeito da primeira versão do
-         OAZE 1. -->
-    <div class="lente-cortina" aria-hidden="true"></div>
+    <div class="portal-painel portal-painel-esq" aria-hidden="true"></div>
+    <div class="portal-painel portal-painel-dir" aria-hidden="true"></div>
 
-    <div class="lente-saudacao" aria-hidden="true">
-      <!-- O hello escrito à mão, o mesmo traço do OAZE 1: um caminho
-           só, do começo ao fim, escrito pelo site.js. É a primeira
-           coisa que a página faz, antes de qualquer texto. -->
-      <p class="hello-linha">
-        <svg class="hello" viewBox="19 11 494 208" width="340" height="143" focusable="false" role="img" aria-label="hello">
-          <defs>
-            <linearGradient id="hello-tinta" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#F0E5CF"/>
-              <stop offset=".42" stop-color="#8FCFC0"/>
-              <stop offset="1" stop-color="#5FA99B"/>
-            </linearGradient>
-          </defs>
-          <path class="hello-traco" d="M35 196C64.5 190 97.5 162 120.4 122C138.4 90 152.9 56 148.9 40C145.4 26 124.9 28 116.4 46C105.9 72 86.5 150 75 200C80.5 178 89.5 154 104 140C119.5 126 142.4 122 150.5 134C157 144 150 168 145.5 182C141 196 146.3 203 158.8 201C180.5 198 204 184 218 164C228.5 150 230 128 215 128C198 128 181.5 154 178 176C175 196 189 204 209.8 201C233.7 197 264 176 285.5 138C302.9 108 322.4 62 319.4 42C317.4 26 298.9 28 289.9 48C280.4 74 261.5 150 255 184C252.5 198 262 204 277 200C301.2 195 330 176 351.5 138C368.9 108 388.4 62 385.4 42C383.4 26 364.9 28 355.9 48C346.4 74 327.5 150 321 184C318.5 198 328 204 343 200C363 196 385 172 398.5 150C405 140 410.5 134 417 132C406 128 382 136 374 160C366 184 373.5 202 392 200C410.5 198 424 176 425 156C426 140 419 132 410.5 134C419 140 434.5 142 451.7 137C469 132 484.7 125 498.4 118"/>
-        </svg>
-      </p>
+    <div class="portal-letreiro">
+      <p class="portal-boas">bienvenido a</p>
+      <!-- A LOGO DE VERDADE, E NÃO A PALAVRA ESCRITA
+           Antes isto era "oaze" em Unbounded. Parecia a marca, mas não
+           era: o logotipo tem desenho próprio, e uma palavra digitada
+           na fonte da marca é uma imitação que diverge do arquivo no
+           dia em que o logotipo for ajustado.
 
-      <!-- A Coco chega como figurinha: contorno grosso em Coconut
-           Milk e uma inclinação de 4°, como adesivo colado torto. É
-           ela em pessoa, e não um logotipo — quem abre o site conhece
-           a assistente antes de conhecer o produto. -->
-      <figure class="lente-coco">
-        <img src="/assets/coco/corpo-alerta_gentil.webp" width="600" height="600" alt="" decoding="async">
-      </figure>
-
-      <small>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg> desliza para revelar
-      </small>
+           O mesmo arquivo entra DUAS VEZES, cada cópia recortada numa
+           metade, para as duas viajarem para lados opostos quando o
+           portal abre. É o movimento do letreiro partido, agora feito
+           com a marca de verdade — um SVG não se divide em dois
+           <span>, mas se divide em dois recortes. -->
+      <h1 class="portal-marca">
+        <span class="sr-so">OAZE</span>
+        <img class="portal-logo portal-logo-esq" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" fetchpriority="high" decoding="async">
+        <img class="portal-logo portal-logo-dir" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" decoding="async">
+      </h1>
     </div>
 
-    <div class="lente-barra" aria-hidden="true"><i></i></div>
+    <p class="portal-dica" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg> desliza para abrir
+    </p>
+    <div class="portal-barra" aria-hidden="true"><i></i></div>
    </div>
   </section>
 

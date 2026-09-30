@@ -102,6 +102,12 @@
   "es": "Empezar gratis"
  },
  {
+  "pt": "Bem-vindo ao OAZE",
+  "en": "Welcome to OAZE",
+  "fr": "Bienvenue chez OAZE",
+  "es": "Bienvenido a OAZE"
+ },
+ {
   "pt": "a coco organiza <br class=\"quebra\">seu dinheiro. <br class=\"quebra\"><em>você confirma.</em>",
   "en": "coco organises <br class=\"quebra\">your money. <br class=\"quebra\"><em>you confirm.</em>",
   "fr": "coco organise <br class=\"quebra\">votre argent. <br class=\"quebra\"><em>vous confirmez.</em>",
@@ -120,10 +126,10 @@
   "es": "Ver qué hace"
  },
  {
-  "pt": "O OAZE funcionando no celular: o início com a carteira e o saldo total, a carteira com os cartões abertos, e uma conversa com a Coco.",
-  "en": "OAZE running on a phone: the home screen with the wallet and total balance, the wallet with the cards fanned out, and a conversation with Coco.",
-  "fr": "OAZE sur téléphone : l’accueil avec le portefeuille et le solde total, le portefeuille avec les cartes déployées, et une conversation avec Coco.",
-  "es": "OAZE funcionando en el móvil: el inicio con la cartera y el saldo total, la cartera con las tarjetas abiertas, y una conversación con Coco."
+  "pt": "O OAZE funcionando em três aparelhos: no computador, a barra lateral com as seções e a visão geral do mês; no tablet, a mesma visão em tela cheia; no celular, o início com a carteira, a carteira de cartões aberta e uma conversa com a Coco.",
+  "en": "OAZE running on three devices: on the computer, the side bar with the sections and the month at a glance; on the tablet, the same view full screen; on the phone, the home screen with the wallet, the card wallet open and a conversation with Coco.",
+  "fr": "OAZE sur trois appareils : sur ordinateur, la barre latérale avec les sections et le mois d’un coup d’œil ; sur tablette, la même vue en plein écran ; sur téléphone, l’accueil avec le portefeuille, le portefeuille de cartes ouvert et une conversation avec Coco.",
+  "es": "OAZE funcionando en tres aparatos: en el ordenador, la barra lateral con las secciones y el mes de un vistazo; en la tableta, la misma vista a pantalla completa; en el móvil, el inicio con la cartera, la cartera de tarjetas abierta y una conversación con Coco."
  },
  {
   "pt": "oaze",
@@ -132,16 +138,16 @@
   "es": "oaze"
  },
  {
-  "pt": "hello",
-  "en": "hello",
-  "fr": "hello",
-  "es": "hello"
+  "pt": "bem-vindo ao",
+  "en": "welcome to",
+  "fr": "bienvenue chez",
+  "es": "bienvenido a"
  },
  {
-  "pt": "⟦s0⟧ role para revelar",
-  "en": "⟦s0⟧ scroll to reveal",
-  "fr": "⟦s0⟧ faites défiler pour révéler",
-  "es": "⟦s0⟧ desliza para revelar"
+  "pt": "⟦s0⟧ role para abrir",
+  "en": "⟦s0⟧ scroll to open",
+  "fr": "⟦s0⟧ faites défiler pour ouvrir",
+  "es": "⟦s0⟧ desliza para abrir"
  },
  {
   "pt": "O que o OAZE garante",
