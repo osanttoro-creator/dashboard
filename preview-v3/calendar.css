@@ -1,0 +1,32 @@
+.v3-calendar{display:grid;gap:22px}
+.v3-cal-heading h2{margin:5px 0 0;text-transform:lowercase}
+.v3-cal-nav{display:flex;gap:8px;align-items:center}
+.v3-cal-nav button{min-width:38px;min-height:38px;padding:0 12px;border:1px solid rgba(240,229,207,.14);border-radius:12px;background:rgba(240,229,207,.05);color:var(--milk);font:600 14px var(--body);cursor:pointer}
+.v3-cal-nav button:hover,.v3-cal-nav button:focus-visible{border-color:var(--teal);outline:none}
+.v3-cal-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.v3-cal-summary>span{display:grid;gap:6px;padding:16px 18px;border:1px solid rgba(240,229,207,.1);border-radius:18px;background:rgba(240,229,207,.04)}
+.v3-cal-summary small{color:var(--muted)}
+.v3-cal-summary strong{font:600 clamp(15px,2vw,20px) var(--mono);font-variant-numeric:tabular-nums}
+.v3-cal-layout{grid-template-columns:minmax(0,1.5fr) minmax(265px,.8fr);align-items:start}
+.v3-cal-grid{padding:16px}
+.v3-cal-weekdays,.v3-cal-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.v3-cal-weekdays span{text-align:center;padding:5px;color:var(--muted);font:600 11px var(--body);text-transform:uppercase;letter-spacing:.08em}
+.v3-cal-days{margin-top:5px}
+.v3-cal-day,.v3-cal-empty{min-height:72px;border-radius:14px}
+.v3-cal-day{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:11px;border:1px solid transparent;background:rgba(240,229,207,.035);color:var(--milk);text-align:left;cursor:pointer;font:600 13px var(--mono);transition:background .2s,border-color .2s,transform .2s}
+.v3-cal-day:hover{background:rgba(95,169,155,.12);transform:translateY(-1px)}
+.v3-cal-day:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.v3-cal-day.is-active{border-color:var(--teal);background:rgba(95,169,155,.18)}
+.v3-cal-day.is-today>span:first-child{display:grid;place-items:center;width:25px;height:25px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--teal);color:var(--night)}
+.v3-cal-marks{display:flex;gap:3px}
+.v3-cal-marks i,.v3-cal-event-kind{display:block;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.v3-cal-marks i.in,.v3-cal-event-kind.in{background:var(--teal)}
+.v3-cal-marks i.due,.v3-cal-event-kind.due{background:var(--milk)}
+.v3-cal-detail{display:grid;gap:13px}
+.v3-cal-detail h2{margin:0;text-transform:lowercase}
+.v3-cal-detail>.v3-secondary{margin-top:9px}
+.v3-cal-event{display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 0;border-top:1px solid rgba(240,229,207,.1)}
+.v3-cal-event small{display:block;margin-top:3px;color:var(--muted)}
+.v3-cal-event .v3-mono{font-size:12px}
+@media(max-width:800px){.v3-cal-layout{grid-template-columns:1fr}.v3-cal-day,.v3-cal-empty{min-height:57px}.v3-cal-summary>span{padding:12px}.v3-cal-summary strong{font-size:13px}}
+@media(max-width:420px){.v3-cal-summary{gap:5px}.v3-cal-summary>span{padding:10px 8px}.v3-cal-day,.v3-cal-empty{min-height:48px;padding:7px}.v3-cal-weekdays,.v3-cal-days{gap:2px}.v3-cal-event{grid-template-columns:8px minmax(0,1fr)}.v3-cal-event .v3-mono{grid-column:2}}

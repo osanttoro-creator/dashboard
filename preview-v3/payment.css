@@ -1,0 +1,7 @@
+.v3-plan-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px}
+.v3-plan-head p{max-width:62ch}
+.v3-plan-head .v3-segment{flex:none}
+.v3-plan-status{margin:0 0 18px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(95,169,155,.08);color:var(--milk)}
+.v3-plan-cancel{margin-top:22px}
+.v3-plan button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:760px){.v3-plan-head{align-items:flex-start;flex-direction:column}.v3-plan-head .v3-segment{width:100%}}

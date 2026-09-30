@@ -28,6 +28,69 @@
   V3Backend.client = () => client;
   V3Backend.saving = () => saving;
   V3Backend.withTimeout = bounded;
+  V3Backend.subscription = async function () {
+    if (!client || !user) throw new Error('Entre na sua conta para consultar a assinatura.');
+    const { data, error } = await bounded(client.from('subscriptions')
+      .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
+      .eq('user_id', user.id).maybeSingle());
+    if (error) throw error;
+    return data || { plan_id: 'free', status: 'free', cancel_at_period_end: false };
+  };
+  V3Backend.payment = async function (body) {
+    if (!client || !user) throw new Error('Entre na sua conta para gerenciar a assinatura.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    if (!/^https:\/\//.test(base) || !publicKey) throw new Error('Pagamento indisponível: conexão não configurada.');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token) throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-pagamento', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify(body)
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.erro) throw new Error(result.mensagem || 'Pagamento indisponível agora. Nada foi cobrado.');
+    return result;
+  };
+  async function requirePrivacyAcceptance() {
+    const { data, error } = await bounded(client.from('privacy_acceptances')
+      .select('policy_version').eq('user_id', user.id)
+      .eq('policy_version', '2026-09-15').maybeSingle());
+    if (error) throw error;
+    if (data) return;
+    const view = document.getElementById('v3-view');
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">ANTES DE ENTRAR</span><h2>Seus dados, suas regras.</h2><p>Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.</p><p><a href="/privacidade" target="_blank" rel="noopener noreferrer">Política de privacidade</a> · <a href="/termos" target="_blank" rel="noopener noreferrer">Termos de uso</a></p><form id="v3-privacy-form"><label><input type="checkbox" name="accept" required> Li e aceito a Política de privacidade (versão 15/09/2026).</label><button type="submit" class="v3-primary">Aceitar e entrar</button><button type="button" class="v3-secondary" id="v3-privacy-decline">Não aceitar</button><p role="alert" id="v3-privacy-error" hidden></p></form></section>';
+    await new Promise((resolve) => {
+      document.getElementById('v3-privacy-decline').addEventListener('click', async () => {
+        await client.auth.signOut().catch(() => {});
+        global.location.replace('/');
+      });
+      document.getElementById('v3-privacy-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (!form.elements.accept.checked) return;
+        const button = form.querySelector('[type="submit"]');
+        const status = document.getElementById('v3-privacy-error');
+        button.disabled = true;
+        try {
+          const result = await bounded(client.from('privacy_acceptances').insert({
+            user_id: user.id,
+            policy_version: '2026-09-15',
+            accepted_at: new Date().toISOString(),
+            source: 'app_bloqueio'
+          }));
+          if (result.error && result.error.code !== '23505') throw result.error;
+          resolve();
+        } catch (error) {
+          status.textContent = 'Não consegui registrar o aceite. Tente novamente; seus dados não foram carregados.';
+          status.hidden = false;
+          button.disabled = false;
+        }
+      });
+    });
+  }
 
   V3Backend.reload = async function () {
     if (saving) { refreshPending = true; return false; }
@@ -89,6 +152,33 @@
     }
   };
 
+  V3Backend.createProfile = async function (name) {
+    if (saving) throw new Error('Espere a gravação anterior terminar.');
+    if (!user || !client) throw new Error('Entre na sua conta antes de criar um espaço.');
+    const cleanName = String(name || '').trim().slice(0, 60);
+    if (!cleanName) throw new Error('Dê um nome ao novo espaço.');
+    const profile = Store.normalizeProfile({ id: U.uid('profile'), name: cleanName });
+    saving = true;
+    try {
+      const { data, error } = await bounded(client.rpc('v3_salvar_perfil', {
+        p_profile: profile,
+        p_expected_updated_at: 0
+      }));
+      if (error) throw error;
+      const saved = Store.normalizeProfile(data);
+      revisions[saved.id] = stamp(saved);
+      Store.state().profiles.push(saved);
+      Store.setActiveProfile(saved.id);
+      return saved;
+    } finally {
+      saving = false;
+      if (refreshPending) {
+        refreshPending = false;
+        await V3Backend.reload().catch((error) => console.error('V3/atualização remota:', error));
+      }
+    }
+  };
+
   V3Backend.start = async function () {
     client = SiteAuth.cliente();
     if (!client) throw new Error('A conexão com o Supabase não está configurada.');
@@ -106,13 +196,8 @@
       email: verified.email || authUser.email || '',
       name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || ''
     };
-    // Contas antigas e retornos de OAuth também precisam do aceite registrado.
-    // Até a V3 ter seu próprio fluxo legal, o painel clássico conclui esse passo.
-    const { data: acceptance, error: acceptanceError } = await bounded(client.from('privacy_acceptances')
-      .select('policy_version').eq('user_id', user.id)
-      .eq('policy_version', '2026-09-15').maybeSingle());
-    if (acceptanceError) throw acceptanceError;
-    if (!acceptance) { global.location.replace('/app?classic=1'); return false; }
+    // Nenhum documento financeiro é lido antes do aceite obrigatório.
+    await requirePrivacyAcceptance();
     /* Compatibilidade somente de leitura para Limites e Coco. A V3 não
        inicializa o Sync antigo nem sua cópia local compartilhada. */
     global.Sync = { currentUser: () => ({ uid: user.id, email: user.email, displayName: ownerName() }) };

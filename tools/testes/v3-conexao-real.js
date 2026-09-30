@@ -36,6 +36,15 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   let accepted = true;
   let dataReads = 0;
   const redirects = [];
+  let submitAcceptance;
+  const privacyView = { innerHTML: '' };
+  const privacyButton = { disabled: false };
+  const privacyStatus = { textContent: '', hidden: true };
+  const privacyForm = {
+    elements: { accept: { checked: true } },
+    querySelector: () => privacyButton,
+    addEventListener(_event, callback) { submitAcceptance = callback; }
+  };
   const state = { profiles: [], activeProfileId: null };
   const Store = {
     state: () => state,
@@ -54,7 +63,8 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
     },
     from(name) {
       if (name === 'privacy_acceptances') return {
-        select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-09-15' } : null }) }) }) })
+        select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-09-15' } : null }) }) }) }),
+        insert: async (row) => { assert.equal(row.source, 'app_bloqueio'); accepted = true; return { error: null }; }
       };
       assert.equal(name, 'dados');
       dataReads++;
@@ -74,7 +84,10 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   const context = {
     console, Store, setTimeout, clearTimeout,
     SiteAuth: { cliente: () => client, quemEsta: async () => ({ id: 'user-1', email: 'u@example.test' }) },
-    document: { addEventListener() {} },
+    document: { addEventListener() {}, getElementById(id) {
+      return { 'v3-view': privacyView, 'v3-privacy-form': privacyForm,
+        'v3-privacy-decline': { addEventListener() {} }, 'v3-privacy-error': privacyStatus }[id];
+    } },
     location: { pathname: '/app', replace(url) { redirects.push(url); } },
     get localStorage() { localCacheReads++; throw new Error('Cache de outra conta'); }
   };
@@ -98,7 +111,12 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   assert.equal(localCacheReads, 0);
   accepted = false;
   const readsBeforeConsentGate = dataReads;
-  assert.equal(await context.V3Backend.start(), false);
-  assert.equal(redirects.at(-1), '/app?classic=1');
+  const waiting = context.V3Backend.start();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.match(privacyView.innerHTML, /Li e aceito a Política de privacidade/);
   assert.equal(dataReads, readsBeforeConsentGate);
+  await submitAcceptance({ preventDefault() {}, currentTarget: privacyForm });
+  assert.equal(await waiting, true);
+  assert.equal(dataReads, readsBeforeConsentGate + 1);
+  assert.equal(redirects.length, 0);
 })().catch((error) => { console.error(error); process.exitCode = 1; });

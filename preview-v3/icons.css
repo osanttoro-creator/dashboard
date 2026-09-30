@@ -8,6 +8,7 @@
 .v3-fi-investments::before{content:'\f3a5'}
 .v3-fi-categories::before{content:'\f390'}
 .v3-fi-goals::before{content:'\f309'}
+.v3-fi-calendar::before{content:'\f339'}
 .v3-fi-reminders::before{content:'\f239'}
 .v3-fi-settings::before{content:'\fbd2'}
 .v3-fi-plan::before{content:'\fa7f'}
@@ -20,10 +21,17 @@
 .v3-fi-heart::before{content:'\f7a0'}
 .v3-fi-leisure::before{content:'\f6df'}
 .v3-fi-subscription::before{content:'\fd0d'}
+.v3-fi-contactless::before{content:'\f9ab'}
+.v3-fi-education::before{content:'\f70f'}
+.v3-fi-shopping::before{content:'\fbf7'}
+.v3-fi-receipt::before{content:'\fb16'}
+.v3-fi-work::before{content:'\f2e9'}
+.v3-fi-exchange::before{content:'\f5ea'}
+.v3-fi-sales::before{content:'\fd51'}
 .v3-fi-eye::before{content:'\f5f8'}
 .v3-hide-money .v3-fi-eye::before{content:'\f5f5'}
 .v3-icon-button .v3-fi{font-size:19px}
-.v3-notification-count{position:absolute;top:-5px;right:-6px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 3px;border:2px solid var(--night);border-radius:50%;background:var(--teal);color:var(--night);font:700 10px/1 var(--body)}
+.v3-notification-count{position:absolute;top:-5px;right:0;display:grid;place-items:center;min-width:19px;height:19px;padding:0 3px;border:2px solid var(--night);border-radius:50%;background:var(--teal);color:var(--night);font:700 10px/1 var(--body)}
 .v3-notification-count[hidden]{display:none}
 .v3-nav .v3-fi{font-size:18px}
 .v3-bottom .v3-fi{font-size:23px}

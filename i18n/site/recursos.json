@@ -6,10 +6,10 @@
   "es": "Funciones de control financiero personal | OAZE"
  },
  {
-  "pt": "Controle contas, cartões, gastos, parcelas, orçamentos e metas. Veja a semana, o mês e o ano e analise seu dinheiro com o assistente financeiro UGLEZ.",
-  "en": "Manage accounts, credit cards, spending, installments, budgets and goals. See your week, month and year and analyze your money with the UGLEZ financial assistant.",
-  "fr": "Gérez comptes, cartes, dépenses, paiements échelonnés, budgets et objectifs. Visualisez la semaine, le mois et l'année et analysez votre argent avec l'assistant financier UGLEZ.",
-  "es": "Controla cuentas, tarjetas, gastos, cuotas, presupuestos y metas. Mira la semana, el mes y el año y analiza tu dinero con el asistente financiero UGLEZ."
+  "pt": "Organize contas, cartões, lançamentos, investimentos e metas. Veja o mês no calendário financeiro e converse com a Coco, assistente do OAZE.",
+  "en": "Organize accounts, cards, transactions, investments and goals. View the month in the financial calendar and talk to Coco, OAZE's assistant.",
+  "fr": "Organisez vos comptes, cartes, opérations, investissements et objectifs. Consultez le mois dans le calendrier financier et échangez avec Coco, l'assistante d'OAZE.",
+  "es": "Organiza cuentas, tarjetas, movimientos, inversiones y metas. Consulta el mes en el calendario financiero y habla con Coco, la asistente de OAZE."
  },
  {
   "pt": "Recursos — OAZE",
@@ -30,10 +30,10 @@
   "es": "OAZE — control financiero personal"
  },
  {
-  "pt": "Contas, cartões, gastos, orçamentos, metas e análise financeira com o UGLEZ.",
-  "en": "Accounts, cards, spending, budgets, goals and financial analysis with UGLEZ.",
-  "fr": "Comptes, cartes, dépenses, budgets, objectifs et analyse financière avec UGLEZ.",
-  "es": "Cuentas, tarjetas, gastos, presupuestos, metas y análisis financiero con UGLEZ."
+  "pt": "Contas, cartões, calendário financeiro, investimentos e ajuda da Coco no OAZE.",
+  "en": "Accounts, cards, financial calendar, investments and help from Coco in OAZE.",
+  "fr": "Comptes, cartes, calendrier financier, investissements et aide de Coco dans OAZE.",
+  "es": "Cuentas, tarjetas, calendario financiero, inversiones y ayuda de Coco en OAZE."
  },
  {
   "pt": "Pular para o conteúdo",
@@ -276,40 +276,34 @@
   "es": "Lo personal y el trabajo separados de verdad, cada uno con sus cuentas, categorías y presupuesto. 1 espacio en Semente y Coqueiro, hasta 5 en Oásis."
  },
  {
-  "pt": "UGLEZ",
-  "en": "UGLEZ",
-  "fr": "UGLEZ",
-  "es": "UGLEZ"
+  "pt": "Coco",
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
-  "pt": "A leitura do mês em português. Boa parte é cálculo feito no próprio navegador, sem dado nenhum saindo. <a href=\"/#uglez\">Como funciona</a>.",
-  "en": "Your month explained in plain words (currently in Portuguese). Much of it is calculated in your own browser, with no data leaving it. <a href=\"/#uglez\">How it works</a>.",
-  "fr": "La lecture de votre mois en mots simples (actuellement en portugais). Une grande partie est calculée dans votre propre navigateur, sans qu'aucune donnée ne sorte. <a href=\"/#uglez\">Comment ça marche</a>.",
-  "es": "La lectura del mes en palabras simples (por ahora en portugués). Buena parte se calcula en tu propio navegador, sin que salga ningún dato. <a href=\"/#uglez\">Cómo funciona</a>."
+  "pt": "A leitura do mês em português. Os totais são calculados no aplicativo; quando você conversa com a Coco, o servidor recebe apenas os agregados necessários. <a href=\"/#coco\">Como funciona</a>.",
+  "en": "A monthly overview in Portuguese. Totals are calculated in the app; when you talk to Coco, the server receives only the aggregates needed. <a href=\"/#coco\">How it works</a>.",
+  "fr": "Une vue du mois en portugais. Les totaux sont calculés dans l'application ; lorsque vous parlez à Coco, le serveur ne reçoit que les agrégats nécessaires. <a href=\"/#coco\">Comment ça marche</a>.",
+  "es": "Una vista del mes en portugués. Los totales se calculan en la aplicación; cuando hablas con Coco, el servidor recibe solo los datos agregados necesarios. <a href=\"/#coco\">Cómo funciona</a>."
  },
  {
-  "pt": "Exportação e portabilidade",
-  "en": "Export and portability",
-  "fr": "Export et portabilité",
-  "es": "Exportación y portabilidad"
+  "pt": "Registre aportes, informe o valor atual e acompanhe a distribuição por tipo. A simulação de juros compostos é uma estimativa, não uma recomendação.",
+  "en": "Record contributions, enter the current value and track the breakdown by type. The compound-interest simulation is an estimate, not a recommendation.",
+  "fr": "Enregistrez vos versements, indiquez la valeur actuelle et suivez la répartition par type. La simulation des intérêts composés est une estimation, pas une recommandation.",
+  "es": "Registra aportaciones, indica el valor actual y consulta la distribución por tipo. La simulación del interés compuesto es una estimación, no una recomendación."
  },
  {
-  "pt": "CSV e PDF dos seus lançamentos na tela de Relatórios, a partir do Coqueiro, em formato aberto e na hora. Entre aparelhos os dados viajam sozinhos pela conta — não há arquivo para guardar nem restaurar à mão.",
-  "en": "CSV and PDF of your entries on the Reports screen, from Coqueiro up, in an open format and right away. Between devices the data travels on its own through your account — there is no file to keep or restore by hand.",
-  "fr": "CSV et PDF de vos écritures sur l'écran Rapports, à partir de Coqueiro, dans un format ouvert et sur-le-champ. D'un appareil à l'autre, les données voyagent seules par votre compte — aucun fichier à garder ni à restaurer à la main.",
-  "es": "CSV y PDF de tus movimientos en la pantalla de Informes, desde Coqueiro, en formato abierto y al instante. Entre dispositivos los datos viajan solos por tu cuenta: no hay archivo que guardar ni restaurar a mano."
+  "pt": "Conta sincronizada",
+  "en": "Synced account",
+  "fr": "Compte synchronisé",
+  "es": "Cuenta sincronizada"
  },
  {
-  "pt": "Funciona sem internet",
-  "en": "Works offline",
-  "fr": "Fonctionne hors ligne",
-  "es": "Funciona sin internet"
- },
- {
-  "pt": "O que você registrar offline entra numa fila e sobe quando a conexão voltar. A tela diz em qual dos estados você está — offline, sincronizando, sincronizado ou com erro.",
-  "en": "Whatever you record offline goes into a queue and syncs when the connection comes back. The screen tells you which state you are in — offline, syncing, synced or error.",
-  "fr": "Ce que vous enregistrez hors ligne entre dans une file et se synchronise au retour de la connexion. L'écran indique dans quel état vous êtes — hors ligne, synchronisation, synchronisé ou erreur.",
-  "es": "Lo que registres sin conexión entra en una cola y se sube cuando vuelve la conexión. La pantalla dice en qué estado estás: sin conexión, sincronizando, sincronizado o con error."
+  "pt": "Na versão atual, seus dados ficam vinculados à sua conta e são carregados do servidor. Para registrar mudanças, é preciso ter conexão.",
+  "en": "In the current version, your data is linked to your account and loaded from the server. You need a connection to save changes.",
+  "fr": "Dans la version actuelle, vos données sont liées à votre compte et chargées depuis le serveur. Une connexion est nécessaire pour enregistrer les modifications.",
+  "es": "En la versión actual, tus datos están vinculados a tu cuenta y se cargan desde el servidor. Necesitas conexión para guardar cambios."
  },
  {
   "pt": "O que o OAZE não faz",
@@ -330,10 +324,10 @@
   "es": "No se conecta a tu banco"
  },
  {
-  "pt": "Não pedimos a senha do seu banco e não usamos Open Finance: o OAZE nunca tem acesso à sua conta. Os lançamentos são seus — e o que se repete todo mês você cadastra uma vez só, como fixo.",
-  "en": "We never ask for your bank password and we do not use Open Finance: OAZE never has access to your account. The entries are yours — and anything that repeats every month you add only once, as a recurring item.",
-  "fr": "Nous ne demandons jamais le mot de passe de votre banque et n'utilisons pas l'Open Finance : OAZE n'a jamais accès à votre compte. Les opérations sont les vôtres — et ce qui se répète chaque mois, vous ne le saisissez qu'une fois, comme récurrence.",
-  "es": "No pedimos la contraseña de tu banco ni usamos Open Finance: OAZE nunca tiene acceso a tu cuenta. Los movimientos son tuyos, y lo que se repite cada mes lo registras una sola vez, como fijo."
+  "pt": "Não pedimos a senha do seu banco e não usamos Open Finance: o OAZE nunca tem acesso à sua conta. Você registra os lançamentos manualmente.",
+  "en": "We do not ask for your bank password or use Open Finance: OAZE never has access to your bank account. You enter transactions manually.",
+  "fr": "Nous ne demandons pas votre mot de passe bancaire et n'utilisons pas l'Open Finance : OAZE n'a jamais accès à votre compte bancaire. Vous saisissez les opérations manuellement.",
+  "es": "No pedimos la contraseña de tu banco ni usamos Open Finance: OAZE nunca accede a tu cuenta bancaria. Registras los movimientos manualmente."
  },
  {
   "pt": "Não recomenda investimento",
@@ -354,16 +348,16 @@
   "es": "No inventa previsiones"
  },
  {
-  "pt": "Sem movimentação suficiente, a UGLEZ diz que não há base para uma previsão. Ela não completa o vazio com “R$ 0,00 em um ano”.",
-  "en": "Without enough activity, UGLEZ says there is no basis for a forecast. It doesn't fill the gap with \"R$ 0.00 in a year\".",
-  "fr": "Sans mouvements suffisants, UGLEZ indique qu'il n'y a pas de base pour une prévision. Elle ne comble pas le vide avec « 0,00 R$ dans un an ».",
-  "es": "Sin movimientos suficientes, UGLEZ dice que no hay base para una previsión. No rellena el vacío con “R$ 0,00 en un año”."
+  "pt": "Sem movimentação suficiente, a Coco diz que não há base para uma previsão. Ela não completa o vazio com “R$ 0,00 em um ano”.",
+  "en": "Without enough transactions, Coco says there is no basis for a forecast. She does not fill the gap with ‘R$ 0.00 in one year’.",
+  "fr": "Sans suffisamment d'opérations, Coco indique qu'il n'y a pas de base pour une prévision. Elle ne comble pas le vide avec « 0,00 R$ dans un an ».",
+  "es": "Sin suficientes movimientos, Coco indica que no hay base para una previsión. No rellena el vacío con «0,00 R$ en un año»."
  },
  {
-  "pt": "<strong>Ainda não disponível:</strong> relatórios personalizados, backup agendado, colaboradores no mesmo espaço e simulações avançadas da UGLEZ. Estão no plano do produto, mas não funcionam hoje — e por isso não estão na lista de nenhum plano.",
-  "en": "<strong>Not available yet:</strong> custom reports, scheduled backup, collaborators in the same space and advanced UGLEZ simulations. They are on the product roadmap but do not work today — which is why they are not listed in any plan.",
-  "fr": "<strong>Pas encore disponible :</strong> rapports personnalisés, sauvegarde programmée, collaborateurs dans le même espace et simulations avancées d'UGLEZ. Ils figurent dans la feuille de route du produit, mais ne fonctionnent pas aujourd'hui — c'est pourquoi ils n'apparaissent dans aucune formule.",
-  "es": "<strong>Todavía no disponible:</strong> informes personalizados, copia de seguridad programada, colaboradores en el mismo espacio y simulaciones avanzadas de UGLEZ. Están en el plan del producto, pero hoy no funcionan, y por eso no aparecen en la lista de ningún plan."
+  "pt": "<strong>Ainda não disponível:</strong> relatórios personalizados, backup agendado, colaboradores no mesmo espaço e simulações avançadas da Coco. Estão no plano do produto, mas não funcionam hoje — e por isso não estão na lista de nenhum plano.",
+  "en": "<strong>Not available yet:</strong> custom reports, scheduled backups, collaborators in the same workspace and advanced Coco simulations. They are on the product roadmap but do not work today, so they are not listed in any plan.",
+  "fr": "<strong>Pas encore disponibles :</strong> rapports personnalisés, sauvegardes programmées, collaborateurs dans le même espace et simulations avancées de Coco. Ces fonctions sont prévues, mais ne marchent pas encore ; elles ne figurent donc dans aucune offre.",
+  "es": "<strong>Aún no disponible:</strong> informes personalizados, copias de seguridad programadas, colaboradores en el mismo espacio y simulaciones avanzadas de Coco. Están previstas, pero todavía no funcionan; por eso no figuran en ningún plan."
  },
  {
   "pt": "Experimente sem compromisso",

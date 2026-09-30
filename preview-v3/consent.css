@@ -1,0 +1,7 @@
+.v3-consent{max-width:640px;margin:8vh auto 0;display:grid;gap:18px}
+.v3-consent h2{font-size:clamp(24px,4vw,36px)}
+.v3-consent a{text-decoration:underline;text-underline-offset:3px;color:var(--teal)}
+.v3-consent form{display:grid;gap:14px;margin-top:5px}
+.v3-consent label{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px}
+.v3-consent input{width:19px;height:19px;flex:none;accent-color:var(--teal)}
+.v3-consent [role=alert]{color:#e6aa9d}

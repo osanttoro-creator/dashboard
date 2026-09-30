@@ -1,0 +1,14 @@
+.v3-invest-page{display:grid;gap:22px}
+.v3-invest .v3-wave{min-height:220px;padding-bottom:22px}
+.v3-invest .v3-stack{min-width:0}
+.v3-invest-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:15px 0;border-top:1px solid var(--line)}
+.v3-invest-row:first-of-type{margin-top:14px}
+.v3-invest-row>span{display:grid;gap:4px}
+.v3-invest-row small{font-size:11px}
+.v3-invest-row button{border:1px solid var(--line);border-radius:11px;padding:8px 12px;color:var(--milk);background:rgba(240,229,207,.05)}
+.v3-invest-row button:hover{border-color:var(--teal)}
+.v3-invest-mix{margin:12px 0;gap:12px}
+.v3-invest-mix strong{display:flex;gap:9px;align-items:center}
+.v3-invest-mix i{display:block;width:11px;height:11px;border-radius:3px;flex:none}
+.v3-invest-mix .v3-mono{font-size:12px;text-align:right}
+@media(max-width:600px){.v3-invest-row{grid-template-columns:minmax(0,1fr) auto;gap:8px}.v3-invest-row>span:nth-child(2){grid-column:1}.v3-invest-row button{grid-column:2;grid-row:1 / span 2}.v3-invest-mix{align-items:flex-start}.v3-invest-mix .v3-mono{font-size:11px}}
