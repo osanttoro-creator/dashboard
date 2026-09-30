@@ -27,9 +27,13 @@
     car: '<path d="m5 16 2-8h10l2 8M3 13h18v6H3zM6 19v2m12-2v2M7 10h10"/>',
     heart: '<path d="M12 20 4 12C0 8 5 2 10 6l2 2 2-2c5-4 10 2 6 6z"/>',
     leisure: '<path d="M6 9 4 13c-2 5 0 7 3 7l5-4 5 4c3 0 5-2 3-7l-2-4H6zM8 11v4m-2-2h4m6-1h.01M18 14h.01"/>',
-    subscription: '<path d="M5 7h13l-3-3m3 3-3 3M19 17H6l3 3m-3-3 3-3"/>'
+    subscription: '<path d="M5 7h13l-3-3m3 3-3 3M19 17H6l3 3m-3-3 3-3"/>',
+    contactless: '<path d="M7 9a5 5 0 0 1 0 6M11 6a9 9 0 0 1 0 12M15 3a13 13 0 0 1 0 18"/>'
   };
-  const icon = (name) => `<svg aria-hidden="true" viewBox="0 0 24 24">${iconPaths[name] || iconPaths.more}</svg>`;
+  const uiIcons = new Set(['home','transactions','wallet','investments','categories','goals','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription']);
+  const icon = (name) => uiIcons.has(name)
+    ? `<span class="v3-fi v3-fi-${name}" aria-hidden="true"></span>`
+    : `<svg aria-hidden="true" viewBox="0 0 24 24">${iconPaths[name] || iconPaths.more}</svg>`;
   const esc = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const money = (n) => 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const pct = (n) => Math.max(0, Math.min(100, Number(n) || 0));
@@ -38,15 +42,15 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', selected: null, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, chat: [] };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, chat: [] };
   let limitsPromise = Promise.resolve(demo);
   global.App = { get ym() { return state.ym; }, goTo: (page) => go(page === 'accounts' ? 'wallet' : page) };
 
   const sample = {
-    owner: 'ana souza', plan: 'OAZE mensal', balance: 18420.35, accountsBalance: 12180.35,
+    owner: 'ana souza', plan: 'OAZE mensal', balance: 18420.35, accountsBalance: 12180.35, cardInvoices: { c1: 1982.3, c2: 640 },
     accounts: [
-      { id: 'a1', name: 'Itaú', bank: 'Itaú', last4: '0917', openingBalance: 12180.35, color: '#477486' },
-      { id: 'a2', name: 'Nubank', bank: 'Nubank', last4: '2204', openingBalance: 0, color: '#196e58' }
+      { id: 'a1', name: 'Itaú', bank: 'Itaú', last4: '0917', openingBalance: 10830.35, color: '#477486' },
+      { id: 'a2', name: 'Nubank', bank: 'Nubank', last4: '2204', openingBalance: 1350, color: '#196e58' }
     ],
     cards: [
       { id: 'c2', name: 'Inter', bank: 'Inter', last4: '1130', limit: 3000, closingDay: 25, dueDay: 10, color: '#626d72' },
@@ -132,8 +136,9 @@
   function items() {
     return [...profile().accounts.filter((a) => !a.archived).map((a) => ({ kind: 'debit', data: a })), ...profile().cards.map((c) => ({ kind: 'credit', data: c }))];
   }
+  function walletItems() { return items().filter((x) => x.kind === state.walletKind); }
   function itemById(id) { return items().find((x) => x.data.id === id); }
-  function selectedItem() { return itemById(state.selected) || items()[0] || null; }
+  function selectedItem() { return walletItems().find((x) => x.data.id === state.selected) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${icon(page)}<span>${esc(names[page])}</span></button>`; }
   function renderNav() {
     $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','goals','reminders','settings','plan'].map(navButton).join('');
@@ -153,21 +158,77 @@
       ? 'Salvando na sua conta…' : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
     if (demo) $('#v3-coco-count').textContent = '4';
-    $('#v3-notification-dot').hidden = !reminders().length;
+    const notificationCount = reminders().length;
+    $('#v3-notification-dot').hidden = !notificationCount;
+    $('#v3-notification-dot').textContent = notificationCount > 9 ? '9+' : String(notificationCount);
+    $('[data-action="privacy"]').setAttribute('aria-pressed', String(state.hideMoney));
+    $('[data-action="privacy"]').setAttribute('aria-label', state.hideMoney ? 'Mostrar valores' : 'Ocultar valores');
   }
-  function bankMark(bank) { const b = String(bank || '').toLowerCase(); return b.includes('nubank') ? 'nu' : b.includes('inter') ? 'in' : b.includes('itaú') || b.includes('itau') ? 'it' : b.slice(0, 2) || '•'; }
-  function bankColor(bank) { const b = String(bank || '').toLowerCase(); return b.includes('nubank') ? '#8500c8' : b.includes('inter') ? '#ff7600' : b.includes('itaú') || b.includes('itau') ? '#f17900' : '#355565'; }
+  const BANK_NAMES = {
+    bancodobrasil:'Banco do Brasil', btg:'BTG Pactual', c6:'C6 Bank', efibank:'Efí Bank',
+    itau:'Itaú', mercadopago:'Mercado Pago', ngcash:'NG.CASH', nubank:'Nubank',
+    pagbank:'PagBank', pan:'Banco PAN', picpay:'PicPay', sicoob:'Sicoob',
+    sicredi:'Sicredi', xp:'XP', bs2:'Banco BS2', bv:'Banco BV', bmg:'Banco BMG',
+    asaas:'Asaas', infinitepay:'InfinitePay', ton:'Ton', iugu:'Iugu',
+    agibank:'Agibank', bradesco:'Bradesco', caixa:'Caixa', cora:'Cora',
+    digio:'Digio', inter:'Inter', mercantil:'Mercantil', neon:'Neon',
+    next:'Next', nomad:'Nomad', original:'Original', paypal:'PayPal',
+    revolut:'Revolut', rico:'Rico', safra:'Safra', santander:'Santander',
+    stone:'Stone', wise:'Wise', avenue:'Avenue'
+  };
+  const BANK_GROUPS = [
+    ['Bancos e cooperativas', 'agibank bancodobrasil bmg bradesco bs2 btg bv c6 caixa digio inter itau mercantil neon next nubank original pan safra santander sicoob sicredi'],
+    ['Contas digitais e pagamentos', 'asaas cora efibank infinitepay iugu mercadopago ngcash pagbank paypal picpay stone ton'],
+    ['Investimentos e exterior', 'avenue nomad revolut rico wise xp']
+  ];
+  const CARD_PLASTIC = { itau:'#F3BC45', bancodobrasil:'#F8D71A', c6:'#242424',
+    xp:'#20252A', btg:'#0F3978', safra:'#1D2959', nomad:'#FFCE04',
+    mercadopago:'#00AEEF', pan:'#0098DA', bv:'#223AD2', paypal:'#253B80',
+    iugu:'#202020', ngcash:'#222222', revolut:'#262626', wise:'#9FE870' };
+  function bankKey(name) { return global.Icons?.bankKey(name) || null; }
+  function bankBrand(name, fallback) {
+    const key=bankKey(name), preset=global.BancosBR?.PRESETS?.[key];
+    return safeColor(CARD_PLASTIC[key] || (preset?.fundo === '#FFFFFF' ? preset.cor : preset?.fundo) || fallback || '#355565');
+  }
+  function cardInk(hex) {
+    const rgb=[1,3,5].map((i)=>parseInt(hex.slice(i,i+2),16)/255);
+    const l=rgb.map((v)=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+    return .2126*l[0]+.7152*l[1]+.0722*l[2]>.38?'#14212A':'#F8F4E9';
+  }
+  function bankLogo(name, color) { return global.Icons?.bank(name, 26, color).outerHTML || icon('wallet'); }
+  function walletItemValue(item) {
+    if (!item) return 0;
+    if (demo) return item.kind === 'credit'
+      ? Number(sample.cardInvoices[item.data.id] || 0)
+      : Number(item.data.openingBalance || 0);
+    try { return item.kind === 'credit'
+      ? Number(Calc.invoice(item.data.id, state.ym)?.planned || 0)
+      : Number(Calc.accountBalance(item.data.id, U.monthEnd(state.ym)) || 0); }
+    catch (e) { return 0; }
+  }
+  function bankPicker() {
+    const known=global.BancosBR?.PRESETS || {};
+    const groups=BANK_GROUPS.map(([label, keys], index)=>`<details class="v3-bank-group" ${index===0?'open':''}><summary>${esc(label)}</summary><div class="v3-bank-options">${keys.split(' ').filter((key)=>known[key]).map((key)=>{
+      const name=BANK_NAMES[key] || key, color=bankBrand(name), ink=cardInk(color);
+      return `<label class="v3-bank-option"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
+    }).join('')}</div></details>`).join('');
+    return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend><p>Escolha a instituição; o nome da conta pode ser personalizado.</p>${groups}<label class="v3-bank-option v3-bank-other"><input type="radio" name="bank" value="Outro"><span class="v3-bank-option-logo">${icon('wallet')}</span><span>Outro</span></label></fieldset>`;
+  }
   function cardButton(item, selected) {
     const d = item.data, name = d.bank || d.name;
-    const tint = item.kind === 'credit' ? '#315769' : '#477689';
-    return `<button type="button" data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--card-light:${tint};--card-dark:#1b3443;--brand:${bankColor(name)}"><span class="v3-bankmark">${esc(bankMark(name))}</span><strong>${esc(name)}</strong><span class="v3-last">•• ${esc(d.last4 || '••••')}</span><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span>${selected ? `<span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">)))</span><span class="v3-card-number">•••• &nbsp; •••• &nbsp; •••• &nbsp; ${esc(d.last4 || '••••')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span>` : ''}</button>`;
+    const plastic=bankBrand(name,d.color), ink=cardInk(plastic);
+    const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
+    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--card-plastic:${plastic};--card-ink:${ink}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(name,ink)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
   }
   function wallet(pocketLabel, expanded) {
-    const list = items(), chosen = selectedItem();
-    if (!list.length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>sua carteira começa aqui</h2><p>Adicione uma conta ou cartão para ver seus saldos neste bolso.</p><button type="button" data-action="add-account" class="v3-primary" style="margin-top:20px">Adicionar conta</button></div>`;
-    const ordered = expanded && chosen ? [chosen, ...list.filter((x) => x.data.id !== chosen.data.id)] : list;
-    const bills=demo?2622.3:profile().cards.reduce((n,c)=>n+Calc.cardUsed(c.id),0);
-    return `<div class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}"><div class="v3-wallet-list">${ordered.map((x) => cardButton(x, !!expanded && chosen && chosen.data.id === x.data.id)).join('')}</div><div class="v3-wallet-pocket"><span class="v3-label">${esc(pocketLabel || 'SALDO TOTAL')}${!expanded && demo ? ' · ▲ 4,2%' : ''}</span><strong class="v3-money v3-sensitive">${money(pocketLabel === 'SALDO EM CONTAS' ? accountsBalance() : balance())}</strong><span class="v3-muted">${pocketLabel === 'SALDO EM CONTAS' ? `Faturas abertas: ${money(bills)}` : `${money(accountsBalance())} em contas · ${money(invested())} investidos`}</span>${!expanded ? '<span class="v3-pocket-hint">♧ &nbsp; toque num cartão para abrir</span>' : ''}</div></div>`;
+    const list = walletItems(), chosen = state.walletOpen && state.selected ? selectedItem() : null;
+    const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button></div></div>`;
+    if (!items().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>sua carteira começa aqui</h2><p>Adicione uma conta ou cartão para ver seus saldos neste bolso.</p><button type="button" data-action="add-account" class="v3-primary" style="margin-top:20px">Adicionar conta</button></div>`;
+    const credit=state.walletKind==='credit';
+    const total=chosen ? walletItemValue(chosen) : credit ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : accountsBalance();
+    const summaryLabel=chosen ? `${credit?'FATURA':'SALDO'} · ${chosen.data.bank || chosen.data.name}` : credit?'FATURAS ABERTAS':'SALDO EM CONTAS';
+    const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(chosen.data.last4):'selecionado(a)'}` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
+    return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x)=>cardButton(x,chosen?.data.id===x.data.id)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div><button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
   }
   function quickActions() { return `<div class="v3-quick">${[['Despesa','down'],['Receita','arrow'],['Transferir','transactions'],['Aporte','investments']].map(([n,i]) => `<button type="button" data-action="new" data-kind="${n.toLowerCase()}">${icon(i)}${n}</button>`).join('')}</div>`; }
   function chartPath() {
@@ -214,11 +275,10 @@
     return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para confirmar.'}</p><section class="v3-panel v3-table"><div class="v3-table-header"><span>CARTÃO</span><span>DATA</span><span>DESCRIÇÃO</span><span>CATEGORIA</span><span>COMO FOI PAGO</span><span>VALOR</span><span></span></div>${cells || '<p class="v3-muted" style="padding:20px 0">Nenhum lançamento neste filtro.</p>'}</section></div>`;
   }
   function renderWallet() {
-    const chosen = selectedItem();
+    const chosen = state.walletOpen && state.selected ? selectedItem() : null;
     const related = chosen ? currentTransactions().filter((x) => x.cardId === chosen.data.id || x.accountId === chosen.data.id).slice(0, 8) : [];
-    const invoice=chosen && chosen.kind==='credit' && !demo ? Calc.invoice(chosen.data.id,state.ym) : null;
-    const itemAmount=chosen ? (chosen.kind==='credit' ? (demo ? 1982.3 : invoice?.planned || 0) : (demo ? sample.accountsBalance : Calc.accountBalance(chosen.data.id,U.monthEnd(state.ym)))) : 0;
-    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.bank || chosen.data.name)} •• ${esc(chosen.data.last4 || '••••')}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="add-account">Adicionar</button></div>${related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>'}</section></div>`;
+    const itemAmount=walletItemValue(chosen);
+    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.bank || chosen.data.name)} •• ${esc(chosen.data.last4 || '••••')}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="add-account">Adicionar</button></div>${related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
   }
   function renderInvestments() {
     const list = profile().investments || [], total = invested(), sim = state.sim;
@@ -262,6 +322,7 @@
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, reminders:renderReminders, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (screens[state.page]||renderHome)();
+    if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     if (!demo && classicPaths[state.page]) $('#v3-view').insertAdjacentHTML('beforeend', `<p class="v3-classic-link">Precisa editar algo que ainda não está nesta tela? <a href="${classicPaths[state.page]}?classic=1">Abrir ferramentas completas</a></p>`);
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
@@ -272,7 +333,7 @@
     const gs = $('[data-column="goals"]'), bs = $('[data-column="budgets"]');
     if (gs&&bs) { gs.hidden = mobile && state.goalTab!=='goals'; bs.hidden = mobile && state.goalTab!=='budgets'; }
   }
-  function go(page) { if (!names[page]) return; state.page=page; if (demo && page==='wallet' && !state.selected) state.selected='c1'; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
+  function go(page) { if (!names[page]) return; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -304,7 +365,7 @@
     openSheet(`${sheetTop('novo lançamento',demo?'demonstração sem gravação':'seu registro financeiro')}<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x)=>`<button type="button" data-compose-kind="${x}" class="${current===x?'is-active':''}">${x}</button>`).join('')}</div>${current==='Aporte'?'<div class="v3-suggestion"><p>O aporte ainda não possui histórico próprio nesta V3. Registrar apenas um valor aqui alteraria o patrimônio sem um lançamento rastreável.</p></div>':`<form class="v3-form" id="v3-form-tx"><input type="hidden" name="kind" value="${current}"><label>VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" placeholder="0,00" required></label><label>DESCRIÇÃO<input name="description" maxlength="120" placeholder="Ex.: mercado" required></label>${current==='Transferir'?'':`<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current==='Transferir'?'CONTA DE ORIGEM':'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current==='Transferir'?`<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a)=>`<option value="${esc(a.id)}">${esc(a.bank||a.name)}</option>`).join('')}</select></label>`:''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(U.todayISO())}" required></label><label>ESTADO<select name="confirmed"><option value="true">Já foi pago / recebido</option><option value="false">Previsto</option></select></label></div><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar lançamento'}</button></form>`}`,'Novo lançamento');
   }
   function accountForm() {
-    openSheet(`${sheetTop('adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}<div class="v3-segment"><button type="button" data-account-type="account" class="is-active">Conta</button><button type="button" data-account-type="card">Cartão</button></div><form class="v3-form" id="v3-form-account"><input type="hidden" name="type" value="account"><label>NOME<input name="name" maxlength="60" placeholder="Ex.: Conta corrente" required></label><label>BANCO<input name="bank" maxlength="50" placeholder="Ex.: Itaú"></label><label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4"></label><label>VALOR INICIAL / LIMITE (R$)<input name="amount" inputmode="decimal" data-money="true" placeholder="0,00"></label><div class="v3-form-row" id="v3-card-dates" hidden><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="28"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="5"></label></div><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Adicionar à carteira'}</button></form>`,'Adicionar à carteira');
+    openSheet(`${sheetTop('adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}<div class="v3-segment"><button type="button" data-account-type="account" class="is-active">Conta</button><button type="button" data-account-type="card">Cartão</button></div><form class="v3-form" id="v3-form-account"><input type="hidden" name="type" value="account"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" placeholder="Ex.: Conta corrente" required></label>${bankPicker()}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4"></label><label>VALOR INICIAL / LIMITE (R$)<input name="amount" inputmode="decimal" data-money="true" placeholder="0,00"></label><div class="v3-form-row" id="v3-card-dates" hidden><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="28"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="5"></label></div><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Adicionar à carteira'}</button></form>`,'Adicionar à carteira');
   }
   function periodSheet() {
     openSheet(`${sheetTop('escolher mês','período exibido em todas as telas')}<form class="v3-form" id="v3-form-period"><label>MÊS E ANO<input type="month" name="ym" value="${esc(state.ym)}" required></label><button class="v3-primary" type="submit">Mostrar período</button></form>`,'Escolher período');
@@ -335,13 +396,13 @@
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), type=fd.get('type'),name=String(fd.get('name')||'').trim(),bank=String(fd.get('bank')||'').trim(),last4=String(fd.get('last4')||'').replace(/\D/g,'').slice(-4),amount=parseMoney(fd.get('amount'));
-    if (!name || (!Number.isFinite(amount) && String(fd.get('amount')||'').trim()) || amount<0) { toast('Confira nome e valor.'); return; }
+    if (!name || (!bankKey(bank) && bank!=='Outro') || (!Number.isFinite(amount) && String(fd.get('amount')||'').trim()) || amount<0) { toast('Confira nome, instituição e valor.'); return; }
     if (!canAdd(type==='card'?'credit_cards':'accounts',state.ym)) { toast('Esta inclusão ultrapassa o limite do seu plano.'); return; }
     const initial=Number.isFinite(amount)?amount:0;
     try {
       await V3Backend.mutate(() => {
-        if (type==='card') Store.cards.add({name,bank,last4,limit:initial,closingDay:+fd.get('closing')||28,dueDay:+fd.get('due')||5,color:'#355565',moeda:'BRL'});
-        else Store.accounts.add({name,bank,last4,openingBalance:initial,openedAt:U.todayISO(),type:'Conta corrente',color:'#355565',moeda:'BRL'});
+        if (type==='card') Store.cards.add({name,bank,last4,limit:initial,closingDay:+fd.get('closing')||28,dueDay:+fd.get('due')||5,color:bankBrand(bank),moeda:'BRL'});
+        else Store.accounts.add({name,bank,last4,openingBalance:initial,openedAt:U.todayISO(),type:'Conta corrente',color:bankBrand(bank),moeda:'BRL'});
       });
       closeSheet(); render(); toast('Item salvo na sua conta.');
     } catch (e) { console.error('V3/carteira:', e); toast(e.message || 'Não foi possível salvar.'); }
@@ -358,10 +419,11 @@
     openCoco();
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-select],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile]');
+    const target=ev.target.closest('[data-go],[data-action],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
-    if (target.dataset.select) { state.selected=target.dataset.select; if(state.page==='home')go('wallet');else render(); return; }
+    if (target.dataset.select) { state.selected=state.selected===target.dataset.select?null:target.dataset.select; render(); return; }
+    if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
     if (target.dataset.filter) { state.filter=target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
     if (target.dataset.goalTab) { state.goalTab=target.dataset.goalTab; render(); return; }
@@ -371,6 +433,7 @@
     if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);closeSheet();render();}return; }
     if (target.dataset.confirm) { if(demo){toast('Demonstração: nenhum dado foi alterado.');return;}const tx=Store.transactions.get(target.dataset.confirm);if(!tx){toast('Esse registro é uma ocorrência recorrente; abra o período de origem para editar.');return;}V3Backend.mutate(()=>Store.transactions.update(tx.id,{confirmed:!tx.confirmed})).then(()=>toast('Estado salvo na sua conta.')).catch((e)=>toast(e.message||'Não foi possível salvar.'));return; }
     const action=target.dataset.action;
+    if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;if(!state.walletOpen)state.selected=null;render();return;}
     if (action==='close'){closeSheet();return;}
     if (action==='back'){go('more');return;}
     if (action==='new'){const k={despesa:'Despesa',receita:'Receita',transferir:'Transferir',aporte:'Aporte'}[target.dataset.kind]||'Despesa';composer(k);return;}
@@ -398,7 +461,6 @@
     const path=location.pathname.replace(/\/+$/,'') || '/app';
     const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
-    if(demo&&state.page==='wallet'&&!state.selected)state.selected='c1';
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
     document.addEventListener('beforeinput',(ev)=>{
       const input=ev.target;

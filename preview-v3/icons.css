@@ -1,0 +1,32 @@
+/* Uicons Regular Rounded, Flaticon — licença em /assets/vendor/FLATICON-LICENSE.txt. */
+@font-face{font-family:OazeUicons;src:url('/assets/fonts/uicons-regular-rounded.woff2') format('woff2');font-style:normal;font-weight:400;font-display:block}
+.v3-fi{display:inline-grid;place-items:center;width:1.25em;height:1.25em;flex:none;font-size:20px;line-height:1}
+.v3-fi::before{font-family:OazeUicons!important;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.v3-fi-home::before{content:'\f7d5'}
+.v3-fi-transactions::before{content:'\f1c4'}
+.v3-fi-wallet::before{content:'\fedc'}
+.v3-fi-investments::before{content:'\f3a5'}
+.v3-fi-categories::before{content:'\f390'}
+.v3-fi-goals::before{content:'\f309'}
+.v3-fi-reminders::before{content:'\f239'}
+.v3-fi-settings::before{content:'\fbd2'}
+.v3-fi-plan::before{content:'\fa7f'}
+.v3-fi-more::before{content:'\f16c'}
+.v3-fi-plus::before{content:'\faac'}
+.v3-fi-arrow::before{content:'\f1b9'}
+.v3-fi-down::before{content:'\f18f'}
+.v3-fi-utensils::before{content:'\fea8'}
+.v3-fi-car::before{content:'\f369'}
+.v3-fi-heart::before{content:'\f7a0'}
+.v3-fi-leisure::before{content:'\f6df'}
+.v3-fi-subscription::before{content:'\fd0d'}
+.v3-fi-eye::before{content:'\f5f8'}
+.v3-hide-money .v3-fi-eye::before{content:'\f5f5'}
+.v3-icon-button .v3-fi{font-size:19px}
+.v3-notification-count{position:absolute;top:-5px;right:-6px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 3px;border:2px solid var(--night);border-radius:50%;background:var(--teal);color:var(--night);font:700 10px/1 var(--body)}
+.v3-notification-count[hidden]{display:none}
+.v3-nav .v3-fi{font-size:18px}
+.v3-bottom .v3-fi{font-size:23px}
+.v3-more .v3-fi{font-size:24px;color:var(--teal);margin-bottom:4px}
+.v3-icon-credit{margin:24px 3px 0;color:var(--muted);font-size:12px}
+.v3-icon-credit a{text-decoration:underline;text-underline-offset:3px}
