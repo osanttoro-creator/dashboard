@@ -3,8 +3,8 @@
   'use strict';
 
   const $ = (s) => document.querySelector(s);
-  // Prévia isolada: nunca carregar dados da conta nem gravar no navegador.
-  const demo = true;
+  // A prévia continua isolada; somente app-v3.html habilita a conta real.
+  const demo = document.documentElement.dataset.oazeMode !== 'live';
   const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'reminders', 'settings', 'plan'];
   const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', reminders: 'lembretes', settings: 'configurações', plan: 'plano', more: 'mais' };
   const iconPaths = {
@@ -37,6 +37,7 @@
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
   const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', selected: null, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, chat: [] };
+  let limitsPromise = Promise.resolve(demo);
   global.App = { get ym() { return state.ym; }, goTo: (page) => go(page === 'accounts' ? 'wallet' : page) };
 
   const sample = {
@@ -145,7 +146,9 @@
     $('#v3-owner').textContent = owner;
     $('#v3-avatar').textContent = owner.trim().charAt(0).toLowerCase() || 'o';
     $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name;
-    $('#v3-demo-note').hidden = !demo;
+    $('#v3-demo-note').hidden = false;
+    if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
+      ? 'Salvando na sua conta…' : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
     if (demo) $('#v3-coco-count').textContent = '4';
     $('#v3-notification-dot').hidden = !reminders().length;
@@ -242,7 +245,7 @@
     return `<div class="v3-grid v3-reminders"><div><span class="v3-label v3-section-title">PRÓXIMOS 30 DIAS</span><section class="v3-panel" style="padding:0">${rs.length?rs.map((r)=>`<div class="v3-reminder-row"><span class="v3-date">${esc(r.date.slice(8,10))}<small>${esc(shortDate(r.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(r.title)}</strong><small>${esc(r.sub)}</small></span><strong class="v3-mono v3-negative v3-sensitive">${money(r.amount)}</strong></div>`).join(''):'<p class="v3-muted" style="padding:20px">Nenhum compromisso pendente registrado nos próximos 30 dias.</p>'}</section></div><div><span class="v3-label v3-section-title">PRÉVIA DA NOTIFICAÇÃO</span><section class="v3-panel"><div class="v3-row"><img src="/assets/brand/oaze-isologo.svg" width="37" height="37" alt=""><span style="flex:1"><strong>OAZE</strong><small style="display:block">${rs.length?esc(rs[0].title)+' está próximo do vencimento':'Nenhum aviso pendente'}</small></span><small>agora</small></div></section><div class="v3-segment" style="margin:12px 0"><button type="button" class="is-active">Sem valor</button><button type="button" disabled>Com valores</button><button type="button" disabled>Genérico</button></div><section class="v3-panel"><h3>avisar sobre</h3>${['Fatura do cartão','Despesa fixa não confirmada','Recorrência do dia'].map((x)=>`<div class="v3-setting-row"><span>${x}<small>Preferências de aviso no app atual</small></span><span class="v3-muted">—</span></div>`).join('')}</section></div></div>`;
   }
   function renderSettings() {
-    const signed = !demo && global.Sync && Sync.currentUser && Sync.currentUser();
+    const signed = !demo && global.V3Backend && V3Backend.user();
     return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><div class="v3-setting-row"><span>Consentimento<small>Somente os agregados necessários à conversa.</small></span><span class="v3-muted">${signed?'verificar':'sem sessão'}</span></div><div class="v3-setting-row"><span>Aprender com meus lançamentos<small>Memória ainda não implementada no backend.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Memória da Coco<small>Não armazenamos memória fictícia.</small></span><span class="v3-muted">—</span></div></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div></section></div></div>`;
   }
   function renderPlan() {
@@ -266,7 +269,7 @@
     const gs = $('[data-column="goals"]'), bs = $('[data-column="budgets"]');
     if (gs&&bs) { gs.hidden = mobile && state.goalTab!=='goals'; bs.hidden = mobile && state.goalTab!=='budgets'; }
   }
-  function go(page) { if (!names[page]) return; state.page=page; if (demo && page==='wallet' && !state.selected) state.selected='c1'; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`/preview-v3/index.html?demo=1#${page}`); }
+  function go(page) { if (!names[page]) return; state.page=page; if (demo && page==='wallet' && !state.selected) state.selected='c1'; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${location.pathname}${location.search}#${page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -309,8 +312,9 @@
   }
   function parseMoney(raw) { const n=U.parseMoney(String(raw||'')); return n==null?NaN:U.round2(n); }
   function canAdd(limit,ym) { return !global.Limites || !Limites.cabe || Limites.cabe(limit,ym); }
-  function saveTransaction(form) {
+  async function saveTransaction(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), kind=fd.get('kind'), amount=parseMoney(fd.get('amount')), date=String(fd.get('date')||''), description=String(fd.get('description')||'').trim(), source=String(fd.get('source')||'');
     if (!(amount>0) || !U.isValidISO(date) || !description || !source) { toast('Confira valor, descrição, data e conta/cartão.'); return; }
     if (!canAdd('transactions_per_month',ymOf(date))) { toast('Este lançamento ultrapassa o limite do seu plano.'); return; }
@@ -319,17 +323,25 @@
     if (transfer && (!destination || destination===sourceId || sourceType!=='account' || !profile().accounts.some((a)=>a.id===destination && !a.archived))) { toast('Escolha duas contas diferentes para transferir.'); return; }
     const tx={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount,date,categoryId:transfer?null:String(fd.get('category')||''),accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:fd.get('confirmed')==='true',source:'manual'};
     if (!transfer && !tx.categoryId) { toast('Escolha uma categoria.'); return; }
-    Store.transactions.add(tx); closeSheet(); render(); toast('Lançamento salvo.');
+    try {
+      await V3Backend.mutate(() => Store.transactions.add(tx));
+      closeSheet(); render(); toast('Lançamento salvo na sua conta.');
+    } catch (e) { console.error('V3/lançamento:', e); toast(e.message || 'Não foi possível salvar.'); }
   }
-  function saveAccount(form) {
+  async function saveAccount(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), type=fd.get('type'),name=String(fd.get('name')||'').trim(),bank=String(fd.get('bank')||'').trim(),last4=String(fd.get('last4')||'').replace(/\D/g,'').slice(-4),amount=parseMoney(fd.get('amount'));
     if (!name || (!Number.isFinite(amount) && String(fd.get('amount')||'').trim()) || amount<0) { toast('Confira nome e valor.'); return; }
     if (!canAdd(type==='card'?'credit_cards':'accounts',state.ym)) { toast('Esta inclusão ultrapassa o limite do seu plano.'); return; }
     const initial=Number.isFinite(amount)?amount:0;
-    if (type==='card') Store.cards.add({name,bank,last4,limit:initial,closingDay:+fd.get('closing')||28,dueDay:+fd.get('due')||5,color:'#355565',moeda:'BRL'});
-    else Store.accounts.add({name,bank,last4,openingBalance:initial,openedAt:U.todayISO(),type:'Conta corrente',color:'#355565',moeda:'BRL'});
-    closeSheet(); render(); toast('Item adicionado à carteira.');
+    try {
+      await V3Backend.mutate(() => {
+        if (type==='card') Store.cards.add({name,bank,last4,limit:initial,closingDay:+fd.get('closing')||28,dueDay:+fd.get('due')||5,color:'#355565',moeda:'BRL'});
+        else Store.accounts.add({name,bank,last4,openingBalance:initial,openedAt:U.todayISO(),type:'Conta corrente',color:'#355565',moeda:'BRL'});
+      });
+      closeSheet(); render(); toast('Item salvo na sua conta.');
+    } catch (e) { console.error('V3/carteira:', e); toast(e.message || 'Não foi possível salvar.'); }
   }
   async function askCoco(form) {
     const q=String(new FormData(form).get('question')||'').trim(); if (!q) return;
@@ -354,7 +366,7 @@
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
     if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);closeSheet();render();}return; }
-    if (target.dataset.confirm) { if(demo){toast('Demonstração: nenhum dado foi alterado.');return;}const tx=Store.transactions.get(target.dataset.confirm);if(!tx){toast('Esse registro é uma ocorrência recorrente; abra o período de origem para editar.');return;}Store.transactions.update(tx.id,{confirmed:!tx.confirmed});render();return; }
+    if (target.dataset.confirm) { if(demo){toast('Demonstração: nenhum dado foi alterado.');return;}const tx=Store.transactions.get(target.dataset.confirm);if(!tx){toast('Esse registro é uma ocorrência recorrente; abra o período de origem para editar.');return;}V3Backend.mutate(()=>Store.transactions.update(tx.id,{confirmed:!tx.confirmed})).then(()=>toast('Estado salvo na sua conta.')).catch((e)=>toast(e.message||'Não foi possível salvar.'));return; }
     const action=target.dataset.action;
     if (action==='close'){closeSheet();return;}
     if (action==='back'){go('more');return;}
@@ -376,10 +388,10 @@
     if(ev.target.id==='v3-form-period'){state.ym=String(new FormData(ev.target).get('ym'));closeSheet();render();}
     if(ev.target.id==='v3-chat-form')askCoco(ev.target);
   }
-  function boot() {
-    if(!demo){try { Store.load(); } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível abrir seus dados neste navegador.</p>';return; }}
+  async function boot() {
+    if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button> ou abra o aplicativo atual em <a href="/app">/app</a>.</p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
     if(!demo)Store.onChange(()=>render());
-    if(!demo){try{Sync.init();}catch(e){console.error('V3/sincronização:',e);}try{if(global.Limites)Limites.carregar();}catch(e){console.error('V3/limites:',e);}}
+    if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
     const requested=location.hash.slice(1);state.page=names[requested]?requested:'home';
     if(demo&&state.page==='wallet'&&!state.selected)state.selected='c1';
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);

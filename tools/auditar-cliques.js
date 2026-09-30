@@ -52,7 +52,7 @@ const FONTES = ['assets/js', 'assets/js/pages']
 const DADOS_COM_ACAO = [
   'page', 'goto', 'quick', 'newcat', 'ciclo', 'tab', 'rectab',
   'method', 'close-search', 'close-modal', 'ai-q', 'novo',
-  'vista', 'fechar-menu', 'escopo'
+  'vista', 'fechar-menu', 'escopo', 'action'
 ];
 
 /* Classes cujo comportamento é ligado em lote, pelo seletor. */

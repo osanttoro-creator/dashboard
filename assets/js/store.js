@@ -27,6 +27,7 @@
 
   const KEY = 'financas.v1';
   const VERSION = 1;
+  let remoteOnly = false;
 
   /* ------------------------------------------------------------
      Paleta das categorias — família OAZE
@@ -556,8 +557,30 @@
     return state;
   };
 
+  /* A V3 lê a conta autenticada antes de desenhar qualquer dado. Não usa o
+     cache compartilhado entre contas do app antigo nem grava nele. */
+  Store.loadRemoteMap = function (map, ownerName, preferredId) {
+    remoteOnly = true;
+    const profiles = Object.entries(map && typeof map === 'object' ? map : {})
+      .filter(([id, value]) => id && value && typeof value === 'object' && !Array.isArray(value))
+      .map(([id, value]) => normalizeProfile(Object.assign({}, value, { id })));
+    if (!profiles.length) profiles.push(makeProfile(tr('Pessoal')));
+    state = {
+      version: VERSION,
+      theme: 'dark',
+      ownerName: String(ownerName || '').trim().slice(0, 40),
+      profiles,
+      activeProfileId: profiles.some((p) => p.id === preferredId) ? preferredId : profiles[0].id,
+      removidos: {}
+    };
+    revisao++;
+    listeners.forEach((fn) => { try { fn('sync-apply'); } catch (e) { console.error(e); } });
+    return state;
+  };
+
   let warnedOnce = false;
   Store.save = function () {
+    if (remoteOnly) return true;
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
       return true;

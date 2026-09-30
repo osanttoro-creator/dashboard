@@ -60,7 +60,8 @@ const VERIFICACOES = [
   ['tools/testes/automacoes-financeiras.js', 'automações financeiras são conservadoras e idempotentes'],
   ['tools/testes/funcao-existe.js', 'nenhum módulo chama o ajudante privado de outro'],
   ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos'],
-  ['tools/testes/preview-v3-isolada.js', 'prévia V3 pública permanece isolada dos dados reais']
+  ['tools/testes/preview-v3-isolada.js', 'prévia V3 pública permanece isolada dos dados reais'],
+  ['tools/testes/v3-conexao-real.js', 'V3 real separada, autenticada e sem cache entre contas']
 ];
 
 const SQL_MANUAIS = [

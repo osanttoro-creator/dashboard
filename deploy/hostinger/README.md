@@ -10,7 +10,9 @@ SEO e `.htaccess`. Código do Supabase, ferramentas, documentação, `.env` e
 fontes de desenvolvimento não entram em `public_html`.
 
 `preview-v3/` também entra no pacote como prévia visual pública, sem dados
-reais, sem gravação e fora da navegação do produto. Ela não substitui `/app`.
+reais e sem gravação. A rota experimental `/app-v3.html` usa autenticação e
+dados reais, mas permanece fora da navegação e não substitui `/app` até os
+fluxos autenticados serem validados de ponta a ponta.
 
 ```powershell
 .\deploy\hostinger\montar-pacote.ps1
@@ -29,6 +31,7 @@ and variables → Actions. Nenhum segredo de Supabase ou IA vai para a Hostinger
 
 - `/`, `/precos`, `/recursos`, `/suporte`, `/app` e `/app/carteira` abrem.
 - `/preview-v3/index.html` abre como demonstração, com CSS e JS próprios.
+- `/app-v3.html` exige sessão; sem login, encaminha para `/entrar`.
 - `/assets/css/style.css` devolve CSS, não HTML.
 - uma rota inventada devolve 404.
 - `http://` redireciona para `https://`.

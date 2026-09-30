@@ -121,7 +121,7 @@ jobs:
           # vale conferir aqui.
           unzip -l "$ZIP_NOME" | grep -q '\.htaccess' \
             || { echo "::error::.htaccess ausente do zip"; exit 1; }
-          for file in preview-v3/index.html preview-v3/app.css preview-v3/app.js; do
+          for file in app-v3.html preview-v3/index.html preview-v3/app.css preview-v3/app.js preview-v3/live-backend.js; do
             unzip -p "$ZIP_NOME" "$file" > /dev/null \
               || { echo "::error::previa V3 ausente do zip: $file"; exit 1; }
           done
@@ -240,9 +240,11 @@ jobs:
           checar /precos                 200
           checar /assets/css/style.css   200
           checar /assets/js/app.js       200
+          checar /app-v3.html             200
           checar /preview-v3/index.html  200
           checar /preview-v3/app.css     200
           checar /preview-v3/app.js      200
+          checar /preview-v3/live-backend.js 200
           checar /naoexiste.css          404
           checar /assets/js/sumiu.js     404
           if [ "$falhou" != "0" ]; then
