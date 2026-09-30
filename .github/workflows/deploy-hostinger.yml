@@ -241,12 +241,22 @@ jobs:
           checar /assets/css/style.css   200
           checar /assets/js/app.js       200
           checar /app-v3.html             200
+          checar /app                     200
+          checar '/app?classic=1'         200
           checar /preview-v3/index.html  200
           checar /preview-v3/app.css     200
           checar /preview-v3/app.js      200
           checar /preview-v3/live-backend.js 200
           checar /naoexiste.css          404
           checar /assets/js/sumiu.js     404
+          v3_html=$(curl -fsS -A 'OAZE-Deploy-Check/1.0 (+https://oaze.site)' "https://$SITE_DOMAIN/app")
+          classic_html=$(curl -fsS -A 'OAZE-Deploy-Check/1.0 (+https://oaze.site)' "https://$SITE_DOMAIN/app?classic=1")
+          if ! grep -q 'data-oaze-mode="live"' <<< "$v3_html"; then
+            echo '::error::/app nao entregou a V3'; falhou=1
+          fi
+          if ! grep -q 'class="app-vnext"' <<< "$classic_html"; then
+            echo '::error::/app?classic=1 nao entregou o painel anterior'; falhou=1
+          fi
           if [ "$falhou" != "0" ]; then
             echo "::error::o site respondeu diferente do esperado apos o deploy"
             exit 1

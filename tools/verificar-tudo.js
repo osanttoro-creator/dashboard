@@ -61,7 +61,8 @@ const VERIFICACOES = [
   ['tools/testes/funcao-existe.js', 'nenhum módulo chama o ajudante privado de outro'],
   ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos'],
   ['tools/testes/preview-v3-isolada.js', 'prévia V3 pública permanece isolada dos dados reais'],
-  ['tools/testes/v3-conexao-real.js', 'V3 real separada, autenticada e sem cache entre contas']
+  ['tools/testes/v3-conexao-real.js', 'V3 real separada, autenticada e sem cache entre contas'],
+  ['tools/testes/v3-corte-principal.js', '/app entrega V3 com retorno ao painel anterior e aceite obrigatório']
 ];
 
 const SQL_MANUAIS = [
