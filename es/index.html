@@ -383,28 +383,39 @@
              Sem JavaScript, ou com "menos movimento" ligado, a mesma
              cena aparece montada e parada. É a composição final, não um
              buraco. -->
-        <div class="cena revela" data-cena
+        <!-- O MESMO SISTEMA DE APARELHO DO HERÓI
+             Esta seção tinha uma segunda montagem, com moldura e
+             contas próprias — e foi ela que envelheceu: ficou com o
+             retângulo de 1px, sem espessura, e sem motion nenhum
+             depois de uma limpeza. Dois sistemas de mockup na mesma
+             página sempre divergem; a única pergunta é quando.
+
+             Aqui são dois aparelhos, porque a seção fala de dois: o
+             polegar e a mesa. A classe e-duplo só ajusta o
+             enquadramento para o palco viver AO LADO do texto, e não
+             embaixo dele. -->
+        <div class="palco3 e-duplo revela" data-palco3
              role="img"
              aria-label="OAZE funcionando en los dos aparatos: en el ordenador, la barra lateral con las secciones y el mes de un vistazo; en el móvil, el inicio, la cartera de tarjetas y una conversación con Coco.">
-          <span class="cena-luz" aria-hidden="true"></span>
 
-          <div class="aparelho notebook" aria-hidden="true">
-            <div class="notebook-tampa">
-              <span class="notebook-camera"></span>
-              <span class="aparelho-tela">
-                <img src="/assets/telas/computador-inicio.png" alt="" width="1440" height="900" loading="lazy" decoding="async">
-              </span>
+          <div class="ap ap-note">
+            <div class="ap-tampa">
+              <span class="ap-camera"></span>
+              <span class="ap-tela"><img src="/assets/telas/computador-inicio.png" alt="" width="1440" height="900" loading="lazy" decoding="async"></span>
             </div>
-            <span class="notebook-base"></span>
+            <span class="ap-base"></span>
           </div>
 
-          <div class="aparelho celular" aria-hidden="true">
-            <span class="aparelho-tela">
+          <div class="ap ap-fone">
+            <span class="ap-tela">
               <img class="quadro is-ativo" src="/assets/telas/celular-inicio.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
               <img class="quadro" src="/assets/telas/celular-carteira.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
               <img class="quadro" src="/assets/telas/celular-coco.png" alt="" width="820" height="1728" loading="lazy" decoding="async">
             </span>
-            <span class="celular-ilha"></span>
+            <span class="ap-ilha"></span>
+            <span class="ap-bt ap-bt-a"></span>
+            <span class="ap-bt ap-bt-b"></span>
+            <span class="ap-bt ap-bt-c"></span>
           </div>
         </div>
       </div>

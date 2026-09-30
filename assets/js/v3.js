@@ -123,8 +123,16 @@
 
   var portal = document.querySelector('[data-portal]');
   var palco = portal && portal.querySelector('.portal-palco');
-  var cena = document.querySelector('[data-palco3]');
-  if (!portal && !cena) return;
+  /* DOIS PALCOS, NÃO UM
+     O do herói vive dentro do portal e segue a abertura dele; o da
+     seção "no bolso e na mesa" está solto na página e segue a
+     própria posição na tela. Tratar os dois pelo mesmo caminho foi o
+     que deixou o segundo parado: ele herdava um progresso que, fora
+     do portal, nunca mudava. */
+  var cena = document.querySelector('.portal [data-palco3]');
+  var cenas = Array.prototype.slice.call(document.querySelectorAll('[data-palco3]'))
+    .filter(function (n) { return n !== cena; });
+  if (!portal && !cena && !cenas.length) return;
 
   var fase = function (p, de, ate) { return Math.max(0, Math.min(1, (p - de) / (ate - de))); };
   var suave = function (t) { return 1 - Math.pow(1 - t, 3); };
@@ -163,6 +171,20 @@
       cena.style.setProperty('--b', suave(fase(q, 0.44, 0.76)).toFixed(4));
       cena.style.setProperty('--c', suave(fase(q, 0.58, 0.92)).toFixed(4));
     }
+
+    desenharSoltos();
+  };
+
+  /* Os palcos soltos seguem a própria subida na tela. */
+  var desenharSoltos = function () {
+    cenas.forEach(function (n) {
+      var r = n.getBoundingClientRect();
+      var total = window.innerHeight + r.height;
+      var q = total > 0 ? Math.max(0, Math.min(1, (window.innerHeight - r.top) / total)) : 1;
+      n.style.setProperty('--a', suave(fase(q, 0.16, 0.52)).toFixed(4));
+      n.style.setProperty('--b', suave(fase(q, 0.28, 0.64)).toFixed(4));
+      n.style.setProperty('--c', suave(fase(q, 0.34, 0.72)).toFixed(4));
+    });
   };
 
   var pedir = function () {
@@ -184,21 +206,23 @@
   /* ---- os quadros do celular ----
      Um relógio só, e ele só troca quando a cena está em quadro e a
      aba está visível: revezar fora de vista é bateria jogada fora. */
-  if (cena) {
-    var quadros = cena.querySelectorAll('.ap-fone .quadro');
-    if (quadros.length > 1) {
-      var i = 0;
-      setInterval(function () {
-        if (document.hidden) return;
-        var r2 = cena.getBoundingClientRect();
-        if (r2.bottom < 0 || r2.top > window.innerHeight) return;
-        i = (i + 1) % quadros.length;
-        Array.prototype.forEach.call(quadros, function (q, k) {
-          q.classList.toggle('is-ativo', k === i);
-        });
-      }, 3000);
-    }
-  }
+  /* Um relógio por celular da página, e cada um só troca quando o
+     próprio aparelho está em quadro: revezar fora de vista é bateria
+     jogada fora, e em celular isso se sente. */
+  document.querySelectorAll('[data-palco3]').forEach(function (p) {
+    var quadros = p.querySelectorAll('.ap-fone .quadro');
+    if (quadros.length < 2) return;
+    var i = 0;
+    setInterval(function () {
+      if (document.hidden) return;
+      var r2 = p.getBoundingClientRect();
+      if (r2.bottom < 0 || r2.top > window.innerHeight) return;
+      i = (i + 1) % quadros.length;
+      Array.prototype.forEach.call(quadros, function (q, k) {
+        q.classList.toggle('is-ativo', k === i);
+      });
+    }, 3000);
+  });
 
   desenhar();
 })();
