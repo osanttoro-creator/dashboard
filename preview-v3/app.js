@@ -7,6 +7,8 @@
   const demo = document.documentElement.dataset.oazeMode !== 'live';
   const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'reminders', 'settings', 'plan'];
   const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', reminders: 'lembretes', settings: 'configurações', plan: 'plano', more: 'mais' };
+  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'reminders', '/app/calendario': 'reminders', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'investments', '/app/uglez': 'home' };
+  const classicPaths = { transactions: '/app/financeiro', wallet: '/app/carteira', investments: '/app/investimentos', categories: '/app/categorias', goals: '/app/metas', reminders: '/app/recorrencias', settings: '/app/configuracoes', plan: '/app/planos' };
   const iconPaths = {
     home: '<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',
     transactions: '<path d="M3 7h17m0 0-4-4m4 4-4 4M21 17H4m0 0 4-4m-4 4 4 4"/>',
@@ -246,7 +248,7 @@
   }
   function renderSettings() {
     const signed = !demo && global.V3Backend && V3Backend.user();
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><div class="v3-setting-row"><span>Consentimento<small>Somente os agregados necessários à conversa.</small></span><span class="v3-muted">${signed?'verificar':'sem sessão'}</span></div><div class="v3-setting-row"><span>Aprender com meus lançamentos<small>Memória ainda não implementada no backend.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Memória da Coco<small>Não armazenamos memória fictícia.</small></span><span class="v3-muted">—</span></div></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div></section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><div class="v3-setting-row"><span>Consentimento<small>Somente os agregados necessários à conversa.</small></span><span class="v3-muted">${signed?'verificar':'sem sessão'}</span></div><div class="v3-setting-row"><span>Aprender com meus lançamentos<small>Memória ainda não implementada no backend.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Memória da Coco<small>Não armazenamos memória fictícia.</small></span><span class="v3-muted">—</span></div></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div>${demo?'':`<a class="v3-setting-row" href="/app?classic=1"><span>Ferramentas anteriores<small>Edição completa de recursos ainda em migração.</small></span><span class="v3-muted">abrir ›</span></a>`}</section></div></div>`;
   }
   function renderPlan() {
     const list = global.Planos ? Planos.LISTA : [];
@@ -260,6 +262,7 @@
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, reminders:renderReminders, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (screens[state.page]||renderHome)();
+    if (!demo && classicPaths[state.page]) $('#v3-view').insertAdjacentHTML('beforeend', `<p class="v3-classic-link">Precisa editar algo que ainda não está nesta tela? <a href="${classicPaths[state.page]}?classic=1">Abrir ferramentas completas</a></p>`);
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
     if (state.page==='goals') updateGoalTabs();
@@ -269,7 +272,7 @@
     const gs = $('[data-column="goals"]'), bs = $('[data-column="budgets"]');
     if (gs&&bs) { gs.hidden = mobile && state.goalTab!=='goals'; bs.hidden = mobile && state.goalTab!=='budgets'; }
   }
-  function go(page) { if (!names[page]) return; state.page=page; if (demo && page==='wallet' && !state.selected) state.selected='c1'; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${location.pathname}${location.search}#${page}`); }
+  function go(page) { if (!names[page]) return; state.page=page; if (demo && page==='wallet' && !state.selected) state.selected='c1'; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -389,10 +392,12 @@
     if(ev.target.id==='v3-chat-form')askCoco(ev.target);
   }
   async function boot() {
-    if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button> ou abra o aplicativo atual em <a href="/app">/app</a>.</p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
+    if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button> ou abra as ferramentas anteriores em <a href="/app?classic=1">/app?classic=1</a>.</p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
     if(!demo)Store.onChange(()=>render());
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
-    const requested=location.hash.slice(1);state.page=names[requested]?requested:'home';
+    const path=location.pathname.replace(/\/+$/,'') || '/app';
+    const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
+    if(!demo && global.OazeCookies) OazeCookies.mostrar();
     if(demo&&state.page==='wallet'&&!state.selected)state.selected='c1';
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
     document.addEventListener('beforeinput',(ev)=>{
@@ -411,6 +416,7 @@
     document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{if(state.page==='goals')updateGoalTabs();});
     render();
+    if(!demo && path==='/app/uglez') { state.cocoTab='Conversa'; openCoco(); }
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })(window);

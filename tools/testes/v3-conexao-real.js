@@ -20,6 +20,7 @@ assert.match(html, /<script src="\/assets\/js\/site-auth\.js"><\/script>/);
 assert.doesNotMatch(html, /dados de exemplo/);
 assert.doesNotMatch(script, /Store\.load\(|localStorage\.getItem\('financas\.v1'/);
 assert.match(script, /SiteAuth\.quemEsta\(\)/);
+assert.match(script, /\.from\('privacy_acceptances'\)/);
 assert.match(script, /\.from\('dados'\)/);
 assert.match(script, /\.rpc\('v3_salvar_perfil'/);
 assert.match(migration, /security invoker/i);
@@ -32,6 +33,9 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   let conflict = false;
   let rpcCalls = 0;
   let localCacheReads = 0;
+  let accepted = true;
+  let dataReads = 0;
+  const redirects = [];
   const state = { profiles: [], activeProfileId: null };
   const Store = {
     state: () => state,
@@ -49,7 +53,11 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } })
     },
     from(name) {
+      if (name === 'privacy_acceptances') return {
+        select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-09-15' } : null }) }) }) })
+      };
       assert.equal(name, 'dados');
+      dataReads++;
       return { select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { profiles: { ...server }, removidos: {} } }) }) }) };
     },
     channel() { return { on() { return this; }, subscribe() { return this; } }; },
@@ -67,7 +75,7 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
     console, Store, setTimeout, clearTimeout,
     SiteAuth: { cliente: () => client, quemEsta: async () => ({ id: 'user-1', email: 'u@example.test' }) },
     document: { addEventListener() {} },
-    location: { replace() { throw new Error('Redirecionamento inesperado'); } },
+    location: { pathname: '/app', replace(url) { redirects.push(url); } },
     get localStorage() { localCacheReads++; throw new Error('Cache de outra conta'); }
   };
   context.window = context;
@@ -88,4 +96,9 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   );
   assert.equal(Store.profile().name, 'Outro aparelho');
   assert.equal(localCacheReads, 0);
+  accepted = false;
+  const readsBeforeConsentGate = dataReads;
+  assert.equal(await context.V3Backend.start(), false);
+  assert.equal(redirects.at(-1), '/app?classic=1');
+  assert.equal(dataReads, readsBeforeConsentGate);
 })().catch((error) => { console.error(error); process.exitCode = 1; });

@@ -11,7 +11,9 @@
   let refreshPending = false;
   let channel = null;
 
-  const loginUrl = '/entrar?destino=' + encodeURIComponent('/app-v3.html');
+  const loginUrl = '/entrar?destino=' + encodeURIComponent(
+    global.location.pathname.startsWith('/app/') ? global.location.pathname : '/app'
+  );
   const ownerName = () => String(user?.name || user?.email?.split('@')[0] || 'Seu OAZE').slice(0, 40);
   const stamp = (p) => Math.max(0, Number(p?.updatedAt) || 0);
   const bounded = (operation) => {
@@ -104,6 +106,13 @@
       email: verified.email || authUser.email || '',
       name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || ''
     };
+    // Contas antigas e retornos de OAuth também precisam do aceite registrado.
+    // Até a V3 ter seu próprio fluxo legal, o painel clássico conclui esse passo.
+    const { data: acceptance, error: acceptanceError } = await bounded(client.from('privacy_acceptances')
+      .select('policy_version').eq('user_id', user.id)
+      .eq('policy_version', '2026-09-15').maybeSingle());
+    if (acceptanceError) throw acceptanceError;
+    if (!acceptance) { global.location.replace('/app?classic=1'); return false; }
     /* Compatibilidade somente de leitura para Limites e Coco. A V3 não
        inicializa o Sync antigo nem sua cópia local compartilhada. */
     global.Sync = { currentUser: () => ({ uid: user.id, email: user.email, displayName: ownerName() }) };

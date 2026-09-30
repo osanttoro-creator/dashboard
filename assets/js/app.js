@@ -99,7 +99,8 @@
        no histórico ao abrir a página direto), push quando é
        navegação de verdade. */
     if (podeTrocarUrl() && !(opts && opts.semUrl)) {
-      const alvo = App.URLS[page] || '/';
+      const alvo = (App.URLS[page] || '/') + (new URLSearchParams(location.search).get('classic') === '1'
+        ? '?' + new URLSearchParams({ classic: '1' }) : '');
       if (location.pathname !== alvo) {
         try { history.pushState({ page }, '', alvo); } catch (e) { /* segue sem URL */ }
       }
