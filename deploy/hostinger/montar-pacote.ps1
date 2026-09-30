@@ -45,7 +45,7 @@ $arquivos = @(
 # en, fr e es sao geradas por tools/gen-idiomas.js a partir das
 # paginas em portugues. Vao inteiras: cada uma tem os mesmos
 # documentos, com title, description e canonica proprias.
-$pastas   = @('assets', 'en', 'fr', 'es')
+$pastas   = @('assets', 'en', 'fr', 'es', 'preview-v3')
 
 $faltando = @()
 foreach ($f in $arquivos) {

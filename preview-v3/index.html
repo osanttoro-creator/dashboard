@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D1821">
+  <meta name="robots" content="noindex, nofollow">
+  <title>OAZE — App V3</title>
+  <link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/preview-v3/app.css">
+</head>
+<body class="v3">
+  <a class="v3-skip" href="#v3-content">Pular para o conteúdo</a>
+  <div class="v3-shell">
+    <aside class="v3-sidebar" aria-label="Navegação principal">
+      <a class="v3-logo" href="/preview-v3/index.html?demo=1" aria-label="OAZE — início"><img src="/assets/brand/oaze-logo-mono-milk.svg" alt="OAZE"></a>
+      <button class="v3-new" type="button" data-action="new">＋ <span>Novo lançamento</span> <kbd>N</kbd></button>
+      <nav id="v3-desktop-nav" aria-label="Seções"></nav>
+      <button class="v3-profile" type="button" data-action="profiles"><span class="v3-avatar" id="v3-avatar">P</span><span><strong id="v3-owner">Seu OAZE</strong><small id="v3-profile-name">Pessoal</small></span><span aria-hidden="true">⌄</span></button>
+    </aside>
+    <main class="v3-main" id="v3-content">
+      <header class="v3-top">
+        <div class="v3-title-wrap"><button class="v3-back" type="button" data-action="back" aria-label="Voltar">‹</button><div><span class="v3-eyebrow" id="v3-eyebrow"></span><h1 id="v3-title">início</h1></div></div>
+        <div class="v3-top-actions"><button class="v3-period" type="button" data-action="period" id="v3-period">‹ &nbsp; set 2026 &nbsp; ›</button><button class="v3-icon-button" type="button" data-action="privacy" aria-label="Ocultar ou mostrar valores">◉</button><button class="v3-icon-button" type="button" data-action="notifications" aria-label="Lembretes">♧<span class="v3-dot" id="v3-notification-dot" hidden></span></button></div>
+      </header>
+      <div class="v3-demo-note" id="v3-demo-note" hidden>Prévia · dados de exemplo · nenhuma gravação</div>
+      <div id="v3-view" aria-live="polite"></div>
+    </main>
+  </div>
+  <nav class="v3-bottom" id="v3-mobile-nav" aria-label="Navegação no celular"></nav>
+  <button class="v3-coco-fab" type="button" data-action="coco" aria-label="Abrir Coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span class="v3-coco-count" id="v3-coco-count" hidden></span></button>
+  <div class="v3-overlay" id="v3-overlay" hidden><div class="v3-scrim" data-action="close"></div><section class="v3-sheet" id="v3-sheet" role="dialog" aria-modal="true" aria-label="Painel do OAZE"></section></div>
+  <div class="v3-toast" id="v3-toast" role="status" hidden></div>
+  <script src="/assets/js/utils.js"></script>
+  <script src="/assets/js/automacoes/normalizar-estabelecimento.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/assets/js/calc.js"></script>
+  <script src="/assets/js/planos.js"></script>
+  <script src="/preview-v3/app.js"></script>
+</body>
+</html>

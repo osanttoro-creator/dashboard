@@ -59,7 +59,8 @@ const VERIFICACOES = [
   ['tools/testes/entrada-monetaria.js', 'reais e centavos avançam juntos sem afetar taxas'],
   ['tools/testes/automacoes-financeiras.js', 'automações financeiras são conservadoras e idempotentes'],
   ['tools/testes/funcao-existe.js', 'nenhum módulo chama o ajudante privado de outro'],
-  ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos']
+  ['tools/testes/acabamento-app.js', 'ajustes finais do app permanecem ativos'],
+  ['tools/testes/preview-v3-isolada.js', 'prévia V3 pública permanece isolada dos dados reais']
 ];
 
 const SQL_MANUAIS = [
