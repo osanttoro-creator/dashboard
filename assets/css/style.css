@@ -1456,9 +1456,21 @@ select.input { cursor: pointer; }
    sabe onde chegou. */
 .seg-ico button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-.color-picker { display: flex; gap: 6px; flex-wrap: wrap; }
-.color-opt { width: 24px; height: 24px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; padding: 0; }
+/* Seis famílias, dois tons cada: a coluna é a cor, as duas caixas
+   dentro dela são a intensidade. O vão entre colunas é maior que o
+   vão interno — é só isso que diz "estes dois são a mesma cor". */
+.color-picker { display: grid; gap: 7px; justify-items: start; }
+.color-tira { display: flex; gap: 11px; flex-wrap: wrap; }
+.color-fam { display: grid; gap: 3px; }
+.color-nome {
+  margin: 0; font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+.color-opt { width: 34px; height: 21px; border-radius: 7px; border: 2px solid transparent; cursor: pointer; padding: 0; }
 .color-opt.is-active { border-color: var(--ink); }
+/* A coluna da cor herdada tem um tom só; o quadrado fica da altura
+   dos outros dois juntos para a fileira não ficar torta. */
+.color-fam.is-herdada .color-opt { height: 45px; }
 
 .grad-picker { display: flex; gap: 7px; flex-wrap: wrap; }
 .grad-opt {
@@ -5577,13 +5589,104 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   z-index: calc(var(--carteira-pecas, 1) - var(--deck-slot, 0));
 }
 
-.carteira.esta-aberta .wallet-deck-stack {
+.carteira.esta-aberta:not(.tem-carrossel) .wallet-deck-stack {
   min-height: calc(214px + (var(--carteira-pecas, 1) - 1) * var(--carteira-passo));
 }
-.carteira.esta-aberta .wallet-deck-stack .wallet-card,
-.carteira.esta-aberta .wallet-deck-stack .wallet-card:not(.is-focused),
-.carteira.esta-aberta .wallet-deck-stack .wallet-card.is-focused {
+.carteira.esta-aberta:not(.tem-carrossel) .wallet-deck-stack .wallet-card,
+.carteira.esta-aberta:not(.tem-carrossel) .wallet-deck-stack .wallet-card:not(.is-focused),
+.carteira.esta-aberta:not(.tem-carrossel) .wallet-deck-stack .wallet-card.is-focused {
   transform: translate(-50%, calc((var(--carteira-pecas, 1) - 1 - var(--deck-slot, 0)) * var(--carteira-passo)));
+}
+
+/* =============================================================
+   ABERTA: UM CARTÃO NO MEIO, OS VIZINHOS ESPIANDO
+   -------------------------------------------------------------
+   A posição de cada cartão é a distância dele até o centro:
+   --deck-i é o índice (fixo, escrito uma vez) e --carta-pos é
+   onde a carteira está AGORA (fracionário, escrito pela mola a
+   cada quadro). A diferença dos dois move, encolhe e apaga o
+   cartão — uma fórmula só, e o arrasto sai de graça porque
+   arrastar é só escrever outro --carta-pos.
+
+   Sem transition de propósito: quem anima é a mola, quadro a
+   quadro. Uma transição por cima atrasaria o cartão em relação ao
+   dedo, que é exatamente o que não pode acontecer.
+   ============================================================= */
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack {
+  min-height: 222px;
+  touch-action: pan-y;
+  cursor: grab;
+  /* O vizinho tem de sumir NA BORDA da carteira, não continuar
+     deslizando por cima da página. Clipar só na horizontal: na
+     vertical a sombra do cartão ainda precisa escapar. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.carteira.tem-carrossel.esta-aberta.esta-arrastando .wallet-deck-stack { cursor: grabbing; }
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack .wallet-card,
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack .wallet-card:hover,
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack .wallet-card:not(.is-focused),
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack .wallet-card.is-focused {
+  --d: calc(var(--deck-i, 0) - var(--carta-pos, 0));
+  --ad: max(var(--d), calc(-1 * var(--d)));
+  top: 0;
+  /* Mais estreito que o palco de propósito: a faixa que sobra dos
+     dois lados é onde os vizinhos aparecem. Sem ela, um cartão
+     sozinho na tela não diz que existem outros. */
+  width: min(300px, calc(100% - 76px));
+  transform:
+    translateX(calc(-50% + var(--d) * var(--carteira-salto, 240px)))
+    scale(calc(1 - .07 * min(var(--ad), 2)));
+  opacity: calc(1 - .42 * min(var(--ad), 1.5));
+  transition: none;
+}
+/* Fora do centro o cartão é cenário: não recebe foco nem clique de
+   abrir página — um toque nele traz o cartão para o meio, e isso
+   quem trata é o JavaScript. */
+.carteira.tem-carrossel.esta-aberta .wallet-card:not(.esta-no-centro) { pointer-events: none; }
+.carteira.tem-carrossel.esta-aberta .wallet-card.esta-no-centro { pointer-events: auto; }
+.carteira.tem-carrossel.esta-aberta .wallet-deck-stack { pointer-events: auto; }
+
+/* ---- setas, só onde há ponteiro ---- */
+.carteira-seta {
+  position: absolute; top: 84px; z-index: 6;
+  width: 34px; height: 34px; padding: 0;
+  display: none; place-items: center;
+  border: 1px solid var(--glass-line); border-radius: 50%;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: var(--ink); font-size: 19px; line-height: 1; cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: opacity .2s var(--ease-out), transform .2s var(--ease-out);
+}
+/* Encostadas na borda, metade para fora: assim não tapam a faixa do
+   vizinho, que é justamente o que elas servem para alcançar. */
+.carteira-seta-ant { left: -16px; }
+.carteira-seta-prox { right: -16px; }
+.carteira-seta:hover { transform: scale(1.06); }
+.carteira-seta:disabled { opacity: .3; cursor: default; transform: none; }
+.carteira.tem-carrossel.esta-aberta .carteira-seta { display: grid; }
+@media (hover: none) {
+  /* No toque o gesto é o controle; duas bolhas por cima dos cartões
+     só tirariam espaço de quem já sabe arrastar. */
+  .carteira.tem-carrossel.esta-aberta .carteira-seta { display: none; }
+}
+
+/* ---- os pontinhos: quantos são e onde estou ---- */
+.carteira-pontos {
+  position: absolute; left: 0; right: 0; bottom: 2px; z-index: 6;
+  display: none; justify-content: center; gap: 5px;
+}
+.carteira.tem-carrossel.esta-aberta .carteira-pontos { display: flex; }
+.carteira-pontos i {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  transition: background .2s var(--ease-out), transform .2s var(--ease-out);
+}
+.carteira-pontos i.e-agora { background: var(--accent); transform: scale(1.35); }
+
+@media (prefers-reduced-motion: reduce) {
+  .carteira-seta:hover, .carteira-pontos i.e-agora { transform: none; }
 }
 
 /* ---------------- o couro ---------------- */

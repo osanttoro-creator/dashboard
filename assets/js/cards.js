@@ -538,6 +538,103 @@
      de quem acabou de abri-la para escolher. */
   const carteirasAbertas = {};
 
+  /* =============================================================
+     QUAL CARTÃO ESTAVA ABERTO
+     -------------------------------------------------------------
+     Uma carteira de verdade abre no cartão que você usou por último
+     — é por isso que você sabe onde ele está sem procurar. Guardar
+     isso só na memória da página não bastava: recarregar devolvia
+     sempre o primeiro da lista, e a carteira perdia o hábito de
+     quem a usa. Vai para o localStorage, por superfície.
+     ============================================================= */
+  const CHAVE_ULTIMO = 'oaze.carteira.ultimo';
+  function lerUltimos() {
+    try { return JSON.parse(localStorage.getItem(CHAVE_ULTIMO)) || {}; } catch (e) { return {}; }
+  }
+  function ultimoAberto(superficie) { return lerUltimos()[superficie] || null; }
+  function guardarUltimo(superficie, id) {
+    try {
+      const todos = lerUltimos();
+      todos[superficie] = id;
+      localStorage.setItem(CHAVE_ULTIMO, JSON.stringify(todos));
+    } catch (e) { /* navegação privada: a carteira só perde o hábito */ }
+  }
+
+  /* =============================================================
+     A MOLA
+     -------------------------------------------------------------
+     Uma transição CSS não serve aqui por um motivo só: ela não pode
+     ser interrompida no meio sem saltar. Quem agarra o cartão de
+     novo enquanto ele ainda está voltando precisa pegá-lo ONDE ELE
+     ESTÁ, e não onde ele deveria estar — é isso que faz um gesto
+     parecer um objeto em vez de uma animação.
+
+     Então a posição é um número que uma mola persegue quadro a
+     quadro. Agarrar cancela a mola e assume o valor atual; soltar
+     entrega a velocidade do dedo para ela continuar. Criticamente
+     amortecida por padrão (não passa do ponto); um pouco mais solta
+     depois de um lance forte, que é quando um resíduo de inércia é
+     esperado.
+     ============================================================= */
+  function molaDePosicao(aoMover) {
+    let pos = 0, alvo = 0, v = 0, amort = 1, quadro = null, ultimoT = 0;
+
+    function passo(t) {
+      const dt = Math.min(0.032, (t - ultimoT) / 1000 || 0.016);
+      ultimoT = t;
+      /* Rigidez e amortecimento de uma mola criticamente amortecida:
+         c = 2·√k dá o retorno mais rápido que ainda não ultrapassa.
+         k = 340 põe a troca de cartão em torno de 0,25 s num lance e
+         0,42 s numa seta — rápido o bastante para não fazer esperar,
+         lento o bastante para a pessoa ver para onde foi. */
+      const k = 340;
+      const c = 2 * Math.sqrt(k) * amort;
+      const a = -k * (pos - alvo) - c * v;
+      v += a * dt;
+      pos += v * dt;
+      if (Math.abs(pos - alvo) < 0.0005 && Math.abs(v) < 0.01) {
+        pos = alvo; v = 0; quadro = null;
+        aoMover(pos);
+        return;
+      }
+      aoMover(pos);
+      quadro = requestAnimationFrame(passo);
+    }
+
+    function ligar() {
+      /* A trava é o quadro pendente, não uma bandeira à parte: com a
+         aba escondida o quadro fica agendado sem disparar, e uma
+         bandeira solta deixaria a mola trancada para sempre. */
+      if (quadro !== null) return;
+      ultimoT = performance.now();
+      quadro = requestAnimationFrame(passo);
+    }
+
+    return {
+      get pos() { return pos; },
+      get alvo() { return alvo; },
+      /* Parar devolve a posição ATUAL: é o valor que o dedo assume. */
+      parar() {
+        if (quadro) cancelAnimationFrame(quadro);
+        quadro = null; v = 0;
+        return pos;
+      },
+      definir(p) { this.parar(); pos = alvo = p; aoMover(pos); },
+      arrastar(p) { pos = p; aoMover(pos); },
+      lancar(destino, velocidade, solta) {
+        alvo = destino;
+        /* Quem pediu menos movimento recebe o destino, não a viagem. */
+        if (global.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.definir(destino);
+          return;
+        }
+        v = velocidade || 0;
+        amort = solta ? 0.8 : 1;
+        ligar();
+      }
+    };
+  }
+
   function emCarteira(deck, list, o) {
     const c = o.carteira || {};
     const superficie = o.surface || 'wallet';
@@ -618,6 +715,8 @@
       ])
     ]);
 
+    montarCarrossel(caixa, deck, list, o, superficie);
+
     if (temPonteiro) {
       caixa.addEventListener('mouseenter', () => aplicar(true));
       caixa.addEventListener('mouseleave', () => { if (!travada) aplicar(false); });
@@ -633,6 +732,204 @@
     });
     if (travada) aplicar(true);
     return caixa;
+  }
+
+  /* =============================================================
+     ABERTA, É UM CARTÃO SÓ — E ELE ANDA PARA OS LADOS
+     -------------------------------------------------------------
+     O leque vertical mostrava seis cartões ao mesmo tempo, o que é
+     um índice, não uma carteira. Carteira aberta mostra UM cartão,
+     inteiro, e os vizinhos espiando nas bordas para você saber que
+     eles existem e de que lado estão.
+
+     Trocar é pelo lado, como no objeto: arrastando no celular,
+     pelas setas (ou pelas flechas do teclado) no computador. O
+     arrasto é 1:1 — o cartão acompanha o dedo, pixel por pixel,
+     porque qualquer atraso aí transforma "estou segurando uma
+     coisa" em "pedi para o programa fazer algo". Nas pontas ele
+     resiste em vez de travar, que é como se diz "acabou" sem
+     precisar de um aviso.
+
+     Soltar entrega a velocidade do dedo para a mola. Um lance curto
+     anda um cartão; um lance forte anda um cartão também — carteira
+     não é rolagem livre, e passar quatro cartões de uma vez faria
+     perder o lugar.
+     ============================================================= */
+  function montarCarrossel(caixa, deck, list, o, superficie) {
+    const nos = Array.from(deck.querySelectorAll('.wallet-card'));
+    if (nos.length < 1) return;
+
+    const lembrado = ultimoAberto(superficie);
+    let indice = nos.findIndex((n) => n.dataset.walletItemId === lembrado);
+    if (indice < 0) indice = Math.max(0, nos.findIndex((n) => n.classList.contains('is-focused')));
+    if (indice < 0) indice = 0;
+
+    const pontos = el('div', { class: 'carteira-pontos', 'aria-hidden': 'true' },
+      nos.map(() => el('i')));
+    const seta = (dir, rotulo) => el('button', {
+      type: 'button', class: 'carteira-seta carteira-seta-' + dir,
+      'aria-label': rotulo, title: rotulo,
+      onclick: (ev) => { ev.stopPropagation(); irPara(indice + (dir === 'ant' ? -1 : 1), true); }
+    }, el('span', { 'aria-hidden': 'true', text: dir === 'ant' ? '‹' : '›' }));
+    const btnAnt = seta('ant', 'Cartão anterior');
+    const btnProx = seta('prox', 'Próximo cartão');
+
+    const palco = deck.parentNode;
+    palco.appendChild(btnAnt);
+    palco.appendChild(btnProx);
+    palco.appendChild(pontos);
+    caixa.classList.add('tem-carrossel');
+
+    let ultimoCentro = -1;
+    function pintar(p) {
+      deck.style.setProperty('--carta-pos', p.toFixed(4));
+      const centro = Math.max(0, Math.min(nos.length - 1, Math.round(p)));
+      if (centro === ultimoCentro) return;
+      ultimoCentro = centro;
+      /* z-index é inteiro: não dá para derivá-lo em CSS de um número
+         fracionário. Ele muda só quando o cartão do meio muda. */
+      nos.forEach((n, i) => {
+        n.style.zIndex = String(nos.length - Math.abs(i - centro));
+        n.classList.toggle('esta-no-centro', i === centro);
+        n.setAttribute('aria-pressed', i === centro ? 'true' : 'false');
+        n.tabIndex = i === centro ? 0 : -1;
+      });
+      U.$$('i', pontos).forEach((n, i) => n.classList.toggle('e-agora', i === centro));
+      btnAnt.disabled = centro === 0;
+      btnProx.disabled = centro === nos.length - 1;
+    }
+
+    const mola = molaDePosicao(pintar);
+    mola.definir(indice);
+
+    function irPara(i, solta, velocidade) {
+      const destino = Math.max(0, Math.min(nos.length - 1, i));
+      indice = destino;
+      deck.dataset.focusedId = nos[destino].dataset.walletItemId;
+      guardarUltimo(superficie, nos[destino].dataset.walletItemId);
+      mola.lancar(destino, velocidade || 0, !!solta);
+    }
+
+    /* ---- o arrasto ---- */
+    let ponteiro = null, x0 = 0, y0 = 0, pos0 = 0, passo = 1, partiuDe = 0;
+    let xUlt = 0, tUlt = 0, vx = 0, arrastando = false, decidiu = false;
+
+    /* O passo é medido, não escrito duas vezes: o CSS posiciona os
+       cartões pelo mesmo número que o arrasto usa para converter
+       pixels de dedo em cartões andados. Se os dois discordassem, o
+       cartão não acompanharia a mão. */
+    function larguraDoPasso() {
+      const largura = nos[0].getBoundingClientRect().width;
+      /* Passo = cartão + um vão. Maior que o cartão, e não menor:
+         o vizinho encosta na borda do palco em vez de montar em
+         cima do do meio. */
+      passo = Math.max(1, largura + 14);
+      deck.style.setProperty('--carteira-salto', passo + 'px');
+      return passo;
+    }
+    larguraDoPasso();
+    if (global.ResizeObserver) new ResizeObserver(larguraDoPasso).observe(deck);
+
+    /* Resistência nas pontas: o cartão ainda anda, mas cada vez
+       menos. É o que diz "não tem mais" sem travar na mão. */
+    function comElastico(p) {
+      const fim = nos.length - 1;
+      if (p < 0) return p * 0.3;
+      if (p > fim) return fim + (p - fim) * 0.3;
+      return p;
+    }
+
+    deck.addEventListener('pointerdown', (ev) => {
+      if (ponteiro !== null || ev.button > 0) return;
+      ponteiro = ev.pointerId;
+      x0 = xUlt = ev.clientX; y0 = ev.clientY;
+      tUlt = ev.timeStamp;
+      vx = 0; arrastando = false; decidiu = false;
+      passo = larguraDoPasso();
+      pos0 = mola.parar();
+      partiuDe = Math.max(0, Math.min(nos.length - 1, Math.round(pos0)));
+    });
+
+    deck.addEventListener('pointermove', (ev) => {
+      if (ev.pointerId !== ponteiro) return;
+      const dx = ev.clientX - x0;
+      const dy = ev.clientY - y0;
+      if (!decidiu) {
+        /* Até saber se o gesto é horizontal, não roubar a rolagem da
+           página: quem desce a tela com o dedo em cima da carteira
+           está lendo, não trocando de cartão. */
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        decidiu = true;
+        arrastando = Math.abs(dx) > Math.abs(dy);
+        if (!arrastando) { ponteiro = null; return; }
+        /* A captura é o que mantém o cartão na mão quando o dedo sai
+           de cima dele. Se o navegador recusar, o gesto continua
+           valendo — o que não pode é a exceção parar o arrasto. */
+        try { deck.setPointerCapture(ev.pointerId); } catch (e) { /* segue sem captura */ }
+        caixa.classList.add('esta-arrastando');
+      }
+      ev.preventDefault();
+      const dt = ev.timeStamp - tUlt;
+      if (dt > 0) {
+        const inst = ((ev.clientX - xUlt) / dt) * 1000;
+        vx = vx * 0.7 + inst * 0.3;   // média móvel: um quadro solto não decide o lance
+        xUlt = ev.clientX; tUlt = ev.timeStamp;
+      }
+      mola.arrastar(comElastico(pos0 - dx / passo));
+    });
+
+    function soltar(ev) {
+      if (ev.pointerId !== ponteiro) return;
+      ponteiro = null;
+      if (!arrastando) return;
+      arrastando = false;
+      caixa.classList.remove('esta-arrastando');
+      try {
+        if (deck.hasPointerCapture(ev.pointerId)) deck.releasePointerCapture(ev.pointerId);
+      } catch (e) { /* já solto */ }
+
+      const vPaginas = -vx / passo;
+      const projetado = mola.pos + vPaginas * 0.35;
+      /* UM CARTÃO POR GESTO
+         A projeção decide a DIREÇÃO e se o lance foi forte o
+         bastante; não decide a distância. O limite é um cartão a
+         partir de onde o gesto começou, porque carteira não é
+         rolagem: passar três de uma vez é perder o lugar, e o que a
+         pessoa pediu foi "o próximo". */
+      const destino = Math.max(partiuDe - 1, Math.min(partiuDe + 1, Math.round(projetado)));
+      /* A mola herda a velocidade do dedo para a chegada parecer
+         continuação do gesto, não um corte. Mas um lance muito forte
+         com um cartão só de distância passaria direto do destino: o
+         teto deixa a ultrapassagem no tamanho de um amortecimento. */
+      irPara(destino, Math.abs(vPaginas) > 0.4, Math.max(-6, Math.min(6, vPaginas)));
+    }
+    deck.addEventListener('pointerup', soltar);
+    deck.addEventListener('pointercancel', soltar);
+
+    /* Um arrasto não é um clique: sem isto, soltar o dedo em cima de
+       um cartão abriria a página dele. */
+    deck.addEventListener('click', (ev) => {
+      const cartao = ev.target.closest && ev.target.closest('.wallet-card');
+      if (!cartao) return;
+      if (Math.abs(ev.clientX - x0) > 6 && decidiu) { ev.stopPropagation(); ev.preventDefault(); return; }
+      const i = nos.indexOf(cartao);
+      if (i < 0 || i === ultimoCentro) return;   // o do meio segue para a página dele
+      ev.stopPropagation(); ev.preventDefault();
+      irPara(i, true);
+    }, true);
+
+    deck.addEventListener('keydown', (ev) => {
+      const passos = { ArrowLeft: -1, ArrowRight: 1 };
+      if (!passos[ev.key]) return;
+      ev.preventDefault();
+      irPara(indice + passos[ev.key], true);
+      const alvo = nos[indice];
+      if (alvo) alvo.focus();
+    });
+
+    pintar(indice);
+    ultimoCentro = -1;
+    pintar(indice);
   }
 
   /* Os dois números que o bolso mostra de perto. Ficam aqui, e não

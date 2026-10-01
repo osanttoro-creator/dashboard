@@ -64,14 +64,22 @@
      teal, com 4,99:1. As cores antigas continuam funcionando em
      dados já salvos — o seletor acrescenta a cor herdada quando ela
      não está na lista, e ninguém perde a categoria que pintou.
+
+     A paleta é escrita POR FAMÍLIA, e não como doze cores soltas,
+     porque é essa estrutura que o seletor mostra na tela: seis
+     colunas com dois tons cada, em vez de uma fileira de quadrados
+     iguais onde qualquer escolha parece tão boa quanto outra.
      ------------------------------------------------------------ */
-  const PALETTE = ['#3E7A6D', '#3E647A', '#3E467A', '#5A3E7A', '#7A503E', '#577A3E'];
-  /* O segundo tom de cada matiz. Em 16/09/2026 o seletor tinha ido a
-     28 cores para "não repetir" com vinte categorias — e o remédio
-     foi pior: ninguém distingue vinho de ferrugem num quadradinho de
-     20px, então a cor deixou de informar. Quem separa vinte
-     categorias é o ÍCONE, que tem forma; a cor agrupa. */
-  const PALETTE_EXTRA = ['#305A51', '#304A5A', '#30365A', '#43305A', '#5A3D30', '#415A30'];
+  const COLOR_FAMILIES = [
+    { nome: 'Teal', tons: ['#3E7A6D', '#305A51'] },
+    { nome: 'Mineral', tons: ['#3E647A', '#304A5A'] },
+    { nome: 'Índigo', tons: ['#3E467A', '#30365A'] },
+    { nome: 'Ameixa', tons: ['#5A3E7A', '#43305A'] },
+    { nome: 'Tangerina', tons: ['#7A503E', '#5A3D30'] },
+    { nome: 'Oliva', tons: ['#577A3E', '#415A30'] }
+  ];
+  const PALETTE = COLOR_FAMILIES.map((f) => f.tons[0]);
+  const PALETTE_EXTRA = COLOR_FAMILIES.map((f) => f.tons[1]);
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
 
   /* ------------------------------------------------------------
@@ -219,7 +227,7 @@
   const NOMES_PADRAO = NOMES_PADRAO_PT.map(tr);
 
   const Store = {
-    PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES, MOEDAS,
+    PALETTE, ALL_COLORS, COLOR_FAMILIES, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES, MOEDAS,
     MEIOS, MEIOS_OFERECIVEIS, MEIOS_PADRAO, meiosDaConta,
     CATEGORIAS_PADRAO: NOMES_PADRAO,
     CATEGORIAS_PADRAO_PT: NOMES_PADRAO_PT
@@ -381,7 +389,11 @@
     return {
       at: (m && U.isValidISO(m.at)) ? m.at : U.todayISO(),
       amount: valor,
-      accountId: (m && m.accountId) || null
+      accountId: (m && m.accountId) || null,
+      /* Por onde a fatura foi paga. Pix e débito automático saem da
+         mesma conta e aparecem diferente no extrato; sem isto, quem
+         confere não reconhece o pagamento que acabou de fazer. */
+      meio: (m && MEIOS.some((x) => x.id === m.meio)) ? m.meio : null
     };
   }
 
@@ -969,7 +981,8 @@
     const m = normalizeMovimento({
       at: (opts && opts.paidAt) || U.todayISO(),
       amount: (opts && opts.amount) || 0,
-      accountId: (opts && opts.accountId) || null
+      accountId: (opts && opts.accountId) || null,
+      meio: (opts && opts.meio) || null
     });
     if (m) r.pagamentos.push(m);
     r.pagamentos.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
@@ -992,7 +1005,8 @@
     const m = normalizeMovimento({
       at: (opts && opts.paidAt) || U.todayISO(),
       amount: (opts && opts.amount) || 0,
-      accountId: (opts && opts.accountId) || null
+      accountId: (opts && opts.accountId) || null,
+      meio: (opts && opts.meio) || null
     });
     if (m) r.adiantamentos[chave] = m; else delete r.adiantamentos[chave];
     limpaSeVazio(cardId, ref);

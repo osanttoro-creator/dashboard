@@ -337,6 +337,20 @@
   "es": "Ver las tarjetas"
  },
  {
+  "pt": "Cartão anterior",
+  "tipo": "exato",
+  "en": "Previous card",
+  "fr": "Carte précédente",
+  "es": "Tarjeta anterior"
+ },
+ {
+  "pt": "Próximo cartão",
+  "tipo": "exato",
+  "en": "Next card",
+  "fr": "Carte suivante",
+  "es": "Tarjeta siguiente"
+ },
+ {
   "pt": "{0} · saldo",
   "tipo": "padrao",
   "en": "{0} · balance",

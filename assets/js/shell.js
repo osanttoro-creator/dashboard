@@ -371,7 +371,7 @@
        campo, que é de onde a pessoa veio. */
     document.getElementById('searchResults').addEventListener('keydown', (ev) => {
       if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
-      const itens = U.$('#searchResults .search-item');
+      const itens = U.$$('#searchResults .search-item');
       const i = itens.indexOf(document.activeElement);
       if (i < 0) return;
       ev.preventDefault();

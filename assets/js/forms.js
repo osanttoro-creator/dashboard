@@ -486,7 +486,7 @@
 
     /* O primeiro botão muda de palavra conforme o tipo: uma receita
        não é "paga", é recebida; uma transferência é "feita". */
-    const btnPago = U.$('button', situacaoSeg)[0];
+    const btnPago = U.$$('button', situacaoSeg)[0];
 
     /* O resto do formulário ainda fala em "confirmado"; esta ponte
        traduz, para não espalhar o estado novo por toda parte. */
@@ -1448,6 +1448,16 @@
       { hint: 'É por esta data que a fatura sai do dinheiro do mês.' });
     const fAccount = field('De onde sai o dinheiro', select(accountOptions(), inv.card.accountId, 'Não debitar de conta'),
       { hint: 'O pagamento baixa o saldo da conta, mas não conta como nova despesa — os itens da fatura já foram contabilizados na data da compra.' });
+    const fMeio = field('Como', select([], null, 'Não informado'));
+    function meiosDoPagamento() {
+      const conta = Store.accounts.get(fAccount._control.value);
+      const atual = fMeio._control.value;
+      UI.fillSelect(fMeio._control, Store.meiosDaConta(conta).map((m) => ({ value: m.id, label: m.nome })),
+        atual, 'Não informado');
+      fMeio.hidden = !fAccount._control.value;
+    }
+    fAccount._control.addEventListener('change', meiosDoPagamento);
+    meiosDoPagamento();
 
     const saldo = el('p', { class: 'hint span-2', role: 'status' });
     const cbQuitar = checkbox('Encerrar a fatura mesmo assim', false);
@@ -1470,7 +1480,7 @@
     fAmount._control.addEventListener('input', recalcula);
     recalcula();
 
-    const grid = el('div', { class: 'form-grid' }, [fAmount, fDate, fAccount, saldo, fQuitar]);
+    const grid = el('div', { class: 'form-grid' }, [fAmount, fDate, fAccount, fMeio, saldo, fQuitar]);
 
     UI.openModal({
       title: `Pagar fatura — ${inv.card.name} · ${U.monthLabel(ref)}`,
@@ -1489,6 +1499,7 @@
               amount: valor,
               paidAt: fDate._control.value,
               accountId: fAccount._control.value || null,
+              meio: fAccount._control.value ? (fMeio._control.value || null) : null,
               quitar: falta <= 0 ? true : cbQuitar._input.checked
             });
             UI.toast(falta > 0 && !cbQuitar._input.checked
@@ -1515,6 +1526,16 @@
     const fAmount = field('Valor adiantado (R$)', moneyInput(falta));
     const fDate = field('Data do pagamento', input({ type: 'date', value: U.todayISO() }));
     const fAccount = field('De onde sai o dinheiro', select(accountOptions(), inv.card.accountId, 'Não debitar de conta'));
+    const fMeio = field('Como', select([], null, 'Não informado'));
+    function meiosDoAdiantamento() {
+      const conta = Store.accounts.get(fAccount._control.value);
+      const atual = fMeio._control.value;
+      UI.fillSelect(fMeio._control, Store.meiosDaConta(conta).map((m) => ({ value: m.id, label: m.nome })),
+        atual, 'Não informado');
+      fMeio.hidden = !fAccount._control.value;
+    }
+    fAccount._control.addEventListener('change', meiosDoAdiantamento);
+    meiosDoAdiantamento();
     const aviso = el('p', { class: 'hint span-2', role: 'status' });
 
     function recalcula() {
@@ -1531,7 +1552,7 @@
       title: 'Adiantar — ' + entrada.description,
       body: el('div', { class: 'form-grid' }, [
         el('p', { class: 'hint span-2', text: `Compra de ${U.fmtBRL(entrada.amount)} em ${U.fmtDateBR(entrada.date)}, cobrada na fatura de ${U.monthLabel(ref, true)}.` }),
-        fAmount, fDate, fAccount, aviso
+        fAmount, fDate, fAccount, fMeio, aviso
       ]),
       buttons: [
         { label: 'Cancelar', class: 'btn-outline', onClick: UI.closeModal },
@@ -1545,7 +1566,8 @@
             Store.advanceInvoiceItem(cardId, ref, entrada.key, {
               amount: valor,
               paidAt: fDate._control.value,
-              accountId: fAccount._control.value || null
+              accountId: fAccount._control.value || null,
+              meio: fAccount._control.value ? (fMeio._control.value || null) : null
             });
             UI.toast('Adiantamento registrado.', 'success');
             UI.closeModal();

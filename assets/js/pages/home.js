@@ -527,7 +527,7 @@
     if (chaves.length > 1) {
       box.appendChild(el('p', {
         class: 'deck-hint',
-        text: 'Abra a carteira e escolha um cartão para trazê-lo à frente.'
+        text: 'Abra a carteira e passe de um cartão para o outro pelos lados.'
       }));
     }
   }

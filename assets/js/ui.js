@@ -196,39 +196,65 @@
     else if (options.length) select.value = options[0].value;
   };
 
-  /** Seletor de cor a partir da paleta validada. */
+  /* =============================================================
+     SELETOR DE COR: SEIS CORES, DOIS TONS — NÃO DOZE QUADRADOS
+     -------------------------------------------------------------
+     Doze quadrados iguais numa fileira que quebra sozinha não é uma
+     paleta, é um sorteio: nada na tela dizia que "Teal" e "Teal
+     profundo" são a mesma cor em intensidades diferentes, então a
+     escolha virava "qual desses eu acho bonito" em vez de "qual
+     família esta categoria pertence".
+
+     Agora cada família é uma coluna com seus dois tons empilhados e
+     o nome embaixo. A quantidade por cor é visivelmente limitada —
+     são dois tons, e acabou — e a estrutura da paleta aparece em vez
+     de ficar só no código.
+
+     Uma cor herdada de dados antigos ganha a própria coluna, com o
+     nome que ela sempre teve: ninguém perde a categoria que pintou
+     de Terracota só porque a paleta mudou.
+     ============================================================= */
   UI.colorPicker = function (initial, onPick) {
     const wrap = el('div', { class: 'color-picker' });
-    const colors = Store.ALL_COLORS.slice();
-    let current = initial || colors[0];
-    if (current && !colors.includes(current)) colors.push(current); // cor herdada de dados antigos
-    colors.forEach((c) => {
-      const nome = Store.colorName ? Store.colorName(c) : c;
-      const b = el('button', {
-        type: 'button', class: 'color-opt' + (c === current ? ' is-active' : ''),
-        style: { background: c }, 'aria-label': 'Cor ' + nome, title: nome,
-        onclick: () => {
-          current = c;
-          U.$$('.color-opt', wrap).forEach((n) => n.classList.remove('is-active'));
-          b.classList.add('is-active');
-          if (onPick) onPick(c);
-        }
+    const familias = (Store.COLOR_FAMILIES || []).map((f) => ({ nome: f.nome, tons: f.tons.slice() }));
+    let current = initial || (familias[0] && familias[0].tons[0]) || null;
+    const conhecidas = familias.reduce((acc, f) => acc.concat(f.tons), []);
+    if (current && !conhecidas.includes(current)) {
+      familias.push({ nome: Store.colorName ? Store.colorName(current) : current, tons: [current], herdada: true });
+    }
+
+    /* O nome fica numa legenda só, embaixo, e não em cada coluna:
+       "Tangerina profundo" é largo demais para caber sob um quadrado
+       de 34px, e seis rótulos de larguras diferentes deixavam as
+       colunas desalinhadas. Um nome por vez também é o que interessa
+       — o da cor que está escolhida. */
+    const legenda = el('p', { class: 'color-nome' });
+    function marcar(c) {
+      current = c;
+      U.$$('.color-opt', wrap).forEach((n) => n.classList.toggle('is-active', n.dataset.cor === c));
+      legenda.textContent = Store.colorName ? Store.colorName(c) : c;
+      if (onPick) onPick(c);
+    }
+
+    const tira = el('div', { class: 'color-tira' });
+    familias.forEach((f) => {
+      const coluna = el('div', { class: 'color-fam' + (f.herdada ? ' is-herdada' : '') });
+      f.tons.forEach((c) => {
+        const nome = Store.colorName ? Store.colorName(c) : c;
+        coluna.appendChild(el('button', {
+          type: 'button', class: 'color-opt' + (c === current ? ' is-active' : ''),
+          style: { background: c }, 'data-cor': c,
+          'aria-label': 'Cor ' + nome, title: nome,
+          onclick: () => marcar(c)
+        }));
       });
-      wrap.appendChild(b);
+      tira.appendChild(coluna);
     });
+    wrap.appendChild(tira);
+    wrap.appendChild(legenda);
+    if (current) legenda.textContent = Store.colorName ? Store.colorName(current) : current;
+
     wrap.getValue = () => current;
-    /* Quem muda o valor por fora (uma data que mudou, um formulário
-       que se refaz) precisa que os botões acompanhem — sem isto o
-       controle mostra uma coisa e vale outra. */
-    wrap.setValue = (v, avisar) => {
-      const alvo = options.find((o) => o.value === v);
-      if (!alvo) return;
-      current = v;
-      U.$('button', wrap).forEach((n, i) => {
-        n.classList.toggle('is-active', options[i].value === v);
-      });
-      if (avisar && onChange) onChange(v);
-    };
     return wrap;
   };
 
@@ -249,6 +275,17 @@
       wrap.appendChild(b);
     });
     wrap.getValue = () => current;
+    /* Quem muda o valor por fora — uma data que mudou, um formulário
+       que se refaz — precisa que os botões acompanhem; sem isto o
+       controle mostra uma coisa e vale outra. */
+    wrap.setValue = (v, avisar) => {
+      if (!options.some((o) => o.value === v)) return;
+      current = v;
+      U.$$('button', wrap).forEach((n, k) => {
+        n.classList.toggle('is-active', options[k].value === v);
+      });
+      if (avisar && onChange) onChange(v);
+    };
     return wrap;
   };
 
