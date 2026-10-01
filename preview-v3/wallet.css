@@ -9,6 +9,78 @@
 .v3-wallet-list{display:block;max-height:385px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(240,229,207,.24) transparent;padding:14px 20px 29px;margin:0 0 -25px}
 .v3-wallet.is-open .v3-wallet-list{animation:v3-wallet-open .35s cubic-bezier(.19,1,.22,1) both}
 .v3-wallet.is-closed .v3-wallet-list{display:none}
+
+/* =============================================================
+   ABERTA: UM CARTÃO NO MEIO, OS VIZINHOS ESPIANDO
+   -------------------------------------------------------------
+   O leque vertical mostrava seis cartões ao mesmo tempo, o que é um
+   índice, não uma carteira. Aqui a posição de cada cartão é a
+   distância dele até o centro: --deck-i é o índice (fixo, escrito
+   uma vez no HTML) e --carta-pos é onde a carteira está AGORA
+   (fracionário, escrito pela mola a cada quadro). A diferença dos
+   dois move, encolhe e apaga o cartão — uma fórmula só, e o arrasto
+   sai de graça, porque arrastar é só escrever outro --carta-pos.
+
+   Sem transition de propósito: quem anima é a mola, quadro a quadro.
+   Uma transição por cima atrasaria o cartão em relação ao dedo, que
+   é exatamente o que não pode acontecer.
+   ============================================================= */
+.v3-wallet.is-open .v3-wallet-list{
+  position:relative;display:block;height:calc(var(--carta-altura,248px) + 24px);max-height:none;
+  margin:0;padding:0;overflow-x:clip;overflow-y:visible;
+  touch-action:pan-y;cursor:grab;animation:none
+}
+.v3-wallet.is-open.esta-arrastando .v3-wallet-list{cursor:grabbing}
+.v3-wallet.is-open .v3-wallet-list .v3-wallet-item,
+.v3-wallet.is-open .v3-wallet-list .v3-wallet-item:not(.is-selected),
+.v3-wallet.is-open .v3-wallet-list .v3-wallet-item.is-selected{
+  --d:calc(var(--deck-i,0) - var(--carta-pos,0));
+  --ad:max(var(--d),calc(-1 * var(--d)));
+  position:absolute;top:0;left:50%;
+  /* Mais estreito que o palco de propósito: a faixa que sobra dos
+     dois lados é onde os vizinhos aparecem. Em proporção, e não em
+     pixels fixos — numa coluna estreita um recuo fixo comeria o
+     cartão inteiro. */
+  width:min(420px,84%);height:auto;aspect-ratio:1.586;margin:0;
+  border-radius:15px;
+  transform:translateX(calc(-50% + var(--d) * var(--carta-salto,300px))) scale(calc(1 - .07 * min(var(--ad),2)));
+  opacity:calc(1 - .42 * min(var(--ad),1.5));
+  transition:none;animation:none
+}
+.v3-wallet.is-open .v3-wallet-list .v3-card-body{opacity:1;transform:none}
+/* Fora do centro o cartão é cenário: um toque nele traz para o meio,
+   e quem trata isso é o JavaScript. */
+.v3-wallet.is-open .v3-wallet-item:not(.esta-no-centro){pointer-events:none}
+.v3-wallet.is-open .v3-wallet-item.esta-no-centro{pointer-events:auto}
+
+/* ---- setas, só onde há ponteiro ---- */
+.v3-carteira-seta{
+  position:absolute;z-index:6;top:calc(var(--carta-altura,248px) / 2 - 10px);
+  width:34px;height:34px;padding:0;display:none;place-items:center;
+  border:1px solid rgba(240,229,207,.18);border-radius:50%;
+  background:rgba(13,24,33,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:var(--milk);font-size:19px;line-height:1;cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.4);transition:opacity .2s ease,transform .2s ease
+}
+.v3-carteira-ant{left:-10px}
+.v3-carteira-prox{right:-10px}
+.v3-carteira-seta:hover{transform:scale(1.06)}
+.v3-carteira-seta:disabled{opacity:.28;cursor:default;transform:none}
+.v3-wallet.is-open .v3-carteira-seta{display:grid}
+@media(hover:none){
+  /* No toque o gesto é o controle; duas bolhas por cima dos cartões
+     só tirariam espaço de quem já sabe arrastar. */
+  .v3-wallet.is-open .v3-carteira-seta{display:none}
+}
+
+/* ---- os pontinhos: quantos são e onde estou ---- */
+.v3-carteira-pontos{position:absolute;left:0;right:0;z-index:6;top:calc(var(--carta-altura,248px) + 15px);display:none;justify-content:center;gap:5px}
+.v3-wallet.is-open .v3-carteira-pontos{display:flex}
+.v3-carteira-pontos i{width:5px;height:5px;border-radius:50%;background:rgba(240,229,207,.26);transition:background .2s ease,transform .2s ease}
+.v3-carteira-pontos i.e-agora{background:var(--teal);transform:scale(1.35)}
+@media(prefers-reduced-motion:reduce){
+  .v3-carteira-seta:hover,.v3-carteira-pontos i.e-agora{transform:none}
+}
 .v3-wallet-item,.v3-wallet-item:not(.is-selected){position:relative;display:block;width:min(100%,420px);height:auto;aspect-ratio:1.586;margin:0 auto calc(-1 * clamp(130px,26vw,202px));padding:16px 18px;border:1px solid rgba(255,255,255,.25);border-radius:15px;overflow:hidden;background:linear-gradient(149deg,rgba(255,255,255,.12) 0 23%,transparent 23% 35%,rgba(0,0,0,.09) 35% 56%,transparent 56%),radial-gradient(ellipse at 77% 4%,rgba(255,255,255,.26),transparent 53%),var(--card-plastic);color:var(--card-ink);box-shadow:0 -7px 20px rgba(0,0,0,.19),inset 0 1px rgba(255,255,255,.3);text-align:left;isolation:isolate;transition:transform .44s cubic-bezier(.19,1,.22,1),margin-bottom .44s cubic-bezier(.19,1,.22,1),box-shadow .3s ease}
 .v3-wallet-item:before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(118deg,transparent 0 48%,rgba(255,255,255,.13) 48% 60%,transparent 60%),linear-gradient(152deg,transparent 0 68%,rgba(0,0,0,.11) 68% 84%,transparent 84%);opacity:.8}
 .v3-wallet-item:not(.is-selected){height:60px;aspect-ratio:auto;margin-bottom:-8px;border-radius:15px 15px 8px 8px}

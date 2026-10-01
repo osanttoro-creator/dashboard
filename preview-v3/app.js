@@ -202,21 +202,58 @@
     }).join('')}</div></details>`).join('');
     return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend><p>Escolha a instituição; o nome da conta pode ser personalizado.</p>${groups}<label class="v3-bank-option v3-bank-other"><input type="radio" name="bank" value="Outro" ${selected && !selectedKey?'checked':''}><span class="v3-bank-option-logo">${icon('wallet')}</span><span>Outro</span></label><label>Se escolheu Outro, informe a instituição<input name="customBank" maxlength="60" value="${esc(selected && !selectedKey && selected!=='Outro'?selected:'')}" placeholder="Nome da instituição"></label></fieldset>`;
   }
-  function cardButton(item, selected) {
+  function cardButton(item, selected, i) {
     const d = item.data, name = d.bank || d.name;
     const plastic=bankBrand(name,d.color), ink=cardInk(plastic);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
-    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--card-plastic:${plastic};--card-ink:${ink}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(name,ink)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
+    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(name,ink)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
   }
+  /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
+     Reescrever só estes três nós, e não a tela inteira, é o que
+     permite o número acompanhar o gesto: um render no meio do
+     arrasto destruiria o cartão que está na mão. */
+  function atualizarBolso(id) {
+    const bolso = $('.v3-wallet-pocket');
+    if (!bolso) return;
+    const item = itemById(id);
+    if (!item) return;
+    state.selected = id;
+    const credit = item.kind === 'credit';
+    const rot = bolso.querySelector('.v3-label');
+    const val = bolso.querySelector('.v3-money');
+    const meta = bolso.querySelector('.v3-muted');
+    if (rot) rot.textContent = `${credit ? 'FATURA' : 'SALDO'} · ${item.data.bank || item.data.name}`;
+    if (val) val.textContent = money(walletItemValue(item));
+    if (meta) meta.textContent = `${credit ? 'Cartão' : 'Conta'} ${item.data.last4 ? 'final ' + item.data.last4 : 'selecionado(a)'}`;
+  }
+
+  /* Remontado a cada render porque a V3 redesenha por innerHTML: o
+     gesto e a mola morrem junto com os nós antigos. */
+  let carrossel = null;
+  function montarCarteira() {
+    if (carrossel) { carrossel.destruir(); carrossel = null; }
+    const raiz = $('.v3-wallet.is-open');
+    if (!raiz || !global.V3Carteira) return;
+    carrossel = V3Carteira.montar(raiz, {
+      superficie: 'v3-' + state.walletKind,
+      inicial: state.selected,
+      aoTrocar: atualizarBolso
+    });
+  }
+
   function wallet(pocketLabel, expanded) {
-    const list = walletItems(), chosen = state.walletOpen && state.selected ? selectedItem() : null;
+    const list = walletItems();
+    /* Aberta, a carteira mostra UM cartão — o último que foi aberto.
+       Fechada, mostra o total. Era essa a diferença entre um índice
+       de cartões e uma carteira. */
+    const chosen = state.walletOpen && list.length ? selectedItem() : null;
     const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button></div></div>`;
     if (!items().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>sua carteira começa aqui</h2><p>Adicione uma conta ou cartão para ver seus saldos neste bolso.</p><button type="button" data-action="add-account" class="v3-primary" style="margin-top:20px">Adicionar conta</button></div>`;
     const credit=state.walletKind==='credit';
     const total=chosen ? walletItemValue(chosen) : credit ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : accountsBalance();
     const summaryLabel=chosen ? `${credit?'FATURA':'SALDO'} · ${chosen.data.bank || chosen.data.name}` : credit?'FATURAS ABERTAS':'SALDO EM CONTAS';
     const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(chosen.data.last4):'selecionado(a)'}` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
-    return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x)=>cardButton(x,chosen?.data.id===x.data.id)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div><button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
+    return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x,i)=>cardButton(x,chosen?.data.id===x.data.id,i)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div>${list.length>1?`<button class="v3-carteira-seta v3-carteira-ant" type="button" data-carteira-ant aria-label="Cartão anterior"><span aria-hidden="true">&lsaquo;</span></button><button class="v3-carteira-seta v3-carteira-prox" type="button" data-carteira-prox aria-label="Próximo cartão"><span aria-hidden="true">&rsaquo;</span></button><div class="v3-carteira-pontos" aria-hidden="true">${list.map(()=>'<i data-carteira-ponto></i>').join('')}</div>`:''}<button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
   }
   function quickActions() { return `<div class="v3-quick">${[['Despesa','down'],['Receita','arrow'],['Transferir','transactions'],['Aporte','investments']].map(([n,i]) => `<button type="button" data-action="new" data-kind="${n.toLowerCase()}">${icon(i)}${n}</button>`).join('')}</div>`; }
   function chartPath() {
@@ -377,6 +414,7 @@
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
     if (state.page==='goals') updateGoalTabs();
+    montarCarteira();
   }
   function updateGoalTabs() {
     const mobile = matchMedia('(max-width:900px)').matches;
@@ -825,7 +863,11 @@
     const target=ev.target.closest('[data-go],[data-action],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
-    if (target.dataset.select) { state.selected=state.selected===target.dataset.select?null:target.dataset.select; render(); return; }
+    /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
+       a seta), e isso não redesenha a tela. Aqui sobra o caso do
+       cartão do meio: ele já está escolhido, e clicar de novo não
+       deve desescolhê-lo — a carteira ficaria sem cartão aberto. */
+    if (target.dataset.select) { state.selected=target.dataset.select; render(); return; }
     if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
     if (target.dataset.filter) { state.filter=target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
@@ -854,7 +896,9 @@
       return;
     }
     const action=target.dataset.action;
-    if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;if(!state.walletOpen)state.selected=null;render();return;}
+    /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
+       voltar nele, que é como uma carteira de verdade se comporta. */
+    if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;render();return;}
     if (action==='review-proposal') {
       const proposal=state.chat[Number(target.dataset.proposalIndex)]?.proposal;
       if (!proposal) { toast('Esta proposta não está mais disponível.'); return; }

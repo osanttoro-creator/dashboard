@@ -783,30 +783,46 @@
     let ultimoCentro = -1;
     function pintar(p) {
       deck.style.setProperty('--carta-pos', p.toFixed(4));
-      const centro = Math.max(0, Math.min(nos.length - 1, Math.round(p)));
+    }
+
+    /* =============================================================
+       O DISCRETO NÃO ESPERA O CONTÍNUO
+       -------------------------------------------------------------
+       Qual cartão está no meio — e portanto o pontinho aceso, o
+       z-index e o botão desabilitado — já foi decidido no instante
+       do gesto. A posição animada é só onde o cartão ESTÁ a caminho
+       dali. Amarrar os dois deixava a seta desabilitada apontando
+       para um cartão que o índice interno já tinha deixado, sempre
+       que a mola não rodava: aba em segundo plano, engasgo de
+       quadro, movimento reduzido.
+       ============================================================= */
+    function aplicarCentro(i) {
+      const centro = Math.max(0, Math.min(nos.length - 1, i));
       if (centro === ultimoCentro) return;
       ultimoCentro = centro;
       /* z-index é inteiro: não dá para derivá-lo em CSS de um número
          fracionário. Ele muda só quando o cartão do meio muda. */
-      nos.forEach((n, i) => {
-        n.style.zIndex = String(nos.length - Math.abs(i - centro));
-        n.classList.toggle('esta-no-centro', i === centro);
-        n.setAttribute('aria-pressed', i === centro ? 'true' : 'false');
-        n.tabIndex = i === centro ? 0 : -1;
+      nos.forEach((n, k) => {
+        n.style.zIndex = String(nos.length - Math.abs(k - centro));
+        n.classList.toggle('esta-no-centro', k === centro);
+        n.setAttribute('aria-pressed', k === centro ? 'true' : 'false');
+        n.tabIndex = k === centro ? 0 : -1;
       });
-      U.$$('i', pontos).forEach((n, i) => n.classList.toggle('e-agora', i === centro));
+      U.$$('i', pontos).forEach((n, k) => n.classList.toggle('e-agora', k === centro));
       btnAnt.disabled = centro === 0;
       btnProx.disabled = centro === nos.length - 1;
     }
 
     const mola = molaDePosicao(pintar);
     mola.definir(indice);
+    aplicarCentro(indice);
 
     function irPara(i, solta, velocidade) {
       const destino = Math.max(0, Math.min(nos.length - 1, i));
       indice = destino;
       deck.dataset.focusedId = nos[destino].dataset.walletItemId;
       guardarUltimo(superficie, nos[destino].dataset.walletItemId);
+      aplicarCentro(destino);
       mola.lancar(destino, velocidade || 0, !!solta);
     }
 
@@ -875,7 +891,11 @@
         vx = vx * 0.7 + inst * 0.3;   // média móvel: um quadro solto não decide o lance
         xUlt = ev.clientX; tUlt = ev.timeStamp;
       }
-      mola.arrastar(comElastico(pos0 - dx / passo));
+      const alvoArrasto = comElastico(pos0 - dx / passo);
+      mola.arrastar(alvoArrasto);
+      /* O pontinho acompanha o dedo: ao passar do meio do caminho, o
+         cartão que chega já é o do meio. */
+      aplicarCentro(Math.round(alvoArrasto));
     });
 
     function soltar(ev) {
@@ -927,8 +947,6 @@
       if (alvo) alvo.focus();
     });
 
-    pintar(indice);
-    ultimoCentro = -1;
     pintar(indice);
   }
 

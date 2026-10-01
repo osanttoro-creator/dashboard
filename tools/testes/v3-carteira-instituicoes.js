@@ -13,11 +13,16 @@ const catalog = read('assets/vendor/bancos.js');
 
 assert.match(app, /data-wallet-kind="debit"/);
 assert.match(app, /data-wallet-kind="credit"/);
-assert.match(app, /state\.selected=state\.selected===target\.dataset\.select\?null:target\.dataset\.select; render\(\); return;/);
+/* Com o carrossel, escolher um cartão é trazê-lo para o meio — nunca
+   desescolher. Clicar de novo no cartão aberto não pode esvaziar a
+   carteira, e fechar não pode esquecer qual estava aberto: reabrir
+   tem de voltar nele. */
+assert.match(app, /state\.selected=target\.dataset\.select; render\(\); return;/);
+assert.doesNotMatch(app, /state\.selected===target\.dataset\.select\?null/);
 assert.match(app, /data-action="wallet-toggle" aria-expanded="\$\{state\.walletOpen\}"/);
 assert.match(app, /action==='wallet-toggle'/);
 assert.match(app, /state\.walletOpen=!state\.walletOpen/);
-assert.match(app, /if\(!state\.walletOpen\)state\.selected=null/);
+assert.doesNotMatch(app, /if\(!state\.walletOpen\)state\.selected=null/);
 assert.doesNotMatch(app, /if \(target\.dataset\.select\)[^\n]*go\('wallet'\)/);
 assert.match(app, /const list = walletItems\(\)/);
 assert.match(app, /function walletItemValue\(item\)/);
@@ -54,4 +59,39 @@ for (const html of ['app-v3.html', 'preview-v3/index.html']) {
   assert.match(page, /assets\/js\/icons\.js/);
 }
 
-console.log('Carteira V3, instituições e ícones locais protegidos por verificação.');
+/* =============================================================
+   O CARROSSEL DA CARTEIRA
+   -------------------------------------------------------------
+   Aberta, a carteira mostra UM cartão e troca pelo lado. O que
+   segura isso é o gesto: 1:1 com o dedo, com captura de ponteiro,
+   animado por uma mola quadro a quadro — e não por transição CSS,
+   que não pode ser interrompida sem saltar. Cada peça abaixo já foi
+   perdida uma vez ao mexer no arquivo; por isso está aqui.
+   ============================================================= */
+const carteira = read('preview-v3/carteira.js');
+
+assert.match(carteira, /setPointerCapture/, 'o arrasto precisa capturar o ponteiro');
+assert.match(carteira, /requestAnimationFrame\(passo\)/, 'a mola anima quadro a quadro');
+assert.match(carteira, /const k = 340/, 'a rigidez da mola é medida, não improvisada');
+assert.match(carteira, /Math\.max\(partiuDe - 1, Math\.min\(partiuDe \+ 1/, 'um gesto anda um cartão');
+assert.match(carteira, /prefers-reduced-motion/, 'quem pede menos movimento recebe o destino');
+assert.match(carteira, /oaze\.carteira\.ultimo/, 'a carteira abre no último cartão aberto');
+assert.match(carteira, /Math\.abs\(dx\) > Math\.abs\(dy\)/, 'gesto vertical continua rolando a página');
+
+/* A posição vem do índice menos a posição atual: é essa fórmula que
+   deixa o arrasto sair de graça. Se ela virar transition, o cartão
+   atrasa em relação ao dedo. */
+assert.match(wallet, /--d:calc\(var\(--deck-i,0\) - var\(--carta-pos,0\)\)/);
+assert.match(wallet, /overflow-x:clip/, 'o vizinho some na borda da carteira, não por cima da página');
+assert.match(wallet, /touch-action:pan-y/, 'o dedo na vertical ainda rola a página');
+assert.match(app, /--deck-i:\$\{i \|\| 0\}/);
+assert.match(app, /data-carteira-ant/);
+assert.match(app, /data-carteira-prox/);
+assert.match(app, /data-carteira-ponto/);
+assert.match(app, /function montarCarteira\(\)/);
+assert.match(app, /function atualizarBolso\(id\)/, 'o bolso acompanha o gesto sem redesenhar a tela');
+for (const html of ['app-v3.html', 'preview-v3/index.html']) {
+  assert.match(read(html), /preview-v3\/carteira\.js/, html + ' precisa carregar a carteira');
+}
+
+console.log('Carteira V3, carrossel, instituições e ícones locais protegidos por verificação.');
