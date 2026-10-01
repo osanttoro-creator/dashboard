@@ -339,6 +339,19 @@
               aria-label="Buscar em todo o app" data-dica="Buscar   /">
         <span data-ico="search"></span><span class="pill-label">Buscar</span>
       </button>
+      <!-- OCULTAR SALDOS
+           Fica na barra, e não enterrado em Configurações: quem
+           precisa dele precisa AGORA — alguém chegou perto, a tela
+           vai ser compartilhada. Um ajuste a três toques de distância
+           não serve para isso.
+           O estado aparece no ícone (olho aberto / olho cortado) além
+           do aria-pressed: dá para saber se os valores estão à mostra
+           sem clicar para descobrir. -->
+      <button class="pill pill-btn" id="btnSigilo" aria-pressed="false"
+              aria-label="Ocultar os valores" data-dica="Ocultar valores">
+        <span data-ico="eye" id="sigiloIcone"></span>
+        <span class="pill-label" id="sigiloRotulo">Ocultar</span>
+      </button>
       <button class="pill pill-btn" id="btnNotif" aria-expanded="false"
               aria-label="Notificações" data-dica="Notificações">
         <span data-ico="bell"></span>

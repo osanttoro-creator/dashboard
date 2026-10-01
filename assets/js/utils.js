@@ -28,7 +28,60 @@
   const nfNum = new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const nfInt = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 });
 
-  U.fmtBRL = (n) => nfBRL.format(Number.isFinite(+n) ? +n : 0);
+  /* =============================================================
+     OCULTAR SALDOS
+     -------------------------------------------------------------
+     Uma decisão só, no lugar por onde TODO dinheiro da tela passa.
+     São 216 chamadas de formatação em 20 arquivos; se cada tela
+     decidisse por conta própria, um número escaparia — e a função
+     deixaria de servir exatamente para aquilo que ela existe.
+
+     POR QUE MÁSCARA, E NÃO DESFOQUE
+     A primeira tentativa usou filter: blur. Desfoque não esconde: o
+     número continua ali, só embaçado. Com zoom, com uma captura de
+     tela, ou simplesmente de perto, ele volta — e quem ligou a
+     função acredita que está protegido. Aqui o valor é SUBSTITUÍDO:
+     não há o que decifrar porque não há número na tela.
+
+     E A MÁSCARA TEM LARGURA FIXA de propósito. Uma máscara que
+     acompanha o tamanho do número entrega a ordem de grandeza —
+     quatro bolinhas ou sete dizem se o saldo é de centenas ou de
+     milhões, que costuma ser justamente o que a pessoa quer
+     esconder de quem olha por cima do ombro.
+
+     A escolha vive no aparelho e sobrevive ao recarregamento.
+     ============================================================= */
+  const CHAVE_SIGILO = 'oaze.sigilo';
+  const MASCARA_VALOR = '••••••';
+  const SIMBOLO_BRL = 'R' + String.fromCharCode(36);
+  let sigiloLigado = false;
+  try { sigiloLigado = localStorage.getItem(CHAVE_SIGILO) === '1'; } catch (e) { sigiloLigado = false; }
+
+  const ouvintesSigilo = new Set();
+
+  U.sigilo = {
+    ligado: () => sigiloLigado,
+    definir: function (v) {
+      sigiloLigado = !!v;
+      try { localStorage.setItem(CHAVE_SIGILO, sigiloLigado ? '1' : '0'); } catch (e) { /* modo privado: vale só nesta aba */ }
+      /* Um ouvinte que quebra não pode derrubar os outros: quem
+         pediu para ser avisado da troca é tela, e tela quebrada
+         deixaria o valor à mostra com o cadeado fechado. */
+      ouvintesSigilo.forEach((f) => { try { f(sigiloLigado); } catch (e) { /* segue */ } });
+      return sigiloLigado;
+    },
+    alternar: function () { return U.sigilo.definir(!sigiloLigado); },
+    aoMudar: function (f) { ouvintesSigilo.add(f); return () => ouvintesSigilo.delete(f); },
+    /* O símbolo da moeda fica: some o valor, não o contexto. */
+    mascarar: (simbolo) => (simbolo ? simbolo + ' ' : '') + MASCARA_VALOR
+  };
+
+  /* O valor de verdade, para quem precisa dele mesmo com o sigilo
+     ligado — exportação, backup e contas intermediárias. */
+  U.fmtBRLReal = (n) => nfBRL.format(Number.isFinite(+n) ? +n : 0);
+
+  U.fmtBRL = (n) => (sigiloLigado ? U.sigilo.mascarar(SIMBOLO_BRL) : U.fmtBRLReal(n));
+
   /* Moeda do cartão internacional. O formato continua o brasileiro
      (vírgula nos centavos): quem lê é a mesma pessoa, só o símbolo
      muda. Um formatador por moeda, guardado. */
@@ -36,6 +89,7 @@
   U.fmtMoeda = function (n, moeda) {
     const m = /^[A-Z]{3}$/.test(moeda || '') ? moeda : 'BRL';
     if (m === 'BRL') return U.fmtBRL(n);
+    if (sigiloLigado) return U.sigilo.mascarar(m);
     if (!nfMoeda[m]) {
       try { nfMoeda[m] = new Intl.NumberFormat(LOCALE, Object.assign({ style: 'currency', currency: m }, EXIBICAO)); }
       catch (e) { nfMoeda[m] = { format: (v) => m + ' ' + nfNum.format(v) }; }
@@ -64,7 +118,7 @@
     if (v >= 1e3) return s + nfInt.format(v / 1e3) + SUFIXOS[2];
     return s + nfInt.format(v);
   };
-  U.fmtBRLCompact = (n) => 'R$ ' + U.fmtCompact(n);
+  U.fmtBRLCompact = (n) => (sigiloLigado ? U.sigilo.mascarar(SIMBOLO_BRL) : SIMBOLO_BRL + ' ' + U.fmtCompact(n));
 
   /** Aceita "1.234,56", "1234.56", "R$ 1.234,56", "-1.234,56", "(1.234,56)" */
   U.parseMoney = function (raw) {

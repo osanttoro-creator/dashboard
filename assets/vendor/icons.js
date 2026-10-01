@@ -127,5 +127,12 @@
   RAW.lucide['moon'] = '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />';
   RAW.lucide['monitor'] = '<rect width="20" height="14" x="2" y="3" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" />';
 
+  /* O olho e o olho cortado, para o botão de ocultar saldos. Os dois
+     desenhos existem porque o estado tem de aparecer no ÍCONE, e não
+     só no aria-pressed: quem bate o olho na barra precisa saber se os
+     valores estão à mostra sem clicar para descobrir. */
+  RAW.lucide['eye'] = '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" />';
+  RAW.lucide['eye-off'] = '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /><path d="m2 2 20 20" />';
+
   global.IconData = RAW;
 })(window);

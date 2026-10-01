@@ -306,6 +306,27 @@
   "es": "Buscar"
  },
  {
+  "pt": "Ocultar os valores",
+  "tipo": "exato",
+  "en": "Hide the amounts",
+  "fr": "Masquer les montants",
+  "es": "Ocultar los importes"
+ },
+ {
+  "pt": "Ocultar valores",
+  "tipo": "exato",
+  "en": "Hide amounts",
+  "fr": "Masquer les montants",
+  "es": "Ocultar importes"
+ },
+ {
+  "pt": "Ocultar",
+  "tipo": "exato",
+  "en": "Hide",
+  "fr": "Masquer",
+  "es": "Ocultar"
+ },
+ {
   "pt": "Notificações",
   "tipo": "exato",
   "en": "Notifications",

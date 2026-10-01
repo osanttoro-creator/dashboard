@@ -329,6 +329,41 @@
   "es": "Registrar en el día elegido"
  },
  {
+  "pt": "Mostrar os valores",
+  "tipo": "exato",
+  "en": "Show the amounts",
+  "fr": "Afficher les montants",
+  "es": "Mostrar los importes"
+ },
+ {
+  "pt": "Mostrar valores",
+  "tipo": "exato",
+  "en": "Show amounts",
+  "fr": "Afficher les montants",
+  "es": "Mostrar importes"
+ },
+ {
+  "pt": "Mostrar",
+  "tipo": "exato",
+  "en": "Show",
+  "fr": "Afficher",
+  "es": "Mostrar"
+ },
+ {
+  "pt": "Valores ocultos neste aparelho.",
+  "tipo": "exato",
+  "en": "Amounts hidden on this device.",
+  "fr": "Montants masqués sur cet appareil.",
+  "es": "Importes ocultos en este aparato."
+ },
+ {
+  "pt": "Valores à mostra.",
+  "tipo": "exato",
+  "en": "Amounts visible again.",
+  "fr": "Montants de nouveau visibles.",
+  "es": "Importes de nuevo a la vista."
+ },
+ {
   "pt": "Perfil alterado.",
   "tipo": "exato",
   "en": "Profile changed.",

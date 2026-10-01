@@ -305,10 +305,28 @@
       ? `${ano}: sobraram ${U.fmtBRL(U.round2(rec - des))}`
       : `${ano}: faltaram ${U.fmtBRL(Math.abs(U.round2(rec - des)))}`;
 
+    /* O SALDO CARREGA O MÊS ANTERIOR
+       -------------------------------------------------------------
+       A linha tracejada mostrava r.balance — o resultado DAQUELE mês,
+       isolado. Setembro fechar com R$ 500 não movia outubro: cada mês
+       recomeçava do zero, e a curva lida de ponta a ponta não contava
+       história nenhuma. Quem olha um ano quer ver para onde o
+       dinheiro foi indo, não doze resultados soltos.
+
+       Agora é r.cumulative, que o monthlySeries já calculava e
+       ninguém usava: ele parte do saldo de abertura do primeiro mês
+       (o fechamento do anterior) e soma mês a mês. Outubro começa
+       onde setembro parou.
+
+       É acumulado POR COMPETÊNCIA: a compra no cartão pesa no mês da
+       compra, não no mês da fatura. O outro saldo do app, o de caixa,
+       responde outra pergunta e tem o cartão "Sobra em caixa" só
+       dele — misturar os dois numa linha só seria somar coisas
+       diferentes e chamar o resultado de saldo. */
     Charts.lines('chartFlow', serie.map((r) => r.label), [
       { label: 'Receitas', color: t.income, data: serie.map((r) => r.income) },
       { label: 'Despesas', color: t.expense, data: serie.map((r) => r.expense), pointStyle: 'rectRot' },
-      { label: 'Saldo do mês', color: t.accent, data: serie.map((r) => r.balance), dashed: true }
+      { label: 'Saldo acumulado', color: t.accent, data: serie.map((r) => r.cumulative), dashed: true }
     ], { markers: true, beginAtZero: false });
   }
 

@@ -691,6 +691,40 @@
     document.getElementById('btnNextMonth').addEventListener('click', () => App.setYM(U.addMonths(App.ym, 1)));
     document.getElementById('btnToday').addEventListener('click', () => App.goToday());
 
+    /* ---------------- ocultar saldos ----------------
+       A troca repinta o app inteiro, e tem de ser assim: o valor é
+       formatado em 216 lugares, e sair caçando cada nó na tela para
+       trocar o texto deixaria um para trás — exatamente o número que
+       a pessoa queria esconder.
+
+       O ícone acompanha o estado. Sem isso, o botão só diria o que
+       faz depois de ser apertado. */
+    const btnSigilo = document.getElementById('btnSigilo');
+    if (btnSigilo) {
+      const pintarSigilo = (ligado) => {
+        btnSigilo.setAttribute('aria-pressed', ligado ? 'true' : 'false');
+        btnSigilo.setAttribute('aria-label', ligado ? 'Mostrar os valores' : 'Ocultar os valores');
+        btnSigilo.setAttribute('data-dica', ligado ? 'Mostrar valores' : 'Ocultar valores');
+        const rotulo = document.getElementById('sigiloRotulo');
+        if (rotulo) rotulo.textContent = ligado ? 'Mostrar' : 'Ocultar';
+        /* Trocar o data-ico não basta: paintIcons() pula todo nó que
+           já tem filho, porque ele existe para preencher o que está
+           vazio. Aqui o desenho é substituído na mão. */
+        const icone = document.getElementById('sigiloIcone');
+        if (icone) {
+          icone.setAttribute('data-ico', ligado ? 'eye-off' : 'eye');
+          U.clear(icone).appendChild(Icons.lucide(ligado ? 'eye-off' : 'eye', 17));
+        }
+      };
+      pintarSigilo(U.sigilo.ligado());
+      btnSigilo.addEventListener('click', () => {
+        const ligado = U.sigilo.alternar();
+        pintarSigilo(ligado);
+        App.render();
+        UI.toast(ligado ? 'Valores ocultos neste aparelho.' : 'Valores à mostra.');
+      });
+    }
+
     // perfil
     document.getElementById('profileSelect').addEventListener('change', (e) => {
       Store.setActiveProfile(e.target.value);

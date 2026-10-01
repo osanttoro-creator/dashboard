@@ -49,6 +49,13 @@
   "es": "Gastos confirmados"
  },
  {
+  "pt": "Saldo do mês",
+  "tipo": "exato",
+  "en": "Month balance",
+  "fr": "Solde du mois",
+  "es": "Saldo del mes"
+ },
+ {
   "pt": "Se tudo se confirmar:",
   "tipo": "exato",
   "en": "If everything goes through:",

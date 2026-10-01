@@ -189,11 +189,11 @@
   "es": "{0}: faltaron {1}"
  },
  {
-  "pt": "Saldo do mês",
+  "pt": "Saldo acumulado",
   "tipo": "exato",
-  "en": "Month balance",
-  "fr": "Solde du mois",
-  "es": "Saldo del mes"
+  "en": "Running balance",
+  "fr": "Solde cumulé",
+  "es": "Saldo acumulado"
  },
  {
   "pt": "{0} concentra {1} dos gastos",
