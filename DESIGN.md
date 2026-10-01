@@ -1,47 +1,47 @@
 ---
 name: OAZE
-description: Clareza financeira em uma câmara de petróleo, areia, ouro e dados vivos.
+description: Clareza financeira em água, leite de coco e um único verde de oásis.
 colors:
-  oasis-night: "#071822"
-  well-deep: "#050F16"
-  petroleum: "#0F2A38"
-  anchor-glass: "#23394D"
-  sand: "#F4EFE6"
-  ink-light: "#F1ECE3"
-  mist: "#9FB2B8"
-  medallion-gold: "#D8B45E"
-  uglez-royal: "#4669F0"
-  uglez-action: "#354EDE"
+  night-ocean: "#0D1821"
+  night-ocean-deep: "#091219"
+  coconut-milk: "#F0E5CF"
+  coconut-milk-deep: "#E3D7BE"
+  mineral-blue: "#355565"
+  oasis-teal: "#5FA99B"
+  oasis-teal-light: "#8FCFC0"
+  oasis-teal-ink: "#2E6459"
+  soft-tangerine: "#E9875E"
+  ink-muted-light: "#4A5E68"
+  ink-muted-dark: "#9DAFB5"
 typography:
   display:
-    fontFamily: '"IBM Plex Sans", system-ui, sans-serif'
-    fontSize: "clamp(42px, 5vw, 78px)"
-    fontWeight: 590
-    lineHeight: 0.92
-    letterSpacing: "0.23em"
+    fontFamily: '"Unbounded", system-ui, sans-serif'
+    fontSize: "clamp(34px, 6vw, 72px)"
+    fontWeight: 500
+    lineHeight: 1.02
+    letterSpacing: "-0.05em"
   headline:
-    fontFamily: '"Newsreader", Georgia, serif'
-    fontSize: "clamp(26px, 2.8vw, 34px)"
+    fontFamily: '"Unbounded", system-ui, sans-serif'
+    fontSize: "clamp(23px, 2.2vw, 34px)"
     fontWeight: 500
     lineHeight: 1.18
     letterSpacing: "-0.01em"
   body:
-    fontFamily: '"IBM Plex Sans", system-ui, sans-serif'
+    fontFamily: '"Instrument Sans", system-ui, sans-serif'
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
   label:
     fontFamily: '"IBM Plex Mono", ui-monospace, monospace'
-    fontSize: "11.5px"
-    fontWeight: 600
+    fontSize: "10.5px"
+    fontWeight: 400
     lineHeight: 1.5
     letterSpacing: "0.14em"
 rounded:
   field: "4px"
   card: "6px"
   panel: "8px"
-  context: "16px"
-  chamber: "30px"
+  wallet: "18px"
   capsule: "999px"
 spacing:
   xs: "4px"
@@ -50,191 +50,247 @@ spacing:
   lg: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.medallion-gold}"
-    textColor: "{colors.oasis-night}"
-    rounded: "{rounded.field}"
-    padding: "8px 14px"
-  button-uglez:
-    backgroundColor: "{colors.uglez-action}"
-    textColor: "#FFFFFF"
+    backgroundColor: "{colors.oasis-teal}"
+    textColor: "{colors.night-ocean}"
     rounded: "{rounded.field}"
     padding: "8px 14px"
   button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.ink-light}"
+    textColor: "{colors.night-ocean}"
     rounded: "{rounded.field}"
     padding: "8px 14px"
-  chip-uglez:
-    backgroundColor: "rgba(151, 176, 197, 0.045)"
-    textColor: "rgba(225, 231, 235, 0.68)"
+  wallet-card:
+    rounded: "{rounded.wallet}"
+    width: "300px"
+    height: "188px"
+  chip:
+    backgroundColor: "rgba(17, 38, 47, 0.06)"
     rounded: "{rounded.capsule}"
     padding: "5px 11px"
-  prompt-uglez:
-    backgroundColor: "rgba(139, 164, 184, 0.05)"
-    textColor: "#F4F6F8"
-    rounded: "{rounded.field}"
-    padding: "13px 14px"
-    height: "82px"
 ---
 
 # Design System: OAZE
 
 ## Overview
 
-**Creative North Star: "A Câmara Financeira do Oásis"**
+**Norte criativo: "O oásis, não o cofre."**
 
-OAZE transforma finanças pessoais em uma sala de leitura calma e precisa. A base é petróleo profundo; areia e tinta clara garantem legibilidade; ouro sinaliza decisões e valor. A interface permanece instrumental e contida, com números à frente da decoração.
+O OAZE mostra dinheiro em repouso. A tela clara é leite de coco; a escura é
+oceano noturno; entre as duas, um único verde de oásis marca o que se pode
+tocar. Nada brilha por brilhar: a hierarquia vem do tamanho do número, da
+solidez da superfície e do espaço, não de cor decorativa.
 
-UGLEZ habita esse mesmo mundo como matéria de dados viva: uma formação abstrata de partículas azul-real, atravessada por poucos pontos quentes. A conversa continua sendo uma ferramenta financeira com estado escrito, contexto do mês e ação explícita — não um mascote ou um cartão genérico de chatbot.
+A assistente é a **Coco**, uma axolote ilustrada do kit V2.1. Ela aparece como
+corpo inteiro em dez poses, cada uma ligada a um momento do app — pensando,
+explicando, comemorando uma meta, dando um alerta gentil. Não é um orbe, não é
+uma esfera de partículas e não tem luz própria: é um desenho, e é por isso que
+ela pode ser carinhosa sem competir com os valores na tela.
 
-**Key Characteristics:**
+**Características:**
 
-- Fundo de oásis noturno e painéis de petróleo em camadas.
-- Ouro raro para ação, seleção e identidade; azul-real reservado à inteligência UGLEZ.
-- Tipografia editorial nos títulos, tipografia técnica e tabular na operação.
-- Divisórias finas, vidro moderado e profundidade ambiental, nunca ornamental.
-- Câmara UGLEZ integralmente contida em uma tela, sem rolagem da página.
+- Dois mundos, um sistema: Coconut Milk de dia, Night Ocean de noite, com os
+  mesmos tokens apontando para cada um.
+- Um acento só — Oasis Teal. O tangerina pertence exclusivamente à Coco.
+- Títulos em Unbounded, operação em Instrument Sans, rótulos em IBM Plex Mono.
+- Três níveis de material (conteúdo, apoio, controle); quanto mais importante
+  o número, mais sólida a superfície sob ele.
+- Raios pequenos em tudo que é controle; o cartão da carteira é a exceção,
+  porque ele imita um objeto de plástico.
+
+> **O que saiu da V1.** Ouro, medalhão, coqueiro e o UGLEZ não fazem mais parte
+> da marca. Se algo na base ainda se chama `--ouro` ou `--uglez`, é um nome
+> antigo apontando para o teal: a troca foi feita no valor, não no nome, para
+> não reescrever centenas de regras de uma vez.
 
 ## Colors
 
-A paleta alterna um mundo claro de areia com um mundo escuro de petróleo; a câmara UGLEZ permanece deliberadamente escura para fazer os dados luminosos legíveis.
+### Primária
 
-### Primary
+- **Oasis Teal `#5FA99B`** — o acento único: ação, seleção, estado ativo, série
+  em destaque nos gráficos. Como TEXTO sobre o fundo claro ele escurece para
+  `#2E6459` (5,6:1); como fundo, o texto por cima é Night Ocean (8,4:1).
 
-- **Ouro do Medalhão:** ação primária, seleção, estado pronto e pontos quentes que ligam a inteligência à marca.
+### Estrutura
 
-### Secondary
+- **Night Ocean `#0D1821`** — fundo do tema escuro e tinta do tema claro (15,1:1).
+- **Coconut Milk `#F0E5CF`** — fundo do tema claro e tinta do tema escuro (14,8:1).
+- **Mineral Blue `#355565`** — o vidro da navegação no tema escuro; é a camada
+  que flutua, nunca uma superfície de conteúdo.
 
-- **Azul-real UGLEZ:** partículas, foco e ação de análise; é a única luz cromática própria da inteligência.
+### Reservada
 
-### Neutral
+- **Soft Tangerine `#E9875E`** — só a Coco. Não serve de acento, de alerta nem
+  de destaque em gráfico.
 
-- **Noite de Oásis:** fundo principal do tema escuro e tinta sobre ouro.
-- **Poço:** profundidade extrema, base do console e vinheta da formação.
-- **Petróleo:** superfícies de conteúdo quase sólidas e fallback quando a transparência é reduzida.
-- **Âncora de Vidro:** camada dos controles e da navegação flutuante.
-- **Areia:** fundo principal do tema claro.
-- **Tinta Clara:** texto de alta prioridade sobre superfícies escuras.
-- **Bruma:** texto secundário, metadados e orientação de baixa hierarquia.
+### Categorias
 
-### Named Rules
+Seis matizes, dois tons cada, todas na mesma saturação e claridade — é isso que
+as faz parecer família. Teal, Mineral, Índigo, Ameixa, Tangerina e Oliva, em um
+tom base e um tom profundo. Todas passam 4,5:1 com texto branco por cima.
 
-**The Ouro Único Rule.** O ouro é o acento global para ação, seleção e identidade; não se distribuem novas cores decorativas pela interface.
+A quantidade é deliberada: com vinte e oito cores a pessoa escolhe por sorteio
+e duas categorias acabam com tons que ninguém distingue de relance. **Quem
+separa vinte categorias é o ícone, que tem forma; a cor agrupa.**
 
-**The Luz UGLEZ Rule.** O azul-real pertence aos estados, partículas, foco e ação da inteligência UGLEZ; ele não substitui a marca OAZE.
+### Regras nomeadas
+
+**A regra do acento único.** Existe um acento, e ele é o teal. Uma cor nova na
+interface precisa justificar por que não podia ser tamanho, peso ou espaço.
+
+**A regra da Coco.** O tangerina é dela. Usá-lo em um botão faria a assistente
+e a ação parecerem a mesma coisa.
+
+**A regra do nome antigo.** Tokens herdados (`--ouro`, `--uglez`, `--midnight`)
+apontam para a paleta nova e continuam válidos; o que não se pode é usar o
+VALOR antigo de volta.
 
 ## Typography
 
-**Display Font:** IBM Plex Sans (with system-ui fallback), usada no nome espaçado UGLEZ.
+**Títulos:** Unbounded (fallback system-ui). Geométrica, de peso 400 e 500 só.
 
-**Body Font:** IBM Plex Sans (with system-ui fallback).
+**Corpo e controles:** Instrument Sans (fallback system-ui), 400/500/600.
 
-**Label/Mono Font:** IBM Plex Mono (with ui-monospace fallback).
+**Rótulos e valores técnicos:** IBM Plex Mono, caixa alta, tracking `.14em`.
 
-**Editorial Font:** Newsreader (with Georgia fallback), usada nos títulos de página do aplicativo.
+As três são servidas localmente de `/assets/fonts`, com `font-display: swap`.
 
-**Character:** Newsreader introduz uma voz editorial serena; IBM Plex Sans mantém conversa, controles e números precisos; IBM Plex Mono separa rótulos de valores. O nome UGLEZ é uma exceção intencional em sans, amplo e geométrico.
+### Hierarquia
 
-### Hierarchy
+- **Display** (Unbounded 500, `clamp(34px, 6vw, 72px)`, tracking `-0.05em`): a
+  marca no portal da home. Aparece uma vez por página, no máximo.
+- **Headline** (Unbounded 500, `clamp(23px, 2.2vw, 34px)`): títulos de página e
+  de cartão de destaque.
+- **Body** (Instrument Sans 400, 14px/1.5): tudo que se lê como frase.
+- **Label** (IBM Plex Mono 400, 10,5–11,5px, caixa alta, tracking positivo):
+  nome de campo, nome de métrica, unidade, legenda de gráfico.
 
-- **Display** (590, `clamp(42px, 5vw, 78px)`, 0.92): assinatura UGLEZ; no celular reduz para `clamp(28px, 8vw, 38px)` e chega a 27px em telas de pouca altura.
-- **Headline** (500, `clamp(26px, 2.8vw, 34px)`, 1.18): títulos editoriais de página.
-- **Title** (630, 15px, compacta): cabeçalhos operacionais como “Conversa financeira”.
-- **Body** (400, 14px, 1.5): explicações e conteúdo; textos auxiliares extensos usam até 1.65.
-- **Label** (600, 11–11.5px, tracking positivo e caixa alta): nomes de campos, métricas e contexto.
+### Regras nomeadas
 
-### Named Rules
+**A regra dos números estáveis.** Valor financeiro usa algarismo tabular, para
+que a coluna não dance quando um número muda.
 
-**The Números Estáveis Rule.** Valores financeiros usam algarismos tabulares para que colunas e mudanças de estado não saltem.
-
-**The Escala de Tracking Rule.** Texto pequeno recebe tracking positivo; títulos grandes recebem tracking negativo, exceto a assinatura deliberadamente espaçada do UGLEZ.
+**A regra do rótulo que não compete.** O que é nome de campo vai em mono, caixa
+alta e espaçado; o que é valor vai grande e em sans. Nunca o contrário.
 
 ## Layout
 
-O aplicativo usa uma faixa superior de destinos em telas a partir de 821px e uma ilha de navegação inferior com cinco destinos no celular. O conteúdo desktop fica centralizado até 1440px; a rota UGLEZ pode avançar até 1920px e ocupa exatamente `100dvh`, sem rolagem da página nem seção posterior. A câmara usa toda a altura restante após os controles globais.
+No desktop o app tem uma barra lateral de 244px e o conteúdo rola ao lado dela.
+No celular, uma ilha inferior com cinco destinos, respeitando as safe areas.
 
-Desktop e tablet mantêm presença visual e console lado a lado: a grade parte de mínimos de 300px e 440px e, abaixo de 1120px, comprime para 250px e 410px. Até 1120px, as três métricas compactas viram linhas dentro da presença. A 820px, a presença se torna uma faixa de 132px sobre o console, as métricas voltam a três colunas e espaço/período permanecem em uma única linha. A faixa reduz para 124px abaixo de 430px e para 112px quando a altura disponível não passa de 700px.
+O site de apresentação abre num **portal**: tela preta com "bem-vindo ao" pequeno
+sobre a marca em tamanho de tela, e a rolagem abre os dois painéis revelando a
+página. Todo o movimento do portal é derivado da POSIÇÃO da rolagem, nunca de um
+cronômetro — por isso ele volta quando se rola para cima.
 
-No celular, o console ordena cabeçalho, compositor e corpo. Estado, Mês/Base/Leitura, sugestões, campo e ação permanecem na mesma tela; apenas histórico e respostas extensas rolam dentro de `.uglez-console-corpo`, com overscroll contido e barra visualmente oculta.
-
-O ritmo combina intervalos de 4 e 8px dentro de controles, 14px em campos e 18–24px entre blocos; as áreas de toque crescem para pelo menos 40–44px onde não há hover.
+O ritmo combina 4 e 8px dentro de controles, 14px em campos e 18–24px entre
+blocos. Onde não há hover, o alvo de toque cresce para 40–44px.
 
 ## Elevation & Depth
 
-A profundidade é híbrida: tonalidade e transparência organizam três materiais, enquanto sombras baixas apenas separam ou elevam. Conteúdo numérico usa material quase sólido; contexto usa vidro intermediário; navegação e controles usam o vidro mais refrativo. Na câmara, vinhetas radiais, névoa azul e a frente/traseira das partículas dão volume à esfera sem trocar estrutura ou introduzir um fundo ilustrativo.
+Três materiais, e a escolha entre eles é sobre leitura, não sobre estilo:
 
-### Shadow Vocabulary
+- **N1 conteúdo** — quase sólido (`.96` no claro, `.94` no escuro), blur 10px.
+  Onde moram os números.
+- **N2 apoio** — translúcido (`.74` / `.55`), blur 20–22px. Contexto.
+- **N3 controle** — vidro (`.56` / Mineral Blue a `.5`), blur 34px / 16px.
+  Barra lateral, barra superior, menus: a camada que flutua.
 
-- **Ambient Low** (`0 1px 2px rgba(0, 0, 0, .5), 0 14px 36px -18px rgba(0, 0, 0, .9)`): separação normal no tema escuro.
-- **Lifted Control** (`0 4px 10px rgba(0, 0, 0, .55), 0 30px 60px -24px rgba(0, 0, 0, 1)`): navegação, menus e superfícies elevadas.
-- **UGLEZ Glow** (`0 0 0 1px rgba(70, 105, 240, .30), 0 0 26px rgba(70, 105, 240, .30)`): presença ou seleção da inteligência, nunca decoração genérica.
+As sombras apenas separam ou elevam; não desenham.
 
-### Named Rules
+- **Ambient** (`0 1px 2px …, 0 10px 30px -14px …`): separação normal.
+- **Lift** (`0 2px 6px …, 0 26px 50px -22px …`): controle, menu, superfície
+  elevada.
 
-**The Dados Antes do Vidro Rule.** Quanto mais importante a leitura financeira, mais sólida a superfície; transparência pertence a contexto e controles.
+### Regra nomeada
+
+**A regra dos dados antes do vidro.** Quanto mais importante a leitura
+financeira, mais sólida a superfície. Transparência pertence a contexto e
+controle, nunca a um número que se precisa conferir.
 
 ## Shapes
 
-Campos e botões usam cantos firmes e pequenos (4px); cartões comuns avançam por 6–8px; contexto interno do UGLEZ usa 12–16px; navegação e estado usam cápsulas completas. A câmara é uma exceção de grande escala com canto generoso (30px no desktop/tablet, 18px até 820px e 16px abaixo de 430px). Bordas de 1px, translúcidas e frias definem os planos sem criar molduras pesadas.
+Campo e botão em 4px; cartão em 6px; prancha em 8px; estado e navegação em
+cápsula. Bordas de 1px translúcidas definem os planos sem moldura pesada.
 
-Formas circulares ficam reservadas a ícones, pontos de estado, medalhão e partículas. A formação UGLEZ é uma esfera erodida, não um avatar figurativo.
+A exceção é a **carteira**: o cartão tem 18px de canto, 300×188px, e é desenhado
+como plástico — gradiente, ladrilho do banco, brilho diagonal. Ele é a única
+coisa no app que imita um objeto, e imita porque é um objeto que a pessoa já
+tem no bolso.
 
 ## Components
 
-Os componentes são precisos e contidos: estados mudam por cor, borda, brilho e pequenos deslocamentos, com equivalente por foco visível.
+### Carteira
 
-### Buttons
+Fechada, a carteira é um porta-cartões de couro que mostra **o total**. Aberta,
+mostra **um cartão** — o último que foi aberto, lembrado entre sessões — com os
+vizinhos espiando nas bordas.
 
-- **Shape:** cantos firmes (4px), peso 560 e padding de 8px por 14px.
-- **Primary:** ouro do medalhão com tinta de oásis; usado para ações financeiras principais.
-- **UGLEZ:** azul de ação próprio com texto branco; na câmara ocupa no mínimo 104px no desktop e 76–82px de largura no celular, acompanhando o campo com 54px de altura ou 48px em telas baixas.
-- **Hover / Focus:** brilho muda de forma breve; o ativo comprime para 97%; foco permanece visível e o movimento é retirado em preferência reduzida.
-- **Outline / Ghost:** fundo transparente; outline mantém borda fria, ghost ganha apenas um véu tonal no hover.
+- **Trocar de cartão:** arrastando no celular, pelas setas ou pelas flechas do
+  teclado no computador.
+- **O arrasto é 1:1.** O cartão acompanha o dedo pixel por pixel, com captura de
+  ponteiro; nas pontas resiste em vez de travar.
+- **Quem anima é uma mola**, quadro a quadro, e não uma transição CSS: agarrar o
+  cartão no meio do caminho precisa pegá-lo onde ele está, não onde ele deveria
+  estar. Rigidez 340, criticamente amortecida (0,8 depois de um lance).
+- **Um gesto anda um cartão.** A projeção da velocidade decide a direção, não a
+  distância: carteira não é rolagem.
+- O bolso é um container de consulta; em coluna estreita a linha quebra e o
+  botão desce, porque o saldo cortado é pior do que o botão deslocado.
 
-### Chips
+### Botões
 
-- **Style:** cápsulas compactas com borda fria translúcida, fundo quase invisível e texto secundário.
-- **State:** hover e foco recebem borda azul-real, névoa azul e texto claro; em toque, a altura mínima cresce para 40px.
+- **Primário:** Oasis Teal com tinta Night Ocean, canto 4px, padding 8×14.
+- **Outline / ghost:** fundo transparente, borda fria; ghost ganha só um véu.
+- **Estados:** hover muda brilho; ativo comprime; foco sempre visível; o
+  movimento sai em `prefers-reduced-motion`.
 
-### Cards / Containers
+### Lançamento
 
-- **Corner Style:** 6–8px no sistema comum; 12–16px para contexto dentro da câmara.
-- **Background:** petróleo e vidros frios em níveis; conteúdo crítico permanece mais sólido.
-- **Shadow Strategy:** sombra baixa em repouso e sombra elevada apenas para controles, menus ou resposta ao hover.
-- **Border:** linha de 1px com baixa opacidade e ressalto interno sutil.
-- **Internal Padding:** 14–24px conforme densidade e hierarquia.
+O lançamento tem **três estados**, e não uma marca: ✓ pago (entra nos totais),
+✗ não pago (fica previsto) e 🚫 cancelado (não entra em total nenhum, nem no
+previsto). O primeiro muda de palavra conforme o tipo — "recebido" numa receita,
+"feita" numa transferência, "comprado" no crédito.
 
-### Inputs / Fields
+O cancelado não some da lista: fica riscado no fim da coluna, com um botão de
+restaurar.
 
-- **Style:** campo escuro translúcido, borda fria de 1px, canto de 4px e texto IBM Plex Sans.
-- **Focus:** borda azul-real e halo de 3px com baixa opacidade.
-- **Responsive:** prompt de 82px no desktop, 68px abaixo de 1120px, 54px até 820px e 48px em telas móveis com até 700px de altura; fonte sobe para 16px no celular para evitar zoom do Safari.
+### Seletores
 
-### Navigation
+- **Cor:** seis colunas, dois tons cada, com o nome do tom escolhido embaixo.
+  O vão entre colunas é maior que o vão interno — é só isso que diz "estes dois
+  são a mesma cor".
+- **Ícone:** caixas individuais de 32px em grade, agrupadas por tema, com o
+  desenho do ícone à mostra. É um `radiogroup` com navegação por setas.
+- **Banco:** lista com busca em cima, que filtra sem acento e por qualquer
+  pedaço do nome. Sem JavaScript, o `<select>` nativo continua inteiro.
 
-- **Desktop:** destinos compactos em faixa superior; o item ativo recebe fundo tonal, e UGLEZ é o único destino com luz azul-real.
-- **Mobile:** ilha inferior arredondada com cinco destinos; o estado ativo mantém ícone, rótulo e contraste, respeitando safe areas.
+### Coco
 
-### UGLEZ Chamber
+Dez poses em `/assets/coco`, cada uma ligada a um momento: neutra acolhedora,
+pensando, explicando, analisando gráfico, conferindo recibo, lendo arquivo,
+feliz, aliviada, meta comemorada, alerta gentil.
 
-A assinatura é uma prancha escura, sem conteúdo posterior, que divide a única tela entre esfera de partículas e console. Desktop e tablet mantêm os dois lados em paralelo; no celular, a esfera vira uma faixa compacta e o console ordena cabeçalho, compositor e corpo rolável internamente. As métricas são sempre Mês, Base e Leitura. A esfera responde aos mesmos estados escritos — repouso, foco, recebendo, pensando, respondendo, sucesso e erro — e preserva um fallback 2D; com movimento reduzido, a interação por ponteiro sai sem remover o feedback textual.
+A Coco nunca substitui o estado escrito. Toda mudança visual dela acompanha um
+texto que diz a mesma coisa.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** mantenha o ouro raro e use-o em ação, seleção, identidade e estados quentes confirmados.
-- **Do** preserve o azul-real para a matéria e os estados do UGLEZ.
-- **Do** mantenha estado textual acessível junto de qualquer mudança visual da esfera.
-- **Do** priorize legibilidade de números com superfícies mais sólidas e algarismos tabulares.
-- **Do** preserve toda a tarefa UGLEZ em `100dvh`, com controles essenciais na mesma tela e rolagem restrita ao corpo da conversa.
-- **Do** preserve os alvos de toque de 40–44px nos controles globais móveis.
+- **Do** usar o teal como único acento, e justificar qualquer cor nova.
+- **Do** manter o tangerina reservado à Coco.
+- **Do** pôr o número sobre a superfície mais sólida que houver.
+- **Do** derivar movimento ligado à rolagem da POSIÇÃO, para que ele volte.
+- **Do** manter o estado escrito ao lado de qualquer sinal visual.
+- **Do** preservar alvos de 40–44px onde não existe hover.
 
 ### Don't:
 
-- **Don't** transforme UGLEZ em avatar, mascote ou cartão genérico de chatbot.
-- **Don't** substitua petróleo, areia e ouro por uma identidade roxa ou por novos acentos decorativos.
-- **Don't** aplique vidro intenso sobre números ou respostas que precisem de leitura precisa.
-- **Don't** dependa apenas da animação para comunicar recebimento, pensamento, sucesso ou erro.
-- **Don't** adicione uma seção inferior ou permita que histórico e respostas aumentem a altura da página UGLEZ.
-- **Don't** remova logo, navegação global, safe areas ou alternativas de movimento reduzido ao estender a câmara.
+- **Don't** trazer de volta ouro, medalhão, coqueiro ou o UGLEZ.
+- **Don't** animar gesto com transição CSS: ela não pode ser interrompida sem
+  saltar, e o gesto precisa ser interrompível.
+- **Don't** aplicar vidro forte sobre valor que se precise conferir.
+- **Don't** aumentar a paleta de categorias para "não repetir": quem separa
+  vinte categorias é o ícone.
+- **Don't** truncar um saldo. Se não cabe, a linha quebra ou o número encolhe.
+- **Don't** depender só de animação para comunicar recebimento, sucesso ou erro.
