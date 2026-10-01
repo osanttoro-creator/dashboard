@@ -21,9 +21,38 @@
 .v3-demo-note{position:absolute;top:24px;right:260px;width:max-content;max-width:240px;margin:0;padding:5px 9px;font:400 10px var(--mono);letter-spacing:.02em}
 .v3-mobile-greeting,.v3-wave-period{display:none}
 .v3-pocket-hint{display:block;margin-top:15px;color:#bac9c9;font-weight:600;font-size:12px}
-.v3-hide-money .v3-sensitive{color:transparent!important;text-shadow:0 0 10px var(--milk);user-select:none}
+/* =============================================================
+   OCULTAR SALDOS TEM DE OCULTAR
+   -------------------------------------------------------------
+   Era `color:transparent` com um `text-shadow` de 10px. Isso não
+   esconde nada: a sombra tem o FORMATO do algarismo, então um 8
+   borrado continua sendo um 8 e um valor de quatro dígitos continua
+   tendo quatro dígitos. Quem liga esse botão está com alguém ao
+   lado olhando a tela — meio-escondido ali é o mesmo que aberto.
+
+   Agora o número some e no lugar fica uma tarja do tamanho dele. A
+   largura ainda é a do valor, para a página não dançar ao ligar e
+   desligar, mas não sobra nenhuma informação sobre quanto era.
+   ============================================================= */
+.v3-hide-money .v3-sensitive{
+  color:transparent!important;text-shadow:none!important;user-select:none;
+  background:linear-gradient(rgba(240,229,207,.17),rgba(240,229,207,.17));
+  border-radius:6px;box-decoration-break:clone;-webkit-box-decoration-break:clone
+}
+/* O ponteiro não revela o que a tarja cobre. */
+.v3-hide-money .v3-sensitive::selection{background:transparent}
+
+/* Mês: a seta anda, o nome abre a escolha. */
+.v3-periodo{display:inline-flex;align-items:center;overflow:hidden}
+.v3-periodo button{border:0;background:transparent;color:inherit;font:inherit;height:100%;padding:0 10px;line-height:1}
+.v3-periodo button[data-period-step]{font-size:17px;opacity:.72}
+.v3-periodo button[data-period-step]:hover{opacity:1;background:rgba(240,229,207,.09)}
+.v3-periodo button[data-period-label]{padding:0 4px;white-space:nowrap}
+.v3-periodo button[data-period-label]:hover{text-decoration:underline;text-underline-offset:3px}
 [hidden]{display:none!important}
-.v3-wave-period{border:0;background:transparent;color:var(--muted);font:400 12px var(--mono)}
+.v3-wave-period{color:var(--muted);font:400 12px var(--mono)}
+/* O saldo que entra no mês, logo abaixo da sobra: é de onde a curva parte. */
+.v3-abertura{display:block;margin-top:5px;font-size:11px;color:var(--muted);line-height:1.45}
 .v3-cat-row .v3-cat-icon svg,.v3-cat-tile .v3-cat-icon svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .v3-timeline>div{display:grid;grid-template-columns:13px minmax(0,1fr) auto;gap:10px;align-items:start}
 .v3-timeline>div:before{grid-column:1;grid-row:1}

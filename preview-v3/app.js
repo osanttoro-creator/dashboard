@@ -144,7 +144,7 @@
     $('#v3-title').textContent = names[state.page] || 'início';
     $('#v3-eyebrow').textContent = ['home','transactions','wallet'].includes(state.page) ? (state.page === 'transactions' ? niceMonth(state.ym) : 'VISÃO GERAL') : 'MAIS';
     $('.v3-top').dataset.home = state.page === 'home' ? 'true' : 'false';
-    $('#v3-period').innerHTML = `‹ &nbsp; ${esc(periodLabel(state.ym))} &nbsp; ›`;
+    $('#v3-period').innerHTML = periodBotoes();
     const owner = demo ? sample.owner : (Store.ownerName() || 'Seu OAZE');
     $('#v3-owner').textContent = owner;
     $('#v3-avatar').textContent = owner.trim().charAt(0).toLowerCase() || 'o';
@@ -202,14 +202,40 @@
       : Number(Calc.accountBalance(item.data.id, U.monthEnd(state.ym)) || 0); }
     catch (e) { return 0; }
   }
+  /* =============================================================
+     OS BANCOS NUM LUGAR SÓ, COM BUSCA
+     -------------------------------------------------------------
+     Eram três sanfonas — "Bancos e cooperativas", "Contas digitais",
+     "Investimentos e exterior" — e duas delas nasciam fechadas.
+     Achar o seu banco virava um jogo de adivinhar em qual gaveta ele
+     mora: o Nubank é banco ou conta digital? E a Avenue?
+
+     Agora é uma lista só, com busca em cima. A busca filtra sem
+     acento e por qualquer pedaço do nome — "brasil" acha "Banco do
+     Brasil", que a lista nativa não achava. Sem JavaScript o campo
+     some e a lista inteira continua lá.
+     ============================================================= */
   function bankPicker(selected) {
     const known=global.BancosBR?.PRESETS || {};
     const selectedKey=bankKey(selected);
-    const groups=BANK_GROUPS.map(([label, keys], index)=>`<details class="v3-bank-group" ${index===0?'open':''}><summary>${esc(label)}</summary><div class="v3-bank-options">${keys.split(' ').filter((key)=>known[key]).map((key)=>{
-      const name=BANK_NAMES[key] || key, color=bankBrand(name), ink=cardInk(color);
-      return `<label class="v3-bank-option"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
-    }).join('')}</div></details>`).join('');
-    return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend><p>Escolha a instituição; o nome da conta pode ser personalizado.</p>${groups}<label class="v3-bank-option v3-bank-other"><input type="radio" name="bank" value="Outro" ${selected && !selectedKey?'checked':''}><span class="v3-bank-option-logo">${icon('wallet')}</span><span>Outro</span></label><label>Se escolheu Outro, informe a instituição<input name="customBank" maxlength="60" value="${esc(selected && !selectedKey && selected!=='Outro'?selected:'')}" placeholder="Nome da instituição"></label></fieldset>`;
+    const chaves=BANK_GROUPS.reduce((acc,[,keys])=>acc.concat(keys.split(' ')),[])
+      .filter((key)=>known[key])
+      .map((key)=>({key,name:BANK_NAMES[key]||key}))
+      .sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+    const opcoes=chaves.map(({key,name})=>{
+      const color=bankBrand(name), ink=cardInk(color);
+      return `<label class="v3-bank-option" data-banco="${esc(U.norm(name))}"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
+    }).join('');
+    const ehOutro=!!selected && !selectedKey;
+    return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend><p>Escolha a instituição; o nome da conta pode ser personalizado.</p>`
+      + `<input type="search" class="v3-bank-busca" id="v3-bank-busca" placeholder="Buscar banco…" aria-label="Buscar banco" autocomplete="off">`
+      + `<div class="v3-bank-options" id="v3-bank-options">${opcoes}`
+      + `<label class="v3-bank-option v3-bank-other" data-banco="outro outra instituicao"><input type="radio" name="bank" value="Outro" ${ehOutro?'checked':''}><span class="v3-bank-option-logo">${icon('wallet')}</span><span>Outro</span></label></div>`
+      + `<p class="v3-bank-vazio" id="v3-bank-vazio" hidden>Nenhuma instituição com esse nome. Escolha "Outro" e escreva o nome.</p>`
+      /* O campo do nome livre só existe quando "Outro" está marcado:
+         antes ficava sempre à vista, pedindo algo que quase ninguém
+         precisava preencher. */
+      + `<label id="v3-bank-custom" ${ehOutro?'':'hidden'}>NOME DA INSTITUIÇÃO<input name="customBank" maxlength="60" value="${esc(ehOutro && selected!=='Outro'?selected:'')}" placeholder="Como ela se chama"></label></fieldset>`;
   }
   function cardButton(item, selected, i) {
     const d = item.data, name = d.bank || d.name;
@@ -265,6 +291,42 @@
     return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x,i)=>cardButton(x,chosen?.data.id===x.data.id,i)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div>${list.length>1?`<button class="v3-carteira-seta v3-carteira-ant" type="button" data-carteira-ant aria-label="Cartão anterior"><span aria-hidden="true">&lsaquo;</span></button><button class="v3-carteira-seta v3-carteira-prox" type="button" data-carteira-prox aria-label="Próximo cartão"><span aria-hidden="true">&rsaquo;</span></button><div class="v3-carteira-pontos" aria-hidden="true">${list.map(()=>'<i data-carteira-ponto></i>').join('')}</div>`:''}<button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
   }
   function quickActions() { return `<div class="v3-quick">${[['Despesa','down'],['Receita','arrow'],['Transferir','transactions'],['Aporte','investments']].map(([n,i]) => `<button type="button" data-action="new" data-kind="${n.toLowerCase()}">${icon(i)}${n}</button>`).join('')}</div>`; }
+  /* =============================================================
+     O MÊS NÃO COMEÇA DO ZERO
+     -------------------------------------------------------------
+     A curva partia de zero todo dia 1º, como se o dinheiro que
+     sobrou do mês anterior não existisse. Quem fechou setembro com
+     R$ 500 começa outubro com R$ 500 — e é desse ponto que a linha
+     tem de sair, senão ela desenha um mês que ninguém viveu.
+
+     A base do gráfico também passa a considerar essa entrada: com o
+     mínimo preso em zero, um mês inteiro acima da linha ficava
+     espremido no topo.
+     ============================================================= */
+  /* =============================================================
+     TRÊS CONTROLES, E NÃO UM
+     -------------------------------------------------------------
+     O seletor de período era UM botão escrito "‹ set 2026 ›": as
+     setas eram desenho, não controle. Tocar na seta abria a mesma
+     folha de escolher mês que tocar no nome — e quem queria só
+     voltar um mês tinha de abrir um formulário e preenchê-lo.
+
+     Agora são três: a seta anda um mês, o nome abre a escolha.
+     ============================================================= */
+  function periodBotoes() {
+    return `<button type="button" data-period-step="-1" aria-label="Mês anterior">&lsaquo;</button>`
+      + `<button type="button" data-action="period" data-period-label>${esc(periodLabel(state.ym))}</button>`
+      + `<button type="button" data-period-step="1" aria-label="Próximo mês">&rsaquo;</button>`;
+  }
+  function periodControl(classe) {
+    return `<div class="${esc(classe)} v3-periodo" role="group" aria-label="Mês exibido">${periodBotoes()}</div>`;
+  }
+
+  function saldoQueEntra() {
+    if (demo) return 0;
+    try { return Calc.openingBalanceOfMonth(state.ym); }
+    catch (e) { return 0; }
+  }
   function chartPath() {
     if (demo) return 'M0 120 C85 105 140 65 200 59 S305 128 375 110 S485 42 550 38 S660 80 720 68';
     const count = +state.ym.slice(5) === 2 ? new Date(+state.ym.slice(0,4), 2, 0).getDate() : new Date(+state.ym.slice(0,4), +state.ym.slice(5), 0).getDate();
@@ -273,14 +335,19 @@
       const day = Number(String(x.date).slice(8,10)) - 1;
       if (day >= 0 && day < count) byDay[day] += (x.kind === 'income' ? 1 : -1) * Number(x.amount || 0);
     });
-    let sum = 0; const values = byDay.map((x) => (sum += x));
-    const min = Math.min(0,...values), max = Math.max(0,...values), range = Math.max(1,max-min);
-    return 'M' + values.map((v,i) => `${(i * 720 / Math.max(1,count-1)).toFixed(1)} ${(135 - (v-min)/range*105).toFixed(1)}`).join(' L');
+    const abertura = saldoQueEntra();
+    let sum = abertura; const values = byDay.map((x) => (sum += x));
+    const min = Math.min(abertura, ...values), max = Math.max(abertura, ...values), range = Math.max(1, max - min);
+    const ponto = (v, i) => `${(i * 720 / Math.max(1, count)).toFixed(1)} ${(135 - (v - min) / range * 105).toFixed(1)}`;
+    /* O primeiro ponto é o dia ZERO: de onde o mês partiu. */
+    return 'M' + [ponto(abertura, 0)].concat(values.map((v, i) => ponto(v, i + 1))).join(' L');
   }
   function wave() {
     const t = totals();
     const path=chartPath();
-    return `<section class="v3-panel v3-wave"><div class="v3-row"><div><span class="v3-label">SOBRA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}</span><strong class="v3-money v3-sensitive">${money(t.balance)}</strong></div><div class="v3-meta"><div><span class="v3-label">ENTROU</span><strong class="v3-mono v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-mono v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><button class="v3-wave-period" type="button" data-action="period">‹ &nbsp; ${esc(periodLabel(state.ym))} &nbsp; ›</button>${(demo || currentTransactions().length) ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="${demo?'Curva de exemplo':'Fluxo acumulado dos lançamentos confirmados no mês'}"><path d="${path} L720 150 H0 Z" fill="rgba(95,169,155,.16)"/><path d="${path}" fill="none" stroke="#5fa99b" stroke-width="3"/>${demo?'<line x1="550" y1="38" x2="550" y2="150"/><circle cx="550" cy="38" r="5" fill="#0d1821" stroke="#5fa99b" stroke-width="2"/>':''}</svg><div class="v3-axis"><span>01</span><span>08</span><span>15</span><span>22</span><span>30</span></div>` : '<p class="v3-muted" style="margin:auto 0">A curva aparece quando houver movimentações no mês.</p>'}</section>`;
+    const abertura = saldoQueEntra();
+    const mesAnterior = periodLabel(U.addMonths(state.ym, -1));
+    return `<section class="v3-panel v3-wave"><div class="v3-row"><div><span class="v3-label">SOBRA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}</span><strong class="v3-money v3-sensitive">${money(t.balance)}</strong>${demo?'':`<small class="v3-abertura">vem de ${esc(mesAnterior)}: <span class="v3-sensitive">${money(abertura)}</span> · fecha em <span class="v3-sensitive">${money(U.round2(abertura + t.balance))}</span></small>`}</div><div class="v3-meta"><div><span class="v3-label">ENTROU</span><strong class="v3-mono v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-mono v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div>${periodControl('v3-wave-period')}${(demo || currentTransactions().length) ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="${demo?'Curva de exemplo':'Fluxo acumulado dos lançamentos confirmados no mês'}"><path d="${path} L720 150 H0 Z" fill="rgba(95,169,155,.16)"/><path d="${path}" fill="none" stroke="#5fa99b" stroke-width="3"/>${demo?'<line x1="550" y1="38" x2="550" y2="150"/><circle cx="550" cy="38" r="5" fill="#0d1821" stroke="#5fa99b" stroke-width="2"/>':''}</svg><div class="v3-axis"><span>01</span><span>08</span><span>15</span><span>22</span><span>30</span></div>` : '<p class="v3-muted" style="margin:auto 0">A curva aparece quando houver movimentações no mês.</p>'}</section>`;
   }
   function categoryBars(max) {
     const rows = categoryTotals('expense').slice(0, max || 5), total = rows.reduce((n, x) => n + x.value, 0);
@@ -565,7 +632,7 @@
        extrato ficava com uma informação que nunca aconteceu. Aqui ela
        diz uma vez; depois o lançamento só mostra isso. */
     const oferecidos=Array.isArray(account?.meios)?account.meios:(Store.MEIOS_PADRAO||[]);
-    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Cartão</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label>COTAÇÃO (R$ POR 1 UNIDADE, SE NÃO FOR BRL)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
+    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
   }
   function invoicePaymentForm(cardId) {
     const card=profile().cards.find((c)=>c.id===cardId);
@@ -964,7 +1031,7 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
@@ -1006,6 +1073,7 @@
         .catch((e) => toast(e.message || 'Não foi possível salvar.'));
       return;
     }
+    if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
     /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
        voltar nele, que é como uma carteira de verdade se comporta. */
@@ -1187,6 +1255,26 @@
     document.addEventListener('change',(ev)=>{
       if(ev.target.dataset.sim){state.sim[ev.target.dataset.sim]=+ev.target.value;render();}
       if(ev.target.name==='source' && ev.target.closest('#v3-form-tx')) updateComposerCurrency(ev.target.form);
+      /* "Outro" é a única opção que pede um nome escrito; as outras
+         já se nomeiam. O campo aparece com ela e some sem ela. */
+      if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom');if(c)c.hidden=ev.target.value!=='Outro';}
+      /* Cotação é a conversão para real: numa conta em real ela não
+         tem o que converter, e pedir isso era pedir por pedir. */
+      if(ev.target.name==='moeda'){const c=document.getElementById('v3-cotacao');if(c)c.hidden=ev.target.value==='BRL';}
+    });
+    /* A busca filtra sem acento e por qualquer pedaço do nome:
+       "brasil" acha "Banco do Brasil", que a lista nativa não achava. */
+    document.addEventListener('input',(ev)=>{
+      if(ev.target.id!=='v3-bank-busca')return;
+      const q=U.norm(ev.target.value.trim());
+      let achou=0;
+      document.querySelectorAll('#v3-bank-options .v3-bank-option').forEach((n)=>{
+        const casa=!q||String(n.dataset.banco||'').includes(q);
+        n.hidden=!casa;
+        if(casa)achou++;
+      });
+      const vazio=document.getElementById('v3-bank-vazio');
+      if(vazio)vazio.hidden=achou>0;
     });
     document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{if(state.page==='goals')updateGoalTabs();});

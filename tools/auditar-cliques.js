@@ -52,7 +52,9 @@ const FONTES = ['assets/js', 'assets/js/pages']
 const DADOS_COM_ACAO = [
   'page', 'goto', 'quick', 'newcat', 'ciclo', 'tab', 'rectab',
   'method', 'close-search', 'close-modal', 'ai-q', 'novo',
-  'vista', 'fechar-menu', 'escopo', 'action'
+  'vista', 'fechar-menu', 'escopo', 'action',
+  /* V3: a seta do mês anda um mês; o nome ao lado abre a escolha. */
+  'period-step'
 ];
 
 /* Classes cujo comportamento é ligado em lote, pelo seletor. */
