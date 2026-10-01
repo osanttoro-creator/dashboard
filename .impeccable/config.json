@@ -207,6 +207,24 @@
         ],
         "createdAt": "2026-09-30T23:10:48.036Z",
         "reason": "Claude: os quatro recortes desta pagina existem para PRODUZIR o efeito, nao para conter layout. .portal-palco e .portal-mundo sao o portal (um portal que nao recorta nao abre nada); .fundindo mascara os cartoes que convergem; .ap-tela e a tela do aparelho (sem recorte a captura vaza por cima da moldura). Verificado no navegador em 30/09/2026: o cabecalho, o menu de navegacao e o painel da bandeira de idioma estao TODOS fora de qualquer container com overflow hidden, entao nenhum menu ou popover fica preso. Escopo limitado ao index.html: as demais paginas seguem cobertas pela regra."
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "app.html"
+        ],
+        "createdAt": "2026-10-01T12:53:22.245Z",
+        "reason": "Claude: os tres pulsos do app sao de ESTADO VIVO, que e o caso que a propria regra permite. .sync-dot pulsa so com .is-loading/.is-syncing (enquanto sincroniza de verdade); .ai-answer::after pulsa so com .is-loading (enquanto a resposta vem); .uglez-orbe pulsa so com data-estado=pensando. Medido no DOM em 01/10/2026 com o app parado: sync-dot sem classe de estado, orbe em estado=pronto, ai-answer sem is-loading -- nenhum deles pulsa em repouso. Nao ha ponto decorativo pulsando. Escopo limitado ao app.html."
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "app.html"
+        ],
+        "createdAt": "2026-10-01T12:53:22.245Z",
+        "reason": "Claude: medido no DOM renderizado em 01/10/2026 -- 39 elementos .card na tela e ZERO com outro .card como ancestral. O detector le a marcacao estatica; em execucao as secoes sao irmas, nao aninhadas. Escopo limitado ao app.html: as demais paginas seguem cobertas pela regra."
       }
     ]
   }

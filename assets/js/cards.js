@@ -610,7 +610,7 @@
            aprovado. É decorativa aqui: o nome OAZE já existe na
            navegação e repetir isso para leitor de tela seria ruído. */
         el('img', {
-          class: 'carteira-marca', src: '/assets/img/oaze-mark.svg',
+          class: 'carteira-marca', src: '/assets/brand/oaze-isologo.svg',
           alt: '', 'aria-hidden': 'true', width: '56', height: '56'
         }),
         el('span', { class: 'carteira-face' }, [elRotulo, elValor]),

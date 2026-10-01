@@ -29,7 +29,8 @@ if (!/Cards\.deck\(prof\.cards[\s\S]*?stacked:\s*true/.test(accounts)) {
 if (!/data-wallet-surface/.test(cards) || !/aria-posinset/.test(cards) || !/aria-setsize/.test(cards)) {
   falhas.push('o baralho integrado perdeu identificação ou posição acessível');
 }
-if (!/carteira-marca[\s\S]*?\/assets\/img\/oaze-mark\.svg/.test(cards) ||
+if (!/carteira-marca[\s\S]*?\/assets\/brand\/oaze-isologo\.svg/.test(cards) ||
+    !fs.existsSync(path.join(RAIZ, 'assets', 'brand', 'oaze-isologo.svg')) ||
     !/\.carteira-marca\s*\{/.test(css) ||
     !/--couro-a:\s*#23394D/.test(css) ||
     !/\.carteira-couro::after/.test(css)) {

@@ -49,6 +49,7 @@ body.app-vnext .page,
 body.app-vnext .grid { gap: var(--app-gap); }
 body.app-vnext .content { padding-bottom: 30px; }
 body.app-vnext .page-head { margin: 0 0 5px; }
+body.app-vnext .brand { width: 100%; border: 0; background: transparent; cursor: pointer; text-align: left; }
 body.app-vnext .input,
 body.app-vnext .oaze-select-menu,
 body.app-vnext .modal,
@@ -114,6 +115,30 @@ body.app-vnext .kpi-value { font-size: clamp(18px, 1.45vw, 24px); font-weight: 5
 body.app-vnext .home-summary-card { max-width: none; }
 body.app-vnext .semana-card { overflow: hidden; }
 body.app-vnext .semana-barras { max-width: none; }
+body.app-vnext #homeVazia { justify-items: stretch; }
+body.app-vnext .primeiro-uso {
+  position: relative; width: 100%; max-width: none; min-height: 380px;
+  padding: clamp(28px, 4vw, 54px); padding-right: clamp(28px, 36%, 490px);
+  align-content: center; overflow: hidden;
+  background:
+    radial-gradient(38rem 22rem at 85% 60%, color-mix(in srgb, var(--oasis) 16%, transparent), transparent 70%),
+    var(--app-surface);
+}
+body.app-vnext .primeiro-uso::after {
+  content: ''; position: absolute; right: 3%; bottom: 8%; width: 38%; height: 72%;
+  background: center / contain no-repeat url('/assets/coco/corpo-neutra_acolhedora.webp');
+  filter: drop-shadow(0 30px 30px rgba(2, 12, 19, .22)); pointer-events: none;
+}
+body.app-vnext .primeiro-uso .empty-ico {
+  display: block; width: 50px; height: 50px;
+  border: 0; background: center / contain no-repeat url('/assets/brand/oaze-isologo.svg');
+}
+body.app-vnext .primeiro-uso .empty-ico svg { display: none; }
+body.app-vnext .pu-titulo { font-family: var(--font-titulo); font-size: clamp(23px, 2.2vw, 34px); font-weight: 500; letter-spacing: -.05em; }
+body.app-vnext .pu-texto { max-width: 58ch; }
+body.app-vnext .pu-passos { max-width: 470px; }
+body.app-vnext .pu-passo { padding-block: 9px; }
+body.app-vnext .pu-link { text-decoration-thickness: 1px; }
 
 /* A mesma carteira se repete no Início e em Contas e cartões. */
 body.app-vnext .page[data-page="accounts"] > .tabs { margin-bottom: 2px; }
@@ -136,7 +161,7 @@ body.app-vnext .coco-portrait,
 body.app-vnext .uglez-orbe,
 body.app-vnext .uglez-flut-botao::before,
 body.app-vnext .uglez-flut-marca::before {
-  display: block; background: center / contain no-repeat url('/assets/coco/corpo-neutra_acolhedora.webp');
+  display: block; background: left center / auto 100% no-repeat url('/assets/coco/corpo-neutra_acolhedora.webp');
 }
 body.app-vnext .coco-nav-icon { width: 24px; height: 24px; }
 body.app-vnext .coco-portrait { width: 48px; height: 48px; flex: none; border: 0; border-radius: 0; box-shadow: none; background-color: transparent; }
@@ -235,6 +260,8 @@ body.app-vnext .inv-uglez-orb [data-ico] { display: none; }
   }
   body.app-vnext .topbar .pill-period { border-radius: 14px; }
   body.app-vnext .home-feature { grid-template-columns: minmax(0, 1fr); }
+  body.app-vnext .primeiro-uso { padding: 25px 20px; min-height: 0; }
+  body.app-vnext .primeiro-uso::after { display: none; }
   body.app-vnext .home-wallet-card #homeCards { min-height: 185px; }
   body.app-vnext .home-flow-card .chart-box { min-height: 230px; }
   body.app-vnext .grid-hero { grid-template-columns: minmax(0, 1fr); }
