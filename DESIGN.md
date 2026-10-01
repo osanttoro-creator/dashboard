@@ -155,7 +155,7 @@ VALOR antigo de volta.
 As três são servidas localmente de `/assets/fonts`, com `font-display: swap`.
 
 > **Onze páginas ainda não migraram.** A home (`index.html` → `v3.css`) e o
-> app (`app.html` → `style.css`) usam o sistema acima. As páginas secundárias
+> app usam o sistema acima. As páginas secundárias
 > — preços, entrar, cadastro, recursos, suporte, termos, privacidade, 404,
 > confirmar e-mail, recuperar e redefinir senha — carregam `site.css`, que
 > ainda está em **Newsreader + IBM Plex Sans**, a tipografia da V1. Quem
