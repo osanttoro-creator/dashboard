@@ -5779,10 +5779,13 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   position: relative; z-index: 1;
   display: flex; flex-direction: column; gap: 4px; min-width: 0;
 }
+/* "SALDO SOMADO EM CON…" não diz nada: o rótulo é o que explica de
+   que número se trata. Em bolso estreito ele quebra em duas linhas,
+   em vez de ser cortado. */
 .carteira-rotulo {
   font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+  line-height: 1.35;
   color: rgba(240, 231, 214, .72);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 /* O tamanho acompanha a LARGURA DO BOLSO, não a da janela: é o bolso
    que tem de caber o número, e numa coluna estreita dentro de uma
