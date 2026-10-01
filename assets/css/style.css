@@ -5632,8 +5632,10 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   top: 0;
   /* Mais estreito que o palco de propósito: a faixa que sobra dos
      dois lados é onde os vizinhos aparecem. Sem ela, um cartão
-     sozinho na tela não diz que existem outros. */
-  width: min(300px, calc(100% - 76px));
+     sozinho na tela não diz que existem outros. Em proporção, e não
+     em pixels fixos: numa coluna estreita um recuo fixo comia o
+     cartão inteiro e o nome do banco começava a truncar. */
+  width: min(300px, 84%);
   transform:
     translateX(calc(-50% + var(--d) * var(--carteira-salto, 240px)))
     scale(calc(1 - .07 * min(var(--ad), 2)));
@@ -5697,11 +5699,18 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   height: var(--carteira-bolso);
   z-index: 2;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px 14px;
   padding: 18px clamp(16px, 4vw, 26px);
   border-radius: calc(var(--radius-lg) + 4px);
+  /* O bolso é um objeto estreito dentro de uma coluna que encolhe:
+     a carteira mede ~250px na faixa do tablet. Lado a lado nessa
+     largura, o total virava "R$ 6…" — um saldo cortado é pior do que
+     nenhum saldo. Em vez de truncar, a linha quebra: o botão desce e
+     o número continua inteiro, que é a razão de o bolso existir. */
+  container-type: inline-size;
   background:
     radial-gradient(90% 75% at 50% -14%, rgba(95, 169, 155, .13), transparent 58%),
     linear-gradient(168deg, var(--couro-a) 0%, var(--couro-b) 72%);
@@ -5753,6 +5762,12 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .45));
   pointer-events: none;
 }
+/* Num bolso estreito o botão desce para baixo do total e ocupa a
+   faixa onde a marca vivia. Entre a marca e o saldo legível, sai a
+   marca: ela é lembrança, o número é o motivo de olhar. */
+@container (max-width: 330px) {
+  .carteira-marca { display: none; }
+}
 /* A fenda de onde os cartões saem. */
 .carteira-bolso::before {
   content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 3px;
@@ -5769,12 +5784,17 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   color: rgba(240, 231, 214, .72);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+/* O tamanho acompanha a LARGURA DO BOLSO, não a da janela: é o bolso
+   que tem de caber o número, e numa coluna estreita dentro de uma
+   tela larga o vw mentia sobre o espaço disponível. */
 .carteira-total {
-  font-size: clamp(22px, 4.6vw, 30px); font-weight: 600; letter-spacing: -.01em;
+  font-size: clamp(21px, 10cqw, 30px); font-weight: 600; letter-spacing: -.01em;
   color: var(--couro-tinta);
   text-shadow: 0 2px 6px rgba(0, 0, 0, .55);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.carteira-face { flex: 1 1 150px; }
+.carteira-bolso > .carteira-abrir { flex: 0 0 auto; }
 
 .carteira-abrir {
   position: relative; z-index: 1; pointer-events: auto;
