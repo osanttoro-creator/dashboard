@@ -87,10 +87,19 @@
   };
 
   function profile() { return demo ? sample : Store.profile(); }
-  function currentTransactions() {
+  /* O CANCELADO NÃO SOME DA LISTA
+     Calc.entries filtra o cancelado de todo total — inclusive do
+     previsto —, que é o certo. Mas tirá-lo também da LISTA o tornaria
+     irreversível: quem cancelou por engano não teria onde desfazer.
+     Aqui ele volta, marcado, e a lista o mostra riscado. */
+  function currentTransactions(opcoes) {
     if (demo) return sample.transactions.filter((t) => ymOf(t.date) === state.ym);
-    try { return Calc.entriesForMonth(state.ym).map((t) => ({ ...t, id: t.txId, kind: t.kind, confirmed: t.confirmed })); }
-    catch (e) { console.error('V3/lançamentos:', e); return []; }
+    try {
+      const todos = Calc.entriesForMonth(state.ym, null, { incluirCancelados: true });
+      return todos
+        .filter((t) => (opcoes && opcoes.comCancelados) || !t.cancelado)
+        .map((t) => ({ ...t, id: t.txId, kind: t.kind, confirmed: t.confirmed, cancelado: !!t.cancelado }));
+    } catch (e) { console.error('V3/lançamentos:', e); return []; }
   }
   function totals() {
     if (demo) return { income: 7850, expense: 4912.4, balance: 2937.6 };
@@ -290,12 +299,12 @@
     return `<div class="v3-mobile-greeting"><span class="v3-avatar">${esc(owner.charAt(0))}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div><div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}<button class="v3-coco-call" type="button" data-action="coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span>${demo ? 'Quatro coisas para ver' : 'Conversar com a Coco'}</span>›</button></div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div></div>`;
   }
   function renderTransactions() {
-    const rows = currentTransactions().filter((t) => state.filter === 'Todos' || (state.filter === 'Crédito' ? !!t.cardId : state.filter === 'Débito' ? !t.cardId : state.filter === 'Cartões' ? !!t.cardId : (t.methodLabel || '').toUpperCase().includes('PIX'))).sort((a, b) => b.date.localeCompare(a.date));
+    const rows = currentTransactions({ comCancelados: true }).filter((t) => state.filter === 'Todos' || (state.filter === 'Crédito' ? !!t.cardId : state.filter === 'Débito' ? !t.cardId : state.filter === 'Cartões' ? !!t.cardId : (t.methodLabel || '').toUpperCase().includes('PIX'))).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
     const cells = rows.map((x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
       const method = x.methodLabel || (x.cardId ? 'CARTÃO' : x.kind === 'transfer' ? 'TRANSFERÊNCIA' : 'CONTA');
-      return `<div class="v3-tx${x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><span>${esc(categoryName(x.categoryId))}<small class="v3-mobile-only">${esc(shortDate(x.date))} · ${esc(method)}</small></span><span class="v3-mono">${esc(method)}</span><span class="v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="${x.confirmed ? 'Marcar como pendente' : 'Confirmar lançamento'}">${x.confirmed ? '✓' : ''}</button></div>`;
+      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><span>${esc(categoryName(x.categoryId))}<small class="v3-mobile-only">${esc(shortDate(x.date))} · ${esc(method)}</small></span><span class="v3-mono">${esc(method)}</span><span class="v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="${x.cancelado ? 'Cancelado — tocar para voltar a pago' : x.confirmed ? 'Pago — tocar para marcar como não pago' : 'Não pago — tocar para cancelar'}" title="${x.cancelado ? 'Cancelado' : x.confirmed ? 'Pago' : 'Não pago'}">${x.cancelado ? '🚫' : x.confirmed ? '✓' : '✗'}</button></div>`;
     }).join('');
     return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para confirmar.'}</p><section class="v3-panel v3-table"><div class="v3-table-header"><span>CARTÃO</span><span>DATA</span><span>DESCRIÇÃO</span><span>CATEGORIA</span><span>COMO FOI PAGO</span><span>VALOR</span><span></span></div>${cells || '<p class="v3-muted" style="padding:20px 0">Nenhum lançamento neste filtro.</p>'}</section></div>`;
   }
@@ -486,10 +495,48 @@
       .map((c) => `<option value="${esc(c.id)}" ${(editing?.categoryId || proposal?.categoryId) === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
     const amount = editing ? (editing.moeda && editing.valorMoeda ? editing.valorMoeda : editing.amount) : proposal?.valor;
     const fmt = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? 'revisar proposta da Coco' : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>ESTADO<select name="confirmed"><option value="true" ${(editing?.confirmed ?? proposal?.confirmado) !== false ? 'selected' : ''}>Já foi pago / recebido</option><option value="false" ${(editing?.confirmed ?? proposal?.confirmado) === false ? 'selected' : ''}>Previsto</option></select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
-    updateComposerCurrency(document.getElementById('v3-form-tx'));
+    /* TRÊS ESTADOS, E NÃO UMA MARCA
+       "Previsto" cobria duas coisas que não são a mesma: a conta que
+       ainda vai ser paga — uma promessa que vale, e entra no previsto
+       — e a compra cancelada, que deixou de existir. Enquanto a
+       segunda contava como previsto, o mês inteiro mentia. */
+    const situacaoInicial = editing
+      ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
+      : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
+    const meioInicial = editing ? (editing.meio || '') : '';
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? 'revisar proposta da Coco' : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    updateComposerCurrency(document.getElementById('v3-form-tx'), meioInicial);
   }
-  function updateComposerCurrency(form) {
+
+  /* =============================================================
+     POR ONDE O DINHEIRO PASSOU
+     -------------------------------------------------------------
+     "Conta: Nubank" diz de onde saiu; não diz como. Pix, cartão de
+     débito e transferência caem todos na mesma conta e deixam
+     rastros diferentes no extrato — é por esse rastro que a pessoa
+     reconhece o lançamento quando vai conferir.
+
+     A lista vem do que a própria conta declarou oferecer: uma conta
+     sem cartão virtual não mostra cartão virtual, porque esse
+     lançamento não existiria. No crédito o meio é o próprio cartão,
+     então o campo some.
+     ============================================================= */
+  function updateComposerMeios(form, escolhido) {
+    const campo = form?.elements.meio;
+    const bloco = form?.querySelector('#v3-tx-meio-label');
+    if (!campo || !bloco) return;
+    const [type, id] = String(form.elements.source.value || '').split(':');
+    bloco.hidden = type !== 'account';
+    if (type !== 'account') { campo.value = ''; return; }
+    const conta = profile().accounts.find((a) => a.id === id);
+    const atual = escolhido != null ? escolhido : campo.value;
+    const lista = (Store.meiosDaConta ? Store.meiosDaConta(conta) : []);
+    campo.innerHTML = '<option value="">Não informado</option>'
+      + lista.map((m) => `<option value="${esc(m.id)}" ${atual === m.id ? 'selected' : ''}>${esc(m.nome)}</option>`).join('');
+  }
+
+  function updateComposerCurrency(form, meioEscolhido) {
+    updateComposerMeios(form, meioEscolhido);
     const source = String(form?.elements.source.value || '');
     const [type, id] = source.split(':');
     const instrument = type === 'card' ? profile().cards.find((c) => c.id === id) : profile().accounts.find((a) => a.id === id);
@@ -512,7 +559,13 @@
     const currencyOptions=currencies.map((m)=>`<option value="${esc(m.code)}" ${m.code===(existing?.moeda||'BRL')?'selected':''}>${esc(m.nome)} (${esc(m.code)})</option>`).join('');
     const accountTypes=(Store.ACCOUNT_TYPES||['Conta corrente']).map((name)=>`<option value="${esc(name)}" ${name===(existing?.type||'Conta corrente')?'selected':''}>${esc(name)}</option>`).join('');
     const billAccounts=profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${card?.accountId===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
-    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Cartão</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label>COTAÇÃO (R$ POR 1 UNIDADE, SE NÃO FOR BRL)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
+    /* O QUE ESTA CONTA TEM
+       Toda conta oferecia tudo, e na hora de lançar a pessoa escolhia
+       "cartão virtual" numa conta que não emite cartão virtual — o
+       extrato ficava com uma informação que nunca aconteceu. Aqui ela
+       diz uma vez; depois o lançamento só mostra isso. */
+    const oferecidos=Array.isArray(account?.meios)?account.meios:(Store.MEIOS_PADRAO||[]);
+    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Cartão</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label>COTAÇÃO (R$ POR 1 UNIDADE, SE NÃO FOR BRL)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
   }
   function invoicePaymentForm(cardId) {
     const card=profile().cards.find((c)=>c.id===cardId);
@@ -520,7 +573,7 @@
     if (!invoice || !(invoice.restante>0)) { toast('Não há valor pendente nesta fatura.'); return; }
     const accounts=profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${invoice.paidAccountId===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
     const fmt=(n)=>Number(n).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-    openSheet(`${sheetTop('pagar fatura',`${card.name} · ${niceMonth(state.ym)}`)}<form class="v3-form" id="v3-form-invoice"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(state.ym)}"><p>Fatura: <strong>${money(invoice.planned)}</strong> · já pago: <strong>${money(invoice.pago)}</strong> · falta: <strong>${money(invoice.restante)}</strong></p><label>VALOR PAGO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(fmt(invoice.restante))}" required></label><label>DATA DO PAGAMENTO<input type="date" name="date" value="${U.todayISO()}" required></label><label>SAIU DA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${accounts}</select></label><p class="v3-muted">É um pagamento da fatura, não uma nova despesa. Se escolher uma conta, o valor sai do saldo dela.</p><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Registrar pagamento'}</button></form>`,'Pagamento de fatura');
+    openSheet(`${sheetTop('pagar fatura',`${card.name} · ${niceMonth(state.ym)}`)}<form class="v3-form" id="v3-form-invoice"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(state.ym)}"><p>Fatura: <strong>${money(invoice.planned)}</strong> · já pago: <strong>${money(invoice.pago)}</strong> · falta: <strong>${money(invoice.restante)}</strong></p><label>VALOR PAGO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(fmt(invoice.restante))}" required></label><label>DATA DO PAGAMENTO<input type="date" name="date" value="${U.todayISO()}" required></label><label>SAIU DA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${accounts}</select></label><label>COMO<select name="meio"><option value="">Não informado</option>${(Store.MEIOS||[]).map((m)=>`<option value="${esc(m.id)}">${esc(m.nome)}</option>`).join('')}</select></label><p class="v3-muted">É um pagamento da fatura, não uma nova despesa. Se escolher uma conta, o valor sai do saldo dela.</p><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Registrar pagamento'}</button></form>`,'Pagamento de fatura');
   }
   function investmentForm(id) {
     const item = id ? profile().investments.find((x) => x.id === id) : null;
@@ -547,12 +600,61 @@
     const options = profile().accounts.filter((a) => !a.archived).map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('');
     openSheet(`${sheetTop('guardar na meta', goal.name)}<form class="v3-form" id="v3-form-goal-deposit"><input type="hidden" name="id" value="${esc(id)}"><label>VALOR (R$)<input name="amount" data-money="true" inputmode="decimal" placeholder="0,00" required></label><label>SAIR DE UMA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${options}</select></label><p class="v3-muted">Se escolher uma conta, o valor sai do saldo dela e entra na meta. Esta ação não gera uma despesa.</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Guardar valor'}</button></form>`, 'Guardar valor');
   }
+  /* =============================================================
+     ESCOLHER ÍCONE E COR
+     -------------------------------------------------------------
+     O ícone era uma lista de nomes: "Alimentação", "Transporte" — a
+     pessoa escolhia a palavra e só via o desenho depois de salvar.
+     Agora cada opção é uma caixa com o ícone à mostra, porque é o
+     ícone que ela vai reconhecer na lista, não o nome dele.
+
+     A cor era um seletor livre do sistema: dezesseis milhões de
+     opções, das quais a esmagadora maioria briga com a tela. Agora
+     são seis matizes da paleta, dois tons cada, em colunas. A
+     quantidade por cor é visivelmente limitada — são dois tons, e
+     acabou.
+
+     Quem separa vinte categorias é o ÍCONE, que tem forma; a cor
+     agrupa. É por isso que o ícone tem doze opções e a cor, seis.
+     ============================================================= */
+  /* Categoria nova nasce numa cor DA PALETA. Antes nascia no teal do
+     acento, que não é uma das famílias — e aí toda categoria nova
+     abria o seletor com uma sétima coluna de "cor herdada", que é um
+     recurso para dados antigos e não para o caso comum. A cor de
+     partida gira entre as famílias, para duas categorias seguidas não
+     saírem iguais. */
+  function corPadraoDeCategoria() {
+    const paleta = Store.PALETTE || [];
+    if (!paleta.length) return '#5fa99b';
+    return paleta[profile().categories.length % paleta.length];
+  }
+  function iconPicker(atual,choices) {
+    return `<fieldset class="v3-icon-picker"><legend>ÍCONE</legend><div class="v3-icon-grid">${choices.map(([key,label])=>
+      `<label class="v3-icon-opt" title="${esc(label)}"><input type="radio" name="icon" value="${esc(key)}" ${key===atual?'checked':''} required><span aria-hidden="true">${icon(key)}</span><small>${esc(label)}</small></label>`
+    ).join('')}</div></fieldset>`;
+  }
+  function colorPicker(atual) {
+    const familias=(Store.COLOR_FAMILIES||[]).slice();
+    const conhecidas=familias.reduce((acc,f)=>acc.concat(f.tons),[]);
+    /* Uma cor herdada de dados antigos ganha a própria coluna: ninguém
+       perde a categoria que pintou só porque a paleta mudou. */
+    if (atual && !conhecidas.some((c)=>c.toLowerCase()===String(atual).toLowerCase())) {
+      familias.push({ nome:(Store.colorName?Store.colorName(atual):atual), tons:[atual], herdada:true });
+    }
+    const ehAtual=(c)=>String(c).toLowerCase()===String(atual).toLowerCase();
+    return `<fieldset class="v3-color-picker"><legend>COR</legend><div class="v3-color-tira">${familias.map((f)=>
+      `<div class="v3-color-fam${f.herdada?' is-herdada':''}">${f.tons.map((c)=>
+        `<label class="v3-color-opt" title="${esc(Store.colorName?Store.colorName(c):c)}" style="--cor:${esc(c)}"><input type="radio" name="color" value="${esc(c)}" ${ehAtual(c)?'checked':''} required><span aria-hidden="true"></span></label>`
+      ).join('')}</div>`
+    ).join('')}</div></fieldset>`;
+  }
+
   function categoryForm(id) {
     const item=id?profile().categories.find((c)=>c.id===id):null;
     if (id&&!item) { toast('Esta categoria não existe mais.'); return; }
     const choices=[['home','Casa'],['utensils','Alimentação'],['car','Transporte'],['heart','Saúde'],['leisure','Lazer'],['subscription','Assinatura'],['shopping','Compras'],['work','Trabalho'],['education','Educação'],['receipt','Conta'],['investments','Investimento'],['more','Outros']];
     const currentIcon=categoryIcon(item?.icon||'more');
-    openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label><label>ÍCONE<select name="icon">${choices.map(([key,label])=>`<option value="${key}" ${key===currentIcon?'selected':''}>${esc(label)}</option>`).join('')}</select></label><label>COR<input type="color" name="color" value="${safeColor(item?.color||'#5fa99b')}"></label><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
+    openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label>${iconPicker(currentIcon,choices)}${colorPicker(safeColor(item?.color||corPadraoDeCategoria()))}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
   }
   function budgetForm(categoryId) {
     const categories = profile().categories.filter((c) => c.kind === 'expense');
@@ -600,7 +702,7 @@
     if (!(rate>0) || !Number.isFinite(rate)) { toast(`Cadastre a cotação de ${instrument.name} antes de lançar em ${currency}.`); return; }
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
-    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:fd.get('confirmed')==='true',recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):fd.get('sourceTag')==='uglez'?'uglez':'manual'};
+    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):fd.get('sourceTag')==='uglez'?'uglez':'manual'};
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
       await V3Backend.mutate(() => {
@@ -642,7 +744,8 @@
         } else {
           const openedAt=String(fd.get('openedAt')||''),accountType=String(fd.get('accountType')||'');
           if (!U.isValidISO(openedAt)||!Store.ACCOUNT_TYPES.includes(accountType)) throw new Error('Confira a data e o tipo de conta.');
-          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,archived:fd.get('archived')==='on',color:bankBrand(bank,existing?.color),moeda,cotacao};
+          const meios=fd.getAll('meios').map(String).filter((m)=>(Store.MEIOS_OFERECIVEIS||[]).some((x)=>x.id===m));
+          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,meios,archived:fd.get('archived')==='on',color:bankBrand(bank,existing?.color),moeda,cotacao};
           if (existing) Store.accounts.update(id,data); else Store.accounts.add(data);
         }
       });
@@ -678,13 +781,14 @@
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     const fd=new FormData(form),cardId=String(fd.get('cardId')||''),ref=String(fd.get('ref')||''),amount=parseMoney(fd.get('amount'));
     const paidAt=String(fd.get('date')||''),accountId=String(fd.get('accountId')||'')||null;
+    const meio=accountId?(String(fd.get('meio')||'')||null):null;
     const invoice=/^\d{4}-\d{2}$/.test(ref)?Calc.invoice(cardId,ref,profile()):null;
     if (!invoice || !(amount>0) || amount>invoice.restante+0.005 || !U.isValidISO(paidAt)
       || (accountId&&!profile().accounts.some((a)=>a.id===accountId&&!a.archived))) {
       toast('Confira a fatura, o valor, a data e a conta.'); return;
     }
     try {
-      await V3Backend.mutate(()=>Store.payInvoice(cardId,ref,{amount,paidAt,accountId}));
+      await V3Backend.mutate(()=>Store.payInvoice(cardId,ref,{amount,paidAt,accountId,meio}));
       closeSheet();render();toast('Pagamento registrado na sua conta.');
     } catch(error) { toast(error.message||'Não foi possível registrar o pagamento.'); }
   }
@@ -888,10 +992,17 @@
     if (target.dataset.confirm) {
       if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
       const id = target.dataset.confirm, ym = target.dataset.confirmMonth;
-      const entry = currentTransactions().find((item) => item.id === id && (item.ym || ymOf(item.date)) === ym);
+      const entry = currentTransactions({ comCancelados: true }).find((item) => item.id === id && (item.ym || ymOf(item.date)) === ym);
       if (!entry || !Store.transactions.get(id)) { toast('Esse lançamento mudou. Atualize a página e tente novamente.'); return; }
-      V3Backend.mutate(() => Store.transactions.setConfirmed(id, ym, !entry.confirmed))
-        .then(() => { render(); toast('Estado salvo na sua conta.'); })
+      /* Três estados, em roda: pago → não pago → cancelado → pago.
+         Cancelar não some com o lançamento; ele fica riscado na
+         lista, e o próximo toque o traz de volta. */
+      const proxima = entry.cancelado ? 'pago' : entry.confirmed ? 'pendente' : 'cancelado';
+      const aviso = { pago: 'Pago — entrou nos totais.', pendente: 'Voltou a previsto — saiu dos totais.', cancelado: 'Cancelado — fora de todo total.' }[proxima];
+      V3Backend.mutate(() => {
+        Store.transactions.setCancelado(id, ym, proxima === 'cancelado');
+        Store.transactions.setConfirmed(id, ym, proxima === 'pago');
+      }).then(() => { render(); toast(aviso); })
         .catch((e) => toast(e.message || 'Não foi possível salvar.'));
       return;
     }

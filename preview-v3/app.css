@@ -69,3 +69,40 @@
 .aviso-cookies-aceitar{background:var(--teal);color:var(--night)}
 .aviso-cookies-recusar{background:transparent;color:var(--milk)}
 @media(max-width:620px){.aviso-cookies{align-items:stretch;flex-direction:column;gap:12px}.aviso-cookies-acoes{display:grid;grid-template-columns:1fr 1fr}}
+
+/* Lançamento cancelado: riscado e apagado. Continua legível para quem
+   procura, sem disputar atenção com o que ainda vale dinheiro. */
+.v3-tx.is-cancelada{opacity:.5}
+.v3-tx.is-cancelada .v3-tx-open,.v3-tx.is-cancelada .v3-mono{text-decoration:line-through}
+.v3-status.is-cancel{border-color:rgba(240,229,207,.3);background:transparent;font-size:12px}
+
+/* =============================================================
+   ÍCONE E COR DA CATEGORIA
+   -------------------------------------------------------------
+   O ícone aparece na própria caixa de escolha: é ele que a pessoa
+   vai reconhecer na lista depois, não o nome dele. A cor vem por
+   família — duas caixas juntas são a mesma cor em intensidades
+   diferentes, e o vão maior entre colunas é o que diz isso.
+   ============================================================= */
+.v3-icon-picker,.v3-color-picker{min-width:0;margin:0;padding:0;border:0}
+.v3-icon-picker legend,.v3-color-picker legend{padding:0;color:var(--muted);font-size:12px}
+.v3-icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:7px;margin-top:8px}
+.v3-icon-opt{position:relative;display:grid!important;justify-items:center;gap:3px;min-width:0;padding:9px 5px;border:1px solid rgba(240,229,207,.11);border-radius:13px;background:rgba(240,229,207,.04);color:var(--milk)!important;cursor:pointer;font-size:11px!important;text-align:center}
+.v3-icon-opt input{position:absolute;opacity:0;width:1px;height:1px;padding:0}
+.v3-icon-opt small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;color:var(--muted)}
+.v3-icon-opt .v3-fi{font-size:19px}
+.v3-icon-opt:has(input:checked){border-color:var(--teal);background:rgba(95,169,155,.13)}
+.v3-icon-opt:has(input:checked) small{color:var(--milk)}
+.v3-icon-opt:has(input:focus-visible){outline:2px solid var(--teal);outline-offset:2px}
+.v3-color-tira{display:flex;flex-wrap:wrap;gap:11px;margin-top:8px}
+.v3-color-fam{display:grid;gap:3px}
+.v3-color-opt{position:relative;display:block!important;cursor:pointer;padding:0!important}
+.v3-color-opt input{position:absolute;opacity:0;width:1px;height:1px;padding:0}
+.v3-color-opt>span{display:block;width:34px;height:21px;border:2px solid transparent;border-radius:7px;background:var(--cor)}
+.v3-color-opt:has(input:checked)>span{border-color:var(--milk)}
+.v3-color-opt:has(input:focus-visible)>span{outline:2px solid var(--teal);outline-offset:2px}
+.v3-color-fam.is-herdada .v3-color-opt>span{height:45px}
+/* Meios que a conta oferece: caixas lado a lado, quebrando sozinhas. */
+.v3-meios{min-width:0;margin:0;padding:0;border:0}
+.v3-meios legend{padding:0;color:var(--muted);font-size:12px}
+.v3-meios .v3-check{display:inline-flex!important;margin-right:14px}
