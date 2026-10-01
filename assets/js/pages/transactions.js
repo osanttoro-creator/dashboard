@@ -172,7 +172,50 @@
     ]));
     const list = el('ul', { class: 'tx-list' });
     items.forEach((e) => list.appendChild(row(e, ym)));
+    /* ============================================================
+       O CANCELADO NÃO SOME
+       ------------------------------------------------------------
+       Cancelar tira o lançamento de todo total — inclusive do
+       previsto. Mas tirá-lo também da lista o tornaria irreversível:
+       quem cancelou por engano não teria onde desfazer. Ele fica
+       aqui, riscado, no fim da coluna, com um botão para voltar.
+       ============================================================ */
+    cancelados(ym, kind).forEach((e) => list.appendChild(linhaCancelada(e, ym)));
     parent.appendChild(list);
+  }
+
+  function cancelados(ym, kind) {
+    const visiveis = new Set(Calc.entriesForMonth(ym).map((e) => e.txId + '|' + e.ym));
+    return Calc.entriesForMonth(ym, null, { incluirCancelados: true })
+      .filter((e) => e.kind === kind && !visiveis.has(e.txId + '|' + e.ym))
+      .filter((e) => matchesSearch(e) && matchesMethod(e));
+  }
+
+  function linhaCancelada(e, ym) {
+    return el('li', { class: 'tx-item is-cancelada' }, [
+      el('span', { class: 'tx-cancel-mark', text: '🚫', 'aria-hidden': 'true' }),
+      Icons.categoryBadge(e.categoryId),
+      el('div', { class: 'tx-main' }, [
+        el('div', { class: 'tx-name', text: e.description, title: e.description, translate: 'no' }),
+        el('div', { class: 'tx-meta' }, [
+          el('span', { text: Calc.dataDeExibicao(e) }),
+          UI.badge('Cancelado', 'pend')
+        ])
+      ]),
+      el('span', {
+        class: 'tx-amount',
+        text: (e.kind === 'income' ? '+ ' : '− ') + U.fmtBRL(e.amount)
+      }),
+      el('div', { class: 'tx-actions' }, [
+        el('button', {
+          class: 'icon-btn', title: 'Restaurar', text: '↩',
+          onclick: () => {
+            Store.transactions.setCancelado(e.txId, e.ym, false);
+            UI.toast('Lançamento restaurado — voltou para previsto.');
+          }
+        })
+      ])
+    ]);
   }
 
   /** Uma linha de lançamento com a checkbox de confirmação. */

@@ -74,6 +74,38 @@
   const PALETTE_EXTRA = ['#305A51', '#304A5A', '#30365A', '#43305A', '#5A3D30', '#415A30'];
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
 
+  /* ------------------------------------------------------------
+     MEIOS DE PAGAMENTO
+     ------------------------------------------------------------
+     O que a conta OFERECE (account.meios) e o que foi usado no
+     lançamento (tx.meio) são a mesma lista, por um motivo: se a
+     conta não tem cartão virtual, oferecer "cartão virtual" no
+     lançamento dela é oferecer uma mentira, e a pessoa vai marcar
+     assim mesmo porque o campo estava lá.
+
+     `oferecivel` separa o que uma conta escolhe ter do que todo
+     mundo tem: dinheiro e boleto não dependem de a conta oferecer.
+     ------------------------------------------------------------ */
+  const MEIOS = [
+    { id: 'pix', nome: 'Pix', icone: 'zap', oferecivel: true },
+    { id: 'cartao_fisico', nome: 'Cartão físico', icone: 'credit-card', oferecivel: true },
+    { id: 'cartao_virtual', nome: 'Cartão virtual', icone: 'smartphone', oferecivel: true },
+    { id: 'transferencia', nome: 'Transferência', icone: 'arrow-left-right', oferecivel: true },
+    { id: 'debito_automatico', nome: 'Débito automático', icone: 'repeat', oferecivel: true },
+    { id: 'boleto', nome: 'Boleto', icone: 'receipt', oferecivel: false },
+    { id: 'dinheiro', nome: 'Dinheiro', icone: 'banknote', oferecivel: false }
+  ];
+  const MEIOS_OFERECIVEIS = MEIOS.filter((m) => m.oferecivel);
+  /* Conta nova já nasce com o que quase toda conta tem. Quem não usa
+     desmarca; quem usa não precisa configurar nada para começar. */
+  const MEIOS_PADRAO = ['pix', 'cartao_fisico', 'transferencia'];
+
+  /** Os meios que uma conta oferece, mais os que não dependem dela. */
+  function meiosDaConta(acc) {
+    const escolhidos = Array.isArray(acc && acc.meios) ? acc.meios : MEIOS_PADRAO;
+    return MEIOS.filter((m) => !m.oferecivel || escolhidos.includes(m.id));
+  }
+
   /* O nome existe para o leitor de tela e para a dica do seletor:
      "Cor #7A3B45" não é um rótulo, é um número de série. */
   const COLOR_NAMES = {
@@ -188,6 +220,7 @@
 
   const Store = {
     PALETTE, ALL_COLORS, COLOR_NAMES, BANK_PRESETS, ACCOUNT_TYPES, INVESTMENT_TYPES, MOEDAS,
+    MEIOS, MEIOS_OFERECIVEIS, MEIOS_PADRAO, meiosDaConta,
     CATEGORIAS_PADRAO: NOMES_PADRAO,
     CATEGORIAS_PADRAO_PT: NOMES_PADRAO_PT
   };
@@ -272,6 +305,19 @@
     t.recurring = !!t.recurring;
     t.recurEnd = t.recurring && /^\d{4}-\d{2}$/.test(t.recurEnd || '') ? t.recurEnd : null;
     t.confirmed = t.confirmed !== false;
+    /* O terceiro estado. Não existe em dado antigo, e a ausência tem
+       de significar "não cancelado" — nunca o contrário, senão uma
+       migração mal lida sumiria com o mês inteiro de alguém. */
+    t.cancelado = t.cancelado === true;
+    /* MEIO DE PAGAMENTO
+       `method` continua dizendo de ONDE saiu (conta ou cartão de
+       crédito), que é o que muda a contabilidade. `meio` diz COMO —
+       pix, cartão físico, cartão virtual, dinheiro, boleto. São
+       perguntas diferentes: um pix e um cartão de débito saem os dois
+       da conta e pesam igual no saldo, mas quem procura "onde gastei
+       no virtual" precisa dos dois separados. Vazio é legítimo: dado
+       antigo não tem, e inventar um meio seria inventar um fato. */
+    t.meio = MEIOS.some((m) => m.id === t.meio) ? t.meio : null;
     t.occ = (t.occ && typeof t.occ === 'object') ? t.occ : {};
     t.installment = t.installment && t.installment.total > 1
       ? { total: +t.installment.total, index: +t.installment.index || 1, groupId: t.installment.groupId || null }
@@ -398,6 +444,12 @@
            banco e não é seu para gastar. Ausente = considerada, que
            é o que todo dado antigo significa. */
         considerado: a.considerado !== false,
+        /* O que esta conta oferece. Ausente = o padrao, e nao lista
+           vazia: conta antiga nao tem o campo, e uma conta que nao
+           oferece meio nenhum nao poderia receber lancamento. */
+        meios: Array.isArray(a.meios)
+          ? a.meios.filter((m) => MEIOS_OFERECIVEIS.some((x) => x.id === m))
+          : MEIOS_PADRAO.slice(),
         /* Conta em outra moeda — quem mora fora, quem recebe de fora,
            quem tem Wise ou Nomad. O saldo inicial e o extrato são na
            moeda dela (como o limite do cartão internacional é na moeda
@@ -793,6 +845,18 @@
         tx.occ[ym] = Object.assign({}, tx.occ[ym], { confirmed: !!value });
       } else {
         tx.confirmed = !!value;
+      }
+      Store.commit('transactions');
+    },
+    /* Cancelar é por ocorrência, como confirmar: cancelar a
+       mensalidade de março não cancela a de abril. */
+    setCancelado(txId, ym, value) {
+      const tx = Store.transactions.get(txId);
+      if (!tx) return;
+      if (tx.recurring) {
+        tx.occ[ym] = Object.assign({}, tx.occ[ym], { cancelado: !!value });
+      } else {
+        tx.cancelado = !!value;
       }
       Store.commit('transactions');
     },

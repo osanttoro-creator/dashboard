@@ -362,6 +362,28 @@
       editing ? editing.cardId : d.cardId,
       prof.cards.length ? (d.requireOrigin ? 'Escolha um cartão…' : null) : 'Nenhum cartão'));
     /* ============================================================
+       POR ONDE O DINHEIRO PASSOU
+       ------------------------------------------------------------
+       "Conta: Nubank" diz de onde saiu; não diz como. Pix, cartão de
+       débito e transferência caem todos na mesma conta e cada um
+       deixa um rastro diferente no extrato — é por esse rastro que a
+       pessoa reconhece o lançamento quando vai conferir.
+
+       A lista não é fixa: vem do que a própria conta declarou
+       oferecer (Store.meiosDaConta). Uma conta sem cartão físico não
+       mostra cartão físico, porque esse lançamento não existiria.
+       ============================================================ */
+    const fMeio = field('Como', select([], editing ? editing.meio : (d.meio || null), 'Não informado'),
+      { hint: 'Como o dinheiro entrou ou saiu dessa conta.' });
+
+    function preencheMeios() {
+      const conta = Store.accounts.get(fAccount._control.value);
+      const atual = fMeio._control.value;
+      const lista = Store.meiosDaConta(conta).map((m) => ({ value: m.id, label: m.nome }));
+      UI.fillSelect(fMeio._control, lista, atual, 'Não informado');
+    }
+
+    /* ============================================================
        NO CRÉDITO, A PESSOA ESCOLHE A FATURA — NÃO O DIA
        ------------------------------------------------------------
        Quem lança uma compra no cartão pensa em "cai na fatura de
@@ -415,16 +437,60 @@
       type: 'number', min: 1, max: 72, value: editing && editing.installment ? editing.installment.total : 1
     }), { hint: 'O valor informado é o TOTAL; será dividido nas parcelas.' });
 
-    /* "Confirmado" não dizia o que confirmava. Agora diz: pago,
-       recebido, compra feita. É esta marca, e só ela, que põe o
-       lançamento nos totais — e um lançamento com data futura nasce
-       desmarcado, porque ninguém pagou ainda a conta de daqui a um mês. */
+    /* =============================================================
+       TRÊS ESTADOS, E NÃO UMA MARCA
+       -------------------------------------------------------------
+       A caixa de marcação só sabia dizer sim ou não, e "não" cobria
+       duas coisas que não são a mesma: a conta que ainda vai ser
+       paga e a compra que foi cancelada. A primeira é uma promessa
+       que vale — entra no previsto, no orçamento, na projeção. A
+       segunda deixou de existir, e enquanto ela contava como
+       "previsto" o mês inteiro mentia.
+
+       Agora são três, e cada um diz o que faz com o dinheiro:
+         ✓  pago      — entra nos totais
+         ✗  não pago  — fica previsto, fora dos totais
+         🚫 cancelado — não entra em lugar nenhum
+
+       Um lançamento com data futura nasce em "não pago": ninguém
+       pagou ainda a conta de daqui a um mês.
+       ============================================================= */
     const dataInicial = editing ? editing.date : (d.date || App.selectedDateOrToday());
-    const cbConfirmed = checkbox('Já foi pago (entra nos totais)',
-      editing ? editing.confirmed
-        : (d.confirmed !== undefined ? d.confirmed : dataInicial <= U.todayISO()));
+    const situacaoInicial = editing
+      ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
+      : ((d.confirmed !== undefined ? d.confirmed : dataInicial <= U.todayISO()) ? 'pago' : 'pendente');
+
+    let situacao = situacaoInicial;
     let marcouAMao = !!editing || d.confirmed !== undefined;
-    cbConfirmed._input.addEventListener('change', () => { marcouAMao = true; });
+
+    const ESTADOS = [
+      { value: 'pago', label: '✓ Pago', dica: 'Entra nos totais do mês.' },
+      { value: 'pendente', label: '✗ Não pago', dica: 'Fica previsto: aparece no mês, fora dos totais.' },
+      { value: 'cancelado', label: '🚫 Cancelado', dica: 'Não entra em total nenhum, nem no previsto.' }
+    ];
+    const situacaoDica = el('p', { class: 'hint' });
+    const situacaoSeg = UI.segmented(ESTADOS, situacao, (v) => {
+      situacao = v;
+      marcouAMao = true;
+      pintarSituacao();
+      if (typeof syncVisibility === 'function') syncVisibility();
+    });
+    const fSituacao = field('Situação', situacaoSeg, { span2: true });
+    fSituacao.appendChild(situacaoDica);
+
+    function pintarSituacao() {
+      const atual = ESTADOS.find((e) => e.value === situacao);
+      situacaoDica.textContent = atual ? atual.dica : '';
+    }
+    pintarSituacao();
+
+    /* O primeiro botão muda de palavra conforme o tipo: uma receita
+       não é "paga", é recebida; uma transferência é "feita". */
+    const btnPago = U.$('button', situacaoSeg)[0];
+
+    /* O resto do formulário ainda fala em "confirmado"; esta ponte
+       traduz, para não espalhar o estado novo por toda parte. */
+    const cbConfirmed = { _input: { get checked() { return situacao === 'pago'; } } };
 
     const fNotes = field('Observações', el('textarea', {
       class: 'input textarea textarea-plain', rows: 2,
@@ -451,10 +517,10 @@
 
     const grid = el('div', { class: 'form-grid' }, [
       el('div', { class: 'field span-2' }, [el('span', { class: 'field-label', text: 'Tipo' }), kindSeg]),
-      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fFatura, fToAccount, faturaAviso,
+      fDesc, fAmount, fDate, fCategory, fMethod, fAccount, fCard, fFatura, fMeio, fToAccount, faturaAviso,
       el('div', { class: 'field span-2' }, cbRecurring),
       fRecurEnd, fInstallments,
-      el('div', { class: 'field span-2' }, cbConfirmed),
+      fSituacao,
       fNotes, recurNote
     ]);
 
@@ -462,15 +528,17 @@
       const isTransfer = currentKind === 'transfer';
       const isExpense = currentKind === 'expense';
       const useCard = isExpense && method === 'card';
-      cbConfirmed.querySelector('span').textContent = isTransfer ? 'Já foi feita (entra nos saldos)'
-        : currentKind === 'income' ? 'Já foi recebido (entra nos totais)'
-          : useCard ? 'Compra já feita (entra nos totais)' : 'Já foi pago (entra nos totais)';
+      btnPago.textContent = isTransfer ? '✓ Feita'
+        : currentKind === 'income' ? '✓ Recebido'
+          : useCard ? '✓ Comprado' : '✓ Pago';
 
       fCategory.hidden = isTransfer;
       fMethod.hidden = !isExpense || !prof.cards.length;
       if (!isExpense) method = 'account';
       fCard.hidden = !useCard;
       fAccount.hidden = useCard;
+      fMeio.hidden = useCard;
+      if (!useCard) preencheMeios();
       fDate.hidden = useCard;
       fFatura.hidden = !useCard;
       if (useCard) preencheFaturas();
@@ -506,10 +574,12 @@
     fCard._control.addEventListener('change', () => { preencheFaturas(); avisaFatura(); syncMoedaDaCompra(); });
     /* Trocar de conta troca a moeda do valor: sem isto, quem escolhe a
        conta em dólar depois de digitar vê "Valor (R$)" e lança errado. */
-    fAccount._control.addEventListener('change', syncMoedaDaCompra);
+    fAccount._control.addEventListener('change', () => { syncMoedaDaCompra(); preencheMeios(); });
     fDate._control.addEventListener('change', () => {
       if (!marcouAMao && U.isValidISO(fDate._control.value)) {
-        cbConfirmed._input.checked = fDate._control.value <= U.todayISO();
+        situacao = fDate._control.value <= U.todayISO() ? 'pago' : 'pendente';
+        situacaoSeg.setValue(situacao);
+        pintarSituacao();
       }
     });
     fInstallments._control.addEventListener('input', avisaFatura);
@@ -612,6 +682,8 @@
         recurring: cbRecurring._input.checked,
         recurEnd: cbRecurring._input.checked ? (fRecurEnd._control.value || null) : null,
         confirmed: cbConfirmed._input.checked,
+        cancelado: situacao === 'cancelado',
+        meio: useCard ? null : (fMeio._control.value || null),
         notes: fNotes._control.value.trim(),
         source: editing ? (editing.source || 'manual') : (d.source || 'manual'),
         merchantKey: sugestaoAtual ? sugestaoAtual.merchantKey : null,
@@ -793,6 +865,29 @@
     const fColor = field('Cor identificadora', picker, { span2: true });
 
     /* ============================================================
+       O QUE ESTA CONTA TEM
+       ------------------------------------------------------------
+       Toda conta oferecia tudo. Na hora de lançar, a pessoa escolhia
+       "cartão virtual" numa conta que não emite cartão virtual — e o
+       extrato ficava com uma informação que nunca aconteceu.
+
+       Aqui ela diz, uma vez, o que a conta realmente oferece; depois
+       o lançamento só mostra isso. É a mesma ideia do cartão: o
+       cadastro limita o que o uso pode escolher.
+       ============================================================ */
+    const oferecidos = editing && Array.isArray(editing.meios) ? editing.meios : Store.MEIOS_PADRAO;
+    const meiosChecks = Store.MEIOS_OFERECIVEIS.map(
+      (m) => checkbox(m.nome, oferecidos.includes(m.id))
+    );
+    const fMeios = el('div', { class: 'field span-2' }, [
+      el('span', { class: 'field-label', text: 'O que a conta oferece' }),
+      el('div', { class: 'check-row' }, meiosChecks),
+      el('p', { class: 'hint', text: 'Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.' })
+    ]);
+    const meiosEscolhidos = () => Store.MEIOS_OFERECIVEIS
+      .filter((m, i) => meiosChecks[i]._input.checked).map((m) => m.id);
+
+    /* ============================================================
        DENTRO OU FORA DOS TOTAIS
        ------------------------------------------------------------
        Nem todo dinheiro que passa por uma conta é dinheiro seu. A
@@ -835,6 +930,7 @@
         last4: fLast4._control.value.replace(/\D/g, '').slice(-4),
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         considerado: cbConsiderado._input.checked,
+        meios: meiosEscolhidos(),
         moeda: moedaSel.value,
         cotacao: moedaSel.value === 'BRL' ? null : U.parseMoney(fCotacao._control.value)
       };
@@ -886,7 +982,7 @@
 
     const grid = el('div', { class: 'form-grid' },
       [fName, fBank, fCustomBank, fType, fMoeda, fCotacao, fLast4, fBalance, fDate,
-        fConsiderado, fColor, fGrad, fAvisoCor, fPreview]);
+        fMeios, fConsiderado, fColor, fGrad, fAvisoCor, fPreview]);
 
     function submit() {
       clearErrors([fName, fDate, fCotacao]);
@@ -907,6 +1003,7 @@
         openingBalance: U.parseMoney(fBalance._control.value) || 0,
         openedAt: fDate._control.value,
         considerado: cbConsiderado._input.checked,
+        meios: meiosEscolhidos(),
         archived: editing ? editing.archived : false,
         moeda,
         cotacao

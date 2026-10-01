@@ -100,7 +100,20 @@
     const confirmed = tx.recurring
       ? (o.confirmed === undefined ? (!!tx.confirmed && date <= U.todayISO()) : !!o.confirmed)
       : !!tx.confirmed;
+    /* CANCELADO NÃO É "NÃO PAGO"
+       Não pago é uma promessa que ainda vale: entra no previsto, no
+       orçamento, na projeção do mês. Cancelado é uma promessa que
+       deixou de existir — a compra foi estornada, o pedido caiu, o
+       boleto não vai ser emitido. Ele não pode aparecer em total
+       nenhum, nem no previsto, senão o mês inteiro mente.
+       Como a recorrência confirma mês a mês, o cancelamento também
+       é por ocorrência: cancelar a mensalidade de março não cancela
+       a de abril. */
+    const cancelado = tx.recurring
+      ? (o.cancelado === undefined ? !!tx.cancelado : !!o.cancelado)
+      : !!tx.cancelado;
     return {
+      cancelado,
       key: tx.recurring ? tx.id + '#' + ym : tx.id,
       txId: tx.id,
       tx,
@@ -144,10 +157,25 @@
     return !a || a.considerado !== false;
   };
 
-  Calc.entries = function (fromISO, toISO, profile) {
+  /* O CANCELADO SAI AQUI, E NÃO EM CADA SOMA
+     -------------------------------------------------------------
+     Esta função é a porta por onde TODO cálculo do app enxerga os
+     lançamentos — saldo, categorias, orçamento, projeção, gráficos,
+     calendário. Filtrar o cancelado em cada um deles seria confiar
+     em lembrar dezenas de vezes, e bastaria esquecer uma para um
+     valor cancelado voltar a pesar em algum total sem ninguém notar.
+
+     Então ele sai na porta. Quem precisa dele de volta — a lista de
+     lançamentos, que tem de mostrá-lo riscado para a pessoa poder
+     desfazer — pede explicitamente com { incluirCancelados: true }.
+     Assim esquecer é o caminho SEGURO, e lembrar é o caminho que
+     precisa ser escrito. */
+  Calc.entries = function (fromISO, toISO, profile, opcoes) {
     const prof = profile || P();
-    return lembrar(prof, 'e|' + fromISO + '|' + toISO,
-      () => calcularEntries(fromISO, toISO, prof)).slice();
+    const todos = lembrar(prof, 'e|' + fromISO + '|' + toISO,
+      () => calcularEntries(fromISO, toISO, prof));
+    if (opcoes && opcoes.incluirCancelados) return todos.slice();
+    return todos.filter((e) => !e.cancelado);
   };
 
   function calcularEntries(fromISO, toISO, prof) {
@@ -176,8 +204,8 @@
     return out;
   }
 
-  Calc.entriesForMonth = function (ym, profile) {
-    return Calc.entries(U.monthStart(ym), U.monthEnd(ym), profile);
+  Calc.entriesForMonth = function (ym, profile, opcoes) {
+    return Calc.entries(U.monthStart(ym), U.monthEnd(ym), profile, opcoes);
   };
 
   /** Primeira data com movimento (para varreduras "desde sempre"). */

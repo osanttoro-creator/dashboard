@@ -6066,3 +6066,18 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
 .select-busca { display: grid; gap: 6px; }
 .select-busca-campo { font-size: 13px; }
 .select-busca-campo::-webkit-search-cancel-button { cursor: pointer; }
+
+/* =============================================================
+   LANÇAMENTO CANCELADO
+   -------------------------------------------------------------
+   Riscado e apagado: continua legível para quem procura, sem
+   disputar atenção com o que ainda vale dinheiro.
+   ============================================================= */
+.tx-item.is-cancelada { opacity: .5; }
+.tx-item.is-cancelada .tx-name,
+.tx-item.is-cancelada .tx-amount { text-decoration: line-through; }
+.tx-cancel-mark { width: 18px; text-align: center; font-size: 13px; }
+
+/* Meios que a conta oferece: caixas lado a lado, quebrando sozinhas. */
+.check-row { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.check-row .check { margin: 0; }

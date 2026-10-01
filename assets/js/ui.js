@@ -217,6 +217,18 @@
       wrap.appendChild(b);
     });
     wrap.getValue = () => current;
+    /* Quem muda o valor por fora (uma data que mudou, um formulário
+       que se refaz) precisa que os botões acompanhem — sem isto o
+       controle mostra uma coisa e vale outra. */
+    wrap.setValue = (v, avisar) => {
+      const alvo = options.find((o) => o.value === v);
+      if (!alvo) return;
+      current = v;
+      U.$('button', wrap).forEach((n, i) => {
+        n.classList.toggle('is-active', options[i].value === v);
+      });
+      if (avisar && onChange) onChange(v);
+    };
     return wrap;
   };
 
