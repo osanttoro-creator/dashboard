@@ -33,7 +33,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
           cocoMemories:async()=>memories.slice(),
           cocoRemember:async(profileId,memory)=>{const row={...memory,id:'memory-'+(memories.length+1),created_at:new Date().toISOString()};memories.unshift(row);return row;},
           cocoForget:async(id)=>{memories=memories.filter((m)=>m.id!==id);},
-          cocoReadMedia:async()=>({texto:'Gastei 7 reais no mercado',tipo:'foto',salvo:false}),
+          cocoReadMedia:async(file)=>({texto:file.type.startsWith('audio/')?'Áudio anotado':'Gastei 7 reais no mercado',tipo:file.type.startsWith('audio/')?'audio':'foto',salvo:false}),
           withTimeout:(promise)=>promise
         };
       ` }));
@@ -131,10 +131,29 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('[data-action="forget-memory"]').click();
       assert.equal(await page.locator('[data-action="forget-memory"]').count(), 0);
       await page.locator('[data-coco-tab="Conversa"]').click();
-      await page.locator('#v3-coco-file').setInputFiles({
+      assert.equal(await page.locator('[data-action="choose-coco-file"] svg').count(), 1);
+      assert.equal(await page.locator('.v3-coco-audio-options summary svg').count(), 1);
+      const imageChooser = page.waitForEvent('filechooser');
+      await page.locator('[data-action="choose-coco-file"]').click();
+      await (await imageChooser).setFiles({
         name: 'recibo.png', mimeType: 'image/png', buffer: Buffer.alloc(120, 1)
       });
+      await page.waitForFunction(() => document.querySelector('#v3-chat-form [name="question"]')?.value === 'Gastei 7 reais no mercado');
       assert.equal(await page.locator('#v3-chat-form [name="question"]').inputValue(), 'Gastei 7 reais no mercado');
+      await page.locator('.v3-coco-audio-options summary').click();
+      assert.equal(await page.locator('[data-action="record-audio"]').isVisible(), true);
+      const audioChooser = page.waitForEvent('filechooser');
+      await page.locator('[data-action="choose-coco-audio"]').click();
+      await (await audioChooser).setFiles({
+        name: 'relato.mp3', mimeType: 'audio/mpeg', buffer: Buffer.alloc(120, 2)
+      });
+      await page.waitForFunction(() => document.querySelector('#v3-chat-form [name="question"]')?.value === 'Áudio anotado');
+      assert.equal(await page.locator('#v3-chat-form [name="question"]').inputValue(), 'Áudio anotado');
+      await page.locator('#v3-coco-file').setInputFiles({
+        name: 'extrato.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(120, 3)
+      });
+      assert.match(await page.locator('#v3-toast').innerText(), /PDF e planilhas ainda não são lidos/);
+      assert.equal(await page.locator('#v3-chat-form [name="question"]').inputValue(), 'Áudio anotado');
       assert.deepEqual(errors, []);
       await page.close();
       console.log(`V3 UI ${width}px: conta, categoria, lançamento, cartão, fatura, espaço e Coco OK`);

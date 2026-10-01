@@ -11,6 +11,14 @@
   const classicPaths = { transactions: '/app/financeiro', wallet: '/app/carteira', investments: '/app/investimentos', categories: '/app/categorias', goals: '/app/metas', reminders: '/app/recorrencias', settings: '/app/configuracoes', plan: '/app/planos' };
   const uiIcons = new Set(['home','transactions','wallet','investments','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
+  const cocoMediaIcon = (name) => {
+    const paths = {
+      attach: '<path d="m21.4 11.6-8.8 8.8a6 6 0 0 1-8.5-8.5L13.6 2.4a4 4 0 0 1 5.7 5.7l-9.5 9.5a2 2 0 0 1-2.8-2.8l8.8-8.8"/>',
+      mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5m-4 0h8"/>',
+      stop: '<rect x="5" y="5" width="14" height="14" rx="2"/>'
+    };
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
+  };
   const esc = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const money = (n) => 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const pct = (n) => Math.max(0, Math.min(100, Number(n) || 0));
@@ -388,6 +396,12 @@
   function openSheet(html,label) { $('#v3-sheet').setAttribute('aria-label',label||'Painel'); $('#v3-sheet').innerHTML=html; $('#v3-overlay').hidden=false; document.body.style.overflow='hidden'; $('#v3-sheet').querySelector('button')?.focus(); }
   function sheetTop(title,sub,img) { return `<div class="v3-sheet-top">${img?`<img src="${img}" alt="">`:''}<span><h2>${esc(title)}</h2>${sub?`<small>${esc(sub)}</small>`:''}</span><button type="button" data-action="close" class="v3-sheet-close" aria-label="Fechar">×</button></div>`; }
   function cocoAllowed() { return demo || !!(state.cocoSettings?.consented_at && !state.cocoSettings?.revoked_at); }
+  function cocoMediaControls() {
+    const audio = recorder?.state === 'recording'
+      ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
+      : `<details class="v3-coco-audio-options"><summary class="v3-coco-icon" aria-label="Opções de áudio" title="Áudio: gravar ou escolher arquivo">${cocoMediaIcon('mic')}</summary><div class="v3-coco-audio-menu"><button type="button" data-action="record-audio">Gravar áudio</button><button type="button" data-action="choose-coco-audio">Enviar áudio do aparelho</button></div></details>`;
+    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar foto ou arquivo de imagem" title="Foto ou imagem: JPG, PNG, WebP">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>${audio}<input id="v3-coco-audio-file" type="file" accept="audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><small>Fotos e áudios viram texto para você revisar. PDF e planilhas ainda não são lidos pela Coco.</small>`;
+  }
   async function refreshCoco() {
     if (demo || state.cocoLoading) return;
     state.cocoLoading = true;
@@ -415,7 +429,7 @@
         body=`<h2 style="margin:10px 0 20px">o que precisa<br>da sua atenção</h2>${pending?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTOS PENDENTES</span><p>${pending} ${pending===1?'lançamento aguarda':'lançamentos aguardam'} confirmação neste mês.</p><button class="v3-primary" type="button" data-go="transactions">Revisar</button></div>`:''}${rs.length?`<div class="v3-suggestion"><span class="v3-label">PRÓXIMOS 30 DIAS</span><p>${rs.length} ${rs.length===1?'compromisso registrado':'compromissos registrados'} para acompanhar.</p><button class="v3-primary" type="button" data-go="reminders">Ver lembretes</button></div>`:''}${!pending&&!rs.length?'<p class="v3-muted">Não há pendências registradas agora. A Coco não inventa alertas.</p>':''}`;
       }
     } else if (state.cocoTab==='Conversa') {
-      body=`<div class="v3-chat" id="v3-chat">${state.chat.length?state.chat.map((x,i)=>`<div class="v3-chat-message ${x.who==='user'?'user':''}"><p>${esc(x.text)}</p>${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button><small>Você poderá apagá-la na aba Memória.</small></div>`:''}</div>`).join(''):'<p>Posso ler os totais do mês e ajudar a organizar suas próximas decisões.</p>'}</div><form class="v3-chat-form" id="v3-chat-form"><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><div class="v3-coco-media"><button type="button" class="v3-secondary" data-action="record-audio">${recorder?.state==='recording'?'Parar gravação':'Gravar áudio'}</button><label class="v3-secondary">Enviar foto ou áudio<input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp,audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></label></div><small>O texto de áudio/foto aparece no campo para você revisar antes de enviar. Nada é salvo automaticamente.</small>`;
+      body=`<div class="v3-chat" id="v3-chat">${state.chat.length?state.chat.map((x,i)=>`<div class="v3-chat-message ${x.who==='user'?'user':''}"><p>${esc(x.text)}</p>${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button><small>Você poderá apagá-la na aba Memória.</small></div>`:''}</div>`).join(''):'<p>Posso ler os totais do mês e ajudar a organizar suas próximas decisões.</p>'}</div>${cocoMediaControls()}`;
     } else {
       body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">Só regras que você confirmou. A memória não autoriza pagamentos nem altera lançamentos.</p>${cocoAllowed()?`<button type="button" class="v3-secondary" data-action="pause-learning">${state.cocoSettings?.learning_paused?'Retomar aprendizado':'Pausar aprendizado'}</button>`:'<p class="v3-muted">Acesso revogado; você ainda pode apagar estas regras.</p>'}<div class="v3-coco-memories">${state.cocoMemories.length?state.cocoMemories.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(m.kind.toUpperCase())} · CONFIRMADA</span><strong>${esc(m.label)}</strong><p>${esc(m.value)}</p><small>${esc(new Date(m.created_at).toLocaleDateString('pt-BR'))}</small><button type="button" class="v3-secondary" data-action="forget-memory" data-memory-id="${esc(m.id)}">Esquecer</button></div>`).join(''):'<p class="v3-muted">Nenhuma preferência confirmada ainda.</p>'}</div>${!cocoAllowed()||state.cocoSettings?.learning_paused?'':`<form id="v3-memory-form" class="v3-form"><label>TIPO<select name="kind"><option value="categoria">Categoria</option><option value="conta">Conta</option><option value="recorrencia">Recorrência</option><option value="preferencia">Preferência</option><option value="meta">Meta</option><option value="outro">Outro</option></select></label><label>NOME DA REGRA<input name="label" maxlength="100" required placeholder="Ex.: Uber"></label><label>COMO DEVO LEMBRAR<input name="value" maxlength="240" required placeholder="Ex.: Categorizar como Transporte"></label><button class="v3-primary" type="submit">Guardar regra</button></form>`}${cocoAllowed()?'<button type="button" class="v3-link" data-action="revoke-coco">Revogar acesso da Coco</button>':'<button type="button" class="v3-link" data-coco-tab="Conversa">Voltar ao consentimento</button>'}`;
     }
@@ -775,7 +789,9 @@
   }
   async function readCocoMedia(file) {
     if (demo || !cocoAllowed() || !file) return;
-    const image=file.type.startsWith('image/');
+    const image=['image/jpeg','image/png','image/webp'].includes(file.type);
+    const audio=['audio/webm','audio/mpeg','audio/mp4','audio/x-m4a','audio/wav','audio/wave'].includes(file.type);
+    if (!image && !audio) { toast('A Coco aceita imagens e áudios. PDF e planilhas ainda não são lidos.'); return; }
     const max=image?4_000_000:8_000_000;
     if (file.size>max || file.size<100) { toast('Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.'); return; }
     if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à OpenAI para leitura? O conteúdo pode incluir dados sensíveis. O arquivo não ficará guardado no OAZE. A leitura usa uma consulta do plano; enviar o texto revisado usa outra.`)) return;
@@ -869,6 +885,8 @@
         .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
     }
+    if (action==='choose-coco-file'){$('#v3-coco-file')?.click();return;}
+    if (action==='choose-coco-audio'){$('#v3-coco-audio-file')?.click();return;}
     if (action==='record-audio'){toggleCocoRecording();return;}
     if (action==='retry-coco'){refreshCoco();return;}
     if (action==='close'){closeSheet();return;}
@@ -994,7 +1012,11 @@
     const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
-    document.addEventListener('change',(event)=>{if(event.target?.id==='v3-coco-file'){const file=event.target.files?.[0];if(file)readCocoMedia(file);}});
+    document.addEventListener('change',(event)=>{
+      if (!['v3-coco-file','v3-coco-audio-file'].includes(event.target?.id)) return;
+      const file=event.target.files?.[0];
+      if (file) readCocoMedia(file);
+    });
     document.addEventListener('beforeinput',(ev)=>{
       const input=ev.target;
       if(!(input instanceof HTMLInputElement)||input.dataset.money!=='true')return;
