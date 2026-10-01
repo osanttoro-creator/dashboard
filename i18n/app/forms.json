@@ -5,6 +5,20 @@
   "ignorar": true
  },
  {
+  "pt": "Buscar…",
+  "tipo": "exato",
+  "en": "Search…",
+  "fr": "Rechercher…",
+  "es": "Buscar…"
+ },
+ {
+  "pt": "Buscar na lista",
+  "tipo": "exato",
+  "en": "Search the list",
+  "fr": "Rechercher dans la liste",
+  "es": "Buscar en la lista"
+ },
+ {
   "pt": "Automático — deriva do banco escolhido",
   "tipo": "exato",
   "en": "Automatic — follows the chosen bank",
@@ -505,6 +519,13 @@
   "en": "e.g. Checking account",
   "fr": "Ex. : Compte courant",
   "es": "Ej.: Cuenta corriente"
+ },
+ {
+  "pt": "Buscar banco…",
+  "tipo": "exato",
+  "en": "Search bank…",
+  "fr": "Rechercher une banque…",
+  "es": "Buscar banco…"
  },
  {
   "pt": "Banco",

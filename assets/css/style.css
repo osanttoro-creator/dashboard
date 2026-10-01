@@ -6059,3 +6059,10 @@ html:not([data-theme="dark"]) .uglez-enviar.tem-texto { background: #5FA99B; col
   .linha { padding: 10px 6px; gap: 10px; }
   .linha-nome { font-size: 13.5px; }
 }
+
+/* ---------------- escolher com busca ----------------
+   A busca fica acima da lista, encostada nela, para ler como um
+   controle só e não como dois campos soltos. */
+.select-busca { display: grid; gap: 6px; }
+.select-busca-campo { font-size: 13px; }
+.select-busca-campo::-webkit-search-cancel-button { cursor: pointer; }

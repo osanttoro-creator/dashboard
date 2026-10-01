@@ -41,6 +41,63 @@
     return s;
   }
 
+  /* =============================================================
+     ESCOLHER O BANCO COM BUSCA
+     -------------------------------------------------------------
+     São 21 bancos numa lista rolante. Achar o seu ali é percorrer a
+     lista inteira com o olho — e o <select> nativo só ajuda quem
+     adivinha a primeira letra do nome como ele foi cadastrado
+     ("Banco do Brasil" não responde a "brasil").
+
+     A busca fica EM CIMA da lista, e filtra enquanto se digita, por
+     qualquer pedaço do nome e sem acento. O <select> continua sendo
+     a fonte do valor: tudo que já lia .value ou escutava change
+     segue funcionando, e quem não quiser digitar continua rolando.
+
+     Sem JavaScript o campo de busca simplesmente não aparece e o
+     select nativo continua lá, inteiro.
+     ============================================================= */
+  function selectComBusca(options, value, rotuloBusca) {
+    const sel = select(options, value);
+    const busca = el('input', {
+      class: 'input select-busca-campo', type: 'search',
+      placeholder: rotuloBusca || 'Buscar…', 'aria-label': rotuloBusca || 'Buscar na lista'
+    });
+
+    const filtrar = () => {
+      const termo = U.norm(busca.value.trim());
+      let visiveis = 0;
+      Array.from(sel.options).forEach((o) => {
+        const bate = !termo || U.norm(o.textContent).includes(termo);
+        o.hidden = !bate;
+        if (bate) visiveis++;
+      });
+      /* Filtrar a lista não pode mudar a escolha: se o que estava
+         selecionado sai do filtro, ele continua selecionado — some
+         só da vista. O contrário apagaria a escolha de quem digitou
+         errado e apagou. */
+      sel.size = 0;
+      busca.setAttribute('aria-describedby', '');
+      return visiveis;
+    };
+
+    busca.addEventListener('input', filtrar);
+    /* Enter na busca escolhe a primeira que sobrou: quem digitou o
+       nome inteiro não deve precisar ir até a lista com o mouse. */
+    busca.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Enter') return;
+      ev.preventDefault();
+      const primeira = Array.from(sel.options).find((o) => !o.hidden);
+      if (!primeira) return;
+      sel.value = primeira.value;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    const wrap = el('div', { class: 'select-busca' }, [busca, sel]);
+    wrap._select = sel;
+    return wrap;
+  }
+
   function checkbox(labelText, checked) {
     const cb = el('input', { type: 'checkbox' });
     cb.checked = !!checked;
@@ -680,9 +737,11 @@
 
     const fName = field('Nome da conta *', input({ value: editing ? editing.name : '', placeholder: 'Ex.: Conta corrente', maxlength: 50 }));
     const bancoConhecido = editing && Store.bankPreset(editing.bank);
-    const bankSel = select(Store.BANK_PRESETS.map((b) => ({ value: b.name, label: b.name })),
-      editing ? (bancoConhecido ? bancoConhecido.name : 'Outro') : 'Itaú');
-    const fBank = field('Banco', bankSel);
+    const bancoBusca = selectComBusca(Store.BANK_PRESETS.map((b) => ({ value: b.name, label: b.name })),
+      editing ? (bancoConhecido ? bancoConhecido.name : 'Outro') : 'Itaú', 'Buscar banco…');
+    const bankSel = bancoBusca._select;
+    const fBank = field('Banco', bancoBusca);
+    fBank._control = bankSel;
     const fCustomBank = field('Nome do banco', input({ value: editing && !Store.BANK_PRESETS.some((b) => b.name === editing.bank) ? editing.bank : '' }));
     const fType = field('Tipo', select(Store.ACCOUNT_TYPES.map((t) => ({ value: t, label: t })), editing ? editing.type : null));
     const fBalance = field('Saldo inicial (R$)', moneyInput(editing ? editing.openingBalance : 0),
@@ -906,8 +965,11 @@
     const accounts = accountOptions();
 
     const fName = field('Nome do cartão *', input({ value: editing ? editing.name : '', placeholder: 'Ex.: Cartão principal', maxlength: 50 }));
-    const bankSel = select(Store.BANK_PRESETS.map((b) => ({ value: b.name, label: b.name })), editing ? editing.bank : 'Nubank');
-    const fBank = field('Banco emissor', bankSel);
+    const bancoBusca = selectComBusca(Store.BANK_PRESETS.map((b) => ({ value: b.name, label: b.name })),
+      editing ? editing.bank : 'Nubank', 'Buscar banco…');
+    const bankSel = bancoBusca._select;
+    const fBank = field('Banco emissor', bancoBusca);
+    fBank._control = bankSel;
     const fLast4 = field('4 últimos dígitos', input({
       inputmode: 'numeric', maxlength: 4, placeholder: '4352',
       value: editing ? editing.last4 : ''
