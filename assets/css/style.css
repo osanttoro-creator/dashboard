@@ -1474,13 +1474,19 @@ select.input { cursor: pointer; }
 .card-preview .wallet-card { cursor: default; }
 .card-preview .wallet-card:hover { transform: none; }
 
+/* GRADE, E NÃO FILA QUE QUEBRA
+   Com flex-wrap as caixas terminavam desalinhadas entre um grupo e
+   outro — cada fileira começava onde a anterior tinha sobrado. Em
+   grade elas ficam em colunas, e o olho percorre por coluna em vez
+   de varrer linha a linha procurando a forma. */
 .icon-picker {
-  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+  gap: 6px; align-items: center;
   max-height: 210px; overflow-y: auto; padding: 8px;
   border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--plane-2);
 }
 .icon-group-label {
-  width: 100%; font-size: 10.5px; font-weight: 660; letter-spacing: .05em;
+  grid-column: 1 / -1; font-size: 10.5px; font-weight: 660; letter-spacing: .05em;
   text-transform: uppercase; color: var(--muted); margin-top: 4px;
 }
 .icon-group-label:first-of-type { margin-top: 0; }
@@ -1491,7 +1497,10 @@ select.input { cursor: pointer; }
 }
 .icon-opt:hover { border-color: var(--border-strong); color: var(--ink); }
 .icon-opt.is-active { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface-2)); }
-.icon-opt.is-auto { width: auto; padding: 0 9px; gap: 5px; grid-auto-flow: column; }
+.icon-opt.is-auto { grid-column: 1 / -1; width: auto; padding: 0 9px; gap: 5px; grid-auto-flow: column; justify-content: start; }
+/* O foco precisa aparecer DENTRO da caixa: com o seletor rolando,
+   um anel por fora fica cortado pela borda do contêiner. */
+.icon-opt:focus-visible, .color-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .icon-opt .auto-tag { font-size: 10px; font-weight: 660; }
 
 .toasts { position: fixed; bottom: 18px; right: 18px; z-index: 200; display: grid; gap: 8px; justify-items: end; }

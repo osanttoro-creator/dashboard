@@ -80,12 +80,27 @@
   }
 
   /** Grade de ícones Lucide para escolher o da categoria. */
+  /* =============================================================
+     ESCOLHA DO ÍCONE
+     -------------------------------------------------------------
+     Cada ícone já vivia na própria caixa, com o desenho dentro — é
+     isso que deixa escolher pela FORMA, e não pelo nome em inglês do
+     ícone. O que faltava era a semântica: eram botões soltos, e quem
+     usa leitor de tela ouvia setenta botões independentes sem saber
+     que só um vale por vez, nem quantos existem.
+
+     Agora é um grupo de rádio de verdade: role=radiogroup, cada caixa
+     com aria-checked e aria-posinset, e um tabindex itinerante — Tab
+     entra uma vez no grupo, as setas andam dentro dele. Setenta
+     paradas de Tab para escolher um ícone não é navegação, é castigo.
+     ============================================================= */
   function iconPicker(initial, kindGetter, nameGetter) {
     let current = initial || null;
-    const wrap = el('div', { class: 'icon-picker' });
+    const wrap = el('div', { class: 'icon-picker', role: 'radiogroup', 'aria-label': 'Ícone da categoria' });
 
     const auto = el('button', {
       type: 'button', class: 'icon-opt is-auto' + (current ? '' : ' is-active'),
+      role: 'radio',
       title: 'Automático — deduz pelo nome da categoria',
       onclick: () => { current = null; paint(); }
     });
@@ -96,20 +111,50 @@
       auto.appendChild(Icons.lucide(Icons.guessCategory(nameGetter(), kindGetter()), 17));
       auto.appendChild(el('span', { class: 'auto-tag', text: 'auto' }));
       auto.classList.toggle('is-active', !current);
+      auto.setAttribute('aria-checked', current ? 'false' : 'true');
+      auto.setAttribute('aria-label', 'Automático, deduzido pelo nome');
+      auto.tabIndex = current ? -1 : 0;
       wrap.appendChild(auto);
 
       Icons.PICKER.forEach((grupo) => {
         wrap.appendChild(el('span', { class: 'icon-group-label', text: grupo.grupo }));
         grupo.nomes.forEach((n) => {
           if (!Icons.has(n)) return;
+          const ativo = current === n;
           wrap.appendChild(el('button', {
-            type: 'button', class: 'icon-opt' + (current === n ? ' is-active' : ''),
+            type: 'button', class: 'icon-opt' + (ativo ? ' is-active' : ''),
+            role: 'radio', 'aria-checked': ativo ? 'true' : 'false',
+            tabindex: ativo ? 0 : -1,
             title: n, 'aria-label': n,
             onclick: () => { current = n; paint(); }
           }, Icons.lucide(n, 17)));
         });
       });
     }
+
+    /* As setas andam entre as caixas e já escolhem, que é como um
+       grupo de rádio se comporta em qualquer lugar. Home e End vão
+       para o "auto" e para o último ícone. */
+    wrap.addEventListener('keydown', (ev) => {
+      const passos = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+      const opcoes = U.$$('.icon-opt', wrap);
+      const i = opcoes.indexOf(document.activeElement);
+      if (i < 0) return;
+      let alvo = null;
+      if (passos[ev.key]) alvo = opcoes[(i + passos[ev.key] + opcoes.length) % opcoes.length];
+      else if (ev.key === 'Home') alvo = opcoes[0];
+      else if (ev.key === 'End') alvo = opcoes[opcoes.length - 1];
+      if (!alvo) return;
+      ev.preventDefault();
+      alvo.click();
+      /* paint() reconstrói tudo: o foco tem de ir para a caixa
+         equivalente da árvore nova, senão ele cai no corpo da página
+         e a pessoa perde o lugar. */
+      const novas = U.$$('.icon-opt', wrap);
+      const destino = novas[opcoes.indexOf(alvo)];
+      if (destino) destino.focus();
+    });
+
     paint();
     wrap.getValue = () => current;
     wrap.refreshAuto = paint;

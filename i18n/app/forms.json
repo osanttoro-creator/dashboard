@@ -19,11 +19,25 @@
   "es": "Color {0}"
  },
  {
+  "pt": "Ícone da categoria",
+  "tipo": "exato",
+  "en": "Category icon",
+  "fr": "Icône de la catégorie",
+  "es": "Icono de la categoría"
+ },
+ {
   "pt": "Automático — deduz pelo nome da categoria",
   "tipo": "exato",
   "en": "Automatic — guessed from the category name",
   "fr": "Automatique — déduit du nom de la catégorie",
   "es": "Automático — se deduce del nombre de la categoría"
+ },
+ {
+  "pt": "Automático, deduzido pelo nome",
+  "tipo": "exato",
+  "en": "Automatic, worked out from the name",
+  "fr": "Automatique, déduit du nom",
+  "es": "Automático, deducido por el nombre"
  },
  {
   "pt": "Cadastre uma conta ou cartão antes de lançar.",

@@ -42,29 +42,58 @@
      isso não basta (daltonismo), a categoria nunca aparece só como
      cor: vem sempre com ícone e nome.
      ------------------------------------------------------------ */
-  const PALETTE = ['#2E6E7E', '#A85A32', '#3B6558', '#7B5A8E', '#1F6B4F', '#B07C3E'];
-  /* extras do seletor — mesma família, outros passos.
-     A segunda linha entrou em 16/09/2026: com dez contas, dez
-     cartões e vinte categorias, dezesseis cores obrigavam a
-     repetir, e duas coisas da mesma cor na mesma tela é o mesmo
-     que nenhuma cor. Os doze novos abrem matizes que faltavam —
-     vinho, jade, oliva, ferrugem, orquídea — sem clarear a
-     família: todos passam 4,5:1 com texto branco por cima. */
-  const PALETTE_EXTRA = ['#34557A', '#8A5A38', '#4C6B33', '#6E4E3D', '#0F2C3D', '#2D4F56',
-    '#547A6E', '#8A7A62', '#4E3A55', '#9A5F35',
-    '#7A3B45', '#1E5E52', '#23324F', '#8C4A2F', '#6B6B3A', '#32363A',
-    '#17656B', '#5A4432', '#8E4A6B', '#3E6E8E', '#7A5A2E', '#1F4A5C'];
+  /* ------------------------------------------------------------
+     AS CORES DAS CATEGORIAS, NA V2.1
+     ------------------------------------------------------------
+     Eram 28 cores soltas da identidade antiga — terracota, âmbar,
+     ferrugem, bronze — escolhidas quando o acento do app era ouro.
+     Com a V2.1 elas passaram a brigar com a tela em que vivem.
+
+     Agora são DOZE, e não vinte e oito, porque seletor de cor não é
+     paleta de pintor: com vinte e oito a pessoa escolhe por sorteio,
+     e duas categorias acabam com tons que ninguém distingue de
+     relance. Doze é o que ainda dá para percorrer com o olho.
+
+     São SEIS MATIZES, ancorados na marca — teal e mineral vêm da
+     paleta, tangerina vem da Coco — em DOIS TONS cada. Saturação e
+     claridade são as mesmas para todas: é isso que faz família. Uma
+     cor mais clara que as outras pularia da tela e viraria destaque
+     sem ninguém ter pedido.
+
+     Todas passam 4,5:1 com texto branco por cima; a mais fraca é o
+     teal, com 4,99:1. As cores antigas continuam funcionando em
+     dados já salvos — o seletor acrescenta a cor herdada quando ela
+     não está na lista, e ninguém perde a categoria que pintou.
+     ------------------------------------------------------------ */
+  const PALETTE = ['#3E7A6D', '#3E647A', '#3E467A', '#5A3E7A', '#7A503E', '#577A3E'];
+  /* O segundo tom de cada matiz. Em 16/09/2026 o seletor tinha ido a
+     28 cores para "não repetir" com vinte categorias — e o remédio
+     foi pior: ninguém distingue vinho de ferrugem num quadradinho de
+     20px, então a cor deixou de informar. Quem separa vinte
+     categorias é o ÍCONE, que tem forma; a cor agrupa. */
+  const PALETTE_EXTRA = ['#305A51', '#304A5A', '#30365A', '#43305A', '#5A3D30', '#415A30'];
   const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
 
   /* O nome existe para o leitor de tela e para a dica do seletor:
      "Cor #7A3B45" não é um rótulo, é um número de série. */
   const COLOR_NAMES = {
-    '#2E6E7E': 'Petróleo', '#A85A32': 'Terracota', '#3B6558': 'Oásis', '#7B5A8E': 'Ameixa',
-    '#1F6B4F': 'Pinho', '#B07C3E': 'Âmbar', '#34557A': 'Índigo', '#8A5A38': 'Couro',
+    /* ---- a família V2.1: seis matizes, dois tons ---- */
+    '#3E7A6D': 'Teal', '#305A51': 'Teal profundo',
+    '#3E647A': 'Mineral', '#304A5A': 'Mineral profundo',
+    '#3E467A': 'Índigo', '#30365A': 'Índigo profundo',
+    '#5A3E7A': 'Ameixa', '#43305A': 'Ameixa profundo',
+    '#7A503E': 'Tangerina', '#5A3D30': 'Tangerina profundo',
+    '#577A3E': 'Oliva', '#415A30': 'Oliva profundo',
+    /* ---- nomes das cores antigas, para o que já está salvo ----
+       Elas somem do seletor, mas não dos dados de ninguém: uma
+       categoria pintada de Terracota continua Terracota, com nome e
+       tudo, até a pessoa escolher outra. */
+    '#2E6E7E': 'Petróleo', '#A85A32': 'Terracota', '#3B6558': 'Oásis', '#7B5A8E': 'Ameixa antiga',
+    '#1F6B4F': 'Pinho', '#B07C3E': 'Âmbar', '#34557A': 'Índigo antigo', '#8A5A38': 'Couro',
     '#4C6B33': 'Musgo', '#6E4E3D': 'Terra', '#0F2C3D': 'Midnight', '#2D4F56': 'Maré',
     '#547A6E': 'Eucalipto', '#8A7A62': 'Areia', '#4E3A55': 'Uva', '#9A5F35': 'Cobre',
     '#7A3B45': 'Vinho', '#1E5E52': 'Jade', '#23324F': 'Azul-noite', '#8C4A2F': 'Ferrugem',
-    '#6B6B3A': 'Oliva', '#32363A': 'Carvão', '#17656B': 'Lagoa', '#5A4432': 'Café',
+    '#6B6B3A': 'Oliva antiga', '#32363A': 'Carvão', '#17656B': 'Lagoa', '#5A4432': 'Café',
     '#8E4A6B': 'Orquídea', '#3E6E8E': 'Céu profundo', '#7A5A2E': 'Bronze', '#1F4A5C': 'Abissal'
   };
 

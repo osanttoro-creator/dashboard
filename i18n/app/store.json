@@ -1,5 +1,68 @@
 [
  {
+  "pt": "Teal",
+  "tipo": "exato",
+  "en": "Teal",
+  "fr": "Sarcelle",
+  "es": "Teal"
+ },
+ {
+  "pt": "Teal profundo",
+  "tipo": "exato",
+  "en": "Deep teal",
+  "fr": "Sarcelle profond",
+  "es": "Teal profundo"
+ },
+ {
+  "pt": "Mineral",
+  "tipo": "exato",
+  "en": "Mineral",
+  "fr": "Minéral",
+  "es": "Mineral"
+ },
+ {
+  "pt": "Mineral profundo",
+  "tipo": "exato",
+  "en": "Deep mineral",
+  "fr": "Minéral profond",
+  "es": "Mineral profundo"
+ },
+ {
+  "pt": "Índigo profundo",
+  "tipo": "exato",
+  "en": "Deep indigo",
+  "fr": "Indigo profond",
+  "es": "Índigo profundo"
+ },
+ {
+  "pt": "Ameixa profundo",
+  "tipo": "exato",
+  "en": "Deep plum",
+  "fr": "Prune profond",
+  "es": "Ciruela profundo"
+ },
+ {
+  "pt": "Tangerina",
+  "tipo": "exato",
+  "en": "Tangerine",
+  "fr": "Mandarine",
+  "es": "Mandarina"
+ },
+ {
+  "pt": "Tangerina profundo",
+  "tipo": "exato",
+  "en": "Deep tangerine",
+  "fr": "Mandarine profond",
+  "es": "Mandarina profundo"
+ },
+ {
+  "pt": "Oliva profundo",
+  "tipo": "exato",
+  "en": "Deep olive",
+  "fr": "Olive profond",
+  "es": "Oliva profundo"
+ },
+ {
   "pt": "Petróleo",
   "tipo": "exato",
   "en": "Petrol blue",
@@ -7,11 +70,25 @@
   "es": "Azul petróleo"
  },
  {
+  "pt": "Ameixa antiga",
+  "tipo": "exato",
+  "en": "Old plum",
+  "fr": "Ancienne prune",
+  "es": "Ciruela antigua"
+ },
+ {
   "pt": "Âmbar",
   "tipo": "exato",
   "en": "Amber",
   "fr": "Ambre",
   "es": "Ámbar"
+ },
+ {
+  "pt": "Índigo antigo",
+  "tipo": "exato",
+  "en": "Old indigo",
+  "fr": "Ancien indigo",
+  "es": "Índigo antiguo"
  },
  {
   "pt": "Couro",
@@ -54,6 +131,13 @@
   "en": "Grape",
   "fr": "Raisin",
   "es": "Uva"
+ },
+ {
+  "pt": "Oliva antiga",
+  "tipo": "exato",
+  "en": "Old olive",
+  "fr": "Ancienne olive",
+  "es": "Oliva antigua"
  },
  {
   "pt": "Céu profundo",
