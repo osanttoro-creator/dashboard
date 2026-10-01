@@ -62,7 +62,7 @@
   <div class="env">
     <div class="texto">
       <h1>Privacy policy</h1>
-      <p class="atualizado">Last updated: 15 September 2026</p>
+      <p class="atualizado">Last updated: October 1, 2026</p>
 
       <div class="aviso">
         <p><strong>Draft pending legal review.</strong> The content describes how the product actually works, but it <strong>has not been reviewed by a lawyer</strong> and required details are missing.</p>
@@ -87,7 +87,7 @@
         <li><strong>Performing the contract</strong> (art. 7, V) — keeping your account, syncing your data between devices, enforcing plan limits and charging the subscription, when there is one.</li>
         <li><strong>Complying with legal obligations</strong> (art. 7, II) — meeting legal obligations applicable to the service.</li>
         <li><strong>Legitimate interest</strong> (art. 7, IX) — security, fraud prevention and fixing defects, always with the minimum data needed.</li>
-        <li><strong>Consent</strong> (art. 7, I) — only for sending data to UGLEZ, described in §5. You can choose not to use UGLEZ and the rest of the product works exactly the same.</li>
+        <li><strong>Consent</strong> (art. 7, I) — only for sending data to Coco (formerly UGLEZ), as described in §5. You can choose not to use Coco; the rest of the product continues to work.</li>
       </ul>
 
       <h2 id="onde">4. Where the data lives</h2>
@@ -95,11 +95,12 @@
       <p>The site is hosted on <strong>Hostinger</strong>.</p>
       <p><strong>International transfer:</strong> these services may keep servers outside Brazil. Before each transfer, OAZE must confirm the legal basis, the country, the importer and a valid mechanism under the LGPD and ANPD Resolution 19/2024. <em>To be confirmed: the Supabase project region and the countries used by each supplier.</em></p>
 
-      <h2 id="ia">5. UGLEZ and the use of artificial intelligence</h2>
-      <p>Much of what UGLEZ shows is <strong>calculated in your own browser</strong>. For that, <strong>no data leaves the device</strong>.</p>
-      <p>When you <em>talk</em> to UGLEZ, the question and a summary of your numbers go to a server of ours, which calls OpenAI's Responses API. The screen shows <strong>which categories of data go along before you send</strong>.</p>
-      <p>What is <strong>not</strong> sent: transaction descriptions, merchant names, account or card numbers, and your email.</p>
-      <p><strong>Your data is not used to train models.</strong> It is sent only to generate your answer. The call does not ask the API to store the generated response (<code>store: false</code>).</p>
+      <h2 id="ia">5. Coco and the use of artificial intelligence</h2>
+      <p>Much of what Coco shows is <strong>calculated in your own browser</strong>. For those calculations, <strong>no data leaves your device</strong>.</p>
+      <p>Coco requires separate consent, which you can revoke. In a conversation, your request, up to three recent exchanges, necessary financial summaries and preferences you confirmed pass through OAZE's server and OpenAI's API. What you type may include names and descriptions, so we cannot promise those details are never sent. OAZE does not add your email, internal identifiers or full account and card numbers to the financial context by default.</p>
+      <p>If you choose a <strong>photo or recording</strong>, we ask for specific confirmation before sending the file to OAZE's server and OpenAI for analysis or transcription. The file may contain visible or spoken personal data: check it before sending. We do not store the original in OAZE's database or file storage. The resulting text appears for your review and enters the conversation only if you choose to send it. No transaction or rule is saved merely because Coco interpreted the media.</p>
+      <p>Memory stores only preferences and rules you confirm. They remain in Supabase, separate from financial transactions. You can pause learning, delete a rule or revoke Coco's access. Revocation stops Coco from using memory; you can still delete saved rules in the Memory tab.</p>
+      <p><strong>Data sent through the API is not used to train models by default.</strong> Calls to the Responses API use <code>store: false</code>. OpenAI's processing and technical retention follow its data controls; this is separate from memory storage in OAZE.</p>
       <p>The provider access key stays on the server. <strong>It never reaches your browser</strong>, and the browser never talks directly to any AI provider.</p>
 
       <h2 id="compartilha">6. Who we share with</h2>
@@ -108,7 +109,7 @@
         <li><strong>Supabase:</strong> PostgreSQL database, authentication, Edge Functions and the backups available on the contracted plan.</li>
         <li><strong>Hostinger:</strong> hosting of the public files and the technical logs needed to deliver and secure the site.</li>
         <li><strong>Stripe:</strong> Checkout, subscription, invoice, cancellation, refund, dispute and fraud prevention.</li>
-        <li><strong>OpenAI:</strong> UGLEZ's answer, only when you choose to send a question, within the limits described in §5.</li>
+        <li><strong>OpenAI:</strong> conversations with Coco and, when you confirm the upload, photo analysis or audio transcription, within the limits in §5.</li>
         <li><strong>Google and Apple:</strong> authentication, only when the method is enabled and you choose it.</li>
         <li><strong>jsDelivr:</strong> technical fallback to load the public Supabase library if the local file is unavailable.</li>
       </ul>

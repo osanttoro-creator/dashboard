@@ -63,7 +63,7 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
     },
     from(name) {
       if (name === 'privacy_acceptances') return {
-        select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-09-15' } : null }) }) }) }),
+        select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-10-01' } : null }) }) }) }),
         insert: async (row) => { assert.equal(row.source, 'app_bloqueio'); accepted = true; return { error: null }; }
       };
       assert.equal(name, 'dados');

@@ -10,7 +10,7 @@
   'use strict';
 
   const Consentimento = {};
-  const VERSAO = '2026-09-15';
+  const VERSAO = '2026-10-01';
   const CHAVE_PENDENTE = 'oaze.privacidade.aceite-pendente';
   const CHAVE_LOCAL = 'oaze.privacidade.local.' + VERSAO;
   const FONTES = new Set([

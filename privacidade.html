@@ -62,7 +62,7 @@
   <div class="env">
     <div class="texto">
       <h1>Política de privacidade</h1>
-      <p class="atualizado">Última atualização: 15 de setembro de 2026</p>
+      <p class="atualizado">Última atualização: 1º de outubro de 2026</p>
 
       <div class="aviso">
         <p><strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o
@@ -111,7 +111,7 @@
         <li><strong>Legítimo interesse</strong> (art. 7º, IX) — segurança, prevenção a
         fraude e correção de defeitos, sempre com o mínimo de dado necessário.</li>
         <li><strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à
-        UGLEZ, descrito no §5. Você pode não usar a UGLEZ e o restante do produto continua
+        Coco (antiga UGLEZ), descrita no §5. Você pode não usar a Coco e o restante do produto continua
         funcionando igual.</li>
       </ul>
 
@@ -127,17 +127,29 @@
       Resolução CD/ANPD nº 19/2024. <em>A confirmar: região do projeto Supabase e países
       usados por cada fornecedor.</em></p>
 
-      <h2 id="ia">5. A UGLEZ e o uso de inteligência artificial</h2>
-      <p>Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio
+      <h2 id="ia">5. A Coco e o uso de inteligência artificial</h2>
+      <p>Boa parte do que a Coco mostra é <strong>cálculo feito no seu próprio
       navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.</p>
-      <p>Quando você <em>conversa</em> com a UGLEZ, a pergunta e um resumo dos seus números
-      vão para um servidor nosso, que chama a Responses API da OpenAI. A tela mostra
-      <strong>quais categorias de dado seguem junto antes de você enviar</strong>.</p>
-      <p>O que <strong>não</strong> é enviado: descrições de lançamento, nomes de
-      estabelecimento, números de conta ou cartão, e o seu e-mail.</p>
-      <p><strong>Seus dados não são usados para treinar modelos.</strong> Eles são enviados
-      apenas para gerar a sua resposta. A chamada não solicita que a API armazene a
-      resposta gerada (<code>store: false</code>).</p>
+      <p>A Coco exige consentimento separado, que você pode revogar. Na conversa, seu pedido,
+      até três trocas recentes, resumos financeiros necessários e preferências que você confirmou
+      passam pelo servidor OAZE e pela API da OpenAI. O que você escrever no pedido pode incluir
+      nomes e descrições; por isso, não prometemos que esses dados nunca serão enviados.
+      O OAZE não acrescenta por padrão seu e-mail, identificadores internos ou números completos
+      de conta e cartão ao contexto financeiro.</p>
+      <p>Se você escolher uma <strong>foto ou gravação</strong>, mostramos uma confirmação específica
+      antes de enviar o arquivo ao servidor OAZE e à OpenAI para leitura ou transcrição. O arquivo
+      pode conter dados pessoais visíveis ou falados: confira antes de enviar. Não guardamos o
+      original no banco ou no armazenamento do OAZE. O texto resultante aparece para sua revisão;
+      só vai à conversa se você decidir enviá-lo. Nenhum lançamento ou regra é salvo só porque
+      a Coco interpretou a mídia.</p>
+      <p>A memória guarda apenas preferências e regras que você confirmar. Elas ficam no Supabase,
+      separadas dos lançamentos financeiros. Você pode pausar o aprendizado, apagar uma regra ou
+      revogar o acesso da Coco. A revogação interrompe o uso da memória pela Coco; você ainda pode
+      apagar as regras guardadas na aba Memória.</p>
+      <p><strong>Os dados enviados pela API não são usados para treinar modelos por padrão.</strong>
+      As chamadas à Responses API usam <code>store: false</code>. O processamento e a retenção
+      técnica pela OpenAI seguem os controles de dados do fornecedor; não confundimos isso com
+      armazenamento de memória no OAZE.</p>
       <p>A chave de acesso ao provedor fica no servidor. <strong>Ela nunca chega ao seu
       navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.</p>
 
@@ -151,8 +163,8 @@
         técnicos necessários à entrega e à segurança do site.</li>
         <li><strong>Stripe:</strong> Checkout, assinatura, fatura, cancelamento, estorno,
         disputa e prevenção a fraude.</li>
-        <li><strong>OpenAI:</strong> resposta da UGLEZ, somente quando você escolhe enviar
-        uma pergunta, nos limites descritos no §5.</li>
+        <li><strong>OpenAI:</strong> conversa com a Coco e, quando você confirmar o envio,
+        leitura de foto ou transcrição de áudio, nos limites descritos no §5.</li>
         <li><strong>Google e Apple:</strong> autenticação, somente quando o método estiver
         habilitado e você o escolher.</li>
         <li><strong>jsDelivr:</strong> fallback técnico para carregar a biblioteca pública

@@ -102,10 +102,10 @@
   "es": "Política de privacidad"
  },
  {
-  "pt": "Última atualização: 15 de setembro de 2026",
-  "en": "Last updated: 15 September 2026",
-  "fr": "Dernière mise à jour : 15 septembre 2026",
-  "es": "Última actualización: 15 de septiembre de 2026"
+  "pt": "Última atualização: 1º de outubro de 2026",
+  "en": "Last updated: October 1, 2026",
+  "fr": "Dernière mise à jour : 1er octobre 2026",
+  "es": "Última actualización: 1 de octubre de 2026"
  },
  {
   "pt": "<strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o funcionamento real do produto, mas <strong>não foi revisado por advogado</strong> e faltam dados obrigatórios.",
@@ -210,10 +210,10 @@
   "es": "<strong>Interés legítimo</strong> (art. 7, IX) — seguridad, prevención del fraude y corrección de defectos, siempre con el mínimo de datos necesarios."
  },
  {
-  "pt": "<strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à UGLEZ, descrito no §5. Você pode não usar a UGLEZ e o restante do produto continua funcionando igual.",
-  "en": "<strong>Consent</strong> (art. 7, I) — only for sending data to UGLEZ, described in §5. You can choose not to use UGLEZ and the rest of the product works exactly the same.",
-  "fr": "<strong>Consentement</strong> (art. 7, I) — uniquement pour l'envoi de données à UGLEZ, décrit au §5. Vous pouvez ne pas utiliser UGLEZ ; le reste du produit fonctionne à l'identique.",
-  "es": "<strong>Consentimiento</strong> (art. 7, I) — solo para el envío de datos a UGLEZ, descrito en el §5. Puedes no usar UGLEZ y el resto del producto sigue funcionando igual."
+  "pt": "<strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à Coco (antiga UGLEZ), descrita no §5. Você pode não usar a Coco e o restante do produto continua funcionando igual.",
+  "en": "<strong>Consent</strong> (art. 7, I) — only for sending data to Coco (formerly UGLEZ), as described in §5. You can choose not to use Coco; the rest of the product continues to work.",
+  "fr": "<strong>Consentement</strong> (art. 7, I) — uniquement pour l'envoi de données à Coco (anciennement UGLEZ), comme décrit au §5. Vous pouvez ne pas utiliser Coco ; le reste du produit continue de fonctionner.",
+  "es": "<strong>Consentimiento</strong> (art. 7, I) — solo para enviar datos a Coco (antes UGLEZ), según el §5. Puedes no usar Coco; el resto del producto sigue funcionando."
  },
  {
   "pt": "4. Onde os dados ficam",
@@ -240,34 +240,40 @@
   "es": "<strong>Transferencia internacional:</strong> estos servicios pueden mantener servidores fuera de Brasil. Antes de cada transferencia, OAZE debe confirmar la hipótesis legal, el país, el importador y un mecanismo válido previsto en la LGPD y en la Resolución CD/ANPD n.º 19/2024. <em>A confirmar: región del proyecto Supabase y países usados por cada proveedor.</em>"
  },
  {
-  "pt": "5. A UGLEZ e o uso de inteligência artificial",
-  "en": "5. UGLEZ and the use of artificial intelligence",
-  "fr": "5. UGLEZ et l'usage de l'intelligence artificielle",
-  "es": "5. UGLEZ y el uso de inteligencia artificial"
+  "pt": "5. A Coco e o uso de inteligência artificial",
+  "en": "5. Coco and the use of artificial intelligence",
+  "fr": "5. Coco et l'utilisation de l'intelligence artificielle",
+  "es": "5. Coco y el uso de inteligencia artificial"
  },
  {
-  "pt": "Boa parte do que a UGLEZ mostra é <strong>cálculo feito no seu próprio navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.",
-  "en": "Much of what UGLEZ shows is <strong>calculated in your own browser</strong>. For that, <strong>no data leaves the device</strong>.",
-  "fr": "Une grande partie de ce que montre UGLEZ est <strong>calculée dans votre propre navigateur</strong>. Pour cela, <strong>aucune donnée ne quitte l'appareil</strong>.",
-  "es": "Buena parte de lo que muestra UGLEZ es <strong>cálculo hecho en tu propio navegador</strong>. Para eso, <strong>ningún dato sale del dispositivo</strong>."
+  "pt": "Boa parte do que a Coco mostra é <strong>cálculo feito no seu próprio navegador</strong>. Para isso, <strong>nenhum dado sai do aparelho</strong>.",
+  "en": "Much of what Coco shows is <strong>calculated in your own browser</strong>. For those calculations, <strong>no data leaves your device</strong>.",
+  "fr": "Une grande partie de ce que Coco affiche est <strong>calculée dans votre navigateur</strong>. Pour ces calculs, <strong>aucune donnée ne quitte votre appareil</strong>.",
+  "es": "Gran parte de lo que muestra Coco se <strong>calcula en tu navegador</strong>. Para esos cálculos, <strong>ningún dato sale de tu dispositivo</strong>."
  },
  {
-  "pt": "Quando você <em>conversa</em> com a UGLEZ, a pergunta e um resumo dos seus números vão para um servidor nosso, que chama a Responses API da OpenAI. A tela mostra <strong>quais categorias de dado seguem junto antes de você enviar</strong>.",
-  "en": "When you <em>talk</em> to UGLEZ, the question and a summary of your numbers go to a server of ours, which calls OpenAI's Responses API. The screen shows <strong>which categories of data go along before you send</strong>.",
-  "fr": "Quand vous <em>discutez</em> avec UGLEZ, la question et un résumé de vos chiffres sont envoyés à l'un de nos serveurs, qui appelle l'API Responses d'OpenAI. L'écran indique <strong>quelles catégories de données partent avec, avant l'envoi</strong>.",
-  "es": "Cuando <em>conversas</em> con UGLEZ, la pregunta y un resumen de tus números van a un servidor nuestro, que llama a la Responses API de OpenAI. La pantalla muestra <strong>qué categorías de datos van junto, antes de que envíes</strong>."
+  "pt": "A Coco exige consentimento separado, que você pode revogar. Na conversa, seu pedido, até três trocas recentes, resumos financeiros necessários e preferências que você confirmou passam pelo servidor OAZE e pela API da OpenAI. O que você escrever no pedido pode incluir nomes e descrições; por isso, não prometemos que esses dados nunca serão enviados. O OAZE não acrescenta por padrão seu e-mail, identificadores internos ou números completos de conta e cartão ao contexto financeiro.",
+  "en": "Coco requires separate consent, which you can revoke. In a conversation, your request, up to three recent exchanges, necessary financial summaries and preferences you confirmed pass through OAZE's server and OpenAI's API. What you type may include names and descriptions, so we cannot promise those details are never sent. OAZE does not add your email, internal identifiers or full account and card numbers to the financial context by default.",
+  "fr": "Coco nécessite un consentement distinct, que vous pouvez retirer. Dans une conversation, votre demande, jusqu'à trois échanges récents, les résumés financiers nécessaires et les préférences que vous avez confirmées passent par le serveur d'OAZE et l'API d'OpenAI. Votre texte peut contenir des noms et des descriptions ; nous ne pouvons donc pas promettre que ces éléments ne sont jamais envoyés. OAZE n'ajoute pas par défaut votre e-mail, des identifiants internes ni des numéros complets de compte ou de carte au contexte financier.",
+  "es": "Coco requiere un consentimiento separado, que puedes revocar. En una conversación, tu solicitud, hasta tres intercambios recientes, los resúmenes financieros necesarios y las preferencias que confirmaste pasan por el servidor de OAZE y la API de OpenAI. Lo que escribas puede incluir nombres y descripciones, por lo que no podemos prometer que esos datos nunca se envíen. OAZE no añade por defecto tu correo, identificadores internos ni números completos de cuenta o tarjeta al contexto financiero."
  },
  {
-  "pt": "O que <strong>não</strong> é enviado: descrições de lançamento, nomes de estabelecimento, números de conta ou cartão, e o seu e-mail.",
-  "en": "What is <strong>not</strong> sent: transaction descriptions, merchant names, account or card numbers, and your email.",
-  "fr": "Ce qui n'est <strong>pas</strong> envoyé : les descriptions d'opérations, les noms de commerçants, les numéros de compte ou de carte, et votre e-mail.",
-  "es": "Lo que <strong>no</strong> se envía: descripciones de movimientos, nombres de comercios, números de cuenta o tarjeta, y tu correo."
+  "pt": "Se você escolher uma <strong>foto ou gravação</strong>, mostramos uma confirmação específica antes de enviar o arquivo ao servidor OAZE e à OpenAI para leitura ou transcrição. O arquivo pode conter dados pessoais visíveis ou falados: confira antes de enviar. Não guardamos o original no banco ou no armazenamento do OAZE. O texto resultante aparece para sua revisão; só vai à conversa se você decidir enviá-lo. Nenhum lançamento ou regra é salvo só porque a Coco interpretou a mídia.",
+  "en": "If you choose a <strong>photo or recording</strong>, we ask for specific confirmation before sending the file to OAZE's server and OpenAI for analysis or transcription. The file may contain visible or spoken personal data: check it before sending. We do not store the original in OAZE's database or file storage. The resulting text appears for your review and enters the conversation only if you choose to send it. No transaction or rule is saved merely because Coco interpreted the media.",
+  "fr": "Si vous choisissez une <strong>photo ou un enregistrement</strong>, nous demandons une confirmation spécifique avant d'envoyer le fichier au serveur d'OAZE et à OpenAI pour analyse ou transcription. Le fichier peut contenir des données personnelles visibles ou prononcées : vérifiez-le avant l'envoi. Nous ne conservons pas l'original dans la base ni dans le stockage de fichiers d'OAZE. Le texte obtenu s'affiche pour vérification et n'entre dans la conversation que si vous décidez de l'envoyer. Aucune opération ni règle n'est enregistrée simplement parce que Coco a interprété le média.",
+  "es": "Si eliges una <strong>foto o grabación</strong>, pedimos una confirmación específica antes de enviar el archivo al servidor de OAZE y a OpenAI para su lectura o transcripción. El archivo puede contener datos personales visibles o hablados: revísalo antes de enviarlo. No guardamos el original en la base de datos ni en el almacenamiento de archivos de OAZE. El texto resultante aparece para que lo revises y solo entra en la conversación si decides enviarlo. Ningún movimiento ni regla se guarda solo porque Coco haya interpretado el archivo."
  },
  {
-  "pt": "<strong>Seus dados não são usados para treinar modelos.</strong> Eles são enviados apenas para gerar a sua resposta. A chamada não solicita que a API armazene a resposta gerada (<code>store: false</code>).",
-  "en": "<strong>Your data is not used to train models.</strong> It is sent only to generate your answer. The call does not ask the API to store the generated response (<code>store: false</code>).",
-  "fr": "<strong>Vos données ne servent pas à entraîner des modèles.</strong> Elles ne sont envoyées que pour générer votre réponse. L'appel ne demande pas à l'API de conserver la réponse générée (<code>store: false</code>).",
-  "es": "<strong>Tus datos no se usan para entrenar modelos.</strong> Se envían solo para generar tu respuesta. La llamada no solicita que la API almacene la respuesta generada (<code>store: false</code>)."
+  "pt": "A memória guarda apenas preferências e regras que você confirmar. Elas ficam no Supabase, separadas dos lançamentos financeiros. Você pode pausar o aprendizado, apagar uma regra ou revogar o acesso da Coco. A revogação interrompe o uso da memória pela Coco; você ainda pode apagar as regras guardadas na aba Memória.",
+  "en": "Memory stores only preferences and rules you confirm. They remain in Supabase, separate from financial transactions. You can pause learning, delete a rule or revoke Coco's access. Revocation stops Coco from using memory; you can still delete saved rules in the Memory tab.",
+  "fr": "La mémoire ne conserve que les préférences et règles que vous confirmez. Elles restent dans Supabase, séparées des opérations financières. Vous pouvez suspendre l'apprentissage, supprimer une règle ou retirer l'accès de Coco. Le retrait empêche Coco d'utiliser la mémoire ; vous pouvez encore supprimer les règles dans l'onglet Mémoire.",
+  "es": "La memoria guarda solo las preferencias y reglas que confirmes. Permanecen en Supabase, separadas de los movimientos financieros. Puedes pausar el aprendizaje, borrar una regla o revocar el acceso de Coco. La revocación impide que Coco use la memoria; aún puedes borrar las reglas guardadas en la pestaña Memoria."
+ },
+ {
+  "pt": "<strong>Os dados enviados pela API não são usados para treinar modelos por padrão.</strong> As chamadas à Responses API usam <code>store: false</code>. O processamento e a retenção técnica pela OpenAI seguem os controles de dados do fornecedor; não confundimos isso com armazenamento de memória no OAZE.",
+  "en": "<strong>Data sent through the API is not used to train models by default.</strong> Calls to the Responses API use <code>store: false</code>. OpenAI's processing and technical retention follow its data controls; this is separate from memory storage in OAZE.",
+  "fr": "<strong>Les données envoyées par l'API ne servent pas par défaut à entraîner les modèles.</strong> Les appels à l'API Responses utilisent <code>store: false</code>. Le traitement et la conservation technique par OpenAI suivent ses contrôles des données ; cela est distinct du stockage de la mémoire dans OAZE.",
+  "es": "<strong>Los datos enviados por la API no se usan para entrenar modelos de forma predeterminada.</strong> Las llamadas a la API Responses usan <code>store: false</code>. El tratamiento y la retención técnica por OpenAI siguen sus controles de datos; esto es distinto de la memoria almacenada en OAZE."
  },
  {
   "pt": "A chave de acesso ao provedor fica no servidor. <strong>Ela nunca chega ao seu navegador</strong>, e o navegador nunca fala direto com nenhum provedor de IA.",
@@ -306,10 +312,10 @@
   "es": "<strong>Stripe:</strong> Checkout, suscripción, factura, cancelación, devolución, disputa y prevención del fraude."
  },
  {
-  "pt": "<strong>OpenAI:</strong> resposta da UGLEZ, somente quando você escolhe enviar uma pergunta, nos limites descritos no §5.",
-  "en": "<strong>OpenAI:</strong> UGLEZ's answer, only when you choose to send a question, within the limits described in §5.",
-  "fr": "<strong>OpenAI :</strong> la réponse d'UGLEZ, uniquement lorsque vous choisissez d'envoyer une question, dans les limites décrites au §5.",
-  "es": "<strong>OpenAI:</strong> la respuesta de UGLEZ, solo cuando eliges enviar una pregunta, dentro de los límites descritos en el §5."
+  "pt": "<strong>OpenAI:</strong> conversa com a Coco e, quando você confirmar o envio, leitura de foto ou transcrição de áudio, nos limites descritos no §5.",
+  "en": "<strong>OpenAI:</strong> conversations with Coco and, when you confirm the upload, photo analysis or audio transcription, within the limits in §5.",
+  "fr": "<strong>OpenAI :</strong> conversations avec Coco et, lorsque vous confirmez l'envoi, analyse de photos ou transcription audio, dans les limites décrites au §5.",
+  "es": "<strong>OpenAI:</strong> conversaciones con Coco y, cuando confirmas el envío, lectura de fotos o transcripción de audio, dentro de los límites del §5."
  },
  {
   "pt": "<strong>Google e Apple:</strong> autenticação, somente quando o método estiver habilitado e você o escolher.",

@@ -30,7 +30,7 @@
 
   var A = {};
   var cliente = null;
-  var POLITICA_PRIVACIDADE_VERSAO = '2026-09-15';
+  var POLITICA_PRIVACIDADE_VERSAO = '2026-10-01';
   var CHAVE_ACEITE_PENDENTE = 'oaze.privacidade.aceite-pendente';
 
   A.POLITICA_PRIVACIDADE_VERSAO = POLITICA_PRIVACIDADE_VERSAO;

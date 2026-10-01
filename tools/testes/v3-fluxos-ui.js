@@ -17,13 +17,23 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
+      page.on('dialog', (dialog) => dialog.accept());
       await page.route('**/preview-v3/live-backend.js', (route) => route.fulfill({ contentType: 'text/javascript', body: `
+        let cocoSettings={consented_at:null,revoked_at:null,learning_paused:false};
+        let memories=[];
         window.V3Backend={
           start:async()=>{Store.loadRemoteMap({},'Teste');window.Sync={currentUser:()=>({uid:'teste'})};Limites.carregar=async()=>true;Limites.cabe=()=>true;Limites.pode=()=>true;AI.chamarFuncao=async()=>({texto:'Revise antes de salvar.',acao_proposta:{tipo:'expense',descricao:'Compra sugerida',valor:7,data:'2026-09-30',forma_pagamento:'account',origem:'Conta teste',categoria:'Teste personalizado',confirmado:true}});return true},
           mutate:async(change)=>{change();return Store.profile()},
           createProfile:async(name)=>Store.addProfile(name),
           user:()=>({id:'teste'}),subscription:async()=>({plan_id:'free',status:'free'}),
           saving:()=>false,client:()=>null,
+          cocoSettings:async()=>({...cocoSettings}),
+          cocoConsent:async(accepted)=>{cocoSettings={...cocoSettings,consented_at:accepted?new Date().toISOString():cocoSettings.consented_at,revoked_at:accepted?null:new Date().toISOString()};},
+          cocoPauseLearning:async(paused)=>{cocoSettings.learning_paused=paused;},
+          cocoMemories:async()=>memories.slice(),
+          cocoRemember:async(profileId,memory)=>{const row={...memory,id:'memory-'+(memories.length+1),created_at:new Date().toISOString()};memories.unshift(row);return row;},
+          cocoForget:async(id)=>{memories=memories.filter((m)=>m.id!==id);},
+          cocoReadMedia:async()=>({texto:'Gastei 7 reais no mercado',tipo:'foto',salvo:false}),
           withTimeout:(promise)=>promise
         };
       ` }));
@@ -98,6 +108,9 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.equal(await page.evaluate(() => Store.profile().accounts.length), 1);
       const beforeCoco = await page.evaluate(() => Store.profile().transactions.length);
       await page.locator('[data-action="coco"]:visible').first().click();
+      await page.locator('#v3-coco-consent-form').waitFor();
+      await page.locator('#v3-coco-consent-form [name="accept"]').check();
+      await page.locator('#v3-coco-consent-form [type="submit"]').click();
       await page.locator('[data-coco-tab="Conversa"]').click();
       await page.locator('#v3-chat-form [name="question"]').fill('Gastei sete reais');
       await page.locator('#v3-chat-form [type="submit"]').click();
@@ -107,6 +120,21 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.equal(await page.locator('#v3-form-tx [name="description"]').inputValue(), 'Compra sugerida');
       await page.locator('#v3-form-tx [type="submit"]').click();
       assert.equal(await page.evaluate(() => Store.profile().transactions.at(-1).source), 'uglez');
+      await page.locator('[data-action="coco"]:visible').first().click();
+      await page.locator('[data-coco-tab="Memória"]').click();
+      await page.locator('#v3-memory-form [name="label"]').fill('Uber');
+      await page.locator('#v3-memory-form [name="value"]').fill('Transporte');
+      await page.locator('#v3-memory-form [type="submit"]').click();
+      await page.locator('.v3-coco-memories').getByText('Uber').waitFor();
+      await page.locator('[data-action="pause-learning"]').click();
+      assert.match(await page.locator('[data-action="pause-learning"]').innerText(), /Retomar/);
+      await page.locator('[data-action="forget-memory"]').click();
+      assert.equal(await page.locator('[data-action="forget-memory"]').count(), 0);
+      await page.locator('[data-coco-tab="Conversa"]').click();
+      await page.locator('#v3-coco-file').setInputFiles({
+        name: 'recibo.png', mimeType: 'image/png', buffer: Buffer.alloc(120, 1)
+      });
+      assert.equal(await page.locator('#v3-chat-form [name="question"]').inputValue(), 'Gastei 7 reais no mercado');
       assert.deepEqual(errors, []);
       await page.close();
       console.log(`V3 UI ${width}px: conta, categoria, lançamento, cartão, fatura, espaço e Coco OK`);

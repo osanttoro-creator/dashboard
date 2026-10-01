@@ -54,14 +54,91 @@
     if (!response.ok || result.erro) throw new Error(result.mensagem || 'Pagamento indisponível agora. Nada foi cobrado.');
     return result;
   };
+  V3Backend.cocoSettings = async function () {
+    if (!client || !user) throw new Error('Entre na sua conta para usar a Coco.');
+    const { data, error } = await bounded(client.from('coco_settings')
+      .select('consented_at,revoked_at,learning_paused').eq('user_id', user.id).maybeSingle());
+    if (error) throw error;
+    return data || { consented_at: null, revoked_at: null, learning_paused: false };
+  };
+  V3Backend.cocoConsent = async function (accepted) {
+    if (!client || !user) throw new Error('Entre na sua conta para configurar a Coco.');
+    const now = new Date().toISOString();
+    const current = await V3Backend.cocoSettings();
+    const { error } = await bounded(client.from('coco_settings').upsert({
+      user_id: user.id,
+      consented_at: accepted ? now : current.consented_at,
+      revoked_at: accepted ? null : now,
+      learning_paused: accepted ? !!current.learning_paused : true,
+      updated_at: now
+    }, { onConflict: 'user_id' }));
+    if (error) throw error;
+  };
+  V3Backend.cocoPauseLearning = async function (paused) {
+    const settings = await V3Backend.cocoSettings();
+    if (!settings.consented_at || settings.revoked_at) throw new Error('Autorize a Coco antes de configurar a memória.');
+    const { error } = await bounded(client.from('coco_settings')
+      .update({ learning_paused: !!paused, updated_at: new Date().toISOString() }).eq('user_id', user.id));
+    if (error) throw error;
+  };
+  V3Backend.cocoMemories = async function (profileId) {
+    if (!client || !user) throw new Error('Entre na sua conta para consultar a memória.');
+    const { data, error } = await bounded(client.from('coco_memories')
+      .select('id,kind,label,value,source,created_at').eq('user_id', user.id)
+      .eq('profile_id', profileId).order('created_at', { ascending: false }).limit(50));
+    if (error) throw error;
+    return data || [];
+  };
+  V3Backend.cocoRemember = async function (profileId, memory) {
+    if (!client || !user) throw new Error('Entre na sua conta para salvar a memória.');
+    const settings = await V3Backend.cocoSettings();
+    if (!settings.consented_at || settings.revoked_at || settings.learning_paused) throw new Error('O aprendizado da Coco está desligado.');
+    const { data, error } = await bounded(client.from('coco_memories').insert({
+      user_id: user.id, profile_id: profileId,
+      kind: memory.kind, label: memory.label, value: memory.value,
+      source: 'confirmado_pelo_usuario'
+    }).select('id,kind,label,value,source,created_at').single());
+    if (error) throw error;
+    return data;
+  };
+  V3Backend.cocoForget = async function (id) {
+    if (!client || !user) throw new Error('Entre na sua conta para apagar a memória.');
+    const { error } = await bounded(client.from('coco_memories').delete()
+      .eq('id', id).eq('user_id', user.id));
+    if (error) throw error;
+  };
+  V3Backend.cocoReadMedia = async function (file, profileId) {
+    if (!client || !user) throw new Error('Entre na sua conta para enviar mídia.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token || !/^https:\/\//.test(base) || !publicKey) throw new Error('Sessão ou conexão indisponível.');
+    const body = new FormData();
+    body.append('file', file, file.name || 'captura');
+    body.append('profile_id', profileId);
+    body.append('media_consent', 'true');
+    const controller = new AbortController();
+    const timer = global.setTimeout(() => controller.abort(), 45000);
+    try {
+      const response = await fetch(base + '/functions/v1/oaze-coco-media', {
+        method: 'POST', signal: controller.signal,
+        headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token },
+        body
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.erro) throw new Error(result.mensagem || 'Não consegui ler o arquivo.');
+      return result;
+    } finally { global.clearTimeout(timer); }
+  };
   async function requirePrivacyAcceptance() {
     const { data, error } = await bounded(client.from('privacy_acceptances')
       .select('policy_version').eq('user_id', user.id)
-      .eq('policy_version', '2026-09-15').maybeSingle());
+      .eq('policy_version', '2026-10-01').maybeSingle());
     if (error) throw error;
     if (data) return;
     const view = document.getElementById('v3-view');
-    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">ANTES DE ENTRAR</span><h2>Seus dados, suas regras.</h2><p>Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.</p><p><a href="/privacidade" target="_blank" rel="noopener noreferrer">Política de privacidade</a> · <a href="/termos" target="_blank" rel="noopener noreferrer">Termos de uso</a></p><form id="v3-privacy-form"><label><input type="checkbox" name="accept" required> Li e aceito a Política de privacidade (versão 15/09/2026).</label><button type="submit" class="v3-primary">Aceitar e entrar</button><button type="button" class="v3-secondary" id="v3-privacy-decline">Não aceitar</button><p role="alert" id="v3-privacy-error" hidden></p></form></section>';
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">ANTES DE ENTRAR</span><h2>Seus dados, suas regras.</h2><p>Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.</p><p><a href="/privacidade" target="_blank" rel="noopener noreferrer">Política de privacidade</a> · <a href="/termos" target="_blank" rel="noopener noreferrer">Termos de uso</a></p><form id="v3-privacy-form"><label><input type="checkbox" name="accept" required> Li e aceito a Política de privacidade (versão 01/10/2026).</label><button type="submit" class="v3-primary">Aceitar e entrar</button><button type="button" class="v3-secondary" id="v3-privacy-decline">Não aceitar</button><p role="alert" id="v3-privacy-error" hidden></p></form></section>';
     await new Promise((resolve) => {
       document.getElementById('v3-privacy-decline').addEventListener('click', async () => {
         await client.auth.signOut().catch(() => {});
@@ -77,7 +154,7 @@
         try {
           const result = await bounded(client.from('privacy_acceptances').insert({
             user_id: user.id,
-            policy_version: '2026-09-15',
+            policy_version: '2026-10-01',
             accepted_at: new Date().toISOString(),
             source: 'app_bloqueio'
           }));

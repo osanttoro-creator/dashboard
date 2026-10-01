@@ -19,7 +19,9 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [] };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '' };
+  let recorder = null;
+  let microphone = null;
   let limitsPromise = Promise.resolve(demo);
   global.App = { get ym() { return state.ym; }, goTo: (page) => go(page === 'accounts' ? 'wallet' : page) };
 
@@ -338,7 +340,7 @@
   }
   function renderSettings() {
     const signed = !demo && global.V3Backend && V3Backend.user();
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><div class="v3-setting-row"><span>Consentimento<small>Somente os agregados necessários à conversa.</small></span><span class="v3-muted">${signed?'verificar':'sem sessão'}</span></div><div class="v3-setting-row"><span>Aprender com meus lançamentos<small>Memória ainda não implementada no backend.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Memória da Coco<small>Não armazenamos memória fictícia.</small></span><span class="v3-muted">—</span></div></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div>${demo?'':`<a class="v3-setting-row" href="/app?classic=1"><span>Ferramentas anteriores<small>Edição completa de recursos ainda em migração.</small></span><span class="v3-muted">abrir ›</span></a>`}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-action="coco" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Consentimento<small>Pedido, agregados e últimas trocas. Foto e áudio só com envio confirmado.</small></span><span class="v3-muted">${!signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›'}</span></button><button type="button" class="v3-setting-row" data-action="coco-memory" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Memória da Coco<small>Revise, pause ou esqueça regras confirmadas.</small></span><span class="v3-muted">abrir ›</span></button></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div>${demo?'':`<a class="v3-setting-row" href="/app?classic=1"><span>Ferramentas anteriores<small>Edição completa de recursos ainda em migração.</small></span><span class="v3-muted">abrir ›</span></a>`}</section></div></div>`;
   }
   function renderPlan() {
     const list = global.Planos ? Planos.LISTA : [];
@@ -379,10 +381,32 @@
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
     clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.hidden=true;},4500);
   }
-  function closeSheet() { $('#v3-overlay').hidden=true; $('#v3-sheet').innerHTML=''; document.body.style.overflow=''; }
+  function closeSheet() {
+    if (recorder?.state==='recording') { recorder.onstop=null;recorder.stop();microphone?.getTracks().forEach((track)=>track.stop());recorder=null;microphone=null; }
+    $('#v3-overlay').hidden=true; $('#v3-sheet').innerHTML=''; document.body.style.overflow='';
+  }
   function openSheet(html,label) { $('#v3-sheet').setAttribute('aria-label',label||'Painel'); $('#v3-sheet').innerHTML=html; $('#v3-overlay').hidden=false; document.body.style.overflow='hidden'; $('#v3-sheet').querySelector('button')?.focus(); }
   function sheetTop(title,sub,img) { return `<div class="v3-sheet-top">${img?`<img src="${img}" alt="">`:''}<span><h2>${esc(title)}</h2>${sub?`<small>${esc(sub)}</small>`:''}</span><button type="button" data-action="close" class="v3-sheet-close" aria-label="Fechar">×</button></div>`; }
+  function cocoAllowed() { return demo || !!(state.cocoSettings?.consented_at && !state.cocoSettings?.revoked_at); }
+  async function refreshCoco() {
+    if (demo || state.cocoLoading) return;
+    state.cocoLoading = true;
+    state.cocoError='';
+    try {
+      state.cocoSettings = await V3Backend.cocoSettings();
+      state.cocoMemories = await V3Backend.cocoMemories(profile().id);
+    } catch (error) { state.cocoSettings=null;state.cocoError=error.message || 'Não consegui carregar as configurações da Coco.'; }
+    finally { state.cocoLoading = false; if (!$('#v3-overlay').hidden) openCoco(); }
+  }
   function openCoco() {
+    if (!demo && !state.cocoSettings) {
+      openSheet(`${sheetTop('coco','preparando sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<p class="v3-muted">${state.cocoError?esc(state.cocoError):'Carregando consentimento e memória…'}</p>${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}`,'Coco');
+      return;
+    }
+    if (!cocoAllowed() && state.cocoTab!=='Memória') {
+      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. A Coco guarda apenas regras que você aprovar; pode esquecer ou pausar depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
+      return;
+    }
     let body='';
     if (state.cocoTab==='Agora') {
       if (demo) body=`<h2 style="margin:10px 0 20px">quatro coisas<br>esperando por você.</h2><div class="v3-suggestion"><span class="v3-label">FEITO POR MIM</span><p>Categorizei 12 lançamentos de setembro do jeito que você costuma fazer.</p><button class="v3-primary" type="button" data-action="demo-only">Tudo certo</button><button class="v3-secondary" type="button" data-action="demo-only">Revisar</button></div><div class="v3-suggestion"><span class="v3-label">PADRÃO VISTO 3 VEZES</span><p>Vi 3 cobranças parecidas da academia perto do dia 5. Quer transformar isso em recorrência?</p><button class="v3-primary" type="button" data-action="demo-only">Criar recorrência</button><button class="v3-secondary" type="button" data-action="demo-only">Agora não</button></div><div class="v3-suggestion"><span class="v3-label">PREVISÃO</span><p>A fatura do Nubank fecha em 2 dias. Outubro começa com R$ 955,30 de sobra.</p><button class="v3-primary" type="button" data-action="demo-only">Lembrar 3 dias antes</button></div>`;
@@ -391,9 +415,9 @@
         body=`<h2 style="margin:10px 0 20px">o que precisa<br>da sua atenção</h2>${pending?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTOS PENDENTES</span><p>${pending} ${pending===1?'lançamento aguarda':'lançamentos aguardam'} confirmação neste mês.</p><button class="v3-primary" type="button" data-go="transactions">Revisar</button></div>`:''}${rs.length?`<div class="v3-suggestion"><span class="v3-label">PRÓXIMOS 30 DIAS</span><p>${rs.length} ${rs.length===1?'compromisso registrado':'compromissos registrados'} para acompanhar.</p><button class="v3-primary" type="button" data-go="reminders">Ver lembretes</button></div>`:''}${!pending&&!rs.length?'<p class="v3-muted">Não há pendências registradas agora. A Coco não inventa alertas.</p>':''}`;
       }
     } else if (state.cocoTab==='Conversa') {
-      body=`<div class="v3-chat" id="v3-chat">${state.chat.length?state.chat.map((x,i)=>`<div class="v3-chat-message ${x.who==='user'?'user':''}"><p>${esc(x.text)}</p>${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}</div>`).join(''):'<p>Posso ler os totais do mês e ajudar a organizar suas próximas decisões.</p>'}</div><form class="v3-chat-form" id="v3-chat-form"><input name="question" maxlength="500" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><small>O servidor recebe agregados; confira qualquer proposta antes de confirmar.</small>`;
+      body=`<div class="v3-chat" id="v3-chat">${state.chat.length?state.chat.map((x,i)=>`<div class="v3-chat-message ${x.who==='user'?'user':''}"><p>${esc(x.text)}</p>${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button><small>Você poderá apagá-la na aba Memória.</small></div>`:''}</div>`).join(''):'<p>Posso ler os totais do mês e ajudar a organizar suas próximas decisões.</p>'}</div><form class="v3-chat-form" id="v3-chat-form"><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><div class="v3-coco-media"><button type="button" class="v3-secondary" data-action="record-audio">${recorder?.state==='recording'?'Parar gravação':'Gravar áudio'}</button><label class="v3-secondary">Enviar foto ou áudio<input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp,audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></label></div><small>O texto de áudio/foto aparece no campo para você revisar antes de enviar. Nada é salvo automaticamente.</small>`;
     } else {
-      body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">A memória editável do protótipo ainda não existe no backend. Não vou exibir lembranças inventadas nem guardar preferências sem um controle de exclusão.</p>`;
+      body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">Só regras que você confirmou. A memória não autoriza pagamentos nem altera lançamentos.</p>${cocoAllowed()?`<button type="button" class="v3-secondary" data-action="pause-learning">${state.cocoSettings?.learning_paused?'Retomar aprendizado':'Pausar aprendizado'}</button>`:'<p class="v3-muted">Acesso revogado; você ainda pode apagar estas regras.</p>'}<div class="v3-coco-memories">${state.cocoMemories.length?state.cocoMemories.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(m.kind.toUpperCase())} · CONFIRMADA</span><strong>${esc(m.label)}</strong><p>${esc(m.value)}</p><small>${esc(new Date(m.created_at).toLocaleDateString('pt-BR'))}</small><button type="button" class="v3-secondary" data-action="forget-memory" data-memory-id="${esc(m.id)}">Esquecer</button></div>`).join(''):'<p class="v3-muted">Nenhuma preferência confirmada ainda.</p>'}</div>${!cocoAllowed()||state.cocoSettings?.learning_paused?'':`<form id="v3-memory-form" class="v3-form"><label>TIPO<select name="kind"><option value="categoria">Categoria</option><option value="conta">Conta</option><option value="recorrencia">Recorrência</option><option value="preferencia">Preferência</option><option value="meta">Meta</option><option value="outro">Outro</option></select></label><label>NOME DA REGRA<input name="label" maxlength="100" required placeholder="Ex.: Uber"></label><label>COMO DEVO LEMBRAR<input name="value" maxlength="240" required placeholder="Ex.: Categorizar como Transporte"></label><button class="v3-primary" type="submit">Guardar regra</button></form>`}${cocoAllowed()?'<button type="button" class="v3-link" data-action="revoke-coco">Revogar acesso da Coco</button>':'<button type="button" class="v3-link" data-coco-tab="Conversa">Voltar ao consentimento</button>'}`;
     }
     openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-segment">${['Agora','Conversa','Memória'].map((x)=>`<button type="button" data-coco-tab="${x}" class="${state.cocoTab===x?'is-active':''}">${x}</button>`).join('')}</div>${body}`,'Coco');
   }
@@ -716,13 +740,70 @@
     const q=String(new FormData(form).get('question')||'').trim(); if (!q) return;
     if (demo) { toast('A conversa de demonstração não envia perguntas.'); return; }
     if (!global.Sync || !Sync.currentUser || !Sync.currentUser()) { toast('Entre na sua conta para conversar com a Coco.'); return; }
+    if (!cocoAllowed()) { toast('Autorize a Coco antes de conversar.'); return; }
+    state.mediaDraft='';
+    const previous=[];
+    for(let i=0;i<state.chat.length-1;i++) {
+      const question=state.chat[i],answer=state.chat[i+1];
+      if(question?.who==='user'&&answer?.who==='coco'&&answer.text) {
+        previous.push({pergunta:String(question.text).slice(0,500),resposta:String(answer.text).slice(0,600)});
+        i++;
+      }
+    }
     state.chat.push({who:'user',text:q}); openCoco();
     try {
-      const r=await AI.chamarFuncao(AI.corpoDaPergunta(q));
+      const body=AI.corpoDaPergunta(q);
+      body.conversa=previous.slice(-3);
+      body.profile_id=profile().id;
+      const r=await AI.chamarFuncao(body);
+      if (r.erro) throw new Error(r.mensagem || 'A Coco está indisponível agora.');
       const proposal=proposalForReview(r.acao_proposta);
-      state.chat.push({who:'coco',text:r.texto || r.mensagem || (proposal?'Preparei um lançamento para você revisar.':'Não consegui responder agora.'),proposal});
-    } catch (e) { console.error('V3/Coco:',e); state.chat.push({who:'coco',text:'A conversa está indisponível agora. Tente de novo.'}); }
+      const memory=r.memoria_proposta && ['categoria','conta','recorrencia','preferencia','meta','outro'].includes(r.memoria_proposta.kind)
+        ? {kind:r.memoria_proposta.kind,label:String(r.memoria_proposta.label||'').slice(0,100),value:String(r.memoria_proposta.value||'').slice(0,240)} : null;
+      state.chat.push({who:'coco',text:r.texto || (proposal?'Preparei um lançamento para você revisar.':memory?'Posso guardar esta preferência, se você confirmar.':'Não consegui responder agora.'),proposal,memory});
+    } catch (e) { console.error('V3/Coco:',e); state.chat.push({who:'coco',text:e.message || 'A conversa está indisponível agora. Tente de novo.'}); }
     openCoco();
+  }
+  async function saveCocoMemory(memory) {
+    if (demo || !cocoAllowed() || state.cocoSettings?.learning_paused) { toast('O aprendizado da Coco está pausado.'); return; }
+    const kind=String(memory.kind||''),label=String(memory.label||'').trim().slice(0,100),value=String(memory.value||'').trim().slice(0,240);
+    if (!['categoria','conta','recorrencia','preferencia','meta','outro'].includes(kind) || !label || !value || state.cocoMemories.length>=50) {
+      toast('Confira a regra ou apague uma memória antiga antes de continuar.'); return;
+    }
+    try { await V3Backend.cocoRemember(profile().id,{kind,label,value}); await refreshCoco(); toast('Regra guardada. Você pode esquecê-la quando quiser.'); return true; }
+    catch (error) { toast(error.message || 'Não consegui guardar a regra.'); return false; }
+  }
+  async function readCocoMedia(file) {
+    if (demo || !cocoAllowed() || !file) return;
+    const image=file.type.startsWith('image/');
+    const max=image?4_000_000:8_000_000;
+    if (file.size>max || file.size<100) { toast('Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.'); return; }
+    if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à OpenAI para leitura? O conteúdo pode incluir dados sensíveis. O arquivo não ficará guardado no OAZE. A leitura usa uma consulta do plano; enviar o texto revisado usa outra.`)) return;
+    toast('Lendo arquivo…');
+    try {
+      const result=await V3Backend.cocoReadMedia(file,profile().id);
+      state.cocoTab='Conversa';state.mediaDraft=String(result.texto||'').slice(0,500);
+      if (!$('#v3-overlay').hidden) { openCoco();$('#v3-chat-form [name="question"]')?.focus(); }
+      toast('Revise o texto antes de enviar à Coco.');
+    } catch (error) { toast(error.message || 'Não consegui ler o arquivo.'); }
+  }
+  async function toggleCocoRecording() {
+    if (recorder?.state==='recording') { recorder.stop(); return; }
+    if (!navigator.mediaDevices?.getUserMedia || !global.MediaRecorder) { toast('Gravação indisponível neste navegador. Envie um arquivo de áudio.'); return; }
+    try {
+      microphone=await navigator.mediaDevices.getUserMedia({audio:true});
+      const mime=['audio/webm','audio/mp4'].find((type)=>MediaRecorder.isTypeSupported(type));
+      recorder=new MediaRecorder(microphone,mime?{mimeType:mime}:undefined);
+      const chunks=[];
+      recorder.ondataavailable=(event)=>{if(event.data.size)chunks.push(event.data);};
+      recorder.onstop=()=>{
+        microphone?.getTracks().forEach((track)=>track.stop()); microphone=null;
+        const type=(recorder.mimeType||mime||'audio/webm').split(';')[0];
+        const file=new File(chunks,'coco-audio.'+(type==='audio/mp4'?'m4a':'webm'),{type});
+        recorder=null;openCoco();readCocoMedia(file);
+      };
+      recorder.start();openCoco();toast('Gravando. Toque em “Parar gravação” quando terminar.');
+    } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
     const target=ev.target.closest('[data-go],[data-action],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
@@ -736,7 +817,7 @@
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);closeSheet();render();}return; }
+    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.mediaDraft='';closeSheet();render();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     if (target.dataset.calMonth) { state.ym=U.addMonths(state.ym,Number(target.dataset.calMonth));state.calDay=1;render();return; }
@@ -764,6 +845,32 @@
       composer(proposal.tipo==='income'?'Receita':'Despesa',proposal.data,null,proposal);
       return;
     }
+    if (action==='remember-proposal') {
+      const row=state.chat[Number(target.dataset.proposalIndex)];
+      if (!row?.memory) { toast('Esta proposta não está mais disponível.'); return; }
+      const candidate=row.memory;
+      saveCocoMemory(candidate).then((saved)=>{if(saved){row.memory=null;openCoco();}});
+      return;
+    }
+    if (action==='forget-memory') {
+      const item=state.cocoMemories.find((m)=>m.id===target.dataset.memoryId);
+      if (!item || !global.confirm(`Esquecer a regra “${item.label}”?`)) return;
+      V3Backend.cocoForget(item.id).then(()=>refreshCoco()).catch((e)=>toast(e.message||'Não consegui apagar a regra.'));
+      return;
+    }
+    if (action==='pause-learning') {
+      V3Backend.cocoPauseLearning(!state.cocoSettings?.learning_paused)
+        .then(()=>refreshCoco()).catch((e)=>toast(e.message||'Não consegui mudar a pausa.'));
+      return;
+    }
+    if (action==='revoke-coco') {
+      if (!global.confirm('Revogar o acesso da Coco? As memórias ficam guardadas para você apagar, mas não serão usadas enquanto o acesso estiver revogado.')) return;
+      V3Backend.cocoConsent(false).then(()=>{state.chat=[];state.mediaDraft='';refreshCoco();})
+        .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
+      return;
+    }
+    if (action==='record-audio'){toggleCocoRecording();return;}
+    if (action==='retry-coco'){refreshCoco();return;}
     if (action==='close'){closeSheet();return;}
     if (action==='back'){go('more');return;}
     if (action==='new'){const k={despesa:'Despesa',receita:'Receita',transferir:'Transferir',aporte:'Aporte'}[target.dataset.kind]||'Despesa';composer(k,target.dataset.date);return;}
@@ -852,7 +959,8 @@
       V3Backend.mutate(()=>Store.investments.remove(id)).then(()=>{closeSheet();render();toast('Aporte excluído.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
       return;
     }
-    if (action==='coco'){state.cocoTab='Agora';openCoco();return;}
+    if (action==='coco'){state.cocoTab='Agora';openCoco();refreshCoco();return;}
+    if (action==='coco-memory'){state.cocoTab='Memória';openCoco();refreshCoco();return;}
     if (action==='period'){periodSheet();return;}
     if (action==='profiles'){profilesSheet();return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
@@ -862,7 +970,7 @@
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-invoice','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-invoice','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form'].includes(formId))return;
     ev.preventDefault();
     if(formId==='v3-form-tx')saveTransaction(ev.target);
     if(formId==='v3-form-account')saveAccount(ev.target);
@@ -875,6 +983,8 @@
     if(formId==='v3-form-budget')saveBudget(ev.target);
     if(formId==='v3-form-period'){state.ym=String(new FormData(ev.target).get('ym'));closeSheet();render();}
     if(formId==='v3-chat-form')askCoco(ev.target);
+    if(formId==='v3-coco-consent-form')V3Backend.cocoConsent(true).then(()=>refreshCoco()).catch((e)=>toast(e.message||'Não consegui registrar o consentimento.'));
+    if(formId==='v3-memory-form')saveCocoMemory(Object.fromEntries(new FormData(ev.target)));
   }
   async function boot() {
     if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button> ou abra as ferramentas anteriores em <a href="/app?classic=1">/app?classic=1</a>.</p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
@@ -884,6 +994,7 @@
     const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
+    document.addEventListener('change',(event)=>{if(event.target?.id==='v3-coco-file'){const file=event.target.files?.[0];if(file)readCocoMedia(file);}});
     document.addEventListener('beforeinput',(ev)=>{
       const input=ev.target;
       if(!(input instanceof HTMLInputElement)||input.dataset.money!=='true')return;
