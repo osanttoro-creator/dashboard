@@ -154,6 +154,18 @@ VALOR antigo de volta.
 
 As três são servidas localmente de `/assets/fonts`, com `font-display: swap`.
 
+> **Onze páginas ainda não migraram.** A home (`index.html` → `v3.css`) e o
+> app (`app.html` → `style.css`) usam o sistema acima. As páginas secundárias
+> — preços, entrar, cadastro, recursos, suporte, termos, privacidade, 404,
+> confirmar e-mail, recuperar e redefinir senha — carregam `site.css`, que
+> ainda está em **Newsreader + IBM Plex Sans**, a tipografia da V1. Quem
+> clica em "Preços" a partir da home troca de tipo no meio do caminho.
+>
+> Isto está escrito aqui, e não corrigido na tabela acima, de propósito: o
+> verificador de design deve continuar apontando essas páginas como fora do
+> sistema até que elas migrem. Declarar as fontes antigas como válidas
+> silenciaria o alarme e esconderia a dívida.
+
 ### Hierarquia
 
 - **Display** (Unbounded 500, `clamp(34px, 6vw, 72px)`, tracking `-0.05em`): a
