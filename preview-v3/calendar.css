@@ -30,3 +30,36 @@
 .v3-cal-event .v3-mono{font-size:12px}
 @media(max-width:800px){.v3-cal-layout{grid-template-columns:1fr}.v3-cal-day,.v3-cal-empty{min-height:57px}.v3-cal-summary>span{padding:12px}.v3-cal-summary strong{font-size:13px}}
 @media(max-width:420px){.v3-cal-summary{gap:5px}.v3-cal-summary>span{padding:10px 8px}.v3-cal-day,.v3-cal-empty{min-height:48px;padding:7px}.v3-cal-weekdays,.v3-cal-days{gap:2px}.v3-cal-event{grid-template-columns:8px minmax(0,1fr)}.v3-cal-event .v3-mono{grid-column:2}}
+
+/* =============================================================
+   TRÊS ALCANCES
+   -------------------------------------------------------------
+   Cada vista tem a forma da pergunta que responde: o ano é uma
+   coluna de meses comparáveis, o mês é a grade, a semana é uma
+   lista por dia.
+   ============================================================= */
+.v3-cal-vistas{margin:0 0 14px;max-width:330px}
+
+/* ---- ano ---- */
+.v3-cal-meses{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:9px;margin-top:14px}
+.v3-cal-mes{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--line);border-radius:16px;background:rgba(240,229,207,.04);color:var(--milk);text-align:left}
+.v3-cal-mes:hover{background:rgba(240,229,207,.08)}
+.v3-cal-mes.is-active{border-color:var(--teal);background:rgba(95,169,155,.12)}
+.v3-cal-mes.is-today .v3-cal-mes-nome{color:var(--teal)}
+.v3-cal-mes-nome{font:400 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.v3-cal-mes-barras{display:grid;gap:3px;min-width:0}
+.v3-cal-mes-barras i{display:block;height:5px;min-width:2px;border-radius:3px}
+.v3-cal-mes-barras i.in{background:var(--teal)}
+.v3-cal-mes-barras i.out{background:rgba(240,229,207,.28)}
+.v3-cal-mes>strong{font-size:12px;white-space:nowrap}
+
+/* ---- semana ---- */
+.v3-cal-dias{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px;margin-top:14px}
+.v3-cal-dia{display:grid;align-content:start;gap:7px;padding:13px;border:1px solid var(--line);border-radius:17px;background:rgba(240,229,207,.035)}
+.v3-cal-dia.is-today{border-color:var(--teal)}
+.v3-cal-dia.is-active{background:rgba(95,169,155,.09)}
+.v3-cal-dia header{display:grid;gap:2px;margin-bottom:2px}
+.v3-cal-dia header .v3-label{margin:0}
+.v3-cal-dia .v3-cal-event{padding:7px 0;border-top:1px solid var(--line)}
+.v3-cal-dia .v3-link{justify-self:start;margin-top:3px;font-size:12px}
+@media(max-width:540px){.v3-cal-meses,.v3-cal-dias{grid-template-columns:1fr}}

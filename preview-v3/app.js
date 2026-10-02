@@ -27,7 +27,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let recorder = null;
   let microphone = null;
   let limitsPromise = Promise.resolve(demo);
@@ -421,38 +421,168 @@
       .map((invoice)=>({title:`Fatura ${invoice.card.name}`,date:invoice.dueDate,amount:invoice.restante,sub:'Cartão de crédito'})));
     return [...entries,...bills].sort((a,b)=>a.date.localeCompare(b.date));
   }
-  function calendarEvents() {
-    if (!demo) return Calc.calendarEvents(state.ym, profile());
+  function eventosDoMes(ym) {
+    const alvo = ym || state.ym;
+    if (!demo) return Calc.calendarEvents(alvo, profile());
     const grouped = {};
-    sample.transactions.filter((t) => ymOf(t.date) === state.ym).forEach((t) => {
+    sample.transactions.filter((t) => ymOf(t.date) === alvo).forEach((t) => {
       const day = Number(t.date.slice(8));
       (grouped[day] ||= []).push({ tipo: t.kind === 'income' ? 'in' : 'out', titulo: t.description, valor: t.amount, confirmado: t.confirmed, categoria: categoryName(t.categoryId) });
     });
-    sample.reminders.filter((r) => ymOf(r.date) === state.ym && r.title.startsWith('Fatura')).forEach((r) => {
+    sample.reminders.filter((r) => ymOf(r.date) === alvo && r.title.startsWith('Fatura')).forEach((r) => {
       const day = Number(r.date.slice(8));
       (grouped[day] ||= []).push({ tipo: 'due', titulo: r.title, valor: r.amount, confirmado: false, categoria: 'Cartão de crédito' });
     });
     return grouped;
   }
-  function renderCalendar() {
+  /* =============================================================
+     O CALENDÁRIO EM TRÊS ALCANCES
+     -------------------------------------------------------------
+     Só havia o mês. Mas as três perguntas que se faz a um calendário
+     financeiro têm alcances diferentes:
+
+       ano     — em que meses eu sobro e em que meses eu afundo?
+       mês     — em que dias as coisas caem?
+       semana  — o que vem pela frente nos próximos dias?
+
+     Responder as três com uma grade de 30 quadradinhos obrigava a
+     fazer a conta de cabeça. Cada alcance ganha a forma que serve à
+     sua pergunta: o ano é uma coluna de meses comparáveis, o mês é a
+     grade, a semana é uma lista por dia.
+     ============================================================= */
+  const CAL_VISTAS = [['year', 'Ano'], ['month', 'Mês'], ['week', 'Semana']];
+
+  function calVista() {
+    return CAL_VISTAS.some(([v]) => v === state.calView) ? state.calView : 'month';
+  }
+  function calSeletor() {
+    return `<div class="v3-segment v3-cal-vistas" role="group" aria-label="Alcance do calendário">${CAL_VISTAS.map(([v, rotulo]) =>
+      `<button type="button" data-cal-view="${v}" aria-pressed="${calVista() === v}" class="${calVista() === v ? 'is-active' : ''}">${rotulo}</button>`
+    ).join('')}</div>`;
+  }
+  /* O dia escolhido, preso ao mês: trocar de mês não pode deixar um
+     "31" apontando para um fevereiro. */
+  function calDiaEscolhido(ym) {
+    const alvo = ym || state.ym;
+    const [y, m] = alvo.split('-').map(Number);
+    const dias = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    const hoje = U.todayISO();
+    return Math.max(1, Math.min(dias, Number(state.calDay) || (ymOf(hoje) === alvo ? Number(hoje.slice(8)) : 1)));
+  }
+  function calIso(ym, dia) { return `${ym}-${String(dia).padStart(2, '0')}`; }
+
+  function calEventoLinha(e) {
+    return `<div class="v3-cal-event"><span class="v3-cal-event-kind ${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></span>`
+      + `<span><strong>${esc(e.titulo)}</strong><small>${esc(e.categoria || (e.tipo === 'due' ? 'Vencimento' : 'Lançamento'))} · ${e.confirmado ? 'confirmado' : 'previsto'}</small></span>`
+      + `<strong class="v3-mono v3-sensitive">${e.tipo === 'in' ? '+' : '−'} ${money(e.valor)}</strong></div>`;
+  }
+
+  /* ---------------- ano ---------------- */
+
+  function calendarioAno() {
+    const ano = state.ym.slice(0, 4);
+    const meses = Array.from({ length: 12 }, (_, i) => `${ano}-${String(i + 1).padStart(2, '0')}`);
+    const linhas = meses.map((ym) => {
+      let t = { income: 0, expense: 0, balance: 0 };
+      if (demo) {
+        const doMes = sample.transactions.filter((x) => ymOf(x.date) === ym);
+        t.income = doMes.filter((x) => x.kind === 'income').reduce((n, x) => n + x.amount, 0);
+        t.expense = doMes.filter((x) => x.kind === 'expense').reduce((n, x) => n + x.amount, 0);
+        t.balance = U.round2(t.income - t.expense);
+      } else {
+        try { t = Calc.monthTotals(ym); } catch (e) { /* mês sem dados */ }
+      }
+      return { ym, ...t };
+    });
+    /* A barra é comparável entre meses: a escala é o maior movimento
+       do ano, não o de cada mês. Sem isso, um mês de R$ 50 e outro de
+       R$ 5.000 desenhariam a mesma barra. */
+    const teto = Math.max(1, ...linhas.map((l) => Math.max(l.income, l.expense)));
+    const hoje = U.todayYM();
+    const corpo = linhas.map((l) => {
+      const nome = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'][+l.ym.slice(5) - 1];
+      const vazio = !l.income && !l.expense;
+      return `<button type="button" class="v3-cal-mes${l.ym === state.ym ? ' is-active' : ''}${l.ym === hoje ? ' is-today' : ''}" data-cal-goto="${l.ym}" aria-pressed="${l.ym === state.ym}" aria-label="${esc(niceMonth(l.ym))}, sobra ${money(l.balance)}">`
+        + `<span class="v3-cal-mes-nome">${nome}</span>`
+        + `<span class="v3-cal-mes-barras" aria-hidden="true"><i class="in" style="width:${pct(100 * l.income / teto)}%"></i><i class="out" style="width:${pct(100 * l.expense / teto)}%"></i></span>`
+        + `<strong class="v3-mono v3-sensitive ${l.balance < 0 ? 'v3-negative' : 'v3-positive'}">${vazio ? '—' : money(l.balance)}</strong></button>`;
+    }).join('');
+    const totalAno = linhas.reduce((n, l) => n + l.balance, 0);
+    return `<section class="v3-panel v3-cal-ano" aria-label="Meses de ${esc(ano)}">`
+      + `<div class="v3-row"><h2>${esc(ano)}</h2><strong class="v3-mono v3-sensitive ${totalAno < 0 ? 'v3-negative' : 'v3-positive'}">${money(totalAno)}</strong></div>`
+      + `<p class="v3-muted">Entradas e saídas de cada mês, na mesma escala. Toque num mês para abrir os dias.</p>`
+      + `<div class="v3-cal-meses">${corpo}</div></section>`;
+  }
+
+  /* ---------------- semana ---------------- */
+
+  function calendarioSemana() {
+    const base = calIso(state.ym, calDiaEscolhido());
+    /* A semana começa na segunda, como a grade do mês. */
+    const d = U.parseISO(base);
+    const recuo = (d.getDay() + 6) % 7;
+    const inicio = U.addDaysISO(base, -recuo);
+    const dias = Array.from({ length: 7 }, (_, i) => U.addDaysISO(inicio, i));
+    /* A semana atravessa a virada do mês: os eventos vêm de cada mês
+       tocado, e não só do mês em exibição. */
+    const porMes = {};
+    dias.forEach((iso) => { const ym = ymOf(iso); if (!porMes[ym]) porMes[ym] = eventosDoMes(ym); });
+    const hoje = U.todayISO();
+    const nomes = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo'];
+    let entrou = 0, saiu = 0;
+    const corpo = dias.map((iso, i) => {
+      const linhas = (porMes[ymOf(iso)][Number(iso.slice(8))] || []);
+      linhas.forEach((e) => {
+        if (e.tipo === 'due' || !e.confirmado) return;
+        if (e.tipo === 'in') entrou += Number(e.valor || 0); else saiu += Number(e.valor || 0);
+      });
+      return `<section class="v3-cal-dia${iso === hoje ? ' is-today' : ''}${iso === base ? ' is-active' : ''}">`
+        + `<header><span class="v3-label">${nomes[i]}</span><strong>${esc(shortDate(iso))}</strong></header>`
+        + (linhas.length ? linhas.map(calEventoLinha).join('') : '<p class="v3-muted">Nada neste dia.</p>')
+        + `<button type="button" class="v3-link" data-action="new" data-date="${iso}">+ lançar</button></section>`;
+    }).join('');
+    return `<section class="v3-panel v3-cal-semana" aria-label="Semana de ${esc(shortDate(inicio))}">`
+      + `<div class="v3-row"><div><span class="v3-label">SEMANA</span><h2>${esc(shortDate(inicio))} a ${esc(shortDate(dias[6]))}</h2></div>`
+      + `<div class="v3-cal-nav"><button type="button" data-cal-days="-7" aria-label="Semana anterior">‹</button><button type="button" data-cal-today>Hoje</button><button type="button" data-cal-days="7" aria-label="Próxima semana">›</button></div></div>`
+      + `<div class="v3-cal-summary"><span><small>Recebido</small><strong class="v3-positive v3-sensitive">${money(entrou)}</strong></span><span><small>Pago</small><strong class="v3-negative v3-sensitive">${money(saiu)}</strong></span></div>`
+      + `<div class="v3-cal-dias">${corpo}</div></section>`;
+  }
+
+  /* ---------------- mês ---------------- */
+
+  function calendarioMes() {
     const [year, month] = state.ym.split('-').map(Number);
     const days = new Date(Date.UTC(year, month, 0)).getUTCDate();
     const offset = (new Date(Date.UTC(year, month - 1, 1)).getUTCDay() + 6) % 7;
     const today = U.todayISO();
-    const day = Math.max(1, Math.min(days, Number(state.calDay) || (ymOf(today) === state.ym ? Number(today.slice(8)) : 1)));
-    const events = calendarEvents(), selected = events[day] || [];
-    const entries = Object.values(events).flat().filter((e) => e.tipo !== 'due');
-    const incoming = entries.filter((e) => e.tipo === 'in' && e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0);
-    const outgoing = entries.filter((e) => e.tipo === 'out' && e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0);
-    const pending = entries.filter((e) => !e.confirmado).length;
+    const day = calDiaEscolhido();
+    const events = eventosDoMes(state.ym), selected = events[day] || [];
     const cells = Array.from({ length: Math.ceil((offset + days) / 7) * 7 }, (_, index) => {
       const n = index - offset + 1;
       if (n < 1 || n > days) return '<span class="v3-cal-empty" aria-hidden="true"></span>';
-      const iso = `${state.ym}-${String(n).padStart(2, '0')}`;
+      const iso = calIso(state.ym, n);
       const rows = events[n] || [];
       return `<button type="button" class="v3-cal-day${n === day ? ' is-active' : ''}${iso === today ? ' is-today' : ''}" data-cal-day="${n}" aria-label="${n} de ${esc(niceMonth(state.ym))}, ${rows.length} evento(s)" aria-pressed="${n === day}"><span>${n}</span><span class="v3-cal-marks" aria-hidden="true">${rows.slice(0, 3).map((e) => `<i class="${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></i>`).join('')}</span></button>`;
     }).join('');
-    return `<div class="v3-calendar"><div class="v3-row v3-cal-heading"><div><span class="v3-label">AGENDA FINANCEIRA</span><h2>${esc(niceMonth(state.ym))}</h2></div><div class="v3-cal-nav"><button type="button" data-cal-month="-1" aria-label="Mês anterior">‹</button><button type="button" data-cal-today>Hoje</button><button type="button" data-cal-month="1" aria-label="Próximo mês">›</button></div></div><div class="v3-cal-summary"><span><small>Recebido</small><strong class="v3-positive v3-sensitive">${money(incoming)}</strong></span><span><small>Pago</small><strong class="v3-negative v3-sensitive">${money(outgoing)}</strong></span><span><small>Pendente</small><strong>${pending} ${pending === 1 ? 'lançamento' : 'lançamentos'}</strong></span></div><div class="v3-grid v3-cal-layout"><section class="v3-panel v3-cal-grid" aria-label="Dias de ${esc(niceMonth(state.ym))}"><div class="v3-cal-weekdays">${['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map((d) => `<span>${d}</span>`).join('')}</div><div class="v3-cal-days">${cells}</div></section><section class="v3-panel v3-cal-detail"><span class="v3-label">DIA ${String(day).padStart(2, '0')}</span><h2>${esc(shortDate(`${state.ym}-${String(day).padStart(2, '0')}`))}</h2>${selected.length ? selected.map((e) => `<div class="v3-cal-event"><span class="v3-cal-event-kind ${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></span><span><strong>${esc(e.titulo)}</strong><small>${esc(e.categoria || (e.tipo === 'due' ? 'Vencimento' : 'Lançamento'))} · ${e.confirmado ? 'confirmado' : 'previsto'}</small></span><strong class="v3-mono v3-sensitive">${e.tipo === 'in' ? '+' : '−'} ${money(e.valor)}</strong></div>`).join('') : '<p class="v3-muted">Nada registrado neste dia.</p>'}<button type="button" class="v3-secondary" data-action="new" data-date="${state.ym}-${String(day).padStart(2, '0')}">Novo lançamento neste dia</button></section></div></div>`;
+    return `<div class="v3-grid v3-cal-layout"><section class="v3-panel v3-cal-grid" aria-label="Dias de ${esc(niceMonth(state.ym))}"><div class="v3-cal-weekdays">${['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((d) => `<span>${d}</span>`).join('')}</div><div class="v3-cal-days">${cells}</div></section>`
+      + `<section class="v3-panel v3-cal-detail"><span class="v3-label">DIA ${String(day).padStart(2, '0')}</span><h2>${esc(shortDate(calIso(state.ym, day)))}</h2>`
+      + (selected.length ? selected.map(calEventoLinha).join('') : '<p class="v3-muted">Nada registrado neste dia.</p>')
+      + `<button type="button" class="v3-secondary" data-action="new" data-date="${calIso(state.ym, day)}">Novo lançamento neste dia</button></section></div>`;
+  }
+
+  function renderCalendar() {
+    const vista = calVista();
+    const entries = Object.values(eventosDoMes(state.ym)).flat().filter((e) => e.tipo !== 'due');
+    const incoming = entries.filter((e) => e.tipo === 'in' && e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0);
+    const outgoing = entries.filter((e) => e.tipo === 'out' && e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0);
+    const pending = entries.filter((e) => !e.confirmado).length;
+    const cabeca = `<div class="v3-row v3-cal-heading"><div><span class="v3-label">AGENDA FINANCEIRA</span><h2>${esc(vista === 'year' ? state.ym.slice(0, 4) : niceMonth(state.ym))}</h2></div>`
+      + `<div class="v3-cal-nav"><button type="button" data-cal-month="-1" aria-label="${vista === 'year' ? 'Ano anterior' : 'Mês anterior'}" data-cal-step="${vista === 'year' ? 12 : 1}">‹</button><button type="button" data-cal-today>Hoje</button><button type="button" data-cal-month="1" aria-label="${vista === 'year' ? 'Próximo ano' : 'Próximo mês'}" data-cal-step="${vista === 'year' ? 12 : 1}">›</button></div></div>`;
+    const resumo = vista === 'month'
+      ? `<div class="v3-cal-summary"><span><small>Recebido</small><strong class="v3-positive v3-sensitive">${money(incoming)}</strong></span><span><small>Pago</small><strong class="v3-negative v3-sensitive">${money(outgoing)}</strong></span><span><small>Pendente</small><strong>${pending} ${pending === 1 ? 'lançamento' : 'lançamentos'}</strong></span></div>`
+      : '';
+    const corpo = vista === 'year' ? calendarioAno() : vista === 'week' ? calendarioSemana() : calendarioMes();
+    return `<div class="v3-calendar">${cabeca}${calSeletor()}${resumo}${corpo}</div>`;
   }
   function renderReminders() {
     const rs = reminders();
@@ -1074,7 +1204,7 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
@@ -1092,7 +1222,14 @@
     if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';closeSheet();render();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
-    if (target.dataset.calMonth) { state.ym=U.addMonths(state.ym,Number(target.dataset.calMonth));state.calDay=1;render();return; }
+    /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
+       está na tela. */
+    if (target.dataset.calMonth) { const passo=Number(target.dataset.calStep||1);state.ym=U.addMonths(state.ym,Number(target.dataset.calMonth)*passo);state.calDay=1;render();return; }
+    if (target.dataset.calView) { state.calView=target.dataset.calView;render();return; }
+    /* Tocar num mês do ano abre os dias dele: é a pergunta seguinte. */
+    if (target.dataset.calGoto) { state.ym=target.dataset.calGoto;state.calDay=1;state.calView='month';render();return; }
+    /* A semana anda sete dias, e pode atravessar a virada do mês. */
+    if (target.dataset.calDays) { const base=`${state.ym}-${String(calDiaEscolhido()).padStart(2,'0')}`;const novo=U.addDaysISO(base,Number(target.dataset.calDays));state.ym=ymOf(novo);state.calDay=Number(novo.slice(8));render();return; }
     if (target.hasAttribute('data-cal-today')) { state.ym=U.todayYM();state.calDay=Number(U.todayISO().slice(8));render();return; }
     if (target.dataset.investment && !target.dataset.action) { investmentForm(target.dataset.investment); return; }
     if (target.dataset.transaction && !target.dataset.action) { composer(null, null, target.dataset.transaction); return; }

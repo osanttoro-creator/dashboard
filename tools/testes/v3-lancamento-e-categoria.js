@@ -62,4 +62,27 @@ assert.match(app, /function corPadraoDeCategoria/, 'categoria nova nasce numa co
 assert.match(css, /\.v3-color-fam/);
 assert.match(css, /\.v3-icon-opt/);
 
-console.log('V3: três estados, meio de pagamento e seletores de ícone e cor protegidos.');
+/* ---- o calendário em três alcances ---- */
+/* Cada vista responde uma pergunta diferente: em que meses eu sobro
+   (ano), em que dias as coisas caem (mês), o que vem pela frente
+   (semana). Com só a grade do mês, as outras duas viravam conta de
+   cabeça. */
+const calCss = read('preview-v3/calendar.css');
+assert.match(app, /const CAL_VISTAS = \[\['year', 'Ano'\], \['month', 'Mês'\], \['week', 'Semana'\]\]/);
+assert.match(app, /function calendarioAno\(\)/);
+assert.match(app, /function calendarioSemana\(\)/);
+assert.match(app, /function calendarioMes\(\)/);
+assert.match(app, /data-cal-view/);
+assert.match(app, /data-cal-goto/, 'tocar num mês do ano abre os dias dele');
+assert.match(app, /data-cal-days/, 'a semana anda sete dias');
+/* A semana atravessa a virada do mês: buscar eventos só do mês em
+   exibição perderia metade dela. */
+assert.match(app, /function eventosDoMes\(ym\)/);
+assert.match(app, /if \(!porMes\[ym\]\) porMes\[ym\] = eventosDoMes\(ym\)/);
+/* A barra do ano é comparável entre meses, não normalizada por mês. */
+assert.match(app, /const teto = Math\.max\(1, \.\.\.linhas\.map/);
+assert.match(app, /Number\(target\.dataset\.calStep\|\|1\)/, 'no ano a seta anda doze meses');
+assert.match(calCss, /\.v3-cal-meses/);
+assert.match(calCss, /\.v3-cal-dias/);
+
+console.log('V3: três estados, meio de pagamento, seletores e as três vistas do calendário protegidos.');
