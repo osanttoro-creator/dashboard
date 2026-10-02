@@ -188,12 +188,12 @@
     let passo = 1;
     function medir() {
       const r = nos[0].getBoundingClientRect();
-      /* Passo = cartão + um vão. Maior que o cartão, e não menor: o
-         vizinho encosta na borda do palco em vez de montar em cima
-         do do meio. Medido, e não escrito duas vezes — o CSS usa o
-         mesmo número que o arrasto usa para converter pixels de dedo
-         em cartões andados. */
-      passo = Math.max(1, r.width + 14);
+      /* O cartão vizinho deve espiar sempre uma faixa discreta, seja
+         no celular ou no tablet. Só usar a largura do cartão deixava
+         quase nada à vista no telefone e um grande corte no tablet. */
+      const larguraPalco = palco.clientWidth || r.width;
+      const espiar = Math.min(32, Math.max(16, larguraPalco * 0.06));
+      passo = Math.max(1, r.width + 14, (larguraPalco + r.width) / 2 - espiar);
       raiz.style.setProperty('--carta-salto', passo + 'px');
       /* A altura do palco também é medida: o cartão tem proporção
          fixa sobre uma largura em porcentagem, então só ele sabe
