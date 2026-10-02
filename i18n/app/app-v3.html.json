@@ -1,0 +1,68 @@
+[
+  {
+    "pt": "<!doctype html>",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Painel privado do OAZE para organizar contas, cartões, calendário e investimentos em uma conta protegida.",
+    "tipo": "exato",
+    "en": "OAZE’s private panel to organise accounts, cards, calendar and investments in a protected account.",
+    "fr": "Le panneau privé d’OAZE pour organiser comptes, cartes, calendrier et investissements dans un compte protégé.",
+    "es": "El panel privado de OAZE para organizar cuentas, tarjetas, calendario e inversiones en una cuenta protegida."
+  },
+  {
+    "pt": "OAZE — seu espaço financeiro",
+    "tipo": "exato",
+    "en": "OAZE — your financial space",
+    "fr": "OAZE — votre espace financier",
+    "es": "OAZE — tu espacio financiero"
+  },
+  {
+    "pt": "início",
+    "tipo": "exato",
+    "en": "home",
+    "fr": "accueil",
+    "es": "inicio"
+  },
+  {
+    "pt": "Mês exibido",
+    "tipo": "exato",
+    "en": "Month shown",
+    "fr": "Mois affiché",
+    "es": "Mes mostrado"
+  },
+  {
+    "pt": "set 2026",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Lembretes",
+    "tipo": "exato",
+    "en": "Reminders",
+    "fr": "Rappels",
+    "es": "Recordatorios"
+  },
+  {
+    "pt": "Conectando sua conta com segurança…",
+    "tipo": "exato",
+    "en": "Connecting your account securely…",
+    "fr": "Connexion sécurisée à votre compte…",
+    "es": "Conectando tu cuenta de forma segura…"
+  },
+  {
+    "pt": "Navegação no celular",
+    "tipo": "exato",
+    "en": "Mobile navigation",
+    "fr": "Navigation sur mobile",
+    "es": "Navegación en el móvil"
+  },
+  {
+    "pt": "Painel do OAZE",
+    "tipo": "exato",
+    "en": "OAZE panel",
+    "fr": "Tableau de bord OAZE",
+    "es": "Panel de OAZE"
+  }
+]

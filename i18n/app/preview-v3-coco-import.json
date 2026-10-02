@@ -1,0 +1,154 @@
+[
+  {
+    "pt": "Não encontrei movimentos seguros para revisar neste arquivo.",
+    "tipo": "exato",
+    "en": "I found no entries safe to review in this file.",
+    "fr": "Je n’ai trouvé aucune opération sûre à vérifier dans ce fichier.",
+    "es": "No encontré movimientos seguros para revisar en este archivo."
+  },
+  {
+    "pt": "Há movimentos idênticos no arquivo. Confira cada repetição antes de salvar.",
+    "tipo": "exato",
+    "en": "There are identical entries in the file. Check each repetition before saving.",
+    "fr": "Il y a des opérations identiques dans le fichier. Vérifiez chaque répétition avant d’enregistrer.",
+    "es": "Hay movimientos idénticos en el archivo. Revisa cada repetición antes de guardar."
+  },
+  {
+    "pt": "A sequência de saldos não confere. Revise o arquivo antes de registrar qualquer movimento.",
+    "tipo": "exato",
+    "en": "The balance sequence doesn’t add up. Check the file before recording any entry.",
+    "fr": "La séquence des soldes ne concorde pas. Vérifiez le fichier avant d’enregistrer la moindre opération.",
+    "es": "La secuencia de saldos no cuadra. Revisa el archivo antes de registrar ningún movimiento."
+  },
+  {
+    "pt": "CSV com aspas incompletas.",
+    "tipo": "exato",
+    "en": "CSV with unclosed quotes.",
+    "fr": "CSV avec des guillemets non fermés.",
+    "es": "CSV con comillas sin cerrar."
+  },
+  {
+    "pt": "Layout CSV não reconhecido. Nenhum lançamento foi importado.",
+    "tipo": "exato",
+    "en": "CSV layout not recognised. No entry was imported.",
+    "fr": "Format CSV non reconnu. Aucune écriture importée.",
+    "es": "Formato CSV no reconocido. No se importó ningún movimiento."
+  },
+  {
+    "pt": "Colunas financeiras incompletas neste CSV.",
+    "tipo": "exato",
+    "en": "Incomplete financial columns in this CSV.",
+    "fr": "Colonnes financières incomplètes dans ce CSV.",
+    "es": "Columnas financieras incompletas en este CSV."
+  },
+  {
+    "pt": "CSV com valor ou sinal ambíguo. Nenhum lançamento foi importado.",
+    "tipo": "exato",
+    "en": "CSV with an ambiguous amount or sign. No entry was imported.",
+    "fr": "CSV avec un montant ou un signe ambigu. Aucune écriture importée.",
+    "es": "CSV con importe o signo ambiguo. No se importó ningún movimiento."
+  },
+  {
+    "pt": "Linha de lançamento incompleta no CSV.",
+    "tipo": "exato",
+    "en": "Incomplete entry row in the CSV.",
+    "fr": "Ligne d’écriture incomplète dans le CSV.",
+    "es": "Fila de movimiento incompleta en el CSV."
+  },
+  {
+    "pt": "CSV bancário",
+    "tipo": "exato",
+    "en": "bank CSV",
+    "fr": "CSV bancaire",
+    "es": "CSV bancario"
+  },
+  {
+    "pt": "Data ou valor inválido no extrato PDF.",
+    "tipo": "exato",
+    "en": "Invalid date or amount in the PDF statement.",
+    "fr": "Date ou montant invalide dans le relevé PDF.",
+    "es": "Fecha o importe no válido en el extracto PDF."
+  },
+  {
+    "pt": "saldo do dia",
+    "tipo": "exato",
+    "en": "balance for the day",
+    "fr": "solde du jour",
+    "es": "saldo del día"
+  },
+  {
+    "pt": "Movimento incompleto no PDF.",
+    "tipo": "exato",
+    "en": "Incomplete entry in the PDF.",
+    "fr": "Opération incomplète dans le PDF.",
+    "es": "Movimiento incompleto en el PDF."
+  },
+  {
+    "pt": "Layout do extrato PDF não reconhecido.",
+    "tipo": "exato",
+    "en": "PDF statement layout not recognised.",
+    "fr": "Mise en page du relevé PDF non reconnue.",
+    "es": "Formato del extracto PDF no reconocido."
+  },
+  {
+    "pt": "PDF bancário com saldos diários",
+    "tipo": "exato",
+    "en": "bank PDF with daily balances",
+    "fr": "PDF bancaire avec soldes quotidiens",
+    "es": "PDF bancario con saldos diarios"
+  },
+  {
+    "pt": "Linha de extrato incompleta. Nenhum lançamento foi importado.",
+    "tipo": "exato",
+    "en": "Incomplete statement row. No entry was imported.",
+    "fr": "Ligne de relevé incomplète. Aucune écriture importée.",
+    "es": "Fila de extracto incompleta. No se importó ningún movimiento."
+  },
+  {
+    "pt": "PDF bancário em colunas",
+    "tipo": "exato",
+    "en": "bank PDF in columns",
+    "fr": "PDF bancaire en colonnes",
+    "es": "PDF bancario en columnas"
+  },
+  {
+    "pt": "PDF longo demais para leitura segura.",
+    "tipo": "exato",
+    "en": "PDF too long to read safely.",
+    "fr": "PDF trop long pour une lecture sûre.",
+    "es": "PDF demasiado largo para leerlo con seguridad."
+  },
+  {
+    "pt": "Este PDF não tem um layout de extrato reconhecido. Nada foi importado.",
+    "tipo": "exato",
+    "en": "This PDF doesn’t have a recognised statement layout. Nothing was imported.",
+    "fr": "Ce PDF n’a pas un format de relevé reconnu. Rien n’a été importé.",
+    "es": "Este PDF no tiene un formato de extracto reconocido. No se importó nada."
+  },
+  {
+    "pt": "Arquivo vazio ou maior que 10 MB.",
+    "tipo": "exato",
+    "en": "Empty file, or larger than 10 MB.",
+    "fr": "Fichier vide ou supérieur à 10 Mo.",
+    "es": "Archivo vacío o mayor de 10 MB."
+  },
+  {
+    "pt": "Use um extrato PDF ou CSV.",
+    "tipo": "exato",
+    "en": "Use a PDF or CSV statement.",
+    "fr": "Utilisez un relevé PDF ou CSV.",
+    "es": "Usa un extracto PDF o CSV."
+  },
+  {
+    "pt": "%PDF-",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "O arquivo não é um PDF válido.",
+    "tipo": "exato",
+    "en": "The file isn’t a valid PDF.",
+    "fr": "Le fichier n’est pas un PDF valide.",
+    "es": "El archivo no es un PDF válido."
+  }
+]

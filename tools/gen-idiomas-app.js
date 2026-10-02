@@ -68,6 +68,12 @@ function arquivosDoApp() {
   for (const f of fs.readdirSync(path.join(js, 'pages')).sort()) {
     if (f.endsWith('.js')) lista.push('assets/js/pages/' + f);
   }
+  /* A V3 é o que /app serve: o que ela escreve precisa falar os
+     quatro idiomas igual ao resto. */
+  lista.push('app-v3.html');
+  for (const f of fs.readdirSync(path.join(RAIZ, 'preview-v3')).sort()) {
+    if (f.endsWith('.js')) lista.push('preview-v3/' + f);
+  }
   return lista;
 }
 
