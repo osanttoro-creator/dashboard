@@ -103,7 +103,13 @@
    procura, sem disputar atenção com o que ainda vale dinheiro. */
 .v3-tx.is-cancelada{opacity:.5}
 .v3-tx.is-cancelada .v3-tx-open,.v3-tx.is-cancelada .v3-mono{text-decoration:line-through}
-.v3-status.is-cancel{border-color:rgba(240,229,207,.3);background:transparent;font-size:12px}
+/* O botão tinha uma cor só, a tinta escura do estado PREENCHIDO:
+   funcionava quando o não-pago era um círculo vazio, e sumiu no
+   instante em que ele passou a ter um ✗ dentro. Cada estado pinta o
+   que precisa para ser lido sobre o próprio fundo. */
+.v3-status{color:var(--teal)}
+.v3-status.is-done{background:var(--teal);color:var(--night)}
+.v3-status.is-cancel{border-color:rgba(240,229,207,.32);background:transparent;color:var(--milk);font-size:12px}
 
 /* =============================================================
    ÍCONE E COR DA CATEGORIA
@@ -155,3 +161,11 @@
 .v3-import-row>strong{white-space:nowrap;font-size:13px}
 .v3-import-row button{grid-column:1/-1;justify-self:start}
 .v3-import-warning{padding:10px 12px;border-radius:12px;background:rgba(214,160,88,.14);color:#f0d2a3}
+
+/* Entrada e saída em listas próprias, cada uma com o seu subtotal. */
+.v3-tx-grupo{margin-bottom:14px}
+.v3-tx-grupo-head{align-items:baseline;margin-bottom:11px}
+.v3-tx-grupo-head h2{font-size:19px;text-transform:lowercase}
+.v3-tx-grupo-head>span{display:flex;align-items:baseline;gap:9px}
+.v3-tx-grupo-head small{color:var(--muted)}
+@media(max-width:900px){.v3-tx-grupo{margin-bottom:22px}.v3-tx-grupo-head{margin-bottom:8px}}

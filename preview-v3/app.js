@@ -368,12 +368,54 @@
   function renderTransactions() {
     const rows = currentTransactions({ comCancelados: true }).filter((t) => state.filter === 'Todos' || (state.filter === 'Crédito' ? !!t.cardId : state.filter === 'Débito' ? !t.cardId : state.filter === 'Cartões' ? !!t.cardId : (t.methodLabel || '').toUpperCase().includes('PIX'))).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
-    const cells = rows.map((x) => {
+    const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
       const method = x.methodLabel || (x.cardId ? 'CARTÃO' : x.kind === 'transfer' ? 'TRANSFERÊNCIA' : 'CONTA');
       return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><span>${esc(categoryName(x.categoryId))}<small class="v3-mobile-only">${esc(shortDate(x.date))} · ${esc(method)}</small></span><span class="v3-mono">${esc(method)}</span><span class="v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="${x.cancelado ? 'Cancelado — tocar para voltar a pago' : x.confirmed ? 'Pago — tocar para marcar como não pago' : 'Não pago — tocar para cancelar'}" title="${x.cancelado ? 'Cancelado' : x.confirmed ? 'Pago' : 'Não pago'}">${x.cancelado ? '🚫' : x.confirmed ? '✓' : '✗'}</button></div>`;
+    };
+
+    /* =============================================================
+       ENTRADA E SAÍDA NÃO SE MISTURAM
+       -------------------------------------------------------------
+       Era uma tabela só, ordenada por data, com o que entrou e o que
+       saiu intercalados — e a única pista de qual era qual era o
+       sinal antes do valor, do lado direito. Para saber onde o
+       dinheiro foi, a pessoa tinha de ler linha por linha filtrando
+       com o olho.
+
+       São duas listas agora, cada uma com o seu subtotal. O que
+       entra e o que sai são perguntas diferentes e raramente se olha
+       as duas ao mesmo tempo. Transferência ganha a terceira lista, e
+       só aparece quando existe: ela não é gasto nem ganho — é o mesmo
+       dinheiro mudando de lugar.
+
+       O cancelado continua visível, riscado, dentro da lista a que
+       pertence: some de todo total, não some de vista.
+       ============================================================= */
+    const grupos = [
+      { chave: 'income', titulo: 'entrou', vazio: 'Nenhuma receita neste filtro.', classe: 'v3-positive', sinal: '▲' },
+      { chave: 'expense', titulo: 'saiu', vazio: 'Nenhuma despesa neste filtro.', classe: 'v3-negative', sinal: '▼' },
+      { chave: 'transfer', titulo: 'transferências', vazio: '', classe: '', sinal: '' }
+    ];
+    const cabecalhoTabela = '<div class="v3-table-header"><span>CARTÃO</span><span>DATA</span><span>DESCRIÇÃO</span><span>CATEGORIA</span><span>COMO FOI PAGO</span><span>VALOR</span><span></span></div>';
+    const listas = grupos.map((g) => {
+      const doGrupo = rows.filter((x) => x.kind === g.chave);
+      /* Transferência só existe na tela quando existe no mês. */
+      if (g.chave === 'transfer' && !doGrupo.length) return '';
+      /* O subtotal conta só o que vale: cancelado fora, previsto fora. */
+      const soma = doGrupo.filter((x) => x.confirmed && !x.cancelado).reduce((n, x) => n + Number(x.amount || 0), 0);
+      const previsto = doGrupo.filter((x) => !x.confirmed && !x.cancelado).length;
+      return `<section class="v3-panel v3-table v3-tx-grupo" aria-label="${esc(g.titulo)}">`
+        + `<div class="v3-row v3-tx-grupo-head"><h2>${esc(g.titulo)}</h2><span>`
+        + (g.sinal ? `<strong class="v3-mono ${g.classe} v3-sensitive">${g.sinal} ${money(soma)}</strong>` : `<strong class="v3-mono v3-sensitive">${money(soma)}</strong>`)
+        + (previsto ? `<small>${previsto} previsto${previsto > 1 ? 's' : ''}</small>` : '')
+        + `</span></div>`
+        + cabecalhoTabela
+        + (doGrupo.length ? doGrupo.map(linha).join('') : `<p class="v3-muted" style="padding:16px 0">${esc(g.vazio)}</p>`)
+        + `</section>`;
     }).join('');
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para confirmar.'}</p><section class="v3-panel v3-table"><div class="v3-table-header"><span>CARTÃO</span><span>DATA</span><span>DESCRIÇÃO</span><span>CATEGORIA</span><span>COMO FOI PAGO</span><span>VALOR</span><span></span></div>${cells || '<p class="v3-muted" style="padding:20px 0">Nenhum lançamento neste filtro.</p>'}</section></div>`;
+
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para percorrer pago, não pago e cancelado.'}</p>${listas}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen && state.selected ? selectedItem() : null;
