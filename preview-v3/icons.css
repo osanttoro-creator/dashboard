@@ -6,6 +6,9 @@
 .v3-fi-transactions::before{content:'\f1c4'}
 .v3-fi-wallet::before{content:'\fedc'}
 .v3-fi-investments::before{content:'\f3a5'}
+/* Análises divide o glifo de investimentos: as duas telas falam de
+   uma linha que sobe ao longo do tempo. */
+.v3-fi-reports::before{content:'\f3a5'}
 .v3-fi-categories::before{content:'\f390'}
 .v3-fi-goals::before{content:'\f309'}
 .v3-fi-calendar::before{content:'\f339'}

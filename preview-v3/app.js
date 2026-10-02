@@ -5,11 +5,11 @@
   const $ = (s) => document.querySelector(s);
   // A prévia continua isolada; somente app-v3.html habilita a conta real.
   const demo = document.documentElement.dataset.oazeMode !== 'live';
-  const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'calendar', 'reminders', 'settings', 'plan'];
-  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', calendar: 'calendário', reminders: 'lembretes', settings: 'configurações', plan: 'plano', more: 'mais' };
-  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'reminders', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'investments', '/app/uglez': 'home' };
+  const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'calendar', 'reminders', 'reports', 'settings', 'plan'];
+  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', calendar: 'calendário', reminders: 'lembretes', reports: 'análises', settings: 'configurações', plan: 'plano', more: 'mais' };
+  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'reminders', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'reports', '/app/uglez': 'home' };
   const classicPaths = { transactions: '/app/financeiro', wallet: '/app/carteira', investments: '/app/investimentos', categories: '/app/categorias', goals: '/app/metas', reminders: '/app/recorrencias', settings: '/app/configuracoes', plan: '/app/planos' };
-  const uiIcons = new Set(['home','transactions','wallet','investments','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
+  const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
   const cocoMediaIcon = (name) => {
     const paths = {
@@ -137,7 +137,7 @@
   function selectedItem() { return walletItems().find((x) => x.data.id === state.selected) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${icon(page)}<span>${esc(names[page])}</span></button>`; }
   function renderNav() {
-    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','goals','calendar','reminders','settings','plan'].map(navButton).join('');
+    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','reports','categories','goals','calendar','reminders','settings','plan'].map(navButton).join('');
     $('#v3-mobile-nav').innerHTML = ['home','transactions'].map((p) => `<button type="button" data-go="${p}" class="${state.page === p ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('') + '<button type="button" data-action="new" class="v3-bottom-plus" aria-label="Novo lançamento">+</button>' + ['wallet','more'].map((p) => `<button type="button" data-go="${p}" class="${(p === 'more' ? !['home','transactions','wallet'].includes(state.page) : state.page === p) ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('');
   }
   function renderHead() {
@@ -698,6 +698,120 @@
      saídas — é isso, ou não é. A recusa fica gravada; o OAZE não
      pergunta duas vezes a mesma coisa.
      ============================================================= */
+  /* =============================================================
+     ANÁLISES — O ANO INTEIRO DE UMA VEZ
+     -------------------------------------------------------------
+     As outras telas respondem sobre o MÊS. Esta responde sobre o
+     ano: quanto entrou, quanto saiu, quanto sobrou, quanto do que
+     entrou virou poupança, e como isso se compara com o ano
+     passado.
+
+     A taxa de poupança está aqui porque é o único número do app que
+     não é um valor: é uma proporção, e proporção só faz sentido
+     numa janela longa. Num mês ela oscila com a conta de luz.
+     ============================================================= */
+  function serieDoAno(ano) {
+    if (demo) return [];
+    try { return Calc.monthlySeries(`${ano}-01`, `${ano}-12`); }
+    catch (e) { console.error('V3/análises:', e); return []; }
+  }
+  function investidoAte(ano) {
+    if (demo) return 0;
+    try { return (profile().investments || []).filter((x) => x.date <= `${ano}-12-31`)
+      .reduce((n, x) => n + (Calc.investmentValueAt(x, `${ano}-12-31`, profile()) || 0), 0); }
+    catch (e) { return 0; }
+  }
+  function renderReports() {
+    const ano = Number(state.ym.slice(0, 4));
+    const serie = serieDoAno(ano);
+    if (!serie.length) {
+      return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>o ano aparece aqui</h2>`
+        + `<p>${demo ? 'Na demonstração não há um ano inteiro para consolidar.' : 'Assim que houver lançamentos, esta tela mostra o consolidado de ' + ano + '.'}</p></div>`;
+    }
+    const receitas = serie.reduce((n, r) => n + r.income, 0);
+    const despesas = serie.reduce((n, r) => n + r.expense, 0);
+    const saldo = U.round2(receitas - despesas);
+    /* Taxa de poupança = o que sobrou dividido pelo que entrou. Sem
+       receita no ano a divisão não tem sentido, e dizer "0%" seria
+       afirmar algo que não se sabe. */
+    const taxa = receitas > 0 ? Math.round((saldo / receitas) * 1000) / 10 : null;
+    const anterior = serieDoAno(ano - 1);
+    const recAnt = anterior.reduce((n, r) => n + r.income, 0);
+    const despAnt = anterior.reduce((n, r) => n + r.expense, 0);
+    const variacao = (atual, antes) => antes > 0 ? Math.round(((atual - antes) / antes) * 1000) / 10 : null;
+
+    const kpi = (rotulo, valor, classe, nota) => `<section class="v3-panel v3-rep-kpi"><span class="v3-label">${esc(rotulo)}</span>`
+      + `<strong class="v3-money v3-sensitive ${classe || ''}">${valor}</strong>${nota ? `<small>${esc(nota)}</small>` : ''}</section>`;
+
+    const linhas = serie.map((r) => `<div class="v3-rep-linha${r.ym === state.ym ? ' is-active' : ''}">`
+      + `<button type="button" data-cal-goto="${esc(r.ym)}" class="v3-rep-mes">${esc(r.label || periodLabel(r.ym))}</button>`
+      + `<span class="v3-mono v3-positive v3-sensitive">${money(r.income)}</span>`
+      + `<span class="v3-mono v3-negative v3-sensitive">${money(r.expense)}</span>`
+      + `<span class="v3-mono v3-sensitive ${r.balance < 0 ? 'v3-negative' : ''}">${money(r.balance)}</span>`
+      + `<span class="v3-mono v3-muted v3-sensitive">${money(r.cumulative)}</span></div>`).join('');
+
+    const comparar = (rotulo, atual, antes, bomSubir) => {
+      const v = variacao(atual, antes);
+      if (v == null) return `<div class="v3-rep-yoy-linha"><span>${esc(rotulo)}</span><strong class="v3-mono v3-sensitive">${money(atual)}</strong><small>sem ${ano - 1} para comparar</small></div>`;
+      const subiu = v > 0;
+      const bom = bomSubir ? subiu : !subiu;
+      return `<div class="v3-rep-yoy-linha"><span>${esc(rotulo)}</span><strong class="v3-mono v3-sensitive">${money(atual)}</strong>`
+        + `<small class="${Math.abs(v) < 0.05 ? '' : bom ? 'v3-positive' : 'v3-negative'}">${subiu ? '▲' : '▼'} ${Math.abs(v)}% sobre ${ano - 1} (${money(antes)})</small></div>`;
+    };
+
+    return `<div class="v3-reports">`
+      + `<div class="v3-row v3-rep-head"><div><span class="v3-label">CONSOLIDADO</span><h2>${ano}</h2></div>`
+      + `<div class="v3-rep-acoes"><button type="button" class="v3-secondary" data-action="export-csv">Exportar CSV</button>`
+      + `<button type="button" class="v3-secondary" data-action="export-pdf">Salvar em PDF</button></div></div>`
+      + `<div class="v3-grid v3-rep-kpis">`
+      + kpi('RECEITAS EM ' + ano, money(receitas), 'v3-positive')
+      + kpi('DESPESAS EM ' + ano, money(despesas), 'v3-negative')
+      + kpi('SOBROU NO ANO', money(saldo), saldo < 0 ? 'v3-negative' : 'v3-positive')
+      + kpi('TAXA DE POUPANÇA', taxa == null ? '—' : taxa + '%', '', taxa == null ? 'Sem receitas no ano.' : 'De cada R$ 100 que entraram, sobraram R$ ' + Math.max(0, taxa).toFixed(0) + '.')
+      + `</div>`
+      + `<section class="v3-panel"><h2>ano a ano</h2><div class="v3-rep-yoy">`
+      + comparar('Receitas', receitas, recAnt, true)
+      + comparar('Despesas', despesas, despAnt, false)
+      + `</div></section>`
+      + `<section class="v3-panel v3-rep-tabela"><h2>mês a mês</h2>`
+      + `<div class="v3-rep-linha v3-rep-cabeca"><span>MÊS</span><span>RECEITAS</span><span>DESPESAS</span><span>SALDO</span><span>ACUMULADO</span></div>`
+      + linhas
+      + `<p class="v3-muted">Acumulado é o saldo somado desde janeiro. Toque num mês para abrir o calendário dele.</p></section>`
+      + `<section class="v3-panel"><h2>investido</h2><p class="v3-money v3-sensitive">${money(investidoAte(ano))}</p>`
+      + `<small>Valor da carteira de investimentos em 31 de dezembro de ${ano}.</small></section></div>`;
+  }
+
+  /* =============================================================
+     EXPORTAR
+     -------------------------------------------------------------
+     As duas passam pelo direito do plano ANTES de rodar. Isso é
+     orientação, não trava: os dados já estão no navegador e são da
+     pessoa. O que a checagem faz é não entregar em silêncio o que o
+     plano diz que não inclui, e EXPLICAR em vez de não fazer nada.
+
+     O PDF sai pela impressão do navegador, de propósito: embutir um
+     gerador seria centenas de KB para produzir um documento pior
+     que o que o próprio sistema já sabe fazer — com as fontes, as
+     cores e o "salvar como PDF" que a pessoa já conhece.
+     ============================================================= */
+  function exportarCsv() {
+    if (global.Limites && Limites.exigirRecurso && !Limites.exigirRecurso('csvExport', 'A exportação em CSV')) return;
+    const ano = Number(state.ym.slice(0, 4));
+    const serie = serieDoAno(ano);
+    if (!serie.length) { toast('Não há dados para exportar neste ano.'); return; }
+    const br = (n) => String(U.round2(n)).replace('.', ',');
+    const linhas = [['Mes', 'Receitas', 'Despesas', 'Saldo', 'Acumulado']];
+    serie.forEach((r) => linhas.push([U.monthLabel(r.ym), br(r.income), br(r.expense), br(r.balance), br(r.cumulative)]));
+    /* Ponto e vírgula e BOM: é o que o Excel em português espera. */
+    U.download(`oaze-consolidado-${ano}.csv`, '﻿' + linhas.map((l) => l.join(';')).join('\r\n'), 'text/csv');
+    toast('CSV exportado.');
+  }
+  function exportarPdf() {
+    if (global.Limites && Limites.exigirRecurso && !Limites.exigirRecurso('pdfExport', 'A exportação em PDF')) return;
+    if (typeof print !== 'function') { toast('Este navegador não abriu a janela de impressão.'); return; }
+    print();
+  }
+
   function recorrenciasDetectadas() {
     if (demo || !global.DetectorRecorrencias) return [];
     try {
@@ -798,7 +912,7 @@
   }
   function render() {
     renderHead(); renderNav();
-    const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, reminders:renderReminders, settings:renderSettings, plan:renderPlan, more:renderMore };
+    const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (screens[state.page]||renderHome)();
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     if (!demo && classicPaths[state.page]) $('#v3-view').insertAdjacentHTML('beforeend', `<p class="v3-classic-link">Precisa editar algo que ainda não está nesta tela? <a href="${classicPaths[state.page]}?classic=1">Abrir ferramentas completas</a></p>`);
@@ -1674,6 +1788,8 @@
     if (action==='coco'){state.cocoTab='Agora';openCoco();refreshCoco();return;}
     if (action==='coco-memory'){state.cocoTab='Memória';openCoco();refreshCoco();return;}
     if (action==='usar-sugestao'){const f=document.getElementById('v3-form-tx');if(f&&sugestaoAtual){f.elements.category.value=sugestaoAtual.categoryId;const lem=document.getElementById('v3-lembrar');if(lem)lem.hidden=!sugestaoAtual.merchantKey;atualizarSugestao(f);}return;}
+    if (action==='export-csv'){exportarCsv();return;}
+    if (action==='export-pdf'){exportarPdf();return;}
     if (action==='period'){periodSheet();return;}
     if (action==='profiles'){profilesSheet();return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
