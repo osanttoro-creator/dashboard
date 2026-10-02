@@ -180,3 +180,7 @@
 .v3-detectada-peso small{font:400 9.5px var(--mono);letter-spacing:.1em;color:var(--muted)}
 .v3-detectada-acoes{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 @media(max-width:540px){.v3-detectada{grid-template-columns:1fr}.v3-detectada-peso{justify-items:start;text-align:left}}
+
+/* O ritmo da meta: quanto por mês, e se cabe. */
+.v3-meta-ritmo{display:grid;gap:4px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:13px}
+.v3-meta-ritmo small{color:var(--muted);line-height:1.45}
