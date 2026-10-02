@@ -626,10 +626,97 @@
     const corpo = vista === 'year' ? calendarioAno() : vista === 'week' ? calendarioSemana() : calendarioMes();
     return `<div class="v3-calendar">${cabeca}${calSeletor()}${resumo}${corpo}</div>`;
   }
+  /* =============================================================
+     O QUE SE REPETE — REESCRITO
+     -------------------------------------------------------------
+     O detector já existia e a V3 nem o carregava. Mas copiar a tela
+     antiga não resolveria: ela mostrava "3 ocorrências, intervalo
+     mediano de 30 dias", que é a prova do ALGORITMO, não a resposta
+     da pessoa. E oferecia três saídas quase iguais — "não é
+     recorrente", "não sugerir de novo", "revisar ocorrências" —
+     obrigando a escolher entre negativas que fazem a mesma coisa.
+
+     A pergunta de verdade é "isto vai acontecer de novo, e quanto
+     compromete do meu mês?". Então é isso que o cartão responde:
+     o peso mensal primeiro, a evidência em português depois, e duas
+     saídas — é isso, ou não é. A recusa fica gravada; o OAZE não
+     pergunta duas vezes a mesma coisa.
+     ============================================================= */
+  function recorrenciasDetectadas() {
+    if (demo || !global.DetectorRecorrencias) return [];
+    try {
+      const prof = profile();
+      const desde = U.addMonths(U.todayYM(), -6);
+      const janela = (prof.transactions || []).filter((t) => ymOf(t.date) >= desde);
+      return DetectorRecorrencias.detectar(janela, prof).slice(0, 4);
+    } catch (e) { console.error('V3/recorrências:', e); return []; }
+  }
+  /* Quanto isto pesa POR MÊS, que é a unidade em que a pessoa pensa
+     o orçamento — um gasto a cada 90 dias não compromete o mês
+     inteiro, compromete um terço dele. */
+  function pesoMensal(c) {
+    const porMes = { weekly: 4.33, biweekly: 2.17, monthly: 1, bimonthly: 0.5, quarterly: 1 / 3, yearly: 1 / 12 };
+    return U.round2(Number(c.median || 0) * (porMes[c.periodicity] || 1));
+  }
+  function painelRecorrencias() {
+    const cands = recorrenciasDetectadas();
+    if (!cands.length) return '';
+    return `<div><span class="v3-label v3-section-title">PARECE QUE SE REPETE</span>`
+      + `<section class="v3-panel v3-detectadas">`
+      + `<p class="v3-muted">Nada disto foi criado. Confirme só o que de fato se repete.</p>`
+      + cands.map((c) => {
+        const mensal = pesoMensal(c);
+        const quantas = (c.evidenceIds || []).length;
+        const verbo = c.kind === 'income' ? 'entrou' : 'saiu';
+        return `<div class="v3-detectada">`
+          + `<span class="v3-detectada-id"><strong>${esc(c.name)}</strong>`
+          + `<small>${verbo} ${quantas} vezes desde ${esc(shortDate(U.addMonths(U.todayYM(), -6) + '-01'))}, sempre ${esc(String(c.periodicityLabel).toLowerCase())}</small>`
+          + `<small>A próxima cairia em ${esc(shortDate(c.nextDate))}, perto de ${money(c.median)}.</small></span>`
+          + `<span class="v3-detectada-peso"><small>POR MÊS</small><strong class="v3-mono ${c.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${money(mensal)}</strong></span>`
+          + `<span class="v3-detectada-acoes">`
+          + `<button type="button" class="v3-secondary" data-recorrencia="${esc(c.id)}" data-recorrencia-acao="criar">É isso, criar</button>`
+          + `<button type="button" class="v3-link" data-recorrencia="${esc(c.id)}" data-recorrencia-acao="dismissed">Não é</button>`
+          + `</span></div>`;
+      }).join('')
+      + `</section></div>`;
+  }
+
+  /* Criar nasce PREVISTO e a partir da PRÓXIMA ocorrência: o
+     histórico que serviu de prova já está lançado, e recriá-lo
+     dobraria o gasto do mês passado. */
+  async function decidirRecorrencia(id, acao) {
+    const c = recorrenciasDetectadas().find((x) => x.id === id);
+    if (!c) { toast('Esta sugestão não está mais disponível.'); return; }
+    try {
+      await V3Backend.mutate(() => {
+        const prof = Store.profile();
+        prof.automation = prof.automation || {};
+        prof.automation.recurrenceDecisions = prof.automation.recurrenceDecisions || {};
+        if (acao === 'criar') {
+          Store.transactions.add({
+            kind: c.kind, description: c.name, amount: c.median, date: c.nextDate,
+            categoryId: c.categoryId || null, method: c.method,
+            accountId: c.method === 'account' ? c.accountId : null,
+            cardId: c.method === 'card' ? c.cardId : null,
+            recurring: true, confirmed: false, source: 'automation', merchantKey: c.merchantKey,
+            recurrenceEvidence: { candidateId: c.id, transactionIds: c.evidenceIds, periodicity: c.periodicity },
+            classification: { source: 'history', confidence: 'high', evidence: c.reason }
+          }, true);
+        }
+        prof.automation.recurrenceDecisions[c.id] = { status: acao === 'criar' ? 'accepted' : 'dismissed', at: new Date().toISOString() };
+        Store.commit('automation');
+      });
+      render();
+      toast(acao === 'criar'
+        ? 'Recorrência criada a partir da próxima, como prevista. O histórico ficou intacto.'
+        : 'Anotado. Não sugiro este de novo.');
+    } catch (e) { toast(e.message || 'Não foi possível salvar.'); }
+  }
+
   function renderReminders() {
     const rs = reminders();
     const recurring=demo?[]:profile().transactions.filter((t)=>t.recurring);
-    return `<div class="v3-grid v3-reminders"><div><span class="v3-label v3-section-title">PRÓXIMOS 30 DIAS</span><section class="v3-panel" style="padding:0">${rs.length?rs.map((r)=>`<div class="v3-reminder-row"><span class="v3-date">${esc(r.date.slice(8,10))}<small>${esc(shortDate(r.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(r.title)}</strong><small>${esc(r.sub)}</small></span><strong class="v3-mono v3-negative v3-sensitive">${money(r.amount)}</strong>${r.id?`<button type="button" class="v3-link" data-transaction="${esc(r.id)}">Editar</button>`:''}</div>`).join(''):'<p class="v3-muted" style="padding:20px">Nenhum compromisso pendente registrado nos próximos 30 dias.</p>'}</section><section class="v3-panel" style="margin-top:16px"><div class="v3-row"><h2>lançamentos fixos</h2><button type="button" class="v3-link" data-action="new">Novo</button></div>${recurring.length?recurring.map((t)=>`<div class="v3-setting-row"><span><strong>${esc(t.description)}</strong><small>Todo dia ${esc(t.date.slice(8))}${t.recurEnd?' · até '+esc(periodLabel(t.recurEnd)):''}</small></span><strong class="v3-mono v3-sensitive">${money(t.amount)}</strong><button type="button" class="v3-link" data-transaction="${esc(t.id)}">Editar</button></div>`).join(''):'<p class="v3-muted">Nenhum lançamento fixo cadastrado. Ao criar um lançamento, marque “Repetir mensalmente”.</p>'}</section></div><div><span class="v3-label v3-section-title">PRÉVIA DA NOTIFICAÇÃO</span><section class="v3-panel"><div class="v3-row"><img src="/assets/brand/oaze-isologo.svg" width="37" height="37" alt=""><span style="flex:1"><strong>OAZE</strong><small style="display:block">${rs.length?esc(rs[0].title)+' está próximo do vencimento':'Nenhum aviso pendente'}</small></span><small>agora</small></div></section><p class="v3-muted">Esta tela mostra compromissos salvos. Avisos do navegador dependem de permissão e ainda precisam de validação neste dispositivo.</p></div></div>`;
+    return `<div class="v3-grid v3-reminders">${painelRecorrencias()}<div><span class="v3-label v3-section-title">PRÓXIMOS 30 DIAS</span><section class="v3-panel" style="padding:0">${rs.length?rs.map((r)=>`<div class="v3-reminder-row"><span class="v3-date">${esc(r.date.slice(8,10))}<small>${esc(shortDate(r.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(r.title)}</strong><small>${esc(r.sub)}</small></span><strong class="v3-mono v3-negative v3-sensitive">${money(r.amount)}</strong>${r.id?`<button type="button" class="v3-link" data-transaction="${esc(r.id)}">Editar</button>`:''}</div>`).join(''):'<p class="v3-muted" style="padding:20px">Nenhum compromisso pendente registrado nos próximos 30 dias.</p>'}</section><section class="v3-panel" style="margin-top:16px"><div class="v3-row"><h2>lançamentos fixos</h2><button type="button" class="v3-link" data-action="new">Novo</button></div>${recurring.length?recurring.map((t)=>`<div class="v3-setting-row"><span><strong>${esc(t.description)}</strong><small>Todo dia ${esc(t.date.slice(8))}${t.recurEnd?' · até '+esc(periodLabel(t.recurEnd)):''}</small></span><strong class="v3-mono v3-sensitive">${money(t.amount)}</strong><button type="button" class="v3-link" data-transaction="${esc(t.id)}">Editar</button></div>`).join(''):'<p class="v3-muted">Nenhum lançamento fixo cadastrado. Ao criar um lançamento, marque “Repetir mensalmente”.</p>'}</section></div><div><span class="v3-label v3-section-title">PRÉVIA DA NOTIFICAÇÃO</span><section class="v3-panel"><div class="v3-row"><img src="/assets/brand/oaze-isologo.svg" width="37" height="37" alt=""><span style="flex:1"><strong>OAZE</strong><small style="display:block">${rs.length?esc(rs[0].title)+' está próximo do vencimento':'Nenhum aviso pendente'}</small></span><small>agora</small></div></section><p class="v3-muted">Esta tela mostra compromissos salvos. Avisos do navegador dependem de permissão e ainda precisam de validação neste dispositivo.</p></div></div>`;
   }
   function renderSettings() {
     const signed = !demo && global.V3Backend && V3Backend.user();
@@ -771,8 +858,9 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p><label class="v3-check v3-lembrar" id="v3-lembrar" hidden><input type="checkbox" name="lembrarRegra"> Lembrar esta categoria para este estabelecimento</label></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     updateComposerCurrency(document.getElementById('v3-form-tx'), meioInicial);
+    atualizarSugestao(document.getElementById('v3-form-tx'));
   }
 
   /* =============================================================
@@ -800,6 +888,46 @@
     const lista = (Store.meiosDaConta ? Store.meiosDaConta(conta) : []);
     campo.innerHTML = '<option value="">Não informado</option>'
       + lista.map((m) => `<option value="${esc(m.id)}" ${atual === m.id ? 'selected' : ''}>${esc(m.nome)}</option>`).join('');
+  }
+
+  /* =============================================================
+     A CATEGORIA QUE SE DEDUZ DO NOME
+     -------------------------------------------------------------
+     Quem lança "Mercado Pão de Açúcar" pela décima vez não deveria
+     ter de escolher "Alimentação" pela décima vez. O motor de
+     categorização já existia e a V3 nem o carregava — a pessoa
+     preenchia à mão o que o histórico dela já respondia.
+
+     A sugestão NÃO se aplica sozinha. Ela aparece com o motivo
+     escrito ("três lançamentos iguais foram para Alimentação") e um
+     botão: categorizar por adivinhação silenciosa é como o extrato
+     do banco erra, e a correção custa mais do que a escolha.
+
+     Confirmando, a pessoa pode gravar a regra para aquele
+     estabelecimento — aí sim, da próxima vez vem pronto.
+     ============================================================= */
+  let sugestaoAtual = null, sugestaoTimer = null;
+  function atualizarSugestao(form) {
+    const alvo = form && form.querySelector('#v3-sugestao');
+    const campoCat = form && form.elements.category;
+    if (!alvo || !campoCat || !global.Categorizacao) return;
+    const descricao = String(form.elements.description.value || '').trim();
+    const kind = String(form.elements.kind.value) === 'Receita' ? 'income' : 'expense';
+    sugestaoAtual = descricao.length >= 3
+      ? Categorizacao.sugerir(descricao, kind, profile(), { excludeId: String(form.elements.id.value || '') })
+      : null;
+    const cat = sugestaoAtual && sugestaoAtual.categoryId
+      ? profile().categories.find((c) => c.id === sugestaoAtual.categoryId) : null;
+    /* Só vale sugerir o que a pessoa ainda não escolheu. */
+    if (!cat || sugestaoAtual.confidence === 'low' || campoCat.value === cat.id) { alvo.hidden = true; return; }
+    alvo.hidden = false;
+    alvo.innerHTML = `<button type="button" data-action="usar-sugestao">Usar ${esc(cat.name)}</button>`
+      + `<small>${esc(sugestaoAtual.evidence)}</small>`;
+  }
+  function lembrarRegraDaSugestao(form, categoryId, kind) {
+    if (!form || !form.elements.lembrarRegra || !form.elements.lembrarRegra.checked) return;
+    if (!sugestaoAtual || !sugestaoAtual.merchantKey || !categoryId) return;
+    Categorizacao.confirmarRegra(profile(), sugestaoAtual.merchantKey, kind, categoryId);
   }
 
   function updateComposerCurrency(form, meioEscolhido) {
@@ -974,6 +1102,9 @@
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
       await V3Backend.mutate(() => {
+        /* A regra do estabelecimento grava junto com o lançamento, na
+           mesma transação: se uma falhar, nenhuma das duas vale. */
+        lembrarRegraDaSugestao(form, categoryId, base.kind);
         if (editing) { Store.transactions.update(id,base); return; }
         if (installments===1) { Store.transactions.add(base); return; }
         const cents=Math.round(amount*100), each=Math.floor(cents/installments), groupId=U.uid('grp'), day=Number(date.slice(8));
@@ -1246,7 +1377,7 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-recorrencia],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
@@ -1295,6 +1426,7 @@
         .catch((e) => toast(e.message || 'Não foi possível salvar.'));
       return;
     }
+    if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
     /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
@@ -1434,6 +1566,7 @@
     }
     if (action==='coco'){state.cocoTab='Agora';openCoco();refreshCoco();return;}
     if (action==='coco-memory'){state.cocoTab='Memória';openCoco();refreshCoco();return;}
+    if (action==='usar-sugestao'){const f=document.getElementById('v3-form-tx');if(f&&sugestaoAtual){f.elements.category.value=sugestaoAtual.categoryId;const lem=document.getElementById('v3-lembrar');if(lem)lem.hidden=!sugestaoAtual.merchantKey;atualizarSugestao(f);}return;}
     if (action==='period'){periodSheet();return;}
     if (action==='profiles'){profilesSheet();return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
@@ -1489,6 +1622,7 @@
     document.addEventListener('change',(ev)=>{
       if(ev.target.dataset.sim){state.sim[ev.target.dataset.sim]=+ev.target.value;render();}
       if(ev.target.name==='source' && ev.target.closest('#v3-form-tx')) updateComposerCurrency(ev.target.form);
+      if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
       /* "Outro" é a única opção que pede um nome escrito; as outras
          já se nomeiam. O campo aparece com ela e some sem ela. */
       if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom');if(c)c.hidden=ev.target.value!=='Outro';}
@@ -1499,6 +1633,7 @@
     /* A busca filtra sem acento e por qualquer pedaço do nome:
        "brasil" acha "Banco do Brasil", que a lista nativa não achava. */
     document.addEventListener('input',(ev)=>{
+      if(ev.target.name==='description' && ev.target.closest('#v3-form-tx')){clearTimeout(sugestaoTimer);const f=ev.target.form;sugestaoTimer=setTimeout(()=>atualizarSugestao(f),160);return;}
       if(ev.target.id!=='v3-bank-busca')return;
       const q=U.norm(ev.target.value.trim());
       let achou=0;
