@@ -109,6 +109,15 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       const beforeCoco = await page.evaluate(() => Store.profile().transactions.length);
       await page.locator('[data-action="coco"]:visible').first().click();
       await page.locator('#v3-coco-consent-form').waitFor();
+      await page.locator('[data-coco-tab="Extratos"]').click();
+      await page.locator('.v3-import-empty').waitFor();
+      await page.locator('#v3-coco-file').setInputFiles({
+        name: 'local.csv', mimeType: 'text/csv', buffer: Buffer.from('Data;Lançamento;Crédito;Débito;Saldo\n01/10/2026;SALDO INICIAL;0,00;0,00;100,00\n02/10/2026;Teste local;0,00;1,00;99,00')
+      });
+      await page.locator('[data-action="review-import-row"]').waitFor();
+      assert.equal(await page.evaluate(() => Store.profile().transactions.length), beforeCoco);
+      await page.locator('[data-coco-tab="Conversa"]').click();
+      await page.locator('#v3-coco-consent-form').waitFor();
       await page.locator('#v3-coco-consent-form [name="accept"]').check();
       await page.locator('#v3-coco-consent-form [type="submit"]').click();
       await page.locator('[data-coco-tab="Conversa"]').click();
@@ -152,8 +161,24 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('#v3-coco-file').setInputFiles({
         name: 'extrato.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(120, 3)
       });
-      assert.match(await page.locator('#v3-toast').innerText(), /PDF e planilhas ainda não são lidos/);
+      assert.match(await page.locator('#v3-toast').innerText(), /não é um PDF válido/);
       assert.equal(await page.locator('#v3-chat-form [name="question"]').inputValue(), 'Áudio anotado');
+      const beforeImport = await page.evaluate(() => Store.profile().transactions.length);
+      await page.locator('#v3-coco-file').setInputFiles({
+        name: 'extrato.csv', mimeType: 'text/csv', buffer: Buffer.from('Data;Lançamento;Crédito;Débito;Saldo\n01/10/2026;SALDO INICIAL;0,00;0,00;100,00\n02/10/2026;Mercado de teste;0,00;12,50;87,50')
+      });
+      await page.locator('[data-action="review-import-row"]').waitFor();
+      assert.equal(await page.evaluate(() => Store.profile().transactions.length), beforeImport);
+      assert.equal(await page.locator('[data-action="review-import-row"]').isEnabled(), false);
+      const accountId = await page.evaluate(() => Store.profile().accounts[0].id);
+      await page.locator('#v3-import-account').selectOption(accountId);
+      await page.locator('[data-action="review-import-row"]').click();
+      assert.equal(await page.locator('#v3-form-tx [name="description"]').inputValue(), 'Mercado de teste');
+      assert.equal(await page.locator('#v3-form-tx [name="amount"]').inputValue(), '12,50');
+      await page.locator('#v3-form-tx [name="category"]').selectOption({ label: 'Teste personalizado' });
+      await page.locator('#v3-form-tx [type="submit"]').click();
+      assert.equal(await page.evaluate(() => Store.profile().transactions.at(-1).source), 'import');
+      assert.match(await page.locator('.v3-import-row').first().innerText(), /Possível duplicata/);
       assert.deepEqual(errors, []);
       await page.close();
       console.log(`V3 UI ${width}px: conta, categoria, lançamento, cartão, fatura, espaço e Coco OK`);

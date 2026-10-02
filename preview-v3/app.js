@@ -27,7 +27,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let recorder = null;
   let microphone = null;
   let limitsPromise = Promise.resolve(demo);
@@ -514,7 +514,7 @@
     const audio = recorder?.state === 'recording'
       ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
       : `<details class="v3-coco-audio-options"><summary class="v3-coco-icon" aria-label="Opções de áudio" title="Áudio: gravar ou escolher arquivo">${cocoMediaIcon('mic')}</summary><div class="v3-coco-audio-menu"><button type="button" data-action="record-audio">Gravar áudio</button><button type="button" data-action="choose-coco-audio">Enviar áudio do aparelho</button></div></details>`;
-    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar foto ou arquivo de imagem" title="Foto ou imagem: JPG, PNG, WebP">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>${audio}<input id="v3-coco-audio-file" type="file" accept="audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><small>Fotos e áudios viram texto para você revisar. PDF e planilhas ainda não são lidos pela Coco.</small>`;
+    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar foto, PDF ou CSV" title="Foto, extrato PDF ou CSV">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/csv,.pdf,.csv" hidden>${audio}<input id="v3-coco-audio-file" type="file" accept="audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><small>Fotos e áudios exigem confirmação para envio à OpenAI. Extratos PDF/CSV reconhecidos são lidos neste aparelho e revisados antes de salvar.</small>`;
   }
   async function refreshCoco() {
     if (demo || state.cocoLoading) return;
@@ -526,13 +526,39 @@
     } catch (error) { state.cocoSettings=null;state.cocoError=error.message || 'Não consegui carregar as configurações da Coco.'; }
     finally { state.cocoLoading = false; if (!$('#v3-overlay').hidden) openCoco(); }
   }
+  function importDuplicate(item, accountId) {
+    if (!accountId) return false;
+    return profile().transactions.some((tx) => tx.accountId === accountId && tx.date === item.date &&
+      tx.kind === (item.cents > 0 ? 'income' : 'expense') && Math.round(Number(tx.amount) * 100) === Math.abs(item.cents) &&
+      global.CocoImport.normalized(tx.description) === global.CocoImport.normalized(item.description));
+  }
+  function importCategorySuggestion(item, accountId) {
+    if (!accountId) return null;
+    const kind=item.cents>0?'income':'expense', label=global.CocoImport.normalized(item.description);
+    const matches=profile().transactions.filter((tx)=>tx.accountId===accountId && tx.kind===kind && tx.confirmed && !tx.cancelado &&
+      global.CocoImport.normalized(tx.description)===label && tx.categoryId);
+    if (matches.length<2) return null;
+    const category=profile().categories.find((entry)=>entry.id===matches[0].categoryId && entry.kind===kind);
+    if (!category || !matches.every((tx)=>tx.categoryId===category.id)) return null;
+    return {id:category.id,name:category.name,count:matches.length};
+  }
+  function renderCocoImport() {
+    const report = state.importPreview;
+    const picker='<input id="v3-coco-file" type="file" accept="application/pdf,text/csv,.pdf,.csv" hidden>';
+    if (!report) return `<div class="v3-import-empty"><h2>seus extratos, sem adivinhação</h2><p>Escolha um CSV ou PDF de extrato. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.</p><button type="button" class="v3-secondary" data-action="choose-coco-file">Escolher arquivo</button><small>Layouts ainda desconhecidos e PDFs digitalizados não são importados.</small>${picker}</div>`;
+    const accounts = profile().accounts.filter((account) => !account.archived && (!account.moeda || account.moeda === 'BRL'));
+    const visible = report.rows.slice(0, state.importLimit);
+    const positive = report.rows.filter((item) => item.cents > 0).reduce((sum, item) => sum + item.cents, 0) / 100;
+    const negative = report.rows.filter((item) => item.cents < 0).reduce((sum, item) => sum - item.cents, 0) / 100;
+    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p><div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${suggestion.count} anteriores iguais</small>`:''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId || report.checks.failed ? 'disabled' : ''}>${importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
+  }
   function openCoco() {
-    if (!demo && !state.cocoSettings) {
+    if (!demo && !state.cocoSettings && state.cocoTab!=='Extratos') {
       openSheet(`${sheetTop('coco','preparando sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<p class="v3-muted">${state.cocoError?esc(state.cocoError):'Carregando consentimento e memória…'}</p>${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}`,'Coco');
       return;
     }
-    if (!cocoAllowed() && state.cocoTab!=='Memória') {
-      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. A Coco guarda apenas regras que você aprovar; pode esquecer ou pausar depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
+    if (!cocoAllowed() && !['Memória','Extratos'].includes(state.cocoTab)) {
+      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda apenas regras que você aprovar; pode esquecer ou pausar depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
       return;
     }
     let body='';
@@ -544,10 +570,12 @@
       }
     } else if (state.cocoTab==='Conversa') {
       body=`<div class="v3-chat" id="v3-chat">${state.chat.length?state.chat.map((x,i)=>`<div class="v3-chat-message ${x.who==='user'?'user':''}"><p>${esc(x.text)}</p>${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button><small>Você poderá apagá-la na aba Memória.</small></div>`:''}</div>`).join(''):'<p>Posso ler os totais do mês e ajudar a organizar suas próximas decisões.</p>'}</div>${cocoMediaControls()}`;
+    } else if (state.cocoTab === 'Extratos') {
+      body = renderCocoImport();
     } else {
       body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">Só regras que você confirmou. A memória não autoriza pagamentos nem altera lançamentos.</p>${cocoAllowed()?`<button type="button" class="v3-secondary" data-action="pause-learning">${state.cocoSettings?.learning_paused?'Retomar aprendizado':'Pausar aprendizado'}</button>`:'<p class="v3-muted">Acesso revogado; você ainda pode apagar estas regras.</p>'}<div class="v3-coco-memories">${state.cocoMemories.length?state.cocoMemories.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(m.kind.toUpperCase())} · CONFIRMADA</span><strong>${esc(m.label)}</strong><p>${esc(m.value)}</p><small>${esc(new Date(m.created_at).toLocaleDateString('pt-BR'))}</small><button type="button" class="v3-secondary" data-action="forget-memory" data-memory-id="${esc(m.id)}">Esquecer</button></div>`).join(''):'<p class="v3-muted">Nenhuma preferência confirmada ainda.</p>'}</div>${!cocoAllowed()||state.cocoSettings?.learning_paused?'':`<form id="v3-memory-form" class="v3-form"><label>TIPO<select name="kind"><option value="categoria">Categoria</option><option value="conta">Conta</option><option value="recorrencia">Recorrência</option><option value="preferencia">Preferência</option><option value="meta">Meta</option><option value="outro">Outro</option></select></label><label>NOME DA REGRA<input name="label" maxlength="100" required placeholder="Ex.: Uber"></label><label>COMO DEVO LEMBRAR<input name="value" maxlength="240" required placeholder="Ex.: Categorizar como Transporte"></label><button class="v3-primary" type="submit">Guardar regra</button></form>`}${cocoAllowed()?'<button type="button" class="v3-link" data-action="revoke-coco">Revogar acesso da Coco</button>':'<button type="button" class="v3-link" data-coco-tab="Conversa">Voltar ao consentimento</button>'}`;
     }
-    openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-segment">${['Agora','Conversa','Memória'].map((x)=>`<button type="button" data-coco-tab="${x}" class="${state.cocoTab===x?'is-active':''}">${x}</button>`).join('')}</div>${body}`,'Coco');
+    openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-segment">${['Agora','Conversa','Extratos','Memória'].map((x)=>`<button type="button" data-coco-tab="${x}" class="${state.cocoTab===x?'is-active':''}">${x}</button>`).join('')}</div>${body}`,'Coco');
   }
   function composer(kind, selectedDate, editId, proposal) {
     const editing = editId ? profile().transactions.find((t) => t.id === editId) : null;
@@ -571,7 +599,7 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? 'revisar proposta da Coco' : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     updateComposerCurrency(document.getElementById('v3-form-tx'), meioInicial);
   }
 
@@ -769,7 +797,8 @@
     if (!(rate>0) || !Number.isFinite(rate)) { toast(`Cadastre a cotação de ${instrument.name} antes de lançar em ${currency}.`); return; }
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
-    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):fd.get('sourceTag')==='uglez'?'uglez':'manual'};
+    const sourceTag=String(fd.get('sourceTag')||'manual');
+    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
       await V3Backend.mutate(() => {
@@ -783,7 +812,9 @@
         });
         Store.transactions.addMany(list);
       });
-      closeSheet(); render(); toast(editing?'Lançamento atualizado.':installments>1?`${installments} parcelas salvas na sua conta.`:'Lançamento salvo na sua conta.');
+      closeSheet(); render();
+      if (!editing && sourceTag==='import' && state.importPreview) { state.cocoTab='Extratos'; openCoco(); }
+      toast(editing?'Lançamento atualizado.':installments>1?`${installments} parcelas salvas na sua conta.`:'Lançamento salvo na sua conta.');
     } catch (e) { console.error('V3/lançamento:', e); toast(e.message || 'Não foi possível salvar.'); }
   }
   async function saveAccount(form) {
@@ -997,10 +1028,22 @@
     catch (error) { toast(error.message || 'Não consegui guardar a regra.'); return false; }
   }
   async function readCocoMedia(file) {
-    if (demo || !cocoAllowed() || !file) return;
+    if (!file) return;
+    const statement=/\.(pdf|csv)$/i.test(file.name) || ['application/pdf','text/csv','application/vnd.ms-excel'].includes(file.type);
+    if (statement) {
+      toast('Lendo o extrato neste aparelho…');
+      try {
+        if (!global.CocoImport) throw new Error('Leitor de extratos indisponível. Atualize a página.');
+        const report=await global.CocoImport.parseFile(file);
+        state.importPreview=report;state.importLimit=30;state.importAccountId='';state.cocoTab='Extratos';
+        openCoco();toast(`${report.rows.length} movimentos encontrados. Revise antes de salvar.`);
+      } catch (error) { toast(error.message || 'Não consegui ler este extrato. Nada foi salvo.'); }
+      return;
+    }
+    if (demo || !cocoAllowed()) return;
     const image=['image/jpeg','image/png','image/webp'].includes(file.type);
     const audio=['audio/webm','audio/mpeg','audio/mp4','audio/x-m4a','audio/wav','audio/wave'].includes(file.type);
-    if (!image && !audio) { toast('A Coco aceita imagens e áudios. PDF e planilhas ainda não são lidos.'); return; }
+    if (!image && !audio) { toast('Formato não aceito. Envie foto, áudio, PDF ou CSV de extrato.'); return; }
     const max=image?4_000_000:8_000_000;
     if (file.size>max || file.size<100) { toast('Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.'); return; }
     if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à OpenAI para leitura? O conteúdo pode incluir dados sensíveis. O arquivo não ficará guardado no OAZE. A leitura usa uma consulta do plano; enviar o texto revisado usa outra.`)) return;
@@ -1046,7 +1089,7 @@
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.mediaDraft='';closeSheet();render();}return; }
+    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';closeSheet();render();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     if (target.dataset.calMonth) { state.ym=U.addMonths(state.ym,Number(target.dataset.calMonth));state.calDay=1;render();return; }
@@ -1104,11 +1147,21 @@
     }
     if (action==='revoke-coco') {
       if (!global.confirm('Revogar o acesso da Coco? As memórias ficam guardadas para você apagar, mas não serão usadas enquanto o acesso estiver revogado.')) return;
-      V3Backend.cocoConsent(false).then(()=>{state.chat=[];state.mediaDraft='';refreshCoco();})
+      V3Backend.cocoConsent(false).then(()=>{state.chat=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';refreshCoco();})
         .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
     }
-    if (action==='choose-coco-file'){$('#v3-coco-file')?.click();return;}
+    if (action==='choose-coco-file') { if (!$('#v3-coco-file')) { state.cocoTab='Conversa';openCoco(); } $('#v3-coco-file')?.click();return; }
+    if (action==='import-more') { state.importLimit=Math.min(state.importLimit+30,state.importPreview?.rows.length||30);openCoco();return; }
+    if (action==='review-import-row') {
+      const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
+      const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
+      if (!Number.isInteger(index) || !item || !account || state.importPreview.checks.failed) { toast('Confira o extrato e escolha uma conta em reais.');return; }
+      if (importDuplicate(item,account.id) && !global.confirm('Existe um lançamento parecido nessa conta. Revisar mesmo assim? Não salve duas vezes o mesmo movimento.')) return;
+      const suggestion=importCategorySuggestion(item,account.id);
+      composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
+      return;
+    }
     if (action==='choose-coco-audio'){$('#v3-coco-audio-file')?.click();return;}
     if (action==='record-audio'){toggleCocoRecording();return;}
     if (action==='retry-coco'){refreshCoco();return;}
@@ -1236,8 +1289,10 @@
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
     document.addEventListener('change',(event)=>{
+      if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
       if (!['v3-coco-file','v3-coco-audio-file'].includes(event.target?.id)) return;
       const file=event.target.files?.[0];
+      event.target.value='';
       if (file) readCocoMedia(file);
     });
     document.addEventListener('beforeinput',(ev)=>{

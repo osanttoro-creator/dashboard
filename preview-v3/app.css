@@ -135,3 +135,23 @@
 .v3-meios{min-width:0;margin:0;padding:0;border:0}
 .v3-meios legend{padding:0;color:var(--muted);font-size:12px}
 .v3-meios .v3-check{display:inline-flex!important;margin-right:14px}
+
+/* Extratos: revisão legível no mesmo painel da Coco, sem alterar o visual do app. */
+.v3-sheet>.v3-segment{min-width:0}
+.v3-sheet>.v3-segment button{min-width:0;padding:7px 5px;font-size:12px}
+.v3-import,.v3-import-empty{display:grid;gap:12px;padding-bottom:24px}
+.v3-import h2,.v3-import-empty h2{margin:0;font:500 27px var(--display)}
+.v3-import p,.v3-import-empty p{margin:0}
+.v3-import-totals{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.v3-import-totals>span{display:grid;gap:5px;padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(240,229,207,.055);font-size:12px}
+.v3-import-totals strong{font-size:17px}
+.v3-import-account{display:grid;gap:7px;color:var(--muted);font-size:12px}
+.v3-import-account select{width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;background:#19383e;color:var(--milk)}
+.v3-import-account option{color:var(--night)}
+.v3-import-list{display:grid;gap:9px}
+.v3-import-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:17px;background:rgba(240,229,207,.04)}
+.v3-import-row>span{min-width:0;display:grid;gap:5px;overflow-wrap:anywhere}
+.v3-import-row small{color:var(--muted)}
+.v3-import-row>strong{white-space:nowrap;font-size:13px}
+.v3-import-row button{grid-column:1/-1;justify-self:start}
+.v3-import-warning{padding:10px 12px;border-radius:12px;background:rgba(214,160,88,.14);color:#f0d2a3}
