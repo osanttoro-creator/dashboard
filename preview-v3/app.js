@@ -710,6 +710,62 @@
      não é um valor: é uma proporção, e proporção só faz sentido
      numa janela longa. Num mês ela oscila com a conta de luz.
      ============================================================= */
+  /* =============================================================
+     AS CINCO PERGUNTAS — O SCORE, REESCRITO
+     -------------------------------------------------------------
+     O cálculo continua o mesmo, e é bom: cinco perguntas
+     verificáveis a partir dos próprios lançamentos, 20 pontos cada,
+     cada uma devolvendo o porquê. O que muda é o que se mostra.
+
+     Na V2 o número vinha primeiro, grande, com uma faixa ("Saudável")
+     e um link para "como é calculado". Isso tem dois problemas.
+
+     Primeiro, 0 a 100 com faixa parece nota de crédito — e não é:
+     ninguém além da pessoa vê isto, não afeta empréstimo nenhum, e
+     confundir as duas coisas assusta sem motivo.
+
+     Segundo, e pior: um número não diz o que fazer. "62, Saudável"
+     não leva a nenhuma ação. O que leva é saber ONDE estão os
+     pontos que faltam — e isso o motor já responde, parte por parte.
+
+     Então a ordem se inverte. Primeiro a pergunta em que há mais a
+     ganhar, escrita como frase. Depois as cinco, com o motivo de
+     cada uma. O total fica no canto, como resumo do que já foi dito,
+     e com o nome do que é: uma conferência que você faz de você
+     mesmo.
+     ============================================================= */
+  function scoreDoMes() {
+    if (demo || !Calc.score) return null;
+    try { return Calc.score(state.ym, profile()); }
+    catch (e) { console.error('V3/conferência:', e); return null; }
+  }
+  function painelScore() {
+    const s = scoreDoMes();
+    if (!s || !s.partes || !s.partes.length) return '';
+    /* Onde há mais a ganhar: a parte com mais pontos na mesa. Em
+       empate, a primeira da lista — e a ordem do motor não é
+       arbitrária, vai da pergunta mais fundamental (sobra dinheiro?)
+       para a mais circunstancial. `sort` é estável, então isso vale.
+
+       Se todas estão cheias, não há o que apontar; dizer isso é
+       melhor do que inventar uma pendência. */
+    const comFolga = s.partes.slice().sort((a, b) => a.pontos - b.pontos)[0];
+    const falta = 20 - (comFolga ? comFolga.pontos : 20);
+    const chamada = falta <= 1
+      ? 'As cinco estão no lugar. Nada a ajustar por aqui este mês.'
+      : `Onde há mais a ganhar agora: <strong>${esc(String(comFolga.nome).toLowerCase())}</strong>. ${esc(comFolga.detalhe)}.`;
+    return `<section class="v3-panel v3-conferencia">`
+      + `<div class="v3-row"><div><span class="v3-label">CONFERÊNCIA DO MÊS</span><h2>cinco perguntas</h2></div>`
+      + `<span class="v3-conf-total"><strong class="v3-mono">${s.total}</strong><small>de 100</small></span></div>`
+      + `<p class="v3-conf-chamada">${chamada}</p>`
+      + `<ul class="v3-conf-lista">${s.partes.map((p) => `<li class="${p.ok ? 'esta-ok' : ''}">`
+        + `<span class="v3-conf-marca" aria-hidden="true">${p.ok ? '✓' : '·'}</span>`
+        + `<span><strong>${esc(p.nome)}</strong><small>${esc(p.detalhe)}</small></span>`
+        + `<span class="v3-mono v3-conf-pontos">${p.pontos}<small>/20</small></span></li>`).join('')}</ul>`
+      + `<p class="v3-muted">Sai dos seus próprios lançamentos e não sai daqui: não é consulta a birô, não vira cadastro e ninguém além de você vê.</p>`
+      + `</section>`;
+  }
+
   function serieDoAno(ano) {
     if (demo) return [];
     try { return Calc.monthlySeries(`${ano}-01`, `${ano}-12`); }
@@ -777,6 +833,7 @@
       + `<div class="v3-rep-linha v3-rep-cabeca"><span>MÊS</span><span>RECEITAS</span><span>DESPESAS</span><span>SALDO</span><span>ACUMULADO</span></div>`
       + linhas
       + `<p class="v3-muted">Acumulado é o saldo somado desde janeiro. Toque num mês para abrir o calendário dele.</p></section>`
+      + painelScore()
       + `<section class="v3-panel"><h2>investido</h2><p class="v3-money v3-sensitive">${money(investidoAte(ano))}</p>`
       + `<small>Valor da carteira de investimentos em 31 de dezembro de ${ano}.</small></section></div>`;
   }

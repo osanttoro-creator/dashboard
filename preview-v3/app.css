@@ -184,3 +184,23 @@
 /* O ritmo da meta: quanto por mês, e se cabe. */
 .v3-meta-ritmo{display:grid;gap:4px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:13px}
 .v3-meta-ritmo small{color:var(--muted);line-height:1.45}
+
+/* =============================================================
+   A CONFERÊNCIA DO MÊS
+   -------------------------------------------------------------
+   A frase do que dá para fazer vem primeiro e grande; o total fica
+   no canto, como resumo do que já foi dito. É o contrário da V2, em
+   que o número liderava e não levava a nada.
+   ============================================================= */
+.v3-conferencia{display:grid;gap:13px}
+.v3-conf-total{display:flex;align-items:baseline;gap:5px;color:var(--muted)}
+.v3-conf-total strong{font-size:25px;color:var(--milk)}
+.v3-conf-chamada{font-size:15px;line-height:1.5}
+.v3-conf-lista{display:grid;gap:1px;margin:0;padding:0;list-style:none}
+.v3-conf-lista li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:11px;align-items:start;padding:11px 0;border-top:1px solid var(--line)}
+.v3-conf-lista li>span:nth-child(2){display:grid;gap:3px;min-width:0}
+.v3-conf-lista small{color:var(--muted);line-height:1.45}
+.v3-conf-marca{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:12px}
+.v3-conf-lista li.esta-ok .v3-conf-marca{border-color:var(--teal);background:rgba(95,169,155,.16);color:var(--teal)}
+.v3-conf-pontos{white-space:nowrap;font-size:14px}
+.v3-conf-pontos small{color:var(--muted)}
