@@ -1929,6 +1929,21 @@
     document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{if(state.page==='goals')updateGoalTabs();});
     render();
+    /* =============================================================
+       PRIMEIROS PASSOS
+       -------------------------------------------------------------
+       Uma conta vazia não se explica sozinha: sem conta cadastrada
+       não há saldo, sem categoria não há para onde o gasto ir, e a
+       tela fica bonita e inútil. O assistente constrói essas peças
+       conversando, e o progresso é salvo a cada etapa — parar na
+       quarta e voltar amanhã continua na quarta.
+
+       Ele decide sozinho se deve aparecer (Ob.deveOferecer), então
+       aqui é só o convite.
+       ============================================================= */
+    if (!demo && global.Ob && Ob.talvezOferecer) {
+      Ob.talvezOferecer().catch((e) => console.error('V3/primeiros passos:', e));
+    }
     if (!demo) {
       const params = new URLSearchParams(location.search);
       const paymentReturn = params.get('pagamento');

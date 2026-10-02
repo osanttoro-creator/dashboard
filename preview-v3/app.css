@@ -204,3 +204,12 @@
 .v3-conf-lista li.esta-ok .v3-conf-marca{border-color:var(--teal);background:rgba(95,169,155,.16);color:var(--teal)}
 .v3-conf-pontos{white-space:nowrap;font-size:14px}
 .v3-conf-pontos small{color:var(--muted)}
+
+/* Primeiros passos: o assistente usa a folha da V3 pela ponte. */
+.v3-ob-corpo{display:grid;gap:13px;padding:4px 0 8px}
+.v3-ob-corpo label{display:grid;gap:5px;color:var(--muted);font-size:12px}
+.v3-ob-corpo input,.v3-ob-corpo select,.v3-ob-corpo textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:14px;background:#19383e;color:var(--milk);font:inherit}
+.v3-ob-corpo option{color:var(--night)}
+.v3-ob-pe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
+.v3-ob-pe .esta-a-esquerda{margin-right:auto}
+.v3-ob-ponto{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
