@@ -10,7 +10,7 @@
    setas (ou pelas flechas do teclado) no computador. O arrasto é
    1:1 — o cartão acompanha o dedo pixel por pixel, porque qualquer
    atraso ali transforma "estou segurando uma coisa" em "pedi para o
-   programa fazer algo". Nas pontas ele resiste em vez de travar.
+   programa fazer algo". Depois do último, vem o primeiro — e vice-versa.
 
    O módulo vive à parte do app.js porque a V3 redesenha a tela
    inteira por innerHTML a cada render: quem segura gesto e
@@ -127,7 +127,7 @@
        O DISCRETO NÃO ESPERA O CONTÍNUO
        -------------------------------------------------------------
        Qual cartão está no meio — e portanto o pontinho aceso, o
-       z-index, o botão desabilitado e o número no bolso — é uma
+       z-index e o número no bolso — é uma
        decisão que já foi tomada no instante do gesto. A posição
        animada é só onde o cartão ESTÁ a caminho dali.
 
@@ -137,39 +137,51 @@
        cartão que o índice interno já tinha deixado. Qualquer
        engasgo de quadro produziria o mesmo desencontro.
        ============================================================= */
+    const quantidade = nos.length;
+    const circular = (i) => ((i % quantidade) + quantidade) % quantidade;
     let centro = -1;
     function aplicarCentro(i) {
-      const novo = Math.max(0, Math.min(nos.length - 1, i));
+      const novo = circular(i);
       if (novo === centro) return;
       centro = novo;
       /* z-index é inteiro: não dá para derivá-lo em CSS de um número
          fracionário. Só muda quando o cartão do meio muda. */
       nos.forEach((n, k) => {
-        n.style.zIndex = String(nos.length - Math.abs(k - centro));
+        const distancia = Math.abs(k - centro);
+        n.style.zIndex = String(quantidade - Math.min(distancia, quantidade - distancia));
         n.classList.toggle('esta-no-centro', k === centro);
         n.setAttribute('aria-pressed', k === centro ? 'true' : 'false');
         n.tabIndex = k === centro ? 0 : -1;
       });
       pontos.forEach((n, k) => n.classList.toggle('e-agora', k === centro));
-      if (setaAnt) setaAnt.disabled = centro === 0;
-      if (setaProx) setaProx.disabled = centro === nos.length - 1;
       if (o.aoTrocar) o.aoTrocar(nos[centro].dataset.select);
     }
 
-    function pintar(p) {
+    let indiceVirtual = indice;
+    let m;
+    function pintar(p, pronto) {
+      /* Cada cartão ocupa a cópia mais próxima de seu lugar no anel.
+         Assim o primeiro já está à direita do último antes da troca;
+         não há viagem de volta por todos os cartões. */
+      nos.forEach((n, k) => n.style.setProperty('--deck-i', String(k + quantidade * Math.round((p - k) / quantidade))));
       raiz.style.setProperty('--carta-pos', p.toFixed(4));
+      if (pronto && (p < 0 || p >= quantidade)) {
+        indiceVirtual = circular(Math.round(p));
+        m.definir(indiceVirtual);
+      }
     }
 
-    const m = mola(pintar);
+    m = mola(pintar);
     m.definir(indice);
     aplicarCentro(indice);
 
-    function irPara(i, solta, velocidade) {
-      const destino = Math.max(0, Math.min(nos.length - 1, i));
-      indice = destino;
-      Carteira.guardar(superficie, nos[destino].dataset.select);
-      aplicarCentro(destino);
-      m.lancar(destino, velocidade || 0, !!solta);
+    function irPara(posicao, solta, velocidade) {
+      if (quantidade < 2) return;
+      indiceVirtual = posicao;
+      indice = circular(posicao);
+      Carteira.guardar(superficie, nos[indice].dataset.select);
+      aplicarCentro(indice);
+      m.lancar(posicao, velocidade || 0, !!solta);
     }
 
     /* ---- geometria ---- */
@@ -194,28 +206,19 @@
     const observador = global.ResizeObserver ? new ResizeObserver(medir) : null;
     if (observador) observador.observe(palco);
 
-    /* Resistência nas pontas: o cartão ainda anda, mas cada vez
-       menos. É como se diz "não tem mais" sem travar na mão. */
-    function elastico(p) {
-      const fim = nos.length - 1;
-      if (p < 0) return p * 0.3;
-      if (p > fim) return fim + (p - fim) * 0.3;
-      return p;
-    }
-
     /* ---- o arrasto ---- */
     let ponteiro = null, x0 = 0, y0 = 0, pos0 = 0, partiuDe = 0;
     let xUlt = 0, tUlt = 0, vx = 0, arrastando = false, decidiu = false;
 
     function aoDescer(ev) {
-      if (ponteiro !== null || ev.button > 0) return;
+      if (quantidade < 2 || ponteiro !== null || ev.button > 0) return;
       ponteiro = ev.pointerId;
       x0 = xUlt = ev.clientX; y0 = ev.clientY;
       tUlt = ev.timeStamp;
       vx = 0; arrastando = false; decidiu = false;
       medir();
       pos0 = m.parar();
-      partiuDe = Math.max(0, Math.min(nos.length - 1, Math.round(pos0)));
+      partiuDe = Math.round(pos0);
     }
 
     function aoMover(ev) {
@@ -240,7 +243,7 @@
         vx = vx * 0.7 + inst * 0.3;   // média móvel: um quadro solto não decide o lance
         xUlt = ev.clientX; tUlt = ev.timeStamp;
       }
-      const p = elastico(pos0 - dx / passo);
+      const p = Math.max(partiuDe - 1.15, Math.min(partiuDe + 1.15, pos0 - dx / passo));
       m.arrastar(p);
       /* O bolso acompanha o dedo: ao passar do meio do caminho, o
          número já é o do cartão que está chegando. */
@@ -281,19 +284,20 @@
       const i = nos.indexOf(cartao);
       if (i < 0 || i === centro) return;   // o do meio segue para a ação dele
       ev.stopPropagation(); ev.preventDefault();
-      irPara(i, true);
+      const visual = Number(cartao.style.getPropertyValue('--deck-i'));
+      irPara(Number.isFinite(visual) ? visual : i, true);
     }, true);
 
     palco.addEventListener('keydown', (ev) => {
       const passos = { ArrowLeft: -1, ArrowRight: 1 };
       if (!passos[ev.key]) return;
       ev.preventDefault();
-      irPara(indice + passos[ev.key], true);
+      irPara(indiceVirtual + passos[ev.key], true);
       if (nos[indice]) nos[indice].focus();
     });
 
-    if (setaAnt) setaAnt.addEventListener('click', (ev) => { ev.stopPropagation(); irPara(indice - 1, true); });
-    if (setaProx) setaProx.addEventListener('click', (ev) => { ev.stopPropagation(); irPara(indice + 1, true); });
+    if (setaAnt) setaAnt.addEventListener('click', (ev) => { ev.stopPropagation(); irPara(indiceVirtual - 1, true); });
+    if (setaProx) setaProx.addEventListener('click', (ev) => { ev.stopPropagation(); irPara(indiceVirtual + 1, true); });
 
     return {
       destruir() {

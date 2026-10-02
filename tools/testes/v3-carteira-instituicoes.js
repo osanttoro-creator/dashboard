@@ -74,6 +74,10 @@ assert.match(carteira, /setPointerCapture/, 'o arrasto precisa capturar o pontei
 assert.match(carteira, /requestAnimationFrame\(passo\)/, 'a mola anima quadro a quadro');
 assert.match(carteira, /const k = 340/, 'a rigidez da mola é medida, não improvisada');
 assert.match(carteira, /Math\.max\(partiuDe - 1, Math\.min\(partiuDe \+ 1/, 'um gesto anda um cartão');
+assert.match(carteira, /const circular = \(i\) => \(\(i % quantidade\) \+ quantidade\) % quantidade/, 'o fim e o início da carteira se encontram');
+assert.match(carteira, /irPara\(indiceVirtual \+ 1, true\)/, 'a seta avança também depois do último cartão');
+assert.match(carteira, /irPara\(indiceVirtual - 1, true\)/, 'a seta volta também antes do primeiro cartão');
+assert.doesNotMatch(carteira, /setaProx\.disabled = centro ===/, 'a seta não para na ponta');
 assert.match(carteira, /prefers-reduced-motion/, 'quem pede menos movimento recebe o destino');
 assert.match(carteira, /oaze\.carteira\.ultimo/, 'a carteira abre no último cartão aberto');
 assert.match(carteira, /Math\.abs\(dx\) > Math\.abs\(dy\)/, 'gesto vertical continua rolando a página');

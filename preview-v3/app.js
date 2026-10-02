@@ -11,6 +11,13 @@
   const classicPaths = { transactions: '/app/financeiro', wallet: '/app/carteira', investments: '/app/investimentos', categories: '/app/categorias', goals: '/app/metas', reminders: '/app/recorrencias', settings: '/app/configuracoes', plan: '/app/planos' };
   const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
+  const statusLabels = { pago: 'Pago', pendente: 'Não pago', cancelado: 'Cancelado' };
+  const statusDescriptions = { pago: 'Entra nos totais', pendente: 'Fica no previsto', cancelado: 'Não entra em nenhum total' };
+  function statusGlyph(value) {
+    if (value === 'cancelado') return '<span class="v3-status-emoji" aria-hidden="true">⛔</span>';
+    const svg = global.Icons?.lucide(value === 'pago' ? 'check' : 'x', 18);
+    return svg?.outerHTML || (value === 'pago' ? '✓' : '×');
+  }
   const cocoMediaIcon = (name) => {
     const paths = {
       attach: '<path d="m21.4 11.6-8.8 8.8a6 6 0 0 1-8.5-8.5L13.6 2.4a4 4 0 0 1 5.7 5.7l-9.5 9.5a2 2 0 0 1-2.8-2.8l8.8-8.8"/>',
@@ -28,6 +35,8 @@
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
   const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  let statusMenu = null;
+  let statusBusy = false;
   let recorder = null;
   let microphone = null;
   let limitsPromise = Promise.resolve(demo);
@@ -365,13 +374,68 @@
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
     return `<div class="v3-mobile-greeting"><span class="v3-avatar">${esc(owner.charAt(0))}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div><div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}<button class="v3-coco-call" type="button" data-action="coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span>${demo ? 'Quatro coisas para ver' : 'Conversar com a Coco'}</span>›</button></div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div></div>`;
   }
+  function closeStatusMenu(restoreFocus = true) {
+    if (!statusMenu) return;
+    const { element, trigger } = statusMenu;
+    const wasFocused = element.contains(document.activeElement);
+    element.remove();
+    trigger?.setAttribute('aria-expanded', 'false');
+    trigger?.removeAttribute('aria-controls');
+    statusMenu = null;
+    if (restoreFocus && wasFocused && trigger?.isConnected) trigger.focus();
+  }
+  function openStatusMenu(trigger) {
+    if (statusBusy) return;
+    if (statusMenu?.trigger === trigger) { closeStatusMenu(); return; }
+    closeStatusMenu(false);
+    const id = trigger.dataset.confirm, ym = trigger.dataset.confirmMonth;
+    const entry = currentTransactions({ comCancelados: true }).find((item) =>
+      item.id === id && (item.ym || ymOf(item.date)) === ym);
+    if (!entry || (!demo && !Store.transactions.get(id))) { toast('Esse lançamento mudou. Atualize a página e tente novamente.'); return; }
+    const current = entry.cancelado ? 'cancelado' : entry.confirmed ? 'pago' : 'pendente';
+    const element = document.createElement('div');
+    element.id = 'v3-status-menu';
+    element.className = 'v3-status-menu';
+    element.setAttribute('role', 'dialog');
+    element.setAttribute('aria-labelledby', 'v3-status-menu-title');
+    element.innerHTML = `<div class="v3-status-menu-head"><strong id="v3-status-menu-title">Escolher situação</strong><button type="button" data-action="close-status-menu" aria-label="Fechar opções de situação">${global.Icons?.lucide('x', 16)?.outerHTML || '×'}</button></div><p>${esc(entry.description)}</p><div class="v3-status-options">${['pago','pendente','cancelado'].map((value) => `<button type="button" class="v3-status-option is-${value}${current === value ? ' is-current' : ''}" data-action="select-transaction-status" data-status-choice="${value}" aria-pressed="${current === value}"><span class="v3-status-option-icon">${statusGlyph(value)}</span><span><strong>${statusLabels[value]}</strong><small>${statusDescriptions[value]}</small></span>${current === value ? '<span class="v3-status-current" aria-hidden="true">Atual</span>' : ''}</button>`).join('')}</div>`;
+    document.body.appendChild(element);
+    const rect = trigger.getBoundingClientRect(), width = element.offsetWidth, height = element.offsetHeight;
+    element.style.left = `${Math.max(12, Math.min(rect.right - width, innerWidth - width - 12))}px`;
+    element.style.top = `${Math.max(12, rect.bottom + height + 8 < innerHeight - 12 ? rect.bottom + 8 : rect.top - height - 8)}px`;
+    trigger.setAttribute('aria-expanded', 'true');
+    trigger.setAttribute('aria-controls', element.id);
+    statusMenu = { element, trigger, id, ym };
+    element.querySelector('.is-current')?.focus();
+  }
+  async function chooseTransactionStatus(value) {
+    if (!statusMenu || statusBusy || !Object.hasOwn(statusLabels, value)) return;
+    const { id, ym } = statusMenu;
+    const entry = currentTransactions({ comCancelados: true }).find((item) =>
+      item.id === id && (item.ym || ymOf(item.date)) === ym);
+    if (!entry || (!demo && !Store.transactions.get(id))) { closeStatusMenu(); toast('Esse lançamento mudou. Atualize a página e tente novamente.'); return; }
+    if (value === (entry.cancelado ? 'cancelado' : entry.confirmed ? 'pago' : 'pendente')) { closeStatusMenu(); return; }
+    if (demo) { closeStatusMenu(); toast('Demonstração: nenhum dado foi alterado.'); return; }
+    statusBusy = true;
+    closeStatusMenu(false);
+    try {
+      await V3Backend.mutate(() => {
+        Store.transactions.setCancelado(id, ym, value === 'cancelado');
+        Store.transactions.setConfirmed(id, ym, value === 'pago');
+      });
+      render();
+      [...document.querySelectorAll('[data-confirm]')].find((button) => button.dataset.confirm === id && button.dataset.confirmMonth === ym)?.focus();
+      toast(`${statusLabels[value]} — ${statusDescriptions[value].toLowerCase()}.`);
+    } catch (error) { render(); toast(error.message || 'Não foi possível salvar a situação.'); }
+    finally { statusBusy = false; }
+  }
   function renderTransactions() {
     const rows = currentTransactions({ comCancelados: true }).filter((t) => state.filter === 'Todos' || (state.filter === 'Crédito' ? !!t.cardId : state.filter === 'Débito' ? !t.cardId : state.filter === 'Cartões' ? !!t.cardId : (t.methodLabel || '').toUpperCase().includes('PIX'))).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
     const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
       const method = x.methodLabel || (x.cardId ? 'CARTÃO' : x.kind === 'transfer' ? 'TRANSFERÊNCIA' : 'CONTA');
-      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><span>${esc(categoryName(x.categoryId))}<small class="v3-mobile-only">${esc(shortDate(x.date))} · ${esc(method)}</small></span><span class="v3-mono">${esc(method)}</span><span class="v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="${x.cancelado ? 'Cancelado — tocar para voltar a pago' : x.confirmed ? 'Pago — tocar para marcar como não pago' : 'Não pago — tocar para cancelar'}" title="${x.cancelado ? 'Cancelado' : x.confirmed ? 'Pago' : 'Não pago'}">${x.cancelado ? '🚫' : x.confirmed ? '✓' : '✗'}</button></div>`;
+      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${esc(shortDate(x.date))} · ${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
     };
 
     /* =============================================================
@@ -383,9 +447,8 @@
        dinheiro foi, a pessoa tinha de ler linha por linha filtrando
        com o olho.
 
-       São duas listas agora, cada uma com o seu subtotal. O que
-       entra e o que sai são perguntas diferentes e raramente se olha
-       as duas ao mesmo tempo. Transferência ganha a terceira lista, e
+       São duas listas lado a lado no desktop, cada uma com subtotal.
+       Transferência ganha a terceira lista, e
        só aparece quando existe: ela não é gasto nem ganho — é o mesmo
        dinheiro mudando de lugar.
 
@@ -397,7 +460,6 @@
       { chave: 'expense', titulo: 'saiu', vazio: 'Nenhuma despesa neste filtro.', classe: 'v3-negative', sinal: '▼' },
       { chave: 'transfer', titulo: 'transferências', vazio: '', classe: '', sinal: '' }
     ];
-    const cabecalhoTabela = '<div class="v3-table-header"><span>CARTÃO</span><span>DATA</span><span>DESCRIÇÃO</span><span>CATEGORIA</span><span>COMO FOI PAGO</span><span>VALOR</span><span></span></div>';
     const listas = grupos.map((g) => {
       const doGrupo = rows.filter((x) => x.kind === g.chave);
       /* Transferência só existe na tela quando existe no mês. */
@@ -405,17 +467,16 @@
       /* O subtotal conta só o que vale: cancelado fora, previsto fora. */
       const soma = doGrupo.filter((x) => x.confirmed && !x.cancelado).reduce((n, x) => n + Number(x.amount || 0), 0);
       const previsto = doGrupo.filter((x) => !x.confirmed && !x.cancelado).length;
-      return `<section class="v3-panel v3-table v3-tx-grupo" aria-label="${esc(g.titulo)}">`
+      return `<section class="v3-panel v3-table v3-tx-grupo v3-tx-grupo--${g.chave}" aria-label="${esc(g.titulo)}">`
         + `<div class="v3-row v3-tx-grupo-head"><h2>${esc(g.titulo)}</h2><span>`
         + (g.sinal ? `<strong class="v3-mono ${g.classe} v3-sensitive">${g.sinal} ${money(soma)}</strong>` : `<strong class="v3-mono v3-sensitive">${money(soma)}</strong>`)
         + (previsto ? `<small>${previsto} previsto${previsto > 1 ? 's' : ''}</small>` : '')
         + `</span></div>`
-        + cabecalhoTabela
         + (doGrupo.length ? doGrupo.map(linha).join('') : `<p class="v3-muted" style="padding:16px 0">${esc(g.vazio)}</p>`)
         + `</section>`;
-    }).join('');
+    });
 
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para percorrer pago, não pago e cancelado.'}</p>${listas}</div>`;
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para escolher pago, não pago ou cancelado.'}</p><div class="v3-tx-pares">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen && state.selected ? selectedItem() : null;
@@ -968,6 +1029,7 @@
     return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${esc((demo?sample.owner:Store.ownerName()||'o').charAt(0).toLowerCase())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','goals','calendar','reminders','settings','plan'].map((p)=>`<button type="button" data-go="${p}">${icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
   }
   function render() {
+    closeStatusMenu(false);
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (screens[state.page]||renderHome)();
@@ -1687,26 +1749,15 @@
     if (target.dataset.goal && !target.dataset.action) { goalForm(target.dataset.goal); return; }
     if (target.dataset.budget && !target.dataset.action) { budgetForm(target.dataset.budget); return; }
     if (target.dataset.confirm) {
-      if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
-      const id = target.dataset.confirm, ym = target.dataset.confirmMonth;
-      const entry = currentTransactions({ comCancelados: true }).find((item) => item.id === id && (item.ym || ymOf(item.date)) === ym);
-      if (!entry || !Store.transactions.get(id)) { toast('Esse lançamento mudou. Atualize a página e tente novamente.'); return; }
-      /* Três estados, em roda: pago → não pago → cancelado → pago.
-         Cancelar não some com o lançamento; ele fica riscado na
-         lista, e o próximo toque o traz de volta. */
-      const proxima = entry.cancelado ? 'pago' : entry.confirmed ? 'pendente' : 'cancelado';
-      const aviso = { pago: 'Pago — entrou nos totais.', pendente: 'Voltou a previsto — saiu dos totais.', cancelado: 'Cancelado — fora de todo total.' }[proxima];
-      V3Backend.mutate(() => {
-        Store.transactions.setCancelado(id, ym, proxima === 'cancelado');
-        Store.transactions.setConfirmed(id, ym, proxima === 'pago');
-      }).then(() => { render(); toast(aviso); })
-        .catch((e) => toast(e.message || 'Não foi possível salvar.'));
+      openStatusMenu(target);
       return;
     }
     if (target.dataset.adiantar) { advanceForm(target.dataset.adiantarCartao, target.dataset.adiantar); return; }
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
+    if (action==='close-status-menu') { closeStatusMenu(); return; }
+    if (action==='select-transaction-status') { chooseTransactionStatus(target.dataset.statusChoice); return; }
     /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
        voltar nele, que é como uma carteira de verdade se comporta. */
     if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;render();return;}
@@ -1881,6 +1932,10 @@
     const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
+    document.addEventListener('click',(event)=>{
+      if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);
+    });
+    document.addEventListener('scroll',()=>closeStatusMenu(false),true);
     document.addEventListener('change',(event)=>{
       if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
       if (!['v3-coco-file','v3-coco-audio-file'].includes(event.target?.id)) return;
@@ -1926,8 +1981,8 @@
       const vazio=document.getElementById('v3-bank-vazio');
       if(vazio)vazio.hidden=achou>0;
     });
-    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
-    addEventListener('resize',()=>{if(state.page==='goals')updateGoalTabs();});
+    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
+    addEventListener('resize',()=>{closeStatusMenu(false);if(state.page==='goals')updateGoalTabs();});
     render();
     /* =============================================================
        PRIMEIROS PASSOS

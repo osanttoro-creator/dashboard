@@ -15,8 +15,8 @@
    -------------------------------------------------------------
    O leque vertical mostrava seis cartões ao mesmo tempo, o que é um
    índice, não uma carteira. Aqui a posição de cada cartão é a
-   distância dele até o centro: --deck-i é o índice (fixo, escrito
-   uma vez no HTML) e --carta-pos é onde a carteira está AGORA
+   distância dele até o centro: --deck-i é a cópia mais próxima do
+   índice no anel e --carta-pos é onde a carteira está AGORA
    (fracionário, escrito pela mola a cada quadro). A diferença dos
    dois move, encolhe e apaga o cartão — uma fórmula só, e o arrasto
    sai de graça, porque arrastar é só escrever outro --carta-pos.
@@ -65,7 +65,6 @@
 .v3-carteira-ant{left:-10px}
 .v3-carteira-prox{right:-10px}
 .v3-carteira-seta:hover{transform:scale(1.06)}
-.v3-carteira-seta:disabled{opacity:.28;cursor:default;transform:none}
 .v3-wallet.is-open .v3-carteira-seta{display:grid}
 @media(hover:none){
   /* No toque o gesto é o controle; duas bolhas por cima dos cartões

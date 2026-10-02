@@ -36,7 +36,11 @@ assert.match(calc, /opcoes && opcoes\.incluirCancelados/);
 assert.match(app, /comCancelados: true/);
 assert.match(app, /is-cancelada/);
 assert.match(css, /\.v3-tx\.is-cancelada/);
-assert.match(app, /entry\.cancelado \? 'pago' : entry\.confirmed \? 'pendente' : 'cancelado'/, 'o status gira nos três estados');
+assert.match(app, /function openStatusMenu\(trigger\)/, 'tocar no círculo deve abrir as três opções');
+assert.match(app, /\['pago','pendente','cancelado'\]\.map/, 'o menu mostra todos os estados');
+assert.match(app, /function chooseTransactionStatus\(value\)/, 'a escolha deve ser explícita');
+assert.match(app, /aria-pressed="\$\{current === value\}"/, 'a opção atual deve ficar indicada');
+assert.doesNotMatch(app, /const proxima = entry\.cancelado/, 'não deve mais alternar em ciclo');
 assert.match(app, /Store\.transactions\.setCancelado/);
 assert.match(store, /setCancelado\(txId, ym, value\)/);
 
