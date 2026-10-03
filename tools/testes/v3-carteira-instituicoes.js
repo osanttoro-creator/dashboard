@@ -17,7 +17,10 @@ assert.match(app, /data-wallet-kind="credit"/);
    desescolher. Clicar de novo no cartão aberto não pode esvaziar a
    carteira, e fechar não pode esquecer qual estava aberto: reabrir
    tem de voltar nele. */
-assert.match(app, /state\.selected=target\.dataset\.select; render\(\); return;/);
+/* Trocar de cartão volta para a fatura corrente DELE: sem o reset, a
+   fatura que estava sendo olhada no cartão anterior seguia na tela,
+   agora com os números do novo. */
+assert.match(app, /state\.selected=target\.dataset\.select; state\.invoiceRef=null; render\(\); return;/);
 assert.doesNotMatch(app, /state\.selected===target\.dataset\.select\?null/);
 assert.match(app, /data-action="wallet-toggle" aria-expanded="\$\{state\.walletOpen\}"/);
 assert.match(app, /action==='wallet-toggle'/);

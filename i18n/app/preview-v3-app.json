@@ -636,6 +636,90 @@
     "es": "Ningún vencimiento próximo registrado."
   },
   {
+    "pt": "{0} {1}% vs. mês anterior",
+    "tipo": "padrao",
+    "en": "{0} {1}% vs. last month",
+    "fr": "{0} {1} % par rapport au mois précédent",
+    "es": "{0} {1}% frente al mes anterior"
+  },
+  {
+    "pt": "Sem mês anterior para comparar",
+    "tipo": "exato",
+    "en": "No previous month to compare",
+    "fr": "Pas de mois précédent pour comparer",
+    "es": "Sin mes anterior para comparar"
+  },
+  {
+    "pt": "{0} disponível",
+    "tipo": "padrao",
+    "en": "{0} available",
+    "fr": "{0} disponible",
+    "es": "{0} disponible"
+  },
+  {
+    "pt": "{0} investido",
+    "tipo": "padrao",
+    "en": "{0} invested",
+    "fr": "{0} investi",
+    "es": "{0} invertido"
+  },
+  {
+    "pt": "Contas consideradas + investimentos − faturas em aberto.",
+    "tipo": "exato",
+    "en": "Counted accounts + investments − open statements.",
+    "fr": "Comptes pris en compte + investissements − relevés en cours.",
+    "es": "Cuentas contadas + inversiones − facturas abiertas."
+  },
+  {
+    "pt": "{0} previsto",
+    "tipo": "padrao",
+    "en": "{0} forecast",
+    "fr": "{0} prévu",
+    "es": "{0} previsto"
+  },
+  {
+    "pt": "Só receitas confirmadas das contas consideradas entram neste valor.",
+    "tipo": "exato",
+    "en": "Only confirmed income from counted accounts goes into this figure.",
+    "fr": "Seuls les revenus confirmés des comptes pris en compte entrent dans ce montant.",
+    "es": "Solo los ingresos confirmados de las cuentas contadas entran en este importe."
+  },
+  {
+    "pt": "Compras no crédito contam no mês da compra; o pagamento da fatura não duplica a despesa.",
+    "tipo": "exato",
+    "en": "Credit purchases count in the month of the purchase; paying the statement doesn’t double the expense.",
+    "fr": "Les achats à crédit comptent dans le mois de l’achat ; payer le relevé ne double pas la dépense.",
+    "es": "Las compras a crédito cuentan en el mes de la compra; pagar la factura no duplica el gasto."
+  },
+  {
+    "pt": "Receitas − débito − {0} em faturas pagas",
+    "tipo": "padrao",
+    "en": "Income − debit − {0} in paid statements",
+    "fr": "Revenus − débit − {0} en relevés payés",
+    "es": "Ingresos − débito − {0} en facturas pagadas"
+  },
+  {
+    "pt": "Caixa do mês: o crédito só sai quando a fatura é paga.",
+    "tipo": "exato",
+    "en": "The month’s cash: credit only leaves when the statement is paid.",
+    "fr": "La trésorerie du mois : le crédit ne sort qu’au paiement du relevé.",
+    "es": "La caja del mes: el crédito solo sale cuando se paga la factura."
+  },
+  {
+    "pt": "Abrir detalhes de {0}",
+    "tipo": "padrao",
+    "en": "Open {0} details",
+    "fr": "Ouvrir les détails de {0}",
+    "es": "Abrir detalles de {0}"
+  },
+  {
+    "pt": "Indicadores do mês",
+    "tipo": "exato",
+    "en": "Month indicators",
+    "fr": "Indicateurs du mois",
+    "es": "Indicadores del mes"
+  },
+  {
     "pt": "seu painel começa aqui",
     "tipo": "exato",
     "en": "your panel starts here",
@@ -839,11 +923,18 @@
     "es": "Solo lo confirmado entra en los totales. {0}"
   },
   {
-    "pt": "FATURA DE {0}",
+    "pt": "em aberto",
+    "tipo": "exato",
+    "en": "open",
+    "fr": "en cours",
+    "es": "abierta"
+  },
+  {
+    "pt": "FATURA DE {0}{1}",
     "tipo": "padrao",
-    "en": "{0} STATEMENT",
-    "fr": "RELEVÉ DE {0}",
-    "es": "FACTURA DE {0}"
+    "en": "{0} STATEMENT{1}",
+    "fr": "RELEVÉ DE {0}{1}",
+    "es": "FACTURA DE {0}{1}"
   },
   {
     "pt": "EXTRATO DA CONTA",
@@ -872,6 +963,34 @@
     "en": "Limit used · {0} of {1}",
     "fr": "Plafond utilisé · {0} sur {1}",
     "es": "Límite usado · {0} de {1}"
+  },
+  {
+    "pt": "Reabrir fatura",
+    "tipo": "exato",
+    "en": "Reopen statement",
+    "fr": "Rouvrir le relevé",
+    "es": "Reabrir factura"
+  },
+  {
+    "pt": "&lsaquo; anterior",
+    "tipo": "exato",
+    "en": "&lsaquo; previous",
+    "fr": "&lsaquo; précédent",
+    "es": "&lsaquo; anterior"
+  },
+  {
+    "pt": "{0} · fecha {1} · vence {2}",
+    "tipo": "padrao",
+    "en": "{0} · closes {1} · due {2}",
+    "fr": "{0} · clôture {1} · échéance {2}",
+    "es": "{0} · cierra {1} · vence {2}"
+  },
+  {
+    "pt": "próxima &rsaquo;",
+    "tipo": "exato",
+    "en": "next &rsaquo;",
+    "fr": "suivant &rsaquo;",
+    "es": "siguiente &rsaquo;"
   },
   {
     "pt": "NA FATURA",
@@ -937,18 +1056,39 @@
     "es": "Aportado: {0}"
   },
   {
-    "pt": "Evolução estimada dos investimentos",
+    "pt": "Evolução dos investimentos: o que foi aportado e quanto vale hoje",
     "tipo": "exato",
-    "en": "Estimated growth of the investments",
-    "fr": "Évolution estimée des investissements",
-    "es": "Evolución estimada de las inversiones"
+    "en": "Investment growth: what was contributed and what it’s worth today",
+    "fr": "Évolution des investissements : ce qui a été apporté et ce que cela vaut aujourd’hui",
+    "es": "Evolución de las inversiones: lo aportado y lo que vale hoy"
   },
   {
-    "pt": "A evolução aparece depois de dois meses de aportes.",
+    "pt": "Vale hoje",
     "tipo": "exato",
-    "en": "The growth shows after two months of contributions.",
-    "fr": "L’évolution apparaît après deux mois d’apports.",
-    "es": "La evolución aparece tras dos meses de aportaciones."
+    "en": "Worth today",
+    "fr": "Vaut aujourd’hui",
+    "es": "Vale hoy"
+  },
+  {
+    "pt": "Só os aportes",
+    "tipo": "exato",
+    "en": "Contributions only",
+    "fr": "Apports seuls",
+    "es": "Solo las aportaciones"
+  },
+  {
+    "pt": "{0} {1} de rendimento",
+    "tipo": "padrao",
+    "en": "{0} {1} in return",
+    "fr": "{0} {1} de rendement",
+    "es": "{0} {1} de rendimiento"
+  },
+  {
+    "pt": "A evolução aparece depois do segundo mês com aporte.",
+    "tipo": "exato",
+    "en": "The growth shows from the second month with a contribution.",
+    "fr": "L’évolution apparaît à partir du deuxième mois avec un apport.",
+    "es": "La evolución aparece a partir del segundo mes con aportación."
   },
   {
     "pt": "Nenhum aporte registrado neste período.",
@@ -2931,6 +3071,13 @@
     "es": "Ej.: supermercado"
   },
   {
+    "pt": "A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.",
+    "tipo": "exato",
+    "en": "The purchase lands on this statement; OAZE picks the right day inside the cycle.",
+    "fr": "L’achat tombe sur ce relevé ; OAZE choisit le bon jour dans le cycle.",
+    "es": "La compra cae en esta factura; OAZE elige el día correcto dentro del ciclo."
+  },
+  {
     "pt": "SITUAÇÃO",
     "tipo": "exato",
     "en": "STATUS",
@@ -3279,6 +3426,69 @@
     "en": "Pay purchase ahead",
     "fr": "Avancer un achat",
     "es": "Adelantar compra"
+  },
+  {
+    "pt": "Escolha um cartão para encerrar a fatura.",
+    "tipo": "exato",
+    "en": "Choose a card to close the statement.",
+    "fr": "Choisissez une carte pour clôturer le relevé.",
+    "es": "Elige una tarjeta para cerrar la factura."
+  },
+  {
+    "pt": "Fatura reaberta. Os pagamentos registrados continuam lá.",
+    "tipo": "exato",
+    "en": "Statement reopened. The recorded payments are still there.",
+    "fr": "Relevé rouvert. Les paiements enregistrés sont toujours là.",
+    "es": "Factura reabierta. Los pagos registrados siguen ahí."
+  },
+  {
+    "pt": "Fatura encerrada. A diferença não vira lançamento.",
+    "tipo": "exato",
+    "en": "Statement closed. The difference doesn’t become an entry.",
+    "fr": "Relevé clôturé. La différence ne devient pas une écriture.",
+    "es": "Factura cerrada. La diferencia no se convierte en movimiento."
+  },
+  {
+    "pt": "Esta fatura não tem pagamento para desfazer.",
+    "tipo": "exato",
+    "en": "This statement has no payment to undo.",
+    "fr": "Ce relevé n’a aucun paiement à annuler.",
+    "es": "Esta factura no tiene pago que deshacer."
+  },
+  {
+    "pt": "desfazer pagamentos",
+    "tipo": "exato",
+    "en": "undo payments",
+    "fr": "annuler les paiements",
+    "es": "deshacer pagos"
+  },
+  {
+    "pt": "Os {0} registrados nesta fatura deixam de contar, e o saldo das contas de onde saíram volta.",
+    "tipo": "padrao",
+    "en": "The {0} recorded on this statement stop counting, and the balance of the accounts they came from is restored.",
+    "fr": "Les {0} enregistrés sur ce relevé cessent de compter, et le solde des comptes d’origine est rétabli.",
+    "es": "Los {0} registrados en esta factura dejan de contar, y el saldo de las cuentas de donde salieron vuelve."
+  },
+  {
+    "pt": "Os adiantamentos de compras seguem como estão.",
+    "tipo": "exato",
+    "en": "Early payments on purchases stay as they are.",
+    "fr": "Les avances sur achats restent telles quelles.",
+    "es": "Los adelantos de compras se quedan como están."
+  },
+  {
+    "pt": "Manter",
+    "tipo": "exato",
+    "en": "Keep",
+    "fr": "Garder",
+    "es": "Mantener"
+  },
+  {
+    "pt": "Esta fatura mudou. Atualize a página.",
+    "tipo": "exato",
+    "en": "This statement changed. Refresh the page.",
+    "fr": "Ce relevé a changé. Actualisez la page.",
+    "es": "Esta factura cambió. Actualiza la página."
   },
   {
     "pt": "Demonstração: nenhum dado foi salvo.",
@@ -4409,13 +4619,6 @@
     "en": "Delete {0}? This can’t be undone.",
     "fr": "Supprimer {0} ? Action irréversible.",
     "es": "¿Eliminar {0}? Esta acción no se puede deshacer."
-  },
-  {
-    "pt": "Manter",
-    "tipo": "exato",
-    "en": "Keep",
-    "fr": "Garder",
-    "es": "Mantener"
   },
   {
     "pt": "Confirmar exclusão",

@@ -48,7 +48,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -149,7 +149,7 @@
   function categoryTotals(kind) {
     if (demo && kind === 'expense') return Object.entries(sample.categoryAmounts).map(([id,value]) => ({ id, name: categoryName(id), value, color: sample.categories.find((c) => c.id === id).color })).sort((a,b) => b.value - a.value);
     const map = new Map();
-    currentTransactions().filter((t) => t.confirmed && t.kind === kind).forEach((t) => map.set(t.categoryId || 'other', (map.get(t.categoryId || 'other') || 0) + +t.amount));
+    currentTransactions().filter((t) => t.confirmed && t.contaNosTotais !== false && t.kind === kind).forEach((t) => map.set(t.categoryId || 'other', (map.get(t.categoryId || 'other') || 0) + +t.amount));
     return [...map].map(([id, value]) => ({ id, name: categoryName(id), value, color: safeColor((profile().categories.find((c) => c.id === id) || {}).color) })).sort((a, b) => b.value - a.value);
   }
   function items() {
@@ -246,7 +246,8 @@
       .map((key)=>({key,name:BANK_NAMES[key]||key}))
       .sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
     const opcoes=chaves.map(({key,name})=>{
-      const color=bankBrand(name), ink=cardInk(color);
+      const brand=global.Icons?.bankBrand(name);
+      const color=safeColor(brand?.bg || bankBrand(name)), ink=safeColor(brand?.fg || cardInk(color));
       return `<label class="v3-bank-option" data-banco="${esc(U.norm(name))}"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
     }).join('');
     const ehOutro=!!selected && !selectedKey;
@@ -263,8 +264,10 @@
   function cardButton(item, selected, i) {
     const d = item.data, name = d.bank || d.name;
     const plastic=bankBrand(name,d.color), ink=cardInk(plastic);
+    const brand=global.Icons?.bankBrand(name);
+    const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
-    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(name,ink)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
+    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(name,brandInk)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -354,16 +357,24 @@
     if (demo) return 'M0 120 C85 105 140 65 200 59 S305 128 375 110 S485 42 550 38 S660 80 720 68';
     const count = +state.ym.slice(5) === 2 ? new Date(+state.ym.slice(0,4), 2, 0).getDate() : new Date(+state.ym.slice(0,4), +state.ym.slice(5), 0).getDate();
     const byDay = Array(count).fill(0);
-    currentTransactions().filter((x) => x.confirmed && ['income','expense'].includes(x.kind)).forEach((x) => {
+    currentTransactions().filter((x) => x.confirmed && x.contaNosTotais !== false && ['income','expense'].includes(x.kind)).forEach((x) => {
       const day = Number(String(x.date).slice(8,10)) - 1;
       if (day >= 0 && day < count) byDay[day] += (x.kind === 'income' ? 1 : -1) * Number(x.amount || 0);
     });
     const abertura = saldoQueEntra();
     let sum = abertura; const values = byDay.map((x) => (sum += x));
     const min = Math.min(abertura, ...values), max = Math.max(abertura, ...values), range = Math.max(1, max - min);
-    const ponto = (v, i) => `${(i * 720 / Math.max(1, count)).toFixed(1)} ${(135 - (v - min) / range * 105).toFixed(1)}`;
-    /* O primeiro ponto é o dia ZERO: de onde o mês partiu. */
-    return 'M' + [ponto(abertura, 0)].concat(values.map((v, i) => ponto(v, i + 1))).join(' L');
+    const pontos = [abertura, ...values].map((v, i) => ({ x: i * 720 / Math.max(1, count), y: 135 - (v - min) / range * 105 }));
+    /* Curva cúbica contínua: o gráfico real precisa ter a mesma linguagem
+       de onda da prévia, sem inventar movimentos entre os dias. */
+    return pontos.slice(1).reduce((d, atual, i) => {
+      const anterior = pontos[i], antes = pontos[Math.max(0, i - 1)], depois = pontos[Math.min(pontos.length - 1, i + 2)];
+      const c1x = anterior.x + (atual.x - antes.x) / 6;
+      const c1y = anterior.y + (atual.y - antes.y) / 6;
+      const c2x = atual.x - (depois.x - anterior.x) / 6;
+      const c2y = atual.y - (depois.y - anterior.y) / 6;
+      return `${d} C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${atual.x.toFixed(1)} ${atual.y.toFixed(1)}`;
+    }, `M${pontos[0].x.toFixed(1)} ${pontos[0].y.toFixed(1)}`);
   }
   function wave() {
     const t = totals();
@@ -378,15 +389,43 @@
     return rows.map((r) => `<div class="v3-cat-row" style="--swatch:${safeColor(r.color)}"><span class="v3-cat-icon">${icon(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span><strong>${esc(r.name)}</strong><div class="v3-bar"><span style="width:${pct(100 * r.value / total)}%"></span></div></span><span class="v3-mono v3-sensitive">${money(r.value)}</span></div>`).join('');
   }
   function upcoming() {
-    const rs = reminders().slice(0, 3);
+    const rs = monthUpcoming().slice(0, 3);
     if (!rs.length) return '<p class="v3-muted">Nenhum vencimento próximo registrado.</p>';
     return `<div class="v3-timeline">${rs.map((r) => `<div><span><small class="v3-mono">${esc(shortDate(r.date).toUpperCase())} · ${esc(r.sub || 'previsto')}</small><strong>${esc(r.title)}</strong></span><span class="v3-mono v3-negative v3-sensitive" style="margin-left:auto">− ${money(r.amount)}</span></div>`).join('')}</div>`;
+  }
+  function homeMetrics() {
+    const end = state.ym === U.todayYM() ? U.todayISO() : U.monthEnd(state.ym);
+    const t = totals();
+    const previous = demo ? { income: 0, expense: 0 } : Calc.monthTotals(U.addMonths(state.ym, -1));
+    const wealth = demo ? sample.balance : Calc.netWorth(end);
+    const available = demo ? sample.accountsBalance : Calc.available(end);
+    const investedValue = invested();
+    const change = (now, before) => before > 0 ? `${now >= before ? '▲' : '▼'} ${Math.abs((now - before) / before * 100).toFixed(1).replace('.', ',')}% vs. mês anterior` : 'Sem mês anterior para comparar';
+    const debit = demo ? 232.4 : t.expenseDebit;
+    const credit = demo ? 544.17 : t.expenseCredit;
+    const paidInvoices = demo ? 0 : t.invoicesPaid;
+    return [
+      { title: 'Patrimônio líquido', value: wealth, detail: [`${money(available)} disponível`, `${money(investedValue)} investido`], note: 'Contas consideradas + investimentos − faturas em aberto.' },
+      { title: 'Receitas do mês', value: t.income, detail: [change(t.income, previous.income), ...(t.pendingIncome > 0 ? [`${money(t.pendingIncome)} previsto`] : [])], note: 'Só receitas confirmadas das contas consideradas entram neste valor.' },
+      { title: 'Despesas do mês', value: t.expense, detail: [change(t.expense, previous.expense), `Débito ${money(debit)}`, `Crédito ${money(credit)}`], note: 'Compras no crédito contam no mês da compra; o pagamento da fatura não duplica a despesa.' },
+      { title: 'Sobra em caixa', value: demo ? t.income - debit : t.saldoCaixa, detail: [`Receitas − débito − ${money(paidInvoices)} em faturas pagas`], note: 'Caixa do mês: o crédito só sai quando a fatura é paga.' }
+    ];
+  }
+  function renderHomeMetrics() {
+    return `<div class="v3-home-metrics" aria-label="Indicadores do mês">${homeMetrics().map((m, i) =>
+      `<button type="button" class="v3-home-metric" data-metric="${i}" aria-label="Abrir detalhes de ${esc(m.title)}"><span class="v3-label">${esc(m.title)}</span><strong class="v3-money v3-sensitive">${money(m.value)}</strong><small>${esc(m.detail[0])}</small><span class="v3-metric-open" aria-hidden="true">↗</span></button>`
+    ).join('')}</div>`;
+  }
+  function openHomeMetric(index) {
+    const metric = homeMetrics()[index];
+    if (!metric) return;
+    openSheet(`${sheetTop(metric.title, niceMonth(state.ym))}<p class="v3-money v3-sensitive v3-metric-detail">${money(metric.value)}</p><div class="v3-metric-lines">${metric.detail.map((line) => `<p>${esc(line)}</p>`).join('')}</div><p class="v3-muted">${esc(metric.note)}</p>`, metric.title);
   }
   function renderHome() {
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
-    return `<div class="v3-mobile-greeting"><span class="v3-avatar">${esc(owner.charAt(0))}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div><div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}<button class="v3-coco-call" type="button" data-action="coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span>${demo ? 'Quatro coisas para ver' : 'Conversar com a Coco'}</span>›</button></div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div></div>`;
+    return `<div class="v3-mobile-greeting"><span class="v3-avatar">${esc(owner.charAt(0))}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div><div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}<button class="v3-coco-call" type="button" data-action="coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span>${demo ? 'Quatro coisas para ver' : 'Conversar com a Coco'}</span>›</button></div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div></div>${renderHomeMetrics()}`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -503,13 +542,45 @@
        Pagar uma compra antes do vencimento é coisa que se faz, e não
        havia por onde.
        ============================================================= */
+    /* =============================================================
+       QUAL FATURA, E NÃO SÓ A DO MÊS
+       -------------------------------------------------------------
+       O painel mostrava sempre a fatura do mês em exibição. Mas uma
+       fatura não coincide com o mês: ela fecha no dia 20 e vence no
+       28, e a compra de ontem pode já estar na próxima. Sem poder
+       andar entre elas, conferir o que entrou na fatura que se vai
+       pagar dependia de trocar o mês do app inteiro.
+       ============================================================= */
+    const refFatura = chosen && chosen.kind === 'credit' && !demo
+      ? (() => { try { return state.invoiceRef || Calc.currentInvoiceRef(chosen.data, state.ym, profile()); } catch (e) { return state.ym; } })()
+      : state.ym;
     const fatura = chosen && chosen.kind === 'credit' && !demo
-      ? (() => { try { return Calc.invoice(chosen.data.id, state.ym, profile()); } catch (e) { return null; } })()
+      ? (() => { try { return Calc.invoice(chosen.data.id, refFatura, profile()); } catch (e) { return null; } })()
       : null;
     const related = chosen ? currentTransactions().filter((x) => x.cardId === chosen.data.id || x.accountId === chosen.data.id).slice(0, 8) : [];
     const itemAmount=walletItemValue(chosen);
-    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.bank || chosen.data.name)} •• ${esc(chosen.data.last4 || '••••')}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="edit-wallet-item" data-wallet-id="${esc(chosen.data.id)}">Editar ${chosen.kind==='credit'?'cartão':'conta'}</button>${chosen.kind==='credit'?`<button class="v3-secondary" type="button" data-action="pay-invoice" data-wallet-id="${esc(chosen.data.id)}">Pagar fatura</button>`:''}</div>${fatura && fatura.items.length ? fatura.items.map((it) => { const falta=U.round2(Math.max(0,it.amount-(it.adiantado||0))); return `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(it.date))}</span><strong>${esc(it.description)}</strong><span class="v3-mono">${it.adiantado?'ADIANTADO':'NA FATURA'}</span><span class="v3-mono v3-negative v3-sensitive">− ${money(it.amount)}</span>${falta>0?`<button type="button" class="v3-link" data-adiantar="${esc(it.key)}" data-adiantar-cartao="${esc(chosen.data.id)}">adiantar</button>`:'<span class="v3-mono v3-muted">pago</span>'}</div>`; }).join('') : related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
+    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(refFatura).split(' de ')[0].toUpperCase())}${fatura ? ` · ${fatura.paid ? 'paga' : fatura.parcial ? 'parcial' : 'em aberto'}` : ''}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.bank || chosen.data.name)} •• ${esc(chosen.data.last4 || '••••')}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="edit-wallet-item" data-wallet-id="${esc(chosen.data.id)}">Editar ${chosen.kind==='credit'?'cartão':'conta'}</button>${chosen.kind==='credit'?`<button class="v3-secondary" type="button" data-action="pay-invoice" data-wallet-id="${esc(chosen.data.id)}">Pagar fatura</button>${fatura?`<button class="v3-secondary" type="button" data-action="fatura-quitar">${fatura.quitada||fatura.paid?'Reabrir fatura':'Encerrar fatura'}</button>${fatura.pago>0?`<button class="v3-secondary" type="button" data-action="fatura-desfazer">Desfazer pagamentos</button>`:''}`:''}`:''}</div>${fatura ? `<div class="v3-row v3-fatura-nav"><button type="button" class="v3-link" data-fatura-passo="-1" data-fatura-de="${esc(refFatura)}" aria-label="Fatura anterior">&lsaquo; anterior</button><small class="v3-mono">${esc(periodLabel(refFatura))} · fecha ${esc(shortDate(fatura.closeDate))} · vence ${esc(shortDate(fatura.dueDate))}</small><button type="button" class="v3-link" data-fatura-passo="1" data-fatura-de="${esc(refFatura)}" aria-label="Próxima fatura">próxima &rsaquo;</button></div>` : ''}${fatura && fatura.items.length ? fatura.items.map((it) => { const falta=U.round2(Math.max(0,it.amount-(it.adiantado||0))); return `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(it.date))}</span><strong>${esc(it.description)}</strong><span class="v3-mono">${it.adiantado?'ADIANTADO':'NA FATURA'}</span><span class="v3-mono v3-negative v3-sensitive">− ${money(it.amount)}</span>${falta>0?`<button type="button" class="v3-link" data-adiantar="${esc(it.key)}" data-adiantar-cartao="${esc(chosen.data.id)}">adiantar</button>`:'<span class="v3-mono v3-muted">pago</span>'}</div>`; }).join('') : related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
   }
+  /* A demonstração não tem Calc com Store por trás, mas tem aportes
+     com data e valor — o bastante para desenhar a mesma história:
+     quanto foi posto até cada mês, e quanto aquilo vale. O valor
+     informado manualmente vence a estimativa, como no app real. */
+  function serieDemo(list) {
+    if (!list.length) return [];
+    const primeiro = list.reduce((min, x) => (x.date < min ? x.date : min), list[0].date);
+    const meses = U.monthRange(ymOf(primeiro), state.ym).slice(-12);
+    return meses.map((ym) => {
+      const ate = U.monthEnd(ym);
+      const dentro = list.filter((x) => x.date <= ate);
+      return {
+        ym,
+        label: periodLabel(ym),
+        contributed: U.round2(dentro.reduce((n, x) => n + Number(x.amount || 0), 0)),
+        value: U.round2(dentro.reduce((n, x) => n + Number(x.currentValue == null ? x.amount : x.currentValue) || 0, 0))
+      };
+    });
+  }
+
   function renderInvestments() {
     const at = U.monthEnd(state.ym), list = (profile().investments || []).filter((x) => x.date <= at).slice().sort((a, b) => b.date.localeCompare(a.date));
     const valueAt = (x) => demo ? Number(x.currentValue == null ? x.amount : x.currentValue) || 0 : Calc.investmentValueAt(x, at, profile());
@@ -523,11 +594,29 @@
     const colors = ['#5fa99b', '#8fb0c0', '#f0e5cf', '#729cab'];
     const distribution = [...byType].map(([name, value], i) => ({ name, value, color: colors[i % colors.length] })).filter((x) => x.value > 0);
     const first = list.length ? list.reduce((min, x) => x.date < min ? x.date : min, list[0].date) : null;
-    const series = !demo && first ? Calc.investmentSeries(ymOf(first), state.ym, profile()).slice(-12) : [];
-    const max = Math.max(1, ...series.map((x) => x.value));
-    const chart = series.length > 1 ? `M${series.map((x, i) => `${(i * 720 / (series.length - 1)).toFixed(1)} ${(138 - x.value / max * 115).toFixed(1)}`).join(' L')}` : '';
+    /* =============================================================
+       DUAS LINHAS, PORQUE O RENDIMENTO É O VÃO ENTRE ELAS
+       -------------------------------------------------------------
+       A curva de uma linha só respondia "quanto eu tenho" — mas quem
+       olha investimento quer saber quanto daquilo foi guardado e
+       quanto o dinheiro rendeu sozinho. Com as duas linhas, a
+       resposta é a distância entre elas, sem conta nenhuma.
+
+       A série também passa a existir na demonstração: ela era
+       desligada ali, e a tela dizia "a evolução aparece depois de
+       dois meses de aportes" mesmo havendo aportes desde março —
+       uma explicação que não era verdade.
+       ============================================================= */
+    const series = first ? (demo ? serieDemo(list) : Calc.investmentSeries(ymOf(first), state.ym, profile()).slice(-12)) : [];
+    const max = Math.max(1, ...series.map((x) => Math.max(x.value, x.contributed)));
+    const linha = (campo) => series.length > 1
+      ? `M${series.map((x, i) => `${(i * 720 / (series.length - 1)).toFixed(1)} ${(138 - x[campo] / max * 115).toFixed(1)}`).join(' L')}`
+      : '';
+    const chart = linha('value');
+    const chartAportes = linha('contributed');
+    const rendimento = series.length ? U.round2(series[series.length-1].value - series[series.length-1].contributed) : U.round2(gain);
     const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
-    return `<div class="v3-invest-page"><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução estimada dos investimentos"><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois de dois meses de aportes.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>seus aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
+    return `<div class="v3-invest-page"><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Vale hoje</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de rendimento</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>seus aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
   }
   /* =============================================================
      O ORÇAMENTO MORA NA CATEGORIA
@@ -643,14 +732,19 @@
     const goalsHtml = gs.length ? gs.map((g) => `<section class="v3-panel v3-goal"><div class="v3-row"><h2>${esc(g.name)}</h2><button type="button" class="v3-link" data-goal="${esc(g.id)}">Editar</button></div><small class="v3-mono">${g.deadline ? 'até '+esc(shortDate(g.deadline)) : 'sem prazo'}</small><p class="v3-money v3-sensitive">${money(g.saved)} <span class="v3-muted" style="font:400 12px var(--mono)">de ${money(g.target)}</span></p><div class="v3-bar"><span style="width:${pct(100*g.saved/(g.target||1))}%"></span></div><p style="margin-top:12px">● &nbsp; Faltam ${money(Math.max(0,g.target-g.saved))}.</p>${ritmoDaMeta(g)}</section>`).join('') : '<section class="v3-panel"><p class="v3-muted">Você ainda não definiu metas.</p></section>';
     const budgetsHtml = budgets.length ? budgets.map((b) => `<div class="v3-budget-row"><div class="v3-row"><strong>${esc(categoryName(b.id))}</strong><button type="button" class="v3-link" data-budget="${esc(b.id)}" aria-label="Editar orçamento de ${esc(categoryName(b.id))}">Editar</button></div><strong class="v3-mono v3-sensitive">${money(b.used)} / ${money(b.limit)}</strong><div class="v3-bar"><span style="width:${pct(100*b.used/b.limit)}%;background:${b.used>b.limit?'var(--blue)':'var(--teal)'}"></span></div><small>${b.used>b.limit?'Passou '+money(b.used-b.limit)+' do planejado.':'Restam '+money(b.limit-b.used)+' neste mês.'}</small></div>`).join('') : '<p class="v3-muted">Nenhum orçamento definido para categorias.</p>';
     return `<div class="v3-grid v3-goals"><div class="v3-goal-column" data-column="goals"><div class="v3-row"><span class="v3-label v3-section-title">METAS</span><button type="button" class="v3-link" data-action="add-goal">Nova meta</button></div>${goalsHtml}</div></div>`; }
-  function reminders() {
-    if (demo) return sample.reminders;
-    const today = U.todayISO(), until = new Date(); until.setDate(until.getDate()+30); const max = until.toISOString().slice(0,10);
-    const entries=Calc.entries(today,max,profile()).filter((entry)=>!entry.confirmed).map((entry)=>({id:entry.txId,title:entry.description,date:entry.date,amount:entry.amount,sub:categoryName(entry.categoryId)}));
-    const bills=profile().cards.flatMap((card)=>[ymOf(today),U.addMonths(ymOf(today),1)].map((ym)=>Calc.invoice(card.id,ym,profile()))
+  function reminders(from, to) {
+    const today = from || U.todayISO(), until = new Date(); until.setDate(until.getDate()+30); const max = to || until.toISOString().slice(0,10);
+    if (demo) return sample.reminders.filter((item) => item.date >= today && item.date <= max);
+    const entries=Calc.entries(today,max,profile()).filter((entry)=>!entry.confirmed && entry.contaNosTotais !== false).map((entry)=>({id:entry.txId,title:entry.description,date:entry.date,amount:entry.amount,sub:categoryName(entry.categoryId)}));
+    const bills=profile().cards.filter((card) => card.considerado !== false).flatMap((card)=>[U.addMonths(ymOf(today),-1),ymOf(today),ymOf(max),U.addMonths(ymOf(max),1)].map((ym)=>Calc.invoice(card.id,ym,profile()))
       .filter((invoice)=>invoice&&invoice.restante>0&&invoice.dueDate>=today&&invoice.dueDate<=max)
       .map((invoice)=>({title:`Fatura ${invoice.card.name}`,date:invoice.dueDate,amount:invoice.restante,sub:'Cartão de crédito'})));
-    return [...entries,...bills].sort((a,b)=>a.date.localeCompare(b.date));
+    return [...entries,...bills].filter((item,index,all)=>all.findIndex((other)=>other.id ? other.id===item.id && other.date===item.date : other.title===item.title && other.date===item.date)===index).sort((a,b)=>a.date.localeCompare(b.date));
+  }
+  function monthUpcoming() {
+    const today = demo ? `${state.ym}-28` : U.todayISO();
+    const end = U.monthEnd(state.ym);
+    return today > end ? [] : reminders(today < U.monthStart(state.ym) ? U.monthStart(state.ym) : today, end);
   }
   function eventosDoMes(ym) {
     const alvo = ym || state.ym;
@@ -1213,7 +1307,7 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p><label class="v3-check v3-lembrar" id="v3-lembrar" hidden><input type="checkbox" name="lembrarRegra"> Lembrar esta categoria para este estabelecimento</label></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label>DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p><label class="v3-check v3-lembrar" id="v3-lembrar" hidden><input type="checkbox" name="lembrarRegra"> Lembrar esta categoria para este estabelecimento</label></label>`}<label>${current === 'Transferir' ? 'CONTA DE ORIGEM' : 'COMO FOI PAGO / RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     updateComposerCurrency(document.getElementById('v3-form-tx'), meioInicial);
     atualizarSugestao(document.getElementById('v3-form-tx'));
   }
@@ -1285,8 +1379,56 @@
     Categorizacao.confirmarRegra(profile(), sugestaoAtual.merchantKey, kind, categoryId);
   }
 
+  /* =============================================================
+     NO CRÉDITO, A PESSOA ESCOLHE A FATURA — NÃO O DIA
+     -------------------------------------------------------------
+     Quem lança uma compra no cartão pensa em "cai na fatura de
+     janeiro", não em "foi dia 27 de dezembro". Pedir o dia obrigava
+     a fazer de cabeça a conta do fechamento — e errar de fatura, que
+     é o erro mais caro: o gasto aparece num mês que já fechou.
+
+     Com um cartão escolhido, o campo de data dá lugar ao seletor de
+     fatura. O dia continua existindo por baixo, porque é por ele que
+     o cálculo decide o ciclo: Calc.dateForInvoice escolhe um dia
+     dentro da fatura pedida — o original, ao editar; hoje, se hoje
+     está nela.
+     ============================================================= */
+  function updateComposerFatura(form) {
+    const campo = form && form.elements.fatura;
+    const bloco = form && form.querySelector('#v3-tx-fatura');
+    const data = form && form.querySelector('#v3-tx-data');
+    if (!campo || !bloco || !data) return;
+    const [tipo, id] = String(form.elements.source.value || '').split(':');
+    const card = tipo === 'card' ? profile().cards.find((c) => c.id === id) : null;
+    bloco.hidden = !card;
+    data.hidden = !!card;
+    if (!card) return;
+    let escolhida = campo.value;
+    try {
+      /* Na demonstração não há Store por trás do Calc; a lista sai do
+         mês em exibição, que é o bastante para a tela existir. */
+      if (demo) {
+        const opcoesDemo = [];
+        for (let k = -3; k <= 6; k++) opcoesDemo.push(U.addMonths(state.ym, k));
+        escolhida = escolhida || state.ym;
+        campo.innerHTML = opcoesDemo.map((ref) => `<option value="${esc(ref)}" ${ref === escolhida ? 'selected' : ''}>fatura de ${esc(periodLabel(ref))}</option>`).join('');
+        return;
+      }
+      if (!escolhida) {
+        const base = form.elements.date.value;
+        escolhida = (U.isValidISO(base) && Calc.invoiceRefOfDate(card, base)) || Calc.currentInvoiceRef(card, state.ym, profile());
+      }
+      const hoje = Calc.currentInvoiceRef(card, U.todayYM(), profile());
+      const opcoes = [];
+      for (let k = -12; k <= 24; k++) opcoes.push(U.addMonths(hoje, k));
+      if (escolhida && !opcoes.includes(escolhida)) { opcoes.push(escolhida); opcoes.sort(); }
+      campo.innerHTML = opcoes.map((ref) => `<option value="${esc(ref)}" ${ref === escolhida ? 'selected' : ''}>fatura de ${esc(periodLabel(ref))}</option>`).join('');
+    } catch (e) { bloco.hidden = true; data.hidden = false; }
+  }
+
   function updateComposerCurrency(form, meioEscolhido) {
     updateComposerMeios(form, meioEscolhido);
+    updateComposerFatura(form);
     const source = String(form?.elements.source.value || '');
     const [type, id] = source.split(':');
     const instrument = type === 'card' ? profile().cards.find((c) => c.id === id) : profile().accounts.find((a) => a.id === id);
@@ -1355,6 +1497,50 @@
       + `<p class="v3-muted">Adiantar tira esta compra da fatura, não do mês em que ela foi feita: a despesa continua na data da compra.</p>`
       + `<button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Registrar adiantamento'}</button></form>`, 'Adiantar compra');
   }
+  /* O cartão e a fatura que o painel está mostrando. As duas ações
+     abaixo agem sobre ELA, e não sobre a do mês do app — que podem
+     ser faturas diferentes. */
+  function faturaEmFoco() {
+    const item = state.selected ? itemById(state.selected) : null;
+    if (!item || item.kind !== 'credit') return null;
+    try {
+      const ref = state.invoiceRef || Calc.currentInvoiceRef(item.data, state.ym, profile());
+      return { card: item.data, ref, inv: Calc.invoice(item.data.id, ref, profile()) };
+    } catch (e) { return null; }
+  }
+  async function quitarFatura() {
+    if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
+    const f = faturaEmFoco();
+    if (!f || !f.inv) { toast('Escolha um cartão para encerrar a fatura.'); return; }
+    const encerrada = f.inv.quitada || f.inv.paid;
+    try {
+      await V3Backend.mutate(() => Store.setInvoiceQuitada(f.card.id, f.ref, !encerrada));
+      render();
+      toast(encerrada
+        ? 'Fatura reaberta. Os pagamentos registrados continuam lá.'
+        : 'Fatura encerrada. A diferença não vira lançamento.');
+    } catch (e) { toast(e.message || 'Não foi possível salvar.'); }
+  }
+  /* Desfazer mexe em dinheiro já registrado, então pergunta antes —
+     na mesma folha de confirmação que o resto do app usa. */
+  function desfazerPagamentos() {
+    if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
+    const f = faturaEmFoco();
+    if (!f || !f.inv || !(f.inv.pago > 0)) { toast('Esta fatura não tem pagamento para desfazer.'); return; }
+    openSheet(`${sheetTop('desfazer pagamentos', `${f.card.name} · ${niceMonth(f.ref)}`)}`
+      + `<p>${esc('Os ' + money(f.inv.pago) + ' registrados nesta fatura deixam de contar, e o saldo das contas de onde saíram volta.')}</p><p class="v3-muted">Os adiantamentos de compras seguem como estão.</p>`
+      + `<div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter</button>`
+      + `<button type="button" class="v3-primary" data-action="confirm-fatura-desfazer">Desfazer pagamentos</button></div>`, 'Desfazer pagamentos');
+  }
+  async function confirmarDesfazerPagamentos() {
+    const f = faturaEmFoco();
+    if (!f || !f.inv) { toast('Esta fatura mudou. Atualize a página.'); return; }
+    try {
+      await V3Backend.mutate(() => Store.clearInvoicePayments(f.card.id, f.ref));
+      closeSheet(); render(); toast('Pagamentos desfeitos.');
+    } catch (e) { toast(e.message || 'Não foi possível salvar.'); }
+  }
+
   async function saveAdvance(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     const fd = new FormData(form);
@@ -1476,7 +1662,8 @@
   async function saveTransaction(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
-    const fd=new FormData(form), id=String(fd.get('id')||''), kind=fd.get('kind'), amount=parseMoney(fd.get('amount')), date=String(fd.get('date')||''), description=String(fd.get('description')||'').trim(), source=String(fd.get('source')||'');
+    const fd=new FormData(form), id=String(fd.get('id')||''), kind=fd.get('kind'), amount=parseMoney(fd.get('amount'));
+    let date=String(fd.get('date')||''), description=String(fd.get('description')||'').trim(), source=String(fd.get('source')||'');
     if (!(amount>0) || !U.isValidISO(date) || !description || !source) { toast('Confira valor, descrição, data e conta/cartão.'); return; }
     const editing=id ? Store.transactions.get(id) : null;
     if (id && !editing) { toast('Este lançamento não existe mais. Atualize a página.'); return; }
@@ -1484,6 +1671,13 @@
     const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived)
       : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId) : null;
     if (!instrument) { toast('Escolha uma conta ou cartão válido.'); return; }
+    /* A data real da compra sai da FATURA escolhida: é por ela que
+       a pessoa pensa, e o dia é detalhe do ciclo. Editar mantém o dia
+       original quando ele já cabe na fatura pedida. */
+    const refEscolhida=String(fd.get('fatura')||'');
+    if (sourceType==='card' && /^d{4}-d{2}$/.test(refEscolhida)) {
+      try { date=Calc.dateForInvoice(instrument, refEscolhida, editing?editing.date:null); } catch (e) { /* segue com a data do campo */ }
+    }
     if (transfer && (!destination || destination===sourceId || sourceType!=='account' || !profile().accounts.some((a)=>a.id===destination && !a.archived))) { toast('Escolha duas contas diferentes para transferir.'); return; }
     const recurring=fd.get('recurring')==='on', recurEnd=String(fd.get('recurEnd')||'');
     const installments=editing ? 1 : Number(fd.get('installments')||1);
@@ -1782,14 +1976,15 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
+    if (target.dataset.metric != null) { openHomeMetric(Number(target.dataset.metric)); return; }
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
        a seta), e isso não redesenha a tela. Aqui sobra o caso do
        cartão do meio: ele já está escolhido, e clicar de novo não
        deve desescolhê-lo — a carteira ficaria sem cartão aberto. */
-    if (target.dataset.select) { state.selected=target.dataset.select; render(); return; }
+    if (target.dataset.select) { state.selected=target.dataset.select; state.invoiceRef=null; render(); return; }
     if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
     if (target.dataset.filter) { state.filter=target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
@@ -1818,6 +2013,7 @@
       openStatusMenu(target);
       return;
     }
+    if (target.dataset.faturaPasso) { state.invoiceRef = U.addMonths(target.dataset.faturaDe || state.ym, Number(target.dataset.faturaPasso)); render(); return; }
     if (target.dataset.adiantar) { advanceForm(target.dataset.adiantarCartao, target.dataset.adiantar); return; }
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
@@ -1891,6 +2087,12 @@
       return;
     }
     if (action==='edit-wallet-item'){accountForm(target.dataset.walletId);return;}
+    /* Encerrar é declarar a fatura resolvida mesmo com diferença —
+       estorno, desconto, juros que não se quer lançar. Reabrir desfaz
+       a declaração sem tocar nos pagamentos. */
+    if (action==='fatura-quitar') { quitarFatura(); return; }
+    if (action==='fatura-desfazer') { desfazerPagamentos(); return; }
+    if (action==='confirm-fatura-desfazer') { confirmarDesfazerPagamentos(); return; }
     if (action==='pay-invoice'){invoicePaymentForm(target.dataset.walletId);return;}
     if (action==='delete-wallet-item') {
       const id=target.dataset.walletId,isCard=target.dataset.walletType==='card';
@@ -2025,6 +2227,7 @@
       if(ev.target.dataset.sim){state.sim[ev.target.dataset.sim]=+ev.target.value;render();}
       if(ev.target.name==='source' && ev.target.closest('#v3-form-tx')) updateComposerCurrency(ev.target.form);
       if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
+      if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) { /* a escolha já está no campo */ }
       /* "Outro" é a única opção que pede um nome escrito; as outras
          já se nomeiam. O campo aparece com ela e some sem ela. */
       if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom');if(c)c.hidden=ev.target.value!=='Outro';}

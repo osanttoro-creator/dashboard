@@ -344,13 +344,13 @@
   };
 
   function calcularCumulativeFlow(uptoISO, prof) {
-    const opening = prof.accounts.reduce(
+    const opening = prof.accounts.filter((a) => !a.archived && a.considerado !== false).reduce(
       (s, a) => s + (a.openedAt <= uptoISO ? Calc.aberturaEmReais(a) : 0), 0);
     const from = Calc.earliestDate(prof);
     if (uptoISO < from) return U.round2(opening);
     let flow = 0;
     Calc.entries(from, uptoISO, prof).forEach((e) => {
-      if (!e.confirmed || e.kind === 'transfer') return;
+      if (!e.confirmed || e.kind === 'transfer' || e.contaNosTotais === false) return;
       flow += e.kind === 'income' ? e.amount : -e.amount;
     });
     return U.round2(opening + flow);
@@ -569,7 +569,7 @@
 
   Calc.totalAccountsBalance = function (uptoISO, profile) {
     const prof = profile || P();
-    return U.round2(prof.accounts.filter((a) => !a.archived)
+    return U.round2(prof.accounts.filter((a) => !a.archived && a.considerado !== false)
       .reduce((s, a) => s + Calc.accountBalance(a.id, uptoISO, prof), 0));
   };
 
@@ -1006,7 +1006,7 @@
     const contas = Calc.totalAccountsBalance(atISO, prof);
     const investido = Calc.investedTotal(atISO, prof);
     let faturas = 0;
-    prof.cards.forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
+    prof.cards.filter((c) => c.considerado !== false).forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
     return U.round2(contas + investido + Calc.reservedFromAccounts(atISO, prof)
       - U.round2(faturas));
   };
@@ -1023,7 +1023,7 @@
     let total = 0;
     prof.goals.forEach((g) => {
       (g.deposits || []).forEach((d) => {
-        if (d.accountId && d.at <= ate) total += d.amount;
+        if (d.accountId && d.at <= ate && prof.accounts.some((a) => a.id === d.accountId && !a.archived && a.considerado !== false)) total += d.amount;
       });
     });
     return U.round2(total);
@@ -1033,7 +1033,7 @@
   Calc.available = function (atISO, profile) {
     const prof = profile || P();
     let faturas = 0;
-    prof.cards.forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
+    prof.cards.filter((c) => c.considerado !== false).forEach((c) => { faturas += Calc.cardUsed(c.id, prof); });
     return U.round2(Calc.totalAccountsBalance(atISO, prof) - U.round2(faturas));
   };
 
@@ -1082,7 +1082,7 @@
     /* 2 · peso do crédito sobre a receita */
     const receita = Calc.monthTotals(ym, prof).income;
     let fatura = 0;
-    prof.cards.forEach((c) => { fatura += Calc.cardUsed(c.id, prof); });
+    prof.cards.filter((c) => c.considerado !== false).forEach((c) => { fatura += Calc.cardUsed(c.id, prof); });
     fatura = U.round2(fatura);
     const peso = receita > 0 ? (fatura / receita) * 100 : (fatura > 0 ? 100 : 0);
     partes.push({
@@ -1121,12 +1121,12 @@
     /* 5 · contas em dia */
     const hoje = U.todayISO();
     let atrasos = 0;
-    prof.cards.forEach((c) => {
+    prof.cards.filter((c) => c.considerado !== false).forEach((c) => {
       const inv = Calc.invoice(c.id, Calc.currentInvoiceRef(c, ym), prof);
       if (inv && !inv.paid && inv.restante > 0 && inv.dueDate < hoje) atrasos++;
     });
     let negativas = 0;
-    prof.accounts.forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
+    contasConsideradas(prof).forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
     const problemas = atrasos + negativas;
     partes.push({
       chave: 'dia', nome: 'Contas em dia',
@@ -1154,7 +1154,7 @@
       (porDia[d] = porDia[d] || []).push(ev);
     };
 
-    Calc.entriesForMonth(ym, prof).forEach((e) => {
+    Calc.entriesForMonth(ym, prof).filter((e) => e.contaNosTotais !== false).forEach((e) => {
       põe(e.date, {
         tipo: e.kind === 'income' ? 'in' : e.kind === 'transfer' ? 'tr' : 'out',
         titulo: e.description,
@@ -1165,7 +1165,7 @@
       });
     });
 
-    prof.cards.forEach((c) => {
+    prof.cards.filter((c) => c.considerado !== false).forEach((c) => {
       [U.addMonths(ym, -1), ym, U.addMonths(ym, 1)].forEach((base) => {
         const ref = Calc.currentInvoiceRef(c, base);
         const inv = Calc.invoice(c.id, ref, prof);

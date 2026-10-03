@@ -432,5 +432,33 @@
     "en": "CREDIT",
     "fr": "CRÉDIT",
     "es": "CRÉDITO"
+  },
+  {
+    "pt": "FATURA",
+    "tipo": "padrao",
+    "en": "STATEMENT",
+    "fr": "RELEVÉ",
+    "es": "FACTURA"
+  },
+  {
+    "pt": "paga",
+    "tipo": "padrao",
+    "en": "paid",
+    "fr": "payé",
+    "es": "pagada"
+  },
+  {
+    "pt": "parcial",
+    "tipo": "padrao",
+    "en": "partial",
+    "fr": "partiel",
+    "es": "parcial"
+  },
+  {
+    "pt": "SALDO",
+    "tipo": "padrao",
+    "en": "BALANCE",
+    "fr": "SOLDE",
+    "es": "SALDO"
   }
 ]

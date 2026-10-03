@@ -276,6 +276,20 @@
   .v3-home .v3-quick button{font-size:11px}
 }
 
+.v3-home-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.v3-home-metric{position:relative;display:grid;align-content:start;gap:5px;min-width:0;min-height:116px;padding:18px 20px;text-align:left;color:var(--milk);background:var(--panel);border:1px solid var(--line);border-radius:24px;transition:transform .2s ease,background .2s ease}
+.v3-home-metric:hover{transform:translateY(-2px);background:#18303a}
+.v3-home-metric:active{transform:translateY(1px)}
+.v3-home-metric .v3-label{margin:0;padding-right:16px}
+.v3-home-metric .v3-money{font-size:clamp(22px,2vw,31px);line-height:1.1;white-space:nowrap}
+.v3-home-metric small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}
+.v3-metric-open{position:absolute;right:18px;top:16px;color:var(--teal);font-size:18px}
+.v3-metric-detail{display:block;margin:16px 0;font-size:clamp(31px,7vw,48px)}
+.v3-metric-lines{display:grid;gap:8px;margin:0 0 19px}
+.v3-metric-lines p{padding:10px 0;border-bottom:1px solid var(--line)}
+@media(max-width:1150px){.v3-home-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.v3-home-metrics{gap:9px;margin-top:14px}.v3-home-metric{min-height:105px;padding:15px}.v3-home-metric .v3-money{font-size:clamp(19px,5vw,25px)}.v3-metric-open{right:13px;top:10px}}
+
 /* O orçamento mora na categoria: quanto gastou, quanto podia, e a
    barra entre os dois — na mesma linha, porque é a mesma pergunta. */
 .v3-cat-tile{align-items:start}
@@ -286,3 +300,17 @@
 .v3-cat-tile.estourou .v3-bar span{background:#C9705A}
 .v3-cat-tile.estourou .v3-cat-teto .v3-link{color:#E09A86}
 .v3-cat-tile.esta-vazia{opacity:.72}
+
+/* Investimentos: duas linhas e o vão entre elas, que é o rendimento. */
+.v3-invest-legenda{display:flex;flex-wrap:wrap;align-items:center;gap:7px 16px;margin-top:9px;font-size:12px;color:var(--muted)}
+.v3-invest-legenda span{display:inline-flex;align-items:center;gap:6px}
+.v3-invest-legenda i{width:16px;height:0;border-top:3px solid var(--teal);border-radius:2px}
+.v3-invest-legenda i.e-aporte{border-top:2px dashed rgba(240,229,207,.45)}
+.v3-invest-legenda strong{margin-left:auto;font-size:12px}
+@media(max-width:540px){.v3-invest-legenda strong{margin-left:0;flex:1 1 100%}}
+
+/* Andar entre faturas: a fatura não coincide com o mês, então ela
+   tem navegação própria, com as datas do ciclo à vista. */
+.v3-fatura-nav{align-items:center;gap:10px;margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line)}
+.v3-fatura-nav small{color:var(--muted);font-size:11px;text-align:center;flex:1}
+.v3-fatura-nav .v3-link{white-space:nowrap;font-size:12px}
