@@ -275,3 +275,14 @@
   .v3-home .v3-quick{gap:6px}
   .v3-home .v3-quick button{font-size:11px}
 }
+
+/* O orçamento mora na categoria: quanto gastou, quanto podia, e a
+   barra entre os dois — na mesma linha, porque é a mesma pergunta. */
+.v3-cat-tile{align-items:start}
+.v3-cat-id{display:grid;gap:2px;min-width:0}
+.v3-cat-teto{grid-column:1/-1;display:grid;gap:5px;margin-top:4px}
+.v3-cat-teto .v3-bar{height:4px}
+.v3-cat-teto .v3-link{justify-self:start;font-size:11px}
+.v3-cat-tile.estourou .v3-bar span{background:#C9705A}
+.v3-cat-tile.estourou .v3-cat-teto .v3-link{color:#E09A86}
+.v3-cat-tile.esta-vazia{opacity:.72}

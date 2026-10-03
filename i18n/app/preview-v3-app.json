@@ -21,6 +21,34 @@
     "es": "ajustes"
   },
   {
+    "pt": "Não pago",
+    "tipo": "exato",
+    "en": "Unpaid",
+    "fr": "Non payé",
+    "es": "Sin pagar"
+  },
+  {
+    "pt": "Entra nos totais",
+    "tipo": "exato",
+    "en": "Counts toward totals",
+    "fr": "Pris en compte dans les totaux",
+    "es": "Se incluye en los totales"
+  },
+  {
+    "pt": "Fica no previsto",
+    "tipo": "exato",
+    "en": "Stays in planned amounts",
+    "fr": "Reste dans les prévisions",
+    "es": "Permanece en lo previsto"
+  },
+  {
+    "pt": "Não entra em nenhum total",
+    "tipo": "exato",
+    "en": "Excluded from all totals",
+    "fr": "Exclu de tous les totaux",
+    "es": "No se incluye en ningún total"
+  },
+  {
     "pt": "março",
     "tipo": "exato",
     "en": "March",
@@ -699,6 +727,48 @@
     "es": "hasta fin de mes"
   },
   {
+    "pt": "Esse lançamento mudou. Atualize a página e tente novamente.",
+    "tipo": "exato",
+    "en": "That entry changed. Refresh the page and try again.",
+    "fr": "Cette écriture a changé. Actualisez la page et réessayez.",
+    "es": "Ese movimiento cambió. Actualiza la página e inténtalo de nuevo."
+  },
+  {
+    "pt": "Atual",
+    "tipo": "exato",
+    "en": "Current",
+    "fr": "Actuel",
+    "es": "Actual"
+  },
+  {
+    "pt": "Escolher situação",
+    "tipo": "exato",
+    "en": "Choose status",
+    "fr": "Choisir le statut",
+    "es": "Elegir estado"
+  },
+  {
+    "pt": "Fechar opções de situação",
+    "tipo": "exato",
+    "en": "Close status options",
+    "fr": "Fermer les options de statut",
+    "es": "Cerrar opciones de estado"
+  },
+  {
+    "pt": "Demonstração: nenhum dado foi alterado.",
+    "tipo": "exato",
+    "en": "Demo: nothing was changed.",
+    "fr": "Démo : rien n’a été modifié.",
+    "es": "Demostración: no se cambió nada."
+  },
+  {
+    "pt": "Não foi possível salvar a situação.",
+    "tipo": "exato",
+    "en": "Could not save the status.",
+    "fr": "Impossible d’enregistrer le statut.",
+    "es": "No se pudo guardar el estado."
+  },
+  {
     "pt": "CARTÃO",
     "tipo": "exato",
     "en": "CARD",
@@ -713,32 +783,11 @@
     "es": "TRANSFERENCIA"
   },
   {
-    "pt": "Cancelado — tocar para voltar a pago",
-    "tipo": "exato",
-    "en": "Cancelled — tap to set back to paid",
-    "fr": "Annulé — toucher pour remettre en payé",
-    "es": "Cancelado — tocar para volver a pagado"
-  },
-  {
-    "pt": "Pago — tocar para marcar como não pago",
-    "tipo": "exato",
-    "en": "Paid — tap to mark as unpaid",
-    "fr": "Payé — toucher pour marquer non payé",
-    "es": "Pagado — tocar para marcar sin pagar"
-  },
-  {
-    "pt": "Não pago — tocar para cancelar",
-    "tipo": "exato",
-    "en": "Unpaid — tap to cancel",
-    "fr": "Non payé — toucher pour annuler",
-    "es": "Sin pagar — tocar para cancelar"
-  },
-  {
-    "pt": "Não pago",
-    "tipo": "exato",
-    "en": "Unpaid",
-    "fr": "Non payé",
-    "es": "Sin pagar"
+    "pt": "Situação de {0}: {1}. Escolher situação",
+    "tipo": "padrao",
+    "en": "Status of {0}: {1}. Choose status",
+    "fr": "Statut de {0} : {1}. Choisir le statut",
+    "es": "Estado de {0}: {1}. Elegir estado"
   },
   {
     "pt": "Nenhuma receita neste filtro.",
@@ -762,20 +811,6 @@
     "es": "transferencias"
   },
   {
-    "pt": "DESCRIÇÃO",
-    "tipo": "exato",
-    "en": "DESCRIPTION",
-    "fr": "DESCRIPTION",
-    "es": "DESCRIPCIÓN"
-  },
-  {
-    "pt": "COMO FOI PAGO",
-    "tipo": "exato",
-    "en": "HOW IT WAS PAID",
-    "fr": "MODE DE PAIEMENT",
-    "es": "CÓMO SE PAGÓ"
-  },
-  {
     "pt": "{0} previsto{1}",
     "tipo": "padrao",
     "en": "{0} forecast{1}",
@@ -790,11 +825,11 @@
     "es": "En la demostración, los controles no cambian tu cuenta."
   },
   {
-    "pt": "Toque no círculo para percorrer pago, não pago e cancelado.",
+    "pt": "Toque no círculo para escolher pago, não pago ou cancelado.",
     "tipo": "exato",
-    "en": "Tap the circle to cycle through paid, unpaid and cancelled.",
-    "fr": "Touchez le cercle pour passer de payé à non payé puis annulé.",
-    "es": "Toca el círculo para recorrer pagado, sin pagar y cancelado."
+    "en": "Tap the circle to choose paid, unpaid, or canceled.",
+    "fr": "Touchez le cercle pour choisir payé, impayé ou annulé.",
+    "es": "Toca el círculo para elegir pagado, pendiente o cancelado."
   },
   {
     "pt": "Só o que está confirmado entra nos totais. {0}",
@@ -993,6 +1028,41 @@
     "es": "{0} de interés estimado. No es una promesa de rentabilidad."
   },
   {
+    "pt": "{0}% do total",
+    "tipo": "padrao",
+    "en": "{0}% of the total",
+    "fr": "{0} % du total",
+    "es": "{0}% del total"
+  },
+  {
+    "pt": "passou {0} de {1}",
+    "tipo": "padrao",
+    "en": "{0} over {1}",
+    "fr": "{0} de plus que {1}",
+    "es": "{0} por encima de {1}"
+  },
+  {
+    "pt": "{0}% de {1}",
+    "tipo": "padrao",
+    "en": "{0}% of {1}",
+    "fr": "{0} % de {1}",
+    "es": "{0}% de {1}"
+  },
+  {
+    "pt": "definir um teto por mês",
+    "tipo": "exato",
+    "en": "set a monthly cap",
+    "fr": "définir un plafond mensuel",
+    "es": "definir un tope mensual"
+  },
+  {
+    "pt": "Nova categoria",
+    "tipo": "exato",
+    "en": "New category",
+    "fr": "Nouvelle catégorie",
+    "es": "Nueva categoría"
+  },
+  {
     "pt": "{0} é {1}% do total em {2}.",
     "tipo": "padrao",
     "en": "{0} is {1}% of the total in {2}.",
@@ -1007,13 +1077,6 @@
     "es": "Las categorías aparecen con movimientos confirmados."
   },
   {
-    "pt": "{0}% do total",
-    "tipo": "padrao",
-    "en": "{0}% of the total",
-    "fr": "{0} % du total",
-    "es": "{0}% del total"
-  },
-  {
     "pt": "Nenhuma movimentação confirmada neste período.",
     "tipo": "exato",
     "en": "No confirmed entries in this period.",
@@ -1021,18 +1084,18 @@
     "es": "Ningún movimiento confirmado en este periodo."
   },
   {
-    "pt": "Editar ›",
+    "pt": "nada gasto neste mês",
     "tipo": "exato",
-    "en": "Edit ›",
-    "fr": "Modifier ›",
-    "es": "Editar ›"
+    "en": "nothing spent this month",
+    "fr": "rien dépensé ce mois-ci",
+    "es": "nada gastado este mes"
   },
   {
-    "pt": "Nova categoria",
-    "tipo": "exato",
-    "en": "New category",
-    "fr": "Nouvelle catégorie",
-    "es": "Nueva categoría"
+    "pt": "teto de {0}",
+    "tipo": "padrao",
+    "en": "cap of {0}",
+    "fr": "plafond de {0}",
+    "es": "tope de {0}"
   },
   {
     "pt": "suas categorias",
@@ -1047,6 +1110,13 @@
     "en": "{0} registered",
     "fr": "{0} enregistrées",
     "es": "{0} registradas"
+  },
+  {
+    "pt": "Editar ›",
+    "tipo": "exato",
+    "en": "Edit ›",
+    "fr": "Modifier ›",
+    "es": "Editar ›"
   },
   {
     "pt": "Meta alcançada.",
@@ -1131,20 +1201,6 @@
     "en": "No budget set for any category.",
     "fr": "Aucun budget défini par catégorie.",
     "es": "Ningún presupuesto definido por categoría."
-  },
-  {
-    "pt": "ORÇAMENTOS DE {0}",
-    "tipo": "padrao",
-    "en": "{0} BUDGETS",
-    "fr": "BUDGETS DE {0}",
-    "es": "PRESUPUESTOS DE {0}"
-  },
-  {
-    "pt": "Novo orçamento",
-    "tipo": "exato",
-    "en": "New budget",
-    "fr": "Nouveau budget",
-    "es": "Nuevo presupuesto"
   },
   {
     "pt": "Alcance do calendário",
@@ -2861,6 +2917,13 @@
     "es": "IMPORTE (R$)"
   },
   {
+    "pt": "DESCRIÇÃO",
+    "tipo": "exato",
+    "en": "DESCRIPTION",
+    "fr": "DESCRIPTION",
+    "es": "DESCRIPCIÓN"
+  },
+  {
     "pt": "Ex.: mercado",
     "tipo": "exato",
     "en": "E.g.: groceries",
@@ -4262,34 +4325,6 @@
     "en": "I couldn’t open the microphone. Check the browser permission.",
     "fr": "Je n’ai pas pu ouvrir le micro. Vérifiez l’autorisation du navigateur.",
     "es": "No pude abrir el micrófono. Revisa el permiso del navegador."
-  },
-  {
-    "pt": "Demonstração: nenhum dado foi alterado.",
-    "tipo": "exato",
-    "en": "Demo: nothing was changed.",
-    "fr": "Démo : rien n’a été modifié.",
-    "es": "Demostración: no se cambió nada."
-  },
-  {
-    "pt": "Esse lançamento mudou. Atualize a página e tente novamente.",
-    "tipo": "exato",
-    "en": "That entry changed. Refresh the page and try again.",
-    "fr": "Cette écriture a changé. Actualisez la page et réessayez.",
-    "es": "Ese movimiento cambió. Actualiza la página e inténtalo de nuevo."
-  },
-  {
-    "pt": "Pago — entrou nos totais.",
-    "tipo": "exato",
-    "en": "Paid — it entered the totals.",
-    "fr": "Payé — compté dans les totaux.",
-    "es": "Pagado — entró en los totales."
-  },
-  {
-    "pt": "Cancelado — fora de todo total.",
-    "tipo": "exato",
-    "en": "Cancelled — outside every total.",
-    "fr": "Annulé — hors de tout total.",
-    "es": "Cancelado — fuera de todo total."
   },
   {
     "pt": "Esta proposta não está mais disponível.",

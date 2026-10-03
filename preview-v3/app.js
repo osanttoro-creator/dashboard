@@ -48,7 +48,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', goalTab: 'goals', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -529,11 +529,70 @@
     const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
     return `<div class="v3-invest-page"><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução estimada dos investimentos"><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois de dois meses de aportes.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>seus aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
   }
+  /* =============================================================
+     O ORÇAMENTO MORA NA CATEGORIA
+     -------------------------------------------------------------
+     Orçamento era uma coluna na tela de Metas, ao lado de "guardar
+     para a viagem". Mas as duas coisas não se parecem: meta é um
+     valor que se junta ao longo do tempo; orçamento é um teto por
+     mês para uma CATEGORIA. Separado dela, a pessoa via "Alimentação
+     R$ 1.130" numa tela e "limite de Alimentação" em outra, e tinha
+     de somar de cabeça para saber se estourou.
+
+     Agora é a mesma linha: quanto gastou, quanto podia, e a barra
+     entre os dois. Quem ainda não tem teto vê "definir" no lugar —
+     o convite está onde o gasto aparece, que é onde a vontade de
+     limitar nasce.
+     ============================================================= */
   function renderCategories() {
     const rows = categoryTotals(state.catKind), total = rows.reduce((n,r)=>n+r.value,0);
     const defined=profile().categories.filter((c)=>c.kind===state.catKind).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+    const orcamentos = profile().budgets || {};
     let start=0; const stops = rows.length ? rows.map((r)=>{const prev=start;start+=100*r.value/total;return `${safeColor(r.color)} ${prev}% ${start}%`}).join(', ') : '#355565 0 100%';
-    return `<div class="v3-stack"><div class="v3-row"><div class="v3-segment" style="max-width:330px"><button type="button" data-cat-kind="expense" class="${state.catKind==='expense'?'is-active':''}">Despesas</button><button type="button" data-cat-kind="income" class="${state.catKind==='income'?'is-active':''}">Receitas</button></div><button type="button" class="v3-link" data-action="add-category">Nova categoria</button></div><div class="v3-grid v3-categories"><section class="v3-panel"><div class="v3-donut" style="--donut:conic-gradient(${esc(stops)})" data-total="${esc(money(total))}"></div><p class="v3-muted" style="text-align:center">${rows.length ? `${esc(rows[0].name)} é ${Math.round(rows[0].value/total*100)}% do total em ${esc(niceMonth(state.ym).split(' de ')[0])}.` : 'As categorias aparecem com lançamentos confirmados.'}</p></section><div class="v3-cat-grid">${rows.map((r) => `<div class="v3-cat-tile"><span class="v3-cat-icon" style="--swatch:${safeColor(r.color)}">${icon(categoryIcon((profile().categories.find((c)=>c.id===r.id)||{}).icon) || 'categories')}</span><span><strong>${esc(r.name)}</strong><small>${Math.round(r.value/total*100)}% do total</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></div>`).join('') || '<p class="v3-muted">Nenhuma movimentação confirmada neste período.</p>'}</div></div><section class="v3-panel"><div class="v3-row"><h2>suas categorias</h2><span class="v3-muted">${defined.length} cadastradas</span></div><div class="v3-cat-manage">${defined.map((c)=>`<button type="button" data-category="${esc(c.id)}"><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)}">${icon(categoryIcon(c.icon))}</span><span>${esc(c.name)}</span><small>Editar ›</small></button>`).join('')}</div></section></div>`;
+
+    /* Só despesa tem teto: limitar quanto se RECEBE não quer dizer
+       nada, e oferecer o campo ali seria oferecer um engano. */
+    const comTeto = state.catKind === 'expense';
+
+    const ladrilho = (r) => {
+      const limite = comTeto ? Number(orcamentos[r.id] || 0) : 0;
+      const usou = limite > 0 ? Math.round(100 * r.value / limite) : null;
+      const estourou = usou != null && usou > 100;
+      return `<div class="v3-cat-tile${estourou ? ' estourou' : ''}">`
+        + `<span class="v3-cat-icon" style="--swatch:${safeColor(r.color)}">${icon(categoryIcon((profile().categories.find((c)=>c.id===r.id)||{}).icon) || 'categories')}</span>`
+        + `<span class="v3-cat-id"><strong>${esc(r.name)}</strong><small>${Math.round(r.value/total*100)}% do total</small></span>`
+        + `<strong class="v3-mono v3-sensitive">${money(r.value)}</strong>`
+        + (comTeto ? (limite > 0
+          ? `<span class="v3-cat-teto"><div class="v3-bar"><span style="width:${pct(usou)}%"></span></div>`
+            + `<button type="button" class="v3-link" data-budget="${esc(r.id)}">`
+            + `${estourou ? `passou ${money(U.round2(r.value - limite))} de ${money(limite)}` : `${usou}% de ${money(limite)}`}</button></span>`
+          : `<span class="v3-cat-teto"><button type="button" class="v3-link" data-budget-novo="${esc(r.id)}">definir um teto por mês</button></span>`)
+          : '')
+        + `</div>`;
+    };
+
+    /* Um teto num mês sem gasto nenhum some da lista acima, porque
+       ela sai dos lançamentos. Estes aparecem à parte: o teto existe,
+       e zero gasto é uma informação, não um sumiço. */
+    const semGasto = comTeto ? Object.keys(orcamentos)
+      .filter((id) => Number(orcamentos[id]) > 0 && !rows.some((r) => r.id === id))
+      .map((id) => ({ id, nome: categoryName(id), limite: Number(orcamentos[id]) })) : [];
+
+    return `<div class="v3-stack"><div class="v3-row"><div class="v3-segment" style="max-width:330px">`
+      + `<button type="button" data-cat-kind="expense" class="${state.catKind==='expense'?'is-active':''}">Despesas</button>`
+      + `<button type="button" data-cat-kind="income" class="${state.catKind==='income'?'is-active':''}">Receitas</button></div>`
+      + `<button type="button" class="v3-link" data-action="add-category">Nova categoria</button></div>`
+      + `<div class="v3-grid v3-categories"><section class="v3-panel">`
+      + `<div class="v3-donut" style="--donut:conic-gradient(${esc(stops)})" data-total="${esc(money(total))}"></div>`
+      + `<p class="v3-muted" style="text-align:center">${rows.length ? `${esc(rows[0].name)} é ${Math.round(rows[0].value/total*100)}% do total em ${esc(niceMonth(state.ym).split(' de ')[0])}.` : 'As categorias aparecem com lançamentos confirmados.'}</p></section>`
+      + `<div class="v3-cat-grid">${rows.map(ladrilho).join('') || '<p class="v3-muted">Nenhuma movimentação confirmada neste período.</p>'}`
+      + semGasto.map((b) => `<div class="v3-cat-tile esta-vazia"><span class="v3-cat-icon" style="--swatch:#355565">${icon('categories')}</span>`
+        + `<span class="v3-cat-id"><strong>${esc(b.nome)}</strong><small>nada gasto neste mês</small></span>`
+        + `<strong class="v3-mono v3-sensitive">${money(0)}</strong>`
+        + `<span class="v3-cat-teto"><button type="button" class="v3-link" data-budget="${esc(b.id)}">teto de ${money(b.limite)}</button></span></div>`).join('')
+      + `</div></div>`
+      + `<section class="v3-panel"><div class="v3-row"><h2>suas categorias</h2><span class="v3-muted">${defined.length} cadastradas</span></div>`
+      + `<div class="v3-cat-manage">${defined.map((c)=>`<button type="button" data-category="${esc(c.id)}"><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)}">${icon(categoryIcon(c.icon))}</span><span>${esc(c.name)}</span><small>Editar ›</small></button>`).join('')}</div></section></div>`;
   }
   /* =============================================================
      QUANTO POR MÊS, E SE CABE
@@ -583,8 +642,7 @@
     const gs = profile().goals || [], budgets = Object.entries(profile().budgets || {}).map(([id,limit]) => ({id,limit,used:(categoryTotals('expense').find((x)=>x.id===id)||{}).value||0}));
     const goalsHtml = gs.length ? gs.map((g) => `<section class="v3-panel v3-goal"><div class="v3-row"><h2>${esc(g.name)}</h2><button type="button" class="v3-link" data-goal="${esc(g.id)}">Editar</button></div><small class="v3-mono">${g.deadline ? 'até '+esc(shortDate(g.deadline)) : 'sem prazo'}</small><p class="v3-money v3-sensitive">${money(g.saved)} <span class="v3-muted" style="font:400 12px var(--mono)">de ${money(g.target)}</span></p><div class="v3-bar"><span style="width:${pct(100*g.saved/(g.target||1))}%"></span></div><p style="margin-top:12px">● &nbsp; Faltam ${money(Math.max(0,g.target-g.saved))}.</p>${ritmoDaMeta(g)}</section>`).join('') : '<section class="v3-panel"><p class="v3-muted">Você ainda não definiu metas.</p></section>';
     const budgetsHtml = budgets.length ? budgets.map((b) => `<div class="v3-budget-row"><div class="v3-row"><strong>${esc(categoryName(b.id))}</strong><button type="button" class="v3-link" data-budget="${esc(b.id)}" aria-label="Editar orçamento de ${esc(categoryName(b.id))}">Editar</button></div><strong class="v3-mono v3-sensitive">${money(b.used)} / ${money(b.limit)}</strong><div class="v3-bar"><span style="width:${pct(100*b.used/b.limit)}%;background:${b.used>b.limit?'var(--blue)':'var(--teal)'}"></span></div><small>${b.used>b.limit?'Passou '+money(b.used-b.limit)+' do planejado.':'Restam '+money(b.limit-b.used)+' neste mês.'}</small></div>`).join('') : '<p class="v3-muted">Nenhum orçamento definido para categorias.</p>';
-    return `<div class="v3-segment v3-mobile-only" style="margin-bottom:16px"><button type="button" data-goal-tab="goals" class="${state.goalTab==='goals'?'is-active':''}">Metas</button><button type="button" data-goal-tab="budgets" class="${state.goalTab==='budgets'?'is-active':''}">Orçamentos</button></div><div class="v3-grid v3-goals"><div class="v3-goal-column" data-column="goals"><div class="v3-row"><span class="v3-label v3-section-title">METAS</span><button type="button" class="v3-link" data-action="add-goal">Nova meta</button></div>${goalsHtml}</div><div class="v3-budget-column" data-column="budgets"><div class="v3-row"><span class="v3-label v3-section-title">ORÇAMENTOS DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}</span><button type="button" class="v3-link" data-action="add-budget">Novo orçamento</button></div><section class="v3-panel">${budgetsHtml}</section></div></div>`;
-  }
+    return `<div class="v3-grid v3-goals"><div class="v3-goal-column" data-column="goals"><div class="v3-row"><span class="v3-label v3-section-title">METAS</span><button type="button" class="v3-link" data-action="add-goal">Nova meta</button></div>${goalsHtml}</div></div>`; }
   function reminders() {
     if (demo) return sample.reminders;
     const today = U.todayISO(), until = new Date(); until.setDate(until.getDate()+30); const max = until.toISOString().slice(0,10);
@@ -1051,13 +1109,7 @@
     if (!demo && classicPaths[state.page]) $('#v3-view').insertAdjacentHTML('beforeend', `<p class="v3-classic-link">Precisa editar algo que ainda não está nesta tela? <a href="${classicPaths[state.page]}?classic=1">Abrir ferramentas completas</a></p>`);
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
-    if (state.page==='goals') updateGoalTabs();
     montarCarteira();
-  }
-  function updateGoalTabs() {
-    const mobile = matchMedia('(max-width:900px)').matches;
-    const gs = $('[data-column="goals"]'), bs = $('[data-column="budgets"]');
-    if (gs&&bs) { gs.hidden = mobile && state.goalTab!=='goals'; bs.hidden = mobile && state.goalTab!=='budgets'; }
   }
   function go(page) { if (!names[page]) return; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
 
@@ -1730,7 +1782,7 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
@@ -1741,7 +1793,6 @@
     if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
     if (target.dataset.filter) { state.filter=target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
-    if (target.dataset.goalTab) { state.goalTab=target.dataset.goalTab; render(); return; }
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
@@ -1761,6 +1812,7 @@
     if (target.dataset.transaction && !target.dataset.action) { composer(null, null, target.dataset.transaction); return; }
     if (target.dataset.category && !target.dataset.action) { categoryForm(target.dataset.category); return; }
     if (target.dataset.goal && !target.dataset.action) { goalForm(target.dataset.goal); return; }
+    if (target.dataset.budgetNovo) { budgetForm(target.dataset.budgetNovo); return; }
     if (target.dataset.budget && !target.dataset.action) { budgetForm(target.dataset.budget); return; }
     if (target.dataset.confirm) {
       openStatusMenu(target);
@@ -1996,7 +2048,7 @@
       if(vazio)vazio.hidden=achou>0;
     });
     document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
-    addEventListener('resize',()=>{closeStatusMenu(false);if(state.page==='goals')updateGoalTabs();});
+    addEventListener('resize',()=>{closeStatusMenu(false);});
     render();
     /* =============================================================
        PRIMEIROS PASSOS
