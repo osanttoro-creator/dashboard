@@ -27,6 +27,16 @@
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
   };
   const esc = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function avatarMarkup(owner) {
+    if (!demo) {
+      try {
+        const url = new URL(V3Backend.user()?.photo || '');
+        if (url.protocol === 'https:' && (url.hostname === 'googleusercontent.com' || url.hostname.endsWith('.googleusercontent.com')))
+          return `<img src="${esc(url.href)}" alt="" referrerpolicy="no-referrer">`;
+      } catch { /* sem foto válida: usa a inicial */ }
+    }
+    return esc(String(owner || 'O').trim().charAt(0).toLowerCase() || 'o');
+  }
   /* =============================================================
      OCULTAR VALORES: BOLINHA NO LUGAR DE CADA ALGARISMO
      -------------------------------------------------------------
