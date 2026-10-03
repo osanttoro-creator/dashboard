@@ -802,8 +802,11 @@
     const score = Calc.score(ym);
 
     /* 1 · atenção — a parte mais fraca do score */
-    const fraca = score.partes.slice().sort((a, b) => a.pontos - b.pontos)[0];
-    if (fraca && fraca.pontos < 14) {
+    /* Cada parte tem seu peso, então ponto bruto não se compara:
+       o fraco é quem preencheu a menor FRAÇÃO do que valia. */
+    const fraca = score.partes.filter((p) => p.aplica)
+      .sort((a, b) => (a.pontos / a.peso) - (b.pontos / b.peso))[0];
+    if (fraca && fraca.pontos / fraca.peso < 0.7) {
       out.push({
         tipo: 'atencao', icone: 'circle-alert', titulo: 'Precisa de atenção',
         linha: fraca.nome, detalhe: fraca.detalhe,

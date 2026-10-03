@@ -7,13 +7,6 @@
     "es": "metas y presupuestos"
   },
   {
-    "pt": "análises",
-    "tipo": "exato",
-    "en": "analyses",
-    "fr": "analyses",
-    "es": "análisis"
-  },
-  {
     "pt": "configurações",
     "tipo": "exato",
     "en": "settings",
@@ -776,20 +769,6 @@
     "es": "SALDO TOTAL"
   },
   {
-    "pt": "Quatro coisas para ver",
-    "tipo": "exato",
-    "en": "Four things to see",
-    "fr": "Quatre choses à voir",
-    "es": "Cuatro cosas para ver"
-  },
-  {
-    "pt": "Conversar com a Coco",
-    "tipo": "exato",
-    "en": "Talk to Coco",
-    "fr": "Parler à Coco",
-    "es": "Hablar con Coco"
-  },
-  {
     "pt": "onde foi o mês",
     "tipo": "exato",
     "en": "where the month went",
@@ -1343,6 +1322,41 @@
     "es": "Ningún presupuesto definido por categoría."
   },
   {
+    "pt": "oaze-v3-notificacoes:{0}:{1}",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "notificações",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "próximos 30 dias",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Nenhuma notificação pendente.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Abrir agenda",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
     "pt": "Alcance do calendário",
     "tipo": "exato",
     "en": "Calendar range",
@@ -1525,16 +1539,122 @@
     "es": "Pendiente"
   },
   {
-    "pt": "V3/conferência:",
+    "pt": "Nenhum compromisso entre hoje e o fim deste mês.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "· pausada",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "· até {0}",
+    "tipo": "padrao",
+    "en": "· until {0}",
+    "fr": "· jusqu’au {0}",
+    "es": "· hasta {0}"
+  },
+  {
+    "pt": "Retomar",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Pausar",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Todo dia {0}{1}",
+    "tipo": "padrao",
+    "en": "Every {0}{1}",
+    "fr": "Chaque {0}{1}",
+    "es": "Cada día {0}{1}"
+  },
+  {
+    "pt": "Nenhuma recorrência. Crie um lançamento e marque “Repetir mensalmente”.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "PRÓXIMOS EVENTOS",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "RECORRÊNCIAS",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "o que se repete",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "+ criar",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "V3/score demo:",
     "tipo": "exato",
     "ignorar": true
   },
   {
-    "pt": "As cinco estão no lugar. Nada a ajustar por aqui este mês.",
+    "pt": "V3/score:",
     "tipo": "exato",
-    "en": "All five are in place. Nothing to adjust here this month.",
-    "fr": "Les cinq sont en place. Rien à ajuster ici ce mois-ci.",
-    "es": "Las cinco están en su sitio. Nada que ajustar aquí este mes."
+    "ignorar": true
+  },
+  {
+    "pt": "V3/score histórico:",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "OAZE SCORE",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "o registro começa com você",
+    "tipo": "exato",
+    "en": "the record starts with you",
+    "fr": "le registre commence avec vous",
+    "es": "el registro empieza con usted"
+  },
+  {
+    "pt": "Nenhuma das oito perguntas tem como ser respondida ainda. Lance o que entra e o que sai de um mês e o score aparece aqui, com o motivo de cada parte.",
+    "tipo": "exato",
+    "en": "None of the eight questions can be answered yet. Record what comes in and what goes out over a month and the score appears here, with the reason for each part.",
+    "fr": "Aucune des huit questions ne peut encore recevoir de réponse. Enregistrez ce qui entre et ce qui sort d'un mois et le score apparaîtra ici, avec la raison de chaque partie.",
+    "es": "Ninguna de las ocho preguntas puede responderse todavía. Registre lo que entra y lo que sale de un mes y el score aparece aquí, con el motivo de cada parte."
+  },
+  {
+    "pt": "As {0} perguntas que se aplicam a você estão no lugar. Nada pedindo correção neste mês.",
+    "tipo": "padrao",
+    "en": "The {0} questions that apply to you are in place. Nothing asking for a correction this month.",
+    "fr": "Les {0} questions qui vous concernent sont en place. Rien à corriger ce mois-ci.",
+    "es": "Las {0} preguntas que se aplican a usted están en su lugar. Nada pide corrección este mes."
   },
   {
     "pt": "Onde há mais a ganhar agora:",
@@ -1544,25 +1664,103 @@
     "es": "Dónde hay más que ganar ahora:"
   },
   {
-    "pt": "CONFERÊNCIA DO MÊS",
-    "tipo": "exato",
-    "en": "MONTHLY CHECK",
-    "fr": "VÉRIFICATION DU MOIS",
-    "es": "REVISIÓN DEL MES"
+    "pt": "<button type=\"button\" class=\"v3-score-barra{0}\" data-score-mes=\"{1}\"",
+    "tipo": "padrao",
+    "ignorar": true
   },
   {
-    "pt": "cinco perguntas",
-    "tipo": "exato",
-    "en": "five questions",
-    "fr": "cinq questions",
-    "es": "cinco preguntas"
+    "pt": "aria-pressed=\"{0}\" aria-label=\"{1}: {2} de 100\"",
+    "tipo": "padrao",
+    "ignorar": true
   },
   {
-    "pt": "de 100",
+    "pt": "style=\"--alto:{0}\">",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
+    "pt": "fora da conta",
     "tipo": "exato",
-    "en": "of 100",
-    "fr": "sur 100",
-    "es": "de 100"
+    "en": "not counted",
+    "fr": "hors du calcul",
+    "es": "fuera del cálculo"
+  },
+  {
+    "pt": "sua saúde financeira",
+    "tipo": "exato",
+    "en": "your financial health",
+    "fr": "votre santé financière",
+    "es": "su salud financiera"
+  },
+  {
+    "pt": "MÊS A MÊS",
+    "tipo": "exato",
+    "en": "MONTH BY MONTH",
+    "fr": "MOIS PAR MOIS",
+    "es": "MES A MES"
+  },
+  {
+    "pt": "igual a {0}",
+    "tipo": "padrao",
+    "en": "same as {0}",
+    "fr": "identique à {0}",
+    "es": "igual que {0}"
+  },
+  {
+    "pt": "▲ subiu",
+    "tipo": "exato",
+    "en": "▲ up",
+    "fr": "▲ en hausse de",
+    "es": "▲ subió"
+  },
+  {
+    "pt": "▼ caiu",
+    "tipo": "exato",
+    "en": "▼ down",
+    "fr": "▼ en baisse de",
+    "es": "▼ bajó"
+  },
+  {
+    "pt": "{0}{1} {2} sobre {3}",
+    "tipo": "padrao",
+    "en": "{0}{1} {2} over {3}",
+    "fr": "{0}{1} {2} par rapport à {3}",
+    "es": "{0}{1} {2} sobre {3}"
+  },
+  {
+    "pt": "A história refaz só o que o passado responde: sobra, previsibilidade e tetos. Fatura em aberto, saldo, patrimônio e metas são de hoje — o motor não tem como saber se uma fatura estava paga em março, e não vai fingir que sabe. Toque num mês para abri-lo.",
+    "tipo": "exato",
+    "en": "The history only redoes what the past can answer: leftover, predictability and caps. Open bills, balance, net worth and goals are from today — the engine has no way of knowing whether a bill was paid in March, and it will not pretend to. Tap a month to open it.",
+    "fr": "L'historique ne refait que ce à quoi le passé peut répondre : reste, prévisibilité et plafonds. Facture en cours, solde, patrimoine et objectifs datent d'aujourd'hui — le moteur ne peut pas savoir si une facture était payée en mars, et il ne fera pas semblant de le savoir. Touchez un mois pour l'ouvrir.",
+    "es": "La historia rehace solo lo que el pasado responde: sobra, previsibilidad y topes. Factura abierta, saldo, patrimonio y metas son de hoy — el motor no tiene cómo saber si una factura estaba pagada en marzo, y no va a fingir que lo sabe. Toque un mes para abrirlo."
+  },
+  {
+    "pt": "A história mês a mês aparece a partir do segundo mês com lançamentos: é ela que separa um 70 subindo de um 70 caindo.",
+    "tipo": "exato",
+    "en": "The month-by-month history appears from the second month with entries: it is what separates a 70 going up from a 70 going down.",
+    "fr": "L'historique mois par mois apparaît à partir du deuxième mois avec des écritures : c'est lui qui distingue un 70 qui monte d'un 70 qui descend.",
+    "es": "La historia mes a mes aparece a partir del segundo mes con movimientos: es ella la que separa un 70 que sube de un 70 que baja."
+  },
+  {
+    "pt": "Uma pergunta não se aplica a você e fica",
+    "tipo": "exato",
+    "en": "One question does not apply to you and stays",
+    "fr": "Une question ne vous concerne pas et reste",
+    "es": "Una pregunta no se aplica a usted y queda"
+  },
+  {
+    "pt": "{0} perguntas não se aplicam a você e ficam",
+    "tipo": "padrao",
+    "en": "{0} questions do not apply to you and stay",
+    "fr": "{0} questions ne vous concernent pas et restent",
+    "es": "{0} preguntas no se aplican a usted y quedan"
+  },
+  {
+    "pt": "{0} fora da conta: a nota é a porcentagem dos {1} pontos que dá para julgar.",
+    "tipo": "padrao",
+    "en": "{0} out of the count: the score is the percentage of the {1} points there is enough to judge.",
+    "fr": "{0} hors du calcul : la note est le pourcentage des {1} points qu'il est possible de juger.",
+    "es": "{0} fuera del cálculo: la nota es el porcentaje de los {1} puntos que se pueden juzgar."
   },
   {
     "pt": "Sai dos seus próprios lançamentos e não sai daqui: não é consulta a birô, não vira cadastro e ninguém além de você vê.",
@@ -1799,20 +1997,6 @@
     "es": "Ningún compromiso pendiente registrado en los próximos 30 días."
   },
   {
-    "pt": "· até {0}",
-    "tipo": "padrao",
-    "en": "· until {0}",
-    "fr": "· jusqu’au {0}",
-    "es": "· hasta {0}"
-  },
-  {
-    "pt": "Todo dia {0}{1}",
-    "tipo": "padrao",
-    "en": "Every {0}{1}",
-    "fr": "Chaque {0}{1}",
-    "es": "Cada día {0}{1}"
-  },
-  {
     "pt": "Nenhum lançamento fixo cadastrado. Ao criar um lançamento, marque “Repetir mensalmente”.",
     "tipo": "exato",
     "en": "No recurring entry registered. When creating an entry, tick “Repeat monthly”.",
@@ -1869,11 +2053,151 @@
     "es": "Esta pantalla muestra compromisos guardados. Los avisos del navegador dependen del permiso y aún requieren validación en este dispositivo."
   },
   {
-    "pt": "entre na conta",
+    "pt": "abrir ›",
     "tipo": "exato",
-    "en": "sign in",
-    "fr": "connectez-vous",
-    "es": "inicia sesión"
+    "en": "open ›",
+    "fr": "ouvrir ›",
+    "es": "abrir ›"
+  },
+  {
+    "pt": "Espaços",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Seus dados",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Nome, foto do login e idioma",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"account-profile\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Trocar conta",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Entre com outro e-mail sem misturar dados",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"switch-account\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Encerrar a sessão neste aparelho",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"sign-out\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Exclusão definitiva após confirmação por e-mail",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"delete-account\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Dados conectados à sua conta",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Entre na conta para sincronizar",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Plano e assinatura",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Recursos, cobrança e cancelamento",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-go=\"plan\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Coco neste mês: {0} / {1}",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Consentimento da Coco",
+    "tipo": "exato",
+    "en": "Coco’s consent",
+    "fr": "Consentement de Coco",
+    "es": "Consentimiento de Coco"
+  },
+  {
+    "pt": "Foto e áudio somente após envio confirmado",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"coco\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "sem sessão",
@@ -1897,18 +2221,60 @@
     "es": "configurar ›"
   },
   {
-    "pt": "Conectada à sua conta",
+    "pt": "Memória da Coco",
     "tipo": "exato",
-    "en": "Connected to your account",
-    "fr": "Connectée à votre compte",
-    "es": "Conectada a tu cuenta"
+    "en": "Coco’s memory",
+    "fr": "Mémoire de Coco",
+    "es": "Memoria de Coco"
   },
   {
-    "pt": "Dados apenas neste aparelho",
+    "pt": "Revisar, pausar ou apagar regras e análises",
     "tipo": "exato",
-    "en": "Data only on this device",
-    "fr": "Données uniquement sur cet appareil",
-    "es": "Datos solo en este dispositivo"
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"coco-memory\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Lembretes até o fim do mês",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"notifications\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Perfis financeiros",
+    "tipo": "exato",
+    "en": "Financial profiles",
+    "fr": "Profils financiers",
+    "es": "Perfiles financieros"
+  },
+  {
+    "pt": "Ativo: {0}",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "data-action=\"profiles\"",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "Ferramentas anteriores",
@@ -1918,18 +2284,11 @@
     "es": "Herramientas anteriores"
   },
   {
-    "pt": "Edição completa de recursos ainda em migração.",
+    "pt": "Fallback até a migração ser validada",
     "tipo": "exato",
-    "en": "Full editing of features still being migrated.",
-    "fr": "Édition complète des fonctions encore en migration.",
-    "es": "La edición completa de funciones sigue en migración."
-  },
-  {
-    "pt": "abrir ›",
-    "tipo": "exato",
-    "en": "open ›",
-    "fr": "ouvrir ›",
-    "es": "abrir ›"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "SEGURANÇA",
@@ -1939,102 +2298,200 @@
     "es": "SEGURIDAD"
   },
   {
-    "pt": "Biometria ao abrir",
+    "pt": "Sessão e sincronização",
     "tipo": "exato",
-    "en": "Biometrics on open",
-    "fr": "Biométrie à l’ouverture",
-    "es": "Biometría al abrir"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Depende do app nativo; indisponível no navegador.",
+    "pt": "Biometria e PIN",
     "tipo": "exato",
-    "en": "Depends on the native app; unavailable in the browser.",
-    "fr": "Dépend de l’app native ; indisponible dans le navigateur.",
-    "es": "Depende de la app nativa; no disponible en el navegador."
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "PIN de 6 números",
+    "pt": "Não disponíveis na versão web; não simulamos proteção inexistente.",
     "tipo": "exato",
-    "en": "6-digit PIN",
-    "fr": "Code PIN à 6 chiffres",
-    "es": "PIN de 6 números"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Não configurado nesta V3 web.",
+    "pt": "PLANO E AJUDA",
     "tipo": "exato",
-    "en": "Not set up in this web V3.",
-    "fr": "Non configuré dans cette V3 web.",
-    "es": "No configurado en esta V3 web."
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Sessão em outros aparelhos",
+    "pt": "Central de ajuda e contato",
     "tipo": "exato",
-    "en": "Session on other devices",
-    "fr": "Session sur d’autres appareils",
-    "es": "Sesión en otros dispositivos"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Consentimento",
+    "pt": "COCO E DADOS",
     "tipo": "exato",
-    "en": "Consent",
-    "fr": "Consentement",
-    "es": "Consentimiento"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Pedido, agregados e últimas trocas. Foto e áudio só com envio confirmado.",
+    "pt": "seus dados",
     "tipo": "exato",
-    "en": "Request, aggregates and recent exchanges. Photo and audio only with confirmed sending.",
-    "fr": "Demande, agrégats et derniers échanges. Photo et audio uniquement après confirmation d’envoi.",
-    "es": "Petición, agregados y últimos intercambios. Foto y audio solo con envío confirmado."
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Memória da Coco",
+    "pt": "vinculados ao login",
     "tipo": "exato",
-    "en": "Coco’s memory",
-    "fr": "Mémoire de Coco",
-    "es": "Memoria de Coco"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Revise, pause ou esqueça regras confirmadas.",
+    "pt": "Português",
     "tipo": "exato",
-    "en": "Review, pause or forget confirmed rules.",
-    "fr": "Vérifiez, mettez en pause ou oubliez les règles confirmées.",
-    "es": "Revisa, pausa u olvida reglas confirmadas."
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "CONTA E DADOS",
+    "pt": "English",
     "tipo": "exato",
-    "en": "ACCOUNT AND DATA",
-    "fr": "COMPTE ET DONNÉES",
-    "es": "CUENTA Y DATOS"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "lembretes ›",
+    "pt": "Español",
     "tipo": "exato",
-    "en": "reminders ›",
-    "fr": "rappels ›",
-    "es": "recordatorios ›"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Plano",
+    "pt": "Français",
     "tipo": "exato",
-    "en": "Plan",
-    "fr": "Forfait",
-    "es": "Plan"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "ver plano ›",
+    "pt": "A V3 ainda está disponível apenas em português.",
     "tipo": "exato",
-    "en": "see plan ›",
-    "fr": "voir le forfait ›",
-    "es": "ver plan ›"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
-    "pt": "Perfil ativo",
+    "pt": "A foto vem do provedor do seu login. Altere-a nele.",
     "tipo": "exato",
-    "en": "Active profile",
-    "fr": "Profil actif",
-    "es": "Perfil activo"
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Salvar dados",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Dados da conta",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Demonstração: nenhum dado foi salvo.",
+    "tipo": "exato",
+    "en": "Demo: nothing was saved.",
+    "fr": "Démo : rien n’a été enregistré.",
+    "es": "Demostración: no se guardó nada."
+  },
+  {
+    "pt": "Confira seu nome.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Dados da conta atualizados.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não foi possível salvar seus dados.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "excluir conta",
+    "tipo": "exato",
+    "en": "delete account",
+    "fr": "supprimer le compte",
+    "es": "eliminar cuenta"
+  },
+  {
+    "pt": "ação definitiva",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Todos os perfis financeiros e dados associados serão excluídos. Baixe uma cópia antes; esta ação não tem desfazer.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Baixar backup JSON",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "CONFIRME SEU E-MAIL",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Excluir minha conta definitivamente",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Última confirmação: excluir sua conta e todos os dados financeiros?",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não foi possível confirmar a exclusão. Confira sua conta antes de tentar de novo.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "Prévia: nenhuma assinatura é criada aqui.",
@@ -2226,18 +2683,11 @@
     "es": "{0} metas activas"
   },
   {
-    "pt": "entradas, saídas e vencimentos",
+    "pt": "calendário e recorrências",
     "tipo": "exato",
-    "en": "income, outgoings and due dates",
-    "fr": "entrées, sorties et échéances",
-    "es": "entradas, salidas y vencimientos"
-  },
-  {
-    "pt": "{0} nos próximos 30 dias",
-    "tipo": "padrao",
-    "en": "{0} in the next 30 days",
-    "fr": "{0} dans les 30 prochains jours",
-    "es": "{0} en los próximos 30 días"
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "segurança, dados",
@@ -2292,6 +2742,55 @@
     "en": "Panel",
     "fr": "Panneau",
     "es": "Panel"
+  },
+  {
+    "pt": "{0}: receitas confirmadas {1}, despesas confirmadas {2}, diferença {3}.",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Despesas por débito {0}, crédito {1}.",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Receitas previstas {0}, despesas previstas {1}.",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Maior categoria de despesa: {0} ({1}).",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Sem categoria de despesa confirmada.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "SHA-256",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "V3/Coco análise:",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "Parar gravação",
@@ -2539,11 +3038,11 @@
     "es": "tus datos, tus reglas"
   },
   {
-    "pt": "Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda apenas regras que você aprovar; pode esquecer ou pausar depois.",
+    "pt": "Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.",
     "tipo": "exato",
-    "en": "To chat, OAZE sends OpenAI your request, the recent exchanges and the financial summaries needed. Photos and audio are only sent when you choose a file or start a recording and confirm the sending. Recognised PDF/CSV statements are read locally, with the file never sent to OpenAI. Coco keeps only rules you approve; you can forget or pause them later.",
-    "fr": "Pour discuter, OAZE envoie à OpenAI votre demande, les derniers échanges et les résumés financiers nécessaires. Les photos et audios ne sont envoyés que lorsque vous choisissez un fichier ou démarrez un enregistrement et confirmez l’envoi. Les relevés PDF/CSV reconnus sont lus localement, sans envoi du fichier à OpenAI. Coco ne garde que les règles que vous approuvez ; vous pouvez les oublier ou les mettre en pause ensuite.",
-    "es": "Para conversar, OAZE envía a OpenAI tu petición, los últimos intercambios y los resúmenes financieros necesarios. Las fotos y audios solo se envían cuando eliges un archivo o inicias una grabación y confirmas el envío. Los extractos PDF/CSV reconocidos se leen localmente, sin enviar el archivo a OpenAI. Coco guarda solo las reglas que apruebes; puedes olvidarlas o pausarlas después."
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.",
@@ -2579,13 +3078,6 @@
     "en": "See or delete memories",
     "fr": "Voir ou effacer les mémoires",
     "es": "Ver o borrar memorias"
-  },
-  {
-    "pt": "Consentimento da Coco",
-    "tipo": "exato",
-    "en": "Coco’s consent",
-    "fr": "Consentement de Coco",
-    "es": "Consentimiento de Coco"
   },
   {
     "pt": "quatro coisas",
@@ -2791,11 +3283,39 @@
     "es": "Pausar aprendizaje"
   },
   {
-    "pt": "Acesso revogado; você ainda pode apagar estas regras.",
+    "pt": "Acesso revogado; você ainda pode apagar memórias.",
     "tipo": "exato",
-    "en": "Access revoked; you can still delete these rules.",
-    "fr": "Accès révoqué ; vous pouvez encore supprimer ces règles.",
-    "es": "Acceso revocado; aún puedes borrar estas reglas."
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "A autorização anterior não incluía análises automáticas. Elas estão desligadas até você autorizar.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Autorizar análises automáticas",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Apagar análise",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Nenhuma análise mensal guardada.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "{0} · CONFIRMADA",
@@ -2889,11 +3409,25 @@
     "es": "lo que aprendí sobre ti"
   },
   {
-    "pt": "Só regras que você confirmou. A memória não autoriza pagamentos nem altera lançamentos.",
+    "pt": "Regras precisam da sua confirmação. Análises mensais são calculadas automaticamente com os dados considerados nos totais. Nenhuma delas autoriza pagamentos ou altera lançamentos.",
     "tipo": "exato",
-    "en": "Only rules you’ve confirmed. The memory doesn’t authorise payments or change entries.",
-    "fr": "Uniquement les règles que vous avez confirmées. La mémoire n’autorise aucun paiement et ne modifie aucune écriture.",
-    "es": "Solo reglas que confirmaste. La memoria no autoriza pagos ni cambia movimientos."
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Análises automáticas",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Regras confirmadas",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "demonstração de interface",
@@ -3491,13 +4025,6 @@
     "es": "Esta factura cambió. Actualiza la página."
   },
   {
-    "pt": "Demonstração: nenhum dado foi salvo.",
-    "tipo": "exato",
-    "en": "Demo: nothing was saved.",
-    "fr": "Démo : rien n’a été enregistré.",
-    "es": "Demostración: no se guardó nada."
-  },
-  {
     "pt": "Confira o valor, a data e a conta.",
     "tipo": "exato",
     "en": "Check the amount, the date and the account.",
@@ -3902,13 +4429,6 @@
     "en": "Create space",
     "fr": "Créer un espace",
     "es": "Crear espacio"
-  },
-  {
-    "pt": "Perfis financeiros",
-    "tipo": "exato",
-    "en": "Financial profiles",
-    "fr": "Profils financiers",
-    "es": "Perfiles financieros"
   },
   {
     "pt": "Não consegui confirmar os limites da conta. Tente novamente.",
@@ -4537,6 +5057,83 @@
     "es": "No pude abrir el micrófono. Revisa el permiso del navegador."
   },
   {
+    "pt": "Esta recorrência não existe mais.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Encerrar “{0}” após {1}? O histórico permanece.",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "A recorrência foi alterada em outro aparelho.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Recorrência pausada.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Recorrência retomada. Meses pausados não foram criados.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Recorrência encerrada. Histórico preservado.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não consegui atualizar a recorrência.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Demonstração sem conta vinculada.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Demonstração sem sessão.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não foi possível encerrar a sessão.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Backup baixado. Confira o arquivo antes de excluir a conta.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
     "pt": "Esta proposta não está mais disponível.",
     "tipo": "exato",
     "en": "This proposal is no longer available.",
@@ -4556,6 +5153,34 @@
     "en": "I couldn’t delete the rule.",
     "fr": "Je n’ai pas pu supprimer la règle.",
     "es": "No pude borrar la regla."
+  },
+  {
+    "pt": "Apagar a análise de {0}? Ela não será recriada enquanto os dados do mês não mudarem.",
+    "tipo": "padrao",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não consegui apagar a análise.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Autorizar a Coco a guardar resumos mensais automáticos e usá-los como contexto nas próximas conversas? Você poderá pausar e apagar cada análise.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
+  },
+  {
+    "pt": "Não consegui registrar a autorização.",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "Não consegui mudar a pausa.",
@@ -4661,13 +5286,6 @@
     "en": "delete card",
     "fr": "supprimer la carte",
     "es": "eliminar tarjeta"
-  },
-  {
-    "pt": "excluir conta",
-    "tipo": "exato",
-    "en": "delete account",
-    "fr": "supprimer le compte",
-    "es": "eliminar cuenta"
   },
   {
     "pt": "Item excluído.",
@@ -4846,6 +5464,13 @@
     "pt": "V3/limites:",
     "tipo": "exato",
     "ignorar": true
+  },
+  {
+    "pt": "V3/Coco configuração:",
+    "tipo": "exato",
+    "en": "",
+    "fr": "",
+    "es": ""
   },
   {
     "pt": "V3/primeiros passos:",

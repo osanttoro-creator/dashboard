@@ -210,7 +210,7 @@
       partes.appendChild(el('li', { class: 'score-part' + (p.ok ? ' is-ok' : ''), title: p.detalhe }, [
         el('span', { class: 'score-dot' }, Icons.lucide(p.ok ? 'check' : 'circle-alert', 12)),
         el('span', { class: 'score-part-name', text: p.nome }),
-        el('span', { class: 'score-part-pts', text: p.pontos + '/20' })
+        el('span', { class: 'score-part-pts', text: p.pontos + '/' + p.peso })
       ]));
     });
   }
@@ -221,10 +221,10 @@
     UI.openModal({
       title: 'Como o OAZE Score é calculado',
       body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-        el('p', { text: 'Cinco perguntas, 20 pontos cada, todas respondidas a partir dos seus próprios lançamentos. Nada vem de fora e nada é opinião.' }),
+        el('p', { text: 'Oito perguntas, cada uma com seu peso, todas respondidas a partir dos seus próprios lançamentos. Nada vem de fora e nada é opinião.' }),
         el('ul', { style: { marginTop: '12px', display: 'grid', gap: '10px' } },
           s.partes.map((p) => el('li', {}, [
-            el('strong', { text: p.nome + ' — ' + p.pontos + '/20' }),
+            el('strong', { text: p.nome + ' — ' + p.pontos + '/' + p.peso }),
             el('br'),
             el('span', { class: 'muted', text: p.detalhe })
           ]))),

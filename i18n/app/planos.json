@@ -43,13 +43,6 @@
   "es": "Ilimitado"
  },
  {
-  "pt": "{0} de {1}{2}",
-  "tipo": "padrao",
-  "en": "{0} of {1}{2}",
-  "fr": "{0} sur {1}{2}",
-  "es": "{0} de {1}{2}"
- },
- {
   "pt": "Movimentações por mês",
   "tipo": "exato",
   "en": "Transactions per month",

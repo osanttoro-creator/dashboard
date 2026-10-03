@@ -52,7 +52,12 @@
   let memo = new Map();
 
   function lembrar(prof, chave, calcular) {
-    const ativo = P();
+    /* Sem estado carregado no Store — a prévia do app é assim —
+       Store.profile() estoura. Quem só queria saber se vale memoizar
+       não pode quebrar o cálculo por isso: sem perfil ativo, calcula
+       e não guarda. */
+    let ativo = null;
+    try { ativo = P(); } catch (e) { ativo = null; }
     if (!ativo || prof !== ativo) return calcular();
     const rev = (global.Store && Store.revisao) ? Store.revisao() : -1;
     /* O dia entra na chave porque "confirmado" depende de hoje (ver
@@ -192,6 +197,7 @@
       months.forEach((ym) => {
         if (U.monthsBetween(startYM, ym) < 0) return;
         if (tx.recurEnd && U.monthsBetween(ym, tx.recurEnd) < 0) return;
+        if (tx.recurPausedFrom && ym >= tx.recurPausedFrom) return;
         if (tx.occ[ym] && tx.occ[ym].skipped) return;
         const date = occurrenceDate(tx, ym);
         if (date >= from && date <= to) out.push(makeEntry(tx, ym, date));
@@ -1045,50 +1051,78 @@
   };
 
   /* ------------------------------------------------------------
-     OAZE Score — 0 a 100
+     OAZE Score — o registro da saúde financeira
      ------------------------------------------------------------
-     Cinco perguntas, cada uma valendo 20 pontos. Todas são
-     verificáveis a partir dos próprios lançamentos; nenhuma
-     depende de opinião ou de dado externo.
+     Oito perguntas, cada uma com um peso, somando 100. Todas são
+     verificáveis a partir dos próprios lançamentos; nenhuma depende
+     de opinião nem de dado de fora.
 
-       1 · Sobra dinheiro?        taxa de poupança dos 3 meses
-       2 · O crédito está sob controle?  fatura / receita mensal
-       3 · Há reserva?            saldo disponível / gasto mensal
-       4 · O patrimônio cresce?   variação em 6 meses
-       5 · As contas estão em dia? nada vencido, nada no negativo
+       1 · Sobra dinheiro?              16   poupança de 3 meses
+       2 · O crédito está sob controle? 14   fatura sobre receita
+       3 · Há reserva?                  16   disponível sobre gasto
+       4 · O patrimônio cresce?         12   variação em 6 meses
+       5 · As contas estão em dia?      14   nada vencido nem negativo
+       6 · O gasto é previsível?        10   oscilação em torno da média
+       7 · Os tetos foram respeitados?  10   orçamentos do mês
+       8 · As metas andam?               8   aportes no mês
 
-     Devolve também o porquê de cada parte, porque um número sozinho
-     não ajuda ninguém a agir.
+     UMA PERGUNTA QUE NÃO SE APLICA NÃO VALE ZERO. Quem não tem meta
+     nenhuma não é alguém que falhou nas metas, e pontuar zero ali
+     afirmaria uma coisa falsa sobre a pessoa — além de prender o
+     total num teto que ela não tem como alcançar. Então cada parte
+     diz se se aplica, e o total é a porcentagem do que DÁ para
+     julgar; por isso o retorno traz pesoAplicado.
+
+     RETROSPECTIVA. Três das oito saem dos lançamentos do próprio
+     mês e podem ser refeitas para trás: sobra, previsibilidade e
+     tetos. As outras cinco dependem do estado de HOJE —
+     fatura em aberto, saldo de hoje, patrimônio de hoje — e
+     reconstruí-las no passado seria inventar: o motor não tem como
+     saber se uma fatura estava paga em março. Por isso o histórico
+     soma só as que têm retro, e a tela diz isso em voz alta em vez
+     de desenhar uma linha que parece saber mais do que sabe.
      ------------------------------------------------------------ */
   Calc.score = function (ym, profile) {
     const prof = profile || P();
+    return lembrar(prof, 'sc|' + ym, function () { return calcularScore(ym, prof); });
+  };
+
+  function calcularScore(ym, prof) {
     const fim = U.monthEnd(ym);
     const partes = [];
     const faixa = (v, min, max) => Math.max(0, Math.min(1, (v - min) / (max - min)));
+    const põe = (p) => {
+      if (!p.aplica) p.pontos = 0;
+      partes.push(p);
+    };
 
     /* 1 · poupança média de 3 meses */
     const taxas = [0, 1, 2]
       .map((i) => Calc.savingsRate(U.addMonths(ym, -i), prof))
       .filter((x) => x != null);
     const media = taxas.length ? taxas.reduce((a, b) => a + b, 0) / taxas.length : null;
-    partes.push({
-      chave: 'poupanca', nome: 'Sobra no fim do mês',
-      pontos: media == null ? 0 : Math.round(faixa(media, -10, 25) * 20),
+    põe({
+      chave: 'poupanca', nome: 'Sobra no fim do mês', peso: 16, retro: true,
+      aplica: media != null,
+      pontos: media == null ? 0 : Math.round(faixa(media, -10, 25) * 16),
       detalhe: media == null ? 'Sem receita registrada nos últimos 3 meses'
         : 'Você guarda ' + U.fmtPct(media, 0) + ' do que recebe',
       ok: media != null && media >= 10
     });
 
     /* 2 · peso do crédito sobre a receita */
+    const cartoes = prof.cards.filter((c) => c.considerado !== false);
     const receita = Calc.monthTotals(ym, prof).income;
     let fatura = 0;
-    prof.cards.filter((c) => c.considerado !== false).forEach((c) => { fatura += Calc.cardUsed(c.id, prof); });
+    cartoes.forEach((c) => { fatura += Calc.cardUsed(c.id, prof); });
     fatura = U.round2(fatura);
     const peso = receita > 0 ? (fatura / receita) * 100 : (fatura > 0 ? 100 : 0);
-    partes.push({
-      chave: 'credito', nome: 'Crédito sob controle',
-      pontos: Math.round(faixa(-peso, -80, -10) * 20),
-      detalhe: fatura <= 0 ? 'Nenhuma fatura em aberto'
+    põe({
+      chave: 'credito', nome: 'Crédito sob controle', peso: 14, retro: false,
+      aplica: cartoes.length > 0,
+      pontos: Math.round(faixa(-peso, -80, -10) * 14),
+      detalhe: !cartoes.length ? 'Nenhum cartão de crédito cadastrado'
+        : fatura <= 0 ? 'Nenhuma fatura em aberto'
         : 'Faturas em aberto somam ' + U.fmtPct(peso, 0) + ' da sua receita',
       ok: peso <= 30
     });
@@ -1099,47 +1133,161 @@
       .reduce((a, b) => a + b, 0) / 3);
     const disponivel = Calc.available(fim, prof);
     const meses = gastoMedio > 0 ? disponivel / gastoMedio : (disponivel > 0 ? 6 : 0);
-    partes.push({
-      chave: 'reserva', nome: 'Reserva de emergência',
-      pontos: Math.round(faixa(meses, 0, 6) * 20),
-      detalhe: gastoMedio <= 0 ? 'Sem gastos para comparar'
-        : 'Cobre ' + (meses < 0 ? '0' : meses.toFixed(1)) + ' meses do seu gasto',
+    põe({
+      chave: 'reserva', nome: 'Reserva de emergência', peso: 16, retro: false,
+      aplica: gastoMedio > 0,
+      pontos: Math.round(faixa(meses, 0, 6) * 16),
+      detalhe: gastoMedio <= 0 ? 'Sem gastos registrados para comparar'
+        : 'Cobre ' + (meses < 0 ? '0' : meses.toFixed(1)).replace('.', U.moneyDecimalSeparator || ',') + ' meses do seu gasto',
       ok: meses >= 3
     });
 
-    /* 4 · o patrimônio cresce? */
+    /* 4 · o patrimônio cresce?
+       Com menos de 6 meses de registro, `antes` é zero e a conta
+       diria "subiu 100%" — que é só o efeito de não haver passado.
+       Então a pergunta espera a pessoa ter passado. */
     const agora = Calc.netWorth(fim, prof);
     const antes = Calc.netWorth(U.monthEnd(U.addMonths(ym, -6)), prof);
     const cresceu = antes !== 0 ? ((agora - antes) / Math.abs(antes)) * 100 : (agora > 0 ? 100 : 0);
-    partes.push({
-      chave: 'patrimonio', nome: 'Patrimônio crescendo',
-      pontos: Math.round(faixa(cresceu, -10, 20) * 20),
-      detalhe: (cresceu >= 0 ? 'Subiu ' : 'Caiu ') + U.fmtPct(Math.abs(cresceu), 0) + ' em 6 meses',
+    põe({
+      chave: 'patrimonio', nome: 'Patrimônio crescendo', peso: 12, retro: false,
+      aplica: antes !== 0,
+      pontos: Math.round(faixa(cresceu, -10, 20) * 12),
+      detalhe: antes === 0 ? 'Precisa de 6 meses de registro para comparar'
+        : (cresceu >= 0 ? 'Subiu ' : 'Caiu ') + U.fmtPct(Math.abs(cresceu), 0) + ' em 6 meses',
       ok: cresceu > 0
     });
 
     /* 5 · contas em dia */
     const hoje = U.todayISO();
     let atrasos = 0;
-    prof.cards.filter((c) => c.considerado !== false).forEach((c) => {
-      const inv = Calc.invoice(c.id, Calc.currentInvoiceRef(c, ym), prof);
+    cartoes.forEach((c) => {
+      const inv = Calc.invoice(c.id, Calc.currentInvoiceRef(c, ym, prof), prof);
       if (inv && !inv.paid && inv.restante > 0 && inv.dueDate < hoje) atrasos++;
     });
+    const contas = contasConsideradas(prof);
     let negativas = 0;
-    contasConsideradas(prof).forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
+    contas.forEach((a) => { if (Calc.accountBalance(a.id, fim, prof) < 0) negativas++; });
     const problemas = atrasos + negativas;
-    partes.push({
-      chave: 'dia', nome: 'Contas em dia',
-      pontos: problemas === 0 ? 20 : Math.max(0, 20 - problemas * 10),
+    põe({
+      chave: 'dia', nome: 'Contas em dia', peso: 14, retro: false,
+      aplica: contas.length > 0 || cartoes.length > 0,
+      pontos: problemas === 0 ? 14 : Math.max(0, 14 - problemas * 7),
       detalhe: problemas === 0 ? 'Nada vencido e nenhuma conta negativa'
-        : (atrasos ? atrasos + ' fatura(s) vencida(s). ' : '') + (negativas ? negativas + ' conta(s) negativa(s).' : ''),
+        : ((atrasos ? atrasos + (atrasos === 1 ? ' fatura vencida. ' : ' faturas vencidas. ') : '')
+          + (negativas ? negativas + (negativas === 1 ? ' conta no negativo.' : ' contas no negativo.') : '')).trim(),
       ok: problemas === 0
     });
 
-    const total = partes.reduce((a, b) => a + b.pontos, 0);
+    /* 6 · o gasto é previsível?
+       Gasto alto e estável dá para planejar; gasto que pula de mês a
+       mês não dá, mesmo sendo menor na média. A medida é a oscilação
+       em torno da própria média da pessoa — nunca uma comparação com
+       um gasto "certo", que não existe. */
+    const gastos = [];
+    for (let i = 0; i < 6; i++) {
+      const g = Calc.monthTotals(U.addMonths(ym, -i), prof).expense;
+      if (g > 0) gastos.push(g);
+    }
+    const mediaGasto = gastos.length ? U.sum(gastos) / gastos.length : 0;
+    const desvio = gastos.length > 1
+      ? Math.sqrt(U.sum(gastos, (g) => (g - mediaGasto) * (g - mediaGasto)) / gastos.length)
+      : 0;
+    const oscila = mediaGasto > 0 ? (desvio / mediaGasto) * 100 : 0;
+    põe({
+      chave: 'previsivel', nome: 'Gasto previsível', peso: 10, retro: true,
+      aplica: gastos.length >= 3,
+      pontos: Math.round(faixa(-oscila, -60, -15) * 10),
+      detalhe: gastos.length < 3 ? 'Precisa de 3 meses com gasto para medir'
+        : 'Seus meses variam ' + U.fmtPct(oscila, 0) + ' em torno de ' + U.fmtBRL(mediaGasto),
+      ok: gastos.length >= 3 && oscila <= 25
+    });
+
+    /* 7 · os tetos foram respeitados?
+       Só conta teto que a pessoa mesma definiu. Sem nenhum, a
+       pergunta não se aplica: não ter limite escrito não é furar
+       limite. */
+    const orcamentos = (prof.budgets && typeof prof.budgets === 'object') ? prof.budgets : {};
+    const gastoPorCat = {};
+    Calc.categoryTotals('expense', ym + '-01', fim, prof).forEach((r) => { gastoPorCat[r.id] = r.total; });
+    const tetos = Object.keys(orcamentos)
+      .filter((id) => Number(orcamentos[id]) > 0)
+      .map((id) => ({
+        id: id,
+        nome: Calc.categoryName(id, prof),
+        limite: Number(orcamentos[id]),
+        gasto: gastoPorCat[id] || 0
+      }));
+    const estourados = tetos.filter((t) => t.gasto > t.limite)
+      .sort((a, b) => (b.gasto - b.limite) - (a.gasto - a.limite));
+    /* Num mês sem gasto nenhum não houve teto a respeitar, e dizer
+       "todos respeitados" seria elogiar um mês vazio — o que estraga
+       justamente a retrospectiva, onde os meses antigos ainda não
+       têm lançamento. */
+    const gastouNoMes = Calc.monthTotals(ym, prof).expense > 0;
+    põe({
+      chave: 'tetos', nome: 'Tetos respeitados', peso: 10, retro: true,
+      aplica: tetos.length > 0 && gastouNoMes,
+      pontos: tetos.length ? Math.round(((tetos.length - estourados.length) / tetos.length) * 10) : 0,
+      detalhe: !tetos.length ? 'Nenhum teto por mês definido ainda'
+        : !gastouNoMes ? 'Nenhum gasto neste mês para comparar com os tetos'
+        : !estourados.length ? (tetos.length === 1 ? 'Seu único teto foi respeitado' : 'Todos os ' + tetos.length + ' tetos respeitados')
+        : estourados[0].nome + ' passou ' + U.fmtBRL(U.round2(estourados[0].gasto - estourados[0].limite))
+          + (estourados.length > 1 ? ' e outros ' + (estourados.length - 1) + ' estouraram' : ''),
+      ok: tetos.length > 0 && gastouNoMes && !estourados.length
+    });
+
+    /* 8 · as metas andam?
+       Meta alcançada não precisa de aporte novo para contar como
+       saudável — cobrar isso puniria quem terminou.
+
+       Não é retrospectiva: "em andamento" se decide pelo guardado de
+       HOJE, e uma meta criada em agosto não existia em março. Olhar
+       para trás com a lista de agora culparia a pessoa por não ter
+       aportado numa meta que ainda não era dela. */
+    const metas = (prof.goals || []).filter((g) => !g.archived && Number(g.target) > 0);
+    const andando = metas.filter((g) => Number(g.saved || 0) < Number(g.target));
+    const comAporte = andando.filter((g) => (g.deposits || []).some((d) => d.at && U.ymOf(d.at) === ym));
+    põe({
+      chave: 'metas', nome: 'Metas andando', peso: 8, retro: false,
+      aplica: metas.length > 0,
+      pontos: !andando.length ? 8 : Math.round((comAporte.length / andando.length) * 8),
+      detalhe: !metas.length ? 'Nenhuma meta cadastrada'
+        : !andando.length ? 'Todas as metas já foram alcançadas'
+        : comAporte.length + ' de ' + andando.length + (andando.length === 1 ? ' meta recebeu aporte neste mês' : ' metas receberam aporte neste mês'),
+      ok: metas.length > 0 && comAporte.length === andando.length
+    });
+
+    const validas = partes.filter((p) => p.aplica);
+    const pesoAplicado = U.sum(validas, (p) => p.peso);
+    const total = pesoAplicado > 0
+      ? Math.round((U.sum(validas, (p) => p.pontos) / pesoAplicado) * 100) : 0;
     const faixaNome = total >= 80 ? 'Excelente' : total >= 60 ? 'Saudável'
       : total >= 40 ? 'Atenção' : 'Frágil';
-    return { total, faixa: faixaNome, partes };
+    return { total: total, faixa: faixaNome, partes: partes, pesoAplicado: pesoAplicado };
+  }
+
+  /**
+   * O mesmo registro, mês a mês, com as perguntas que o passado
+   * ainda responde. Devolve total null num mês em que nenhuma delas
+   * se aplica — porque "sem dados" não é zero, e desenhar zero ali
+   * inventaria um mês ruim que nunca houve.
+   */
+  Calc.scoreHistory = function (ym, meses, profile) {
+    const prof = profile || P();
+    const n = Math.max(2, Math.min(24, meses || 12));
+    const out = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const mes = U.addMonths(ym, -i);
+      const retro = Calc.score(mes, prof).partes.filter((p) => p.retro && p.aplica);
+      const pesoRetro = U.sum(retro, (p) => p.peso);
+      out.push({
+        ym: mes,
+        total: pesoRetro > 0 ? Math.round((U.sum(retro, (p) => p.pontos) / pesoRetro) * 100) : null,
+        partes: retro
+      });
+    }
+    return out;
   };
 
   /* ------------------------------------------------------------

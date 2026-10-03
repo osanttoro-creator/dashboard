@@ -42,6 +42,41 @@
   "es": "Pago no disponible ahora. No se cobró nada."
  },
  {
+  "pt": "Entre na sua conta para editar o perfil.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "Escreva seu nome.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "Sessão indisponível.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "Sua sessão expirou. Nada foi apagado.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "O servidor não confirmou a exclusão. Confira sua conta antes de tentar novamente.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
   "pt": "Entre na sua conta para usar a Coco.",
   "tipo": "exato",
   "en": "Sign in to use Coco.",
@@ -89,6 +124,34 @@
   "en": "Sign in to delete the memory.",
   "fr": "Connectez-vous pour effacer la mémoire.",
   "es": "Inicia sesión para borrar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para consultar as análises.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "Entre na sua conta para guardar a análise.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "A memória da Coco está desligada.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
+ },
+ {
+  "pt": "Entre na sua conta para apagar a análise.",
+  "tipo": "exato",
+  "en": "",
+  "fr": "",
+  "es": ""
  },
  {
   "pt": "Entre na sua conta para enviar mídia.",
