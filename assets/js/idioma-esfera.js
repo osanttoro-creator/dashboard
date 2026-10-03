@@ -222,6 +222,11 @@
    * e descobrir isso é sempre depois de publicar.
    */
   function pendurar(caixa) {
+    /* A V3 primeiro: é o que /app serve. A barra dela tem nome
+       próprio, e sem esta linha a esfera caía no fim do <body> —
+       existindo, mas num canto onde ninguém procura a língua. */
+    var barraV3 = document.querySelector('.v3-top-actions');
+    if (barraV3) { barraV3.insertBefore(caixa, barraV3.firstChild); return; }
     var barraApp = document.querySelector('.topbar');
     if (barraApp) { barraApp.appendChild(caixa); return; }
     var barraSite = document.querySelector('.topo .env');

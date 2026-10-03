@@ -22,25 +22,17 @@
 .v3-mobile-greeting,.v3-wave-period{display:none}
 .v3-pocket-hint{display:block;margin-top:15px;color:#bac9c9;font-weight:600;font-size:12px}
 /* =============================================================
-   OCULTAR SALDOS TEM DE OCULTAR
+   OCULTAR SALDOS
    -------------------------------------------------------------
-   Era `color:transparent` com um `text-shadow` de 10px. Isso não
-   esconde nada: a sombra tem o FORMATO do algarismo, então um 8
-   borrado continua sendo um 8 e um valor de quatro dígitos continua
-   tendo quatro dígitos. Quem liga esse botão está com alguém ao
-   lado olhando a tela — meio-escondido ali é o mesmo que aberto.
+   Quem esconde os valores pinta a tarja? Não: cada algarismo vira
+   uma bolinha no próprio texto (ver money() em app.js). A tarja
+   escondia, mas deixava um vão escuro no meio da frase, e a página
+   ficava cheia de buracos de tamanhos diferentes.
 
-   Agora o número some e no lugar fica uma tarja do tamanho dele. A
-   largura ainda é a do valor, para a página não dançar ao ligar e
-   desligar, mas não sobra nenhuma informação sobre quanto era.
+   Aqui sobra só impedir a seleção: o texto já não tem o que ler,
+   mas copiá-lo não deve render uma linha de bolinhas sem sentido.
    ============================================================= */
-.v3-hide-money .v3-sensitive{
-  color:transparent!important;text-shadow:none!important;user-select:none;
-  background:linear-gradient(rgba(240,229,207,.17),rgba(240,229,207,.17));
-  border-radius:6px;box-decoration-break:clone;-webkit-box-decoration-break:clone
-}
-/* O ponteiro não revela o que a tarja cobre. */
-.v3-hide-money .v3-sensitive::selection{background:transparent}
+.v3-hide-money .v3-sensitive{user-select:none}}
 
 /* Mês: a seta anda, o nome abre a escolha. */
 .v3-periodo{display:inline-flex;align-items:center;overflow:hidden}
