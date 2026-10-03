@@ -425,7 +425,7 @@
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
-    return `<div class="v3-mobile-greeting"><span class="v3-avatar">${esc(owner.charAt(0))}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div><div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}<button class="v3-coco-call" type="button" data-action="coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span>${demo ? 'Quatro coisas para ver' : 'Conversar com a Coco'}</span>›</button></div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div></div>${renderHomeMetrics()}`;
+    return `<div class="v3-mobile-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${renderHomeMetrics()}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}</div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div>${painelScore()}</div>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -938,58 +938,130 @@
      numa janela longa. Num mês ela oscila com a conta de luz.
      ============================================================= */
   /* =============================================================
-     AS CINCO PERGUNTAS — O SCORE, REESCRITO
+     O OAZE SCORE — O REGISTRO DA SAÚDE FINANCEIRA
      -------------------------------------------------------------
-     O cálculo continua o mesmo, e é bom: cinco perguntas
-     verificáveis a partir dos próprios lançamentos, 20 pontos cada,
-     cada uma devolvendo o porquê. O que muda é o que se mostra.
-
-     Na V2 o número vinha primeiro, grande, com uma faixa ("Saudável")
-     e um link para "como é calculado". Isso tem dois problemas.
+     Na V2 o score era um anel com um número grande, uma faixa
+     ("Saudável") e um link para "como é calculado". Dois problemas.
 
      Primeiro, 0 a 100 com faixa parece nota de crédito — e não é:
      ninguém além da pessoa vê isto, não afeta empréstimo nenhum, e
-     confundir as duas coisas assusta sem motivo.
+     confundir as duas coisas assusta sem motivo. Por isso o número
+     não vem primeiro, e a tela diz em voz alta de onde ele sai e
+     onde ele fica.
 
      Segundo, e pior: um número não diz o que fazer. "62, Saudável"
-     não leva a nenhuma ação. O que leva é saber ONDE estão os
-     pontos que faltam — e isso o motor já responde, parte por parte.
+     não leva a nenhuma ação. O que leva é saber ONDE estão os pontos
+     que faltam — e isso o motor responde parte por parte.
 
-     Então a ordem se inverte. Primeiro a pergunta em que há mais a
-     ganhar, escrita como frase. Depois as cinco, com o motivo de
-     cada uma. O total fica no canto, como resumo do que já foi dito,
-     e com o nome do que é: uma conferência que você faz de você
-     mesmo.
+     Então a ordem se inverte. Primeiro a frase do que há mais a
+     ganhar. Depois a HISTÓRIA, porque saúde financeira é uma linha e
+     não um instante: um 70 subindo há quatro meses não é o mesmo 70
+     de quem está caindo, e sem o passado ao lado os dois se parecem.
+     Depois as oito perguntas, cada uma com o seu motivo. O número
+     fica no canto, como resumo do que já foi dito.
+
+     O QUE NÃO SE APLICA APARECE DIZENDO ISSO. Quem não tem cartão vê
+     "nenhum cartão cadastrado" em cinza, fora da conta — e não um
+     zero que pareceria culpa. O rodapé diz sobre quantos pontos a
+     nota foi calculada, senão a pessoa some com a diferença de
+     cabeça e conclui que perdeu pontos que nunca existiram.
      ============================================================= */
+  /* O motor lê lançamentos, faturas, tetos e metas de um perfil
+     inteiro. A amostra da demonstração é escrita à mão e não tem os
+     campos que o Store preenche (método do gasto, abertura da conta),
+     e sem eles o motor leria um mês vazio. Normalizar uma CÓPIA faz a
+     demonstração mostrar o score de verdade do perfil de exemplo sem
+     tocar no resto da amostra, que o resto da tela usa como está. */
+  let amostraScore;
+  function perfilDoScore() {
+    if (!demo) return profile();
+    if (amostraScore === undefined) {
+      try { amostraScore = Store.normalizeProfile(JSON.parse(JSON.stringify(sample))); }
+      catch (e) { console.error('V3/score demo:', e); amostraScore = null; }
+    }
+    return amostraScore;
+  }
   function scoreDoMes() {
-    if (demo || !Calc.score) return null;
-    try { return Calc.score(state.ym, profile()); }
-    catch (e) { console.error('V3/conferência:', e); return null; }
+    const prof = perfilDoScore();
+    if (!prof || !Calc.score) return null;
+    try { return Calc.score(state.ym, prof); }
+    catch (e) { console.error('V3/score:', e); return null; }
+  }
+  function historicoDoScore() {
+    const prof = perfilDoScore();
+    if (!prof || !Calc.scoreHistory) return [];
+    try { return Calc.scoreHistory(state.ym, 12, prof).filter((m) => m.total != null); }
+    catch (e) { console.error('V3/score histórico:', e); return []; }
+  }
+  /* Os detalhes chegam do motor com o valor já formatado. Com os
+     valores ocultos, só os dígitos de dinheiro somem: mês, meses e
+     porcentagem continuam, senão a frase para de dizer alguma coisa. */
+  function fraseDoScore(texto) {
+    const t = String(texto == null ? '' : texto).trim();
+    return esc(state.hideMoney ? t.replace(/R\$\s?[\d.,]+/g, (m) => ocultarDigitos(m)) : t);
   }
   function painelScore() {
     const s = scoreDoMes();
     if (!s || !s.partes || !s.partes.length) return '';
-    /* Onde há mais a ganhar: a parte com mais pontos na mesa. Em
-       empate, a primeira da lista — e a ordem do motor não é
-       arbitrária, vai da pergunta mais fundamental (sobra dinheiro?)
-       para a mais circunstancial. `sort` é estável, então isso vale.
+    const validas = s.partes.filter((p) => p.aplica);
+    if (!validas.length) {
+      return `<section class="v3-panel v3-score esta-vazia"><span class="v3-label">OAZE SCORE</span>`
+        + `<h2>o registro começa com você</h2>`
+        + `<p class="v3-muted">Nenhuma das oito perguntas tem como ser respondida ainda. Lance o que entra e o que sai de um mês e o score aparece aqui, com o motivo de cada parte.</p></section>`;
+    }
 
-       Se todas estão cheias, não há o que apontar; dizer isso é
-       melhor do que inventar uma pendência. */
-    const comFolga = s.partes.slice().sort((a, b) => a.pontos - b.pontos)[0];
-    const falta = 20 - (comFolga ? comFolga.pontos : 20);
-    const chamada = falta <= 1
-      ? 'As cinco estão no lugar. Nada a ajustar por aqui este mês.'
-      : `Onde há mais a ganhar agora: <strong>${esc(String(comFolga.nome).toLowerCase())}</strong>. ${esc(comFolga.detalhe)}.`;
-    return `<section class="v3-panel v3-conferencia">`
-      + `<div class="v3-row"><div><span class="v3-label">CONFERÊNCIA DO MÊS</span><h2>cinco perguntas</h2></div>`
-      + `<span class="v3-conf-total"><strong class="v3-mono">${s.total}</strong><small>de 100</small></span></div>`
-      + `<p class="v3-conf-chamada">${chamada}</p>`
-      + `<ul class="v3-conf-lista">${s.partes.map((p) => `<li class="${p.ok ? 'esta-ok' : ''}">`
-        + `<span class="v3-conf-marca" aria-hidden="true">${p.ok ? '✓' : '·'}</span>`
-        + `<span><strong>${esc(p.nome)}</strong><small>${esc(p.detalhe)}</small></span>`
-        + `<span class="v3-mono v3-conf-pontos">${p.pontos}<small>/20</small></span></li>`).join('')}</ul>`
-      + `<p class="v3-muted">Sai dos seus próprios lançamentos e não sai daqui: não é consulta a birô, não vira cadastro e ninguém além de você vê.</p>`
+    /* Onde há mais a ganhar: a parte que preencheu a menor FRAÇÃO do
+       que valia — ponto bruto não se compara entre pesos diferentes.
+       Em empate vale a ordem do motor, que vai da pergunta mais
+       fundamental (sobra dinheiro?) para a mais circunstancial; o
+       `sort` de array é estável, então isso se mantém. */
+    const fraca = validas.slice().sort((a, b) => (a.pontos / a.peso) - (b.pontos / b.peso))[0];
+    const cheia = fraca.pontos / fraca.peso >= 0.9;
+    const chamada = cheia
+      ? `As ${validas.length} perguntas que se aplicam a você estão no lugar. Nada pedindo correção neste mês.`
+      : `Onde há mais a ganhar agora: <strong>${esc(String(fraca.nome).toLowerCase())}</strong>. ${fraseDoScore(fraca.detalhe)}.`;
+
+    const hist = historicoDoScore();
+    const atual = hist.length ? hist[hist.length - 1] : null;
+    const antes = hist.length > 1 ? hist[hist.length - 2] : null;
+    const passo = atual && antes ? atual.total - antes.total : null;
+    const alto = hist.reduce((n, m) => Math.max(n, m.total), 0) || 100;
+    const barras = hist.map((m) => {
+      const eOMes = m.ym === state.ym;
+      return `<button type="button" class="v3-score-barra${eOMes ? ' is-active' : ''}" data-score-mes="${esc(m.ym)}"`
+        + ` aria-pressed="${eOMes}" aria-label="${esc(periodLabel(m.ym))}: ${m.total} de 100"`
+        + ` style="--alto:${Math.max(6, Math.round((m.total / alto) * 100))}"><span><i></i></span>`
+        + `<small>${esc(periodLabel(m.ym).slice(0, 3))}</small></button>`;
+    }).join('');
+
+    const parte = (p) => `<li class="${p.aplica ? (p.ok ? 'esta-ok' : '') : 'fora-da-conta'}">`
+      + `<span class="v3-score-marca" aria-hidden="true">${p.aplica ? (p.ok ? '✓' : '·') : '–'}</span>`
+      + `<span class="v3-score-id"><strong>${esc(p.nome)}</strong><small>${fraseDoScore(p.detalhe)}</small></span>`
+      + (p.aplica
+        ? `<span class="v3-score-peso"><span class="v3-bar"><span style="width:${Math.round((p.pontos / p.peso) * 100)}%"></span></span>`
+          + `<small class="v3-mono">${p.pontos}<i>/${p.peso}</i></small></span>`
+        : `<span class="v3-score-peso"><small class="v3-muted">fora da conta</small></span>`)
+      + `</li>`;
+
+    const fora = s.partes.length - validas.length;
+    return `<section class="v3-panel v3-score">`
+      + `<div class="v3-row"><div><span class="v3-label">OAZE SCORE</span><h2>sua saúde financeira</h2></div>`
+      + `<span class="v3-score-nota" style="--parte:${s.total}%">`
+      + `<span><strong class="v3-mono">${s.total}</strong></span><small>${esc(s.faixa)}</small></span></div>`
+      + `<p class="v3-score-chamada">${chamada}</p>`
+      + (hist.length > 1
+        ? `<div class="v3-score-hist">`
+          + `<div class="v3-row"><span class="v3-label">MÊS A MÊS</span>`
+          + (passo == null ? '' : `<small class="${passo > 0 ? 'v3-positive' : passo < 0 ? 'v3-negative' : 'v3-muted'}">`
+            + (passo === 0 ? `igual a ${esc(periodLabel(antes.ym))}`
+              : `${passo > 0 ? '▲ subiu ' : '▼ caiu '}${Math.abs(passo)} ${Math.abs(passo) === 1 ? 'ponto' : 'pontos'} sobre ${esc(periodLabel(antes.ym))}`)
+            + `</small>`)
+          + `</div><div class="v3-score-barras">${barras}</div>`
+          + `<small class="v3-muted">A história refaz só o que o passado responde: sobra, previsibilidade e tetos. Fatura em aberto, saldo, patrimônio e metas são de hoje — o motor não tem como saber se uma fatura estava paga em março, e não vai fingir que sabe. Toque num mês para abri-lo.</small></div>`
+        : `<p class="v3-muted" style="padding-top:13px;border-top:1px solid var(--line)">A história mês a mês aparece a partir do segundo mês com lançamentos: é ela que separa um 70 subindo de um 70 caindo.</p>`)
+      + `<ul class="v3-score-lista">${s.partes.map(parte).join('')}</ul>`
+      + `<p class="v3-muted">${fora ? `${fora === 1 ? 'Uma pergunta não se aplica a você e fica' : fora + ' perguntas não se aplicam a você e ficam'} fora da conta: a nota é a porcentagem dos ${s.pesoAplicado} pontos que dá para julgar. ` : ''}`
+      + `Sai dos seus próprios lançamentos e não sai daqui: não é consulta a birô, não vira cadastro e ninguém além de você vê.</p>`
       + `</section>`;
   }
 
@@ -1060,7 +1132,6 @@
       + `<div class="v3-rep-linha v3-rep-cabeca"><span>MÊS</span><span>RECEITAS</span><span>DESPESAS</span><span>SALDO</span><span>ACUMULADO</span></div>`
       + linhas
       + `<p class="v3-muted">Acumulado é o saldo somado desde janeiro. Toque num mês para abrir o calendário dele.</p></section>`
-      + painelScore()
       + `<section class="v3-panel"><h2>investido</h2><p class="v3-money v3-sensitive">${money(investidoAte(ano))}</p>`
       + `<small>Valor da carteira de investimentos em 31 de dezembro de ${ano}.</small></section></div>`;
   }
@@ -1976,7 +2047,7 @@
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.metric != null) { openHomeMetric(Number(target.dataset.metric)); return; }
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
@@ -1999,6 +2070,10 @@
     if (target.dataset.calMonth) { const passo=Number(target.dataset.calStep||1);state.ym=U.addMonths(state.ym,Number(target.dataset.calMonth)*passo);state.calDay=1;render();return; }
     if (target.dataset.calView) { state.calView=target.dataset.calView;render();return; }
     /* Tocar num mês do ano abre os dias dele: é a pergunta seguinte. */
+    /* A barra do histórico troca o mês do app e nada mais: quem toca
+       em "abr" quer LER abril, e levar a pessoa para o calendário
+       seria responder outra pergunta. */
+    if (target.dataset.scoreMes) { state.ym=target.dataset.scoreMes;state.calDay=null;render();return; }
     if (target.dataset.calGoto) { state.ym=target.dataset.calGoto;state.calDay=1;state.calView='month';render();return; }
     /* A semana anda sete dias, e pode atravessar a virada do mês. */
     if (target.dataset.calDays) { const base=`${state.ym}-${String(calDiaEscolhido()).padStart(2,'0')}`;const novo=U.addDaysISO(base,Number(target.dataset.calDays));state.ym=ymOf(novo);state.calDay=Number(novo.slice(8));render();return; }
