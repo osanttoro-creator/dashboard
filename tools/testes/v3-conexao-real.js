@@ -13,7 +13,12 @@ const migration = read('supabase/migrations/20260930142133_v3_salvar_perfil_com_
 const packageScript = read('deploy/hostinger/montar-pacote.ps1');
 const workflow = read('.github/workflows/deploy-hostinger.yml');
 assert.match(html, /data-oaze-mode="live"/);
-assert.match(packageScript, /'app\.html', 'app-v3\.html'/);
+/* O pacote leva o aplicativo. Era um par — o painel anterior e a
+   V3 — enquanto os dois existiam; hoje é um só, e a lista explícita
+   do script precisa continuar citando ele, senão o site sobe sem
+   aplicativo e o erro só aparece para quem tentar entrar. */
+assert.match(packageScript, /'app-v3\.html',/);
+assert.doesNotMatch(packageScript, /'app\.html'/);
 assert.match(workflow, /checar \/app-v3\.html\s+200/);
 assert.match(html, /<script src="\/preview-v3\/live-backend\.js"><\/script>/);
 assert.match(html, /<script src="\/assets\/js\/site-auth\.js"><\/script>/);
