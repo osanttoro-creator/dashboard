@@ -62,7 +62,7 @@
   <div class="env">
     <div class="texto">
       <h1>Privacy policy</h1>
-      <p class="atualizado">Last updated: October 1, 2026</p>
+      <p class="atualizado">Last updated: October 3, 2026 (automatic analysis addendum to the October 1, 2026 version)</p>
 
       <div class="aviso">
         <p><strong>Draft pending legal review.</strong> The content describes how the product actually works, but it <strong>has not been reviewed by a lawyer</strong> and required details are missing.</p>
@@ -99,7 +99,8 @@
       <p>Much of what Coco shows is <strong>calculated in your own browser</strong>. For those calculations, <strong>no data leaves your device</strong>.</p>
       <p>Coco requires separate consent, which you can revoke. In a conversation, your request, up to three recent exchanges, necessary financial summaries and preferences you confirmed pass through OAZE's server and OpenAI's API. What you type may include names and descriptions, so we cannot promise those details are never sent. OAZE does not add your email, internal identifiers or full account and card numbers to the financial context by default.</p>
       <p>If you choose a <strong>photo or recording</strong>, we ask for specific confirmation before sending the file to OAZE's server and OpenAI for analysis or transcription. The file may contain visible or spoken personal data: check it before sending. We do not store the original in OAZE's database or file storage. The resulting text appears for your review and enters the conversation only if you choose to send it. No transaction or rule is saved merely because Coco interpreted the media.</p>
-      <p>Memory stores only preferences and rules you confirm. They remain in Supabase, separate from financial transactions. You can pause learning, delete a rule or revoke Coco's access. Revocation stops Coco from using memory; you can still delete saved rules in the Memory tab.</p>
+      <p>Memory stores preferences and rules you confirm. If you also authorize automatic analyses, OAZE stores in Supabase a monthly summary calculated from data included in totals: income, expenses, planned amounts, and the largest spending category. Coco may use up to six of these summaries as context in later conversations. They may become outdated when entries change; they do not authorize payments or changes.</p>
+      <p>Rules and analyses are stored separately from financial entries. You can pause learning, delete each item, or revoke Coco's access. Deleting an analysis removes its text; it is recalculated only if that month's data change. Revocation stops Coco from using memory but keeps the items so you can still review and delete them.</p>
       <p><strong>Data sent through the API is not used to train models by default.</strong> Calls to the Responses API use <code>store: false</code>. OpenAI's processing and technical retention follow its data controls; this is separate from memory storage in OAZE.</p>
       <p>The provider access key stays on the server. <strong>It never reaches your browser</strong>, and the browser never talks directly to any AI provider.</p>
 

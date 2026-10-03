@@ -6,8 +6,8 @@
   // A prévia continua isolada; somente app-v3.html habilita a conta real.
   const demo = document.documentElement.dataset.oazeMode !== 'live';
   const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'calendar', 'reminders', 'reports', 'settings', 'plan'];
-  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', calendar: 'calendário', reminders: 'lembretes', reports: 'análises', settings: 'configurações', plan: 'plano', more: 'mais' };
-  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'reminders', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'reports', '/app/uglez': 'home' };
+  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', calendar: 'agenda', reminders: 'agenda', reports: 'início', settings: 'configurações', plan: 'plano', more: 'mais' };
+  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'calendar', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'home', '/app/uglez': 'home' };
   const classicPaths = { transactions: '/app/financeiro', wallet: '/app/carteira', investments: '/app/investimentos', categories: '/app/categorias', goals: '/app/metas', reminders: '/app/recorrencias', settings: '/app/configuracoes', plan: '/app/planos' };
   const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
@@ -58,11 +58,14 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Agora', hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
   let microphone = null;
+  let analysisTimer = null;
+  let analysisBusy = false;
+  let cocoRefreshPending = false;
   let limitsPromise = Promise.resolve(demo);
   global.App = { get ym() { return state.ym; }, goTo: (page) => go(page === 'accounts' ? 'wallet' : page) };
 
@@ -170,7 +173,7 @@
   function selectedItem() { return walletItems().find((x) => x.data.id === state.selected) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${icon(page)}<span>${esc(names[page])}</span></button>`; }
   function renderNav() {
-    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','reports','categories','goals','calendar','reminders','settings','plan'].map(navButton).join('');
+    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','goals','calendar','settings','plan'].map(navButton).join('');
     $('#v3-mobile-nav').innerHTML = ['home','transactions'].map((p) => `<button type="button" data-go="${p}" class="${state.page === p ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('') + '<button type="button" data-action="new" class="v3-bottom-plus" aria-label="Novo lançamento">+</button>' + ['wallet','more'].map((p) => `<button type="button" data-go="${p}" class="${(p === 'more' ? !['home','transactions','wallet'].includes(state.page) : state.page === p) ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('');
   }
   function renderHead() {
@@ -180,14 +183,15 @@
     $('#v3-period').innerHTML = periodBotoes();
     const owner = demo ? sample.owner : (Store.ownerName() || 'Seu OAZE');
     $('#v3-owner').textContent = owner;
-    $('#v3-avatar').textContent = owner.trim().charAt(0).toLowerCase() || 'o';
+    $('#v3-avatar').innerHTML = avatarMarkup(owner);
     $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name;
     $('#v3-demo-note').hidden = false;
     if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
       ? 'Salvando na sua conta…' : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
     if (demo) $('#v3-coco-count').textContent = '4';
-    const notificationCount = reminders().length;
+    const alerts = reminders();
+    const notificationCount = notificationSeen() === notificationSignature(alerts) ? 0 : alerts.length;
     $('#v3-notification-dot').hidden = !notificationCount;
     $('#v3-notification-dot').textContent = notificationCount > 9 ? '9+' : String(notificationCount);
     $('[data-action="privacy"]').setAttribute('aria-pressed', String(state.hideMoney));
@@ -411,14 +415,14 @@
     const available = demo ? sample.accountsBalance : Calc.available(end);
     const investedValue = invested();
     const change = (now, before) => before > 0 ? `${now >= before ? '▲' : '▼'} ${Math.abs((now - before) / before * 100).toFixed(1).replace('.', ',')}% vs. mês anterior` : 'Sem mês anterior para comparar';
-    const debit = demo ? 232.4 : t.expenseDebit;
+    const debit = demo ? U.round2(t.expense - 544.17) : t.expenseDebit;
     const credit = demo ? 544.17 : t.expenseCredit;
     const paidInvoices = demo ? 0 : t.invoicesPaid;
     return [
       { title: 'Patrimônio líquido', value: wealth, detail: [`${money(available)} disponível`, `${money(investedValue)} investido`], note: 'Contas consideradas + investimentos − faturas em aberto.' },
       { title: 'Receitas do mês', value: t.income, detail: [change(t.income, previous.income), ...(t.pendingIncome > 0 ? [`${money(t.pendingIncome)} previsto`] : [])], note: 'Só receitas confirmadas das contas consideradas entram neste valor.' },
       { title: 'Despesas do mês', value: t.expense, detail: [change(t.expense, previous.expense), `Débito ${money(debit)}`, `Crédito ${money(credit)}`], note: 'Compras no crédito contam no mês da compra; o pagamento da fatura não duplica a despesa.' },
-      { title: 'Sobra em caixa', value: demo ? t.income - debit : t.saldoCaixa, detail: [`Receitas − débito − ${money(paidInvoices)} em faturas pagas`], note: 'Caixa do mês: o crédito só sai quando a fatura é paga.' }
+      { title: 'Sobra em caixa', value: demo ? U.round2(t.income - debit) : t.saldoCaixa, detail: [`Receitas − débito − ${money(paidInvoices)} em faturas pagas`], note: 'Caixa do mês: o crédito só sai quando a fatura é paga.' }
     ];
   }
   function renderHomeMetrics() {
@@ -756,6 +760,22 @@
     const end = U.monthEnd(state.ym);
     return today > end ? [] : reminders(today < U.monthStart(state.ym) ? U.monthStart(state.ym) : today, end);
   }
+  function notificationStorageKey() {
+    return `oaze-v3-notificacoes:${demo ? 'demo' : V3Backend.user()?.id || 'anon'}:${profile().id || 'sem-perfil'}`;
+  }
+  function notificationSignature(list) {
+    const raw = list.map((item) => [item.id || item.title,item.date,item.amount].join('|')).join(';');
+    let hash = 2166136261;
+    for (let i=0;i<raw.length;i++) hash = Math.imul(hash ^ raw.charCodeAt(i),16777619);
+    return String(hash >>> 0);
+  }
+  function notificationSeen() { try { return sessionStorage.getItem(notificationStorageKey()); } catch { return null; } }
+  function openNotifications() {
+    const list=reminders();
+    try { sessionStorage.setItem(notificationStorageKey(),notificationSignature(list)); } catch { /* navegador sem sessão */ }
+    $('#v3-notification-dot').hidden=true;
+    openSheet(`${sheetTop('notificações','próximos 30 dias')}<div class="v3-notification-list">${list.length ? list.map((item) => `<div class="v3-notification-item"><span class="v3-date">${esc(item.date.slice(8,10))}<small>${esc(shortDate(item.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(item.title)}</strong><small>${esc(item.sub || 'previsto')}</small></span><strong class="v3-mono v3-sensitive">${money(item.amount)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma notificação pendente.</p>'}</div><button type="button" class="v3-secondary" data-go="calendar">Abrir agenda</button>`, 'Notificações');
+  }
   function eventosDoMes(ym) {
     const alvo = ym || state.ym;
     if (!demo) return Calc.calendarEvents(alvo, profile());
@@ -917,7 +937,12 @@
       ? `<div class="v3-cal-summary"><span><small>Recebido</small><strong class="v3-positive v3-sensitive">${money(incoming)}</strong></span><span><small>Pago</small><strong class="v3-negative v3-sensitive">${money(outgoing)}</strong></span><span><small>Pendente</small><strong>${pending} ${pending === 1 ? 'lançamento' : 'lançamentos'}</strong></span></div>`
       : '';
     const corpo = vista === 'year' ? calendarioAno() : vista === 'week' ? calendarioSemana() : calendarioMes();
-    return `<div class="v3-calendar">${cabeca}${calSeletor()}${resumo}${corpo}</div>`;
+    return `<div class="v3-calendar">${cabeca}${calSeletor()}${resumo}${corpo}${agendaRecorrencias()}</div>`;
+  }
+  function agendaRecorrencias() {
+    const rows = demo ? [] : profile().transactions.filter((t) => t.recurring).sort((a,b) => a.description.localeCompare(b.description,'pt-BR'));
+    const upcomingRows = monthUpcoming();
+    return `<div class="v3-agenda-extra"><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">PRÓXIMOS EVENTOS</span><h2>até o fim do mês</h2></div></div>${upcomingRows.length ? `<div class="v3-timeline">${upcomingRows.map((r) => `<div><span><small>${esc(shortDate(r.date))} · ${esc(r.sub)}</small><strong>${esc(r.title)}</strong></span><strong class="v3-mono v3-sensitive">${money(r.amount)}</strong></div>`).join('')}</div>` : '<p class="v3-muted">Nenhum compromisso entre hoje e o fim deste mês.</p>'}</section><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">RECORRÊNCIAS</span><h2>o que se repete</h2></div><button type="button" class="v3-link" data-action="new-recurring">+ criar</button></div>${rows.length ? rows.map((t) => `<div class="v3-recurring-row"><span><strong>${esc(t.description)}</strong><small>Todo dia ${esc(t.date.slice(8))}${t.recurPausedFrom ? ' · pausada' : t.recurEnd ? ' · até '+esc(periodLabel(t.recurEnd)) : ''}</small></span><strong class="v3-mono v3-sensitive">${money(t.amount)}</strong><span class="v3-recurring-actions"><button type="button" class="v3-link" data-transaction="${esc(t.id)}">Editar</button>${!t.recurEnd ? `<button type="button" class="v3-link" data-action="${t.recurPausedFrom ? 'resume-recurring' : 'pause-recurring'}" data-recurring-id="${esc(t.id)}">${t.recurPausedFrom ? 'Retomar' : 'Pausar'}</button><button type="button" class="v3-link" data-action="end-recurring" data-recurring-id="${esc(t.id)}">Encerrar</button>` : ''}</span></div>`).join('') : '<p class="v3-muted">Nenhuma recorrência. Crie um lançamento e marque “Repetir mensalmente”.</p>'}</section></div>${painelRecorrencias()}`;
   }
   /* =============================================================
      O QUE SE REPETE — REESCRITO
@@ -1255,7 +1280,43 @@
   }
   function renderSettings() {
     const signed = !demo && global.V3Backend && V3Backend.user();
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Biometria ao abrir<small>Depende do app nativo; indisponível no navegador.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>PIN de 6 números<small>Não configurado nesta V3 web.</small></span><span class="v3-muted">—</span></div><div class="v3-setting-row"><span>Sessão em outros aparelhos</span><span class="v3-muted">${signed?'ativa':'entre na conta'}</span></div></section></div><div><span class="v3-label v3-section-title">COCO</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-action="coco" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Consentimento<small>Pedido, agregados e últimas trocas. Foto e áudio só com envio confirmado.</small></span><span class="v3-muted">${!signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›'}</span></button><button type="button" class="v3-setting-row" data-action="coco-memory" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Memória da Coco<small>Revise, pause ou esqueça regras confirmadas.</small></span><span class="v3-muted">abrir ›</span></button></section></div><div><span class="v3-label v3-section-title">CONTA E DADOS</span><section class="v3-panel"><button type="button" class="v3-setting-row" data-go="reminders" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Notificações</span><span class="v3-muted">lembretes ›</span></button><button type="button" class="v3-setting-row" data-go="plan" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Plano</span><span class="v3-muted">ver plano ›</span></button><button type="button" class="v3-setting-row" data-action="profiles" style="border:0;background:none;color:inherit;width:100%;text-align:left"><span>Perfil ativo</span><span class="v3-muted">${esc(profile().name || 'Pessoal')} ›</span></button><div class="v3-setting-row"><span>Sincronização<small>${signed?'Conectada à sua conta':'Dados apenas neste aparelho'}</small></span></div>${demo?'':`<a class="v3-setting-row" href="/app?classic=1"><span>Ferramentas anteriores<small>Edição completa de recursos ainda em migração.</small></span><span class="v3-muted">abrir ›</span></a>`}</section></div></div>`;
+    const row = (label, detail, attr, value='abrir ›') => `<button type="button" class="v3-setting-row" ${attr}><span>${label}<small>${detail}</small></span><span class="v3-muted">${value}</span></button>`;
+    const usage = signed && global.Limites && Limites.contar ? [
+      ['Espaços', 'workspaces'], ['Contas', 'accounts'], ['Cartões', 'credit_cards'],
+      ['Categorias', 'custom_categories'], ['Orçamentos', 'budgets'], ['Metas', 'goals'],
+      ['Recorrências', 'recurring_items']
+    ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
+    const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', 'Nome, foto do login e idioma', 'data-action="account-profile"')}${row('Trocar conta', 'Entre com outro e-mail sem misturar dados', 'data-action="switch-account"')}${row('Sair', 'Encerrar a sessão neste aparelho', 'data-action="sign-out"')}${row('Excluir conta', 'Exclusão definitiva após confirmação por e-mail', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização<small>${signed?'Dados conectados à sua conta':'Entre na conta para sincronizar'}</small></span></div><div class="v3-setting-row"><span>Biometria e PIN<small>Não disponíveis na versão web; não simulamos proteção inexistente.</small></span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', 'Recursos, cobrança e cancelamento', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte<small>Central de ajuda e contato</small></span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', 'Foto e áudio somente após envio confirmado', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', 'Revisar, pausar ou apagar regras e análises', 'data-action="coco-memory"')}${row('Notificações', 'Lembretes até o fim do mês', 'data-action="notifications"')}${row('Perfis financeiros', `Ativo: ${esc(profile().name||'Pessoal')}`, 'data-action="profiles"')}${demo?'':`<a class="v3-setting-row" href="/app?classic=1"><span>Ferramentas anteriores<small>Fallback até a migração ser validada</small></span><span class="v3-muted">abrir ›</span></a>`}</section></div></div>`;
+  }
+  function accountProfileSheet() {
+    const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
+    const language = global.I18n?.lang || 'pt';
+    openSheet(`${sheetTop('seus dados', 'vinculados ao login')}<div class="v3-row"><span class="v3-avatar" style="width:58px;height:58px">${avatarMarkup(owner.name)}</span><span>${esc(owner.email)}<small style="display:block">A foto vem do provedor do seu login. Altere-a nele.</small></span></div><form id="v3-form-account-profile" class="v3-form"><label>NOME<input name="name" maxlength="40" value="${esc(data.nome || owner.name || '')}" required></label><label>IDIOMA<select name="language" ${global.I18n?'':'disabled'}>${[['pt','Português'],['en','English'],['es','Español'],['fr','Français']].map(([code,label])=>`<option value="${code}" ${language===code?'selected':''}>${label}</option>`).join('')}</select><small class="v3-muted">A tradução da V3 ainda está em revisão; algumas telas podem aparecer em português.</small></label><button class="v3-primary" type="submit">Salvar dados</button></form>`, 'Dados da conta');
+  }
+  async function saveAccountProfile(form) {
+    if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+    const fd = new FormData(form), name = String(fd.get('name')||'').trim();
+    if (!name || name.length > 40) { toast('Confira seu nome.'); return; }
+    try {
+      const current = V3Backend.accountProfile() || {};
+      await V3Backend.saveAccountProfile({ name, currency: current.moeda || 'BRL', country: current.pais || 'BR' });
+      if (global.I18n && fd.get('language') !== I18n.lang) I18n.escolher(String(fd.get('language')));
+      closeSheet(); render(); toast('Dados da conta atualizados.');
+    } catch (error) { toast(error.message || 'Não foi possível salvar seus dados.'); }
+  }
+  function deleteAccountSheet() {
+    const email = V3Backend.user()?.email || '';
+    openSheet(`${sheetTop('excluir conta', 'ação definitiva')}<p>Todos os perfis financeiros e dados associados serão excluídos. Baixe uma cópia antes; esta ação não tem desfazer.</p><button type="button" class="v3-secondary" data-action="download-backup">Baixar backup JSON</button><form id="v3-form-delete-account" class="v3-form"><label>CONFIRME SEU E-MAIL<input name="email" type="email" autocomplete="off" placeholder="${esc(email)}" required></label><button type="submit" class="v3-primary">Excluir minha conta definitivamente</button></form>`, 'Excluir conta');
+  }
+  async function confirmDeleteAccount(form) {
+    if (demo) return;
+    const email = String(new FormData(form).get('email') || '').trim();
+    if (email.toLowerCase() !== V3Backend.user()?.email?.toLowerCase()) { toast('O e-mail não confere.'); return; }
+    if (!global.confirm('Última confirmação: excluir sua conta e todos os dados financeiros?')) return;
+    const button = form.querySelector('[type="submit"]'); button.disabled = true;
+    try { await V3Backend.deleteAccount(email); }
+    catch (error) { button.disabled = false; toast(error.message || 'Não foi possível confirmar a exclusão. Confira sua conta antes de tentar de novo.'); }
   }
   function renderPlan() {
     const list = global.Planos ? Planos.LISTA : [];
@@ -1272,8 +1333,8 @@
     }).join('')}</div>${!demo && paid && !sub.cancel_at_period_end && (sub.stripe_subscription_id || sub.asaas_subscription_id) ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
   }
   function renderMore() {
-    const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'entradas, saídas e vencimentos', reminders: `${reminders().length} nos próximos 30 dias`, settings: 'segurança, dados', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
-    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${esc((demo?sample.owner:Store.ownerName()||'o').charAt(0).toLowerCase())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','goals','calendar','reminders','settings','plan'].map((p)=>`<button type="button" data-go="${p}">${icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
+    const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'calendário e recorrências', settings: 'segurança, dados', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
+    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','goals','calendar','settings','plan'].map((p)=>`<button type="button" data-go="${p}">${icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
   }
   function render() {
     closeStatusMenu(false);
@@ -1286,7 +1347,7 @@
     document.body.classList.toggle('v3-home-screen',state.page==='home');
     montarCarteira();
   }
-  function go(page) { if (!names[page]) return; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
+  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (!names[page]) return; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -1299,6 +1360,37 @@
   function openSheet(html,label) { $('#v3-sheet').setAttribute('aria-label',label||'Painel'); $('#v3-sheet').innerHTML=html; $('#v3-overlay').hidden=false; document.body.style.overflow='hidden'; $('#v3-sheet').querySelector('button')?.focus(); }
   function sheetTop(title,sub,img) { return `<div class="v3-sheet-top">${img?`<img src="${img}" alt="">`:''}<span><h2>${esc(title)}</h2>${sub?`<small>${esc(sub)}</small>`:''}</span><button type="button" data-action="close" class="v3-sheet-close" aria-label="Fechar">×</button></div>`; }
   function cocoAllowed() { return demo || !!(state.cocoSettings?.consented_at && !state.cocoSettings?.revoked_at); }
+  function analysisSummary(ym) {
+    const t = Calc.monthTotals(ym), top = categoryTotals('expense')[0];
+    const balance = U.round2(t.income - t.expense);
+    return `${periodLabel(ym)}: receitas confirmadas ${moneyReal(t.income)}, despesas confirmadas ${moneyReal(t.expense)}, diferença ${moneyReal(balance)}. `
+      + `Despesas por débito ${moneyReal(t.expenseDebit)}, crédito ${moneyReal(t.expenseCredit)}. `
+      + `Receitas previstas ${moneyReal(t.pendingIncome)}, despesas previstas ${moneyReal(t.pendingExpense)}. `
+      + (top ? `Maior categoria de despesa: ${top.name} (${moneyReal(top.value)}).` : 'Sem categoria de despesa confirmada.');
+  }
+  async function analysisHash(value) {
+    const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(bytes), (byte) => byte.toString(16).padStart(2,'0')).join('');
+  }
+  function scheduleAnalysisSync() {
+    if (demo || !cocoAllowed() || !state.cocoSettings?.analysis_consented_at || state.cocoSettings?.learning_paused || analysisBusy) return;
+    clearTimeout(analysisTimer);
+    analysisTimer = setTimeout(async () => {
+      if (V3Backend.saving()) { scheduleAnalysisSync(); return; }
+      const profileId = profile().id, period = state.ym, summary = analysisSummary(period);
+      const old = state.cocoAnalyses.find((row) => row.period === period);
+      if (old?.summary === summary || (old?.forgotten_hash && old.forgotten_hash === await analysisHash(summary))) return;
+      analysisBusy = true;
+      try {
+        await V3Backend.cocoSaveAnalysis(profileId, period, summary);
+        if (profile().id === profileId) {
+          state.cocoAnalyses = await V3Backend.cocoAnalyses(profileId);
+          if (state.cocoTab === 'Memória' && !$('#v3-overlay').hidden) openCoco();
+        }
+      } catch (error) { console.error('V3/Coco análise:', error); }
+      finally { analysisBusy = false; }
+    }, 750);
+  }
   function cocoMediaControls() {
     const audio = recorder?.state === 'recording'
       ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
@@ -1306,14 +1398,21 @@
     return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar foto, PDF ou CSV" title="Foto, extrato PDF ou CSV">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/csv,.pdf,.csv" hidden>${audio}<input id="v3-coco-audio-file" type="file" accept="audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Peça para lançar, analisar ou planejar" aria-label="Pergunta para a Coco" required><button type="submit" aria-label="Enviar">↑</button></form><small>Fotos e áudios exigem confirmação para envio à OpenAI. Extratos PDF/CSV reconhecidos são lidos neste aparelho e revisados antes de salvar.</small>`;
   }
   async function refreshCoco() {
-    if (demo || state.cocoLoading) return;
+    if (demo) return;
+    if (state.cocoLoading) { cocoRefreshPending = true; return; }
     state.cocoLoading = true;
     state.cocoError='';
     try {
       state.cocoSettings = await V3Backend.cocoSettings();
       state.cocoMemories = await V3Backend.cocoMemories(profile().id);
+      state.cocoAnalyses = await V3Backend.cocoAnalyses(profile().id);
     } catch (error) { state.cocoSettings=null;state.cocoError=error.message || 'Não consegui carregar as configurações da Coco.'; }
-    finally { state.cocoLoading = false; if (!$('#v3-overlay').hidden) openCoco(); }
+    finally {
+      state.cocoLoading = false;
+      if (cocoRefreshPending) { cocoRefreshPending = false; refreshCoco(); return; }
+      if (!$('#v3-overlay').hidden) openCoco();
+      scheduleAnalysisSync();
+    }
   }
   function importDuplicate(item, accountId) {
     if (!accountId) return false;
@@ -1347,7 +1446,7 @@
       return;
     }
     if (!cocoAllowed() && !['Memória','Extratos'].includes(state.cocoTab)) {
-      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda apenas regras que você aprovar; pode esquecer ou pausar depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
+      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
       return;
     }
     let body='';
@@ -1362,7 +1461,8 @@
     } else if (state.cocoTab === 'Extratos') {
       body = renderCocoImport();
     } else {
-      body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">Só regras que você confirmou. A memória não autoriza pagamentos nem altera lançamentos.</p>${cocoAllowed()?`<button type="button" class="v3-secondary" data-action="pause-learning">${state.cocoSettings?.learning_paused?'Retomar aprendizado':'Pausar aprendizado'}</button>`:'<p class="v3-muted">Acesso revogado; você ainda pode apagar estas regras.</p>'}<div class="v3-coco-memories">${state.cocoMemories.length?state.cocoMemories.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(m.kind.toUpperCase())} · CONFIRMADA</span><strong>${esc(m.label)}</strong><p>${esc(m.value)}</p><small>${esc(new Date(m.created_at).toLocaleDateString('pt-BR'))}</small><button type="button" class="v3-secondary" data-action="forget-memory" data-memory-id="${esc(m.id)}">Esquecer</button></div>`).join(''):'<p class="v3-muted">Nenhuma preferência confirmada ainda.</p>'}</div>${!cocoAllowed()||state.cocoSettings?.learning_paused?'':`<form id="v3-memory-form" class="v3-form"><label>TIPO<select name="kind"><option value="categoria">Categoria</option><option value="conta">Conta</option><option value="recorrencia">Recorrência</option><option value="preferencia">Preferência</option><option value="meta">Meta</option><option value="outro">Outro</option></select></label><label>NOME DA REGRA<input name="label" maxlength="100" required placeholder="Ex.: Uber"></label><label>COMO DEVO LEMBRAR<input name="value" maxlength="240" required placeholder="Ex.: Categorizar como Transporte"></label><button class="v3-primary" type="submit">Guardar regra</button></form>`}${cocoAllowed()?'<button type="button" class="v3-link" data-action="revoke-coco">Revogar acesso da Coco</button>':'<button type="button" class="v3-link" data-coco-tab="Conversa">Voltar ao consentimento</button>'}`;
+      const analyses=state.cocoAnalyses.filter((item)=>item.summary);
+      body=`<h2 style="margin:15px 0">o que aprendi sobre você</h2><p class="v3-muted">Regras precisam da sua confirmação. Análises mensais são calculadas automaticamente com os dados considerados nos totais. Nenhuma delas autoriza pagamentos ou altera lançamentos.</p>${cocoAllowed()?`<button type="button" class="v3-secondary" data-action="pause-learning">${state.cocoSettings?.learning_paused?'Retomar aprendizado':'Pausar aprendizado'}</button>`:'<p class="v3-muted">Acesso revogado; você ainda pode apagar memórias.</p>'}${cocoAllowed()&&!state.cocoSettings?.analysis_consented_at?'<p class="v3-muted">A autorização anterior não incluía análises automáticas. Elas estão desligadas até você autorizar.</p><button type="button" class="v3-secondary" data-action="analysis-consent">Autorizar análises automáticas</button>':''}<h3>Análises automáticas</h3><div class="v3-coco-memories">${analyses.length?analyses.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(periodLabel(m.period))}</span><p>${esc(m.summary)}</p><button type="button" class="v3-secondary" data-action="forget-analysis" data-analysis-period="${esc(m.period)}">Apagar análise</button></div>`).join(''):'<p class="v3-muted">Nenhuma análise mensal guardada.</p>'}</div><h3>Regras confirmadas</h3><div class="v3-coco-memories">${state.cocoMemories.length?state.cocoMemories.map((m)=>`<div class="v3-suggestion"><span class="v3-label">${esc(m.kind.toUpperCase())} · CONFIRMADA</span><strong>${esc(m.label)}</strong><p>${esc(m.value)}</p><small>${esc(new Date(m.created_at).toLocaleDateString('pt-BR'))}</small><button type="button" class="v3-secondary" data-action="forget-memory" data-memory-id="${esc(m.id)}">Esquecer</button></div>`).join(''):'<p class="v3-muted">Nenhuma preferência confirmada ainda.</p>'}</div>${!cocoAllowed()||state.cocoSettings?.learning_paused?'':`<form id="v3-memory-form" class="v3-form"><label>TIPO<select name="kind"><option value="categoria">Categoria</option><option value="conta">Conta</option><option value="recorrencia">Recorrência</option><option value="preferencia">Preferência</option><option value="meta">Meta</option><option value="outro">Outro</option></select></label><label>NOME DA REGRA<input name="label" maxlength="100" required placeholder="Ex.: Uber"></label><label>COMO DEVO LEMBRAR<input name="value" maxlength="240" required placeholder="Ex.: Categorizar como Transporte"></label><button class="v3-primary" type="submit">Guardar regra</button></form>`}${cocoAllowed()?'<button type="button" class="v3-link" data-action="revoke-coco">Revogar acesso da Coco</button>':'<button type="button" class="v3-link" data-coco-tab="Conversa">Voltar ao consentimento</button>'}`;
     }
     openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-segment">${['Agora','Conversa','Extratos','Memória'].map((x)=>`<button type="button" data-coco-tab="${x}" class="${state.cocoTab===x?'is-active':''}">${x}</button>`).join('')}</div>${body}`,'Coco');
   }
@@ -2056,6 +2156,26 @@
       recorder.start();openCoco();toast('Gravando. Toque em “Parar gravação” quando terminar.');
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
   }
+  async function changeRecurring(id, action) {
+    const tx = profile().transactions.find((item) => item.id === id && item.recurring);
+    if (!tx) { toast('Esta recorrência não existe mais.'); return; }
+    if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
+    if (action === 'end-recurring' && !global.confirm(`Encerrar “${tx.description}” após ${periodLabel(state.ym)}? O histórico permanece.`)) return;
+    try {
+      await V3Backend.mutate(() => {
+        const current = Store.transactions.get(id);
+        if (!current?.recurring) throw new Error('A recorrência foi alterada em outro aparelho.');
+        if (action === 'pause-recurring') Store.transactions.update(id, { recurPausedFrom: U.todayYM() });
+        if (action === 'resume-recurring') {
+          const skipped = { ...(current.occ || {}) };
+          U.monthRange(current.recurPausedFrom || U.todayYM(), U.addMonths(U.todayYM(), -1)).forEach((ym) => { skipped[ym] = { ...(skipped[ym] || {}), skipped: true }; });
+          Store.transactions.update(id, { recurPausedFrom: null, occ: skipped });
+        }
+        if (action === 'end-recurring') Store.transactions.update(id, { recurEnd: current.recurPausedFrom ? U.addMonths(current.recurPausedFrom, -1) : state.ym, recurPausedFrom: null });
+      });
+      render(); toast(action === 'pause-recurring' ? 'Recorrência pausada.' : action === 'resume-recurring' ? 'Recorrência retomada. Meses pausados não foram criados.' : 'Recorrência encerrada. Histórico preservado.');
+    } catch (error) { toast(error.message || 'Não consegui atualizar a recorrência.'); }
+  }
   function handleClick(ev) {
     const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-compose-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
@@ -2072,7 +2192,7 @@
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';closeSheet();render();}return; }
+    if (target.dataset.profile) { if(!demo){Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
@@ -2103,6 +2223,19 @@
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
+    if (action==='account-profile') { if (!demo) accountProfileSheet(); else toast('Demonstração sem conta vinculada.'); return; }
+    if (action==='switch-account' || action==='sign-out') {
+      if (demo) { toast('Demonstração sem sessão.'); return; }
+      V3Backend.signOut().catch((e)=>toast(e.message||'Não foi possível encerrar a sessão.'));
+      return;
+    }
+    if (action==='delete-account') { if (!demo) deleteAccountSheet(); return; }
+    if (action==='download-backup') {
+      if (demo) return;
+      U.download('oaze-backup-'+U.todayISO()+'.json', Store.exportJSON());
+      toast('Backup baixado. Confira o arquivo antes de excluir a conta.');
+      return;
+    }
     if (action==='close-status-menu') { closeStatusMenu(); return; }
     if (action==='select-transaction-status') { chooseTransactionStatus(target.dataset.statusChoice); return; }
     /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
@@ -2127,6 +2260,18 @@
       V3Backend.cocoForget(item.id).then(()=>refreshCoco()).catch((e)=>toast(e.message||'Não consegui apagar a regra.'));
       return;
     }
+    if (action==='forget-analysis') {
+      const row=state.cocoAnalyses.find((item)=>item.period===target.dataset.analysisPeriod && item.summary);
+      if (!row || !global.confirm(`Apagar a análise de ${periodLabel(row.period)}? Ela não será recriada enquanto os dados do mês não mudarem.`)) return;
+      analysisHash(row.summary).then((hash)=>V3Backend.cocoForgetAnalysis(profile().id,row.period,hash))
+        .then(()=>refreshCoco()).catch((error)=>toast(error.message||'Não consegui apagar a análise.'));
+      return;
+    }
+    if (action==='analysis-consent') {
+      if (!cocoAllowed() || !global.confirm('Autorizar a Coco a guardar resumos mensais automáticos e usá-los como contexto nas próximas conversas? Você poderá pausar e apagar cada análise.')) return;
+      V3Backend.cocoConsent(true).then(()=>refreshCoco()).catch((error)=>toast(error.message||'Não consegui registrar a autorização.'));
+      return;
+    }
     if (action==='pause-learning') {
       V3Backend.cocoPauseLearning(!state.cocoSettings?.learning_paused)
         .then(()=>refreshCoco()).catch((e)=>toast(e.message||'Não consegui mudar a pausa.'));
@@ -2134,6 +2279,7 @@
     }
     if (action==='revoke-coco') {
       if (!global.confirm('Revogar o acesso da Coco? As memórias ficam guardadas para você apagar, mas não serão usadas enquanto o acesso estiver revogado.')) return;
+      clearTimeout(analysisTimer);
       V3Backend.cocoConsent(false).then(()=>{state.chat=[];state.mediaDraft='';state.importPreview=null;state.importAccountId='';refreshCoco();})
         .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
@@ -2155,6 +2301,8 @@
     if (action==='close'){closeSheet();return;}
     if (action==='back'){go('more');return;}
     if (action==='new'){const k={despesa:'Despesa',receita:'Receita',transferir:'Transferir',aporte:'Aporte'}[target.dataset.kind]||'Despesa';composer(k,target.dataset.date);return;}
+    if (action==='new-recurring') { composer('Despesa'); const recurring=$('#v3-form-tx [name="recurring"]'); if (recurring) recurring.checked=true; return; }
+    if (['pause-recurring','resume-recurring','end-recurring'].includes(action)) { changeRecurring(target.dataset.recurringId,action); return; }
     if (action==='add-account'){accountForm();return;}
     if (action==='add-category'){categoryForm();return;}
     if (action==='delete-category') {
@@ -2254,18 +2402,20 @@
     if (action==='period'){periodSheet();return;}
     if (action==='profiles'){profilesSheet();return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
-    if (action==='notifications'){go('reminders');return;}
+    if (action==='notifications'){openNotifications();return;}
     if (action==='plan-info'){go('plan');return;}
     if (action==='demo-only'){toast('Esta é uma proposta visual; não houve nenhuma ação na sua conta.');return;}
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form'].includes(formId))return;
     ev.preventDefault();
     if(formId==='v3-form-tx')saveTransaction(ev.target);
     if(formId==='v3-form-account')saveAccount(ev.target);
     if(formId==='v3-form-category')saveCategory(ev.target);
     if(formId==='v3-form-profile')saveProfile(ev.target);
+    if(formId==='v3-form-account-profile')saveAccountProfile(ev.target);
+    if(formId==='v3-form-delete-account')confirmDeleteAccount(ev.target);
     if(formId==='v3-form-advance')saveAdvance(ev.target);
     if(formId==='v3-form-invoice')saveInvoicePayment(ev.target);
     if(formId==='v3-form-investment')saveInvestment(ev.target);
@@ -2279,11 +2429,12 @@
   }
   async function boot() {
     if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button> ou abra as ferramentas anteriores em <a href="/app?classic=1">/app?classic=1</a>.</p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
-    if(!demo)Store.onChange(()=>render());
+    if(!demo)Store.onChange(()=>{render();scheduleAnalysisSync();});
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
     const path=location.pathname.replace(/\/+$/,'') || '/app';
-    const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?requested:'home';
+    const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?(requested==='reminders'?'calendar':requested==='reports'?'home':requested):'home';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
+    if(!demo) refreshCoco().catch((error)=>console.error('V3/Coco configuração:',error));
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
     document.addEventListener('click',(event)=>{
       if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);

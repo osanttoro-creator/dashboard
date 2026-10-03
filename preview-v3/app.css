@@ -331,7 +331,7 @@
   .v3-home .v3-quick button{font-size:11px}
 }
 
-.v3-home-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.v3-home-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 18px}
 .v3-home-metric{position:relative;display:grid;align-content:start;gap:5px;min-width:0;min-height:116px;padding:18px 20px;text-align:left;color:var(--milk);background:var(--panel);border:1px solid var(--line);border-radius:24px;transition:transform .2s ease,background .2s ease}
 .v3-home-metric:hover{transform:translateY(-2px);background:#18303a}
 .v3-home-metric:active{transform:translateY(1px)}
@@ -342,8 +342,35 @@
 .v3-metric-detail{display:block;margin:16px 0;font-size:clamp(31px,7vw,48px)}
 .v3-metric-lines{display:grid;gap:8px;margin:0 0 19px}
 .v3-metric-lines p{padding:10px 0;border-bottom:1px solid var(--line)}
+.v3-settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.v3-settings>div{min-width:0}
+.v3-settings .v3-panel{margin-bottom:20px}
+.v3-settings button.v3-setting-row,.v3-settings a.v3-setting-row{width:100%;padding:10px 0;border-left:0;border-right:0;border-bottom:0;background:transparent;color:inherit;text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+.v3-settings button.v3-setting-row:hover,.v3-settings a.v3-setting-row:hover{color:var(--teal)}
+.v3-settings button.v3-setting-row:focus-visible,.v3-settings a.v3-setting-row:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+.v3-usage{padding:15px 0;border-top:1px solid var(--line)}
+.v3-usage summary{cursor:pointer;font-weight:600}
+.v3-usage ul{padding:0 0 0 20px;margin:13px 0 0;display:grid;gap:6px;color:var(--muted);font-size:13px}
+@media(max-width:1120px){.v3-settings{grid-template-columns:1fr}}
 @media(max-width:1150px){.v3-home-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.v3-home-metrics{gap:9px;margin-top:14px}.v3-home-metric{min-height:105px;padding:15px}.v3-home-metric .v3-money{font-size:clamp(19px,5vw,25px)}.v3-metric-open{right:13px;top:10px}}
+.v3-agenda-extra{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.v3-agenda-extra .v3-panel{min-width:0}
+.v3-agenda-extra .v3-timeline>div{justify-content:space-between;border-top:1px solid var(--line);padding-top:10px}
+.v3-recurring-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;padding:11px 0;border-top:1px solid var(--line)}
+.v3-recurring-row:first-of-type{margin-top:14px}
+.v3-recurring-row>span:first-child{display:grid;gap:3px;min-width:0}
+.v3-recurring-row small{color:var(--muted)}
+.v3-recurring-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:13px}
+@media(max-width:900px){.v3-agenda-extra{grid-template-columns:minmax(0,1fr)}}
+.v3-notification-list{display:grid;gap:4px;margin:8px 0 18px}
+.v3-notification-item{display:grid;grid-template-columns:45px minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.v3-notification-item>span:nth-child(2){display:grid;gap:3px;min-width:0}
+.v3-notification-item small{display:block;color:var(--muted)}
+.v3-notification-item .v3-mono{font-size:12px;white-space:nowrap}
+@media(max-width:540px){.v3-notification-item{grid-template-columns:38px minmax(0,1fr)}.v3-notification-item .v3-mono{grid-column:2}}
+.v3-avatar{overflow:hidden}
+.v3-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
 
 /* O orçamento mora na categoria: quanto gastou, quanto podia, e a
    barra entre os dois — na mesma linha, porque é a mesma pergunta. */

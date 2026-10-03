@@ -62,7 +62,7 @@
   <div class="env">
     <div class="texto">
       <h1>Politique de confidentialité</h1>
-      <p class="atualizado">Dernière mise à jour : 1er octobre 2026</p>
+      <p class="atualizado">Dernière mise à jour : 3 octobre 2026 (avenant relatif aux analyses automatiques à la version du 1er octobre 2026)</p>
 
       <div class="aviso">
         <p><strong>Projet en attente de relecture juridique.</strong> Le contenu décrit le fonctionnement réel du produit, mais il <strong>n'a pas été relu par un avocat</strong> et des informations obligatoires manquent.</p>
@@ -99,7 +99,8 @@
       <p>Une grande partie de ce que Coco affiche est <strong>calculée dans votre navigateur</strong>. Pour ces calculs, <strong>aucune donnée ne quitte votre appareil</strong>.</p>
       <p>Coco nécessite un consentement distinct, que vous pouvez retirer. Dans une conversation, votre demande, jusqu'à trois échanges récents, les résumés financiers nécessaires et les préférences que vous avez confirmées passent par le serveur d'OAZE et l'API d'OpenAI. Votre texte peut contenir des noms et des descriptions ; nous ne pouvons donc pas promettre que ces éléments ne sont jamais envoyés. OAZE n'ajoute pas par défaut votre e-mail, des identifiants internes ni des numéros complets de compte ou de carte au contexte financier.</p>
       <p>Si vous choisissez une <strong>photo ou un enregistrement</strong>, nous demandons une confirmation spécifique avant d'envoyer le fichier au serveur d'OAZE et à OpenAI pour analyse ou transcription. Le fichier peut contenir des données personnelles visibles ou prononcées : vérifiez-le avant l'envoi. Nous ne conservons pas l'original dans la base ni dans le stockage de fichiers d'OAZE. Le texte obtenu s'affiche pour vérification et n'entre dans la conversation que si vous décidez de l'envoyer. Aucune opération ni règle n'est enregistrée simplement parce que Coco a interprété le média.</p>
-      <p>La mémoire ne conserve que les préférences et règles que vous confirmez. Elles restent dans Supabase, séparées des opérations financières. Vous pouvez suspendre l'apprentissage, supprimer une règle ou retirer l'accès de Coco. Le retrait empêche Coco d'utiliser la mémoire ; vous pouvez encore supprimer les règles dans l'onglet Mémoire.</p>
+      <p>La mémoire conserve les préférences et règles que vous confirmez. Si vous autorisez également les analyses automatiques, OAZE stocke dans Supabase un résumé mensuel calculé à partir des données incluses dans les totaux : revenus, dépenses, montants prévus et principale catégorie de dépenses. Coco peut utiliser jusqu'à six de ces résumés comme contexte dans les conversations suivantes. Ils peuvent devenir obsolètes lorsque les opérations changent ; ils n'autorisent aucun paiement ni aucune modification.</p>
+      <p>Les règles et analyses sont séparées des opérations financières. Vous pouvez suspendre l'apprentissage, supprimer chaque élément ou révoquer l'accès de Coco. Supprimer une analyse efface son texte ; elle n'est recalculée que si les données de ce mois changent. La révocation empêche Coco d'utiliser la mémoire, mais conserve les éléments pour que vous puissiez les consulter et les supprimer.</p>
       <p><strong>Les données envoyées par l'API ne servent pas par défaut à entraîner les modèles.</strong> Les appels à l'API Responses utilisent <code>store: false</code>. Le traitement et la conservation technique par OpenAI suivent ses contrôles des données ; cela est distinct du stockage de la mémoire dans OAZE.</p>
       <p>La clé d'accès au fournisseur reste sur le serveur. <strong>Elle n'arrive jamais dans votre navigateur</strong>, et le navigateur ne parle jamais directement à un fournisseur d'IA.</p>
 

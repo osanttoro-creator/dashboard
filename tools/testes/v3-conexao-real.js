@@ -58,13 +58,16 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   };
   const client = {
     auth: {
-      getUser: async () => ({ data: { user: { id: 'user-1', email: 'u@example.test', user_metadata: {} } } }),
+      getUser: async () => ({ data: { user: { id: 'user-1', email: 'u@example.test', user_metadata: { avatar_url: 'https://lh3.googleusercontent.com/photo-test' } } } }),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } })
     },
     from(name) {
       if (name === 'privacy_acceptances') return {
         select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-10-01' } : null }) }) }) }),
         insert: async (row) => { assert.equal(row.source, 'app_bloqueio'); accepted = true; return { error: null }; }
+      };
+      if (name === 'profiles') return {
+        select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { nome: 'Usuário', moeda: 'BRL', pais: 'BR', fuso: 'America/Sao_Paulo' }, error: null }) }) })
       };
       assert.equal(name, 'dados');
       dataReads++;
@@ -94,6 +97,7 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
   context.window = context;
   vm.runInNewContext(script, context, { filename: 'live-backend.js' });
   assert.equal(await context.V3Backend.start(), true);
+  assert.equal(context.V3Backend.user().photo, 'https://lh3.googleusercontent.com/photo-test');
   assert.equal(Store.profile().name, 'Servidor');
   assert.equal(localCacheReads, 0);
 

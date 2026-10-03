@@ -102,10 +102,10 @@
   "es": "Política de privacidad"
  },
  {
-  "pt": "Última atualização: 1º de outubro de 2026",
-  "en": "Last updated: October 1, 2026",
-  "fr": "Dernière mise à jour : 1er octobre 2026",
-  "es": "Última actualización: 1 de octubre de 2026"
+  "pt": "Última atualização: 3 de outubro de 2026 (adendo sobre análises automáticas à versão 01/10/2026)",
+  "en": "Last updated: October 3, 2026 (automatic analysis addendum to the October 1, 2026 version)",
+  "fr": "Dernière mise à jour : 3 octobre 2026 (avenant relatif aux analyses automatiques à la version du 1er octobre 2026)",
+  "es": "Última actualización: 3 de octubre de 2026 (anexo sobre análisis automáticos a la versión del 1 de octubre de 2026)"
  },
  {
   "pt": "<strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o funcionamento real do produto, mas <strong>não foi revisado por advogado</strong> e faltam dados obrigatórios.",
@@ -264,10 +264,16 @@
   "es": "Si eliges una <strong>foto o grabación</strong>, pedimos una confirmación específica antes de enviar el archivo al servidor de OAZE y a OpenAI para su lectura o transcripción. El archivo puede contener datos personales visibles o hablados: revísalo antes de enviarlo. No guardamos el original en la base de datos ni en el almacenamiento de archivos de OAZE. El texto resultante aparece para que lo revises y solo entra en la conversación si decides enviarlo. Ningún movimiento ni regla se guarda solo porque Coco haya interpretado el archivo."
  },
  {
-  "pt": "A memória guarda apenas preferências e regras que você confirmar. Elas ficam no Supabase, separadas dos lançamentos financeiros. Você pode pausar o aprendizado, apagar uma regra ou revogar o acesso da Coco. A revogação interrompe o uso da memória pela Coco; você ainda pode apagar as regras guardadas na aba Memória.",
-  "en": "Memory stores only preferences and rules you confirm. They remain in Supabase, separate from financial transactions. You can pause learning, delete a rule or revoke Coco's access. Revocation stops Coco from using memory; you can still delete saved rules in the Memory tab.",
-  "fr": "La mémoire ne conserve que les préférences et règles que vous confirmez. Elles restent dans Supabase, séparées des opérations financières. Vous pouvez suspendre l'apprentissage, supprimer une règle ou retirer l'accès de Coco. Le retrait empêche Coco d'utiliser la mémoire ; vous pouvez encore supprimer les règles dans l'onglet Mémoire.",
-  "es": "La memoria guarda solo las preferencias y reglas que confirmes. Permanecen en Supabase, separadas de los movimientos financieros. Puedes pausar el aprendizaje, borrar una regla o revocar el acceso de Coco. La revocación impide que Coco use la memoria; aún puedes borrar las reglas guardadas en la pestaña Memoria."
+  "pt": "A memória guarda preferências e regras que você confirmar. Se você autorizar também as análises automáticas, o OAZE guarda no Supabase um resumo mensal calculado a partir dos dados incluídos nos totais: receitas, despesas, valores previstos e principal categoria de gasto. A Coco pode usar até seis desses resumos como contexto em conversas futuras. Eles podem ficar desatualizados quando os lançamentos mudam; não autorizam pagamentos nem alterações.",
+  "en": "Memory stores preferences and rules you confirm. If you also authorize automatic analyses, OAZE stores in Supabase a monthly summary calculated from data included in totals: income, expenses, planned amounts, and the largest spending category. Coco may use up to six of these summaries as context in later conversations. They may become outdated when entries change; they do not authorize payments or changes.",
+  "fr": "La mémoire conserve les préférences et règles que vous confirmez. Si vous autorisez également les analyses automatiques, OAZE stocke dans Supabase un résumé mensuel calculé à partir des données incluses dans les totaux : revenus, dépenses, montants prévus et principale catégorie de dépenses. Coco peut utiliser jusqu'à six de ces résumés comme contexte dans les conversations suivantes. Ils peuvent devenir obsolètes lorsque les opérations changent ; ils n'autorisent aucun paiement ni aucune modification.",
+  "es": "La memoria guarda las preferencias y reglas que confirmes. Si también autorizas los análisis automáticos, OAZE guarda en Supabase un resumen mensual calculado con los datos incluidos en los totales: ingresos, gastos, importes previstos y principal categoría de gasto. Coco puede usar hasta seis de estos resúmenes como contexto en conversaciones posteriores. Pueden quedar desactualizados cuando cambian los movimientos; no autorizan pagos ni cambios."
+ },
+ {
+  "pt": "Regras e análises ficam separadas dos lançamentos financeiros. Você pode pausar o aprendizado, apagar cada item ou revogar o acesso da Coco. Apagar uma análise remove seu texto; ela só é recalculada se os dados daquele mês mudarem. A revogação interrompe o uso da memória pela Coco, mas mantém os itens para que você ainda possa revisá-los e apagá-los.",
+  "en": "Rules and analyses are stored separately from financial entries. You can pause learning, delete each item, or revoke Coco's access. Deleting an analysis removes its text; it is recalculated only if that month's data change. Revocation stops Coco from using memory but keeps the items so you can still review and delete them.",
+  "fr": "Les règles et analyses sont séparées des opérations financières. Vous pouvez suspendre l'apprentissage, supprimer chaque élément ou révoquer l'accès de Coco. Supprimer une analyse efface son texte ; elle n'est recalculée que si les données de ce mois changent. La révocation empêche Coco d'utiliser la mémoire, mais conserve les éléments pour que vous puissiez les consulter et les supprimer.",
+  "es": "Las reglas y los análisis se guardan por separado de los movimientos financieros. Puedes pausar el aprendizaje, borrar cada elemento o revocar el acceso de Coco. Borrar un análisis elimina su texto; solo se recalcula si cambian los datos de ese mes. La revocación impide que Coco use la memoria, pero conserva los elementos para que puedas revisarlos y borrarlos."
  },
  {
   "pt": "<strong>Os dados enviados pela API não são usados para treinar modelos por padrão.</strong> As chamadas à Responses API usam <code>store: false</code>. O processamento e a retenção técnica pela OpenAI seguem os controles de dados do fornecedor; não confundimos isso com armazenamento de memória no OAZE.",

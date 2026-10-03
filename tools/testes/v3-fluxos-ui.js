@@ -19,20 +19,26 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       page.on('pageerror', (error) => errors.push(error.message));
       page.on('dialog', (dialog) => dialog.accept());
       await page.route('**/preview-v3/live-backend.js', (route) => route.fulfill({ contentType: 'text/javascript', body: `
-        let cocoSettings={consented_at:null,revoked_at:null,learning_paused:false};
+        let cocoSettings={consented_at:null,analysis_consented_at:null,revoked_at:null,learning_paused:false};
         let memories=[];
+        let analyses=[];
         window.V3Backend={
           start:async()=>{Store.loadRemoteMap({},'Teste');window.Sync={currentUser:()=>({uid:'teste'})};Limites.carregar=async()=>true;Limites.cabe=()=>true;Limites.pode=()=>true;AI.chamarFuncao=async()=>({texto:'Revise antes de salvar.',acao_proposta:{tipo:'expense',descricao:'Compra sugerida',valor:7,data:'2026-09-30',forma_pagamento:'account',origem:'Conta teste',categoria:'Teste personalizado',confirmado:true}});return true},
           mutate:async(change)=>{change();return Store.profile()},
           createProfile:async(name)=>Store.addProfile(name),
-          user:()=>({id:'teste'}),subscription:async()=>({plan_id:'free',status:'free'}),
+          user:()=>({id:'teste',email:'teste@example.com',name:'Teste'}),accountProfile:()=>({nome:'Teste',moeda:'BRL',pais:'BR'}),
+          saveAccountProfile:async(values)=>{Store.setOwnerName(values.name);return values;},
+          subscription:async()=>({plan_id:'free',status:'free'}),
           saving:()=>false,client:()=>null,
           cocoSettings:async()=>({...cocoSettings}),
-          cocoConsent:async(accepted)=>{cocoSettings={...cocoSettings,consented_at:accepted?new Date().toISOString():cocoSettings.consented_at,revoked_at:accepted?null:new Date().toISOString()};},
+          cocoConsent:async(accepted)=>{cocoSettings={...cocoSettings,consented_at:accepted?new Date().toISOString():cocoSettings.consented_at,analysis_consented_at:accepted?new Date().toISOString():cocoSettings.analysis_consented_at,revoked_at:accepted?null:new Date().toISOString()};},
           cocoPauseLearning:async(paused)=>{cocoSettings.learning_paused=paused;},
           cocoMemories:async()=>memories.slice(),
           cocoRemember:async(profileId,memory)=>{const row={...memory,id:'memory-'+(memories.length+1),created_at:new Date().toISOString()};memories.unshift(row);return row;},
           cocoForget:async(id)=>{memories=memories.filter((m)=>m.id!==id);},
+          cocoAnalyses:async()=>analyses.slice(),
+          cocoSaveAnalysis:async(_profileId,period,summary)=>{analyses=[{period,summary,forgotten_hash:null},...analyses.filter((a)=>a.period!==period)];},
+          cocoForgetAnalysis:async(_profileId,period,hash)=>{analyses=analyses.map((a)=>a.period===period?{period,summary:null,forgotten_hash:hash}:a);},
           cocoReadMedia:async(file)=>({texto:file.type.startsWith('audio/')?'Áudio anotado':'Gastei 7 reais no mercado',tipo:file.type.startsWith('audio/')?'audio':'foto',salvo:false}),
           withTimeout:(promise)=>promise
         };
@@ -46,6 +52,12 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('#v3-form-account [name="bank"][value="Itaú"]').check();
       await page.locator('#v3-form-account [name="amount"]').fill('123,45');
       await page.locator('#v3-form-account [type="submit"]').click();
+      await page.locator('[data-go="home"]:visible').first().click();
+      assert.equal(await page.locator('.v3-home-metric').count(), 4);
+      await page.locator('.v3-home-metric').first().click();
+      assert.match(await page.locator('#v3-sheet').innerText(), /Patrimônio líquido/);
+      await page.locator('.v3-sheet-close').click();
+      await page.locator('[data-go="wallet"]:visible').first().click();
       await page.locator('.v3-wallet-item').first().click();
       assert.match(await page.locator('.v3-wallet-pocket').innerText(), /123,45/);
       await page.locator('[data-action="edit-wallet-item"]').click();
@@ -112,9 +124,19 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('#v3-form-tx [name="description"]').fill('Compra no cartão');
       await page.locator('#v3-form-tx [name="category"]').selectOption({ label: 'Teste personalizado' });
       const cardId = await page.evaluate(() => Store.profile().cards[0].id);
-      await page.locator('#v3-form-tx [name="source"]').selectOption('card:' + cardId);
       await page.locator('#v3-form-tx [name="date"]').fill('2026-09-15');
+      await page.locator('#v3-form-tx [name="source"]').selectOption('card:' + cardId);
       await page.locator('#v3-form-tx [type="submit"]').click();
+      const excludedCard = await page.evaluate(() => {
+        const card = Store.profile().cards[0];
+        const before = Calc.netWorth('2026-10-31');
+        Store.cards.update(card.id, { considerado: false });
+        const month = Calc.monthTotals('2026-09').expense;
+        const without = Calc.netWorth('2026-10-31');
+        Store.cards.update(card.id, { considerado: true });
+        return [month, Calc.monthTotals('2026-09').expense,Math.round((without-before)*100)/100];
+      });
+      assert.deepEqual(excludedCard, [0, 50, 50], 'cartão fora dos totais só aparece na carteira');
       await page.locator('#v3-period').click();
       await page.locator('#v3-form-period [name="ym"]').fill('2026-10');
       await page.locator('#v3-form-period [type="submit"]').click();
@@ -125,10 +147,12 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('#v3-form-invoice [type="submit"]').click();
       assert.equal(await page.evaluate(() => Object.values(Store.profile().invoices).flatMap((x) => x.pagamentos).length), 1);
       const firstProfile = await page.evaluate(() => Store.profile().id);
-      if (width < 900) {
-        await page.locator('#v3-mobile-nav [data-go="more"]').click();
-        await page.locator('[data-go="settings"]:visible').first().click();
-      }
+      if (width < 900) await page.locator('#v3-mobile-nav [data-go="more"]').click();
+      await page.locator('[data-go="settings"]:visible').first().click();
+      await page.locator('[data-action="account-profile"]').click();
+      await page.locator('#v3-form-account-profile [name="name"]').fill('Teste V3');
+      await page.locator('#v3-form-account-profile [type="submit"]').click();
+      assert.equal(await page.evaluate(() => Store.ownerName()), 'Teste V3');
       await page.locator('[data-action="profiles"]:visible').first().click();
       await page.locator('#v3-form-profile [name="name"]').fill('Outro espaço');
       await page.locator('#v3-form-profile [type="submit"]').click();
@@ -136,6 +160,18 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('[data-action="profiles"]:visible').first().click();
       await page.locator(`[data-profile="${firstProfile}"]`).click();
       assert.equal(await page.evaluate(() => Store.profile().accounts.length), 1);
+      const recurringId = await page.evaluate(() => {
+        const entry=Store.transactions.add({ kind:'expense', description:'Assinatura teste', amount:9,
+          date:'2026-11-05', categoryId:Store.profile().categories.find((item)=>item.kind==='expense').id,
+          accountId:Store.profile().accounts[0].id, recurring:true, confirmed:false });
+        return entry.id;
+      });
+      if (width < 900) await page.locator('#v3-mobile-nav [data-go="more"]').click();
+      await page.locator('[data-go="calendar"]:visible').first().click();
+      await page.locator(`[data-action="pause-recurring"][data-recurring-id="${recurringId}"]`).click();
+      assert.equal(await page.evaluate((id)=>!!Store.transactions.get(id).recurPausedFrom,recurringId),true);
+      await page.locator(`[data-action="resume-recurring"][data-recurring-id="${recurringId}"]`).click();
+      assert.equal(await page.evaluate((id)=>Store.transactions.get(id).recurPausedFrom,recurringId),null);
       const beforeCoco = await page.evaluate(() => Store.profile().transactions.length);
       await page.locator('[data-action="coco"]:visible').first().click();
       await page.locator('#v3-coco-consent-form').waitFor();
@@ -161,10 +197,15 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.equal(await page.evaluate(() => Store.profile().transactions.at(-1).source), 'uglez');
       await page.locator('[data-action="coco"]:visible').first().click();
       await page.locator('[data-coco-tab="Memória"]').click();
+      await page.locator('[data-action="forget-analysis"]').waitFor();
+      assert.match(await page.locator('.v3-coco-memories').first().innerText(), /receitas confirmadas/);
+      await page.locator('[data-action="forget-analysis"]').click();
+      await page.waitForTimeout(900);
+      assert.equal(await page.locator('[data-action="forget-analysis"]').count(), 0);
       await page.locator('#v3-memory-form [name="label"]').fill('Uber');
       await page.locator('#v3-memory-form [name="value"]').fill('Transporte');
       await page.locator('#v3-memory-form [type="submit"]').click();
-      await page.locator('.v3-coco-memories').getByText('Uber').waitFor();
+      await page.locator('.v3-coco-memories').last().getByText('Uber').waitFor();
       await page.locator('[data-action="pause-learning"]').click();
       assert.match(await page.locator('[data-action="pause-learning"]').innerText(), /Retomar/);
       await page.locator('[data-action="forget-memory"]').click();
@@ -211,7 +252,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.match(await page.locator('.v3-import-row').first().innerText(), /Possível duplicata/);
       assert.deepEqual(errors, []);
       await page.close();
-      console.log(`V3 UI ${width}px: conta, categoria, lançamento, cartão, fatura, espaço e Coco OK`);
+      console.log(`V3 UI ${width}px: indicadores, conta, cartão, agenda, configurações e Coco OK`);
     }
   } finally { await browser.close(); }
 })().catch((error) => { console.error(error); process.exitCode = 1; });

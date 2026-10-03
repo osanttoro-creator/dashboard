@@ -312,6 +312,7 @@
     t.cardId = t.method === 'card' ? t.cardId : null;
     t.recurring = !!t.recurring;
     t.recurEnd = t.recurring && /^\d{4}-\d{2}$/.test(t.recurEnd || '') ? t.recurEnd : null;
+    t.recurPausedFrom = t.recurring && /^\d{4}-\d{2}$/.test(t.recurPausedFrom || '') ? t.recurPausedFrom : null;
     t.confirmed = t.confirmed !== false;
     /* O terceiro estado. Não existe em dado antigo, e a ausência tem
        de significar "não cancelado" — nunca o contrário, senão uma

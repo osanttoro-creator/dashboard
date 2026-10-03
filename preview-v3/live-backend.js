@@ -10,6 +10,7 @@
   let saving = false;
   let refreshPending = false;
   let channel = null;
+  let accountProfile = null;
 
   const loginUrl = '/entrar?destino=' + encodeURIComponent(
     global.location.pathname.startsWith('/app/') ? global.location.pathname : '/app'
@@ -27,6 +28,7 @@
   V3Backend.user = () => user;
   V3Backend.client = () => client;
   V3Backend.saving = () => saving;
+  V3Backend.accountProfile = () => accountProfile;
   V3Backend.withTimeout = bounded;
   V3Backend.subscription = async function () {
     if (!client || !user) throw new Error('Entre na sua conta para consultar a assinatura.');
@@ -54,12 +56,50 @@
     if (!response.ok || result.erro) throw new Error(result.mensagem || 'Pagamento indisponível agora. Nada foi cobrado.');
     return result;
   };
+  V3Backend.saveAccountProfile = async function (values) {
+    if (!client || !user) throw new Error('Entre na sua conta para editar o perfil.');
+    const name = String(values.name || '').trim().slice(0, 40);
+    if (!name) throw new Error('Escreva seu nome.');
+    const record = { user_id: user.id, nome: name, moeda: values.currency, pais: values.country,
+      fuso: Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo' };
+    const { error } = await bounded(client.from('profiles').upsert(record, { onConflict: 'user_id' }));
+    if (error) throw error;
+    accountProfile = record;
+    user.name = name;
+    Store.setOwnerName(name);
+    return record;
+  };
+  V3Backend.signOut = async function () {
+    if (!client) throw new Error('Sessão indisponível.');
+    const { error } = await bounded(client.auth.signOut());
+    if (error) throw error;
+    global.location.replace(loginUrl);
+  };
+  V3Backend.deleteAccount = async function (confirmation) {
+    if (!client || !user || String(confirmation || '').toLowerCase() !== user.email.toLowerCase())
+      throw new Error('O e-mail não confere.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token || !/^https:\/\//.test(base) || !publicKey)
+      throw new Error('Sua sessão expirou. Nada foi apagado.');
+    const response = await fetch(base + '/functions/v1/oaze-conta', {
+      method: 'POST', headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify({ acao: 'excluir', confirmacao: confirmation })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.ok !== true) throw new Error(result.mensagem || 'O servidor não confirmou a exclusão. Confira sua conta antes de tentar novamente.');
+    await client.auth.signOut().catch(() => {});
+    global.location.replace('/');
+  };
   V3Backend.cocoSettings = async function () {
     if (!client || !user) throw new Error('Entre na sua conta para usar a Coco.');
     const { data, error } = await bounded(client.from('coco_settings')
-      .select('consented_at,revoked_at,learning_paused').eq('user_id', user.id).maybeSingle());
+      .select('consented_at,analysis_consented_at,revoked_at,learning_paused').eq('user_id', user.id).maybeSingle());
     if (error) throw error;
-    return data || { consented_at: null, revoked_at: null, learning_paused: false };
+    return data || { consented_at: null, analysis_consented_at: null, revoked_at: null, learning_paused: false };
   };
   V3Backend.cocoConsent = async function (accepted) {
     if (!client || !user) throw new Error('Entre na sua conta para configurar a Coco.');
@@ -68,6 +108,7 @@
     const { error } = await bounded(client.from('coco_settings').upsert({
       user_id: user.id,
       consented_at: accepted ? now : current.consented_at,
+      analysis_consented_at: accepted ? now : current.analysis_consented_at,
       revoked_at: accepted ? null : now,
       learning_paused: accepted ? !!current.learning_paused : true,
       updated_at: now
@@ -105,6 +146,33 @@
     if (!client || !user) throw new Error('Entre na sua conta para apagar a memória.');
     const { error } = await bounded(client.from('coco_memories').delete()
       .eq('id', id).eq('user_id', user.id));
+    if (error) throw error;
+  };
+  V3Backend.cocoAnalyses = async function (profileId) {
+    if (!client || !user) throw new Error('Entre na sua conta para consultar as análises.');
+    const { data, error } = await bounded(client.from('coco_analyses')
+      .select('period,summary,forgotten_hash,updated_at').eq('user_id', user.id).eq('profile_id', profileId)
+      .order('period', { ascending: false }).limit(12));
+    if (error) throw error;
+    return data || [];
+  };
+  V3Backend.cocoSaveAnalysis = async function (profileId, period, summary) {
+    if (!client || !user) throw new Error('Entre na sua conta para guardar a análise.');
+    const settings = await V3Backend.cocoSettings();
+    if (!settings.consented_at || !settings.analysis_consented_at || settings.revoked_at || settings.learning_paused)
+      throw new Error('A memória da Coco está desligada.');
+    const { error } = await bounded(client.from('coco_analyses').upsert({
+      user_id: user.id, profile_id: profileId, period, summary, forgotten_hash: null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id,profile_id,period' }));
+    if (error) throw error;
+  };
+  V3Backend.cocoForgetAnalysis = async function (profileId, period, hash) {
+    if (!client || !user) throw new Error('Entre na sua conta para apagar a análise.');
+    const { error } = await bounded(client.from('coco_analyses').update({
+      summary: null, forgotten_hash: hash, updated_at: new Date().toISOString()
+    })
+      .eq('user_id', user.id).eq('profile_id', profileId).eq('period', period));
     if (error) throw error;
   };
   V3Backend.cocoReadMedia = async function (file, profileId) {
@@ -271,10 +339,16 @@
     user = {
       id: verified.id,
       email: verified.email || authUser.email || '',
-      name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || ''
+      name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || '',
+      photo: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || ''
     };
     // Nenhum documento financeiro é lido antes do aceite obrigatório.
     await requirePrivacyAcceptance();
+    const { data: profileRow, error: profileError } = await bounded(client.from('profiles')
+      .select('nome,moeda,pais,fuso').eq('user_id', user.id).maybeSingle());
+    if (profileError) throw profileError;
+    accountProfile = profileRow || {};
+    if (accountProfile.nome) user.name = accountProfile.nome;
     /* Compatibilidade somente de leitura para Limites e Coco. A V3 não
        inicializa o Sync antigo nem sua cópia local compartilhada. */
     global.Sync = { currentUser: () => ({ uid: user.id, email: user.email, displayName: ownerName() }) };
