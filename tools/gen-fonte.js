@@ -8,7 +8,7 @@
        arquivo separado é bloqueada por CORS nesse esquema na
        maioria dos navegadores.
 
-   O motivo caducou. O app.html usa caminhos absolutos (/assets/…)
+   O motivo caducou. O aplicativo usa caminhos absolutos (/assets/…)
    e carrega o Supabase por CDN: aberto em file:// ele já não
    funciona, com ou sem fonte. E o preço do base64 ficou alto:
 

@@ -13,7 +13,11 @@ const stripe = ler('supabase/functions/_shared/stripe.ts');
 const conta = ler('supabase/functions/oaze-conta/index.ts');
 const migration = ler('supabase/migrations/20260913180000_stripe_e_rate_limits.sql');
 const config = ler('supabase/config.toml');
-const precos = ler('assets/js/pages/precos.js');
+/* A tela de compra mudou de arquivo com o painel: o que importa
+   é que ALGUÉM do lado do navegador confira o host antes de
+   redirecionar — uma URL de checkout vinda do servidor ainda é uma
+   URL que leva a pessoa para fora do site. */
+const precos = ler('preview-v3/app.js');
 
 exige(/from\('plan_prices'\)/.test(pagamento), 'oaze-pagamento não lê o preço de plan_prices');
 exige(!/corpo\.(centavos|valor|preco)\b/.test(pagamento), 'oaze-pagamento aceita valor do navegador');

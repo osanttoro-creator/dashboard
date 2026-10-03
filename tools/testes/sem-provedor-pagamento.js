@@ -8,8 +8,8 @@ const raiz = path.join(__dirname, '..', '..');
 const arquivos = [
   '.env.example', 'index.html', 'precos.html', 'termos.html',
   'privacidade.html', 'suporte.html', 'robots.txt',
-  'assets/js/site.js', 'assets/js/conta.js',
-  'assets/js/pages/precos.js', 'assets/js/pages/settings.js',
+  'assets/js/site.js', 'assets/js/planos.js',
+  'preview-v3/app.js', 'preview-v3/live-backend.js',
   'deploy/hostinger/.htaccess',
   'supabase/migrations/20260902_ai_limites_e_assinatura.sql',
   'supabase/migrations/20260902_planos.sql',
@@ -22,10 +22,19 @@ const proibidos = [
   /provedor\s+(externo\s+)?de\s+pagamento/i
 ];
 
+/* A interface do aplicativo tem um catálogo de instituições para a
+   pessoa dizer de que banco é a conta, e nele existem fintechs cujo
+   nome coincide com o do provedor removido. Dizer "Mercado Pago" ali
+   é oferecer um banco, não voltar a cobrar por ele — então o nome do
+   provedor não é procurado neste arquivo; o resto é. */
+const catalogoDeBancos = new Set(['preview-v3/app.js']);
+const nomesDoProvedor = new Set([/mercado\s*pago/i, /mercadopago/i].map((re) => re.source));
+
 const falhas = [];
 for (const arquivo of arquivos) {
   const conteudo = fs.readFileSync(path.join(raiz, arquivo), 'utf8');
   for (const re of proibidos) {
+    if (catalogoDeBancos.has(arquivo) && nomesDoProvedor.has(re.source)) continue;
     if (re.test(conteudo)) falhas.push(`${arquivo}: ${re}`);
   }
 }

@@ -44,28 +44,25 @@ valor = U.moneySetCent(valor, '5', 0);
 valor = U.moneySetCent(valor, '6', 1);
 igual(valor, '1.234,56', 'centavos explícitos');
 
-const app = ler('assets/js/app.js');
-const html = ler('app.html');
-const forms = ler('assets/js/forms.js');
+/* A máscara é a mesma; quem a aplica mudou de arquivo. O painel
+   anterior foi apagado, e o controlador vive na interface da V3. */
+const app = ler('preview-v3/app.js');
 if (!/addEventListener\('beforeinput'/.test(app) || !/U\.moneyGrow/.test(app)) {
   falhas.push('o controlador real não usa a máscara testada');
 }
-if (!/U\.moneyGrow\(campo\.value, dado, tudoSelecionado\)/.test(app) ||
-    !/U\.moneyShrink\(campo\.value\)/.test(app) ||
+if (!/U\.moneyGrow\(input\.value,\s*text,\s*replace\)/.test(app) ||
+    !/U\.moneyShrink\(input\.value\)/.test(app) ||
     /posicaoCentavo|moneyParte|moneyCentavo/.test(app)) {
   falhas.push('reais e centavos ainda são tratados como blocos separados');
 }
-const inputMarcado = (id) => {
-  const tag = html.match(new RegExp(`<input[^>]*id=["']${id}["'][^>]*>|<input[^>]*data-money=["']true["'][^>]*id=["']${id}["'][^>]*>`));
-  return tag && /data-money=["']true["']/.test(tag[0]);
-};
-if (!inputMarcado('projInitial') || !inputMarcado('projMonthly')) {
-  falhas.push('os valores da projeção não foram marcados como dinheiro');
-}
-if (/id="projRate"[^>]*data-money/.test(html) ||
-    /Rentabilidade estimada[^\n]*data-money/.test(forms) ||
-    /placeholder:\s*'5,45'[^\n]*data-money/.test(forms)) {
-  falhas.push('taxa ou cotação recebeu a máscara de dinheiro por engano');
+/* Dinheiro recebe a máscara; taxa e cotação, não — a entrada ali é
+   decimal livre, e mascarar 5,45 como R$ 5,45 pediria à pessoa um
+   valor que ela não tem. */
+if (!/data-money="true"/.test(app)) falhas.push('nenhum campo de dinheiro foi marcado');
+for (const campo of ['rate', 'cotacao']) {
+  const tag = new RegExp('name="' + campo + '"[^>]*').exec(app);
+  if (!tag) { falhas.push('campo ' + campo + ' sumiu do formulário'); continue; }
+  if (/data-money/.test(tag[0])) falhas.push('taxa ou cotação recebeu a máscara de dinheiro por engano');
 }
 
 if (falhas.length) {

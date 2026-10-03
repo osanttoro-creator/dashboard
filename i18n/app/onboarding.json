@@ -1,5 +1,10 @@
 [
  {
+  "pt": "oaze.onboarding.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Sobre você",
   "tipo": "exato",
   "en": "About you",
@@ -19,6 +24,13 @@
   "en": "Where your money is",
   "fr": "Où est votre argent",
   "es": "Dónde está tu dinero"
+ },
+ {
+  "pt": "Categorias",
+  "tipo": "exato",
+  "en": "Categories",
+  "fr": "Catégories",
+  "es": "Categorías"
  },
  {
   "pt": "Primeira movimentação",
@@ -54,13 +66,6 @@
   "es": "Paso {0} de {1}"
  },
  {
-  "pt": "Voltar",
-  "tipo": "exato",
-  "en": "Back",
-  "fr": "Retour",
-  "es": "Volver"
- },
- {
   "pt": "Pular",
   "tipo": "exato",
   "en": "Skip",
@@ -75,6 +80,48 @@
   "es": "cómo quieres que te llamen"
  },
  {
+  "pt": "Real (R$)",
+  "tipo": "exato",
+  "en": "Real (R$)",
+  "fr": "Réal (R$)",
+  "es": "Real (R$)"
+ },
+ {
+  "pt": "Dólar (US$)",
+  "tipo": "exato",
+  "en": "Dollar (US$)",
+  "fr": "Dollar (US$)",
+  "es": "Dólar (US$)"
+ },
+ {
+  "pt": "Euro (€)",
+  "tipo": "exato",
+  "en": "Euro (€)",
+  "fr": "Euro (€)",
+  "es": "Euro (€)"
+ },
+ {
+  "pt": "Brasil",
+  "tipo": "exato",
+  "en": "Brazil",
+  "fr": "Brésil",
+  "es": "Brasil"
+ },
+ {
+  "pt": "Portugal",
+  "tipo": "exato",
+  "en": "Portugal",
+  "fr": "Portugal",
+  "es": "Portugal"
+ },
+ {
+  "pt": "Estados Unidos",
+  "tipo": "exato",
+  "en": "United States",
+  "fr": "États-Unis",
+  "es": "Estados Unidos"
+ },
+ {
   "pt": "Vamos configurar o essencial. São poucos minutos, e você pode sair e continuar depois de onde parou.",
   "tipo": "exato",
   "en": "Let's set up the essentials. It only takes a few minutes, and you can leave and pick up where you left off.",
@@ -82,11 +129,32 @@
   "es": "Vamos a configurar lo esencial. Son pocos minutos, y puedes salir y continuar después donde lo dejaste."
  },
  {
+  "pt": "Nome",
+  "tipo": "exato",
+  "en": "Name",
+  "fr": "Nom",
+  "es": "Nombre"
+ },
+ {
   "pt": "Aparece na saudação do painel.",
   "tipo": "exato",
   "en": "It shows in the dashboard greeting.",
   "fr": "Il apparaît dans le message d'accueil du tableau de bord.",
   "es": "Aparece en el saludo del panel."
+ },
+ {
+  "pt": "Moeda",
+  "tipo": "exato",
+  "en": "Currency",
+  "fr": "Devise",
+  "es": "Moneda"
+ },
+ {
+  "pt": "País",
+  "tipo": "exato",
+  "en": "Country",
+  "fr": "Pays",
+  "es": "País"
  },
  {
   "pt": "Fuso detectado: {0}",
@@ -103,13 +171,6 @@
   "es": "Continuar"
  },
  {
-  "pt": "Pessoal",
-  "tipo": "exato",
-  "en": "Personal",
-  "fr": "Personnel",
-  "es": "Personal"
- },
- {
   "pt": "Um espaço financeiro guarda contas, cartões e lançamentos separados dos demais. A maioria das pessoas usa só um.",
   "tipo": "exato",
   "en": "A financial space keeps accounts, cards and entries separate from the others. Most people only use one.",
@@ -122,6 +183,13 @@
   "en": "Space name",
   "fr": "Nom de l'espace",
   "es": "Nombre del espacio"
+ },
+ {
+  "pt": "Ex.: Conta corrente",
+  "tipo": "exato",
+  "en": "e.g. Checking account",
+  "fr": "Ex. : Compte courant",
+  "es": "Ej.: Cuenta corriente"
  },
  {
   "pt": "Ex.: Itaú",
@@ -145,6 +213,13 @@
   "es": "Nombre de la cuenta"
  },
  {
+  "pt": "Banco",
+  "tipo": "exato",
+  "en": "Bank",
+  "fr": "Banque",
+  "es": "Banco"
+ },
+ {
   "pt": "Saldo hoje (R$)",
   "tipo": "exato",
   "en": "Balance today (R$)",
@@ -164,6 +239,13 @@
   "en": "Give the account a name.",
   "fr": "Donnez un nom au compte.",
   "es": "Ponle un nombre a la cuenta."
+ },
+ {
+  "pt": "Conta corrente",
+  "tipo": "exato",
+  "en": "Checking account",
+  "fr": "Compte courant",
+  "es": "Cuenta corriente"
  },
  {
   "pt": "Estas categorias já vêm prontas. Remova as que não fazem sentido para você — dá para criar outras a qualquer momento.",
@@ -187,11 +269,39 @@
   "es": "Esta categoría ya tiene movimientos y no se puede quitar."
  },
  {
+  "pt": "Despesas",
+  "tipo": "exato",
+  "en": "Expenses",
+  "fr": "Dépenses",
+  "es": "Gastos"
+ },
+ {
+  "pt": "Receitas",
+  "tipo": "exato",
+  "en": "Income",
+  "fr": "Revenus",
+  "es": "Ingresos"
+ },
+ {
   "pt": "Ex.: Salário, Aluguel, Mercado",
   "tipo": "exato",
   "en": "e.g. Salary, Rent, Groceries",
   "fr": "Ex. : Salaire, Loyer, Courses",
   "es": "Ej.: Salario, Alquiler, Supermercado"
+ },
+ {
+  "pt": "Despesa",
+  "tipo": "exato",
+  "en": "Expense",
+  "fr": "Dépense",
+  "es": "Gasto"
+ },
+ {
+  "pt": "Receita",
+  "tipo": "exato",
+  "en": "Income",
+  "fr": "Revenu",
+  "es": "Ingreso"
  },
  {
   "pt": "Registre uma movimentação real — a última que você lembra. É ela que faz o painel sair do zero.",
@@ -201,11 +311,32 @@
   "es": "Registra un movimiento real — el último que recuerdes. Es el que hace que el panel salga de cero."
  },
  {
+  "pt": "Descrição",
+  "tipo": "exato",
+  "en": "Description",
+  "fr": "Description",
+  "es": "Descripción"
+ },
+ {
   "pt": "Valor (R$)",
   "tipo": "exato",
   "en": "Amount (R$)",
   "fr": "Montant (R$)",
   "es": "Monto (R$)"
+ },
+ {
+  "pt": "Tipo",
+  "tipo": "exato",
+  "en": "Type",
+  "fr": "Type",
+  "es": "Tipo"
+ },
+ {
+  "pt": "Categoria",
+  "tipo": "exato",
+  "en": "Category",
+  "fr": "Catégorie",
+  "es": "Categoría"
  },
  {
   "pt": "Registrar",
@@ -220,6 +351,13 @@
   "en": "Describe the transaction.",
   "fr": "Décrivez le mouvement.",
   "es": "Describe el movimiento."
+ },
+ {
+  "pt": "Informe um valor maior que zero.",
+  "tipo": "exato",
+  "en": "Enter an amount greater than zero.",
+  "fr": "Saisissez un montant supérieur à zéro.",
+  "es": "Ingresa un monto mayor que cero."
  },
  {
   "pt": "Ex.: Reserva de emergência",

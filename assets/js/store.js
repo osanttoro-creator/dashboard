@@ -769,19 +769,6 @@
     return true;
   };
 
-  /**
-   * Mantido por compatibilidade com chamadas antigas. A DECISÃO
-   * mora em tema.js — inclusive a terceira opção ("seguir o
-   * sistema"), que este atalho de dois valores não sabe expressar.
-   * Quem constrói interface de tema fala com o Tema direto.
-   */
-  Store.setTheme = function (theme) {
-    if (global.Tema && Tema.definir) { Tema.definir(theme === 'dark' ? 'dark' : 'light'); return; }
-    state.theme = theme === 'dark' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', state.theme);
-    Store.commit('theme');
-  };
-
   /* ---------------- CRUD genérico ---------------- */
 
   function collection(name) {

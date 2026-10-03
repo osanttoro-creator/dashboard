@@ -19,6 +19,67 @@
   "es": "OAZE — tu espacio financiero"
  },
  {
+  "pt": "Pular para o conteúdo",
+  "tipo": "exato",
+  "en": "Skip to content",
+  "fr": "Aller au contenu",
+  "es": "Saltar al contenido"
+ },
+ {
+  "pt": "Navegação principal",
+  "tipo": "exato",
+  "en": "Main navigation",
+  "fr": "Navigation principale",
+  "es": "Navegación principal"
+ },
+ {
+  "pt": "OAZE — início",
+  "tipo": "exato",
+  "en": "OAZE — home",
+  "fr": "OAZE — accueil",
+  "es": "OAZE — inicio"
+ },
+ {
+  "pt": "OAZE",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Novo lançamento",
+  "tipo": "exato",
+  "en": "New entry",
+  "fr": "Nouvelle écriture",
+  "es": "Nuevo movimiento"
+ },
+ {
+  "pt": "Seções",
+  "tipo": "exato",
+  "en": "Sections",
+  "fr": "Sections",
+  "es": "Secciones"
+ },
+ {
+  "pt": "Seu OAZE",
+  "tipo": "exato",
+  "en": "Your OAZE",
+  "fr": "Votre OAZE",
+  "es": "Tu OAZE"
+ },
+ {
+  "pt": "Pessoal",
+  "tipo": "exato",
+  "en": "Personal",
+  "fr": "Personnel",
+  "es": "Personal"
+ },
+ {
+  "pt": "Voltar",
+  "tipo": "exato",
+  "en": "Back",
+  "fr": "Retour",
+  "es": "Volver"
+ },
+ {
   "pt": "início",
   "tipo": "exato",
   "en": "home",
@@ -33,9 +94,30 @@
   "es": "Mes mostrado"
  },
  {
+  "pt": "Mês anterior",
+  "tipo": "exato",
+  "en": "Previous month",
+  "fr": "Mois précédent",
+  "es": "Mes anterior"
+ },
+ {
   "pt": "set 2026",
   "tipo": "exato",
   "ignorar": true
+ },
+ {
+  "pt": "Próximo mês",
+  "tipo": "exato",
+  "en": "Next month",
+  "fr": "Mois suivant",
+  "es": "Mes siguiente"
+ },
+ {
+  "pt": "Ocultar valores",
+  "tipo": "exato",
+  "en": "Hide amounts",
+  "fr": "Masquer les montants",
+  "es": "Ocultar importes"
  },
  {
   "pt": "Lembretes",
@@ -57,6 +139,13 @@
   "en": "Mobile navigation",
   "fr": "Navigation sur mobile",
   "es": "Navegación en el móvil"
+ },
+ {
+  "pt": "Abrir Coco",
+  "tipo": "exato",
+  "en": "Open Coco",
+  "fr": "Ouvrir Coco",
+  "es": "Abrir Coco"
  },
  {
   "pt": "Painel do OAZE",

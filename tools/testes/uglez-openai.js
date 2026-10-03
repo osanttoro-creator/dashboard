@@ -7,7 +7,10 @@ const path = require('path');
 const RAIZ = path.join(__dirname, '..', '..');
 const ler = (...partes) => fs.readFileSync(path.join(RAIZ, ...partes), 'utf8');
 const funcao = ler('supabase', 'functions', 'oaze-assistant', 'index.ts');
+/* O preparo do pedido continua em ai.js; a REVISÃO da proposta é
+   da interface, e ela mudou de arquivo com o painel. */
 const cliente = ler('assets', 'js', 'ai.js');
+const tela = ler('preview-v3', 'app.js');
 const config = ler('supabase', 'config.toml');
 const falhas = [];
 
@@ -48,8 +51,10 @@ exigir(/acao_proposta/.test(funcao) && /extrairAcao/.test(funcao),
   'a saída estruturada não é reconstruída e validada no servidor');
 exigir(!/Store\.transactions\.(add|update)/.test(funcao),
   'a Edge Function ganhou acesso direto para alterar a carteira');
-exigir(/renderAcaoProposta/.test(cliente) && /Forms\.openTransaction/.test(cliente),
+exigir(/function proposalForReview/.test(tela) && /data-action="review-proposal"/.test(tela),
   'a proposta não passa pelo formulário oficial para revisão');
+exigir(/Nada será salvo sem sua confirmação/.test(tela),
+  'a tela deixou de dizer que nada é salvo sem confirmação');
 exigir(/investimentos:\s*\{/.test(cliente) && /porTipo/.test(cliente),
   'a carteira de investimentos agregada não acompanha a pergunta');
 

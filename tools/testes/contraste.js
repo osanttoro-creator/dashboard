@@ -17,34 +17,43 @@
    olhado para nada do que estava no ar. Uma segunda fonte de verdade
    sempre diverge; a única questão é quando.
 
-   Agora ele LÊ os tokens do style.css. Trocar uma cor lá é o
-   suficiente para ser medido aqui, e não existe mais o passo de
-   "lembrar de atualizar o teste".
+   Agora ele LÊ os tokens da folha. Trocar uma cor lá é o suficiente
+   para ser medido aqui, e não existe mais o passo de "lembrar de
+   atualizar o teste".
+
+   O QUE MUDOU EM 03/10/2026
+   O painel anterior foi apagado e o style.css com ele. As folhas
+   que estão no ar são duas — a do aplicativo e a do site —, e as
+   duas são medidas. O tema claro saiu junto: hoje há um tema só,
+   por decisão, e medir "os dois" seria medir o mesmo duas vezes.
    ============================================================= */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-const CSS = fs.readFileSync(path.join(__dirname, '..', '..', 'assets', 'css', 'style.css'), 'utf8');
+const ler = (f) => fs.readFileSync(path.join(__dirname, '..', '..', f), 'utf8');
 
-/* ---------- leitura dos tokens ---------- */
+/* ---------- leitura dos tokens ----------
+   Lê o bloco :root direto da folha, aceitando tanto o formato
+   espaçado quanto o compacto — a folha do aplicativo é escrita numa
+   linha por seção, e um leitor linha a linha não enxergaria nada
+   ali. Segue valendo a regra que criou este leitor: a paleta mora
+   num lugar só, e trocar uma cor lá é o suficiente para ser medido
+   aqui. Uma cópia à mão sempre diverge; a única questão é quando. */
 
-function bloco(seletor) {
-  const i = CSS.indexOf(seletor + ' {');
-  if (i < 0) throw new Error('não achei o bloco ' + seletor + ' no style.css');
-  const fim = CSS.indexOf('\n}', i);
-  const corpo = CSS.slice(i, fim);
+function tokensDe(css, seletor) {
+  const i = css.search(new RegExp(seletor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{'));
+  if (i < 0) throw new Error('não achei o bloco ' + seletor);
+  const abre = css.indexOf('{', i);
+  const fecha = css.indexOf('}', abre);
   const mapa = {};
-  for (const linha of corpo.split('\n')) {
-    const m = /^\s*(--[\w-]+)\s*:\s*([^;]+);/.exec(linha);
+  for (const par of css.slice(abre + 1, fecha).split(';')) {
+    const m = /^\s*(--[\w-]+)\s*:\s*(.+)$/.exec(par);
     if (m) mapa[m[1]] = m[2].trim();
   }
   return mapa;
 }
-
-const CLARO = bloco(':root');
-const ESCURO = Object.assign({}, CLARO, bloco('[data-theme="dark"]'));
 
 /* var(--x) resolvido até o fundo; para de seguir em 12 saltos, que é
    mais do que qualquer cadeia honesta precisa. */
@@ -104,44 +113,66 @@ function razao(a, b) {
   const y = luz(b);
   return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 }
-
 /* ---------- o que medir ----------
-   Os nomes são de TOKEN, não de cor: é isso que sobrevive à próxima
-   troca de identidade. */
+   Duas superfícies, porque são duas folhas: a do aplicativo e a do
+   site público. Os nomes são de TOKEN, não de cor — é isso que
+   sobrevive à próxima troca de identidade.
 
-const TINTAS = [
-  ['valor e texto principal', '--text-primary'],
-  ['rótulo e texto de apoio', '--text-muted'],
-  ['receita / positivo', '--income'],
-  ['despesa', '--expense'],
-  ['acento como texto', '--accent'],
-  ['a Coco como texto', '--uglez-texto'],
-  ['investimento', '--invest']
-];
+   UM TEMA SÓ. O aplicativo tinha claro e escuro; hoje tem um, por
+   decisão. Medir "os dois temas" viraria medir o mesmo duas vezes e
+   dar a impressão de cobrir o dobro. */
 
-/* fundo raso, fundo profundo, e as três camadas de material */
-const FUNDOS = ['--bg', '--bg-deep', '--n1', '--n2', '--n3'];
-
-const BOTOES = [
-  ['tinta sobre o acento', '--on-accent', '--ouro']
+const SUPERFICIES = [
+  {
+    nome: 'aplicativo (preview-v3/app.css)',
+    css: ler('preview-v3/app.css'),
+    base: '--night',
+    fundos: ['--night', '--dark', '--panel', '--panel2'],
+    tintas: [
+      ['texto principal', '--milk'],
+      ['texto de apoio', '--muted'],
+      ['positivo e acento', '--teal'],
+      ['negativo', '--blue']
+    ],
+    botoes: [
+      ['tinta sobre o acento', '--night', '--teal'],
+      ['tinta sobre a ação principal', '--night', '--milk']
+    ]
+  },
+  {
+    nome: 'site público (assets/css/v3.css)',
+    css: ler('assets/css/v3.css'),
+    base: '--night',
+    fundos: ['--night', '--sup', '--sup-alta', '--sup-baixa'],
+    tintas: [
+      ['texto principal', '--milk'],
+      ['texto de apoio', '--tinta-2'],
+      ['acento', '--teal']
+    ],
+    botoes: [
+      ['tinta sobre o acento', '--night', '--teal'],
+      ['tinta sobre a ação principal', '--night', '--milk']
+    ]
+  }
 ];
 
 let falhas = 0;
 const MINIMO = 4.5;
 
-function medirTema(rotulo, mapa) {
+function medir(sup) {
+  const mapa = tokensDe(sup.css, ':root');
   console.log('');
-  console.log('  contraste — ' + rotulo);
+  console.log('  contraste — ' + sup.nome);
   console.log('  ' + '-'.repeat(66));
 
-  const base = valor(mapa, '--bg');
+  const base = valor(mapa, sup.base);
 
-  for (const [nomeFundo] of FUNDOS.map((f) => [f])) {
+  for (const nomeFundo of sup.fundos) {
     const cru = valor(mapa, nomeFundo);
     const fundo = sobre(cru, base);
     if (!fundo) { console.log('    (pulei ' + nomeFundo + ': ' + cru + ')'); continue; }
 
-    for (const [nomeTinta, token] of TINTAS) {
+    for (const [nomeTinta, token] of sup.tintas) {
       const tinta = rgba(valor(mapa, token));
       if (!tinta) continue;
       const r = razao(tinta, fundo);
@@ -153,7 +184,7 @@ function medirTema(rotulo, mapa) {
     }
   }
 
-  for (const [nome, tokenTexto, tokenFundo] of BOTOES) {
+  for (const [nome, tokenTexto, tokenFundo] of sup.botoes) {
     const tinta = rgba(valor(mapa, tokenTexto));
     const fundo = sobre(valor(mapa, tokenFundo), base);
     const r = razao(tinta, fundo);
@@ -163,12 +194,11 @@ function medirTema(rotulo, mapa) {
   }
 }
 
-medirTema('tema claro', CLARO);
-medirTema('tema escuro', ESCURO);
+SUPERFICIES.forEach(medir);
 
 console.log('  ' + '-'.repeat(66));
 if (falhas) {
   console.log('  ' + falhas + ' par(es) abaixo de ' + MINIMO + ':1.');
   process.exit(1);
 }
-console.log('  todos os pares passam, nos dois temas — medidos no style.css');
+console.log('  todos os pares passam — medidos nas folhas que estão no ar');

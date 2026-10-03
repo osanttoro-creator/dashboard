@@ -1,5 +1,10 @@
 [
  {
+  "pt": "financas.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Teal",
   "tipo": "exato",
   "en": "Teal",
@@ -14,11 +19,32 @@
   "es": "Mineral"
  },
  {
+  "pt": "Índigo",
+  "tipo": "exato",
+  "en": "Indigo",
+  "fr": "Indigo",
+  "es": "Índigo"
+ },
+ {
+  "pt": "Ameixa",
+  "tipo": "exato",
+  "en": "Plum",
+  "fr": "Prune",
+  "es": "Ciruela"
+ },
+ {
   "pt": "Tangerina",
   "tipo": "exato",
   "en": "Tangerine",
   "fr": "Mandarine",
   "es": "Mandarina"
+ },
+ {
+  "pt": "Oliva",
+  "tipo": "exato",
+  "en": "Olive",
+  "fr": "Olive",
+  "es": "Oliva"
  },
  {
   "pt": "Pix",
@@ -112,11 +138,25 @@
   "es": "Azul petróleo"
  },
  {
+  "pt": "Terracota",
+  "tipo": "exato",
+  "en": "Terracotta",
+  "fr": "Terre cuite",
+  "es": "Terracota"
+ },
+ {
   "pt": "Ameixa antiga",
   "tipo": "exato",
   "en": "Old plum",
   "fr": "Ancienne prune",
   "es": "Ciruela antigua"
+ },
+ {
+  "pt": "Pinho",
+  "tipo": "exato",
+  "en": "Pine",
+  "fr": "Pin",
+  "es": "Pino"
  },
  {
   "pt": "Âmbar",
@@ -154,6 +194,13 @@
   "es": "Tierra"
  },
  {
+  "pt": "Midnight",
+  "tipo": "exato",
+  "en": "Midnight",
+  "fr": "Minuit",
+  "es": "Medianoche"
+ },
+ {
   "pt": "Maré",
   "tipo": "exato",
   "en": "Tide",
@@ -168,6 +215,13 @@
   "es": "Eucalipto"
  },
  {
+  "pt": "Areia",
+  "tipo": "exato",
+  "en": "Sand",
+  "fr": "Sable",
+  "es": "Arena"
+ },
+ {
   "pt": "Uva",
   "tipo": "exato",
   "en": "Grape",
@@ -175,11 +229,74 @@
   "es": "Uva"
  },
  {
+  "pt": "Cobre",
+  "tipo": "exato",
+  "en": "Copper",
+  "fr": "Cuivre",
+  "es": "Cobre"
+ },
+ {
+  "pt": "Vinho",
+  "tipo": "exato",
+  "en": "Wine",
+  "fr": "Bordeaux",
+  "es": "Vino"
+ },
+ {
+  "pt": "Jade",
+  "tipo": "exato",
+  "en": "Jade",
+  "fr": "Jade",
+  "es": "Jade"
+ },
+ {
+  "pt": "Azul-noite",
+  "tipo": "exato",
+  "en": "Night blue",
+  "fr": "Bleu nuit",
+  "es": "Azul noche"
+ },
+ {
+  "pt": "Ferrugem",
+  "tipo": "exato",
+  "en": "Rust",
+  "fr": "Rouille",
+  "es": "Óxido"
+ },
+ {
   "pt": "Oliva antiga",
   "tipo": "exato",
   "en": "Old olive",
   "fr": "Ancienne olive",
   "es": "Oliva antigua"
+ },
+ {
+  "pt": "Carvão",
+  "tipo": "exato",
+  "en": "Charcoal",
+  "fr": "Charbon",
+  "es": "Carbón"
+ },
+ {
+  "pt": "Lagoa",
+  "tipo": "exato",
+  "en": "Lagoon",
+  "fr": "Lagune",
+  "es": "Laguna"
+ },
+ {
+  "pt": "Café",
+  "tipo": "exato",
+  "en": "Coffee",
+  "fr": "Café",
+  "es": "Café"
+ },
+ {
+  "pt": "Orquídea",
+  "tipo": "exato",
+  "en": "Orchid",
+  "fr": "Orchidée",
+  "es": "Orquídea"
  },
  {
   "pt": "Céu profundo",
@@ -201,6 +318,16 @@
   "en": "Abyssal",
   "fr": "Abyssal",
   "es": "Abisal"
+ },
+ {
+  "pt": "Itaú",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nubank",
+  "tipo": "exato",
+  "ignorar": true
  },
  {
   "pt": "Bradesco",
@@ -400,6 +527,13 @@
   "es": "Cuenta de inversión"
  },
  {
+  "pt": "Renda fixa",
+  "tipo": "exato",
+  "en": "Fixed income",
+  "fr": "Revenu fixe",
+  "es": "Renta fija"
+ },
+ {
   "pt": "Tesouro Direto",
   "tipo": "exato",
   "en": "Treasury bonds",
@@ -498,6 +632,13 @@
   "es": "Compras"
  },
  {
+  "pt": "Assinaturas",
+  "tipo": "exato",
+  "en": "Subscriptions",
+  "fr": "Abonnements",
+  "es": "Suscripciones"
+ },
+ {
   "pt": "Impostos e taxas",
   "tipo": "exato",
   "en": "Taxes and fees",
@@ -559,6 +700,27 @@
   "en": "(no description)",
   "fr": "(sans description)",
   "es": "(sin descripción)"
+ },
+ {
+  "pt": "Conta",
+  "tipo": "exato",
+  "en": "Account",
+  "fr": "Compte",
+  "es": "Cuenta"
+ },
+ {
+  "pt": "Cartão",
+  "tipo": "exato",
+  "en": "Card",
+  "fr": "Carte",
+  "es": "Tarjeta"
+ },
+ {
+  "pt": "Meta",
+  "tipo": "exato",
+  "en": "Goal",
+  "fr": "Objectif",
+  "es": "Meta"
  },
  {
   "pt": "Não foi possível ler o localStorage:",

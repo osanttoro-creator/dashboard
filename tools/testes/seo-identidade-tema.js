@@ -46,12 +46,20 @@ if (!ler('deploy/hostinger/montar-pacote.ps1').includes("'llms.txt'")) {
   falhas.push('deploy Hostinger: llms.txt ficaria fora da publicação');
 }
 
-const app = ler('app.html');
-const tema = ler('assets/js/tema.js');
-const supabase = ler('assets/js/supabase-auth.js');
-if (!app.includes("localStorage.getItem('oaze.tema')")) falhas.push('app.html: tema não é aplicado antes do CSS');
-if (!tema.includes('revisaoAoComecar !== revisaoEscolha')) falhas.push('tema.js: resposta antiga do servidor ainda pode vencer um clique novo');
-if (!supabase.includes('cliente: () => cliente')) falhas.push('supabase-auth.js: tema não alcança o cliente autenticado');
+/* TEMA: UM SÓ, E ISSO É DECISÃO, NÃO FALTA.
+   O aplicativo tinha claro e escuro, com a preferência guardada no
+   servidor e aplicada antes do CSS para não piscar branco. A V3 tem
+   um tema só — pedido explícito —, e com ele saíram o tema.js, a
+   sincronização da escolha e o piscar que ela existia para evitar.
+   O que sobra do contrato é que ninguém volte a declarar dois sem
+   trazer de volta as três coisas que fazem isso funcionar. */
+const appV3 = ler('app-v3.html');
+if (/data-theme="light"|oaze.tema/.test(appV3)) {
+  falhas.push('app-v3.html: voltou a existir escolha de tema sem a máquina que a sustentava');
+}
+if (!/color-scheme:s*dark/.test(ler('preview-v3/app.css'))) {
+  falhas.push('preview-v3/app.css: o tema único deixou de ser declarado');
+}
 
 if (falhas.length) {
   console.error('Identidade/SEO/tema incompletos:');
@@ -59,4 +67,4 @@ if (falhas.length) {
   process.exit(1);
 }
 
-console.log('OK — tema persiste; identidade, previews, llms.txt e sitemap estão coerentes.');
+console.log('OK — tema único declarado; identidade, previews, llms.txt e sitemap estão coerentes.');

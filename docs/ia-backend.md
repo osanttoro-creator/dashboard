@@ -7,7 +7,7 @@ navegador autenticado -> Edge Function oaze-assistant -> Responses API da OpenAI
 ```
 
 A chave da OpenAI fica nos Secrets das Edge Functions do Supabase. Ela nunca
-entra em `assets/`, `app.html`, `localStorage`, resposta HTTP ou log.
+entra em `assets/`, `preview-v3/`, `localStorage`, resposta HTTP ou log.
 
 ## Configuração
 

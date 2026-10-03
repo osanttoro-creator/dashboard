@@ -55,29 +55,25 @@ const LINGUAS = ['en', 'fr', 'es'];
    qualquer dicionário ser carregado. */
 /* v3.js e a folha de rosto do site, nao do app: quem traduz a
    pagina publica e gen-idiomas.js, gerando /en, /fr e /es. */
-const FORA = new Set(['site.js', 'v3.js', 'site-auth.js', 'narrativa.js', 'cookies.js', 'contato.js', 'idioma.js',
-  'idioma-esfera.js',
-  'supabase-config.js', 'icons.js', 'uglez-particulas.js', 'uglez-erosao.js', 'uglez-neon.js']);
+const FORA = new Set(['site.js', 'v3.js', 'site-auth.js', 'cookies.js', 'contato.js', 'idioma.js',
+  'idioma-esfera.js', 'supabase-config.js', 'icons.js']);
 
 function arquivosDoApp() {
-  const lista = ['app.html'];
+  /* O painel anterior saiu daqui junto com os arquivos dele; o que
+     /app serve é a V3, e é o que ela escreve que precisa falar os
+     quatro idiomas. */
+  const lista = ['app-v3.html'];
   const js = path.join(RAIZ, 'assets', 'js');
   for (const f of fs.readdirSync(js).sort()) {
     if (f.endsWith('.js') && !FORA.has(f)) lista.push('assets/js/' + f);
   }
-  for (const f of fs.readdirSync(path.join(js, 'pages')).sort()) {
-    if (f.endsWith('.js')) lista.push('assets/js/pages/' + f);
-  }
-  /* A V3 é o que /app serve: o que ela escreve precisa falar os
-     quatro idiomas igual ao resto. */
-  lista.push('app-v3.html');
   for (const f of fs.readdirSync(path.join(RAIZ, 'preview-v3')).sort()) {
     if (f.endsWith('.js')) lista.push('preview-v3/' + f);
   }
   return lista;
 }
 
-const nomeDoDic = (arquivo) => arquivo === 'app.html' ? 'app-html'
+const nomeDoDic = (arquivo) => arquivo === 'app-v3.html' ? 'app-v3-html'
   : arquivo.replace(/^assets\/js\//, '').replace(/\//g, '-').replace(/\.js$/, '');
 
 /* ---------------------------------------------------------------

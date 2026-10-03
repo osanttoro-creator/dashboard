@@ -213,11 +213,25 @@
     return null;
   }
 
-  /**
-   * Barra a criação e EXPLICA. A frase segue a fórmula do brief:
-   * quanto está usando, de quanto, e o que o próximo plano dá.
-   * Um "limite atingido" seco manda a pessoa adivinhar.
-   */
+  /* =============================================================
+     QUEM DECIDE É ESTE ARQUIVO; QUEM MOSTRA É A INTERFACE
+     -------------------------------------------------------------
+     Antes, as duas funções abaixo montavam um modal com o UI do
+     painel anterior. Com aquele painel apagado, a chamada quebraria
+     no meio de uma ação — e justo numa ação que já ia parar, o que
+     a pessoa leria como "não acontece nada" em vez de "o plano não
+     cobre isto". Silêncio é a pior resposta possível a um limite.
+
+     Agora o módulo decide e DESCREVE; quem desenha é a interface,
+     pelo gancho Limites.avisar. O padrão é o alerta do navegador:
+     feio, mas nunca silencioso — se alguém esquecer de ligar a
+     própria tela, o aviso aparece mesmo assim.
+     ============================================================= */
+  Limites.avisar = function (aviso) {
+    try { global.alert([aviso.titulo, ''].concat(aviso.linhas).join('\n')); }
+    catch (e) { console.warn('Limites:', aviso.titulo, aviso.linhas.join(' ')); }
+  };
+
   Limites.exigirEspaco = function (chave, ym) {
     const tipo = Planos.chave(chave);
     if (Limites.cabe(tipo, ym)) return true;
@@ -237,43 +251,24 @@
       : ' disponíveis no plano ' + planoAtual.nome + '.';
     const prox = proximoQueResolve(tipo);
 
-    const corpo = el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-      el('p', {}, [
-        /* O uso real, não o teto repetido: quem tem 2 espaços num plano
-           que permite 1 lia "usando 1 de 1" e achava que o app errou. */
-        el('strong', { text: 'Você está usando ' + Math.max(teto, Limites.contar(tipo, ym)) + ' de ' + teto + ' ' + plural }),
-        el('span', { text: fecho })
-      ]),
-      prox
-        ? el('p', { style: { marginTop: '10px' } }, [
-          el('span', { text: 'No ' + prox.nome + ', você pode cadastrar ' }),
-          el('strong', { text: prox.limites[tipo] === null ? 'quantos quiser' : 'até ' + prox.limites[tipo] }),
-          el('span', { text: '.' })
-        ])
-        : null,
-      el('p', { style: { marginTop: '10px' }, text: 'Nada foi apagado, e o resto do app continua funcionando. Você também pode excluir um dos que já existem para abrir espaço.' })
-    ].filter(Boolean));
+    const linhas = [
+      /* O uso real, não o teto repetido: quem tem 2 espaços num plano
+         que permite 1 lia "usando 1 de 1" e achava que o app errou. */
+      'Você está usando ' + Math.max(teto, Limites.contar(tipo, ym)) + ' de ' + teto + ' ' + plural + fecho
+    ];
+    if (prox) {
+      linhas.push('No ' + prox.nome + ', você pode cadastrar '
+        + (prox.limites[tipo] === null ? 'quantos quiser' : 'até ' + prox.limites[tipo]) + '.');
+    }
+    linhas.push('Nada foi apagado, e o resto do app continua funcionando. Você também pode excluir um dos que já existem para abrir espaço.');
 
-    /* O modal explica O QUE parou. A tela de limites explica o
-       CONJUNTO: tudo o que está cheio, o que cada teto impede e
-       onde abrir espaço. Sem esta porta, fechar o modal era um beco
-       sem saída — a pessoa sabia do teto e não tinha para onde ir. */
-    UI.openModal({
-      title: 'Limite do plano ' + planoAtual.nome,
-      body: corpo,
-      buttons: [
-        { label: 'Entendi', class: 'btn-ghost', onClick: UI.closeModal },
-        {
-          label: 'Ver meus limites', class: 'btn-outline',
-          onClick: () => { UI.closeModal(); App.goTo('limites'); }
-        },
-        prox
-          ? {
-            label: 'Ver planos', class: 'btn-primary',
-            onClick: () => { UI.closeModal(); App.goTo('precos'); }
-          }
-          : null
-      ].filter(Boolean)
+    Limites.avisar({
+      titulo: 'Limite do plano ' + planoAtual.nome,
+      linhas: linhas,
+      /* Para onde ir depois de entender. Sem esta porta, fechar o
+         aviso era um beco sem saída: a pessoa sabia do teto e não
+         tinha o que fazer com a informação. */
+      verPlanos: !!prox
     });
     return false;
   };
@@ -287,48 +282,19 @@
       Planos.IDS.indexOf(p.id) > Planos.IDS.indexOf(direitos.plano) && p.recursos[recurso]);
     const planoAtual = Planos.get(direitos.plano);
 
-    UI.openModal({
-      title: 'Disponível em outro plano',
-      body: el('div', { style: { fontSize: '13.5px', lineHeight: '1.65' } }, [
-        el('p', { text: oQueEra + ' não está incluído no plano ' + planoAtual.nome + '.' }),
-        prox ? el('p', { style: { marginTop: '10px' }, text: 'Está disponível a partir do ' + prox.nome + '.' }) : null,
-        el('p', { style: { marginTop: '10px' }, text: 'Seus dados continuam intactos e o resto do app segue funcionando normalmente.' })
-      ].filter(Boolean)),
-      buttons: [
-        { label: 'Fechar', class: 'btn-ghost', onClick: UI.closeModal },
-        { label: 'Ver meus limites', class: 'btn-outline', onClick: () => { UI.closeModal(); App.goTo('limites'); } },
-        prox ? { label: 'Ver planos', class: 'btn-primary', onClick: () => { UI.closeModal(); App.goTo('precos'); } } : null
-      ].filter(Boolean)
-    });
+    const linhas = [oQueEra + ' não está incluído no plano ' + planoAtual.nome + '.'];
+    if (prox) linhas.push('Está disponível a partir do ' + prox.nome + '.');
+    linhas.push('Seus dados continuam intactos e o resto do app segue funcionando normalmente.');
+
+    Limites.avisar({ titulo: 'Disponível em outro plano', linhas: linhas, verPlanos: !!prox });
     return false;
   };
 
-  /* ---------------- barra de consumo ---------------- */
-
-  /**
-   * Uma barra que não existe quando o limite é ilimitado: desenhar
-   * uma barra sempre vazia sugere um teto que não há.
-   */
-  Limites.barra = function (rotulo, usado, limite, unidade) {
-    if (limite === null || limite === undefined) {
-      return el('div', { class: 'uso-linha' }, [
-        el('span', { class: 'uso-rotulo', text: rotulo }),
-        el('span', { class: 'uso-num', text: usado + (unidade ? ' ' + unidade : '') + ' · ilimitado' })
-      ]);
-    }
-    const pct = limite > 0 ? Math.min(100, Math.round((usado / limite) * 100)) : 0;
-    const cheio = usado >= limite;
-    return el('div', { class: 'uso-linha' }, [
-      el('span', { class: 'uso-rotulo', text: rotulo }),
-      el('span', { class: 'uso-num' + (cheio ? ' is-cheio' : ''), text: usado + ' de ' + limite }),
-      el('div', {
-        class: 'uso-barra' + (cheio ? ' is-cheio' : ''),
-        role: 'progressbar', 'aria-valuenow': String(usado),
-        'aria-valuemin': '0', 'aria-valuemax': String(limite),
-        'aria-label': rotulo + ': ' + usado + ' de ' + limite
-      }, el('i', { style: { width: pct + '%' } }))
-    ]);
-  };
+  /* A BARRA DE CONSUMO SAIU DAQUI
+     Ela montava DOM com o ajudante do painel anterior, e só a tela
+     de limites daquele painel a usava. A V3 desenha o próprio
+     consumo, com os mesmos números pedidos a Limites.contar e
+     Limites.limite — o dado continua vindo de um lugar só. */
 
   /* ---------------- ciclo ---------------- */
 
@@ -339,15 +305,16 @@
        um upgrade aparecer na hora, sem recarregar a página — quem
        acabou de pagar não deveria ter que dar F5 para ver o que
        comprou. */
-    if (global.UglezFlutuante) UglezFlutuante.sincronizar();
-    if (App.page === 'settings') Cfg.render();
-    if (App.page === 'precos' && global.Precos) Precos.render();
+    /* A interface se redesenha sozinha quando os direitos chegam:
+       antes era este módulo que mandava três telas do painel
+       anterior se repintarem, uma a uma e por nome. */
+    if (typeof Limites.aoMudar === 'function') Limites.aoMudar();
   };
 
   Limites.aoSair = function () {
     direitos = PADRAO;
-    if (global.UglezFlutuante) UglezFlutuante.sincronizar();
     consumoIA = { usado: 0, limite: PADRAO.limites.ai_queries_per_month };
+    if (typeof Limites.aoMudar === 'function') Limites.aoMudar();
   };
 
   global.Limites = Limites;

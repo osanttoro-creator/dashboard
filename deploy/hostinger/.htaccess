@@ -64,11 +64,12 @@
   RewriteRule ^suporte/?$           /suporte.html         [L]
 
   # -----------------------------------------------------------
-  # 3 · aplicativo V3 com saída reversível para o app anterior
+  # 3 · aplicativo
   # -----------------------------------------------------------
-  # /app e /onboarding são estados do aplicativo, não
-  # arquivos. /app usa a V3; ?classic=1 preserva o painel anterior
-  # para edição completa e rollback sem apagar código ou dados.
+  # /app e /onboarding são estados do aplicativo, não arquivos. Os
+  # dois entregam app-v3.html. A saída para o painel anterior existiu enquanto o
+  # painel anterior estava no código; ele foi apagado, e uma rota
+  # para um arquivo que não existe só produziria 404 silencioso.
   # O Apache entrega HTML e o JavaScript decide o
   # que mostrar — inclusive se a pessoa pode estar ali.
   #
@@ -79,19 +80,16 @@
   # teatro: não há sessão para ele consultar.
   #
   # A CONDIÇÃO DE EXTENSÃO NÃO É OPCIONAL. Sem ela,
-  # /app/assets/js/app.js casa com ^app(/.*)$ e recebe o app.html
-  # com status 200 — o navegador tenta executar HTML como
+  # /app/preview-v3/app.js casa com ^app(/.*)$ e recebe o HTML do
+  # aplicativo com status 200 — o navegador tenta executar HTML como
   # JavaScript e o console enche de "Unexpected token '<'".
   # (Aconteceu: 41 scripts, 41 erros. O app até funcionava, porque
   # os caminhos são absolutos e havia um segundo pedido correto,
   # mas cada arquivo era baixado duas vezes.)
   RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
-  RewriteCond %{QUERY_STRING} (^|&)classic=1(&|$) [NC]
-  RewriteRule ^app(/.*)?$         /app.html [L]
-  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
   RewriteRule ^app(/.*)?$         /app-v3.html [L]
   RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
-  RewriteRule ^onboarding(/.*)?$  /app.html [L]
+  RewriteRule ^onboarding(/.*)?$  /app-v3.html [L]
   # -----------------------------------------------------------
   # 4 · fallback da raiz
   # -----------------------------------------------------------

@@ -24,6 +24,11 @@
   "es": "Raíz firme: cuentas, tarjetas e historial."
  },
  {
+  "pt": "Oásis",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Tudo o que o OAZE faz, sem teto no dia a dia.",
   "tipo": "exato",
   "en": "Everything OAZE does, with no ceiling on your day-to-day.",
@@ -41,6 +46,34 @@
   "en": "Unlimited",
   "fr": "Illimité",
   "es": "Ilimitado"
+ },
+ {
+  "pt": "{0}{1} · ilimitado",
+  "tipo": "padrao",
+  "en": "{0}{1} · unlimited",
+  "fr": "{0}{1} · illimité",
+  "es": "{0}{1} · ilimitado"
+ },
+ {
+  "pt": "Espaços financeiros",
+  "tipo": "exato",
+  "en": "Financial spaces",
+  "fr": "Espaces financiers",
+  "es": "Espacios financieros"
+ },
+ {
+  "pt": "Contas",
+  "tipo": "exato",
+  "en": "Accounts",
+  "fr": "Comptes",
+  "es": "Cuentas"
+ },
+ {
+  "pt": "Cartões de crédito",
+  "tipo": "exato",
+  "en": "Credit cards",
+  "fr": "Cartes de crédit",
+  "es": "Tarjetas de crédito"
  },
  {
   "pt": "Movimentações por mês",
@@ -69,6 +102,13 @@
   "en": "Active goals",
   "fr": "Objectifs actifs",
   "es": "Metas activas"
+ },
+ {
+  "pt": "Recorrências",
+  "tipo": "exato",
+  "en": "Recurring",
+  "fr": "Récurrences",
+  "es": "Recurrentes"
  },
  {
   "pt": "Histórico disponível",

@@ -39,7 +39,9 @@ const RAIZ = path.join(__dirname, '..');
    como "for(o=0;o<a;++o)" casam com a busca por tags. */
 const PAGINAS = fs.readdirSync(RAIZ).filter((f) => f.endsWith('.html'));
 
-const FONTES = ['assets/js', 'assets/js/pages']
+/* 'assets/js/pages' saiu com o painel anterior; 'preview-v3' entrou
+   no lugar, que é onde a interface do aplicativo vive agora. */
+const FONTES = ['assets/js', 'preview-v3']
   .flatMap((d) => fs.readdirSync(path.join(RAIZ, d))
     .filter((f) => f.endsWith('.js'))
     .map((f) => path.join(RAIZ, d, f)))

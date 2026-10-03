@@ -92,7 +92,7 @@ o app já traz o ícone e as metatags para isso, e respeita o notch e a barra in
 
 ```
 index.html                a landing pública
-app.html                  o aplicativo
+app-v3.html               o aplicativo
 entrar.html cadastro.html recuperar-senha.html redefinir-senha.html confirmar-email.html
 precos.html recursos.html suporte.html termos.html privacidade.html 404.html
 servir-no-wifi.ps1        publica a pasta na rede local, para testar do celular
@@ -104,27 +104,23 @@ docs/                     o que não cabe em comentário de código
 assets/vendor/bancos.js   bancos brasileiros, vendorizado (GERADO)
 assets/vendor/icons.js    ícones Lucide, vendorizado (GERADO)
 assets/vendor/fontes/     Newsreader, IBM Plex Sans e Mono (OFL)
-assets/css/style.css      o aplicativo
+preview-v3/               o aplicativo: tela, carteira, backend e Coco
 assets/css/site.css       o site público
 assets/js/
   utils.js       formatação BRL, datas (sem armadilha de fuso), helpers de DOM
   store.js       modelo de dados, persistência, perfis, backup
   calc.js        motor de cálculo: ocorrências, saldos, faturas, investimentos
-  repo.js        leitura e escrita no esquema normalizado do Postgres
-  dados.js       traz o estado do servidor sem atropelar o que está no aparelho
-  fila.js        o que ainda não subiu, e por isso não pode ser sobrescrito
-  migracao.js    do localStorage para o banco, uma vez só, com backup antes
-  sync.js        o contrato de sincronização (estado, mesclagem, envio)
-  supabase-auth.js  o backend que cumpre esse contrato
-  site-auth.js   autenticação das páginas públicas (leve, sem o app junto)
-  conta.js       chamadas às Edge Functions
+  site-auth.js   autenticação, do site e do aplicativo
   planos.js limites.js  planos, direitos e limites de uso
-  ai.js          sugestões, via Edge Function — a chave nunca vem ao navegador
-  charts.js ui.js forms.js cards.js icons.js importer.js tema.js shell.js
-  onboarding.js estado-sync.js
-  uglez-*.js     a peça visual do UGLEZ (WebGL, com fallback 2D)
-  pages/*.js     uma página por arquivo
-  app.js         estado da interface, roteamento, eventos
+  ai.js          o que vai à Edge Function — a chave nunca vem ao navegador
+  icons.js idioma.js idioma-esfera.js onboarding.js
+  automacoes/*.js  categorizar, detectar recorrência, metas automáticas
+preview-v3/
+  app.js         a interface inteira: telas, formulários, Coco
+  live-backend.js  a conta real: sessão, gravação com conflito, Coco no banco
+  carteira.js    o gesto da carteira (mola quadro a quadro, 1:1 com o dedo)
+  coco-import.js extrato lido NESTE aparelho, revisado antes de salvar
+  app.css wallet.css calendar.css icons.css
 ```
 
 Os scripts são clássicos (sem `type="module"`), para funcionar também em `file://` —

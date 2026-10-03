@@ -1,5 +1,12 @@
 [
   {
+    "pt": "lançamentos",
+    "tipo": "exato",
+    "en": "entries",
+    "fr": "écritures",
+    "es": "movimientos"
+  },
+  {
     "pt": "metas e orçamentos",
     "tipo": "exato",
     "en": "goals and budgets",
@@ -14,11 +21,25 @@
     "es": "ajustes"
   },
   {
+    "pt": "Pago",
+    "tipo": "exato",
+    "en": "Paid",
+    "fr": "Payé",
+    "es": "Pagado"
+  },
+  {
     "pt": "Não pago",
     "tipo": "exato",
     "en": "Unpaid",
     "fr": "Non payé",
     "es": "Sin pagar"
+  },
+  {
+    "pt": "Cancelado",
+    "tipo": "exato",
+    "en": "Cancelled",
+    "fr": "Annulé",
+    "es": "Cancelado"
   },
   {
     "pt": "Entra nos totais",
@@ -47,6 +68,13 @@
     "en": "March",
     "fr": "mars",
     "es": "marzo"
+  },
+  {
+    "pt": "{0} de {1}",
+    "tipo": "padrao",
+    "en": "{0} of {1}",
+    "fr": "{0} sur {1}",
+    "es": "{0} de {1}"
   },
   {
     "pt": "Todos",
@@ -267,6 +295,13 @@
     "es": "Datos cargados de tu cuenta"
   },
   {
+    "pt": "Mostrar valores",
+    "tipo": "exato",
+    "en": "Show amounts",
+    "fr": "Afficher les montants",
+    "es": "Mostrar importes"
+  },
+  {
     "pt": "Efí Bank",
     "tipo": "exato",
     "ignorar": true
@@ -412,6 +447,13 @@
     "es": "Elige la entidad; el nombre de la cuenta se puede personalizar."
   },
   {
+    "pt": "Buscar banco…",
+    "tipo": "exato",
+    "en": "Search bank…",
+    "fr": "Rechercher une banque…",
+    "es": "Buscar banco…"
+  },
+  {
     "pt": "Buscar banco",
     "tipo": "exato",
     "en": "Search bank",
@@ -438,6 +480,20 @@
     "en": "What it’s called",
     "fr": "Comment elle s’appelle",
     "es": "Cómo se llama"
+  },
+  {
+    "pt": "crédito",
+    "tipo": "exato",
+    "en": "credit",
+    "fr": "crédit",
+    "es": "crédito"
+  },
+  {
+    "pt": "débito",
+    "tipo": "exato",
+    "en": "debit",
+    "fr": "débit",
+    "es": "débito"
   },
   {
     "pt": "final {0}",
@@ -494,6 +550,20 @@
     "en": "View accounts or cards",
     "fr": "Afficher les comptes ou les cartes",
     "es": "Ver cuentas o tarjetas"
+  },
+  {
+    "pt": "Débito",
+    "tipo": "exato",
+    "en": "Debit",
+    "fr": "Débit",
+    "es": "Débito"
+  },
+  {
+    "pt": "Crédito",
+    "tipo": "exato",
+    "en": "Credit",
+    "fr": "Crédit",
+    "es": "Crédito"
   },
   {
     "pt": "sua carteira começa aqui",
@@ -559,6 +629,20 @@
     "es": "Ningún {0} en este espacio."
   },
   {
+    "pt": "Cartão anterior",
+    "tipo": "exato",
+    "en": "Previous card",
+    "fr": "Carte précédente",
+    "es": "Tarjeta anterior"
+  },
+  {
+    "pt": "Próximo cartão",
+    "tipo": "exato",
+    "en": "Next card",
+    "fr": "Carte suivante",
+    "es": "Tarjeta siguiente"
+  },
+  {
     "pt": "Carteira de {0}",
     "tipo": "padrao",
     "en": "{0} wallet",
@@ -571,6 +655,20 @@
     "en": "Tap the wallet to {0}",
     "fr": "Touchez le portefeuille pour {0}",
     "es": "Toca la cartera para {0}"
+  },
+  {
+    "pt": "Transferir",
+    "tipo": "exato",
+    "en": "Transfer",
+    "fr": "Virement",
+    "es": "Transferir"
+  },
+  {
+    "pt": "Aporte",
+    "tipo": "exato",
+    "en": "Contribution",
+    "fr": "Versement",
+    "es": "Aporte"
   },
   {
     "pt": "vem de {0}:",
@@ -643,6 +741,13 @@
     "es": "Sin mes anterior para comparar"
   },
   {
+    "pt": "Patrimônio líquido",
+    "tipo": "exato",
+    "en": "Net worth",
+    "fr": "Patrimoine net",
+    "es": "Patrimonio neto"
+  },
+  {
     "pt": "{0} disponível",
     "tipo": "padrao",
     "en": "{0} available",
@@ -664,6 +769,13 @@
     "es": "Cuentas contadas + inversiones − facturas abiertas."
   },
   {
+    "pt": "Receitas do mês",
+    "tipo": "exato",
+    "en": "Income this month",
+    "fr": "Revenus du mois",
+    "es": "Ingresos del mes"
+  },
+  {
     "pt": "{0} previsto",
     "tipo": "padrao",
     "en": "{0} forecast",
@@ -678,11 +790,39 @@
     "es": "Solo los ingresos confirmados de las cuentas contadas entran en este importe."
   },
   {
+    "pt": "Despesas do mês",
+    "tipo": "exato",
+    "en": "Expenses this month",
+    "fr": "Dépenses du mois",
+    "es": "Gastos del mes"
+  },
+  {
+    "pt": "Débito {0}",
+    "tipo": "padrao",
+    "en": "Debit {0}",
+    "fr": "Débit {0}",
+    "es": "Débito {0}"
+  },
+  {
+    "pt": "Crédito {0}",
+    "tipo": "padrao",
+    "en": "Credit {0}",
+    "fr": "Crédit {0}",
+    "es": "Crédito {0}"
+  },
+  {
     "pt": "Compras no crédito contam no mês da compra; o pagamento da fatura não duplica a despesa.",
     "tipo": "exato",
     "en": "Credit purchases count in the month of the purchase; paying the statement doesn’t double the expense.",
     "fr": "Les achats à crédit comptent dans le mois de l’achat ; payer le relevé ne double pas la dépense.",
     "es": "Las compras a crédito cuentan en el mes de la compra; pagar la factura no duplica el gasto."
+  },
+  {
+    "pt": "Sobra em caixa",
+    "tipo": "exato",
+    "en": "Cash left over",
+    "fr": "Reste en trésorerie",
+    "es": "Sobrante en caja"
   },
   {
     "pt": "Receitas − débito − {0} em faturas pagas",
@@ -818,6 +958,11 @@
     "es": "Cerrar opciones de estado"
   },
   {
+    "pt": "{0}px",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
     "pt": "Demonstração: nenhum dado foi alterado.",
     "tipo": "exato",
     "en": "Demo: nothing was changed.",
@@ -832,6 +977,13 @@
     "es": "No se pudo guardar el estado."
   },
   {
+    "pt": "Cartões",
+    "tipo": "exato",
+    "en": "Cards",
+    "fr": "Cartes",
+    "es": "Tarjetas"
+  },
+  {
     "pt": "CARTÃO",
     "tipo": "exato",
     "en": "CARD",
@@ -844,6 +996,13 @@
     "en": "TRANSFER",
     "fr": "VIREMENT",
     "es": "TRANSFERENCIA"
+  },
+  {
+    "pt": "Editar {0}",
+    "tipo": "padrao",
+    "en": "Edit {0}",
+    "fr": "Modifier {0}",
+    "es": "Editar {0}"
   },
   {
     "pt": "Situação de {0}: {1}. Escolher situação",
@@ -951,6 +1110,34 @@
     "es": "Reabrir factura"
   },
   {
+    "pt": "Encerrar fatura",
+    "tipo": "exato",
+    "en": "Close bill",
+    "fr": "Clôturer le relevé",
+    "es": "Cerrar factura"
+  },
+  {
+    "pt": "Desfazer pagamentos",
+    "tipo": "exato",
+    "en": "Undo payments",
+    "fr": "Annuler les paiements",
+    "es": "Deshacer pagos"
+  },
+  {
+    "pt": "Pagar fatura",
+    "tipo": "exato",
+    "en": "Pay bill",
+    "fr": "Payer le relevé",
+    "es": "Pagar factura"
+  },
+  {
+    "pt": "Fatura anterior",
+    "tipo": "exato",
+    "en": "Previous bill",
+    "fr": "Relevé précédent",
+    "es": "Factura anterior"
+  },
+  {
     "pt": "&lsaquo; anterior",
     "tipo": "exato",
     "en": "&lsaquo; previous",
@@ -963,6 +1150,13 @@
     "en": "{0} · closes {1} · due {2}",
     "fr": "{0} · clôture {1} · échéance {2}",
     "es": "{0} · cierra {1} · vence {2}"
+  },
+  {
+    "pt": "Próxima fatura",
+    "tipo": "exato",
+    "en": "Next bill",
+    "fr": "Relevé suivant",
+    "es": "Próxima factura"
   },
   {
     "pt": "próxima &rsaquo;",
@@ -1035,6 +1229,13 @@
     "es": "Aportado: {0}"
   },
   {
+    "pt": "Editar",
+    "tipo": "exato",
+    "en": "Edit",
+    "fr": "Modifier",
+    "es": "Editar"
+  },
+  {
     "pt": "Evolução dos investimentos: o que foi aportado e quanto vale hoje",
     "tipo": "exato",
     "en": "Investment growth: what was contributed and what it’s worth today",
@@ -1098,6 +1299,20 @@
     "es": "Tasa anual"
   },
   {
+    "pt": "Prazo",
+    "tipo": "exato",
+    "en": "Deadline",
+    "fr": "Échéance",
+    "es": "Plazo"
+  },
+  {
+    "pt": "{0} meses",
+    "tipo": "padrao",
+    "en": "{0} months",
+    "fr": "{0} mois",
+    "es": "{0} meses"
+  },
+  {
     "pt": "PATRIMÔNIO INVESTIDO",
     "tipo": "exato",
     "en": "INVESTED ASSETS",
@@ -1117,6 +1332,13 @@
     "en": "your contributions",
     "fr": "vos apports",
     "es": "tus aportaciones"
+  },
+  {
+    "pt": "Novo aporte",
+    "tipo": "exato",
+    "en": "New contribution",
+    "fr": "Nouveau versement",
+    "es": "Nuevo aporte"
   },
   {
     "pt": "distribuição por tipo",
@@ -1280,6 +1502,13 @@
     "es": "Sin plazo definido: el ritmo depende de ti."
   },
   {
+    "pt": "sem prazo",
+    "tipo": "exato",
+    "en": "no deadline",
+    "fr": "sans échéance",
+    "es": "sin plazo"
+  },
+  {
     "pt": "● &nbsp; Faltam {0}.",
     "tipo": "padrao",
     "en": "● &nbsp; {0} to go.",
@@ -1322,6 +1551,13 @@
     "es": "Ningún presupuesto definido por categoría."
   },
   {
+    "pt": "Nova meta",
+    "tipo": "exato",
+    "en": "New goal",
+    "fr": "Nouvel objectif",
+    "es": "Nueva meta"
+  },
+  {
     "pt": "oaze-v3-notificacoes:{0}:{1}",
     "tipo": "padrao",
     "ignorar": true
@@ -1355,11 +1591,46 @@
     "es": "Abrir agenda"
   },
   {
+    "pt": "Notificações",
+    "tipo": "exato",
+    "en": "Notifications",
+    "fr": "Notifications",
+    "es": "Notificaciones"
+  },
+  {
+    "pt": "Ano",
+    "tipo": "exato",
+    "en": "Year",
+    "fr": "Année",
+    "es": "Año"
+  },
+  {
+    "pt": "Mês",
+    "tipo": "exato",
+    "en": "Month",
+    "fr": "Mois",
+    "es": "Mes"
+  },
+  {
+    "pt": "Semana",
+    "tipo": "exato",
+    "en": "Week",
+    "fr": "Semaine",
+    "es": "Semana"
+  },
+  {
     "pt": "Alcance do calendário",
     "tipo": "exato",
     "en": "Calendar range",
     "fr": "Portée du calendrier",
     "es": "Alcance del calendario"
+  },
+  {
+    "pt": "Vencimento",
+    "tipo": "exato",
+    "en": "Due date",
+    "fr": "Échéance",
+    "es": "Vencimiento"
   },
   {
     "pt": "Lançamento",
@@ -1418,11 +1689,39 @@
     "es": "+ registrar"
   },
   {
+    "pt": "Semana de {0}",
+    "tipo": "padrao",
+    "en": "Week of {0}",
+    "fr": "Semaine du {0}",
+    "es": "Semana del {0}"
+  },
+  {
+    "pt": "Semana anterior",
+    "tipo": "exato",
+    "en": "Previous week",
+    "fr": "Semaine précédente",
+    "es": "Semana anterior"
+  },
+  {
     "pt": "Hoje",
     "tipo": "exato",
     "en": "Today",
     "fr": "Aujourd’hui",
     "es": "Hoy"
+  },
+  {
+    "pt": "Próxima semana",
+    "tipo": "exato",
+    "en": "Next week",
+    "fr": "Semaine suivante",
+    "es": "Próxima semana"
+  },
+  {
+    "pt": "Recebido",
+    "tipo": "exato",
+    "en": "Received",
+    "fr": "Reçu",
+    "es": "Recibido"
   },
   {
     "pt": "{0} de {1}, {2} evento(s)",
@@ -1530,6 +1829,13 @@
     "es": "Próximo año"
   },
   {
+    "pt": "lançamento",
+    "tipo": "exato",
+    "en": "entry",
+    "fr": "écriture",
+    "es": "movimiento"
+  },
+  {
     "pt": "Pendente",
     "tipo": "exato",
     "en": "Pending",
@@ -1570,6 +1876,13 @@
     "en": "Pause",
     "fr": "Mettre en pause",
     "es": "Pausar"
+  },
+  {
+    "pt": "Encerrar",
+    "tipo": "exato",
+    "en": "End",
+    "fr": "Arrêter",
+    "es": "Terminar"
   },
   {
     "pt": "Todo dia {0}{1}",
@@ -1899,11 +2212,68 @@
     "es": "Valor de la cartera de inversiones el 31 de diciembre de {0}."
   },
   {
+    "pt": "A exportação em CSV",
+    "tipo": "exato",
+    "en": "CSV export",
+    "fr": "L'export en CSV",
+    "es": "La exportación en CSV"
+  },
+  {
     "pt": "Não há dados para exportar neste ano.",
     "tipo": "exato",
     "en": "There’s no data to export for this year.",
     "fr": "Aucune donnée à exporter pour cette année.",
     "es": "No hay datos para exportar en este año."
+  },
+  {
+    "pt": "Mes",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Saldo",
+    "tipo": "exato",
+    "en": "Balance",
+    "fr": "Solde",
+    "es": "Saldo"
+  },
+  {
+    "pt": "Acumulado",
+    "tipo": "exato",
+    "en": "Running total",
+    "fr": "Cumulé",
+    "es": "Acumulado"
+  },
+  {
+    "pt": "oaze-consolidado-{0}.csv",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
+    "pt": "text/csv",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "CSV exportado.",
+    "tipo": "exato",
+    "en": "CSV exported.",
+    "fr": "CSV exporté.",
+    "es": "CSV exportado."
+  },
+  {
+    "pt": "A exportação em PDF",
+    "tipo": "exato",
+    "en": "PDF export",
+    "fr": "L'export en PDF",
+    "es": "La exportación en PDF"
+  },
+  {
+    "pt": "Este navegador não abriu a janela de impressão.",
+    "tipo": "exato",
+    "en": "This browser didn't open the print window.",
+    "fr": "Ce navigateur n'a pas ouvert la fenêtre d'impression.",
+    "es": "Este navegador no abrió la ventana de impresión."
   },
   {
     "pt": "V3/recorrências:",
@@ -2065,6 +2435,27 @@
     "es": "Espacios"
   },
   {
+    "pt": "Orçamentos",
+    "tipo": "exato",
+    "en": "Budgets",
+    "fr": "Budgets",
+    "es": "Presupuestos"
+  },
+  {
+    "pt": "Metas",
+    "tipo": "exato",
+    "en": "Goals",
+    "fr": "Objectifs",
+    "es": "Metas"
+  },
+  {
+    "pt": "sem limite",
+    "tipo": "exato",
+    "en": "no limit",
+    "fr": "sans limite",
+    "es": "sin límite"
+  },
+  {
     "pt": "Seus dados",
     "tipo": "exato",
     "en": "Your details",
@@ -2103,6 +2494,13 @@
     "ignorar": true
   },
   {
+    "pt": "Sair",
+    "tipo": "exato",
+    "en": "Sign out",
+    "fr": "Se déconnecter",
+    "es": "Salir"
+  },
+  {
     "pt": "Encerrar a sessão neste aparelho",
     "tipo": "exato",
     "en": "Sign out on this device",
@@ -2113,6 +2511,13 @@
     "pt": "data-action=\"sign-out\"",
     "tipo": "exato",
     "ignorar": true
+  },
+  {
+    "pt": "Excluir conta",
+    "tipo": "exato",
+    "en": "Delete account",
+    "fr": "Supprimer le compte",
+    "es": "Eliminar cuenta"
   },
   {
     "pt": "Exclusão definitiva após confirmação por e-mail",
@@ -2165,6 +2570,13 @@
     "en": "Coco this month: {0} / {1}",
     "fr": "Coco ce mois-ci : {0} / {1}",
     "es": "Coco este mes: {0} / {1}"
+  },
+  {
+    "pt": "Acompanhar recursos utilizados",
+    "tipo": "exato",
+    "en": "Track resources used",
+    "fr": "Suivre les ressources utilisées",
+    "es": "Seguir los recursos usados"
   },
   {
     "pt": "Consentimento da Coco",
@@ -2257,20 +2669,6 @@
     "ignorar": true
   },
   {
-    "pt": "Ferramentas anteriores",
-    "tipo": "exato",
-    "en": "Previous tools",
-    "fr": "Anciens outils",
-    "es": "Herramientas anteriores"
-  },
-  {
-    "pt": "Fallback até a migração ser validada",
-    "tipo": "exato",
-    "en": "Fallback until the migration is validated",
-    "fr": "Solution de repli jusqu'à la validation de la migration",
-    "es": "Alternativa hasta que la migración sea validada"
-  },
-  {
     "pt": "SEGURANÇA",
     "tipo": "exato",
     "en": "SECURITY",
@@ -2304,6 +2702,13 @@
     "en": "PLAN AND HELP",
     "fr": "FORFAIT ET AIDE",
     "es": "PLAN Y AYUDA"
+  },
+  {
+    "pt": "Ajuda e suporte",
+    "tipo": "exato",
+    "en": "Help and support",
+    "fr": "Aide et assistance",
+    "es": "Ayuda y soporte"
   },
   {
     "pt": "Central de ajuda e contato",
@@ -2452,6 +2857,13 @@
     "es": "Eliminar mi cuenta definitivamente"
   },
   {
+    "pt": "O e-mail não confere.",
+    "tipo": "exato",
+    "en": "The email doesn't match.",
+    "fr": "L'e-mail ne correspond pas.",
+    "es": "El correo no coincide."
+  },
+  {
     "pt": "Última confirmação: excluir sua conta e todos os dados financeiros?",
     "tipo": "exato",
     "en": "Final confirmation: delete your account and all financial data?",
@@ -2464,6 +2876,13 @@
     "en": "We could not confirm the deletion. Check your account before trying again.",
     "fr": "Impossible de confirmer la suppression. Vérifiez votre compte avant de réessayer.",
     "es": "No fue posible confirmar la eliminación. Compruebe su cuenta antes de intentarlo de nuevo."
+  },
+  {
+    "pt": "mês",
+    "tipo": "exato",
+    "en": "month",
+    "fr": "mois",
+    "es": "mes"
   },
   {
     "pt": "Prévia: nenhuma assinatura é criada aqui.",
@@ -2513,6 +2932,13 @@
     "en": "Your current plan is Semente.",
     "fr": "Votre forfait actuel est Semente.",
     "es": "Tu plan actual es Semente."
+  },
+  {
+    "pt": "Plano atual",
+    "tipo": "exato",
+    "en": "Current plan",
+    "fr": "Formule actuelle",
+    "es": "Plan actual"
   },
   {
     "pt": "Plano inicial",
@@ -2627,6 +3053,20 @@
     "es": "La tarjeta se introduce en la página segura de Stripe. Tu plan solo cambia tras confirmarse el pago."
   },
   {
+    "pt": "Ciclo de cobrança",
+    "tipo": "exato",
+    "en": "Billing cycle",
+    "fr": "Cycle de facturation",
+    "es": "Ciclo de cobro"
+  },
+  {
+    "pt": "Mensal",
+    "tipo": "exato",
+    "en": "Monthly",
+    "fr": "Mensuel",
+    "es": "Mensual"
+  },
+  {
     "pt": "Anual",
     "tipo": "exato",
     "en": "Yearly",
@@ -2695,25 +3135,18 @@
     "ignorar": true
   },
   {
-    "pt": "Precisa editar algo que ainda não está nesta tela?",
-    "tipo": "exato",
-    "en": "Need to edit something that isn’t on this screen yet?",
-    "fr": "Besoin de modifier quelque chose qui n’est pas encore ici ?",
-    "es": "¿Necesitas editar algo que aún no está en esta pantalla?"
-  },
-  {
-    "pt": "Abrir ferramentas completas",
-    "tipo": "exato",
-    "en": "Open the full tools",
-    "fr": "Ouvrir les outils complets",
-    "es": "Abrir las herramientas completas"
-  },
-  {
     "pt": "Painel",
     "tipo": "exato",
     "en": "Panel",
     "fr": "Panneau",
     "es": "Panel"
+  },
+  {
+    "pt": "Fechar",
+    "tipo": "exato",
+    "en": "Close",
+    "fr": "Fermer",
+    "es": "Cerrar"
   },
   {
     "pt": "{0}: receitas confirmadas {1}, despesas confirmadas {2}, diferença {3}.",
@@ -2999,6 +3432,20 @@
     "es": "Cargando consentimiento y memoria…"
   },
   {
+    "pt": "Tentar novamente",
+    "tipo": "exato",
+    "en": "Try again",
+    "fr": "Réessayer",
+    "es": "Intentar de nuevo"
+  },
+  {
+    "pt": "Coco",
+    "tipo": "exato",
+    "en": "Coco",
+    "fr": "Coco",
+    "es": "Coco"
+  },
+  {
     "pt": "seus dados, suas regras",
     "tipo": "exato",
     "en": "your data, your rules",
@@ -3095,6 +3542,20 @@
     "en": "I saw 3 similar gym charges around the 5th. Want to turn that into a recurrence?",
     "fr": "J’ai vu 3 prélèvements similaires de la salle de sport vers le 5. Voulez-vous en faire une récurrence ?",
     "es": "Vi 3 cobros parecidos del gimnasio cerca del día 5. ¿Quieres convertirlo en recurrencia?"
+  },
+  {
+    "pt": "Criar recorrência",
+    "tipo": "exato",
+    "en": "Create recurrence",
+    "fr": "Créer la récurrence",
+    "es": "Crear recurrencia"
+  },
+  {
+    "pt": "Agora não",
+    "tipo": "exato",
+    "en": "Not now",
+    "fr": "Pas maintenant",
+    "es": "Ahora no"
   },
   {
     "pt": "PREVISÃO",
@@ -3195,11 +3656,25 @@
     "es": "de tu atención"
   },
   {
+    "pt": "Conversa",
+    "tipo": "exato",
+    "en": "Conversation",
+    "fr": "Conversation",
+    "es": "Conversación"
+  },
+  {
     "pt": "LANÇAMENTO PARA REVISAR",
     "tipo": "exato",
     "en": "ENTRY TO REVIEW",
     "fr": "ÉCRITURE À VÉRIFIER",
     "es": "MOVIMIENTO POR REVISAR"
+  },
+  {
+    "pt": "Revisar no formulário",
+    "tipo": "exato",
+    "en": "Review in the form",
+    "fr": "Vérifier dans le formulaire",
+    "es": "Revisar en el formulario"
   },
   {
     "pt": "Nada será salvo sem sua confirmação.",
@@ -3419,6 +3894,16 @@
     "es": "Movimiento no encontrado. Actualiza la página."
   },
   {
+    "pt": "card:{0}",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
+    "pt": "account:{0}",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
     "pt": "editar lançamento",
     "tipo": "exato",
     "en": "edit entry",
@@ -3552,6 +4037,13 @@
     "es": "Guardar movimiento"
   },
   {
+    "pt": "Excluir lançamento",
+    "tipo": "exato",
+    "en": "Delete entry",
+    "fr": "Supprimer l'écriture",
+    "es": "Eliminar movimiento"
+  },
+  {
     "pt": "VALOR (R$)",
     "tipo": "exato",
     "en": "AMOUNT (R$)",
@@ -3571,6 +4063,20 @@
     "en": "E.g.: groceries",
     "fr": "Ex. : courses",
     "es": "Ej.: supermercado"
+  },
+  {
+    "pt": "Não informado",
+    "tipo": "exato",
+    "en": "Not specified",
+    "fr": "Non précisé",
+    "es": "Sin especificar"
+  },
+  {
+    "pt": "Como o dinheiro entrou ou saiu dessa conta.",
+    "tipo": "exato",
+    "en": "How the money came into or left this account.",
+    "fr": "Comment l’argent est entré ou sorti de ce compte.",
+    "es": "Cómo entró o salió el dinero de esta cuenta."
   },
   {
     "pt": "A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.",
@@ -3615,11 +4121,25 @@
     "es": "Opcional"
   },
   {
+    "pt": "Editar lançamento",
+    "tipo": "exato",
+    "en": "Edit entry",
+    "fr": "Modifier l'écriture",
+    "es": "Editar movimiento"
+  },
+  {
     "pt": "Usar {0}",
     "tipo": "padrao",
     "en": "Use {0}",
     "fr": "Utiliser {0}",
     "es": "Usar {0}"
+  },
+  {
+    "pt": "fatura de {0}",
+    "tipo": "padrao",
+    "en": "{0} bill",
+    "fr": "relevé de {0}",
+    "es": "factura de {0}"
   },
   {
     "pt": "VALOR ({0})",
@@ -3699,6 +4219,13 @@
     "es": "Añadir a la cartera"
   },
   {
+    "pt": "Excluir {0}",
+    "tipo": "padrao",
+    "en": "Delete {0}",
+    "fr": "Supprimer {0}",
+    "es": "Eliminar {0}"
+  },
+  {
     "pt": "NOME DA CONTA OU CARTÃO",
     "tipo": "exato",
     "en": "ACCOUNT OR CARD NAME",
@@ -3755,6 +4282,13 @@
     "es": "LO QUE OFRECE LA CUENTA"
   },
   {
+    "pt": "Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.",
+    "tipo": "exato",
+    "en": "Only what is ticked here shows up as a payment method on this account’s entries.",
+    "fr": "Seul ce qui est coché ici apparaît comme moyen de paiement dans les écritures de ce compte.",
+    "es": "Solo lo marcado aquí aparece como forma de pago en los movimientos de esta cuenta."
+  },
+  {
     "pt": "DIA DE FECHAMENTO",
     "tipo": "exato",
     "en": "CLOSING DAY",
@@ -3774,6 +4308,13 @@
     "en": "ACCOUNT TO PAY THE STATEMENT",
     "fr": "COMPTE POUR PAYER LE RELEVÉ",
     "es": "CUENTA PARA PAGAR LA FACTURA"
+  },
+  {
+    "pt": "Nenhuma",
+    "tipo": "exato",
+    "en": "None",
+    "fr": "Aucun",
+    "es": "Ninguna"
   },
   {
     "pt": "Considerar nos totais",
@@ -3802,6 +4343,13 @@
     "en": "pay statement",
     "fr": "payer le relevé",
     "es": "pagar factura"
+  },
+  {
+    "pt": "Registrar pagamento",
+    "tipo": "exato",
+    "en": "Record payment",
+    "fr": "Enregistrer le paiement",
+    "es": "Registrar pago"
   },
   {
     "pt": "Fatura:",
@@ -3923,6 +4471,13 @@
     "es": "Adelantar quita esta compra de la factura, no del mes en que se hizo: el gasto sigue en la fecha de compra."
   },
   {
+    "pt": "Registrar adiantamento",
+    "tipo": "exato",
+    "en": "Record early payment",
+    "fr": "Enregistrer l'anticipation",
+    "es": "Registrar adelanto"
+  },
+  {
     "pt": "Adiantar compra",
     "tipo": "exato",
     "en": "Pay purchase ahead",
@@ -3991,6 +4546,13 @@
     "en": "This statement changed. Refresh the page.",
     "fr": "Ce relevé a changé. Actualisez la page.",
     "es": "Esta factura cambió. Actualiza la página."
+  },
+  {
+    "pt": "Pagamentos desfeitos.",
+    "tipo": "exato",
+    "en": "Payments undone.",
+    "fr": "Paiements annulés.",
+    "es": "Pagos deshechos."
   },
   {
     "pt": "Confira o valor, a data e a conta.",
@@ -4098,6 +4660,13 @@
     "es": "DEBITAR DE UNA CUENTA"
   },
   {
+    "pt": "Não debitar",
+    "tipo": "exato",
+    "en": "Don't take from an account",
+    "fr": "Ne pas débiter",
+    "es": "No debitar"
+  },
+  {
     "pt": "Se escolher uma conta, o aporte será descontado do saldo dela. O valor atual informado substitui a estimativa de rentabilidade.",
     "tipo": "exato",
     "en": "If you choose an account, the contribution is deducted from its balance. The current value you enter replaces the return estimate.",
@@ -4131,6 +4700,13 @@
     "en": "Save goal",
     "fr": "Enregistrer l’objectif",
     "es": "Guardar meta"
+  },
+  {
+    "pt": "Excluir meta",
+    "tipo": "exato",
+    "en": "Delete goal",
+    "fr": "Supprimer l'objectif",
+    "es": "Eliminar meta"
   },
   {
     "pt": "NOME DA META",
@@ -4238,6 +4814,13 @@
     "es": "Hogar"
   },
   {
+    "pt": "Assinatura",
+    "tipo": "exato",
+    "en": "Subscription",
+    "fr": "Abonnement",
+    "es": "Suscripción"
+  },
+  {
     "pt": "Trabalho",
     "tipo": "exato",
     "en": "Work",
@@ -4264,6 +4847,13 @@
     "en": "Save category",
     "fr": "Enregistrer la catégorie",
     "es": "Guardar categoría"
+  },
+  {
+    "pt": "Excluir categoria",
+    "tipo": "exato",
+    "en": "Delete category",
+    "fr": "Supprimer la catégorie",
+    "es": "Eliminar categoría"
   },
   {
     "pt": "editar orçamento",
@@ -4455,6 +5045,13 @@
     "es": "Una de las cuotas supera el límite mensual de tu plan."
   },
   {
+    "pt": "Cadastre a cotação de {0} antes de lançar em {1}.",
+    "tipo": "padrao",
+    "en": "Add the exchange rate for {0} before recording in {1}.",
+    "fr": "Ajoutez le taux de change de {0} avant de saisir en {1}.",
+    "es": "Agrega la cotización de {0} antes de registrar en {1}."
+  },
+  {
     "pt": "Escolha uma categoria válida.",
     "tipo": "exato",
     "en": "Choose a valid category.",
@@ -4467,6 +5064,13 @@
     "en": "Each instalment needs at least one cent.",
     "fr": "Chaque échéance doit faire au moins un centime.",
     "es": "Cada cuota necesita al menos un céntimo."
+  },
+  {
+    "pt": "Lançamento atualizado.",
+    "tipo": "exato",
+    "en": "Entry updated.",
+    "fr": "Écriture mise à jour.",
+    "es": "Movimiento actualizado."
   },
   {
     "pt": "{0} parcelas salvas na sua conta.",
@@ -4547,6 +5151,13 @@
     "en": "Check name, icon and colour.",
     "fr": "Vérifiez le nom, l’icône et la couleur.",
     "es": "Revisa nombre, icono y color."
+  },
+  {
+    "pt": "Já existe uma categoria com esse nome.",
+    "tipo": "exato",
+    "en": "A category with that name already exists.",
+    "fr": "Une catégorie porte déjà ce nom.",
+    "es": "Ya existe una categoría con ese nombre."
   },
   {
     "pt": "Esta categoria ultrapassa o limite do seu plano.",
@@ -5214,6 +5825,13 @@
     "es": "¿Eliminar {0}? Esta acción no se puede deshacer."
   },
   {
+    "pt": "Excluir",
+    "tipo": "exato",
+    "en": "Delete",
+    "fr": "Supprimer",
+    "es": "Eliminar"
+  },
+  {
     "pt": "Confirmar exclusão",
     "tipo": "exato",
     "en": "Confirm deletion",
@@ -5226,6 +5844,13 @@
     "en": "The category changed or is in use. Refresh the page.",
     "fr": "La catégorie a changé ou est utilisée. Actualisez la page.",
     "es": "La categoría cambió o está en uso. Actualiza la página."
+  },
+  {
+    "pt": "Categoria excluída.",
+    "tipo": "exato",
+    "en": "Category deleted.",
+    "fr": "Catégorie supprimée.",
+    "es": "Categoría eliminada."
   },
   {
     "pt": "Não foi possível excluir.",
@@ -5270,6 +5895,20 @@
     "es": "Este movimiento ya no existe."
   },
   {
+    "pt": "Todas as parcelas do grupo serão removidas.",
+    "tipo": "exato",
+    "en": "Every installment in the group will be removed.",
+    "fr": "Toutes les échéances du groupe seront supprimées.",
+    "es": "Se eliminarán todas las cuotas del grupo."
+  },
+  {
+    "pt": "Todas as ocorrências mensais serão removidas.",
+    "tipo": "exato",
+    "en": "Every monthly occurrence will be removed.",
+    "fr": "Toutes les occurrences mensuelles seront supprimées.",
+    "es": "Se eliminarán todas las ocurrencias mensuales."
+  },
+  {
     "pt": "excluir lançamento",
     "tipo": "exato",
     "en": "delete entry",
@@ -5282,6 +5921,13 @@
     "en": "Delete {0}? {1}",
     "fr": "Supprimer {0} ? {1}",
     "es": "¿Eliminar {0}? {1}"
+  },
+  {
+    "pt": "Lançamento excluído.",
+    "tipo": "exato",
+    "en": "Entry deleted.",
+    "fr": "Écriture supprimée.",
+    "es": "Movimiento eliminado."
   },
   {
     "pt": "excluir meta",
@@ -5319,6 +5965,13 @@
     "es": "Ese elemento ya no existe."
   },
   {
+    "pt": "Meta excluída.",
+    "tipo": "exato",
+    "en": "Goal deleted.",
+    "fr": "Objectif supprimé.",
+    "es": "Meta eliminada."
+  },
+  {
     "pt": "Orçamento excluído.",
     "tipo": "exato",
     "en": "Budget deleted.",
@@ -5345,6 +5998,13 @@
     "en": "You keep the plan until the end of the period already paid. After that, your account returns to Semente.",
     "fr": "Vous gardez le forfait jusqu’à la fin de la période déjà payée. Ensuite, votre compte revient à Semente.",
     "es": "Mantienes el plan hasta el fin del periodo ya pagado. Después, tu cuenta vuelve a Semente."
+  },
+  {
+    "pt": "Manter assinatura",
+    "tipo": "exato",
+    "en": "Keep subscription",
+    "fr": "Garder l'abonnement",
+    "es": "Mantener suscripción"
   },
   {
     "pt": "Cancelar renovação",
@@ -5422,11 +6082,18 @@
     "es": "No se pudo cargar tu cuenta. Tus datos no se modificaron."
   },
   {
-    "pt": "ou abra as ferramentas anteriores em",
+    "pt": "limite do seu plano",
     "tipo": "exato",
-    "en": "or open the previous tools at",
-    "fr": "ou ouvrez les anciens outils sur",
-    "es": "o abre las herramientas anteriores en"
+    "en": "your plan's limit",
+    "fr": "la limite de votre forfait",
+    "es": "el límite de su plan"
+  },
+  {
+    "pt": "Ver planos",
+    "tipo": "exato",
+    "en": "See plans",
+    "fr": "Voir les formules",
+    "es": "Ver planes"
   },
   {
     "pt": "V3/limites:",
@@ -5435,6 +6102,11 @@
   },
   {
     "pt": "V3/Coco configuração:",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Escape",
     "tipo": "exato",
     "ignorar": true
   },
@@ -5470,5 +6142,10 @@
     "en": "Payment cancelled. Nothing was charged.",
     "fr": "Paiement annulé. Rien n’a été débité.",
     "es": "Pago cancelado. No se cobró nada."
+  },
+  {
+    "pt": "DOMContentLoaded",
+    "tipo": "exato",
+    "ignorar": true
   }
 ]

@@ -28,6 +28,13 @@
   "es": "Apertura"
  },
  {
+  "pt": "Transferência",
+  "tipo": "exato",
+  "en": "Transfer",
+  "fr": "Virement",
+  "es": "Transferencia"
+ },
+ {
   "pt": "cartão",
   "tipo": "exato",
   "en": "card",

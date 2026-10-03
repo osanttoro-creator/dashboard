@@ -1,276 +1,288 @@
 [
-  {
-    "pt": "Tempo esgotado ao conectar sua conta.",
-    "tipo": "exato",
-    "en": "Timed out connecting your account.",
-    "fr": "Délai dépassé lors de la connexion à votre compte.",
-    "es": "Tiempo agotado al conectar tu cuenta."
-  },
-  {
-    "pt": "Entre na sua conta para consultar a assinatura.",
-    "tipo": "exato",
-    "en": "Sign in to see the subscription.",
-    "fr": "Connectez-vous pour consulter l’abonnement.",
-    "es": "Inicia sesión para consultar la suscripción."
-  },
-  {
-    "pt": "Entre na sua conta para gerenciar a assinatura.",
-    "tipo": "exato",
-    "en": "Sign in to manage the subscription.",
-    "fr": "Connectez-vous pour gérer l’abonnement.",
-    "es": "Inicia sesión para gestionar la suscripción."
-  },
-  {
-    "pt": "Pagamento indisponível: conexão não configurada.",
-    "tipo": "exato",
-    "en": "Payment unavailable: connection not configured.",
-    "fr": "Paiement indisponible : connexion non configurée.",
-    "es": "Pago no disponible: conexión no configurada."
-  },
-  {
-    "pt": "Sua sessão expirou. Entre novamente.",
-    "tipo": "exato",
-    "en": "Your session expired. Sign in again.",
-    "fr": "Votre session a expiré. Reconnectez-vous.",
-    "es": "Tu sesión expiró. Entra de nuevo."
-  },
-  {
-    "pt": "Pagamento indisponível agora. Nada foi cobrado.",
-    "tipo": "exato",
-    "en": "Payment unavailable right now. Nothing was charged.",
-    "fr": "Paiement indisponible pour le moment. Rien n’a été débité.",
-    "es": "Pago no disponible ahora. No se cobró nada."
-  },
-  {
-    "pt": "Entre na sua conta para editar o perfil.",
-    "tipo": "exato",
-    "en": "Sign in to edit your profile.",
-    "fr": "Connectez-vous pour modifier votre profil.",
-    "es": "Entre en su cuenta para editar el perfil."
-  },
-  {
-    "pt": "Escreva seu nome.",
-    "tipo": "exato",
-    "en": "Write your name.",
-    "fr": "Écrivez votre nom.",
-    "es": "Escriba su nombre."
-  },
-  {
-    "pt": "Sessão indisponível.",
-    "tipo": "exato",
-    "en": "Session unavailable.",
-    "fr": "Session indisponible.",
-    "es": "Sesión no disponible."
-  },
-  {
-    "pt": "Sua sessão expirou. Nada foi apagado.",
-    "tipo": "exato",
-    "en": "Your session expired. Nothing was deleted.",
-    "fr": "Votre session a expiré. Rien n'a été supprimé.",
-    "es": "Su sesión expiró. Nada fue borrado."
-  },
-  {
-    "pt": "O servidor não confirmou a exclusão. Confira sua conta antes de tentar novamente.",
-    "tipo": "exato",
-    "en": "The server did not confirm the deletion. Check your account before trying again.",
-    "fr": "Le serveur n'a pas confirmé la suppression. Vérifiez votre compte avant de réessayer.",
-    "es": "El servidor no confirmó la eliminación. Compruebe su cuenta antes de intentarlo de nuevo."
-  },
-  {
-    "pt": "Entre na sua conta para usar a Coco.",
-    "tipo": "exato",
-    "en": "Sign in to use Coco.",
-    "fr": "Connectez-vous pour utiliser Coco.",
-    "es": "Inicia sesión para usar a Coco."
-  },
-  {
-    "pt": "Entre na sua conta para configurar a Coco.",
-    "tipo": "exato",
-    "en": "Sign in to set Coco up.",
-    "fr": "Connectez-vous pour configurer Coco.",
-    "es": "Inicia sesión para configurar a Coco."
-  },
-  {
-    "pt": "Autorize a Coco antes de configurar a memória.",
-    "tipo": "exato",
-    "en": "Authorise Coco before setting the memory up.",
-    "fr": "Autorisez Coco avant de configurer la mémoire.",
-    "es": "Autoriza a Coco antes de configurar la memoria."
-  },
-  {
-    "pt": "Entre na sua conta para consultar a memória.",
-    "tipo": "exato",
-    "en": "Sign in to see the memory.",
-    "fr": "Connectez-vous pour consulter la mémoire.",
-    "es": "Inicia sesión para consultar la memoria."
-  },
-  {
-    "pt": "Entre na sua conta para salvar a memória.",
-    "tipo": "exato",
-    "en": "Sign in to save the memory.",
-    "fr": "Connectez-vous pour enregistrer la mémoire.",
-    "es": "Inicia sesión para guardar la memoria."
-  },
-  {
-    "pt": "O aprendizado da Coco está desligado.",
-    "tipo": "exato",
-    "en": "Coco’s learning is switched off.",
-    "fr": "L’apprentissage de Coco est désactivé.",
-    "es": "El aprendizaje de Coco está desactivado."
-  },
-  {
-    "pt": "Entre na sua conta para apagar a memória.",
-    "tipo": "exato",
-    "en": "Sign in to delete the memory.",
-    "fr": "Connectez-vous pour effacer la mémoire.",
-    "es": "Inicia sesión para borrar la memoria."
-  },
-  {
-    "pt": "Entre na sua conta para consultar as análises.",
-    "tipo": "exato",
-    "en": "Sign in to see the analyses.",
-    "fr": "Connectez-vous pour consulter les analyses.",
-    "es": "Entre en su cuenta para consultar los análisis."
-  },
-  {
-    "pt": "Entre na sua conta para guardar a análise.",
-    "tipo": "exato",
-    "en": "Sign in to store the analysis.",
-    "fr": "Connectez-vous pour enregistrer l'analyse.",
-    "es": "Entre en su cuenta para guardar el análisis."
-  },
-  {
-    "pt": "A memória da Coco está desligada.",
-    "tipo": "exato",
-    "en": "Coco's memory is off.",
-    "fr": "La mémoire de Coco est désactivée.",
-    "es": "La memoria de Coco está apagada."
-  },
-  {
-    "pt": "Entre na sua conta para apagar a análise.",
-    "tipo": "exato",
-    "en": "Sign in to delete the analysis.",
-    "fr": "Connectez-vous pour supprimer l'analyse.",
-    "es": "Entre en su cuenta para borrar el análisis."
-  },
-  {
-    "pt": "Entre na sua conta para enviar mídia.",
-    "tipo": "exato",
-    "en": "Sign in to send media.",
-    "fr": "Connectez-vous pour envoyer un média.",
-    "es": "Inicia sesión para enviar archivos."
-  },
-  {
-    "pt": "Sessão ou conexão indisponível.",
-    "tipo": "exato",
-    "en": "Session or connection unavailable.",
-    "fr": "Session ou connexion indisponible.",
-    "es": "Sesión o conexión no disponible."
-  },
-  {
-    "pt": "ANTES DE ENTRAR",
-    "tipo": "exato",
-    "en": "BEFORE YOU START",
-    "fr": "AVANT DE COMMENCER",
-    "es": "ANTES DE ENTRAR"
-  },
-  {
-    "pt": "Seus dados, suas regras.",
-    "tipo": "exato",
-    "en": "Your data, your rules.",
-    "fr": "Vos données, vos règles.",
-    "es": "Tus datos, tus reglas."
-  },
-  {
-    "pt": "Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.",
-    "tipo": "exato",
-    "en": "Read the Privacy Policy and the Terms of use before continuing. Without acceptance, the app doesn’t load your financial data.",
-    "fr": "Lisez la politique de confidentialité et les conditions d’utilisation avant de continuer. Sans acceptation, l’application ne charge pas vos données financières.",
-    "es": "Lee la Política de privacidad y los Términos de uso antes de continuar. Sin la aceptación, la aplicación no carga tus datos financieros."
-  },
-  {
-    "pt": "Termos de uso",
-    "tipo": "exato",
-    "en": "Terms of use",
-    "fr": "Conditions d’utilisation",
-    "es": "Términos de uso"
-  },
-  {
-    "pt": "Li e aceito a Política de privacidade (versão 01/10/2026).",
-    "tipo": "exato",
-    "en": "I’ve read and accept the Privacy Policy (version 01/10/2026).",
-    "fr": "J’ai lu et j’accepte la politique de confidentialité (version 01/10/2026).",
-    "es": "He leído y acepto la Política de privacidad (versión 01/10/2026)."
-  },
-  {
-    "pt": "Aceitar e entrar",
-    "tipo": "exato",
-    "en": "Accept and enter",
-    "fr": "Accepter et entrer",
-    "es": "Aceptar y entrar"
-  },
-  {
-    "pt": "Não aceitar",
-    "tipo": "exato",
-    "en": "Decline",
-    "fr": "Refuser",
-    "es": "No aceptar"
-  },
-  {
-    "pt": "Não consegui registrar o aceite. Tente novamente; seus dados não foram carregados.",
-    "tipo": "exato",
-    "en": "I couldn’t record the acceptance. Try again; your data wasn’t loaded.",
-    "fr": "Je n’ai pas pu enregistrer l’acceptation. Réessayez ; vos données n’ont pas été chargées.",
-    "es": "No pude registrar la aceptación. Inténtalo de nuevo; tus datos no se cargaron."
-  },
-  {
-    "pt": "Espere a gravação anterior terminar.",
-    "tipo": "exato",
-    "en": "Wait for the previous recording to finish.",
-    "fr": "Attendez la fin de l’enregistrement précédent.",
-    "es": "Espera a que termine la grabación anterior."
-  },
-  {
-    "pt": "Entre na sua conta antes de alterar dados.",
-    "tipo": "exato",
-    "en": "Sign in before changing data.",
-    "fr": "Connectez-vous avant de modifier des données.",
-    "es": "Inicia sesión antes de cambiar datos."
-  },
-  {
-    "pt": "Este espaço mudou em outro aparelho. Atualizei a tela; confira e tente novamente.",
-    "tipo": "exato",
-    "en": "This space changed on another device. I’ve refreshed the screen; check it and try again.",
-    "fr": "Cet espace a changé sur un autre appareil. J’ai actualisé l’écran ; vérifiez et réessayez.",
-    "es": "Este espacio cambió en otro dispositivo. Actualicé la pantalla; revísalo e inténtalo de nuevo."
-  },
-  {
-    "pt": "V3/atualização remota:",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "Entre na sua conta antes de criar um espaço.",
-    "tipo": "exato",
-    "en": "Sign in before creating a space.",
-    "fr": "Connectez-vous avant de créer un espace.",
-    "es": "Inicia sesión antes de crear un espacio."
-  },
-  {
-    "pt": "A conexão com o Supabase não está configurada.",
-    "tipo": "exato",
-    "en": "The Supabase connection isn’t configured.",
-    "fr": "La connexion à Supabase n’est pas configurée.",
-    "es": "La conexión con Supabase no está configurada."
-  },
-  {
-    "pt": "V3/tempo real:",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "V3/retomada:",
-    "tipo": "exato",
-    "ignorar": true
-  }
+ {
+  "pt": "Tempo esgotado ao conectar sua conta.",
+  "tipo": "exato",
+  "en": "Timed out connecting your account.",
+  "fr": "Délai dépassé lors de la connexion à votre compte.",
+  "es": "Tiempo agotado al conectar tu cuenta."
+ },
+ {
+  "pt": "Entre na sua conta para consultar a assinatura.",
+  "tipo": "exato",
+  "en": "Sign in to see the subscription.",
+  "fr": "Connectez-vous pour consulter l’abonnement.",
+  "es": "Inicia sesión para consultar la suscripción."
+ },
+ {
+  "pt": "Entre na sua conta para gerenciar a assinatura.",
+  "tipo": "exato",
+  "en": "Sign in to manage the subscription.",
+  "fr": "Connectez-vous pour gérer l’abonnement.",
+  "es": "Inicia sesión para gestionar la suscripción."
+ },
+ {
+  "pt": "Pagamento indisponível: conexão não configurada.",
+  "tipo": "exato",
+  "en": "Payment unavailable: connection not configured.",
+  "fr": "Paiement indisponible : connexion non configurée.",
+  "es": "Pago no disponible: conexión no configurada."
+ },
+ {
+  "pt": "Sua sessão expirou. Entre novamente.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again.",
+  "fr": "Votre session a expiré. Reconnectez-vous.",
+  "es": "Tu sesión expiró. Entra de nuevo."
+ },
+ {
+  "pt": "Pagamento indisponível agora. Nada foi cobrado.",
+  "tipo": "exato",
+  "en": "Payment unavailable right now. Nothing was charged.",
+  "fr": "Paiement indisponible pour le moment. Rien n’a été débité.",
+  "es": "Pago no disponible ahora. No se cobró nada."
+ },
+ {
+  "pt": "Entre na sua conta para editar o perfil.",
+  "tipo": "exato",
+  "en": "Sign in to edit your profile.",
+  "fr": "Connectez-vous pour modifier votre profil.",
+  "es": "Entre en su cuenta para editar el perfil."
+ },
+ {
+  "pt": "Escreva seu nome.",
+  "tipo": "exato",
+  "en": "Write your name.",
+  "fr": "Écrivez votre nom.",
+  "es": "Escriba su nombre."
+ },
+ {
+  "pt": "Sessão indisponível.",
+  "tipo": "exato",
+  "en": "Session unavailable.",
+  "fr": "Session indisponible.",
+  "es": "Sesión no disponible."
+ },
+ {
+  "pt": "Sua sessão expirou. Nada foi apagado.",
+  "tipo": "exato",
+  "en": "Your session expired. Nothing was deleted.",
+  "fr": "Votre session a expiré. Rien n'a été supprimé.",
+  "es": "Su sesión expiró. Nada fue borrado."
+ },
+ {
+  "pt": "O servidor não confirmou a exclusão. Confira sua conta antes de tentar novamente.",
+  "tipo": "exato",
+  "en": "The server did not confirm the deletion. Check your account before trying again.",
+  "fr": "Le serveur n'a pas confirmé la suppression. Vérifiez votre compte avant de réessayer.",
+  "es": "El servidor no confirmó la eliminación. Compruebe su cuenta antes de intentarlo de nuevo."
+ },
+ {
+  "pt": "Entre na sua conta para usar a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to use Coco.",
+  "fr": "Connectez-vous pour utiliser Coco.",
+  "es": "Inicia sesión para usar a Coco."
+ },
+ {
+  "pt": "Entre na sua conta para configurar a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to set Coco up.",
+  "fr": "Connectez-vous pour configurer Coco.",
+  "es": "Inicia sesión para configurar a Coco."
+ },
+ {
+  "pt": "Autorize a Coco antes de configurar a memória.",
+  "tipo": "exato",
+  "en": "Authorise Coco before setting the memory up.",
+  "fr": "Autorisez Coco avant de configurer la mémoire.",
+  "es": "Autoriza a Coco antes de configurar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para consultar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to see the memory.",
+  "fr": "Connectez-vous pour consulter la mémoire.",
+  "es": "Inicia sesión para consultar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para salvar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to save the memory.",
+  "fr": "Connectez-vous pour enregistrer la mémoire.",
+  "es": "Inicia sesión para guardar la memoria."
+ },
+ {
+  "pt": "O aprendizado da Coco está desligado.",
+  "tipo": "exato",
+  "en": "Coco’s learning is switched off.",
+  "fr": "L’apprentissage de Coco est désactivé.",
+  "es": "El aprendizaje de Coco está desactivado."
+ },
+ {
+  "pt": "Entre na sua conta para apagar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to delete the memory.",
+  "fr": "Connectez-vous pour effacer la mémoire.",
+  "es": "Inicia sesión para borrar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para consultar as análises.",
+  "tipo": "exato",
+  "en": "Sign in to see the analyses.",
+  "fr": "Connectez-vous pour consulter les analyses.",
+  "es": "Entre en su cuenta para consultar los análisis."
+ },
+ {
+  "pt": "Entre na sua conta para guardar a análise.",
+  "tipo": "exato",
+  "en": "Sign in to store the analysis.",
+  "fr": "Connectez-vous pour enregistrer l'analyse.",
+  "es": "Entre en su cuenta para guardar el análisis."
+ },
+ {
+  "pt": "A memória da Coco está desligada.",
+  "tipo": "exato",
+  "en": "Coco's memory is off.",
+  "fr": "La mémoire de Coco est désactivée.",
+  "es": "La memoria de Coco está apagada."
+ },
+ {
+  "pt": "Entre na sua conta para apagar a análise.",
+  "tipo": "exato",
+  "en": "Sign in to delete the analysis.",
+  "fr": "Connectez-vous pour supprimer l'analyse.",
+  "es": "Entre en su cuenta para borrar el análisis."
+ },
+ {
+  "pt": "Entre na sua conta para enviar mídia.",
+  "tipo": "exato",
+  "en": "Sign in to send media.",
+  "fr": "Connectez-vous pour envoyer un média.",
+  "es": "Inicia sesión para enviar archivos."
+ },
+ {
+  "pt": "Sessão ou conexão indisponível.",
+  "tipo": "exato",
+  "en": "Session or connection unavailable.",
+  "fr": "Session ou connexion indisponible.",
+  "es": "Sesión o conexión no disponible."
+ },
+ {
+  "pt": "ANTES DE ENTRAR",
+  "tipo": "exato",
+  "en": "BEFORE YOU START",
+  "fr": "AVANT DE COMMENCER",
+  "es": "ANTES DE ENTRAR"
+ },
+ {
+  "pt": "Seus dados, suas regras.",
+  "tipo": "exato",
+  "en": "Your data, your rules.",
+  "fr": "Vos données, vos règles.",
+  "es": "Tus datos, tus reglas."
+ },
+ {
+  "pt": "Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.",
+  "tipo": "exato",
+  "en": "Read the Privacy Policy and the Terms of use before continuing. Without acceptance, the app doesn’t load your financial data.",
+  "fr": "Lisez la politique de confidentialité et les conditions d’utilisation avant de continuer. Sans acceptation, l’application ne charge pas vos données financières.",
+  "es": "Lee la Política de privacidad y los Términos de uso antes de continuar. Sin la aceptación, la aplicación no carga tus datos financieros."
+ },
+ {
+  "pt": "Política de privacidade",
+  "tipo": "exato",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "Termos de uso",
+  "tipo": "exato",
+  "en": "Terms of use",
+  "fr": "Conditions d’utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Li e aceito a Política de privacidade (versão 01/10/2026).",
+  "tipo": "exato",
+  "en": "I’ve read and accept the Privacy Policy (version 01/10/2026).",
+  "fr": "J’ai lu et j’accepte la politique de confidentialité (version 01/10/2026).",
+  "es": "He leído y acepto la Política de privacidad (versión 01/10/2026)."
+ },
+ {
+  "pt": "Aceitar e entrar",
+  "tipo": "exato",
+  "en": "Accept and enter",
+  "fr": "Accepter et entrer",
+  "es": "Aceptar y entrar"
+ },
+ {
+  "pt": "Não aceitar",
+  "tipo": "exato",
+  "en": "Decline",
+  "fr": "Refuser",
+  "es": "No aceptar"
+ },
+ {
+  "pt": "Não consegui registrar o aceite. Tente novamente; seus dados não foram carregados.",
+  "tipo": "exato",
+  "en": "I couldn’t record the acceptance. Try again; your data wasn’t loaded.",
+  "fr": "Je n’ai pas pu enregistrer l’acceptation. Réessayez ; vos données n’ont pas été chargées.",
+  "es": "No pude registrar la aceptación. Inténtalo de nuevo; tus datos no se cargaron."
+ },
+ {
+  "pt": "Espere a gravação anterior terminar.",
+  "tipo": "exato",
+  "en": "Wait for the previous recording to finish.",
+  "fr": "Attendez la fin de l’enregistrement précédent.",
+  "es": "Espera a que termine la grabación anterior."
+ },
+ {
+  "pt": "Entre na sua conta antes de alterar dados.",
+  "tipo": "exato",
+  "en": "Sign in before changing data.",
+  "fr": "Connectez-vous avant de modifier des données.",
+  "es": "Inicia sesión antes de cambiar datos."
+ },
+ {
+  "pt": "Este espaço mudou em outro aparelho. Atualizei a tela; confira e tente novamente.",
+  "tipo": "exato",
+  "en": "This space changed on another device. I’ve refreshed the screen; check it and try again.",
+  "fr": "Cet espace a changé sur un autre appareil. J’ai actualisé l’écran ; vérifiez et réessayez.",
+  "es": "Este espacio cambió en otro dispositivo. Actualicé la pantalla; revísalo e inténtalo de nuevo."
+ },
+ {
+  "pt": "V3/atualização remota:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Entre na sua conta antes de criar um espaço.",
+  "tipo": "exato",
+  "en": "Sign in before creating a space.",
+  "fr": "Connectez-vous avant de créer un espace.",
+  "es": "Inicia sesión antes de crear un espacio."
+ },
+ {
+  "pt": "A conexão com o Supabase não está configurada.",
+  "tipo": "exato",
+  "en": "The Supabase connection isn’t configured.",
+  "fr": "La connexion à Supabase n’est pas configurée.",
+  "es": "La conexión con Supabase no está configurada."
+ },
+ {
+  "pt": "user_id=eq.{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/tempo real:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/retomada:",
+  "tipo": "exato",
+  "ignorar": true
+ }
 ]
