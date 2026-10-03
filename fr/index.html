@@ -146,6 +146,12 @@
   <section class="heroi">
     <div class="env">
       <div class="heroi-texto">
+        <!-- A PÍLULA DIZ O QUE AS TELAS SÃO
+             Toda imagem desta página é o app de verdade rodando com
+             um perfil de exemplo. Dizer isso aqui, ao lado da cena,
+             evita a leitura de que aqueles números são de alguém — e
+             custa uma linha. -->
+        <p class="pilula-vivo"><span class="pilula-ponto" aria-hidden="true"></span>Démo<em>vraies captures de l'app, avec des données d'exemple</em></p>
         <h1>coco organise <br class="quebra">votre argent. <br class="quebra"><em>vous confirmez.</em></h1>
         <p class="grande">
           Elle enregistre, catégorise et vous prévient de ce qui arrive. Rien n’entre dans vos totaux sans votre accord — et tout ce qu’elle fait peut être annulé.
@@ -156,46 +162,78 @@
         </div>
       </div>
 
-      <!-- ══════ A DEMONSTRAÇÃO ══════
-           Três aparelhos, com o app andando dentro dos três. Uma
-           captura parada prova que a tela existe; ela não prova que o
-           app funciona, e é isso que alguém que nunca entrou precisa
-           ver.
+      <!-- ══════ O NÓ E OS SATÉLITES ══════
+           Antes aqui havia três aparelhos lado a lado. Eles provavam
+           que o app existe em três tamanhos, mas não diziam a coisa
+           que o OAZE é: um lugar onde o que está espalhado se junta.
 
-           Os quadros do celular se revezam no percurso real de quem
-           usa — início, carteira, Coco. A ENTRADA é ligada à rolagem,
-           não a um relógio: quem sobe de volta vê a cena se desmontar
-           na mesma ordem em que montou.
+           Agora a cena diz. No centro, o painel — grande, 16:9, de
+           vidro. Em volta, o que chega nele: a carteira, a Coco, o
+           mês no tablet. As curvas que ligam um ao outro não são
+           enfeite: são a mesma ideia desenhada, e por isso pulsam no
+           sentido de fora para dentro, nunca o contrário.
 
-           O alt descreve os três de uma vez, porque quem não enxerga
-           recebe a cena inteira numa frase só, e não em três. -->
-      <div class="palco3" data-palco3
+           Os três tamanhos continuam ali — computador no meio,
+           tablet e celular em volta —, porque quem nunca entrou
+           precisa ver que cabe no aparelho que ele tem.
+
+           A ENTRADA segue a abertura do portal, não um relógio: quem
+           sobe de volta vê os satélites recolherem na ordem inversa.
+           Sem JavaScript ou com "menos movimento", tudo nasce no
+           lugar. -->
+      <div class="nodo" data-nodo
            role="img"
-           aria-label="OAZE sur trois appareils : sur ordinateur, la barre latérale avec les sections et le mois d’un coup d’œil ; sur tablette, la même vue en plein écran ; sur téléphone, l’accueil avec le portefeuille, le portefeuille de cartes ouvert et une conversation avec Coco.">
+           aria-label="OAZE sur trois appareils : sur l'ordinateur, la vue d'ensemble du mois avec le portefeuille et les totaux ; sur la tablette, la même vue en plein écran ; sur le téléphone, le portefeuille de cartes ouvert, l'accueil et une conversation avec Coco.">
 
-        <div class="ap ap-note">
-          <div class="ap-tampa">
-            <span class="ap-camera"></span>
-            <span class="ap-tela"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></span>
-          </div>
-          <span class="ap-base"></span>
+        <!-- As curvas moram atrás de tudo e acompanham a caixa inteira.
+             preserveAspectRatio="none" deixa cada ponto do traçado cair
+             exatamente na mesma porcentagem em que o cartão foi posto;
+             non-scaling-stroke impede que essa mesma distorção engorde
+             a linha de um lado e afine do outro. -->
+        <svg class="nodo-linhas" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="fioOaze" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8FCFC0" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#5FA99B" stop-opacity=".28"/>
+            </linearGradient>
+          </defs>
+          <g class="nodo-fios">
+            <path class="fio" vector-effect="non-scaling-stroke" d="M150,150 C300,180 360,250 470,300"/>
+            <path class="fio" vector-effect="non-scaling-stroke" d="M860,130 C720,170 650,230 545,295"/>
+            <path class="fio" vector-effect="non-scaling-stroke" d="M140,505 C300,480 380,420 470,355"/>
+            <path class="fio" vector-effect="non-scaling-stroke" d="M870,520 C720,490 630,430 545,360"/>
+          </g>
+          <g class="nodo-fluxo">
+            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M150,150 C300,180 360,250 470,300"/>
+            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M860,130 C720,170 650,230 545,295"/>
+            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M140,505 C300,480 380,420 470,355"/>
+            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M870,520 C720,490 630,430 545,360"/>
+          </g>
+        </svg>
+
+        <div class="nodo-centro">
+          <img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async">
         </div>
 
-        <div class="ap ap-tablet">
-          <span class="ap-tela"><img src="/assets/telas/tablet-carteira.jpg" alt="" width="1024" height="720" loading="lazy" decoding="async"></span>
-        </div>
+        <figure class="satelite sat-a">
+          <img src="/assets/telas/celular-coco.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
+          <figcaption>Coco saisit pour vous</figcaption>
+        </figure>
 
-        <div class="ap ap-fone">
-          <span class="ap-tela">
-            <img class="quadro is-ativo" src="/assets/telas/celular-inicio.jpg" alt="" width="923" height="1944" fetchpriority="high" decoding="async">
-            <img class="quadro" src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-            <img class="quadro" src="/assets/telas/celular-coco.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-          </span>
-          <span class="ap-ilha"></span>
-          <span class="ap-bt ap-bt-a"></span>
-          <span class="ap-bt ap-bt-b"></span>
-          <span class="ap-bt ap-bt-c"></span>
-        </div>
+        <figure class="satelite sat-b">
+          <img src="/assets/telas/tablet-carteira.jpg" alt="" width="1024" height="720" loading="lazy" decoding="async">
+          <figcaption>le mois sur la tablette</figcaption>
+        </figure>
+
+        <figure class="satelite sat-c">
+          <img src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
+          <figcaption>les cartes dans un seul portefeuille</figcaption>
+        </figure>
+
+        <figure class="satelite sat-d">
+          <img src="/assets/telas/celular-inicio.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
+          <figcaption>tout le mois dans la poche</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -615,6 +653,12 @@
           <li><a href="/fr/termos">Conditions d'utilisation</a></li>
           <li><a href="/fr/privacidade">Politique de confidentialité</a></li>
         </ul>
+      </div>
+      <div>
+        <h3>Nous écrire</h3>
+        <p class="rodape-sobre">Nous répondons sous 2 jours ouvrés.</p>
+        <a class="rodape-fala" href="mailto:suporte@oaze.site">suporte@oaze.site <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
       </div>
     </div>
     <div class="rodape-fim">

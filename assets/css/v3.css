@@ -244,15 +244,190 @@ main > .secao:first-child { padding-top: calc(var(--respiro) + 62px); }
   pointer-events: none;
 }
 
+/* O nó ocupa a largura inteira abaixo do texto: ele é a cena, e
+   espremido numa coluna de 400px as curvas não teriam onde correr. */
 .heroi .env {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
-  gap: clamp(30px, 5vw, 64px); align-items: center;
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 34px); justify-items: center; text-align: center;
 }
-.heroi-texto { display: grid; gap: 24px; justify-items: start; }
+.heroi-texto { display: grid; gap: 22px; justify-items: center; max-width: 46ch; }
 .heroi h1 em { font-style: normal; color: var(--teal); }
 .heroi-acoes { display: flex; flex-wrap: wrap; gap: 12px; }
 .heroi-tela { justify-self: center; width: min(100%, 380px); }
 .heroi-tela img { border-radius: 26px; }
+
+/* =============================================================
+   O GRÃO, O VIDRO E O NÓ
+   -------------------------------------------------------------
+   A estrutura vem do sistema que o Jonatham anexou: fundo escuro
+   com grão de pontos, camadas de vidro desfocado, um nó central
+   ligado por curvas a cartões satélites. O MUNDO continua sendo o
+   do OAZE: nada de ouro sobre preto — Noite, Leite de Coco e o
+   único verde do oásis, nas fontes da marca.
+
+   O grão é fixo e some antes da metade da tela. Um padrão que
+   acompanha a rolagem vira textura de tapete; parado e esmaecendo,
+   vira profundidade, que é o que ele está ali para dar.
+   ============================================================= */
+
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -3; pointer-events: none;
+  background-image: radial-gradient(rgba(240, 229, 207, .085) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(130% 70% at 50% 0%, #000 0%, transparent 74%);
+          mask-image: radial-gradient(130% 70% at 50% 0%, #000 0%, transparent 74%);
+}
+
+/* O vidro: uma regra só, usada por tudo que se sobrepõe. Sem o
+   desfoque, duas camadas translúcidas somam o que está atrás e a
+   página fica suja justamente onde ela deveria descansar. */
+.vidro {
+  background: rgba(240, 229, 207, .03);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 1px solid rgba(240, 229, 207, .1);
+  border-radius: clamp(18px, 2.2vw, 30px);
+}
+
+/* ---------------- a pílula que diz o que a cena é ---------------- */
+
+.pilula-vivo {
+  display: inline-flex; align-items: center; gap: 9px; margin: 0;
+  padding: 7px 15px 7px 11px; border-radius: 999px;
+  background: rgba(240, 229, 207, .03);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 1px solid rgba(240, 229, 207, .1);
+  font: 500 10px/1 var(--fonte-dado); text-transform: uppercase; letter-spacing: .16em;
+  color: var(--milk);
+}
+.pilula-vivo em {
+  font: 400 12px/1 var(--fonte-corpo); font-style: normal;
+  text-transform: none; letter-spacing: 0; color: var(--tinta-2);
+}
+.pilula-ponto {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--teal); box-shadow: 0 0 0 0 rgba(95, 169, 155, .55);
+  animation: respira 2.4s ease-out infinite;
+}
+@keyframes respira {
+  0%   { box-shadow: 0 0 0 0 rgba(95, 169, 155, .5); }
+  70%  { box-shadow: 0 0 0 7px rgba(95, 169, 155, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(95, 169, 155, 0); }
+}
+
+/* ---------------- o nó e os satélites ---------------- */
+
+/* A ALTURA MANDA, e a largura sai da proporção — a mesma regra que
+   consertou os aparelhos. Se a largura mandasse, a cena cresceria
+   para baixo em tela larga e empurraria a manchete para fora do
+   primeiro quadro, que é o único que todo mundo vê. */
+.nodo {
+  position: relative; grid-column: 1 / -1; justify-self: center;
+  height: min(48vh, 430px); aspect-ratio: 1000 / 640; width: auto; max-width: 100%;
+  margin-top: clamp(10px, 2vw, 26px);
+  --a: 1; --b: 1; --c: 1;
+}
+
+.nodo-linhas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: visible; opacity: var(--b);
+}
+.nodo-fios .fio {
+  fill: none; stroke: url(#fioOaze); stroke-width: 2.5; stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(95, 169, 155, .35));
+  animation: pulsa-galho 5s ease-in-out infinite;
+}
+.nodo-fios .fio:nth-child(2) { animation-delay: -1.2s; }
+.nodo-fios .fio:nth-child(3) { animation-delay: -2.4s; }
+.nodo-fios .fio:nth-child(4) { animation-delay: -3.6s; }
+@keyframes pulsa-galho { 0%, 100% { opacity: .55; } 50% { opacity: .9; } }
+
+/* A segunda camada é o sentido da coisa: os tracinhos correm de
+   fora para DENTRO, porque é isso que o OAZE faz. Correndo ao
+   contrário, a mesma animação contaria a história errada. */
+.nodo-fluxo .fio-fluxo {
+  fill: none; stroke: var(--teal); stroke-width: 1.6;
+  stroke-dasharray: 5 15; opacity: .5;
+  animation: correnteza 2.4s linear infinite;
+}
+.nodo-fluxo .fio-fluxo:nth-child(2) { animation-delay: -.6s; }
+.nodo-fluxo .fio-fluxo:nth-child(3) { animation-delay: -1.2s; }
+.nodo-fluxo .fio-fluxo:nth-child(4) { animation-delay: -1.8s; }
+@keyframes correnteza { to { stroke-dashoffset: -40; } }
+
+.nodo-centro {
+  position: absolute; left: 50%; top: 50%; width: 47%;
+  aspect-ratio: 16 / 9; overflow: hidden;
+  border-radius: clamp(12px, 1.6vw, 22px);
+  background: rgba(240, 229, 207, .03);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 1px solid rgba(240, 229, 207, .14);
+  box-shadow: 0 0 100px rgba(95, 169, 155, .2);
+  opacity: calc(.25 + .75 * var(--a));
+  transform: translate(-50%, -50%) scale(calc(.93 + .07 * var(--a)));
+}
+.nodo-centro img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+.satelite {
+  position: absolute; margin: 0; width: 17%;
+  display: grid; gap: 9px; justify-items: center;
+}
+.satelite > img {
+  width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top center;
+  border-radius: 20px; border: 1px solid rgba(240, 229, 207, .1);
+  /* Dessaturado, não cinza: o verde do oásis é a assinatura do
+     produto, e apagá-lo por completo esconderia justamente o que a
+     imagem veio mostrar. Ao passar o mouse, volta inteiro. */
+  filter: grayscale(.55) contrast(1.02);
+  transition: filter .7s var(--curva), transform .4s var(--curva), box-shadow .4s var(--curva);
+}
+.satelite figcaption {
+  font: 500 10px/1.3 var(--fonte-dado); text-transform: uppercase;
+  letter-spacing: .16em; color: var(--tinta-2); text-align: center;
+}
+.satelite:hover > img {
+  filter: grayscale(0); transform: scale(1.05);
+  box-shadow: 0 0 60px rgba(95, 169, 155, .3);
+}
+
+.sat-a { left: 15%; top: 23.4%; }
+.sat-b { left: 86%; top: 20.3%; width: 22%; }
+.sat-b > img { aspect-ratio: 4 / 3; }
+.sat-c { left: 14%; top: 78.9%; }
+.sat-d { left: 87%; top: 81.3%; }
+
+.sat-a, .sat-c {
+  opacity: var(--b);
+  transform: translate(-50%, -50%) translateX(calc((1 - var(--b)) * -46px));
+}
+.sat-b, .sat-d {
+  opacity: var(--c);
+  transform: translate(-50%, -50%) translateX(calc((1 - var(--c)) * 46px));
+}
+
+/* Em tela estreita não há volta do nó: as curvas cruzariam os
+   próprios cartões. A cena vira o que ela sempre foi por baixo —
+   o painel e, embaixo, o que chega nele. */
+@media (max-width: 900px) {
+  .nodo { aspect-ratio: auto; height: auto; display: grid; gap: 16px; width: 100%; max-width: none; }
+  .nodo-linhas { display: none; }
+  .nodo-centro,
+  .satelite { position: static; transform: none; opacity: 1; }
+  .nodo-centro { width: 100%; }
+  .satelite { width: 100%; }
+  .nodo .satelite { grid-column: span 1; }
+  .nodo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nodo-centro { grid-column: 1 / -1; }
+  .sat-b > img { aspect-ratio: 4 / 5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nodo-fios .fio,
+  .nodo-fluxo .fio-fluxo,
+  .pilula-ponto { animation: none; }
+}
 
 /* ---------------- barra de confiança ----------------
    Três provas, no lugar onde o Pierre põe "100+ bancos". As dele
@@ -764,7 +939,7 @@ main > .secao:first-child { padding-top: calc(var(--respiro) + 62px); }
    Então aqui a manchete é menor que a da página solta, os respiros
    encolhem, e a cena dos aparelhos ganha teto em vh: numa tela baixa
    ela diminui junto, em vez de empurrar o texto para fora. */
-.portal-mundo .heroi { padding-block: 0; }
+.portal-mundo .heroi { padding-block: 86px 0; }
 .portal-mundo .heroi .env { gap: clamp(18px, 3.4vh, 34px); }
 .portal-mundo .heroi h1 { font-size: clamp(28px, 3.3vw, 46px); }
 .portal-mundo .heroi .grande { font-size: clamp(.95rem, 1.2vw, 1.05rem); }
@@ -1074,3 +1249,115 @@ main > .secao:first-child { padding-top: calc(var(--respiro) + 62px); }
   .portal-painel, .portal-letreiro, .portal-dica, .portal-barra { display: none; }
   .portal .palco3 { --a: 1 !important; --b: 1 !important; --c: 1 !important; }
 }
+
+
+/* =============================================================
+   A ESTRUTURA DO SISTEMA ANEXADO, NO MUNDO DO OAZE
+   -------------------------------------------------------------
+   O que veio de lá: navegação de links curtos em maiúsculas com
+   muito espaçamento e uma ação em cápsula; a grade de recursos em
+   QUATRO cartões de vidro; o selo do plano em destaque pendurado na
+   borda de cima; imagens que chegam dessaturadas e voltam inteiras
+   ao toque; rodapé de cinco colunas.
+
+   O que não veio: o ouro sobre preto. Aqui a base é a Noite e o
+   acento é o único verde do oásis — trocar a paleta seria trocar a
+   marca para parecer outro produto.
+   ============================================================= */
+
+/* ---------------- navegação ---------------- */
+
+.menu { display: flex; gap: clamp(18px, 2.4vw, 34px); margin-inline: auto; }
+@media (max-width: 860px) {
+  .menu { display: none; }
+  .topo.aberto .menu { display: grid; margin-inline: 0; }
+}
+.menu a {
+  color: var(--tinta-2);
+  font: 500 11px/1 var(--fonte-dado); text-transform: uppercase; letter-spacing: .14em;
+  transition: color .16s var(--curva);
+}
+.menu a:hover { color: var(--milk); }
+
+/* ---------------- recursos: quatro cartões de vidro ----------------
+   Eram dois por linha, soltos no fundo. Quatro em vidro é a grade do
+   sistema anexado — e cabe, porque cada cartão diz uma coisa só. A
+   Coco continua sendo o ícone: ela faz exatamente estas quatro
+   coisas, e um quadrado com um símbolo genérico diria menos. */
+
+.recursos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.recurso {
+  display: grid; gap: 12px; align-content: start;
+  padding: clamp(20px, 2vw, 26px);
+  background: rgba(240, 229, 207, .03);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 1px solid rgba(240, 229, 207, .1);
+  border-radius: clamp(18px, 2vw, 26px);
+  transition: border-color .3s var(--curva), background .3s var(--curva);
+}
+.recurso:hover { border-color: rgba(240, 229, 207, .22); background: rgba(240, 229, 207, .05); }
+.recurso h3 { font-size: 18px; }
+.recurso-coco { position: relative; width: 76px; height: 76px; margin: 0 0 2px; }
+.recurso:hover .recurso-coco img { transform: scale(1.1); }
+.recurso-coco img { transition: transform .3s var(--curva); }
+.recurso p { font-size: 14.5px; max-width: none; }
+
+@media (max-width: 1000px) { .recursos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .recursos { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------------- as telas dos blocos ----------------
+   Chegam dessaturadas e voltam inteiras quando a pessoa se aproxima:
+   é o gesto do sistema anexado. Dessaturadas, não cinzas — o verde
+   do oásis é a assinatura do produto, e apagá-lo esconderia o que a
+   imagem veio mostrar. */
+
+.bloco-tela img {
+  filter: grayscale(.5) contrast(1.02);
+  transition: filter .7s var(--curva);
+}
+.bloco-tela:hover img { filter: grayscale(0); }
+
+/* ---------------- o selo do plano em destaque ----------------
+   Pendurado na borda de cima, centralizado: lido antes do nome do
+   plano, que é a ordem em que a decisão acontece. */
+
+.plano.e-destaque { position: relative; }
+.plano.e-destaque .plano-selo {
+  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
+  background: var(--teal); border-color: var(--teal); color: var(--night);
+  white-space: nowrap;
+}
+.preco-valor { font-size: clamp(2.4rem, 4.6vw, 3rem); }
+
+/* ---------------- rodapé de cinco colunas ---------------- */
+
+.rodape-grade { grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) { .rodape-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* O sistema anexado põe aqui um campo de newsletter com um botão
+   redondo de seta. O OAZE não tem newsletter, e um campo que não
+   envia a lugar nenhum é um engano desenhado. A forma fica; o
+   destino passa a ser o que existe de verdade — o suporte. */
+.rodape-fala {
+  display: inline-flex; align-items: center; gap: 10px; margin-top: 12px;
+  padding: 7px 7px 7px 15px; border-radius: 999px;
+  background: rgba(240, 229, 207, .03);
+  border: 1px solid rgba(240, 229, 207, .1);
+  color: var(--tinta-2); font-size: 14px;
+  transition: border-color .2s var(--curva), color .2s var(--curva);
+}
+.rodape-fala:hover { border-color: var(--teal); color: var(--milk); }
+.rodape-fala span {
+  display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+  border-radius: 50%; background: var(--teal); color: var(--night);
+}
+.rodape-fala svg { width: 15px; height: 15px; }
+
+/* O seletor de idioma é gerado dentro do rodapé por tools/gen-idiomas.js.
+   Sem regra nenhuma aqui, os quatro links saíam colados — "PortuguêsEnglish
+   FrançaisEspañol" — porque o estilo deles mora no site.css, que esta
+   página não carrega. */
+.idiomas { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.idiomas a { color: var(--tinta-2); font-size: 14px; }
+.idiomas a[aria-current="true"] { color: var(--milk); }

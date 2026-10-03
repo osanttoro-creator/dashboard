@@ -129,7 +129,10 @@
      própria posição na tela. Tratar os dois pelo mesmo caminho foi o
      que deixou o segundo parado: ele herdava um progresso que, fora
      do portal, nunca mudava. */
-  var cena = document.querySelector('.portal [data-palco3]');
+  /* No herói, o palco de três aparelhos deu lugar ao nó com os
+     satélites. Ele mora no mesmo lugar e segue a mesma régua — a
+     abertura do portal —, então herda o caminho de `cena`. */
+  var cena = document.querySelector('.portal [data-palco3], .portal [data-nodo]');
   var cenas = Array.prototype.slice.call(document.querySelectorAll('[data-palco3]'))
     .filter(function (n) { return n !== cena; });
   if (!portal && !cena && !cenas.length) return;

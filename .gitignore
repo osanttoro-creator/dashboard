@@ -44,3 +44,7 @@ supabase/.temp/
 # deploy/hostinger/montar-pacote.ps1 a qualquer momento.
 deploy/hostinger/public_html/
 deploy/hostinger/*.zip
+
+# Saída da ferramenta de capturas: conferir e copiar para assets/telas.
+# O que vale é o que está em assets/telas; a pasta de trabalho, não.
+tools/telas-novas/
