@@ -38,7 +38,7 @@ $arquivos = @(
   'redefinir-senha.html', 'confirmar-email.html',
   'privacidade.html', 'termos.html', 'suporte.html',
   # aplicativo
-  'app.html', 'app-v3.html',
+  'app-v3.html',
   # apoio
   'robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', '404.html'
 )
