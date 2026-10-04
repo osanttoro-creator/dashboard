@@ -108,64 +108,46 @@
   "es": "Bienvenido a OAZE"
  },
  {
-  "pt": "<span class=\"pilula-ponto\" aria-hidden=\"true\"></span>Demonstração<em>telas reais do app, com dados de exemplo</em>",
-  "en": "<span class=\"pilula-ponto\" aria-hidden=\"true\"></span>Demo<em>real app screens, with sample data</em>",
-  "fr": "<span class=\"pilula-ponto\" aria-hidden=\"true\"></span>Démo<em>vraies captures de l'app, avec des données d'exemple</em>",
-  "es": "<span class=\"pilula-ponto\" aria-hidden=\"true\"></span>Demostración<em>pantallas reales de la app, con datos de ejemplo</em>"
+  "pt": "O SEU MÊS, SEM PONTAS SOLTAS",
+  "en": "YOUR MONTH, WITHOUT LOOSE ENDS",
+  "fr": "VOTRE MOIS, SANS ZONE FLOUE",
+  "es": "TU MES, SIN CABOS SUELTOS"
  },
  {
-  "pt": "a coco organiza <br class=\"quebra\">seu dinheiro. <br class=\"quebra\"><em>você confirma.</em>",
-  "en": "coco organises <br class=\"quebra\">your money. <br class=\"quebra\"><em>you confirm.</em>",
-  "fr": "coco organise <br class=\"quebra\">votre argent. <br class=\"quebra\"><em>vous confirmez.</em>",
-  "es": "coco organiza <br class=\"quebra\">tu dinero. <br class=\"quebra\"><em>tú confirmas.</em>"
+  "pt": "O dinheiro fica mais claro quando <em>tudo se encontra.</em>",
+  "en": "Money makes more sense when <em>everything comes together.</em>",
+  "fr": "L’argent devient plus clair quand <em>tout se rejoint.</em>",
+  "es": "El dinero se entiende mejor cuando <em>todo se reúne.</em>"
  },
  {
-  "pt": "Ela lança, categoriza e avisa o que vem pela frente. Nada entra nos seus totais sem você dizer sim — e tudo o que ela faz tem desfazer.",
-  "en": "She records, categorises and warns you what is coming. Nothing enters your totals without your yes — and everything she does can be undone.",
-  "fr": "Elle enregistre, catégorise et vous prévient de ce qui arrive. Rien n’entre dans vos totaux sans votre accord — et tout ce qu’elle fait peut être annulé.",
-  "es": "Registra, categoriza y te avisa de lo que viene. Nada entra en tus totales sin tu sí — y todo lo que hace se puede deshacer."
+  "pt": "Contas, cartões e compromissos no mesmo lugar. A Coco ajuda a organizar e mostra o que vem pela frente. Você confirma cada ação.",
+  "en": "Accounts, cards and commitments in one place. Coco helps organise them and shows what comes next. You confirm every action.",
+  "fr": "Comptes, cartes et échéances au même endroit. Coco aide à les organiser et montre ce qui arrive. Vous confirmez chaque action.",
+  "es": "Cuentas, tarjetas y compromisos en un solo lugar. Coco ayuda a organizarlos y muestra lo que viene. Tú confirmas cada acción."
  },
  {
-  "pt": "Ver o que ela faz",
-  "en": "See what she does",
-  "fr": "Voir ce qu’elle fait",
-  "es": "Ver qué hace"
+  "pt": "Conhecer o OAZE <span aria-hidden=\"true\">↗</span>",
+  "en": "Explore OAZE <span aria-hidden=\"true\">↗</span>",
+  "fr": "Découvrir OAZE <span aria-hidden=\"true\">↗</span>",
+  "es": "Conoce OAZE <span aria-hidden=\"true\">↗</span>"
  },
  {
-  "pt": "O OAZE funcionando em três aparelhos: no computador, a visão geral do mês com a carteira e os totais; no tablet, a mesma visão em tela cheia; no celular, a carteira de cartões aberta, o início e uma conversa com a Coco.",
-  "en": "OAZE running on three devices: on the computer, the month overview with the wallet and the totals; on the tablet, the same view full screen; on the phone, the card wallet open, the home screen and a conversation with Coco.",
-  "fr": "OAZE sur trois appareils : sur l'ordinateur, la vue d'ensemble du mois avec le portefeuille et les totaux ; sur la tablette, la même vue en plein écran ; sur le téléphone, le portefeuille de cartes ouvert, l'accueil et une conversation avec Coco.",
-  "es": "OAZE funcionando en tres dispositivos: en el ordenador, la visión general del mes con la cartera y los totales; en la tableta, la misma vista a pantalla completa; en el móvil, la cartera de tarjetas abierta, el inicio y una conversación con Coco."
+  "pt": "Funciona no celular e no computador · Sem cartão para começar",
+  "en": "Works on phone and computer · No card needed to start",
+  "fr": "Sur téléphone et ordinateur · Aucune carte requise pour commencer",
+  "es": "Funciona en móvil y ordenador · Sin tarjeta para empezar"
  },
  {
-  "pt": "a Coco lança",
-  "en": "Coco records it",
-  "fr": "Coco saisit pour vous",
-  "es": "Coco registra por usted"
+  "pt": "Telas reais do OAZE com dados de exemplo: painel financeiro no computador, carteira no celular e Coco, a assistente.",
+  "en": "Real OAZE screens with sample data: a financial dashboard on a computer, a wallet on a phone and Coco, the assistant.",
+  "fr": "Vraies captures d’OAZE avec des données d’exemple : tableau de bord sur ordinateur, portefeuille sur téléphone et Coco, l’assistante.",
+  "es": "Pantallas reales de OAZE con datos de ejemplo: panel financiero en ordenador, cartera en móvil y Coco, la asistente."
  },
  {
-  "pt": "o mês no tablet",
-  "en": "the month on the tablet",
-  "fr": "le mois sur la tablette",
-  "es": "el mes en la tableta"
- },
- {
-  "pt": "os cartões numa carteira",
-  "en": "your cards in one wallet",
-  "fr": "les cartes dans un seul portefeuille",
-  "es": "las tarjetas en una cartera"
- },
- {
-  "pt": "o mês inteiro no bolso",
-  "en": "the whole month in your pocket",
-  "fr": "tout le mois dans la poche",
-  "es": "el mes entero en el bolsillo"
- },
- {
-  "pt": "oaze",
-  "en": "oaze",
-  "fr": "oaze",
-  "es": "oaze"
+  "pt": "Demonstração com dados de exemplo",
+  "en": "Demo with sample data",
+  "fr": "Démo avec des données d’exemple",
+  "es": "Demostración con datos de ejemplo"
  },
  {
   "pt": "bem-vindo ao",
@@ -180,286 +162,358 @@
   "es": "⟦s0⟧ desliza para abrir"
  },
  {
-  "pt": "O que o OAZE garante",
-  "en": "What OAZE guarantees",
-  "fr": "Ce qu’OAZE garantit",
-  "es": "Lo que OAZE garantiza"
+  "pt": "Como o OAZE funciona",
+  "en": "How OAZE works",
+  "fr": "Comment fonctionne OAZE",
+  "es": "Cómo funciona OAZE"
  },
  {
-  "pt": "zero",
-  "en": "zero",
-  "fr": "zéro",
-  "es": "cero"
+  "pt": "Você registra do seu jeito",
+  "en": "You record things your way",
+  "fr": "Vous enregistrez à votre façon",
+  "es": "Registras a tu manera"
  },
  {
-  "pt": "movimentação de dinheiro",
-  "en": "money moved",
-  "fr": "mouvement d’argent",
-  "es": "movimientos de dinero"
+  "pt": "A Coco ajuda a organizar",
+  "en": "Coco helps organise",
+  "fr": "Coco aide à organiser",
+  "es": "Coco ayuda a organizar"
  },
  {
-  "pt": "tudo",
-  "en": "everything",
-  "fr": "tout",
-  "es": "todo"
+  "pt": "Você vê e confirma",
+  "en": "You review and confirm",
+  "fr": "Vous vérifiez et confirmez",
+  "es": "Revisas y confirmas"
  },
  {
-  "pt": "tem desfazer",
-  "en": "can be undone",
-  "fr": "peut être annulé",
-  "es": "se puede deshacer"
+  "pt": "UM LUGAR PARA O SEU DINHEIRO",
+  "en": "ONE PLACE FOR YOUR MONEY",
+  "fr": "UN SEUL ENDROIT POUR VOTRE ARGENT",
+  "es": "UN LUGAR PARA TU DINERO"
  },
  {
-  "pt": "grátis",
-  "en": "free",
-  "fr": "gratuit",
-  "es": "gratis"
+  "pt": "Tudo o que importa. <em>Sem procurar em cinco telas.</em>",
+  "en": "Everything that matters. <em>Without searching five screens.</em>",
+  "fr": "Tout ce qui compte. <em>Sans chercher dans cinq écrans.</em>",
+  "es": "Todo lo que importa. <em>Sin buscar en cinco pantallas.</em>"
  },
  {
-  "pt": "sem pedir cartão",
-  "en": "no card asked",
-  "fr": "sans carte bancaire",
-  "es": "sin pedir tarjeta"
+  "pt": "O OAZE mostra o mês como ele é: o que entrou, o que saiu e o que ainda está por vir.",
+  "en": "OAZE shows your month as it is: what came in, what went out and what is still ahead.",
+  "fr": "OAZE montre votre mois tel qu’il est : ce qui est entré, ce qui est sorti et ce qui reste à venir.",
+  "es": "OAZE muestra tu mes como es: lo que entró, lo que salió y lo que aún está por venir."
  },
  {
-  "pt": "o que a coco faz por você",
-  "en": "what coco does for you",
-  "fr": "ce que coco fait pour vous",
-  "es": "lo que coco hace por ti"
+  "pt": "Contas reunidas",
+  "en": "Accounts together",
+  "fr": "Comptes réunis",
+  "es": "Cuentas reunidas"
  },
  {
-  "pt": "Ela deixou de ser um lugar de perguntas. Agora faz o trabalho e traz para você conferir.",
-  "en": "She stopped being a place for questions. Now she does the work and brings it to you to check.",
-  "fr": "Elle n’est plus un endroit où poser des questions. Maintenant elle fait le travail et vous l’apporte à vérifier.",
-  "es": "Dejó de ser un lugar de preguntas. Ahora hace el trabajo y te lo trae para revisar."
+  "pt": "Cadastre as contas que usa e enxergue cada saldo no mesmo painel, sem misturar os espaços da sua vida.",
+  "en": "Add the accounts you use and see each balance in one dashboard, without mixing the different parts of your life.",
+  "fr": "Ajoutez les comptes que vous utilisez et voyez chaque solde dans un seul tableau de bord, sans mélanger les espaces de votre vie.",
+  "es": "Añade las cuentas que usas y ve cada saldo en un solo panel, sin mezclar los espacios de tu vida."
  },
  {
-  "pt": "a Coco explicando, de pé e virada para quem lê",
-  "en": "Coco explaining, standing and facing the reader",
-  "fr": "Coco qui explique, debout et tournée vers le lecteur",
-  "es": "Coco explicando, de pie y mirando a quien lee"
+  "pt": "Cartões no lugar certo",
+  "en": "Cards in the right place",
+  "fr": "Les cartes à leur place",
+  "es": "Tarjetas en su lugar"
  },
  {
-  "pt": "conversa que vira lançamento",
-  "en": "a conversation that becomes an entry",
-  "fr": "une conversation qui devient une écriture",
-  "es": "una conversación que se vuelve un registro"
+  "pt": "Crédito, débito, parcelas e faturas com datas próprias. O pagamento da fatura não vira uma despesa duplicada.",
+  "en": "Credit, debit, instalments and bills with their own dates. Paying a card bill does not create a duplicate expense.",
+  "fr": "Crédit, débit, échéances et factures à leurs propres dates. Payer une facture de carte ne crée pas une dépense en double.",
+  "es": "Crédito, débito, cuotas y facturas con sus propias fechas. Pagar una factura de tarjeta no crea un gasto duplicado."
  },
  {
-  "pt": "\"Gastei 45 no iFood\" vira uma despesa no cartão certo, com a categoria que ela aprendeu com você. Por texto ou por voz.",
-  "en": "\"Spent 45 on takeaway\" becomes an expense on the right card, in the category she learned from you. By text or by voice.",
-  "fr": "« J’ai dépensé 45 en livraison » devient une dépense sur la bonne carte, dans la catégorie qu’elle a apprise de vous. Par écrit ou à la voix.",
-  "es": "\"Gasté 45 en delivery\" se vuelve un gasto en la tarjeta correcta, con la categoría que aprendió de ti. Por texto o por voz."
+  "pt": "O mês antes de acabar",
+  "en": "See the month ahead",
+  "fr": "Voir la suite du mois",
+  "es": "Anticipa el mes"
  },
  {
-  "pt": "a Coco conferindo um recibo comprido",
-  "en": "Coco checking a long receipt",
-  "fr": "Coco qui vérifie un long reçu",
-  "es": "Coco revisando un recibo largo"
+  "pt": "Compromissos, recorrências e contas previstas aparecem na agenda para você não descobrir tudo no vencimento.",
+  "en": "Commitments, recurring items and expected bills appear in the calendar so you do not discover everything on the due date.",
+  "fr": "Engagements, éléments récurrents et factures prévues apparaissent dans le calendrier pour éviter les surprises à l’échéance.",
+  "es": "Compromisos, recurrentes y cuentas previstas aparecen en el calendario para que no descubras todo el día del vencimiento."
  },
  {
-  "pt": "todos os cartões numa carteira",
-  "en": "every card in one wallet",
-  "fr": "toutes les cartes dans un portefeuille",
-  "es": "todas las tarjetas en una cartera"
+  "pt": "Metas com prazo",
+  "en": "Goals with a date",
+  "fr": "Des objectifs datés",
+  "es": "Metas con plazo"
  },
  {
-  "pt": "Crédito e débito empilhados como na sua carteira de verdade. Toque num e ele sai de dentro dela, com a fatura ou o extrato.",
-  "en": "Credit and debit stacked like in your real wallet. Tap one and it slides out, with the statement or the balance.",
-  "fr": "Crédit et débit empilés comme dans votre vrai portefeuille. Touchez-en une et elle sort, avec le relevé ou le solde.",
-  "es": "Crédito y débito apilados como en tu cartera de verdad. Toca una y sale, con la factura o el extracto."
+  "pt": "Defina onde quer chegar. O OAZE mostra quanto falta e propõe um ritmo que você pode ajustar.",
+  "en": "Decide where you want to go. OAZE shows what remains and suggests a pace you can adjust.",
+  "fr": "Choisissez votre objectif. OAZE montre ce qu’il reste et propose un rythme que vous pouvez ajuster.",
+  "es": "Decide adónde quieres llegar. OAZE muestra cuánto falta y propone un ritmo que puedes ajustar."
  },
  {
-  "pt": "a Coco chamando atenção com calma, uma pata erguida",
-  "en": "Coco calmly drawing attention, one paw raised",
-  "fr": "Coco qui attire l’attention calmement, une patte levée",
-  "es": "Coco llamando la atención con calma, una pata levantada"
+  "pt": "Ver tudo que o OAZE faz <span aria-hidden=\"true\">↗</span>",
+  "en": "See everything OAZE does <span aria-hidden=\"true\">↗</span>",
+  "fr": "Voir toutes les fonctions d’OAZE <span aria-hidden=\"true\">↗</span>",
+  "es": "Ver todo lo que hace OAZE <span aria-hidden=\"true\">↗</span>"
  },
  {
-  "pt": "sabe o que vem pela frente",
-  "en": "she knows what is coming",
-  "fr": "elle sait ce qui arrive",
-  "es": "sabe lo que viene"
+  "pt": "VISÃO GERAL",
+  "en": "OVERVIEW",
+  "fr": "VUE D’ENSEMBLE",
+  "es": "VISIÓN GENERAL"
  },
  {
-  "pt": "Faturas, fixas e débitos automáticos numa linha do tempo até o fim do mês. Ela vê três cobranças parecidas e sugere a recorrência.",
-  "en": "Statements, fixed bills and direct debits on a timeline to the end of the month. She sees three similar charges and suggests the recurrence.",
-  "fr": "Relevés, prélèvements fixes et automatiques sur une frise jusqu’à la fin du mois. Elle voit trois prélèvements semblables et propose la récurrence.",
-  "es": "Facturas, fijos y débitos automáticos en una línea de tiempo hasta fin de mes. Ve tres cobros parecidos y sugiere la recurrencia."
+  "pt": "Comece o dia sabendo <em>onde está.</em>",
+  "en": "Start the day knowing <em>where you stand.</em>",
+  "fr": "Commencez la journée en sachant <em>où vous en êtes.</em>",
+  "es": "Empieza el día sabiendo <em>dónde estás.</em>"
  },
  {
-  "pt": "a Coco comemorando uma meta alcançada",
-  "en": "Coco celebrating a goal reached",
-  "fr": "Coco qui fête un objectif atteint",
-  "es": "Coco celebrando una meta alcanzada"
+  "pt": "Você abre o OAZE e encontra o saldo de cada conta, os gastos do mês e o que ainda vai chegar. Sem somar números de cabeça.",
+  "en": "Open OAZE to see each account balance, this month’s spending and what is still coming. No mental arithmetic.",
+  "fr": "Ouvrez OAZE pour voir le solde de chaque compte, les dépenses du mois et ce qui reste à venir. Sans calcul mental.",
+  "es": "Abre OAZE y encuentra el saldo de cada cuenta, los gastos del mes y lo que aún viene. Sin sumar de cabeza."
  },
  {
-  "pt": "metas com ritmo de verdade",
-  "en": "goals with a real rhythm",
-  "fr": "des objectifs au rythme réel",
-  "es": "metas con ritmo de verdad"
+  "pt": "Demonstração da visão geral do OAZE no computador, com dados de exemplo",
+  "en": "Demo of the OAZE overview on a computer, with sample data",
+  "fr": "Démonstration de la vue d’ensemble d’OAZE sur ordinateur, avec des données d’exemple",
+  "es": "Demostración de la vista general de OAZE en ordenador, con datos de ejemplo"
  },
  {
-  "pt": "Ela calcula quanto guardar por mês para chegar no prazo, propõe o aporte e espera você confirmar. O saldo só muda no seu sim.",
-  "en": "She works out how much to set aside each month to arrive on time, proposes the contribution and waits for your yes. The balance only moves when you confirm.",
-  "fr": "Elle calcule combien mettre de côté chaque mois pour arriver à temps, propose le versement et attend votre accord. Le solde ne bouge qu’à votre confirmation.",
-  "es": "Calcula cuánto guardar por mes para llegar a tiempo, propone el aporte y espera tu sí. El saldo solo cambia cuando confirmas."
+  "pt": "Tela real do app · dados de exemplo",
+  "en": "Real app screen · sample data",
+  "fr": "Vraie capture de l’application · données d’exemple",
+  "es": "Pantalla real de la app · datos de ejemplo"
  },
  {
-  "pt": "A carteira e a Coco",
-  "en": "The wallet and Coco",
-  "fr": "Le portefeuille et Coco",
-  "es": "La cartera y Coco"
+  "pt": "Carteira do OAZE no celular com um cartão de exemplo e o saldo abaixo",
+  "en": "OAZE wallet on a phone with a sample card and the balance below",
+  "fr": "Portefeuille OAZE sur téléphone avec une carte d’exemple et le solde en dessous",
+  "es": "Cartera de OAZE en móvil con una tarjeta de ejemplo y el saldo debajo"
  },
  {
-  "pt": "surpresa na fatura? <br class=\"quebra\">aqui não.",
-  "en": "a surprise on the bill? <br class=\"quebra\">not here.",
-  "fr": "une surprise sur la facture ? <br class=\"quebra\">pas ici.",
-  "es": "¿sorpresa en la factura? <br class=\"quebra\">aquí no."
+  "pt": "Crédito e débito, cada um no seu lugar",
+  "en": "Credit and debit, each in its place",
+  "fr": "Crédit et débit, chacun à sa place",
+  "es": "Crédito y débito, cada uno en su lugar"
  },
  {
-  "pt": "Os cartões saem de dentro da carteira. No crédito você vê a fatura do mês, o que fecha e o que vence; no débito, o saldo e o extrato.",
-  "en": "The cards come out of the wallet. On credit you see the month’s statement, what closes and what falls due; on debit, the balance and the transactions.",
-  "fr": "Les cartes sortent du portefeuille. En crédit vous voyez le relevé du mois, ce qui se clôture et ce qui arrive à échéance ; en débit, le solde et les opérations.",
-  "es": "Las tarjetas salen de la cartera. En crédito ves la factura del mes, lo que cierra y lo que vence; en débito, el saldo y el extracto."
+  "pt": "CARTEIRA",
+  "en": "WALLET",
+  "fr": "PORTEFEUILLE",
+  "es": "CARTERA"
  },
  {
-  "pt": "<strong>Pagar fatura não é despesa nova.</strong> É a conta baixando o que o cartão já gastou.",
-  "en": "<strong>Paying a bill is not a new expense.</strong> It is the account settling what the card already spent.",
-  "fr": "<strong>Payer une facture n’est pas une nouvelle dépense.</strong> C’est le compte qui solde ce que la carte a déjà dépensé.",
-  "es": "<strong>Pagar la factura no es un gasto nuevo.</strong> Es la cuenta saldando lo que la tarjeta ya gastó."
+  "pt": "Seu cartão tem uma história. <em>A fatura também.</em>",
+  "en": "Your card has a story. <em>So does the bill.</em>",
+  "fr": "Votre carte a une histoire. <em>Sa facture aussi.</em>",
+  "es": "Tu tarjeta tiene una historia. <em>La factura también.</em>"
  },
  {
-  "pt": "<strong>Só o confirmado entra nos totais.</strong> O previsto fica visível, com borda tracejada, sem mexer no saldo.",
-  "en": "<strong>Only what is confirmed counts.</strong> What is forecast stays visible, with a dashed border, without touching the balance.",
-  "fr": "<strong>Seul le confirmé compte.</strong> Le prévu reste visible, en pointillés, sans toucher au solde.",
-  "es": "<strong>Solo lo confirmado entra en los totales.</strong> Lo previsto queda visible, con borde punteado, sin tocar el saldo."
+  "pt": "Veja a compra no ciclo em que ela realmente cai. A carteira separa crédito e débito, sem esconder o que já foi pago nem misturar previsão com saldo.",
+  "en": "See a purchase in the billing cycle where it really belongs. The wallet separates credit and debit without hiding what is paid or mixing forecasts with your balance.",
+  "fr": "Voyez chaque achat dans le cycle où il apparaît vraiment. Le portefeuille sépare crédit et débit, sans masquer ce qui est payé ni mélanger prévisions et solde.",
+  "es": "Ve cada compra en el ciclo de facturación que le corresponde. La cartera separa crédito y débito, sin ocultar lo pagado ni mezclar previsiones con saldo."
  },
  {
-  "pt": "Carteira do OAZE aberta no celular: um cartão de conta no centro, o próximo espiando na borda e o saldo somado no bolso de couro embaixo.",
-  "en": "The OAZE wallet open on a phone: one account card centred, the next one peeking at the edge and the combined balance on the leather pocket below.",
-  "fr": "Le portefeuille OAZE ouvert sur un téléphone : une carte de compte au centre, la suivante qui dépasse au bord et le solde cumulé sur la poche en cuir en dessous.",
-  "es": "La cartera de OAZE abierta en el móvil: una tarjeta de cuenta en el centro, la siguiente asomando por el borde y el saldo sumado en el bolsillo de cuero debajo."
+  "pt": "Conhecer a carteira",
+  "en": "Explore the wallet",
+  "fr": "Découvrir le portefeuille",
+  "es": "Conocer la cartera"
  },
  {
-  "pt": "A Coco, assistente do OAZE: uma axolote de corpo verde-água e brânquias alaranjadas, explicando algo.",
-  "en": "Coco, the OAZE assistant: an axolotl with a sea-green body and orange gills, explaining something.",
-  "fr": "Coco, l’assistante d’OAZE : un axolotl au corps vert d’eau et aux branchies orangées, en train d’expliquer quelque chose.",
-  "es": "Coco, la asistente de OAZE: un ajolote de cuerpo verde agua y branquias anaranjadas, explicando algo."
+  "pt": "Coco, axolote do OAZE, explicando com uma pata levantada",
+  "en": "Coco, the OAZE axolotl, explaining with one paw raised",
+  "fr": "Coco, l’axolotl d’OAZE, explique avec une patte levée",
+  "es": "Coco, el ajolote de OAZE, explicando con una pata levantada"
  },
  {
-  "pt": "ela aprende, <br class=\"quebra\">e você pode esquecer.",
-  "en": "she learns, <br class=\"quebra\">so you can forget.",
-  "fr": "elle apprend, <br class=\"quebra\">vous pouvez oublier.",
-  "es": "ella aprende, <br class=\"quebra\">y tú puedes olvidar."
+  "pt": "ESSA É A COCO",
+  "en": "MEET COCO",
+  "fr": "VOICI COCO",
+  "es": "CONOCE A COCO"
  },
  {
-  "pt": "A Coco guarda o que aprendeu à vista: padrões de categoria, o dia do salário, suas prioridades. Cada item pode ser apagado, e o aprendizado pode ser pausado.",
-  "en": "Coco keeps what she learned in plain sight: category patterns, payday, your priorities. Each item can be deleted, and the learning can be paused.",
-  "fr": "Coco garde ce qu’elle a appris à la vue de tous : habitudes de catégorie, le jour de la paie, vos priorités. Chaque élément peut être effacé, et l’apprentissage mis en pause.",
-  "es": "Coco guarda lo que aprendió a la vista: patrones de categoría, el día del sueldo, tus prioridades. Cada elemento se puede borrar, y el aprendizaje se puede pausar."
+  "pt": "Pergunte como fala. <em>Entenda sem traduzir.</em>",
+  "en": "Ask in your own words. <em>Understand without translating.</em>",
+  "fr": "Parlez naturellement. <em>Comprenez sans traduire.</em>",
+  "es": "Pregunta a tu manera. <em>Entiende sin traducir.</em>"
  },
  {
-  "pt": "<strong>\"Vi 3 cobranças parecidas da academia perto do dia 5.</strong> Quer transformar isso em recorrência?\"",
-  "en": "<strong>\"I saw 3 similar gym charges around the 5th.</strong> Want to turn that into a recurrence?\"",
-  "fr": "<strong>« J’ai vu 3 prélèvements semblables de la salle de sport vers le 5.</strong> Vous voulez en faire une récurrence ? »",
-  "es": "<strong>\"Vi 3 cobros parecidos del gimnasio cerca del día 5.</strong> ¿Quieres convertirlo en recurrencia?\""
+  "pt": "Conte um gasto por texto, áudio ou foto. A Coco prepara o lançamento, sugere a categoria e explica o que viu nos seus números. Antes de mudar a carteira, ela pede sua confirmação.",
+  "en": "Tell Coco about an expense by text, voice or photo. She prepares the entry, suggests a category and explains what she sees in your figures. Before changing your wallet, she asks for confirmation.",
+  "fr": "Parlez d’une dépense à Coco par texte, audio ou photo. Elle prépare l’écriture, suggère une catégorie et explique ce qu’elle voit dans vos chiffres. Avant de modifier le portefeuille, elle demande votre accord.",
+  "es": "Cuéntale un gasto a Coco por texto, audio o foto. Prepara el registro, sugiere una categoría y explica lo que ve en tus números. Antes de cambiar la cartera, pide tu confirmación."
  },
  {
-  "pt": "no bolso <br class=\"quebra\">e na mesa.",
-  "en": "in your pocket <br class=\"quebra\">and on your desk.",
-  "fr": "dans la poche <br class=\"quebra\">et sur le bureau.",
-  "es": "en el bolsillo <br class=\"quebra\">y en el escritorio."
+  "pt": "“Gastei R$ 45 no mercado hoje.”",
+  "en": "“I spent R$ 45 at the market today.”",
+  "fr": "« J’ai dépensé 45 R$ au marché aujourd’hui. »",
+  "es": "« Gasté R$ 45 en el mercado hoy. »"
  },
  {
-  "pt": "A mesma organização no celular e no computador — muda só o alcance do polegar. Entrada por biometria ou PIN de seis números nos dois.",
-  "en": "The same organisation on the phone and on the computer — only the reach of your thumb changes. Entry by biometrics or a six-digit PIN on both.",
-  "fr": "La même organisation sur téléphone et sur ordinateur — seule la portée du pouce change. Accès par biométrie ou code à six chiffres sur les deux.",
-  "es": "La misma organización en el móvil y en el ordenador — solo cambia el alcance del pulgar. Entrada por biometría o PIN de seis números en los dos."
+  "pt": "Entendi. Quer registrar como alimentação?",
+  "en": "Got it. Record this under groceries?",
+  "fr": "Compris. L’enregistrer dans alimentation ?",
+  "es": "Entendido. ¿Lo registro como alimentación?"
  },
  {
-  "pt": "<strong>No celular:</strong> barra inferior com o + no centro, e a Coco numa folha que sobe da base.",
-  "en": "<strong>On the phone:</strong> a bottom bar with the + in the middle, and Coco on a sheet that rises from the base.",
-  "fr": "<strong>Sur téléphone :</strong> une barre en bas avec le + au centre, et Coco sur une feuille qui monte depuis le bas.",
-  "es": "<strong>En el móvil:</strong> barra inferior con el + al centro, y Coco en una hoja que sube desde la base."
+  "pt": "Exemplo de conversa · nenhuma ação sem confirmação",
+  "en": "Sample conversation · no action without confirmation",
+  "fr": "Conversation d’exemple · aucune action sans confirmation",
+  "es": "Conversación de ejemplo · ninguna acción sin confirmación"
  },
  {
-  "pt": "<strong>No computador:</strong> barra lateral, painel da Coco à direita e a tecla N para lançar.",
-  "en": "<strong>On the computer:</strong> a side bar, Coco’s panel on the right and the N key to add an entry.",
-  "fr": "<strong>Sur ordinateur :</strong> une barre latérale, le panneau de Coco à droite et la touche N pour saisir.",
-  "es": "<strong>En el ordenador:</strong> barra lateral, el panel de Coco a la derecha y la tecla N para registrar."
+  "pt": "Conhecer a Coco",
+  "en": "Meet Coco",
+  "fr": "Découvrir Coco",
+  "es": "Conocer a Coco"
  },
  {
-  "pt": "O OAZE funcionando nos dois aparelhos: no computador, a barra lateral com as seções e a visão geral do mês; no celular, o início, a carteira de cartões e uma conversa com a Coco.",
-  "en": "OAZE running on both devices: on the computer, the side bar with the sections and the month at a glance; on the phone, the home screen, the card wallet and a conversation with Coco.",
-  "fr": "OAZE sur les deux appareils : sur ordinateur, la barre latérale avec les sections et le mois d’un coup d’œil ; sur téléphone, l’accueil, le portefeuille de cartes et une conversation avec Coco.",
-  "es": "OAZE funcionando en los dos aparatos: en el ordenador, la barra lateral con las secciones y el mes de un vistazo; en el móvil, el inicio, la cartera de tarjetas y una conversación con Coco."
+  "pt": "OLHE ADIANTE",
+  "en": "LOOK AHEAD",
+  "fr": "ANTICIPEZ",
+  "es": "MIRA ADELANTE"
  },
  {
-  "pt": "a coco nunca mexe <br class=\"quebra\">no seu dinheiro",
-  "en": "coco never touches <br class=\"quebra\">your money",
-  "fr": "coco ne touche jamais <br class=\"quebra\">à votre argent",
-  "es": "coco nunca toca <br class=\"quebra\">tu dinero"
+  "pt": "O fim do mês não precisa ser <em>uma surpresa.</em>",
+  "en": "The end of the month need not be <em>a surprise.</em>",
+  "fr": "La fin du mois n’a pas à être <em>une surprise.</em>",
+  "es": "El fin de mes no tiene por qué ser <em>una sorpresa.</em>"
  },
  {
-  "pt": "Ela prepara, organiza e sugere. Quem decide é você, sempre — e dá para voltar atrás em tudo.",
-  "en": "She prepares, organises and suggests. You decide, always — and everything can be walked back.",
-  "fr": "Elle prépare, organise et propose. C’est vous qui décidez, toujours — et tout peut être défait.",
-  "es": "Ella prepara, organiza y sugiere. Quien decide eres tú, siempre — y todo se puede revertir."
+  "pt": "Calendário e recorrências andam juntos. Veja o que está previsto até o último dia do mês e decida com antecedência o que cabe no seu plano.",
+  "en": "Calendar and recurring items work together. See what is expected through the last day of the month and decide early what fits your plan.",
+  "fr": "Calendrier et éléments récurrents fonctionnent ensemble. Voyez ce qui est prévu jusqu’au dernier jour du mois et décidez à l’avance ce qui entre dans votre plan.",
+  "es": "Calendario y recurrentes trabajan juntos. Ve lo previsto hasta el último día del mes y decide con antelación qué cabe en tu plan."
  },
  {
-  "pt": "nenhuma transação",
-  "en": "no transactions",
-  "fr": "aucune transaction",
-  "es": "ninguna transacción"
+  "pt": "Ver calendário e metas",
+  "en": "See calendar and goals",
+  "fr": "Voir calendrier et objectifs",
+  "es": "Ver calendario y metas"
  },
  {
-  "pt": "O OAZE não faz transferência, pagamento nem qualquer movimentação. Ele organiza o registro do seu dinheiro, não o dinheiro.",
-  "en": "OAZE makes no transfer, no payment and no movement of any kind. It organises the record of your money, not the money.",
-  "fr": "OAZE ne fait ni virement, ni paiement, ni aucun mouvement. Il organise le registre de votre argent, pas l’argent.",
-  "es": "OAZE no hace transferencias, pagos ni ningún movimiento. Organiza el registro de tu dinero, no el dinero."
+  "pt": "Exemplo ilustrativo de agenda com três compromissos ao longo do mês",
+  "en": "Illustrative example of a calendar with three commitments through the month",
+  "fr": "Exemple illustratif de calendrier avec trois échéances au cours du mois",
+  "es": "Ejemplo ilustrativo de agenda con tres compromisos durante el mes"
  },
  {
-  "pt": "tudo tem desfazer",
-  "en": "everything can be undone",
-  "fr": "tout peut être annulé",
-  "es": "todo se puede deshacer"
+  "pt": "HOJE",
+  "en": "TODAY",
+  "fr": "AUJOURD’HUI",
+  "es": "HOY"
  },
  {
-  "pt": "Cada ação da Coco pode ser revertida, e cada previsão vem marcada como estimativa. Nada é apresentado como certeza sem ser.",
-  "en": "Every action by Coco can be reversed, and every forecast is labelled as an estimate. Nothing is presented as certain unless it is.",
-  "fr": "Chaque action de Coco peut être annulée, et chaque prévision est marquée comme une estimation. Rien n’est présenté comme certain sans l’être.",
-  "es": "Cada acción de Coco se puede revertir, y cada previsión viene marcada como estimación. Nada se presenta como certeza sin serlo."
+  "pt": "Seu mês está em movimento",
+  "en": "Your month is in motion",
+  "fr": "Votre mois est en mouvement",
+  "es": "Tu mes está en movimiento"
  },
  {
-  "pt": "entra com biometria ou PIN",
-  "en": "unlock with biometrics or a PIN",
-  "fr": "accès par biométrie ou code",
-  "es": "entra con biometría o PIN"
+  "pt": "Contas do mês",
+  "en": "This month's bills",
+  "fr": "Factures du mois",
+  "es": "Cuentas del mes"
  },
  {
-  "pt": "O app tranca sozinho quando você sai, no tempo que você escolher. Dá para desconectar os outros aparelhos a qualquer momento.",
-  "en": "The app locks itself when you leave, after however long you choose. You can sign other devices out at any time.",
-  "fr": "L’application se verrouille toute seule quand vous partez, au bout du délai que vous choisissez. Vous pouvez déconnecter les autres appareils à tout moment.",
-  "es": "La app se bloquea sola cuando sales, en el tiempo que elijas. Puedes desconectar los otros aparatos cuando quieras."
+  "pt": "Organizadas por vencimento",
+  "en": "Organized by due date",
+  "fr": "Organisées par échéance",
+  "es": "Organizadas por vencimiento"
  },
  {
-  "pt": "você escolhe o que a Coco vê",
-  "en": "you choose what Coco sees",
-  "fr": "vous choisissez ce que Coco voit",
-  "es": "tú eliges lo que Coco ve"
+  "pt": "Fatura do cartão",
+  "en": "Card statement",
+  "fr": "Facture de carte",
+  "es": "Resumen de la tarjeta"
  },
  {
-  "pt": "Antes do primeiro uso ela mostra o que sai do seu aparelho: totais e categorias, nunca descrições, nomes de conta ou e-mail. Dá para revogar depois.",
-  "en": "Before the first use she shows what leaves your device: totals and categories, never descriptions, account names or e-mail. You can revoke it later.",
-  "fr": "Avant la première utilisation, elle montre ce qui quitte votre appareil : totaux et catégories, jamais les libellés, les noms de comptes ou l’e-mail. Vous pouvez révoquer ensuite.",
-  "es": "Antes del primer uso te muestra qué sale de tu aparato: totales y categorías, nunca descripciones, nombres de cuenta o correo. Puedes revocarlo después."
+  "pt": "No ciclo certo",
+  "en": "In the right billing cycle",
+  "fr": "Dans le bon cycle de facturation",
+  "es": "En el ciclo de facturación correcto"
  },
  {
-  "pt": "escolha seu plano",
-  "en": "choose your plan",
-  "fr": "choisissez votre formule",
-  "es": "elige tu plan"
+  "pt": "Fechamento",
+  "en": "Month-end outlook",
+  "fr": "Fin de mois",
+  "es": "Cierre del mes"
+ },
+ {
+  "pt": "O que ainda está previsto",
+  "en": "What is still expected",
+  "fr": "Ce qui est encore prévu",
+  "es": "Lo que aún está previsto"
+ },
+ {
+  "pt": "Exemplo ilustrativo · datas não representam sua conta",
+  "en": "Illustrative example · dates do not represent your account",
+  "fr": "Exemple illustratif · les dates ne représentent pas votre compte",
+  "es": "Ejemplo ilustrativo · las fechas no representan tu cuenta"
+ },
+ {
+  "pt": "CONTROLE SEM ABRIR MÃO DE VOCÊ",
+  "en": "CONTROL WITHOUT LOSING YOURSELF",
+  "fr": "LE CONTRÔLE SANS RENONCER À VOUS",
+  "es": "CONTROL SIN DEJAR DE SER TÚ"
+ },
+ {
+  "pt": "A Coco ajuda. <em>Você decide.</em>",
+  "en": "Coco helps. <em>You decide.</em>",
+  "fr": "Coco vous aide. <em>Vous décidez.</em>",
+  "es": "Coco te ayuda. <em>Tú decides.</em>"
+ },
+ {
+  "pt": "O OAZE organiza o registro do seu dinheiro. Não faz pagamentos, transferências ou investimentos por você.",
+  "en": "OAZE organizes your money records. It does not make payments, transfers, or investments for you.",
+  "fr": "OAZE organise vos finances. Il n'effectue aucun paiement, virement ou investissement à votre place.",
+  "es": "OAZE organiza el registro de tu dinero. No hace pagos, transferencias ni inversiones por ti."
+ },
+ {
+  "pt": "Nada se move sozinho",
+  "en": "Nothing moves on its own",
+  "fr": "Rien ne bouge tout seul",
+  "es": "Nada se mueve solo"
+ },
+ {
+  "pt": "O que a Coco prepara só entra na carteira depois da sua confirmação.",
+  "en": "What Coco prepares only enters your wallet after you confirm it.",
+  "fr": "Ce que Coco prépare n'entre dans votre portefeuille qu'après votre confirmation.",
+  "es": "Lo que Coco prepara solo entra en tu cartera después de tu confirmación."
+ },
+ {
+  "pt": "Previsão não é saldo",
+  "en": "A forecast is not a balance",
+  "fr": "Une prévision n'est pas un solde",
+  "es": "Una previsión no es un saldo"
+ },
+ {
+  "pt": "Valores futuros ficam identificados como previstos, sem inflar o que você tem hoje.",
+  "en": "Future amounts are marked as expected and do not inflate what you have today.",
+  "fr": "Les montants futurs sont indiqués comme prévus, sans gonfler votre solde actuel.",
+  "es": "Los valores futuros se identifican como previstos, sin inflar lo que tienes hoy."
+ },
+ {
+  "pt": "Seus dados, suas escolhas",
+  "en": "Your data, your choices",
+  "fr": "Vos données, vos choix",
+  "es": "Tus datos, tus decisiones"
+ },
+ {
+  "pt": "Você pode rever o que a Coco aprende, pausar o aprendizado e apagar lembranças.",
+  "en": "You can review what Coco learns, pause learning, and delete memories.",
+  "fr": "Vous pouvez revoir ce que Coco apprend, suspendre l'apprentissage et effacer ses souvenirs.",
+  "es": "Puedes revisar lo que Coco aprende, pausar el aprendizaje y borrar recuerdos."
+ },
+ {
+  "pt": "o plano que acompanha você",
+  "en": "the plan that grows with you",
+  "fr": "l'offre qui évolue avec vous",
+  "es": "el plan que crece contigo"
  },
  {
   "pt": "Comece grátis, sem cartão. O plano grátis não expira. Mude quando precisar.",
@@ -484,6 +538,12 @@
   "en": "Annual <span class=\"economia\">−16%</span>",
   "fr": "Annuel <span class=\"economia\">−16%</span>",
   "es": "Anual <span class=\"economia\">−16%</span>"
+ },
+ {
+  "pt": "grátis",
+  "en": "free",
+  "fr": "gratuit",
+  "es": "gratis"
  },
  {
   "pt": "R$ 0",
@@ -540,6 +600,12 @@
   "es": "básico"
  },
  {
+  "pt": "Escolha do OAZE",
+  "en": "OAZE’s pick",
+  "fr": "Choix d’OAZE",
+  "es": "Elección de OAZE"
+ },
+ {
   "pt": "R$ 14,90",
   "en": "R$ 14,90",
   "fr": "R$ 14,90",
@@ -592,12 +658,6 @@
   "en": "complete",
   "fr": "complète",
   "es": "completo"
- },
- {
-  "pt": "Tudo incluído",
-  "en": "Everything included",
-  "fr": "Tout compris",
-  "es": "Todo incluido"
  },
  {
   "pt": "R$ 29,90",
@@ -654,10 +714,10 @@
   "es": "Cancela cuando quieras, directo en los ajustes."
  },
  {
-  "pt": "dúvidas? a gente responde",
-  "en": "questions? we answer",
-  "fr": "des questions ? on répond",
-  "es": "¿dudas? te respondemos"
+  "pt": "o que você precisa saber",
+  "en": "what you need to know",
+  "fr": "ce qu'il faut savoir",
+  "es": "lo que necesitas saber"
  },
  {
   "pt": "As perguntas que mais aparecem sobre o OAZE e sobre a Coco.",
@@ -750,16 +810,16 @@
   "es": "Sí, directo en Ajustes. La renovación se detiene al instante y sigues con el plan hasta el final del período que ya pagaste. Después la cuenta vuelve al gratis, con todo lo que registraste en su lugar."
  },
  {
-  "pt": "pronto para organizar <br class=\"quebra\">o seu mês?",
-  "en": "ready to organise <br class=\"quebra\">your month?",
-  "fr": "prêt à organiser <br class=\"quebra\">votre mois ?",
-  "es": "¿listo para organizar <br class=\"quebra\">tu mes?"
+  "pt": "Seu dinheiro pode fazer <em>mais sentido.</em>",
+  "en": "Your money can <em>make more sense.</em>",
+  "fr": "Votre argent peut <em>devenir plus clair.</em>",
+  "es": "Tu dinero puede <em>tener más sentido.</em>"
  },
  {
-  "pt": "Comece agora. É rápido, funciona sem conta e o plano grátis não expira.",
-  "en": "Start now. It is quick, it works without an account and the free plan does not expire.",
-  "fr": "Commencez maintenant. C’est rapide, ça marche sans compte et la formule gratuite n’expire pas.",
-  "es": "Empieza ahora. Es rápido, funciona sin cuenta y el plan gratis no caduca."
+  "pt": "Comece no seu ritmo. O plano grátis não expira e você não precisa cadastrar um cartão.",
+  "en": "Start at your own pace. The free plan does not expire and you do not need to add a card.",
+  "fr": "Commencez à votre rythme. L'offre gratuite n'expire pas et aucune carte n'est nécessaire.",
+  "es": "Empieza a tu ritmo. El plan gratis no vence y no necesitas registrar una tarjeta."
  },
  {
   "pt": "Sem cartão de crédito · Sem movimentar dinheiro · Tudo com desfazer",
@@ -824,14 +884,14 @@
  {
   "pt": "Fale com a gente",
   "en": "Talk to us",
-  "fr": "Nous écrire",
-  "es": "Hable con nosotros"
+  "fr": "Parlons-en",
+  "es": "Hablemos"
  },
  {
   "pt": "Respondemos em até 2 dias úteis.",
   "en": "We reply within 2 business days.",
-  "fr": "Nous répondons sous 2 jours ouvrés.",
-  "es": "Respondemos en un máximo de 2 días hábiles."
+  "fr": "Nous répondons sous 2 jours ouvrables.",
+  "es": "Respondemos en un plazo de 2 días hábiles."
  },
  {
   "pt": "suporte@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",

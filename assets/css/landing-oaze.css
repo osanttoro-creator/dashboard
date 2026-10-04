@@ -1,0 +1,248 @@
+/* Landing OAZE: o portal original continua; os capítulos abaixo usam a marca real. */
+.landing-oaze {
+  --env: min(1240px, calc(100% - clamp(32px, 6vw, 96px)));
+  --respiro: clamp(84px, 10vw, 152px);
+  --curva: cubic-bezier(.22,.61,.36,1);
+  background: #0d1821;
+}
+.landing-oaze .env { width: var(--env); }
+.landing-oaze .rotulo {
+  font: 500 11px/1.4 var(--fonte-dado);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #8fcfc0;
+}
+.landing-oaze h1,
+.landing-oaze h2,
+.landing-oaze h3 { font-family: var(--fonte-titulo); font-style: normal; text-transform: lowercase; }
+.landing-oaze h2 { font-size: clamp(2.3rem, 4.8vw, 4.7rem); line-height: 1.04; letter-spacing: -.055em; text-wrap: balance; }
+.landing-oaze h2 em,
+.landing-oaze h1 em { font-style: normal; color: var(--teal); }
+.landing-oaze .btn { min-height: 48px; padding: 12px 24px; font-size: 14px; }
+.landing-oaze .btn-claro { background: #5fa99b; color: #0d1821; }
+.landing-oaze .btn-claro:hover { background: #8fcfc0; color: #0d1821; box-shadow: 0 9px 28px rgba(95,169,155,.25); }
+.landing-oaze .btn-linha { border-color: rgba(240,229,207,.25); }
+.landing-oaze .btn-linha:hover { border-color: #8fcfc0; color: #f0e5cf; }
+.landing-oaze :focus-visible { outline-color: #8fcfc0; }
+
+/* A navegação pousa sobre o portal; o letreiro e os painéis não mudam. */
+.landing-oaze .topo,
+.landing-oaze .topo.rolou {
+  top: 0; left: 0; transform: none; width: 100%;
+  border: 0; border-bottom: 1px solid rgba(240,229,207,.08); border-radius: 0;
+  background: rgba(13,24,33,.8);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+.landing-oaze .topo .env { width: min(1320px, calc(100% - 40px)); height: 72px; gap: 28px; padding: 0; }
+.landing-oaze .marca img { width: auto; height: 31px; }
+.landing-oaze .menu { gap: clamp(18px,2.2vw,34px); margin-inline: auto; }
+.landing-oaze .menu a { color: #c1c9c8; font: 500 12px/1 var(--fonte-corpo); letter-spacing: .02em; text-transform: none; }
+.landing-oaze .menu a:hover { color: #f0e5cf; }
+.landing-oaze .acoes-topo .btn-linha { padding-inline: 10px; border: 0; }
+.landing-oaze .acoes-topo .btn-claro { background: #f0e5cf; color: #0d1821; }
+.landing-oaze .acoes-topo .btn-claro:hover { background: #8fcfc0; }
+
+/* A segunda cena aparece quando os painéis se abrem. */
+.landing-oaze .portal-mundo { background: radial-gradient(ellipse at 66% 62%, rgba(53,85,101,.34), transparent 52%), #0d1821; }
+.landing-oaze .portal-mundo .novo-heroi { padding: 80px 0 0; }
+.landing-oaze .portal-mundo .novo-heroi::before { display: none; }
+.landing-oaze .novo-heroi .env {
+  display: grid; grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr);
+  align-items: center; gap: clamp(12px,3vw,44px);
+  justify-items: stretch; text-align: left;
+}
+.landing-oaze .novo-heroi-texto { position: relative; z-index: 2; display: grid; justify-items: start; gap: clamp(16px,2.4vh,24px); max-width: 580px; }
+.landing-oaze .novo-heroi h1 { font-size: clamp(2.8rem,5.1vw,5.7rem); line-height: 1.03; letter-spacing: -.065em; text-wrap: balance; }
+.landing-oaze .novo-heroi .grande { color: #c0cece; max-width: 48ch; font-size: clamp(1rem,1.3vw,1.18rem); line-height: 1.62; }
+.landing-oaze .novo-heroi .heroi-acoes { justify-content: flex-start; }
+.landing-oaze .heroi-pequeno { color: #8ea5aa; font: 400 12px/1.5 var(--fonte-corpo); }
+.landing-oaze .novo-heroi-cena { position: relative; height: min(62vh,570px); min-height: 350px; width: 100%; --a: 1; --b: 1; --c: 1; }
+.landing-oaze .cena-brilho { position: absolute; inset: 12% 0 0; border-radius: 50%; background: radial-gradient(ellipse at 57% 62%, rgba(95,169,155,.2), transparent 60%); filter: blur(25px); }
+.landing-oaze .cena-computador,
+.landing-oaze .cena-celular { position: absolute; overflow: hidden; background: #071219; border: 7px solid #1c313d; box-shadow: 0 32px 65px rgba(0,0,0,.38), inset 0 1px 0 rgba(240,229,207,.18); }
+.landing-oaze .cena-computador { left: 0; top: 21%; width: 83%; aspect-ratio: 16/10; border-radius: 20px; opacity: var(--a); transform: translateY(calc((1 - var(--a))*30px)); }
+.landing-oaze .cena-computador img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.landing-oaze .cena-celular { right: 2%; top: 10%; width: 30%; height: 79%; border: 5px solid #243742; border-radius: 28px; opacity: var(--b); transform: translateY(calc((1 - var(--b))*40px)); }
+.landing-oaze .cena-celular img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.landing-oaze .cena-coco { position: absolute; left: -13%; bottom: -4%; width: 38%; opacity: var(--c); transform: translateY(calc((1 - var(--c))*34px)); filter: drop-shadow(0 24px 20px rgba(0,0,0,.24)); }
+.landing-oaze .cena-coco img { width: 100%; height: auto; }
+.landing-oaze .cena-legenda { position: absolute; right: 4%; bottom: 0; color: #a6b9b8; font: 500 10px/1.3 var(--fonte-dado); letter-spacing: .07em; }
+
+/* O começo é curto: nenhuma métrica fabricada, só a ordem real da ação. */
+.landing-oaze .sinais { border-block: 1px solid rgba(240,229,207,.1); }
+.landing-oaze .sinais .env { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0; }
+.landing-oaze .sinais .env > div { display: flex; align-items: center; gap: 17px; min-height: 106px; padding: 20px 28px; border-right: 1px solid rgba(240,229,207,.1); }
+.landing-oaze .sinais .env > div:last-child { border-right: 0; }
+.landing-oaze .sinais strong { color: #5fa99b; font: 500 13px/1 var(--fonte-dado); }
+.landing-oaze .sinais span { color: #f0e5cf; font: 500 15px/1.35 var(--fonte-corpo); }
+
+/* Um capítulo claro dá ar aos quatro recursos sem parecer outro app. */
+.landing-oaze .nova-vantagens { background: #f0e5cf; color: #0d1821; }
+.landing-oaze .nova-vantagens .rotulo { color: #2e6b63; }
+.landing-oaze .nova-vantagens .secao-topo { max-width: 850px; }
+.landing-oaze .nova-vantagens h2 { color: #0d1821; }
+.landing-oaze .nova-vantagens h2 em { color: #2d786c; }
+.landing-oaze .nova-vantagens .secao-topo p:not(.rotulo) { color: #4b6266; max-width: 60ch; }
+.landing-oaze .vantagens-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1px; background: rgba(13,24,33,.17); border: 1px solid rgba(13,24,33,.17); }
+.landing-oaze .vantagem { display: flex; flex-direction: column; min-height: 280px; gap: 12px; padding: clamp(22px,2.6vw,34px); background: #f0e5cf; transition: background .25s var(--curva), transform .25s var(--curva); }
+.landing-oaze .vantagem:hover { background: #faf5e9; transform: translateY(-4px); }
+.landing-oaze .vantagem-icone { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 10px; color: #2d786c; }
+.landing-oaze .vantagem-icone svg { width: 44px; height: 44px; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.landing-oaze .vantagem h3 { color: #0d1821; font: 500 20px/1.25 var(--fonte-titulo); }
+.landing-oaze .vantagem p { color: #496065; font: 400 14px/1.6 var(--fonte-corpo); }
+.landing-oaze .link-secao { display: inline-flex; gap: 14px; margin-top: 32px; color: #226d62; font: 600 14px/1.4 var(--fonte-corpo); border-bottom: 1px solid #226d62; padding-bottom: 6px; }
+.landing-oaze .link-secao:hover { color: #0d1821; border-color: #0d1821; }
+
+/* Telas reais, grandes o suficiente para mostrar por que existem. */
+.landing-oaze .nova-historia { overflow: clip; }
+.landing-oaze .historia-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(34px,6vw,94px); align-items: center; }
+.landing-oaze .historia-texto { display: grid; justify-items: start; gap: 22px; }
+.landing-oaze .historia-texto h2 { max-width: 13ch; }
+.landing-oaze .historia-texto p:not(.rotulo) { color: #aebfc1; font-size: clamp(1rem,1.3vw,1.15rem); line-height: 1.65; max-width: 46ch; }
+.landing-oaze .historia-visual { position: relative; min-width: 0; margin: 0; padding: clamp(18px,2.3vw,30px); border: 1px solid rgba(240,229,207,.08); border-radius: 32px; background: radial-gradient(ellipse at 45% 40%, rgba(95,169,155,.16), transparent 65%), #132731; }
+.landing-oaze .historia-visual img { width: 100%; height: auto; border-radius: 18px; box-shadow: 0 28px 50px rgba(0,0,0,.3); }
+.landing-oaze .historia-visual figcaption { margin-top: 16px; color: #aebfc1; font: 500 11px/1.4 var(--fonte-dado); letter-spacing: .08em; }
+.landing-oaze .visual-celular { display: grid; place-items: center; justify-self: center; width: min(100%,460px); }
+.landing-oaze .visual-celular img { width: min(100%,290px); }
+.landing-oaze .historia-carteira { background: #10212b; }
+.landing-oaze .historia-carteira .historia-texto { order: 2; }
+
+/* A Coco é protagonista, não um ícone repetido em quatro cartões. */
+.landing-oaze .coco-vitrine { position: relative; overflow: hidden; background: #c5dfd6; color: #0d1821; }
+.landing-oaze .coco-vitrine::before { content: ''; position: absolute; left: -12%; bottom: -55%; width: 65%; aspect-ratio: 1; border-radius: 50%; background: rgba(95,169,155,.26); filter: blur(70px); }
+.landing-oaze .coco-grid { position: relative; display: grid; grid-template-columns: minmax(0,.86fr) minmax(0,1.14fr); align-items: center; gap: clamp(30px,5vw,76px); }
+.landing-oaze .coco-personagem { display: grid; place-items: center; min-height: 480px; }
+.landing-oaze .coco-personagem img { width: min(100%,520px); height: auto; filter: drop-shadow(0 35px 25px rgba(13,24,33,.12)); }
+.landing-oaze .coco-texto { display: grid; justify-items: start; gap: 22px; }
+.landing-oaze .coco-texto .rotulo { color: #1e665d; }
+.landing-oaze .coco-texto h2 { color: #0d1821; }
+.landing-oaze .coco-texto h2 em { color: #297569; }
+.landing-oaze .coco-texto > p:not(.rotulo) { color: #355b61; font-size: clamp(1rem,1.4vw,1.16rem); line-height: 1.65; max-width: 48ch; }
+.landing-oaze .coco-conversa { display: grid; gap: 12px; width: min(100%,440px); padding: 21px; border-radius: 22px; background: #f4f0e6; box-shadow: 0 22px 50px rgba(13,24,33,.09); }
+.landing-oaze .coco-conversa span { justify-self: end; max-width: 78%; padding: 10px 14px; border-radius: 15px 15px 4px 15px; background: #d8e9e1; color: #0d1821; font-size: 13px; }
+.landing-oaze .coco-conversa strong { justify-self: start; max-width: 83%; padding: 10px 14px; border-radius: 15px 15px 15px 4px; background: #0d1821; color: #f0e5cf; font: 500 13px/1.45 var(--fonte-corpo); }
+.landing-oaze .coco-conversa small { color: #53696a; font-size: 11px; }
+.landing-oaze .coco-texto .btn-claro { background: #0d1821; color: #f0e5cf; }
+.landing-oaze .coco-texto .btn-claro:hover { background: #24424e; color: #fff; }
+
+.landing-oaze .nova-agenda { background: #0d1821; }
+.landing-oaze .agenda-ilustracao { padding: clamp(22px,3vw,40px); border-radius: 28px; background: #f0e5cf; color: #0d1821; box-shadow: 0 30px 65px rgba(0,0,0,.19); }
+.landing-oaze .agenda-ilustracao > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: baseline; padding-bottom: 28px; border-bottom: 1px solid rgba(13,24,33,.14); }
+.landing-oaze .agenda-ilustracao > div span { font: 600 11px var(--fonte-dado); color: #287368; letter-spacing: .14em; }
+.landing-oaze .agenda-ilustracao > div strong { font: 500 17px var(--fonte-titulo); }
+.landing-oaze .agenda-ilustracao ol { list-style: none; margin: 0; padding: 0; }
+.landing-oaze .agenda-ilustracao li { display: grid; grid-template-columns: 52px 1fr; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(13,24,33,.12); }
+.landing-oaze .agenda-ilustracao time { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: #d5e8df; color: #1e675d; font: 500 18px var(--fonte-dado); }
+.landing-oaze .agenda-ilustracao li span { display: grid; gap: 4px; }
+.landing-oaze .agenda-ilustracao li strong { font: 600 15px var(--fonte-corpo); }
+.landing-oaze .agenda-ilustracao li small { font: 400 13px var(--fonte-corpo); color: #53696a; }
+.landing-oaze .agenda-ilustracao > p { margin-top: 18px; color: #647777; font: 400 11px/1.5 var(--fonte-corpo); }
+
+.landing-oaze .nova-seguranca { background: #162e39; }
+.landing-oaze .nova-seguranca .secao-topo { max-width: 800px; }
+.landing-oaze .nova-seguranca .secao-topo p:not(.rotulo) { color: #b8c9ca; }
+.landing-oaze .seguranca-lista { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
+.landing-oaze .seguranca-lista article { display: grid; align-content: start; gap: 14px; padding-top: 22px; border-top: 1px solid rgba(240,229,207,.23); }
+.landing-oaze .seguranca-lista article > span { color: #8fcfc0; font: 500 12px var(--fonte-dado); }
+.landing-oaze .seguranca-lista h3 { font: 500 18px/1.3 var(--fonte-titulo); }
+.landing-oaze .seguranca-lista p { color: #b8c9ca; font-size: 14px; line-height: 1.6; }
+
+/* O catálogo existente conserva preços e limites; só muda o enquadramento. */
+.landing-oaze #planos { background: #0d1821; }
+.landing-oaze #planos .secao-topo { margin-inline: auto; text-align: center; justify-items: center; }
+.landing-oaze #planos .secao-topo p { max-width: 55ch; }
+.landing-oaze .ciclo { display: flex; width: max-content; margin-inline: auto; background: #1b303b; }
+.landing-oaze .ciclo button[aria-pressed="true"] { background: #f0e5cf; color: #0d1821; }
+.landing-oaze .planos { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.landing-oaze .plano { border-radius: 22px; background: #142732; grid-template-rows: auto auto auto 1fr auto; }
+.landing-oaze .plano.e-destaque { background: #1d3840; border-color: rgba(95,169,155,.62); box-shadow: 0 22px 48px rgba(0,0,0,.2); }
+.landing-oaze .plano.e-destaque .plano-selo { background: #8fcfc0; border-color: #8fcfc0; color: #0d1821; }
+.landing-oaze .plano h3 { font: 500 18px/1.2 var(--fonte-titulo); }
+.landing-oaze .plano .preco-valor { font-size: clamp(2.2rem,3vw,3rem); }
+.landing-oaze .plano .preco-ciclo { min-height: 3.5em; }
+.landing-oaze .plano .btn { align-self: end; }
+.landing-oaze .plano .btn-claro { background: #8fcfc0; }
+.landing-oaze .plano-lista { align-self: start; }
+
+.landing-oaze #planos + .secao { background: #10212b; }
+.landing-oaze .perguntas { max-width: 900px; margin-inline: auto; }
+.landing-oaze #planos + .secao .secao-topo { margin-inline: auto; text-align: center; }
+.landing-oaze .final { background: #f0e5cf; color: #0d1821; border: 0; }
+.landing-oaze .final h2 { max-width: 18ch; }
+.landing-oaze .final h2 em { color: #26766b; }
+.landing-oaze .final p { color: #4b6063; }
+.landing-oaze .final .btn-claro { background: #0d1821; color: #f0e5cf; }
+.landing-oaze .final .btn-claro:hover { background: #21434c; color: #fff; }
+.landing-oaze .rodape { background: #0d1821; }
+.landing-oaze .rodape-grade { grid-template-columns: minmax(0,1.6fr) repeat(4,minmax(0,1fr)); }
+.landing-oaze .rodape-fala:hover { border-color: #8fcfc0; }
+
+@media (max-width: 1050px) {
+  .landing-oaze .vantagens-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .landing-oaze .sinais .env > div { padding-inline: 16px; }
+  .landing-oaze .rodape-grade { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 900px) {
+  .landing-oaze .menu { display: none; }
+  .landing-oaze .topo.aberto .menu { display: grid; }
+  .landing-oaze .acoes-topo { display: none; }
+  .landing-oaze .topo.aberto .acoes-topo { display: grid; }
+  .landing-oaze .novo-heroi .env { grid-template-columns: 1fr; gap: 12px; text-align: center; justify-items: center; }
+  .landing-oaze .novo-heroi-texto { justify-items: center; max-width: 680px; }
+  .landing-oaze .novo-heroi .heroi-acoes { justify-content: center; }
+  .landing-oaze .novo-heroi-cena { height: min(42vh,370px); min-height: 260px; width: min(100%,620px); }
+  .landing-oaze .cena-computador { top: 8%; width: 76%; }
+  .landing-oaze .cena-celular { top: 0; height: 90%; width: 27%; }
+  .landing-oaze .cena-coco { left: -1%; bottom: -1%; width: 29%; }
+  .landing-oaze .historia-grid,
+  .landing-oaze .coco-grid { grid-template-columns: 1fr; }
+  .landing-oaze .historia-carteira .historia-texto { order: 0; }
+  .landing-oaze .historia-carteira .historia-visual { order: 1; }
+  .landing-oaze .coco-personagem { min-height: 0; order: 1; }
+  .landing-oaze .coco-texto { order: 0; }
+  .landing-oaze .coco-personagem img { width: min(100%,400px); }
+  .landing-oaze .seguranca-lista { grid-template-columns: 1fr; }
+  .landing-oaze .planos { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 620px) {
+  .landing-oaze { --env: calc(100% - 32px); --respiro: 76px; }
+  .landing-oaze .topo .env { min-height: 64px; height: auto; width: calc(100% - 32px); }
+  .landing-oaze .marca img { height: 28px; }
+  .landing-oaze .portal-mundo .novo-heroi { padding-top: 70px; padding-bottom: 10px; }
+  .landing-oaze .novo-heroi-texto { gap: 13px; }
+  .landing-oaze .novo-heroi .rotulo { font-size: 9px; }
+  .landing-oaze .novo-heroi h1 { font-size: clamp(2.1rem,9vw,3.4rem); }
+  .landing-oaze .novo-heroi .grande { font-size: .9rem; line-height: 1.45; }
+  .landing-oaze .novo-heroi .heroi-acoes { gap: 7px; width: 100%; }
+  .landing-oaze .novo-heroi .heroi-acoes .btn { min-height: 42px; padding: 9px 14px; font-size: 12px; width: auto; }
+  .landing-oaze .heroi-pequeno { font-size: 10px; }
+  .landing-oaze .novo-heroi-cena { height: min(34vh,275px); min-height: 195px; }
+  .landing-oaze .cena-computador { left: 2%; top: 14%; width: 80%; border-width: 4px; border-radius: 11px; }
+  .landing-oaze .cena-celular { right: 1%; top: 4%; width: 29%; height: 86%; border-width: 3px; border-radius: 15px; }
+  .landing-oaze .cena-coco { left: 0; bottom: 0; width: 29%; }
+  .landing-oaze .cena-legenda { bottom: 2px; right: 0; font-size: 8px; }
+  .landing-oaze .sinais .env { grid-template-columns: 1fr; }
+  .landing-oaze .sinais .env > div { min-height: 65px; border-right: 0; border-bottom: 1px solid rgba(240,229,207,.1); padding: 12px 6px; }
+  .landing-oaze .sinais .env > div:last-child { border-bottom: 0; }
+  .landing-oaze .vantagens-grid,
+  .landing-oaze .planos { grid-template-columns: 1fr; }
+  .landing-oaze .vantagem { min-height: 0; }
+  .landing-oaze .historia-grid { gap: 34px; }
+  .landing-oaze .historia-texto h2 { max-width: 17ch; }
+  .landing-oaze .coco-conversa { padding: 14px; }
+  .landing-oaze .rodape-grade { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .landing-oaze .rodape-grade > div:first-child,
+  .landing-oaze .rodape-grade > div:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 380px) {
+  .landing-oaze .novo-heroi .heroi-acoes { flex-wrap: nowrap; }
+  .landing-oaze .novo-heroi .heroi-acoes .btn { font-size: 11px; padding-inline: 10px; }
+  .landing-oaze .heroi-pequeno { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-oaze .cena-computador,
+  .landing-oaze .cena-celular,
+  .landing-oaze .cena-coco { opacity: 1; transform: none; }
+  .landing-oaze .vantagem { transition: none; }
+}

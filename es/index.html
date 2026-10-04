@@ -44,6 +44,7 @@
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/v3.css">
+<link rel="stylesheet" href="/assets/css/landing-oaze.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -93,7 +94,7 @@
 </script>
 </head>
 
-<body class="pagina-inicial">
+<body class="pagina-inicial landing-oaze">
 <a class="pular" href="#conteudo">Saltar al contenido</a>
 
 <header class="topo" id="topo">
@@ -143,113 +144,25 @@
   <section class="portal" data-portal aria-label="Bienvenido a OAZE">
    <div class="portal-palco">
     <div class="portal-mundo">
-  <section class="heroi">
+  <section class="heroi novo-heroi">
     <div class="env">
-      <div class="heroi-texto">
-        <!-- A PÍLULA DIZ O QUE AS TELAS SÃO
-             Toda imagem desta página é o app de verdade rodando com
-             um perfil de exemplo. Dizer isso aqui, ao lado da cena,
-             evita a leitura de que aqueles números são de alguém — e
-             custa uma linha. -->
-        <p class="pilula-vivo"><span class="pilula-ponto" aria-hidden="true"></span>Demostración<em>pantallas reales de la app, con datos de ejemplo</em></p>
-        <h1>coco organiza <br class="quebra">tu dinero. <br class="quebra"><em>tú confirmas.</em></h1>
-        <p class="grande">
-          Registra, categoriza y te avisa de lo que viene. Nada entra en tus totales sin tu sí — y todo lo que hace se puede deshacer.
-        </p>
+      <div class="novo-heroi-texto">
+        <p class="rotulo">TU MES, SIN CABOS SUELTOS</p>
+        <h1>El dinero se entiende mejor cuando <em>todo se reúne.</em></h1>
+        <p class="grande">Cuentas, tarjetas y compromisos en un solo lugar. Coco ayuda a organizarlos y muestra lo que viene. Tú confirmas cada acción.</p>
         <div class="heroi-acoes">
           <a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a>
-          <a class="btn btn-linha" href="#recursos">Ver qué hace</a>
+          <a class="btn btn-linha" href="#recursos">Conoce OAZE <span aria-hidden="true">↗</span></a>
         </div>
+        <p class="heroi-pequeno">Funciona en móvil y ordenador · Sin tarjeta para empezar</p>
       </div>
-
-      <!-- ══════ O NÓ E OS SATÉLITES ══════
-           Antes aqui havia três aparelhos lado a lado. Eles provavam
-           que o app existe em três tamanhos, mas não diziam a coisa
-           que o OAZE é: um lugar onde o que está espalhado se junta.
-
-           Agora a cena diz. No centro, o painel — grande, 16:9, de
-           vidro. Em volta, o que chega nele: a carteira, a Coco, o
-           mês no tablet. As curvas que ligam um ao outro não são
-           enfeite: são a mesma ideia desenhada, e por isso pulsam no
-           sentido de fora para dentro, nunca o contrário.
-
-           Os três tamanhos continuam ali — computador no meio,
-           tablet e celular em volta —, porque quem nunca entrou
-           precisa ver que cabe no aparelho que ele tem.
-
-           A ENTRADA segue a abertura do portal, não um relógio: quem
-           sobe de volta vê os satélites recolherem na ordem inversa.
-           Sem JavaScript ou com "menos movimento", tudo nasce no
-           lugar. -->
-      <div class="nodo" data-nodo
-           role="img"
-           aria-label="OAZE funcionando en tres dispositivos: en el ordenador, la visión general del mes con la cartera y los totales; en la tableta, la misma vista a pantalla completa; en el móvil, la cartera de tarjetas abierta, el inicio y una conversación con Coco.">
-
-        <!-- As curvas moram atrás de tudo e acompanham a caixa inteira.
-             preserveAspectRatio="none" deixa cada ponto do traçado cair
-             exatamente na mesma porcentagem em que o cartão foi posto;
-             non-scaling-stroke impede que essa mesma distorção engorde
-             a linha de um lado e afine do outro. -->
-        <svg class="nodo-linhas" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="fioOaze" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#8FCFC0" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#5FA99B" stop-opacity=".28"/>
-            </linearGradient>
-          </defs>
-          <g class="nodo-fios">
-            <path class="fio" vector-effect="non-scaling-stroke" d="M150,150 C300,180 360,250 470,300"/>
-            <path class="fio" vector-effect="non-scaling-stroke" d="M860,130 C720,170 650,230 545,295"/>
-            <path class="fio" vector-effect="non-scaling-stroke" d="M140,505 C300,480 380,420 470,355"/>
-            <path class="fio" vector-effect="non-scaling-stroke" d="M870,520 C720,490 630,430 545,360"/>
-          </g>
-          <g class="nodo-fluxo">
-            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M150,150 C300,180 360,250 470,300"/>
-            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M860,130 C720,170 650,230 545,295"/>
-            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M140,505 C300,480 380,420 470,355"/>
-            <path class="fio-fluxo" vector-effect="non-scaling-stroke" d="M870,520 C720,490 630,430 545,360"/>
-          </g>
-        </svg>
-
-        <div class="nodo-centro">
-          <img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async">
-        </div>
-
-        <figure class="satelite sat-a">
-          <img src="/assets/telas/celular-coco.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-          <figcaption>Coco registra por usted</figcaption>
-        </figure>
-
-        <figure class="satelite sat-b">
-          <img src="/assets/telas/tablet-carteira.jpg" alt="" width="1024" height="720" loading="lazy" decoding="async">
-          <figcaption>el mes en la tableta</figcaption>
-        </figure>
-
-        <figure class="satelite sat-c">
-          <img src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-          <figcaption>las tarjetas en una cartera</figcaption>
-        </figure>
-
-        <figure class="satelite sat-d">
-          <img src="/assets/telas/celular-inicio.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-          <figcaption>el mes entero en el bolsillo</figcaption>
-        </figure>
+      <div class="novo-heroi-cena" data-nodo role="img" aria-label="Pantallas reales de OAZE con datos de ejemplo: panel financiero en ordenador, cartera en móvil y Coco, la asistente.">
+        <div class="cena-brilho" aria-hidden="true"></div>
+        <div class="cena-computador"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></div>
+        <div class="cena-celular"><img src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="eager" decoding="async"></div>
+        <div class="cena-coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="" width="600" height="600" loading="eager" decoding="async"></div>
+        <span class="cena-legenda">Demostración con datos de ejemplo</span>
       </div>
-    </div>
-
-    <!-- ══════ OS CARTÕES ENTRANDO NO OAZE ══════
-         Vive no rodapé do primeiro quadro, por baixo do texto, a 14%
-         de opacidade: é ambiente, não ilustração — quem lê a manchete
-         não pode ser puxado para cá. O ciclo mostra a promessa inteira
-         sem escrevê-la: cartões soltos de bancos diferentes viram um
-         cartão só, o do OAZE. -->
-    <div class="fundindo" aria-hidden="true">
-      <span class="carta c1 itau"></span>
-      <span class="carta c2 nubank"></span>
-      <span class="carta c3 inter"></span>
-      <span class="carta c4 c6"></span>
-      <span class="carta c5 bb"></span>
-      <span class="carta oaze"><b>oaze</b></span>
     </div>
   </section>
     </div>
@@ -284,211 +197,124 @@
    </div>
   </section>
 
-  <!-- ══════ AS TRÊS PROVAS ══════
-       No Pierre este lugar é dos bancos conectados e do selo do
-       Bacen. O OAZE não conecta banco e não é instituição regulada:
-       repetir aquilo seria mentira. Estas três são verdade hoje. -->
-  <section class="provas" aria-label="Lo que OAZE garantiza">
+  <section class="sinais" aria-label="Cómo funciona OAZE">
     <div class="env">
-      <div class="prova">
-        <strong>cero</strong>
-        <span>movimientos de dinero</span>
-      </div>
-      <div class="prova">
-        <strong>todo</strong>
-        <span>se puede deshacer</span>
-      </div>
-      <div class="prova">
-        <strong>gratis</strong>
-        <span>sin pedir tarjeta</span>
-      </div>
+      <div><strong>01</strong><span>Registras a tu manera</span></div>
+      <div><strong>02</strong><span>Coco ayuda a organizar</span></div>
+      <div><strong>03</strong><span>Revisas y confirmas</span></div>
     </div>
   </section>
 
-  <!-- ══════ O QUE A COCO FAZ ══════ -->
-  <section class="secao" id="recursos" aria-labelledby="recursos-titulo">
+  <section class="secao nova-vantagens" id="recursos" aria-labelledby="recursos-titulo">
     <div class="env">
       <div class="secao-topo revela">
-        <h2 id="recursos-titulo">lo que coco hace por ti</h2>
-        <p>Dejó de ser un lugar de preguntas. Ahora hace el trabajo y te lo trae para revisar.</p>
+        <p class="rotulo">UN LUGAR PARA TU DINERO</p>
+        <h2 id="recursos-titulo">Todo lo que importa. <em>Sin buscar en cinco pantallas.</em></h2>
+        <p>OAZE muestra tu mes como es: lo que entró, lo que salió y lo que aún está por venir.</p>
       </div>
-
-      <div class="recursos">
-        <article class="recurso revela">
-          <figure class="recurso-coco">
-            <img src="/assets/coco/corpo-explicando.webp" alt="Coco explicando, de pie y mirando a quien lee" width="600" height="600" loading="lazy" decoding="async">
-          </figure>
-          <h3>una conversación que se vuelve un registro</h3>
-          <p>"Gasté 45 en delivery" se vuelve un gasto en la tarjeta correcta, con la categoría que aprendió de ti. Por texto o por voz.</p>
+      <div class="vantagens-grid">
+        <article class="vantagem revela">
+          <span class="vantagem-icone" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="5" y="9" width="38" height="30" rx="8"/><path d="M5 20h38M14 30h8"/></svg></span>
+          <h3>Cuentas reunidas</h3>
+          <p>Añade las cuentas que usas y ve cada saldo en un solo panel, sin mezclar los espacios de tu vida.</p>
         </article>
-
-        <article class="recurso revela">
-          <figure class="recurso-coco">
-            <img src="/assets/coco/corpo-conferindo_recibo.webp" alt="Coco revisando un recibo largo" width="600" height="600" loading="lazy" decoding="async">
-          </figure>
-          <h3>todas las tarjetas en una cartera</h3>
-          <p>Crédito y débito apilados como en tu cartera de verdad. Toca una y sale, con la factura o el extracto.</p>
+        <article class="vantagem revela">
+          <span class="vantagem-icone" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="7" y="12" width="34" height="25" rx="6"/><path d="M7 20h34M15 29h9"/></svg></span>
+          <h3>Tarjetas en su lugar</h3>
+          <p>Crédito, débito, cuotas y facturas con sus propias fechas. Pagar una factura de tarjeta no crea un gasto duplicado.</p>
         </article>
-
-        <article class="recurso revela">
-          <figure class="recurso-coco">
-            <img src="/assets/coco/corpo-alerta_gentil.webp" alt="Coco llamando la atención con calma, una pata levantada" width="600" height="600" loading="lazy" decoding="async">
-          </figure>
-          <h3>sabe lo que viene</h3>
-          <p>Facturas, fijos y débitos automáticos en una línea de tiempo hasta fin de mes. Ve tres cobros parecidos y sugiere la recurrencia.</p>
+        <article class="vantagem revela">
+          <span class="vantagem-icone" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="7" y="10" width="34" height="31" rx="6"/><path d="M7 19h34M16 6v8M32 6v8M15 27h6M27 27h6M15 34h6"/></svg></span>
+          <h3>Anticipa el mes</h3>
+          <p>Compromisos, recurrentes y cuentas previstas aparecen en el calendario para que no descubras todo el día del vencimiento.</p>
         </article>
-
-        <article class="recurso revela">
-          <figure class="recurso-coco">
-            <img src="/assets/coco/corpo-meta_comemorada.webp" alt="Coco celebrando una meta alcanzada" width="600" height="600" loading="lazy" decoding="async">
-          </figure>
-          <h3>metas con ritmo de verdad</h3>
-          <p>Calcula cuánto guardar por mes para llegar a tiempo, propone el aporte y espera tu sí. El saldo solo cambia cuando confirmas.</p>
+        <article class="vantagem revela">
+          <span class="vantagem-icone" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 37V12a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v25"/><path d="M13 31l8-9 7 5 7-11M8 37h32"/></svg></span>
+          <h3>Metas con plazo</h3>
+          <p>Decide adónde quieres llegar. OAZE muestra cuánto falta y propone un ritmo que puedes ajustar.</p>
         </article>
       </div>
-
-      <div class="fecho revela"><a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a></div>
+      <a class="link-secao" href="/es/recursos">Ver todo lo que hace OAZE <span aria-hidden="true">↗</span></a>
     </div>
   </section>
 
-  <!-- ══════ BLOCOS ALTERNADOS ══════ -->
-  <section class="secao" id="carteira" aria-label="La cartera y Coco">
-    <div class="env">
-
-      <div class="bloco">
-        <div class="bloco-texto revela">
-          <h2>¿sorpresa en la factura? <br class="quebra">aquí no.</h2>
-          <p>Las tarjetas salen de la cartera. En crédito ves la factura del mes, lo que cierra y lo que vence; en débito, el saldo y el extracto.</p>
-          <ul class="lista-limpa">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-              <span><strong>Pagar la factura no es un gasto nuevo.</strong> Es la cuenta saldando lo que la tarjeta ya gastó.</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-              <span><strong>Solo lo confirmado entra en los totales.</strong> Lo previsto queda visible, con borde punteado, sin tocar el saldo.</span>
-            </li>
-          </ul>
-          <a class="btn btn-linha" href="/es/cadastro">Empezar gratis</a>
-        </div>
-        <figure class="bloco-tela revela">
-          <img src="/assets/telas/celular-carteira.jpg"
-               alt="La cartera de OAZE abierta en el móvil: una tarjeta de cuenta en el centro, la siguiente asomando por el borde y el saldo sumado en el bolsillo de cuero debajo."
-               width="923" height="1944" loading="lazy" decoding="async">
-        </figure>
+  <section class="secao nova-historia" id="contas" aria-labelledby="contas-titulo">
+    <div class="env historia-grid">
+      <div class="historia-texto revela">
+        <p class="rotulo">VISIÓN GENERAL</p>
+        <h2 id="contas-titulo">Empieza el día sabiendo <em>dónde estás.</em></h2>
+        <p>Abre OAZE y encuentra el saldo de cada cuenta, los gastos del mes y lo que aún viene. Sin sumar de cabeza.</p>
+        <a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a>
       </div>
-
-      <div class="bloco invertido" id="coco">
-        <figure class="bloco-tela coco-retrato revela">
-          <img src="/assets/coco/corpo-explicando.webp"
-               alt="Coco, la asistente de OAZE: un ajolote de cuerpo verde agua y branquias anaranjadas, explicando algo."
-               width="600" height="600" loading="lazy" decoding="async">
-        </figure>
-        <div class="bloco-texto revela">
-          <h2>ella aprende, <br class="quebra">y tú puedes olvidar.</h2>
-          <p>Coco guarda lo que aprendió a la vista: patrones de categoría, el día del sueldo, tus prioridades. Cada elemento se puede borrar, y el aprendizaje se puede pausar.</p>
-          <p class="coco-fala">
-            <strong>"Vi 3 cobros parecidos del gimnasio cerca del día 5.</strong> ¿Quieres convertirlo en recurrencia?"
-          </p>
-          <a class="btn btn-linha" href="/es/cadastro">Empezar gratis</a>
-        </div>
-      </div>
-
-      <div class="bloco">
-        <div class="bloco-texto revela">
-          <h2>en el bolsillo <br class="quebra">y en el escritorio.</h2>
-          <p>La misma organización en el móvil y en el ordenador — solo cambia el alcance del pulgar. Entrada por biometría o PIN de seis números en los dos.</p>
-          <ul class="lista-limpa">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
-              <span><strong>En el móvil:</strong> barra inferior con el + al centro, y Coco en una hoja que sube desde la base.</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-              <span><strong>En el ordenador:</strong> barra lateral, el panel de Coco a la derecha y la tecla N para registrar.</span>
-            </li>
-          </ul>
-          <a class="btn btn-linha" href="/es/cadastro">Empezar gratis</a>
-        </div>
-        <!-- ══════ A CENA DOS APARELHOS ══════
-             É o motion do OAZE 1 trazido de volta, e não uma imitação:
-             a rolagem vira quatro variáveis de CSS, o notebook abre, o
-             celular chega enquanto o notebook ainda termina, e as telas
-             se revezam dentro dos dois. As fases se sobrepõem de
-             propósito — se não, a cena para num quadro vazio no meio do
-             caminho.
-
-             Sem JavaScript, ou com "menos movimento" ligado, a mesma
-             cena aparece montada e parada. É a composição final, não um
-             buraco. -->
-        <!-- O MESMO SISTEMA DE APARELHO DO HERÓI
-             Esta seção tinha uma segunda montagem, com moldura e
-             contas próprias — e foi ela que envelheceu: ficou com o
-             retângulo de 1px, sem espessura, e sem motion nenhum
-             depois de uma limpeza. Dois sistemas de mockup na mesma
-             página sempre divergem; a única pergunta é quando.
-
-             Aqui são dois aparelhos, porque a seção fala de dois: o
-             polegar e a mesa. A classe e-duplo só ajusta o
-             enquadramento para o palco viver AO LADO do texto, e não
-             embaixo dele. -->
-        <div class="palco3 e-duplo revela" data-palco3
-             role="img"
-             aria-label="OAZE funcionando en los dos aparatos: en el ordenador, la barra lateral con las secciones y el mes de un vistazo; en el móvil, el inicio, la cartera de tarjetas y una conversación con Coco.">
-
-          <div class="ap ap-note">
-            <div class="ap-tampa">
-              <span class="ap-camera"></span>
-              <span class="ap-tela"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" loading="lazy" decoding="async"></span>
-            </div>
-            <span class="ap-base"></span>
-          </div>
-
-          <div class="ap ap-fone">
-            <span class="ap-tela">
-              <img class="quadro is-ativo" src="/assets/telas/celular-inicio.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-              <img class="quadro" src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-              <img class="quadro" src="/assets/telas/celular-coco.jpg" alt="" width="923" height="1944" loading="lazy" decoding="async">
-            </span>
-            <span class="ap-ilha"></span>
-            <span class="ap-bt ap-bt-a"></span>
-            <span class="ap-bt ap-bt-b"></span>
-            <span class="ap-bt ap-bt-c"></span>
-          </div>
-        </div>
-      </div>
-
+      <figure class="historia-visual visual-desktop revela">
+        <img src="/assets/telas/computador-inicio.jpg" alt="Demostración de la vista general de OAZE en ordenador, con datos de ejemplo" width="1440" height="900" loading="lazy" decoding="async">
+        <figcaption>Pantalla real de la app · datos de ejemplo</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- ══════ SEGURANÇA ══════ -->
-  <section class="secao" id="seguranca" aria-labelledby="seguranca-titulo">
+  <section class="secao nova-historia historia-carteira" id="carteira" aria-labelledby="carteira-titulo">
+    <div class="env historia-grid">
+      <figure class="historia-visual visual-celular revela">
+        <img src="/assets/telas/celular-carteira.jpg" alt="Cartera de OAZE en móvil con una tarjeta de ejemplo y el saldo debajo" width="923" height="1944" loading="lazy" decoding="async">
+        <figcaption>Crédito y débito, cada uno en su lugar</figcaption>
+      </figure>
+      <div class="historia-texto revela">
+        <p class="rotulo">CARTERA</p>
+        <h2 id="carteira-titulo">Tu tarjeta tiene una historia. <em>La factura también.</em></h2>
+        <p>Ve cada compra en el ciclo de facturación que le corresponde. La cartera separa crédito y débito, sin ocultar lo pagado ni mezclar previsiones con saldo.</p>
+        <a class="btn btn-linha" href="/es/recursos">Conocer la cartera</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao coco-vitrine" id="coco" aria-labelledby="coco-titulo">
+    <div class="env coco-grid">
+      <div class="coco-personagem revela">
+        <img src="/assets/coco/corpo-explicando.webp" alt="Coco, el ajolote de OAZE, explicando con una pata levantada" width="600" height="600" loading="lazy" decoding="async">
+      </div>
+      <div class="coco-texto revela">
+        <p class="rotulo">CONOCE A COCO</p>
+        <h2 id="coco-titulo">Pregunta a tu manera. <em>Entiende sin traducir.</em></h2>
+        <p>Cuéntale un gasto a Coco por texto, audio o foto. Prepara el registro, sugiere una categoría y explica lo que ve en tus números. Antes de cambiar la cartera, pide tu confirmación.</p>
+        <div class="coco-conversa"><span>« Gasté R$ 45 en el mercado hoy. »</span><strong>Entendido. ¿Lo registro como alimentación?</strong><small>Conversación de ejemplo · ninguna acción sin confirmación</small></div>
+        <a class="btn btn-claro" href="/es/cadastro">Conocer a Coco</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao nova-agenda" id="agenda" aria-labelledby="agenda-titulo">
+    <div class="env historia-grid">
+      <div class="historia-texto revela">
+        <p class="rotulo">MIRA ADELANTE</p>
+        <h2 id="agenda-titulo">El fin de mes no tiene por qué ser <em>una sorpresa.</em></h2>
+        <p>Calendario y recurrentes trabajan juntos. Ve lo previsto hasta el último día del mes y decide con antelación qué cabe en tu plan.</p>
+        <a class="btn btn-linha" href="/es/recursos">Ver calendario y metas</a>
+      </div>
+      <div class="agenda-ilustracao revela" aria-label="Ejemplo ilustrativo de agenda con tres compromisos durante el mes">
+        <div><span>HOY</span><strong>Tu mes está en movimiento</strong></div>
+        <ol>
+          <li><time>08</time><span><strong>Cuentas del mes</strong><small>Organizadas por vencimiento</small></span></li>
+          <li><time>16</time><span><strong>Resumen de la tarjeta</strong><small>En el ciclo de facturación correcto</small></span></li>
+          <li><time>30</time><span><strong>Cierre del mes</strong><small>Lo que aún está previsto</small></span></li>
+        </ol>
+        <p>Ejemplo ilustrativo · las fechas no representan tu cuenta</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao nova-seguranca" id="seguranca" aria-labelledby="seguranca-titulo">
     <div class="env">
       <div class="secao-topo revela">
-        <h2 id="seguranca-titulo">coco nunca toca <br class="quebra">tu dinero</h2>
-        <p>Ella prepara, organiza y sugiere. Quien decide eres tú, siempre — y todo se puede revertir.</p>
+        <p class="rotulo">CONTROL SIN DEJAR DE SER TÚ</p>
+        <h2 id="seguranca-titulo">Coco te ayuda. <em>Tú decides.</em></h2>
+        <p>OAZE organiza el registro de tu dinero. No hace pagos, transferencias ni inversiones por ti.</p>
       </div>
-
-      <div class="garantias">
-        <article class="garantia revela">
-          <h3>ninguna transacción</h3>
-          <p>OAZE no hace transferencias, pagos ni ningún movimiento. Organiza el registro de tu dinero, no el dinero.</p>
-        </article>
-        <article class="garantia revela">
-          <h3>todo se puede deshacer</h3>
-          <p>Cada acción de Coco se puede revertir, y cada previsión viene marcada como estimación. Nada se presenta como certeza sin serlo.</p>
-        </article>
-        <article class="garantia revela">
-          <h3>entra con biometría o PIN</h3>
-          <p>La app se bloquea sola cuando sales, en el tiempo que elijas. Puedes desconectar los otros aparatos cuando quieras.</p>
-        </article>
-        <article class="garantia revela">
-          <h3>tú eliges lo que Coco ve</h3>
-          <p>Antes del primer uso te muestra qué sale de tu aparato: totales y categorías, nunca descripciones, nombres de cuenta o correo. Puedes revocarlo después.</p>
-        </article>
+      <div class="seguranca-lista">
+        <article class="revela"><span>01</span><h3>Nada se mueve solo</h3><p>Lo que Coco prepara solo entra en tu cartera después de tu confirmación.</p></article>
+        <article class="revela"><span>02</span><h3>Una previsión no es un saldo</h3><p>Los valores futuros se identifican como previstos, sin inflar lo que tienes hoy.</p></article>
+        <article class="revela"><span>03</span><h3>Tus datos, tus decisiones</h3><p>Puedes revisar lo que Coco aprende, pausar el aprendizaje y borrar recuerdos.</p></article>
       </div>
-
-      <div class="fecho revela"><a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a></div>
     </div>
   </section>
 
@@ -496,7 +322,7 @@
   <section class="secao" id="planos" aria-labelledby="planos-titulo">
     <div class="env">
       <div class="secao-topo revela">
-        <h2 id="planos-titulo">elige tu plan</h2>
+        <h2 id="planos-titulo">el plan que crece contigo</h2>
         <p>Empieza gratis, sin tarjeta. El plan gratis no caduca. Cambia cuando lo necesites.</p>
       </div>
 
@@ -532,8 +358,8 @@
           <a class="btn btn-linha" href="/es/cadastro">Empezar gratis</a>
         </article>
 
-        <article class="plano revela">
-          <div class="plano-cabeca"><h3>básico</h3></div>
+        <article class="plano e-destaque revela">
+          <div class="plano-cabeca"><h3>básico</h3><span class="plano-selo">Elección de OAZE</span></div>
           <span class="preco-valor dado" data-mensal="US$ 3.99" data-anual="US$ 2.91">US$ 3.99</span>
           <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado US$ 34.99 por ano — você economiza US$ 12.89">al mes, cobrado mensualmente</span>
           <ul class="plano-lista">
@@ -546,10 +372,9 @@
           <a class="btn btn-linha" href="/es/cadastro">Suscribir el básico</a>
         </article>
 
-        <article class="plano e-destaque revela">
+        <article class="plano revela">
           <div class="plano-cabeca">
             <h3>completo</h3>
-            <span class="plano-selo">Todo incluido</span>
           </div>
           <span class="preco-valor dado" data-mensal="US$ 7.99" data-anual="US$ 5.83">US$ 7.99</span>
           <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado US$ 69.99 por ano — você economiza US$ 25.89">al mes, cobrado mensualmente</span>
@@ -568,11 +393,12 @@
     </div>
   </section>
 
+
   <!-- ══════ PERGUNTAS ══════ -->
   <section class="secao" aria-labelledby="duvidas-titulo">
     <div class="env">
       <div class="secao-topo revela">
-        <h2 id="duvidas-titulo">¿dudas? te respondemos</h2>
+        <h2 id="duvidas-titulo">lo que necesitas saber</h2>
         <p>Las preguntas que más aparecen sobre OAZE y sobre Coco.</p>
       </div>
 
@@ -614,8 +440,8 @@
 <!-- ══════ CHAMADA FINAL ══════ -->
 <section class="final" aria-labelledby="final-titulo">
   <div class="env">
-    <h2 id="final-titulo" class="revela">¿listo para organizar <br class="quebra">tu mes?</h2>
-    <p class="revela">Empieza ahora. Es rápido, funciona sin cuenta y el plan gratis no caduca.</p>
+    <h2 id="final-titulo" class="revela">Tu dinero puede <em>tener más sentido.</em></h2>
+    <p class="revela">Empieza a tu ritmo. El plan gratis no vence y no necesitas registrar una tarjeta.</p>
     <a class="btn btn-claro revela" href="/es/cadastro">Empezar gratis</a>
     <p class="final-selo revela">Sin tarjeta de crédito · Sin mover dinero · Todo se puede deshacer</p>
   </div>
@@ -655,8 +481,8 @@
         </ul>
       </div>
       <div>
-        <h3>Hable con nosotros</h3>
-        <p class="rodape-sobre">Respondemos en un máximo de 2 días hábiles.</p>
+        <h3>Hablemos</h3>
+        <p class="rodape-sobre">Respondemos en un plazo de 2 días hábiles.</p>
         <a class="rodape-fala" href="mailto:suporte@oaze.site">suporte@oaze.site <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </div>
