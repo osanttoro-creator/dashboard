@@ -78,7 +78,6 @@
       </button>
 
       <div id="via-email">
-      <form id="form-entrar" novalidate>
         <div class="campo">
           <label for="email">E-mail</label>
           <input type="email" id="email" name="email" autocomplete="email"
@@ -87,6 +86,18 @@
           <p class="erro" id="email-erro" hidden></p>
         </div>
 
+      <form id="form-magico" novalidate>
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-magico">
+          Recevoir un lien de connexion
+        </button>
+        <p class="dica" style="text-align:center;margin-top:10px;color:var(--texto-3);font-size:.84rem">
+          Confirmez votre e-mail pour vous connecter. Votre code PIN protège les données sensibles du compte.
+        </p>
+      </form>
+
+      <details style="margin-top:20px">
+        <summary>J'ai un ancien compte avec mot de passe</summary>
+      <form id="form-entrar" novalidate style="margin-top:16px">
         <div class="campo">
           <div class="linha-campo">
             <label for="senha">Mot de passe</label>
@@ -97,19 +108,9 @@
           <p class="erro" id="senha-erro" hidden></p>
         </div>
 
-        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-entrar">Se connecter</button>
+        <button class="btn btn-fantasma btn-largo" type="submit" id="botao-entrar">Se connecter avec un mot de passe</button>
       </form>
-
-      <div class="separa">ou</div>
-
-      <form id="form-magico" novalidate>
-        <button class="btn btn-fantasma btn-largo" type="submit" id="botao-magico">
-          Recevoir un lien par e-mail
-        </button>
-        <p class="dica" style="text-align:center;margin-top:10px;color:var(--texto-3);font-size:.84rem">
-          Connexion sans mot de passe. Le lien est valable une heure et ne fonctionne qu'une seule fois.
-        </p>
-      </form>
+      </details>
       </div><!-- /via-email -->
 
       <p class="pe-do-painel">
@@ -244,7 +245,7 @@
     /* O foco vai para o primeiro campo com problema. Sem isso, quem
        navega por teclado recebe a mensagem e continua no botão, sem
        saber onde o erro está. */
-    if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
+    if (!ok) { var ruim = document.querySelector('#via-email [aria-invalid="true"]'); if (ruim) ruim.focus(); }
     return ok;
   }
 

@@ -98,14 +98,7 @@
           <p class="erro" id="email-erro" hidden></p>
         </div>
 
-        <div class="campo">
-          <label for="senha">Mot de passe</label>
-          <input type="password" id="senha" name="senha" autocomplete="new-password"
-                 required minlength="8" placeholder="Au moins 8 caractères"
-                 aria-describedby="senha-dica senha-erro">
-          <p class="dica" id="senha-dica">Au moins 8 caractères. Évitez un mot de passe que vous utilisez déjà ailleurs.</p>
-          <p class="erro" id="senha-erro" hidden></p>
-        </div>
+        <p class="dica">Nous vous enverrons un lien de confirmation. Après avoir ouvert l'e-mail, créez un code PIN à six chiffres pour protéger les données sensibles.</p>
 
         <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar" disabled>Créer mon compte</button>
       </form>
@@ -132,7 +125,6 @@
   var recado = document.getElementById('recado');
   var nome = document.getElementById('nome');
   var email = document.getElementById('email');
-  var senha = document.getElementById('senha');
   var form = document.getElementById('form-cadastro');
   var botao = document.getElementById('botao-cadastrar');
   var aceite = document.getElementById('aceite-privacidade');
@@ -266,14 +258,10 @@
 
   function valida() {
     var ok = true;
-    [email, senha].forEach(function (c) { A.erroNoCampo(c, ''); });
+    A.erroNoCampo(email, '');
     if (!aceiteObrigatorio()) ok = false;
     if (!email.value.trim()) { A.erroNoCampo(email, 'Saisissez votre e-mail.'); ok = false; }
     else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { A.erroNoCampo(email, 'Cet e-mail ne semble pas valide.'); ok = false; }
-    /* O mínimo é conferido aqui E no servidor. Aqui é cortesia -- dá
-       a resposta na hora; lá é a regra, porque o navegador é do
-       usuário e minlength some com um clique no DevTools. */
-    if (senha.value.length < 8) { A.erroNoCampo(senha, 'Le mot de passe doit contenir au moins 8 caractères.'); ok = false; }
     if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
     return ok;
   }
@@ -285,7 +273,7 @@
 
     A.ocupado(botao, true, 'Création…');
     try {
-      var r = await A.cadastrar(email.value.trim(), senha.value, nome.value.trim(), A.novoAceite('cadastro_email'));
+      var r = await A.cadastrar(email.value.trim(), null, nome.value.trim(), A.novoAceite('cadastro_email'));
       if (r.error) throw r.error;
 
       /* DUAS SAÍDAS, e confundi-las é o erro clássico desta tela.
@@ -300,9 +288,8 @@
       }
 
       form.hidden = true;
-      A.diz(recado, 'Compte créé. Nous avons envoyé une confirmation à ' +
-        email.value.trim() + '. Ouvrez le message pour activer votre accès — ' +
-        'il peut mettre quelques minutes à arriver et atterrit parfois dans les spams.', 'ok');
+      A.diz(recado, 'Nous avons envoyé un lien à ' + email.value.trim() +
+        '. Ouvrez le message pour confirmer votre e-mail et créer votre code PIN. Il peut prendre quelques minutes et arriver dans les indésirables.', 'ok');
     } catch (err) {
       A.ocupado(botao, false);
       atualizaAceite();

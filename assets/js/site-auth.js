@@ -377,12 +377,15 @@
     var c = A.cliente();
     if (!c) return Promise.reject(new Error('config'));
     if (!aceiteValido(aceite)) return Promise.reject(new Error('privacy_policy_required'));
-    return c.auth.signUp({
+    /* O e-mail confirma a identidade; o PIN é criado depois do link,
+       numa sessão autenticada. Nunca guardamos um PIN temporário no navegador. */
+    return c.auth.signInWithOtp({
       email: email,
-      password: senha,
       options: {
+        shouldCreateUser: true,
         data: {
           nome: nome || '',
+          oaze_pin_required: true,
           privacy_policy_version: aceite.policy_version,
           privacy_accepted_at: aceite.accepted_at,
           privacy_consent_source: aceite.source

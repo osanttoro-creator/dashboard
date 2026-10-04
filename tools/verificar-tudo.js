@@ -58,6 +58,7 @@ const VERIFICACOES = [
   ['tools/testes/v3-carteira-instituicoes.js', 'carteira V3, bancos e ícones preservam a interação'],
   ['tools/testes/v3-corte-principal.js', '/app entrega a V3, sem rota de volta, com aceite obrigatório'],
   ['tools/testes/v3-lancamento-e-categoria.js', 'V3 tem os três estados, o meio de pagamento e os seletores de ícone e cor'],
+  ['tools/testes/v3-cofre-e-formularios.js', 'V3 exige e-mail confirmado, PIN e cofre cifrado sem senha bancária'],
   ['tools/testes/v3-score.js', 'o OAZE Score pesa cada pergunta e não julga o que não sabe'],
   ['tools/testes/coco-extratos.js', 'Coco confere extratos locais antes de propor lançamentos']
 ];

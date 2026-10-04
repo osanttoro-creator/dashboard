@@ -114,22 +114,10 @@
   "es": "tu@ejemplo.com"
  },
  {
-  "pt": "Senha",
-  "en": "Password",
-  "fr": "Mot de passe",
-  "es": "Contraseña"
- },
- {
-  "pt": "Pelo menos 8 caracteres",
-  "en": "At least 8 characters",
-  "fr": "Au moins 8 caractères",
-  "es": "Al menos 8 caracteres"
- },
- {
-  "pt": "Mínimo de 8 caracteres. Evite algo que você já usa em outro lugar.",
-  "en": "At least 8 characters. Avoid something you already use elsewhere.",
-  "fr": "Au moins 8 caractères. Évitez un mot de passe que vous utilisez déjà ailleurs.",
-  "es": "Mínimo 8 caracteres. Evita algo que ya uses en otro lugar."
+  "pt": "Vamos enviar um link de confirmação. Depois de abrir o e-mail, você cria seu PIN de seis dígitos para proteger os dados sensíveis.",
+  "en": "We'll send a confirmation link. After opening the email, create a six-digit PIN to protect sensitive details.",
+  "fr": "Nous vous enverrons un lien de confirmation. Après avoir ouvert l'e-mail, créez un code PIN à six chiffres pour protéger les données sensibles.",
+  "es": "Te enviaremos un enlace de confirmación. Después de abrir el correo, crea un PIN de seis dígitos para proteger los datos sensibles."
  },
  {
   "pt": "Criar minha conta",
@@ -174,33 +162,21 @@
   "es": "Ese correo no parece válido."
  },
  {
-  "pt": "A senha precisa ter pelo menos 8 caracteres.",
-  "en": "Your password needs at least 8 characters.",
-  "fr": "Le mot de passe doit contenir au moins 8 caractères.",
-  "es": "La contraseña debe tener al menos 8 caracteres."
- },
- {
   "pt": "Criando…",
   "en": "Creating…",
   "fr": "Création…",
   "es": "Creando…"
  },
  {
-  "pt": "Conta criada. Enviamos uma confirmação para ",
-  "en": "Account created. We sent a confirmation to ",
-  "fr": "Compte créé. Nous avons envoyé une confirmation à ",
-  "es": "Cuenta creada. Enviamos una confirmación a "
+  "pt": "Enviamos um link para ",
+  "en": "We sent a link to ",
+  "fr": "Nous avons envoyé un lien à ",
+  "es": "Enviamos un enlace a "
  },
  {
-  "pt": ". Abra a mensagem para ativar o acesso — ",
-  "en": ". Open the message to activate your access — ",
-  "fr": ". Ouvrez le message pour activer votre accès — ",
-  "es": ". Abre el mensaje para activar tu acceso: "
- },
- {
-  "pt": "ela pode levar alguns minutos e às vezes cai no spam.",
-  "en": "it can take a few minutes and sometimes lands in spam.",
-  "fr": "il peut mettre quelques minutes à arriver et atterrit parfois dans les spams.",
-  "es": "puede tardar unos minutos y a veces llega a la carpeta de spam."
+  "pt": ". Abra a mensagem para confirmar o e-mail e criar seu PIN. Ela pode levar alguns minutos e às vezes cai no spam.",
+  "en": ". Open the message to confirm your email and create your PIN. It may take a few minutes and could land in spam.",
+  "fr": ". Ouvrez le message pour confirmer votre e-mail et créer votre code PIN. Il peut prendre quelques minutes et arriver dans les indésirables.",
+  "es": ". Abre el mensaje para confirmar tu correo y crear tu PIN. Puede tardar unos minutos y llegar a spam."
  }
 ]

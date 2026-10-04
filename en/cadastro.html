@@ -98,14 +98,7 @@
           <p class="erro" id="email-erro" hidden></p>
         </div>
 
-        <div class="campo">
-          <label for="senha">Password</label>
-          <input type="password" id="senha" name="senha" autocomplete="new-password"
-                 required minlength="8" placeholder="At least 8 characters"
-                 aria-describedby="senha-dica senha-erro">
-          <p class="dica" id="senha-dica">At least 8 characters. Avoid something you already use elsewhere.</p>
-          <p class="erro" id="senha-erro" hidden></p>
-        </div>
+        <p class="dica">We'll send a confirmation link. After opening the email, create a six-digit PIN to protect sensitive details.</p>
 
         <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-cadastrar" disabled>Create my account</button>
       </form>
@@ -132,7 +125,6 @@
   var recado = document.getElementById('recado');
   var nome = document.getElementById('nome');
   var email = document.getElementById('email');
-  var senha = document.getElementById('senha');
   var form = document.getElementById('form-cadastro');
   var botao = document.getElementById('botao-cadastrar');
   var aceite = document.getElementById('aceite-privacidade');
@@ -266,14 +258,10 @@
 
   function valida() {
     var ok = true;
-    [email, senha].forEach(function (c) { A.erroNoCampo(c, ''); });
+    A.erroNoCampo(email, '');
     if (!aceiteObrigatorio()) ok = false;
     if (!email.value.trim()) { A.erroNoCampo(email, 'Enter your email.'); ok = false; }
     else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { A.erroNoCampo(email, 'That email doesn\'t look valid.'); ok = false; }
-    /* O mínimo é conferido aqui E no servidor. Aqui é cortesia -- dá
-       a resposta na hora; lá é a regra, porque o navegador é do
-       usuário e minlength some com um clique no DevTools. */
-    if (senha.value.length < 8) { A.erroNoCampo(senha, 'Your password needs at least 8 characters.'); ok = false; }
     if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
     return ok;
   }
@@ -285,7 +273,7 @@
 
     A.ocupado(botao, true, 'Creating…');
     try {
-      var r = await A.cadastrar(email.value.trim(), senha.value, nome.value.trim(), A.novoAceite('cadastro_email'));
+      var r = await A.cadastrar(email.value.trim(), null, nome.value.trim(), A.novoAceite('cadastro_email'));
       if (r.error) throw r.error;
 
       /* DUAS SAÍDAS, e confundi-las é o erro clássico desta tela.
@@ -300,9 +288,8 @@
       }
 
       form.hidden = true;
-      A.diz(recado, 'Account created. We sent a confirmation to ' +
-        email.value.trim() + '. Open the message to activate your access — ' +
-        'it can take a few minutes and sometimes lands in spam.', 'ok');
+      A.diz(recado, 'We sent a link to ' + email.value.trim() +
+        '. Open the message to confirm your email and create your PIN. It may take a few minutes and could land in spam.', 'ok');
     } catch (err) {
       A.ocupado(botao, false);
       atualizaAceite();

@@ -42,6 +42,13 @@
   "es": "Pago no disponible ahora. No se cobró nada."
  },
  {
+  "pt": "Entre na conta para acessar o cofre.",
+ "tipo": "exato",
+  "en": "Sign in to access the vault.",
+  "fr": "Connectez-vous pour accéder au coffre.",
+  "es": "Entra en tu cuenta para acceder a la bóveda."
+ },
+ {
   "pt": "Entre na sua conta para editar o perfil.",
   "tipo": "exato",
   "en": "Sign in to edit your profile.",
@@ -229,6 +236,48 @@
   "en": "I couldn’t record the acceptance. Try again; your data wasn’t loaded.",
   "fr": "Je n’ai pas pu enregistrer l’acceptation. Réessayez ; vos données n’ont pas été chargées.",
   "es": "No pude registrar la aceptación. Inténtalo de nuevo; tus datos no se cargaron."
+ },
+ {
+  "pt": "PROTEÇÃO EXTRA",
+ "tipo": "exato",
+  "en": "EXTRA PROTECTION",
+  "fr": "PROTECTION SUPPLÉMENTAIRE",
+  "es": "PROTECCIÓN ADICIONAL"
+ },
+ {
+  "pt": "Crie seu PIN de seis dígitos.",
+ "tipo": "exato",
+  "en": "Create your six-digit PIN.",
+  "fr": "Créez votre code PIN à six chiffres.",
+  "es": "Crea tu PIN de seis dígitos."
+ },
+ {
+  "pt": "Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.",
+ "tipo": "exato",
+  "en": "You have confirmed your email. Now choose the PIN that unlocks your sensitive account details. Avoid dates, sequences and repeated digits. The PIN alone cannot sign you in to OAZE.",
+  "fr": "Vous avez confirmé votre e-mail. Choisissez maintenant le code PIN qui déverrouille les données sensibles de votre compte. Évitez les dates, les suites et les chiffres répétés. Le code PIN seul ne permet pas d'accéder à OAZE.",
+  "es": "Ya confirmaste tu correo. Ahora elige el PIN que desbloquea los datos sensibles de tu cuenta. Evita fechas, secuencias y números repetidos. El PIN por sí solo no permite acceder a OAZE."
+ },
+ {
+  "pt": "CONFIRME O PIN",
+ "tipo": "exato",
+  "en": "CONFIRM PIN",
+  "fr": "CONFIRMEZ LE CODE PIN",
+  "es": "CONFIRMA EL PIN"
+ },
+ {
+  "pt": "Criar PIN e continuar",
+ "tipo": "exato",
+  "en": "Create PIN and continue",
+  "fr": "Créer le code PIN et continuer",
+  "es": "Crear PIN y continuar"
+ },
+ {
+  "pt": "Os PINs não são iguais.",
+ "tipo": "exato",
+  "en": "The PINs do not match.",
+  "fr": "Les codes PIN ne correspondent pas.",
+  "es": "Los PIN no coinciden."
  },
  {
   "pt": "Espere a gravação anterior terminar.",

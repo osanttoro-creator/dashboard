@@ -78,7 +78,6 @@
       </button>
 
       <div id="via-email">
-      <form id="form-entrar" novalidate>
         <div class="campo">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" autocomplete="email"
@@ -87,6 +86,18 @@
           <p class="erro" id="email-erro" hidden></p>
         </div>
 
+      <form id="form-magico" novalidate>
+        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-magico">
+          Get sign-in link
+        </button>
+        <p class="dica" style="text-align:center;margin-top:10px;color:var(--texto-3);font-size:.84rem">
+          Confirm your email to sign in. Your PIN protects sensitive account details.
+        </p>
+      </form>
+
+      <details style="margin-top:20px">
+        <summary>I have an older account with a password</summary>
+      <form id="form-entrar" novalidate style="margin-top:16px">
         <div class="campo">
           <div class="linha-campo">
             <label for="senha">Password</label>
@@ -97,19 +108,9 @@
           <p class="erro" id="senha-erro" hidden></p>
         </div>
 
-        <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-entrar">Sign in</button>
+        <button class="btn btn-fantasma btn-largo" type="submit" id="botao-entrar">Sign in with password</button>
       </form>
-
-      <div class="separa">or</div>
-
-      <form id="form-magico" novalidate>
-        <button class="btn btn-fantasma btn-largo" type="submit" id="botao-magico">
-          Get a link by email
-        </button>
-        <p class="dica" style="text-align:center;margin-top:10px;color:var(--texto-3);font-size:.84rem">
-          Sign in without a password. The link is valid for one hour and works only once.
-        </p>
-      </form>
+      </details>
       </div><!-- /via-email -->
 
       <p class="pe-do-painel">
@@ -244,7 +245,7 @@
     /* O foco vai para o primeiro campo com problema. Sem isso, quem
        navega por teclado recebe a mensagem e continua no botão, sem
        saber onde o erro está. */
-    if (!ok) { var ruim = form.querySelector('[aria-invalid="true"]'); if (ruim) ruim.focus(); }
+    if (!ok) { var ruim = document.querySelector('#via-email [aria-invalid="true"]'); if (ruim) ruim.focus(); }
     return ok;
   }
 

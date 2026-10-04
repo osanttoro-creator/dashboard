@@ -84,6 +84,24 @@
   "es": "tu@ejemplo.com"
  },
  {
+  "pt": "Receber link para entrar",
+  "en": "Get sign-in link",
+  "fr": "Recevoir un lien de connexion",
+  "es": "Recibir enlace para entrar"
+ },
+ {
+  "pt": "Confirme o e-mail para entrar. Seu PIN protege os dados sensíveis da conta.",
+  "en": "Confirm your email to sign in. Your PIN protects sensitive account details.",
+  "fr": "Confirmez votre e-mail pour vous connecter. Votre code PIN protège les données sensibles du compte.",
+  "es": "Confirma tu correo para entrar. Tu PIN protege los datos sensibles de la cuenta."
+ },
+ {
+  "pt": "Tenho uma conta antiga com senha",
+  "en": "I have an older account with a password",
+  "fr": "J'ai un ancien compte avec mot de passe",
+  "es": "Tengo una cuenta antigua con contraseña"
+ },
+ {
   "pt": "Senha",
   "en": "Password",
   "fr": "Mot de passe",
@@ -102,16 +120,10 @@
   "es": "Tu contraseña"
  },
  {
-  "pt": "Receber um link por e-mail",
-  "en": "Get a link by email",
-  "fr": "Recevoir un lien par e-mail",
-  "es": "Recibir un enlace por correo"
- },
- {
-  "pt": "Entra sem senha. O link vale por uma hora e serve uma vez só.",
-  "en": "Sign in without a password. The link is valid for one hour and works only once.",
-  "fr": "Connexion sans mot de passe. Le lien est valable une heure et ne fonctionne qu'une seule fois.",
-  "es": "Entra sin contraseña. El enlace vale por una hora y solo se puede usar una vez."
+  "pt": "Entrar com senha",
+  "en": "Sign in with password",
+  "fr": "Se connecter avec un mot de passe",
+  "es": "Entrar con contraseña"
  },
  {
   "pt": "Ainda não tem conta? <a href=\"/cadastro\">Criar conta grátis</a>",

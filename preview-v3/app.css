@@ -382,6 +382,37 @@
 .v3-cat-tile.estourou .v3-bar span{background:#C9705A}
 .v3-cat-tile.estourou .v3-cat-teto .v3-link{color:#E09A86}
 .v3-cat-tile.esta-vazia{opacity:.72}
+.v3-payment-kind{min-width:0;padding:0;margin:0;border:0}
+.v3-payment-kind legend{margin-bottom:8px;color:var(--muted);font-size:12px}
+.v3-payment-kind .v3-segment{margin:0}
+#v3-repeat-fields{display:grid;gap:14px;padding:15px;border:1px solid var(--line);border-radius:18px;background:rgba(240,229,207,.035)}
+
+/* Metas lado a lado; o título e o botão continuam acima das duas colunas. */
+.v3-goals{display:block}
+.v3-goal-column[data-column="goals"]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v3-goal-column[data-column="goals"]>.v3-row{grid-column:1/-1}
+.v3-goal-column[data-column="goals"]>.v3-goal{margin:0;min-width:0}
+@media(max-width:700px){.v3-goal-column[data-column="goals"]{grid-template-columns:1fr}}
+
+/* Valor e percentual não empurram o nome para fora do cartão. */
+.v3-cat-tile{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center}
+.v3-cat-tile>.v3-mono{justify-self:end;text-align:right;white-space:nowrap;font-size:clamp(11px,.9vw,13px);font-variant-numeric:tabular-nums}
+.v3-cat-tile .v3-cat-id{overflow-wrap:anywhere}
+.v3-cat-tile .v3-cat-id small{font-variant-numeric:tabular-nums}
+.v3-cat-tile .v3-cat-teto{grid-column:1/-1;min-width:0}
+@media(max-width:520px){.v3-cat-tile{grid-template-columns:40px minmax(0,1fr)}.v3-cat-tile>.v3-mono{grid-column:2;justify-self:start}}
+
+/* O seletor de idioma da landing também precisa ser redondo dentro do app. */
+.v3 .idioma-esfera{position:relative;flex:none}
+.v3 .idioma-esfera-botao{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--line);border-radius:50%;overflow:hidden;background:var(--panel);cursor:pointer}
+.v3 .idioma-esfera-botao svg{display:block;width:100%;height:100%}
+.v3 .idioma-esfera-botao:focus-visible,.v3 .idioma-esfera-item:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.v3 .idioma-esfera-painel{display:none;position:absolute;z-index:70;top:calc(100% + 8px);right:0;min-width:185px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:0 18px 44px #020a0f}
+.v3 .idioma-esfera.esta-aberta .idioma-esfera-painel{display:block}
+.v3 .idioma-esfera-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px;border:0;border-radius:10px;background:transparent;color:var(--milk);font:500 14px var(--body);text-align:left;cursor:pointer}
+.v3 .idioma-esfera-item:hover{background:rgba(240,229,207,.08)}
+.v3 .idioma-esfera-item svg{border-radius:50%;flex:none}
+.v3 .idioma-esfera-item.is-atual{color:var(--teal)}
 
 /* Investimentos: duas linhas e o vão entre elas, que é o rendimento. */
 .v3-invest-legenda{display:flex;flex-wrap:wrap;align-items:center;gap:7px 16px;margin-top:9px;font-size:12px;color:var(--muted)}

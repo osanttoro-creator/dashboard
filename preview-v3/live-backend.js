@@ -56,6 +56,24 @@
     if (!response.ok || result.erro) throw new Error(result.mensagem || 'Pagamento indisponível agora. Nada foi cobrado.');
     return result;
   };
+  V3Backend.vault = async function (body) {
+    if (!client || !user) throw new Error('Entre na conta para acessar o cofre.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    if (!/^https:\/\//.test(base) || !publicKey) throw new Error('Cofre indisponível.');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token) throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-cofre', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify(body)
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.erro) throw new Error(result.erro || 'Cofre indisponível.');
+    return result;
+  };
   V3Backend.saveAccountProfile = async function (values) {
     if (!client || !user) throw new Error('Entre na sua conta para editar o perfil.');
     const name = String(values.name || '').trim().slice(0, 40);
@@ -237,6 +255,38 @@
     });
   }
 
+  async function requirePinSetup() {
+    const status = await V3Backend.vault({ action: 'status' });
+    if (status.configured) return;
+    const view = document.getElementById('v3-view');
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">PROTEÇÃO EXTRA</span><h2>Crie seu PIN de seis dígitos.</h2><p>Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.</p><form id="v3-pin-first-form" class="v3-form"><label>PIN<input name="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><label>CONFIRME O PIN<input name="confirm" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><button type="submit" class="v3-primary">Criar PIN e continuar</button><p role="alert" id="v3-pin-first-error" hidden></p></form></section>';
+    await new Promise((resolve) => {
+      document.getElementById('v3-pin-first-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const pin = String(form.elements.pin.value || '');
+        const status = document.getElementById('v3-pin-first-error');
+        if (pin !== form.elements.confirm.value) {
+          status.textContent = 'Os PINs não são iguais.'; status.hidden = false; return;
+        }
+        const button = form.querySelector('[type="submit"]');
+        button.disabled = true;
+        try {
+          await V3Backend.vault({ action: 'setup', pin });
+          form.elements.pin.value = '';
+          form.elements.confirm.value = '';
+          resolve();
+        } catch (error) {
+          status.textContent = error.message || 'Não foi possível criar o PIN.';
+          status.hidden = false;
+          form.elements.pin.value = '';
+          form.elements.confirm.value = '';
+          button.disabled = false;
+        }
+      });
+    });
+  }
+
   V3Backend.reload = async function () {
     if (saving) { refreshPending = true; return false; }
     const verified = await bounded(SiteAuth.quemEsta());
@@ -344,6 +394,7 @@
     };
     // Nenhum documento financeiro é lido antes do aceite obrigatório.
     await requirePrivacyAcceptance();
+    if (authUser.user_metadata?.oaze_pin_required === true) await requirePinSetup();
     const { data: profileRow, error: profileError } = await bounded(client.from('profiles')
       .select('nome,moeda,pais,fuso').eq('user_id', user.id).maybeSingle());
     if (profileError) throw profileError;

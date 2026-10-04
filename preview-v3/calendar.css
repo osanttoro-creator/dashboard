@@ -42,7 +42,9 @@
 
 /* ---- ano ---- */
 .v3-cal-meses{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:9px;margin-top:14px}
-.v3-cal-mes{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--line);border-radius:16px;background:rgba(240,229,207,.04);color:var(--milk);text-align:left}
+.v3-cal-mes{display:grid;gap:8px;padding:11px 13px;border:1px solid var(--line);border-radius:16px;background:rgba(240,229,207,.04);color:var(--milk);text-align:left;min-width:0}
+.v3-cal-mes-main{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.v3-cal-mes-main:focus-visible,.v3-cal-mes-edicoes button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 .v3-cal-mes:hover{background:rgba(240,229,207,.08)}
 .v3-cal-mes.is-active{border-color:var(--teal);background:rgba(95,169,155,.12)}
 .v3-cal-mes.is-today .v3-cal-mes-nome{color:var(--teal)}
@@ -51,15 +53,24 @@
 .v3-cal-mes-barras i{display:block;height:5px;min-width:2px;border-radius:3px}
 .v3-cal-mes-barras i.in{background:var(--teal)}
 .v3-cal-mes-barras i.out{background:rgba(240,229,207,.28)}
-.v3-cal-mes>strong{font-size:12px;white-space:nowrap}
+.v3-cal-mes-main>strong{font-size:12px;white-space:nowrap}
+.v3-cal-mes-numeros{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:7px;color:var(--muted);font-size:11px}
+.v3-cal-mes-numeros strong{color:var(--milk);font-variant-numeric:tabular-nums}
+.v3-cal-mes-edicoes{display:grid;gap:3px}
+.v3-cal-mes-edicoes button{display:flex;justify-content:space-between;gap:8px;width:100%;padding:5px 0;border:0;background:transparent;color:var(--milk);text-align:left;cursor:pointer;font-size:11px}
+.v3-cal-mes-edicoes button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-cal-mes-edicoes small{color:var(--teal);white-space:nowrap}
 
 /* ---- semana ---- */
-.v3-cal-dias{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px;margin-top:14px}
-.v3-cal-dia{display:grid;align-content:start;gap:7px;padding:13px;border:1px solid var(--line);border-radius:17px;background:rgba(240,229,207,.035)}
+.v3-cal-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;margin-top:14px;overflow-x:auto}
+.v3-cal-dia{display:grid;align-content:start;gap:7px;min-width:0;padding:13px;border:1px solid var(--line);border-radius:17px;background:rgba(240,229,207,.035)}
 .v3-cal-dia.is-today{border-color:var(--teal)}
 .v3-cal-dia.is-active{background:rgba(95,169,155,.09)}
 .v3-cal-dia header{display:grid;gap:2px;margin-bottom:2px}
 .v3-cal-dia header .v3-label{margin:0}
 .v3-cal-dia .v3-cal-event{padding:7px 0;border-top:1px solid var(--line)}
 .v3-cal-dia .v3-link{justify-self:start;margin-top:3px;font-size:12px}
-@media(max-width:540px){.v3-cal-meses,.v3-cal-dias{grid-template-columns:1fr}}
+.v3-cal-dia .v3-cal-event{grid-template-columns:8px minmax(0,1fr);overflow-wrap:anywhere}
+.v3-cal-dia .v3-cal-event .v3-mono,.v3-cal-dia .v3-cal-event .v3-link{grid-column:2}
+@media(max-width:900px){.v3-cal-dias{grid-template-columns:repeat(7,minmax(165px,1fr));padding-bottom:8px;scroll-snap-type:x proximity}.v3-cal-dia{scroll-snap-align:start}}
+@media(max-width:540px){.v3-cal-meses{grid-template-columns:1fr}}

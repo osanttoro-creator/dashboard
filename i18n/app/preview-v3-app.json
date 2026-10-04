@@ -482,6 +482,13 @@
     "es": "Cómo se llama"
   },
   {
+    "pt": "Sem nome",
+    "tipo": "exato",
+    "en": "Unnamed",
+    "fr": "Sans nom",
+    "es": "Sin nombre"
+  },
+  {
     "pt": "crédito",
     "tipo": "exato",
     "en": "credit",
@@ -1180,6 +1187,13 @@
     "es": "Ningún movimiento de este elemento en el periodo."
   },
   {
+    "pt": "Dados da conta · PIN",
+    "tipo": "exato",
+    "en": "Account details · PIN",
+    "fr": "Données du compte · PIN",
+    "es": "Datos de la cuenta · PIN"
+  },
+  {
     "pt": "Toque no item que quer acompanhar.",
     "tipo": "exato",
     "en": "Tap the item you want to follow.",
@@ -1640,11 +1654,32 @@
     "es": "Movimiento"
   },
   {
-    "pt": "{0}, sobra {1}",
+    "pt": "Abrir {0}",
     "tipo": "padrao",
-    "en": "{0}, {1} left over",
-    "fr": "{0}, reste {1}",
-    "es": "{0}, sobra {1}"
+    "en": "Open {0}",
+    "fr": "Ouvrir {0}",
+    "es": "Abrir {0}"
+  },
+  {
+    "pt": "Lançados",
+    "tipo": "exato",
+    "en": "Recorded",
+    "fr": "Enregistrés",
+    "es": "Registrados"
+  },
+  {
+    "pt": "Previstos",
+    "tipo": "exato",
+    "en": "Forecast",
+    "fr": "Prévus",
+    "es": "Previstos"
+  },
+  {
+    "pt": "Editar {0} em {1}",
+    "tipo": "padrao",
+    "en": "Edit {0} in {1}",
+    "fr": "Modifier {0} en {1}",
+    "es": "Editar {0} en {1}"
   },
   {
     "pt": "Meses de {0}",
@@ -3904,6 +3939,13 @@
     "ignorar": true
   },
   {
+    "pt": "card:",
+    "tipo": "exato",
+    "en": "card:",
+    "fr": "card:",
+    "es": "card:"
+  },
+  {
     "pt": "editar lançamento",
     "tipo": "exato",
     "en": "edit entry",
@@ -3953,6 +3995,13 @@
     "es": "Recordar esta categoría para este establecimiento"
   },
   {
+    "pt": "Débito ou crédito",
+    "tipo": "exato",
+    "en": "Debit or credit",
+    "fr": "Débit ou crédit",
+    "es": "Débito o crédito"
+  },
+  {
     "pt": "CONTA DE ORIGEM",
     "tipo": "exato",
     "en": "FROM ACCOUNT",
@@ -3960,11 +4009,25 @@
     "es": "CUENTA DE ORIGEN"
   },
   {
-    "pt": "COMO FOI PAGO / RECEBIDO",
+    "pt": "CARTÃO DE CRÉDITO",
     "tipo": "exato",
-    "en": "HOW IT WAS PAID / RECEIVED",
-    "fr": "MODE DE PAIEMENT / RÉCEPTION",
-    "es": "CÓMO SE PAGÓ / RECIBIÓ"
+    "en": "CREDIT CARD",
+    "fr": "CARTE DE CRÉDIT",
+    "es": "TARJETA DE CRÉDITO"
+  },
+  {
+    "pt": "CONTA DE DÉBITO",
+    "tipo": "exato",
+    "en": "DEBIT ACCOUNT",
+    "fr": "COMPTE DE DÉBIT",
+    "es": "CUENTA DE DÉBITO"
+  },
+  {
+    "pt": "ONDE FOI RECEBIDO",
+    "tipo": "exato",
+    "en": "WHERE IT WAS RECEIVED",
+    "fr": "OÙ IL A ÉTÉ REÇU",
+    "es": "DÓNDE SE RECIBIÓ"
   },
   {
     "pt": "CONTA DE DESTINO",
@@ -4098,6 +4161,13 @@
     "en": "Repeat monthly",
     "fr": "Répéter chaque mois",
     "es": "Repetir mensualmente"
+  },
+  {
+    "pt": "DATA DA REPETIÇÃO",
+    "tipo": "exato",
+    "en": "REPEAT DATE",
+    "fr": "DATE DE RÉPÉTITION",
+    "es": "FECHA DE REPETICIÓN"
   },
   {
     "pt": "TERMINAR RECORRÊNCIA EM (OPCIONAL)",
@@ -4989,6 +5059,174 @@
     "es": "Crear espacio"
   },
   {
+    "pt": "O cofre só funciona na conta real.",
+    "tipo": "exato",
+    "en": "The vault is only available in a real account.",
+    "fr": "Le coffre est disponible uniquement dans un compte réel.",
+    "es": "La bóveda solo está disponible en una cuenta real."
+  },
+  {
+    "pt": "criar PIN",
+    "tipo": "exato",
+    "en": "create PIN",
+    "fr": "créer un code PIN",
+    "es": "crear PIN"
+  },
+  {
+    "pt": "proteção extra para dados da conta",
+    "tipo": "exato",
+    "en": "extra protection for account details",
+    "fr": "protection supplémentaire des données du compte",
+    "es": "protección adicional para los datos de la cuenta"
+  },
+  {
+    "pt": "Crie um PIN de seis dígitos. Evite datas, sequências e repetições. O PIN não substitui a confirmação por e-mail para entrar.",
+    "tipo": "exato",
+    "en": "Create a six-digit PIN. Avoid dates, sequences and repeated digits. The PIN does not replace email confirmation to sign in.",
+    "fr": "Créez un code PIN à six chiffres. Évitez les dates, les suites et les répétitions. Le code PIN ne remplace pas la confirmation par e-mail pour vous connecter.",
+    "es": "Crea un PIN de seis dígitos. Evita fechas, secuencias y repeticiones. El PIN no sustituye la confirmación por correo para entrar."
+  },
+  {
+    "pt": "CONFIRMAR PIN",
+    "tipo": "exato",
+    "en": "CONFIRM PIN",
+    "fr": "CONFIRMER LE CODE PIN",
+    "es": "CONFIRMAR PIN"
+  },
+  {
+    "pt": "Criar PIN",
+    "tipo": "exato",
+    "en": "Create PIN",
+    "fr": "Créer le code PIN",
+    "es": "Crear PIN"
+  },
+  {
+    "pt": "dados da conta",
+    "tipo": "exato",
+    "en": "account details",
+    "fr": "données du compte",
+    "es": "datos de la cuenta"
+  },
+  {
+    "pt": "Estes dados só aparecem depois do PIN. A senha de acesso ao banco não deve ser guardada aqui.",
+    "tipo": "exato",
+    "en": "These details only appear after entering the PIN. Do not store your bank password here.",
+    "fr": "Ces données n'apparaissent qu'après la saisie du code PIN. Ne conservez pas votre mot de passe bancaire ici.",
+    "es": "Estos datos solo aparecen después de ingresar el PIN. No guardes aquí tu contraseña bancaria."
+  },
+  {
+    "pt": "PIN DE 6 DÍGITOS",
+    "tipo": "exato",
+    "en": "6-DIGIT PIN",
+    "fr": "CODE PIN À 6 CHIFFRES",
+    "es": "PIN DE 6 DÍGITOS"
+  },
+  {
+    "pt": "Desbloquear dados",
+    "tipo": "exato",
+    "en": "Unlock details",
+    "fr": "Déverrouiller les données",
+    "es": "Desbloquear datos"
+  },
+  {
+    "pt": "Cofre indisponível.",
+    "tipo": "exato",
+    "en": "Vault unavailable.",
+    "fr": "Coffre indisponible.",
+    "es": "Bóveda no disponible."
+  },
+  {
+    "pt": "Use seis dígitos, sem datas ou sequências fáceis, e confirme o mesmo PIN.",
+    "tipo": "exato",
+    "en": "Use six digits, avoid dates and easy sequences, and confirm the same PIN.",
+    "fr": "Utilisez six chiffres, sans dates ni suites faciles, puis confirmez le même code PIN.",
+    "es": "Usa seis dígitos, sin fechas ni secuencias fáciles, y confirma el mismo PIN."
+  },
+  {
+    "pt": "Não foi possível criar o PIN.",
+    "tipo": "exato",
+    "en": "Could not create the PIN.",
+    "fr": "Impossible de créer le code PIN.",
+    "es": "No se pudo crear el PIN."
+  },
+  {
+    "pt": "dados protegidos",
+    "tipo": "exato",
+    "en": "protected details",
+    "fr": "données protégées",
+    "es": "datos protegidos"
+  },
+  {
+    "pt": "Visíveis só enquanto este painel estiver aberto. Não guarde senha bancária.",
+    "tipo": "exato",
+    "en": "Visible only while this panel is open. Do not store bank passwords.",
+    "fr": "Visibles uniquement lorsque ce panneau est ouvert. Ne stockez pas de mots de passe bancaires.",
+    "es": "Visibles solo mientras este panel esté abierto. No guardes contraseñas bancarias."
+  },
+  {
+    "pt": "CHAVE PIX",
+    "tipo": "exato",
+    "en": "PIX KEY",
+    "fr": "CLÉ PIX",
+    "es": "CLAVE PIX"
+  },
+  {
+    "pt": "AGÊNCIA",
+    "tipo": "exato",
+    "en": "BRANCH",
+    "fr": "AGENCE",
+    "es": "SUCURSAL"
+  },
+  {
+    "pt": "ANOTAÇÃO SEGURA",
+    "tipo": "exato",
+    "en": "SECURE NOTE",
+    "fr": "NOTE PROTÉGÉE",
+    "es": "NOTA SEGURA"
+  },
+  {
+    "pt": "CONFIRME O PIN PARA SALVAR",
+    "tipo": "exato",
+    "en": "CONFIRM PIN TO SAVE",
+    "fr": "CONFIRMEZ LE CODE PIN POUR ENREGISTRER",
+    "es": "CONFIRMA EL PIN PARA GUARDAR"
+  },
+  {
+    "pt": "Salvar no cofre",
+    "tipo": "exato",
+    "en": "Save in vault",
+    "fr": "Enregistrer dans le coffre",
+    "es": "Guardar en la bóveda"
+  },
+  {
+    "pt": "Dados protegidos",
+    "tipo": "exato",
+    "en": "Protected details",
+    "fr": "Données protégées",
+    "es": "Datos protegidos"
+  },
+  {
+    "pt": "Não foi possível desbloquear.",
+    "tipo": "exato",
+    "en": "Could not unlock.",
+    "fr": "Impossible de déverrouiller.",
+    "es": "No se pudo desbloquear."
+  },
+  {
+    "pt": "Dados protegidos salvos.",
+    "tipo": "exato",
+    "en": "Protected details saved.",
+    "fr": "Données protégées enregistrées.",
+    "es": "Datos protegidos guardados."
+  },
+  {
+    "pt": "Não foi possível salvar no cofre.",
+    "tipo": "exato",
+    "en": "Could not save in the vault.",
+    "fr": "Impossible d'enregistrer dans le coffre.",
+    "es": "No se pudo guardar en la bóveda."
+  },
+  {
     "pt": "Não consegui confirmar os limites da conta. Tente novamente.",
     "tipo": "exato",
     "en": "I couldn’t confirm the account limits. Try again.",
@@ -5022,6 +5260,20 @@
     "en": "Choose two different accounts to transfer.",
     "fr": "Choisissez deux comptes différents pour le virement.",
     "es": "Elige dos cuentas distintas para transferir."
+  },
+  {
+    "pt": "Escolha a data da repetição.",
+    "tipo": "exato",
+    "en": "Choose the repeat date.",
+    "fr": "Choisissez la date de répétition.",
+    "es": "Elige la fecha de repetición."
+  },
+  {
+    "pt": "A data da repetição precisa pertencer à fatura escolhida.",
+    "tipo": "exato",
+    "en": "The repeat date must fall within the selected invoice.",
+    "fr": "La date de répétition doit appartenir à la facture choisie.",
+    "es": "La fecha de repetición debe corresponder a la factura elegida."
   },
   {
     "pt": "Confira a recorrência e as parcelas.",
