@@ -104,14 +104,12 @@
     { id: 'dinheiro', nome: 'Dinheiro', icone: 'banknote', oferecivel: false }
   ];
   const MEIOS_OFERECIVEIS = MEIOS.filter((m) => m.oferecivel);
-  /* Conta nova já nasce com o que quase toda conta tem. Quem não usa
-     desmarca; quem usa não precisa configurar nada para começar. */
+  /* Mantido para compatibilidade com perfis antigos; a V3 libera todos os meios. */
   const MEIOS_PADRAO = ['pix', 'cartao_fisico', 'transferencia'];
 
-  /** Os meios que uma conta oferece, mais os que não dependem dela. */
+  /** A escolha do meio acontece no lançamento, não no cadastro da conta. */
   function meiosDaConta(acc) {
-    const escolhidos = Array.isArray(acc && acc.meios) ? acc.meios : MEIOS_PADRAO;
-    return MEIOS.filter((m) => !m.oferecivel || escolhidos.includes(m.id));
+    return MEIOS;
   }
 
   /* O nome existe para o leitor de tela e para a dica do seletor:
@@ -450,6 +448,7 @@
         openingBalance: U.round2(+a.openingBalance || 0),
         openedAt: U.isValidISO(a.openedAt) ? a.openedAt : U.todayISO(),
         archived: !!a.archived,
+        hidden: !!a.hidden,
         /* Fora dos totais: a conta continua existindo, com extrato e
            saldo, mas o que passa por ela não entra nas receitas e
            despesas do mês. É para a conta da empresa, a conta de
@@ -457,12 +456,8 @@
            banco e não é seu para gastar. Ausente = considerada, que
            é o que todo dado antigo significa. */
         considerado: a.considerado !== false,
-        /* O que esta conta oferece. Ausente = o padrao, e nao lista
-           vazia: conta antiga nao tem o campo, e uma conta que nao
-           oferece meio nenhum nao poderia receber lancamento. */
-        meios: Array.isArray(a.meios)
-          ? a.meios.filter((m) => MEIOS_OFERECIVEIS.some((x) => x.id === m))
-          : MEIOS_PADRAO.slice(),
+        /* Perfis antigos podem ter um subconjunto; normalizamos para todos. */
+        meios: MEIOS_OFERECIVEIS.map((m) => m.id),
         /* Conta em outra moeda — quem mora fora, quem recebe de fora,
            quem tem Wise ou Nomad. O saldo inicial e o extrato são na
            moeda dela (como o limite do cartão internacional é na moeda
@@ -492,7 +487,8 @@
       /* Mesmo interruptor do débito: a fatura continua inteira, com
          limite e vencimento, mas as compras dele ficam fora das
          despesas do mês. */
-      considerado: c.considerado !== false
+      considerado: c.considerado !== false,
+      hidden: !!c.hidden
     }));
     prof.categories = (Array.isArray(prof.categories) && prof.categories.length ? prof.categories : makeCategories())
       .map((c) => ({

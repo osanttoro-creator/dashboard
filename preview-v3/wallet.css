@@ -5,6 +5,9 @@
 .v3-wallet-tabs{display:flex;gap:3px;padding:3px;border:1px solid rgba(240,229,207,.12);border-radius:17px;background:#0a171f}
 .v3-wallet-tabs button{min-width:72px;min-height:34px;border:0;border-radius:13px;background:transparent;color:var(--muted);font-weight:600;font-size:12px}
 .v3-wallet-tabs button.is-active{background:var(--milk);color:var(--night)}
+.v3-wallet-tabs .v3-wallet-hidden-toggle{display:grid;place-items:center;position:relative;min-width:36px;padding:0 6px}
+.v3-wallet-hidden-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none}
+.v3-wallet-hidden-toggle small{position:absolute;top:-5px;right:-4px;min-width:15px;height:15px;border-radius:50%;background:var(--teal);color:var(--night);font:700 10px/15px var(--body)}
 .v3-wallet-stack{position:relative;padding-top:7px;filter:drop-shadow(0 24px 26px rgba(1,7,9,.32))}
 .v3-wallet-list{display:block;max-height:385px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(240,229,207,.24) transparent;padding:14px 20px 29px;margin:0 0 -25px}
 .v3-wallet.is-open .v3-wallet-list{animation:v3-wallet-open .35s cubic-bezier(.19,1,.22,1) both}
@@ -126,6 +129,7 @@
 .v3-bank-group summary{padding:12px 2px;cursor:pointer;font-weight:600;color:var(--milk)}
 .v3-bank-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-bottom:13px}
 .v3-bank-option{position:relative;display:flex!important;align-items:center;gap:9px;min-width:0;min-height:50px;padding:6px 9px;border:1px solid rgba(240,229,207,.11);border-radius:14px;background:rgba(240,229,207,.04);color:var(--milk)!important;cursor:pointer;font-size:11px!important}
+.v3-bank-option[hidden]{display:none!important}
 .v3-bank-option:has(input:checked){border-color:var(--teal);background:rgba(95,169,155,.13)}
 .v3-bank-option input{position:absolute;opacity:0;width:1px;height:1px;padding:0}
 .v3-bank-option:has(input:focus-visible){outline:2px solid var(--teal);outline-offset:2px}

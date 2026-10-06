@@ -50,8 +50,14 @@ assert.match(app, /Store\.meiosDaConta/, 'a lista de meios vem do que a conta de
 assert.match(app, /id="v3-tx-meio-label"/);
 assert.match(app, /bloco\.hidden = type !== 'account'/, 'no crédito o meio é o próprio cartão');
 assert.match(app, /meio:sourceType==='account'/);
-assert.match(app, /fd\.getAll\('meios'\)/, 'a conta declara o que oferece');
+assert.match(app, /Store\.MEIOS_OFERECIVEIS\|\|\[\]\)\.map/, 'todos os meios ficam disponíveis');
+assert.match(store, /function meiosDaConta\(acc\) \{\s*return MEIOS;/, 'a conta não limita os meios');
 assert.match(app, /O QUE A CONTA OFERECE/);
+assert.match(app, /hidden:fd\.get\('hidden'\)==='on'/, 'visibilidade da carteira persiste');
+assert.match(app, /sourceType!=='card' && installments>1/, 'parcelas só no crédito');
+assert.match(app, /current==='Transferir' \|\| !a\.hidden/, 'contas ocultas só em transferência');
+assert.match(app, /profile\(\)\.cards\.filter\(\(c\)=>!c\.hidden\)/, 'cartões ocultos não aparecem em despesas');
+assert.doesNotMatch(app, /Lembrar esta categoria para este estabelecimento/, 'a opção foi retirada');
 assert.match(app, /Store\.payInvoice\(cardId,ref,\{amount,paidAt,accountId,meio\}\)/, 'a fatura também registra o meio');
 assert.match(store, /MEIOS_OFERECIVEIS/);
 

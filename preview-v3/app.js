@@ -57,7 +57,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -170,7 +170,7 @@
   function items() {
     return [...profile().accounts.filter((a) => !a.archived).map((a) => ({ kind: 'debit', data: a })), ...profile().cards.map((c) => ({ kind: 'credit', data: c }))];
   }
-  function walletItems() { return items().filter((x) => x.kind === state.walletKind); }
+  function walletItems() { return items().filter((x) => x.kind === state.walletKind && !!x.data.hidden === !!state.walletHidden); }
   function itemById(id) { return items().find((x) => x.data.id === id); }
   function selectedItem() { return walletItems().find((x) => x.data.id === state.selected) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
@@ -324,12 +324,14 @@
        Fechada, mostra o total. Era essa a diferença entre um índice
        de cartões e uma carteira. */
     const chosen = state.walletOpen && list.length ? selectedItem() : null;
-    const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button></div></div>`;
+    const hiddenCount=items().filter((item)=>item.data.hidden).length;
+    const hideAction=chosen?`<button type="button" class="v3-wallet-hidden-toggle" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(chosen.data.id)}" aria-label="${chosen.data.hidden?'Reexibir':'Ocultar'} ${esc(chosen.data.name||chosen.data.bank)}" title="${chosen.data.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(chosen.data.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`:'';
+    const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button>${hideAction}<button type="button" class="v3-wallet-hidden-toggle${state.walletHidden?' is-active':''}" data-action="wallet-hidden" aria-pressed="${state.walletHidden}" aria-label="${state.walletHidden?'Mostrar carteira principal':'Ver itens ocultos'}" title="${state.walletHidden?'Carteira principal':`${hiddenCount} item(ns) oculto(s)`}">${global.Icons?.lucide(state.walletHidden?'eye-off':'eye',18)?.outerHTML||'◉'}${hiddenCount?`<small>${hiddenCount}</small>`:''}</button></div></div>`;
     if (!items().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>sua carteira começa aqui</h2><p>Adicione uma conta ou cartão para ver seus saldos neste bolso.</p><button type="button" data-action="add-account" class="v3-primary" style="margin-top:20px">Adicionar conta</button></div>`;
     const credit=state.walletKind==='credit';
-    const total=chosen ? walletItemValue(chosen) : credit ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : accountsBalance();
-    const summaryLabel=chosen ? `${credit?'FATURA':'SALDO'} · ${chosen.data.name || chosen.data.bank}` : credit?'FATURAS ABERTAS':'SALDO EM CONTAS';
-    const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(chosen.data.last4):'selecionado(a)'}` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
+    const total=chosen ? walletItemValue(chosen) : state.walletHidden ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : credit ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : accountsBalance();
+    const summaryLabel=chosen ? `${credit?'FATURA':'SALDO'} · ${chosen.data.name || chosen.data.bank}` : state.walletHidden?'ITENS OCULTOS':credit?'FATURAS ABERTAS':'SALDO EM CONTAS';
+    const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(chosen.data.last4):'selecionado(a)'}` : state.walletHidden ? `${list.length} item(ns) oculto(s)` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
     return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x,i)=>cardButton(x,chosen?.data.id===x.data.id,i)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div>${list.length>1?`<button class="v3-carteira-seta v3-carteira-ant" type="button" data-carteira-ant aria-label="Cartão anterior"><span aria-hidden="true">&lsaquo;</span></button><button class="v3-carteira-seta v3-carteira-prox" type="button" data-carteira-prox aria-label="Próximo cartão"><span aria-hidden="true">&rsaquo;</span></button><div class="v3-carteira-pontos" aria-hidden="true">${list.map(()=>'<i data-carteira-ponto></i>').join('')}</div>`:''}<button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
   }
   function quickActions() { return `<div class="v3-quick">${[['Despesa','down'],['Receita','arrow'],['Transferir','transactions'],['Aporte','investments']].map(([n,i]) => `<button type="button" data-action="new" data-kind="${n.toLowerCase()}">${icon(i)}${n}</button>`).join('')}</div>`; }
@@ -1362,12 +1364,12 @@
     const byCategory=new Map();
     for(const tx of expenses) byCategory.set(tx.categoryId,(byCategory.get(tx.categoryId)||0)+Number(tx.amount||0));
     const leaders=[...byCategory].sort((a,b)=>b[1]-a[1]).slice(0,5);
-    return `<div class="v3-coco-analysis"><div class="v3-coco-analysis-intro"><span class="v3-label">SEUS DADOS · ${esc(periodLabel(state.ym))}</span><h2>O que os números mostram.</h2><p>Gráficos calculados a partir dos lançamentos do OAZE. A Coco pode explicar o contexto, mas não inventa valores.</p></div><div class="v3-coco-kpis"><div><span>Entradas</span><strong class="v3-sensitive">${money(now.income)}</strong></div><div><span>Saídas</span><strong class="v3-sensitive">${money(now.expense)}</strong></div><div><span>Resultado</span><strong class="v3-sensitive">${money(now.balance)}</strong></div><div><span>Despesas pendentes</span><strong class="v3-sensitive">${money(pendingValue)}</strong><small>${pending.length} lançamento(s)</small></div></div><section class="v3-coco-chart"><div class="v3-row"><h3>Últimos seis meses</h3><small>entradas <i class="v3-coco-legend income"></i> · saídas <i class="v3-coco-legend expense"></i></small></div><div class="v3-coco-bars" role="img" aria-label="Comparativo de entradas e saídas dos últimos seis meses">${series.map((x)=>`<div class="v3-coco-month"><div class="v3-coco-bar-pair"><span class="income" style="height:${Math.max(2,x.income/max*100)}%" title="${esc(periodLabel(x.ym))}: entradas ${esc(moneyReal(x.income))}"></span><span class="expense" style="height:${Math.max(2,x.expense/max*100)}%" title="${esc(periodLabel(x.ym))}: saídas ${esc(moneyReal(x.expense))}"></span></div><small>${esc(periodLabel(x.ym).split(' ')[0])}</small></div>`).join('')}</div></section><section class="v3-coco-chart"><h3>Para onde saiu</h3>${leaders.length?leaders.map(([id,value])=>`<div class="v3-coco-category"><span>${esc(categoryName(id))}</span><div><i style="width:${Math.max(2,value/Math.max(now.expense,1)*100)}%"></i></div><strong class="v3-sensitive">${money(value)}</strong></div>`).join(''):'<p class="v3-muted">Ainda não há saídas confirmadas neste mês.</p>'}</section><button type="button" class="v3-secondary" data-action="coco-analyze">Perguntar à Coco sobre estes números</button><button type="button" class="v3-link" data-action="coco-memory">Ver memória e análises guardadas</button></div>`;
+    return `<div class="v3-coco-analysis"><div class="v3-coco-analysis-intro"><span class="v3-label">SEUS DADOS · ${esc(periodLabel(state.ym))}</span><h2>O que os números mostram.</h2><p>Gráficos calculados a partir dos lançamentos do OAZE. Pergunte à Coco o que mudou.</p></div><div class="v3-coco-kpis"><div><span>Entradas</span><strong class="v3-sensitive">${money(now.income)}</strong></div><div><span>Saídas</span><strong class="v3-sensitive">${money(now.expense)}</strong></div><div><span>Resultado</span><strong class="v3-sensitive">${money(now.balance)}</strong></div><div><span>Despesas pendentes</span><strong class="v3-sensitive">${money(pendingValue)}</strong><small>${pending.length} lançamento(s)</small></div></div><section class="v3-coco-chart"><div class="v3-row"><h3>Últimos seis meses</h3><small>entradas <i class="v3-coco-legend income"></i> · saídas <i class="v3-coco-legend expense"></i></small></div><div class="v3-coco-bars" role="img" aria-label="Comparativo de entradas e saídas dos últimos seis meses">${series.map((x)=>`<div class="v3-coco-month"><div class="v3-coco-bar-pair"><span class="income" style="height:${Math.max(2,x.income/max*100)}%" title="${esc(periodLabel(x.ym))}: entradas ${esc(moneyReal(x.income))}"></span><span class="expense" style="height:${Math.max(2,x.expense/max*100)}%" title="${esc(periodLabel(x.ym))}: saídas ${esc(moneyReal(x.expense))}"></span></div><small>${esc(periodLabel(x.ym).split(' ')[0])}</small></div>`).join('')}</div></section><section class="v3-coco-chart"><h3>Para onde saiu</h3>${leaders.length?leaders.map(([id,value])=>`<div class="v3-coco-category"><span>${esc(categoryName(id))}</span><div><i style="width:${Math.max(2,value/Math.max(now.expense,1)*100)}%"></i></div><strong class="v3-sensitive">${money(value)}</strong></div>`).join(''):'<p class="v3-muted">Ainda não há saídas confirmadas neste mês.</p>'}</section><button type="button" class="v3-secondary" data-action="coco-analyze">Perguntar à Coco sobre estes números</button></div>`;
   }
   function renderCoco() {
     const consent=!demo&&!cocoAllowed();
-    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados após sua confirmação. Para falar a resposta, o texto também é enviado à OpenAI. Extratos PDF/CSV reconhecidos são lidos no aparelho.</p><p>Não envie senhas, documentos ou números completos de conta. Você pode revogar o acesso e apagar memórias.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem IA</button></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}<p>Resposta falada: voz gerada por IA. A conversa não executa lançamentos sem sua revisão.</p></div></div>`;
-    return `<div class="v3-coco-page"><header class="v3-coco-hero"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco, assistente financeira do OAZE"><div><span class="v3-label">SUA ASSISTENTE FINANCEIRA</span><h1>coco<span>.</span></h1><p>Converse sobre seu dinheiro. Enxergue os dados com clareza.</p></div><button type="button" class="v3-coco-utility" data-action="coco-memory">Memória</button><button type="button" class="v3-coco-utility" data-coco-tab="Extratos">Extratos</button></header><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
+    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}</div></div>`;
+    return `<div class="v3-coco-page"><header class="v3-coco-hero"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco, assistente financeira do OAZE"><div><span class="v3-label">SUA ASSISTENTE FINANCEIRA</span><h1>coco<span>.</span></h1><p>Converse sobre seu dinheiro. Enxergue os dados com clareza.</p></div></header><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
   }
   function render() {
     closeStatusMenu(false);
@@ -1380,7 +1382,7 @@
     document.body.classList.toggle('v3-coco-screen',state.page==='coco');
     montarCarteira();
   }
-  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (!names[page]) return; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
+  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (!names[page]) return; if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -1427,8 +1429,8 @@
   function cocoMediaControls() {
     const audio = recorder?.state === 'recording'
       ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
-      : `<details class="v3-coco-audio-options"><summary class="v3-coco-icon" aria-label="Opções de áudio" title="Áudio: gravar ou escolher arquivo">${cocoMediaIcon('mic')}</summary><div class="v3-coco-audio-menu"><button type="button" data-action="record-audio">Gravar áudio</button><button type="button" data-action="choose-coco-audio">Enviar áudio do aparelho</button></div></details>`;
-    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar foto, PDF ou CSV" title="Foto, extrato PDF ou CSV">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/csv,.pdf,.csv" hidden>${audio}<input id="v3-coco-audio-file" type="file" accept="audio/webm,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Pergunte, grave ou envie um arquivo" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}><button type="submit" aria-label="Enviar" ${state.cocoAsking?'disabled':''}>↑</button></form><small>Fotos e áudios exigem confirmação para envio à OpenAI. Extratos PDF/CSV reconhecidos são lidos neste aparelho e revisados antes de salvar.</small>`;
+      : `<button type="button" class="v3-coco-icon" data-action="record-audio" aria-label="Gravar áudio" title="Gravar áudio">${cocoMediaIcon('mic')}</button>`;
+    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar arquivo" title="Anexar arquivo">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" hidden>${audio}</div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Pergunte, grave ou envie um arquivo" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}><button type="submit" aria-label="Enviar" ${state.cocoAsking?'disabled':''}>↑</button></form>`;
   }
   async function refreshCoco() {
     if (demo) return;
@@ -1506,7 +1508,7 @@
     if (editId && !editing) { toast('Lançamento não encontrado. Atualize a página.'); return; }
     const current = editing ? ({ expense:'Despesa', income:'Receita', transfer:'Transferir' }[editing.kind]) : (kind || 'Despesa');
     if (current === 'Aporte') { investmentForm(); return; }
-    const accounts = profile().accounts.filter((a) => !a.archived), cards = profile().cards;
+    const accounts = profile().accounts.filter((a) => !a.archived && (current==='Transferir' || !a.hidden)), cards = profile().cards.filter((c)=>!c.hidden);
     const sourceValue = editing ? (editing.cardId ? `card:${editing.cardId}` : `account:${editing.accountId || ''}`) : proposal?.source || '';
     const paymentKind = current === 'Despesa' && sourceValue.startsWith('card:') ? 'credit' : 'debit';
     const accountOptions = () => accounts.map((a) => `<option value="account:${esc(a.id)}" ${sourceValue === `account:${a.id}` ? 'selected' : ''}>${esc(a.name || a.bank)} •• ${esc(a.last4 || '')} · ${esc(a.moeda || 'BRL')}</option>`).join('');
@@ -1525,8 +1527,13 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p><label class="v3-check v3-lembrar" id="v3-lembrar" hidden><input type="checkbox" name="lembrarRegra"> Lembrar esta categoria para este estabelecimento</label></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
-    updateComposerCurrency(document.getElementById('v3-form-tx'), meioInicial);
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    const txForm=document.getElementById('v3-form-tx');
+    const destination=txForm.elements.destination;
+    if(destination) destination.innerHTML='<option value="">Selecione</option>'+profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${editing?.toAccountId===a.id?'selected':''}>${esc(a.name||a.bank)} •• ${esc(a.last4||'')} · ${esc(a.moeda||'BRL')}</option>`).join('');
+    const installmentsField=txForm.elements.installments?.closest('label');
+    if(installmentsField){installmentsField.hidden=!(current==='Despesa' && paymentKind==='credit' && !txForm.elements.recurring.checked);installmentsField.firstChild.textContent='PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)';}
+    updateComposerCurrency(txForm, meioInicial);
     atualizarSugestao(document.getElementById('v3-form-tx'));
   }
 
@@ -1534,13 +1541,15 @@
     if (!form || !['debit', 'credit'].includes(kind) || form.elements.kind.value !== 'Despesa') return;
     const source = form.elements.source;
     const previous = source.value;
-    const list = kind === 'credit' ? profile().cards : profile().accounts.filter((a) => !a.archived);
+    const list = kind === 'credit' ? profile().cards.filter((c)=>!c.hidden) : profile().accounts.filter((a) => !a.archived && !a.hidden);
     source.innerHTML = '<option value="">Selecione</option>' + list.map((item) => {
       const value = `${kind === 'credit' ? 'card' : 'account'}:${item.id}`;
       return `<option value="${esc(value)}">${esc(item.name || item.bank)} •• ${esc(item.last4 || '')} · ${esc(item.moeda || 'BRL')}</option>`;
     }).join('');
     if (Array.from(source.options).some((option) => option.value === previous)) source.value = previous;
     form.dataset.paymentKind = kind;
+    const installmentsField=form.elements.installments?.closest('label');
+    if(installmentsField){installmentsField.hidden=kind!=='credit'||form.elements.recurring.checked;form.elements.installments.value='1';}
     const label = form.querySelector('#v3-tx-source-label');
     if (label?.firstChild) label.firstChild.textContent = kind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO';
     form.querySelectorAll('[data-payment-kind]').forEach((button) => {
@@ -1557,6 +1566,8 @@
     const fields = form?.querySelector('#v3-repeat-fields');
     if (!fields) return;
     fields.hidden = !recurring;
+    const installmentsField=form.elements.installments?.closest('label');
+    if(installmentsField){installmentsField.hidden=recurring||form.dataset.paymentKind!=='credit';if(recurring)form.elements.installments.value='1';}
     form.elements.repeatDate.required = !!recurring;
     if (!recurring) return;
     const [kind, id] = String(form.elements.source.value || '').split(':');
@@ -1629,12 +1640,6 @@
     alvo.innerHTML = `<button type="button" data-action="usar-sugestao">Usar ${esc(cat.name)}</button>`
       + `<small>${esc(sugestaoAtual.evidence)}</small>`;
   }
-  function lembrarRegraDaSugestao(form, categoryId, kind) {
-    if (!form || !form.elements.lembrarRegra || !form.elements.lembrarRegra.checked) return;
-    if (!sugestaoAtual || !sugestaoAtual.merchantKey || !categoryId) return;
-    Categorizacao.confirmarRegra(profile(), sugestaoAtual.merchantKey, kind, categoryId);
-  }
-
   /* =============================================================
      NO CRÉDITO, A PESSOA ESCOLHE A FATURA — NÃO O DIA
      -------------------------------------------------------------
@@ -1707,13 +1712,14 @@
     const currencyOptions=currencies.map((m)=>`<option value="${esc(m.code)}" ${m.code===(existing?.moeda||'BRL')?'selected':''}>${esc(m.nome)} (${esc(m.code)})</option>`).join('');
     const accountTypes=(Store.ACCOUNT_TYPES||['Conta corrente']).map((name)=>`<option value="${esc(name)}" ${name===(existing?.type||'Conta corrente')?'selected':''}>${esc(name)}</option>`).join('');
     const billAccounts=profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${card?.accountId===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
-    /* O QUE ESTA CONTA TEM
-       Toda conta oferecia tudo, e na hora de lançar a pessoa escolhia
-       "cartão virtual" numa conta que não emite cartão virtual — o
-       extrato ficava com uma informação que nunca aconteceu. Aqui ela
-       diz uma vez; depois o lançamento só mostra isso. */
-    const oferecidos=Array.isArray(account?.meios)?account.meios:(Store.MEIOS_PADRAO||[]);
+    /* Todos os meios disponíveis: a distinção é feita no lançamento. */
+    const oferecidos=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
     openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
+    const form=document.getElementById('v3-form-account');
+    form?.querySelectorAll('.v3-meios input').forEach((input)=>{input.checked=true;input.disabled=true;});
+    const meiosHint=form?.querySelector('.v3-meios small');
+    if(meiosHint)meiosHint.textContent='Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.';
+    form?.querySelector('[name="considerado"]')?.closest('label')?.insertAdjacentHTML('beforebegin',`<label class="v3-check"><input type="checkbox" name="hidden" ${existing?.hidden?'checked':''}> Ocultar da carteira principal</label>`);
   }
   function invoicePaymentForm(cardId) {
     const card=profile().cards.find((c)=>c.id===cardId);
@@ -1970,8 +1976,8 @@
     const editing=id ? Store.transactions.get(id) : null;
     if (id && !editing) { toast('Este lançamento não existe mais. Atualize a página.'); return; }
     const [sourceType,sourceId]=source.split(':'), transfer=kind==='Transferir', destination=String(fd.get('destination')||'');
-    const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived)
-      : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId) : null;
+    const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived && (transfer || !a.hidden))
+      : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId && !c.hidden) : null;
     if (!instrument) { toast('Escolha uma conta ou cartão válido.'); return; }
     /* A data real da compra sai da FATURA escolhida: é por ela que
        a pessoa pensa, e o dia é detalhe do ciclo. Editar mantém o dia
@@ -1993,7 +1999,7 @@
     }
     const installments=editing ? 1 : Number(fd.get('installments')||1);
     if ((recurring && recurEnd && (!/^\d{4}-\d{2}$/.test(recurEnd) || recurEnd<ymOf(date)))
-      || !Number.isInteger(installments) || installments<1 || installments>72 || (recurring && installments>1) || (kind!=='Despesa' && installments>1)) {
+      || !Number.isInteger(installments) || installments<1 || installments>72 || (recurring && installments>1) || (sourceType!=='card' && installments>1)) {
       toast('Confira a recorrência e as parcelas.'); return;
     }
     if (!editing && recurring && !canAdd('recurring_items',ymOf(date))) { toast('Esta recorrência ultrapassa o limite do seu plano.'); return; }
@@ -2012,9 +2018,6 @@
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
       await V3Backend.mutate(() => {
-        /* A regra do estabelecimento grava junto com o lançamento, na
-           mesma transação: se uma falhar, nenhuma das duas vale. */
-        lembrarRegraDaSugestao(form, categoryId, base.kind);
         if (editing) { Store.transactions.update(id,base); return; }
         if (installments===1) { Store.transactions.add(base); return; }
         const cents=Math.round(amount*100), each=Math.floor(cents/installments), groupId=U.uid('grp'), day=Number(date.slice(8));
@@ -2050,13 +2053,13 @@
         if (type==='card') {
           const closingDay=Number(fd.get('closing')),dueDay=Number(fd.get('due')),accountId=String(fd.get('billAccount')||'')||null;
           if (![closingDay,dueDay].every((n)=>Number.isInteger(n)&&n>=1&&n<=31)|| (accountId&&!profile().accounts.some((a)=>a.id===accountId&&!a.archived))) throw new Error('Confira fechamento, vencimento e conta da fatura.');
-          const data={name,bank,last4,limit:initial,closingDay,dueDay,accountId,considerado,color:bankBrand(bank,existing?.color),moeda,cotacao};
+          const data={name,bank,last4,limit:initial,closingDay,dueDay,accountId,considerado,hidden:fd.get('hidden')==='on',color:bankBrand(bank,existing?.color),moeda,cotacao};
           if (existing) Store.cards.update(id,data); else Store.cards.add(data);
         } else {
           const openedAt=String(fd.get('openedAt')||''),accountType=String(fd.get('accountType')||'');
           if (!U.isValidISO(openedAt)||!Store.ACCOUNT_TYPES.includes(accountType)) throw new Error('Confira a data e o tipo de conta.');
-          const meios=fd.getAll('meios').map(String).filter((m)=>(Store.MEIOS_OFERECIVEIS||[]).some((x)=>x.id===m));
-          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,meios,archived:fd.get('archived')==='on',color:bankBrand(bank,existing?.color),moeda,cotacao};
+          const meios=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
+          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,meios,hidden:fd.get('hidden')==='on',archived:fd.get('archived')==='on',color:bankBrand(bank,existing?.color),moeda,cotacao};
           if (existing) Store.accounts.update(id,data); else Store.accounts.add(data);
         }
       });
@@ -2197,7 +2200,7 @@
     const valor=Number(raw.valor),data=String(raw.data||''),descricao=String(raw.descricao||'').trim().slice(0,90);
     if (!(valor>0) || !Number.isFinite(valor) || !U.isValidISO(data) || !descricao) return null;
     const sourceText=U.norm(String(raw.origem||''));
-    const pool=raw.forma_pagamento==='card'?profile().cards:profile().accounts.filter((a)=>!a.archived);
+    const pool=raw.forma_pagamento==='card'?profile().cards.filter((c)=>!c.hidden):profile().accounts.filter((a)=>!a.archived&&!a.hidden);
     const matches=sourceText?pool.filter((item)=>[item.name,item.bank,item.last4].some((value)=>value&&U.norm(String(value))===sourceText)):[];
     const categoryText=U.norm(String(raw.categoria||''));
     const categories=categoryText?profile().categories.filter((item)=>item.kind===raw.tipo&&U.norm(item.name)===categoryText):[];
@@ -2267,7 +2270,7 @@
     try { await V3Backend.cocoRemember(profile().id,{kind,label,value}); await refreshCoco(); toast('Regra guardada. Você pode esquecê-la quando quiser.'); return true; }
     catch (error) { toast(error.message || 'Não consegui guardar a regra.'); return false; }
   }
-  async function readCocoMedia(file) {
+  async function readCocoMedia(file, sendRecording=false) {
     if (!file) return;
     const statement=/\.(pdf|csv)$/i.test(file.name) || ['application/pdf','text/csv','application/vnd.ms-excel'].includes(file.type);
     if (statement) {
@@ -2280,24 +2283,34 @@
       } catch (error) { toast(error.message || 'Não consegui ler este extrato. Nada foi salvo.'); }
       return;
     }
-    if (demo || !cocoAllowed()) return;
+    if (demo || !cocoAllowed()) { toast('Autorize a Coco antes de enviar arquivos.'); return; }
     const image=['image/jpeg','image/png','image/webp'].includes(file.type);
     const audio=['audio/webm','audio/mpeg','audio/mp4','audio/x-m4a','audio/wav','audio/wave'].includes(file.type);
-    if (!image && !audio) { toast('Formato não aceito. Envie foto, áudio, PDF ou CSV de extrato.'); return; }
+    const localText=/\.(txt|md|json|log)$/i.test(file.name) || ['text/plain','text/markdown','application/json'].includes(file.type);
+    if(localText){
+      if(file.size>1_000_000){toast('Texto acima de 1 MB. Envie um arquivo menor.');return;}
+      const value=(await file.text()).replace(/[\u0000-\u001f]/g,' ').trim();
+      if(!value){toast('O arquivo não contém texto legível.');return;}
+      state.mediaDraft=(`Leia este trecho de ${file.name}: ${value}`).slice(0,500);
+      state.cocoView='conversation';go('coco');$('#v3-chat-form [name="question"]')?.focus();
+      toast('Confira o trecho antes de enviar à Coco.');return;
+    }
+    if (!image && !audio) { toast('Arquivo escolhido, mas este formato ainda não pode ser lido. Use foto, áudio, extrato PDF/CSV ou texto.'); return; }
     const max=image?4_000_000:8_000_000;
     if (file.size>max || file.size<100) { toast('Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.'); return; }
-    if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à OpenAI para leitura? O conteúdo pode incluir dados sensíveis. O arquivo não ficará guardado no OAZE. A leitura usa uma consulta do plano; enviar o texto revisado usa outra.`)) return;
+    if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à Coco? O conteúdo pode incluir dados sensíveis e será processado pela OpenAI. O arquivo não ficará guardado no OAZE.`)) return;
     toast('Lendo arquivo…');
     try {
       const result=await V3Backend.cocoReadMedia(file,profile().id);
       state.cocoTab='Conversa';state.cocoView='conversation';state.mediaDraft=String(result.texto||'').slice(0,500);state.voiceDraft=audio;
       closeSheet();go('coco');$('#v3-chat-form [name="question"]')?.focus();
-      toast('Revise o texto antes de enviar à Coco.');
+      if(sendRecording && state.mediaDraft){await askCoco($('#v3-chat-form'));}
+      else toast('Revise o texto antes de enviar à Coco.');
     } catch (error) { toast(error.message || 'Não consegui ler o arquivo.'); }
   }
   async function toggleCocoRecording() {
     if (recorder?.state==='recording') { recorder.stop(); return; }
-    if (!navigator.mediaDevices?.getUserMedia || !global.MediaRecorder) { toast('Gravação indisponível neste navegador. Envie um arquivo de áudio.'); return; }
+    if (!navigator.mediaDevices?.getUserMedia || !global.MediaRecorder) { toast('Gravação indisponível neste navegador. Confira a permissão do microfone.'); return; }
     try {
       microphone=await navigator.mediaDevices.getUserMedia({audio:true});
       const mime=['audio/webm','audio/mp4'].find((type)=>MediaRecorder.isTypeSupported(type));
@@ -2308,7 +2321,7 @@
         microphone?.getTracks().forEach((track)=>track.stop()); microphone=null;
         const type=(recorder.mimeType||mime||'audio/webm').split(';')[0];
         const file=new File(chunks,'coco-audio.'+(type==='audio/mp4'?'m4a':'webm'),{type});
-        recorder=null;render();readCocoMedia(file);
+        recorder=null;render();readCocoMedia(file,true);
       };
       recorder.start();render();toast('Gravando. Toque em “Parar gravação” quando terminar.');
     } catch { microphone?.getTracks().forEach((track)=>track.stop());microphone=null;toast('Não consegui abrir o microfone. Confira a permissão do navegador.'); }
@@ -2399,6 +2412,18 @@
     if (action==='select-transaction-status') { chooseTransactionStatus(target.dataset.statusChoice); return; }
     /* Fechar NÃO esquece qual cartão estava aberto: reabrir tem de
        voltar nele, que é como uma carteira de verdade se comporta. */
+    if (action==='wallet-hidden'){const next=!state.walletHidden;if(state.page!=='wallet')go('wallet');state.walletHidden=next;state.selected=null;state.walletOpen=true;render();return;}
+    if (action==='toggle-wallet-item-hidden'){
+      const item=itemById(target.dataset.walletId);
+      if(!item || demo){toast('Entre na sua conta para alterar a carteira.');return;}
+      const hide=!item.data.hidden;
+      if(hide && !global.confirm(`Ocultar “${item.data.name||item.data.bank}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.`))return;
+      V3Backend.mutate(()=>{
+        const collection=item.kind==='credit'?Store.cards:Store.accounts;
+        collection.update(item.data.id,{hidden:hide});
+      }).then(()=>{state.selected=null;render();toast(hide?'Item oculto. Abra o olho para vê-lo.':'Item reexibido na carteira.');}).catch((e)=>toast(e.message||'Não consegui mudar a visibilidade.'));
+      return;
+    }
     if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;render();return;}
     if (action==='review-proposal') {
       const proposal=state.chat[Number(target.dataset.proposalIndex)]?.proposal;
@@ -2454,7 +2479,6 @@
       composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
       return;
     }
-    if (action==='choose-coco-audio'){$('#v3-coco-audio-file')?.click();return;}
     if (action==='record-audio'){toggleCocoRecording();return;}
     if (action==='retry-coco'){refreshCoco();return;}
     if (action==='close'){closeSheet();return;}
@@ -2557,7 +2581,7 @@
     if (action==='coco-analyze'){state.cocoView='conversation';state.mediaDraft='O que mudou nas minhas entradas e saídas nos últimos seis meses?';render();$('#v3-chat-form [name="question"]')?.focus();return;}
     if (action==='coco-speak'){playCocoAnswer(Number(target.dataset.messageIndex));return;}
     if (action==='coco-memory'){state.cocoTab='Memória';openCoco();refreshCoco();return;}
-    if (action==='usar-sugestao'){const f=document.getElementById('v3-form-tx');if(f&&sugestaoAtual){f.elements.category.value=sugestaoAtual.categoryId;const lem=document.getElementById('v3-lembrar');if(lem)lem.hidden=!sugestaoAtual.merchantKey;atualizarSugestao(f);}return;}
+    if (action==='usar-sugestao'){const f=document.getElementById('v3-form-tx');if(f&&sugestaoAtual){f.elements.category.value=sugestaoAtual.categoryId;atualizarSugestao(f);}return;}
     if (action==='export-csv'){exportarCsv();return;}
     if (action==='export-pdf'){exportarPdf();return;}
     if (action==='period'){periodSheet();return;}
@@ -2618,7 +2642,7 @@
     document.addEventListener('scroll',()=>closeStatusMenu(false),true);
     document.addEventListener('change',(event)=>{
       if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
-      if (!['v3-coco-file','v3-coco-audio-file'].includes(event.target?.id)) return;
+      if (event.target?.id!=='v3-coco-file') return;
       const file=event.target.files?.[0];
       event.target.value='';
       if (file) readCocoMedia(file);
@@ -2658,14 +2682,15 @@
       const q=U.norm(ev.target.value.trim());
       let achou=0;
       document.querySelectorAll('#v3-bank-options .v3-bank-option').forEach((n)=>{
-        const casa=!q||String(n.dataset.banco||'').includes(q);
+        const outro=n.classList.contains('v3-bank-other');
+        const casa=outro||!q||String(n.dataset.banco||'').includes(q);
         n.hidden=!casa;
-        if(casa)achou++;
+        if(casa&&!outro)achou++;
       });
       const vazio=document.getElementById('v3-bank-vazio');
       if(vazio)vazio.hidden=achou>0;
     });
-    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){ev.preventDefault();composer('Despesa');}});
+    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key?.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName||'')){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{closeStatusMenu(false);});
     render();
     /* =============================================================

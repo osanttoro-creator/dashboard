@@ -545,6 +545,62 @@
     "es": "ANA SOUZA"
   },
   {
+    "pt": "Reexibir",
+    "tipo": "exato",
+    "en": "Show again",
+    "fr": "Réafficher",
+    "es": "Volver a mostrar"
+  },
+  {
+    "pt": "Ocultar",
+    "tipo": "exato",
+    "en": "Hide",
+    "fr": "Masquer",
+    "es": "Ocultar"
+  },
+  {
+    "pt": "Reexibir na carteira",
+    "tipo": "exato",
+    "en": "Show in wallet",
+    "fr": "Réafficher dans le portefeuille",
+    "es": "Mostrar en la cartera"
+  },
+  {
+    "pt": "Ocultar este item",
+    "tipo": "exato",
+    "en": "Hide this item",
+    "fr": "Masquer cet élément",
+    "es": "Ocultar este elemento"
+  },
+  {
+    "pt": "Mostrar carteira principal",
+    "tipo": "exato",
+    "en": "Show main wallet",
+    "fr": "Afficher le portefeuille principal",
+    "es": "Mostrar cartera principal"
+  },
+  {
+    "pt": "Ver itens ocultos",
+    "tipo": "exato",
+    "en": "View hidden items",
+    "fr": "Voir les éléments masqués",
+    "es": "Ver elementos ocultos"
+  },
+  {
+    "pt": "Carteira principal",
+    "tipo": "exato",
+    "en": "Main wallet",
+    "fr": "Portefeuille principal",
+    "es": "Cartera principal"
+  },
+  {
+    "pt": "{0} item(ns) oculto(s)",
+    "tipo": "padrao",
+    "en": "{0} hidden item(s)",
+    "fr": "{0} élément(s) masqué(s)",
+    "es": "{0} elemento(s) oculto(s)"
+  },
+  {
     "pt": "SUA CARTEIRA",
     "tipo": "exato",
     "en": "YOUR WALLET",
@@ -592,6 +648,13 @@
     "en": "Add account",
     "fr": "Ajouter un compte",
     "es": "Añadir cuenta"
+  },
+  {
+    "pt": "ITENS OCULTOS",
+    "tipo": "exato",
+    "en": "HIDDEN ITEMS",
+    "fr": "ÉLÉMENTS MASQUÉS",
+    "es": "ELEMENTOS OCULTOS"
   },
   {
     "pt": "FATURAS ABERTAS",
@@ -3284,11 +3347,11 @@
     "es": "Lo que muestran los números."
   },
   {
-    "pt": "Gráficos calculados a partir dos lançamentos do OAZE. A Coco pode explicar o contexto, mas não inventa valores.",
+    "pt": "Gráficos calculados a partir dos lançamentos do OAZE. Pergunte à Coco o que mudou.",
     "tipo": "exato",
-    "en": "Charts calculated from your OAZE entries. Coco can explain the context, but does not invent figures.",
-    "fr": "Graphiques calculés à partir de vos opérations OAZE. Coco peut expliquer le contexte, sans inventer de chiffres.",
-    "es": "Gráficos calculados a partir de tus movimientos en OAZE. Coco puede explicar el contexto, pero no inventa cifras."
+    "en": "Charts based on your OAZE transactions. Ask Coco what changed.",
+    "fr": "Graphiques calculés à partir de vos opérations OAZE. Demandez à Coco ce qui a changé.",
+    "es": "Gráficos calculados a partir de tus movimientos en OAZE. Pregunta a Coco qué cambió."
   },
   {
     "pt": "Entradas",
@@ -3361,13 +3424,6 @@
     "es": "Preguntar a Coco por estas cifras"
   },
   {
-    "pt": "Ver memória e análises guardadas",
-    "tipo": "exato",
-    "en": "View saved memories and analyses",
-    "fr": "Voir les mémoires et analyses enregistrées",
-    "es": "Ver memorias y análisis guardados"
-  },
-  {
     "pt": "Preparando a Coco…",
     "tipo": "exato",
     "en": "Getting Coco ready…",
@@ -3389,18 +3445,11 @@
     "es": "Antes de conversar"
   },
   {
-    "pt": "O OAZE envia à OpenAI sua pergunta, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados após sua confirmação. Para falar a resposta, o texto também é enviado à OpenAI. Extratos PDF/CSV reconhecidos são lidos no aparelho.",
+    "pt": "O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.",
     "tipo": "exato",
-    "en": "OAZE sends your question, recent exchanges, and necessary financial summaries to OpenAI. Photos and audio are sent only after you confirm. To speak a reply, its text is also sent to OpenAI. Supported PDF/CSV statements are read on your device.",
-    "fr": "OAZE envoie à OpenAI votre question, les derniers échanges et les résumés financiers nécessaires. Les photos et audios ne sont envoyés qu’après votre confirmation. Pour lire une réponse à voix haute, son texte est aussi envoyé à OpenAI. Les relevés PDF/CSV reconnus sont lus sur votre appareil.",
-    "es": "OAZE envía a OpenAI tu pregunta, los últimos intercambios y los resúmenes financieros necesarios. Las fotos y los audios solo se envían tras tu confirmación. Para decir la respuesta en voz alta, también se envía su texto a OpenAI. Los extractos PDF/CSV compatibles se leen en tu dispositivo."
-  },
-  {
-    "pt": "Não envie senhas, documentos ou números completos de conta. Você pode revogar o acesso e apagar memórias.",
-    "tipo": "exato",
-    "en": "Do not send passwords, documents, or full account numbers. You can revoke access and delete memories.",
-    "fr": "N’envoyez pas de mots de passe, documents ou numéros de compte complets. Vous pouvez révoquer l’accès et effacer les mémoires.",
-    "es": "No envíes contraseñas, documentos ni números de cuenta completos. Puedes revocar el acceso y borrar recuerdos."
+    "en": "OAZE sends your question and necessary financial summaries to OpenAI. Photos or audio are sent only after your confirmation. Do not send passwords or full account numbers.",
+    "fr": "OAZE envoie votre question et les résumés financiers nécessaires à OpenAI. Les photos et audios ne sont envoyés qu’après votre confirmation. N’envoyez pas de mots de passe ni de numéros de compte complets.",
+    "es": "OAZE envía tu pregunta y los resúmenes financieros necesarios a OpenAI. Las fotos y el audio solo se envían tras tu confirmación. No envíes contraseñas ni números de cuenta completos."
   },
   {
     "pt": "Autorizo esse uso dos meus dados pela Coco.",
@@ -3417,13 +3466,6 @@
     "es": "Autorizar a Coco"
   },
   {
-    "pt": "Ler extrato local sem IA",
-    "tipo": "exato",
-    "en": "Read statement locally without AI",
-    "fr": "Lire le relevé localement sans IA",
-    "es": "Leer extracto local sin IA"
-  },
-  {
     "pt": "Coco está pensando…",
     "tipo": "exato",
     "en": "Coco is thinking…",
@@ -3436,13 +3478,6 @@
     "en": "Transcript ready. Check the text before sending.",
     "fr": "Transcription prête. Vérifiez le texte avant l’envoi.",
     "es": "Transcripción lista. Revisa el texto antes de enviarlo."
-  },
-  {
-    "pt": "Resposta falada: voz gerada por IA. A conversa não executa lançamentos sem sua revisão.",
-    "tipo": "exato",
-    "en": "Spoken replies use an AI-generated voice. Chat never posts entries without your review.",
-    "fr": "Les réponses parlées utilisent une voix générée par IA. La conversation n’enregistre rien sans votre vérification.",
-    "es": "Las respuestas habladas usan una voz generada por IA. La conversación no registra movimientos sin tu revisión."
   },
   {
     "pt": "Coco, assistente financeira do OAZE",
@@ -3464,20 +3499,6 @@
     "en": "Talk about your money. See your data clearly.",
     "fr": "Parlez de votre argent. Comprenez clairement vos données.",
     "es": "Habla de tu dinero. Mira tus datos con claridad."
-  },
-  {
-    "pt": "Memória",
-    "tipo": "exato",
-    "en": "Memory",
-    "fr": "Mémoire",
-    "es": "Memoria"
-  },
-  {
-    "pt": "Extratos",
-    "tipo": "exato",
-    "en": "Statements",
-    "fr": "Relevés",
-    "es": "Extractos"
   },
   {
     "pt": "Área da Coco",
@@ -3560,6 +3581,13 @@
     "ignorar": true
   },
   {
+    "pt": "Memória",
+    "tipo": "exato",
+    "en": "Memory",
+    "fr": "Mémoire",
+    "es": "Memoria"
+  },
+  {
     "pt": "V3/Coco análise:",
     "tipo": "exato",
     "ignorar": true
@@ -3572,20 +3600,6 @@
     "es": "Detener grabación"
   },
   {
-    "pt": "Opções de áudio",
-    "tipo": "exato",
-    "en": "Audio options",
-    "fr": "Options audio",
-    "es": "Opciones de audio"
-  },
-  {
-    "pt": "Áudio: gravar ou escolher arquivo",
-    "tipo": "exato",
-    "en": "Audio: record or choose a file",
-    "fr": "Audio : enregistrer ou choisir un fichier",
-    "es": "Audio: grabar o elegir archivo"
-  },
-  {
     "pt": "Gravar áudio",
     "tipo": "exato",
     "en": "Record audio",
@@ -3593,25 +3607,11 @@
     "es": "Grabar audio"
   },
   {
-    "pt": "Enviar áudio do aparelho",
+    "pt": "Anexar arquivo",
     "tipo": "exato",
-    "en": "Send audio from the device",
-    "fr": "Envoyer un audio de l’appareil",
-    "es": "Enviar audio del dispositivo"
-  },
-  {
-    "pt": "Anexar foto, PDF ou CSV",
-    "tipo": "exato",
-    "en": "Attach photo, PDF or CSV",
-    "fr": "Joindre une photo, un PDF ou un CSV",
-    "es": "Adjuntar foto, PDF o CSV"
-  },
-  {
-    "pt": "Foto, extrato PDF ou CSV",
-    "tipo": "exato",
-    "en": "Photo, PDF or CSV statement",
-    "fr": "Photo, relevé PDF ou CSV",
-    "es": "Foto, extracto PDF o CSV"
+    "en": "Attach file",
+    "fr": "Joindre un fichier",
+    "es": "Adjuntar archivo"
   },
   {
     "pt": "Pergunte, grave ou envie um arquivo",
@@ -3633,13 +3633,6 @@
     "en": "Send",
     "fr": "Envoyer",
     "es": "Enviar"
-  },
-  {
-    "pt": "Fotos e áudios exigem confirmação para envio à OpenAI. Extratos PDF/CSV reconhecidos são lidos neste aparelho e revisados antes de salvar.",
-    "tipo": "exato",
-    "en": "Photos and audio need confirmation before being sent to OpenAI. Recognised PDF/CSV statements are read on this device and reviewed before saving.",
-    "fr": "Les photos et audios nécessitent une confirmation avant l’envoi à OpenAI. Les relevés PDF/CSV reconnus sont lus sur cet appareil et vérifiés avant enregistrement.",
-    "es": "Las fotos y audios requieren confirmación para enviarse a OpenAI. Los extractos PDF/CSV reconocidos se leen en este dispositivo y se revisan antes de guardar."
   },
   {
     "pt": "Não consegui carregar as configurações da Coco.",
@@ -3766,6 +3759,13 @@
     "en": "Now",
     "fr": "Maintenant",
     "es": "Ahora"
+  },
+  {
+    "pt": "Extratos",
+    "tipo": "exato",
+    "en": "Statements",
+    "fr": "Relevés",
+    "es": "Extractos"
   },
   {
     "pt": "preparando sua assistente",
@@ -4247,13 +4247,6 @@
     "es": "Elige una categoría"
   },
   {
-    "pt": "Lembrar esta categoria para este estabelecimento",
-    "tipo": "exato",
-    "en": "Remember this category for this merchant",
-    "fr": "Mémoriser cette catégorie pour ce commerçant",
-    "es": "Recordar esta categoría para este establecimiento"
-  },
-  {
     "pt": "Débito ou crédito",
     "tipo": "exato",
     "en": "Debit or credit",
@@ -4457,6 +4450,13 @@
     "es": "Editar movimiento"
   },
   {
+    "pt": "PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)",
+    "tipo": "exato",
+    "en": "INSTALLMENTS (NON-RECURRING CREDIT ONLY)",
+    "fr": "MENSUALITÉS (CRÉDIT NON RÉCURRENT UNIQUEMENT)",
+    "es": "CUOTAS (SOLO CRÉDITO NO RECURRENTE)"
+  },
+  {
     "pt": "Usar {0}",
     "tipo": "padrao",
     "en": "Use {0}",
@@ -4658,6 +4658,20 @@
     "en": "Account or card",
     "fr": "Compte ou carte",
     "es": "Cuenta o tarjeta"
+  },
+  {
+    "pt": "Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.",
+    "tipo": "exato",
+    "en": "All available. Choose the payment method when recording an expense or income.",
+    "fr": "Tous disponibles. Choisissez le mode de paiement lors de la saisie d’une dépense ou d’un revenu.",
+    "es": "Todos disponibles. Elige el método de pago al registrar un gasto o ingreso."
+  },
+  {
+    "pt": "Ocultar da carteira principal",
+    "tipo": "exato",
+    "en": "Hide from main wallet",
+    "fr": "Masquer du portefeuille principal",
+    "es": "Ocultar de la cartera principal"
   },
   {
     "pt": "Não há valor pendente nesta fatura.",
@@ -6034,6 +6048,13 @@
     "es": "No pude leer este extracto. No se guardó nada."
   },
   {
+    "pt": "Autorize a Coco antes de enviar arquivos.",
+    "tipo": "exato",
+    "en": "Authorize Coco before sending files.",
+    "fr": "Autorisez Coco avant d’envoyer des fichiers.",
+    "es": "Autoriza a Coco antes de enviar archivos."
+  },
+  {
     "pt": "image/jpeg",
     "tipo": "exato",
     "ignorar": true
@@ -6079,11 +6100,53 @@
     "ignorar": true
   },
   {
-    "pt": "Formato não aceito. Envie foto, áudio, PDF ou CSV de extrato.",
+    "pt": "text/plain",
     "tipo": "exato",
-    "en": "Format not accepted. Send a photo, audio, PDF or CSV statement.",
-    "fr": "Format non accepté. Envoyez une photo, un audio, un PDF ou un CSV de relevé.",
-    "es": "Formato no aceptado. Envía foto, audio, PDF o CSV de extracto."
+    "en": "text/plain",
+    "fr": "text/plain",
+    "es": "text/plain"
+  },
+  {
+    "pt": "text/markdown",
+    "tipo": "exato",
+    "en": "text/markdown",
+    "fr": "text/markdown",
+    "es": "text/markdown"
+  },
+  {
+    "pt": "Texto acima de 1 MB. Envie um arquivo menor.",
+    "tipo": "exato",
+    "en": "Text exceeds 1 MB. Send a smaller file.",
+    "fr": "Le texte dépasse 1 Mo. Envoyez un fichier plus petit.",
+    "es": "El texto supera 1 MB. Envía un archivo más pequeño."
+  },
+  {
+    "pt": "O arquivo não contém texto legível.",
+    "tipo": "exato",
+    "en": "The file has no readable text.",
+    "fr": "Le fichier ne contient aucun texte lisible.",
+    "es": "El archivo no contiene texto legible."
+  },
+  {
+    "pt": "Leia este trecho de {0}: {1}",
+    "tipo": "padrao",
+    "en": "Read this excerpt from {0}: {1}",
+    "fr": "Lisez cet extrait de {0} : {1}",
+    "es": "Lee este fragmento de {0}: {1}"
+  },
+  {
+    "pt": "Confira o trecho antes de enviar à Coco.",
+    "tipo": "exato",
+    "en": "Review the excerpt before sending it to Coco.",
+    "fr": "Vérifiez l’extrait avant de l’envoyer à Coco.",
+    "es": "Revisa el fragmento antes de enviarlo a Coco."
+  },
+  {
+    "pt": "Arquivo escolhido, mas este formato ainda não pode ser lido. Use foto, áudio, extrato PDF/CSV ou texto.",
+    "tipo": "exato",
+    "en": "File selected, but this format cannot be read yet. Use a photo, audio, PDF/CSV statement, or text.",
+    "fr": "Fichier sélectionné, mais ce format ne peut pas encore être lu. Utilisez une photo, un audio, un relevé PDF/CSV ou du texte.",
+    "es": "Archivo seleccionado, pero este formato aún no se puede leer. Usa una foto, audio, extracto PDF/CSV o texto."
   },
   {
     "pt": "Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.",
@@ -6107,11 +6170,11 @@
     "es": "este audio"
   },
   {
-    "pt": "Enviar {0} à OpenAI para leitura? O conteúdo pode incluir dados sensíveis. O arquivo não ficará guardado no OAZE. A leitura usa uma consulta do plano; enviar o texto revisado usa outra.",
+    "pt": "Enviar {0} à Coco? O conteúdo pode incluir dados sensíveis e será processado pela OpenAI. O arquivo não ficará guardado no OAZE.",
     "tipo": "padrao",
-    "en": "Send {0} to OpenAI to be read? The content may include sensitive data. The file won’t be stored in OAZE. The reading uses one request from your plan; sending the reviewed text uses another.",
-    "fr": "Envoyer {0} à OpenAI pour lecture ? Le contenu peut inclure des données sensibles. Le fichier ne sera pas conservé dans OAZE. La lecture utilise une requête du forfait ; l’envoi du texte vérifié en utilise une autre.",
-    "es": "¿Enviar {0} a OpenAI para su lectura? El contenido puede incluir datos sensibles. El archivo no se guardará en OAZE. La lectura usa una consulta del plan; enviar el texto revisado usa otra."
+    "en": "Send {0} to Coco? It may contain sensitive data and will be processed by OpenAI. OAZE will not store the file.",
+    "fr": "Envoyer {0} à Coco ? Le contenu peut être sensible et sera traité par OpenAI. OAZE ne conservera pas le fichier.",
+    "es": "¿Enviar {0} a Coco? Puede contener datos sensibles y será procesado por OpenAI. OAZE no guardará el archivo."
   },
   {
     "pt": "Lendo arquivo…",
@@ -6135,11 +6198,11 @@
     "es": "No pude leer el archivo."
   },
   {
-    "pt": "Gravação indisponível neste navegador. Envie um arquivo de áudio.",
+    "pt": "Gravação indisponível neste navegador. Confira a permissão do microfone.",
     "tipo": "exato",
-    "en": "Recording unavailable in this browser. Send an audio file.",
-    "fr": "Enregistrement indisponible dans ce navigateur. Envoyez un fichier audio.",
-    "es": "Grabación no disponible en este navegador. Envía un archivo de audio."
+    "en": "Recording is unavailable in this browser. Check microphone permission.",
+    "fr": "L’enregistrement est indisponible dans ce navigateur. Vérifiez l’autorisation du microphone.",
+    "es": "La grabación no está disponible en este navegador. Revisa el permiso del micrófono."
   },
   {
     "pt": "coco-audio.{0}",
@@ -6236,6 +6299,41 @@
     "en": "Backup downloaded. Check the file before deleting the account.",
     "fr": "Sauvegarde téléchargée. Vérifiez le fichier avant de supprimer le compte.",
     "es": "Copia descargada. Compruebe el archivo antes de eliminar la cuenta."
+  },
+  {
+    "pt": "Entre na sua conta para alterar a carteira.",
+    "tipo": "exato",
+    "en": "Sign in to change the wallet.",
+    "fr": "Connectez-vous pour modifier le portefeuille.",
+    "es": "Inicia sesión para cambiar la cartera."
+  },
+  {
+    "pt": "Ocultar “{0}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.",
+    "tipo": "padrao",
+    "en": "Hide “{0}”? It will leave the main wallet and income/expense selectors. It may still count in totals if selected and remain accessible through the wallet eye.",
+    "fr": "Masquer « {0} » ? Il disparaîtra du portefeuille principal et des sélecteurs de revenus et dépenses. Il pourra rester dans les totaux si cette option est cochée et sera accessible via l’œil du portefeuille.",
+    "es": "¿Ocultar «{0}»? Saldrá de la cartera principal y de los selectores de ingresos y gastos. Podrá seguir en los totales si esa opción está marcada y estará disponible desde el ojo de la cartera."
+  },
+  {
+    "pt": "Item oculto. Abra o olho para vê-lo.",
+    "tipo": "exato",
+    "en": "Item hidden. Open the eye to see it.",
+    "fr": "Élément masqué. Ouvrez l’œil pour le voir.",
+    "es": "Elemento oculto. Abre el ojo para verlo."
+  },
+  {
+    "pt": "Item reexibido na carteira.",
+    "tipo": "exato",
+    "en": "Item shown in wallet again.",
+    "fr": "Élément réaffiché dans le portefeuille.",
+    "es": "Elemento visible de nuevo en la cartera."
+  },
+  {
+    "pt": "Não consegui mudar a visibilidade.",
+    "tipo": "exato",
+    "en": "Could not change visibility.",
+    "fr": "Impossible de modifier la visibilité.",
+    "es": "No se pudo cambiar la visibilidad."
   },
   {
     "pt": "Esta proposta não está mais disponível.",
