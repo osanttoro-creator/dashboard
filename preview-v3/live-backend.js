@@ -217,6 +217,29 @@
       return result;
     } finally { global.clearTimeout(timer); }
   };
+  V3Backend.cocoSpeak = async function (text) {
+    if (!client || !user) throw new Error('Entre na sua conta para ouvir a Coco.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token || !/^https:\/\//.test(base) || !publicKey) throw new Error('Sessão ou conexão indisponível.');
+    const controller = new AbortController();
+    const timer = global.setTimeout(() => controller.abort(), 30000);
+    try {
+      const response = await fetch(base + '/functions/v1/oaze-coco-voz', {
+        method: 'POST', signal: controller.signal,
+        headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token,
+          'content-type': 'application/json' },
+        body: JSON.stringify({ text: String(text || '').slice(0, 1200) })
+      });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.mensagem || 'Não consegui reproduzir a resposta.');
+      }
+      return response.blob();
+    } finally { global.clearTimeout(timer); }
+  };
   async function requirePrivacyAcceptance() {
     const { data, error } = await bounded(client.from('privacy_acceptances')
       .select('policy_version').eq('user_id', user.id)

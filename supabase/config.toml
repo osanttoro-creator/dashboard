@@ -15,6 +15,9 @@ uri = "pg-functions://postgres/public/validar_aceite_privacidade"
 # "este é o usuário, e é dele que vamos ler o plano".
 verify_jwt = true
 
+[functions.oaze-coco-voz]
+verify_jwt = true
+
 [functions.oaze-pagamento]
 verify_jwt = true
 

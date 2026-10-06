@@ -84,11 +84,11 @@
     "es": "Todos"
   },
   {
-    "pt": "Agora",
+    "pt": "Conversa",
     "tipo": "exato",
-    "en": "Now",
-    "fr": "Maintenant",
-    "es": "Ahora"
+    "en": "Conversation",
+    "fr": "Conversation",
+    "es": "Conversación"
   },
   {
     "pt": "ana souza",
@@ -3137,6 +3137,13 @@
     "es": "calendario y recurrencias"
   },
   {
+    "pt": "conversa e análises",
+    "tipo": "exato",
+    "en": "conversation and analysis",
+    "fr": "conversation et analyses",
+    "es": "conversación y análisis"
+  },
+  {
     "pt": "segurança, dados",
     "tipo": "exato",
     "en": "security, data",
@@ -3156,6 +3163,335 @@
     "en": "Profile {0}",
     "fr": "Profil {0}",
     "es": "Perfil {0}"
+  },
+  {
+    "pt": "COCO ESTÁ AQUI",
+    "tipo": "exato",
+    "en": "COCO IS HERE",
+    "fr": "COCO EST LÀ",
+    "es": "COCO ESTÁ AQUÍ"
+  },
+  {
+    "pt": "Comece pelo que você precisa entender.",
+    "tipo": "exato",
+    "en": "Start with what you need to understand.",
+    "fr": "Commencez par ce que vous devez comprendre.",
+    "es": "Empieza por lo que necesitas entender."
+  },
+  {
+    "pt": "Pergunte sobre seus lançamentos, grave uma dúvida ou peça uma proposta. Nada muda na sua carteira sem sua confirmação.",
+    "tipo": "exato",
+    "en": "Ask about your entries, record a question, or request a suggestion. Nothing changes in your wallet without your confirmation.",
+    "fr": "Interrogez vos opérations, enregistrez une question ou demandez une suggestion. Rien ne change dans votre portefeuille sans votre confirmation.",
+    "es": "Pregunta por tus movimientos, graba una duda o pide una propuesta. Nada cambia en tu cartera sin tu confirmación."
+  },
+  {
+    "pt": "VOCÊ",
+    "tipo": "exato",
+    "en": "YOU",
+    "fr": "VOUS",
+    "es": "TÚ"
+  },
+  {
+    "pt": "Parar áudio",
+    "tipo": "exato",
+    "en": "Stop audio",
+    "fr": "Arrêter l’audio",
+    "es": "Detener audio"
+  },
+  {
+    "pt": "Ouvir resposta da Coco",
+    "tipo": "exato",
+    "en": "Listen to Coco’s answer",
+    "fr": "Écouter la réponse de Coco",
+    "es": "Escuchar respuesta de Coco"
+  },
+  {
+    "pt": "Ouvir resposta",
+    "tipo": "exato",
+    "en": "Listen to answer",
+    "fr": "Écouter la réponse",
+    "es": "Escuchar respuesta"
+  },
+  {
+    "pt": "LANÇAMENTO PARA REVISAR",
+    "tipo": "exato",
+    "en": "ENTRY TO REVIEW",
+    "fr": "ÉCRITURE À VÉRIFIER",
+    "es": "MOVIMIENTO POR REVISAR"
+  },
+  {
+    "pt": "Revisar no formulário",
+    "tipo": "exato",
+    "en": "Review in the form",
+    "fr": "Vérifier dans le formulaire",
+    "es": "Revisar en el formulario"
+  },
+  {
+    "pt": "Nada será salvo sem sua confirmação.",
+    "tipo": "exato",
+    "en": "Nothing is saved without your confirmation.",
+    "fr": "Rien n’est enregistré sans votre confirmation.",
+    "es": "Nada se guarda sin tu confirmación."
+  },
+  {
+    "pt": "MEMÓRIA PARA APROVAR",
+    "tipo": "exato",
+    "en": "MEMORY TO APPROVE",
+    "fr": "MÉMOIRE À APPROUVER",
+    "es": "MEMORIA POR APROBAR"
+  },
+  {
+    "pt": "Guardar esta regra",
+    "tipo": "exato",
+    "en": "Save this rule",
+    "fr": "Enregistrer cette règle",
+    "es": "Guardar esta regla"
+  },
+  {
+    "pt": "{0}: entradas {1}",
+    "tipo": "padrao",
+    "en": "{0}: income {1}",
+    "fr": "{0} : entrées {1}",
+    "es": "{0}: ingresos {1}"
+  },
+  {
+    "pt": "{0}: saídas {1}",
+    "tipo": "padrao",
+    "en": "{0}: expenses {1}",
+    "fr": "{0} : sorties {1}",
+    "es": "{0}: gastos {1}"
+  },
+  {
+    "pt": "Ainda não há saídas confirmadas neste mês.",
+    "tipo": "exato",
+    "en": "There are no confirmed expenses this month yet.",
+    "fr": "Aucune dépense confirmée ce mois-ci.",
+    "es": "Aún no hay gastos confirmados este mes."
+  },
+  {
+    "pt": "SEUS DADOS · {0}",
+    "tipo": "padrao",
+    "en": "YOUR DATA · {0}",
+    "fr": "VOS DONNÉES · {0}",
+    "es": "TUS DATOS · {0}"
+  },
+  {
+    "pt": "O que os números mostram.",
+    "tipo": "exato",
+    "en": "What the numbers show.",
+    "fr": "Ce que montrent les chiffres.",
+    "es": "Lo que muestran los números."
+  },
+  {
+    "pt": "Gráficos calculados a partir dos lançamentos do OAZE. A Coco pode explicar o contexto, mas não inventa valores.",
+    "tipo": "exato",
+    "en": "Charts calculated from your OAZE entries. Coco can explain the context, but does not invent figures.",
+    "fr": "Graphiques calculés à partir de vos opérations OAZE. Coco peut expliquer le contexte, sans inventer de chiffres.",
+    "es": "Gráficos calculados a partir de tus movimientos en OAZE. Coco puede explicar el contexto, pero no inventa cifras."
+  },
+  {
+    "pt": "Entradas",
+    "tipo": "exato",
+    "en": "Incoming",
+    "fr": "Entrées",
+    "es": "Entradas"
+  },
+  {
+    "pt": "Saídas",
+    "tipo": "exato",
+    "en": "Outgoing",
+    "fr": "Sorties",
+    "es": "Salidas"
+  },
+  {
+    "pt": "Resultado",
+    "tipo": "exato",
+    "en": "Net result",
+    "fr": "Résultat",
+    "es": "Resultado"
+  },
+  {
+    "pt": "Despesas pendentes",
+    "tipo": "exato",
+    "en": "Pending expenses",
+    "fr": "Dépenses en attente",
+    "es": "Gastos pendientes"
+  },
+  {
+    "pt": "{0} lançamento(s)",
+    "tipo": "padrao",
+    "en": "{0} entry/entries",
+    "fr": "{0} opération(s)",
+    "es": "{0} movimiento(s)"
+  },
+  {
+    "pt": "Últimos seis meses",
+    "tipo": "exato",
+    "en": "Last six months",
+    "fr": "Six derniers mois",
+    "es": "Últimos seis meses"
+  },
+  {
+    "pt": "· saídas",
+    "tipo": "exato",
+    "en": "· expenses",
+    "fr": "· sorties",
+    "es": "· gastos"
+  },
+  {
+    "pt": "Comparativo de entradas e saídas dos últimos seis meses",
+    "tipo": "exato",
+    "en": "Income and expenses over the last six months",
+    "fr": "Entrées et sorties des six derniers mois",
+    "es": "Ingresos y gastos de los últimos seis meses"
+  },
+  {
+    "pt": "Para onde saiu",
+    "tipo": "exato",
+    "en": "Where it went",
+    "fr": "Où est parti l’argent",
+    "es": "Adónde fue"
+  },
+  {
+    "pt": "Perguntar à Coco sobre estes números",
+    "tipo": "exato",
+    "en": "Ask Coco about these figures",
+    "fr": "Demander à Coco d’expliquer ces chiffres",
+    "es": "Preguntar a Coco por estas cifras"
+  },
+  {
+    "pt": "Ver memória e análises guardadas",
+    "tipo": "exato",
+    "en": "View saved memories and analyses",
+    "fr": "Voir les mémoires et analyses enregistrées",
+    "es": "Ver memorias y análisis guardados"
+  },
+  {
+    "pt": "Preparando a Coco…",
+    "tipo": "exato",
+    "en": "Getting Coco ready…",
+    "fr": "Préparation de Coco…",
+    "es": "Preparando a Coco…"
+  },
+  {
+    "pt": "Tentar novamente",
+    "tipo": "exato",
+    "en": "Try again",
+    "fr": "Réessayer",
+    "es": "Intentar de nuevo"
+  },
+  {
+    "pt": "Antes de conversar",
+    "tipo": "exato",
+    "en": "Before chatting",
+    "fr": "Avant de discuter",
+    "es": "Antes de conversar"
+  },
+  {
+    "pt": "O OAZE envia à OpenAI sua pergunta, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados após sua confirmação. Para falar a resposta, o texto também é enviado à OpenAI. Extratos PDF/CSV reconhecidos são lidos no aparelho.",
+    "tipo": "exato",
+    "en": "OAZE sends your question, recent exchanges, and necessary financial summaries to OpenAI. Photos and audio are sent only after you confirm. To speak a reply, its text is also sent to OpenAI. Supported PDF/CSV statements are read on your device.",
+    "fr": "OAZE envoie à OpenAI votre question, les derniers échanges et les résumés financiers nécessaires. Les photos et audios ne sont envoyés qu’après votre confirmation. Pour lire une réponse à voix haute, son texte est aussi envoyé à OpenAI. Les relevés PDF/CSV reconnus sont lus sur votre appareil.",
+    "es": "OAZE envía a OpenAI tu pregunta, los últimos intercambios y los resúmenes financieros necesarios. Las fotos y los audios solo se envían tras tu confirmación. Para decir la respuesta en voz alta, también se envía su texto a OpenAI. Los extractos PDF/CSV compatibles se leen en tu dispositivo."
+  },
+  {
+    "pt": "Não envie senhas, documentos ou números completos de conta. Você pode revogar o acesso e apagar memórias.",
+    "tipo": "exato",
+    "en": "Do not send passwords, documents, or full account numbers. You can revoke access and delete memories.",
+    "fr": "N’envoyez pas de mots de passe, documents ou numéros de compte complets. Vous pouvez révoquer l’accès et effacer les mémoires.",
+    "es": "No envíes contraseñas, documentos ni números de cuenta completos. Puedes revocar el acceso y borrar recuerdos."
+  },
+  {
+    "pt": "Autorizo esse uso dos meus dados pela Coco.",
+    "tipo": "exato",
+    "en": "I authorise Coco to use my data this way.",
+    "fr": "J’autorise Coco à utiliser mes données ainsi.",
+    "es": "Autorizo ese uso de mis datos por Coco."
+  },
+  {
+    "pt": "Autorizar Coco",
+    "tipo": "exato",
+    "en": "Authorise Coco",
+    "fr": "Autoriser Coco",
+    "es": "Autorizar a Coco"
+  },
+  {
+    "pt": "Ler extrato local sem IA",
+    "tipo": "exato",
+    "en": "Read statement locally without AI",
+    "fr": "Lire le relevé localement sans IA",
+    "es": "Leer extracto local sin IA"
+  },
+  {
+    "pt": "Coco está pensando…",
+    "tipo": "exato",
+    "en": "Coco is thinking…",
+    "fr": "Coco réfléchit…",
+    "es": "Coco está pensando…"
+  },
+  {
+    "pt": "Transcrição pronta. Confira o texto antes de enviar.",
+    "tipo": "exato",
+    "en": "Transcript ready. Check the text before sending.",
+    "fr": "Transcription prête. Vérifiez le texte avant l’envoi.",
+    "es": "Transcripción lista. Revisa el texto antes de enviarlo."
+  },
+  {
+    "pt": "Resposta falada: voz gerada por IA. A conversa não executa lançamentos sem sua revisão.",
+    "tipo": "exato",
+    "en": "Spoken replies use an AI-generated voice. Chat never posts entries without your review.",
+    "fr": "Les réponses parlées utilisent une voix générée par IA. La conversation n’enregistre rien sans votre vérification.",
+    "es": "Las respuestas habladas usan una voz generada por IA. La conversación no registra movimientos sin tu revisión."
+  },
+  {
+    "pt": "Coco, assistente financeira do OAZE",
+    "tipo": "exato",
+    "en": "Coco, OAZE’s financial assistant",
+    "fr": "Coco, assistante financière d’OAZE",
+    "es": "Coco, asistente financiera de OAZE"
+  },
+  {
+    "pt": "SUA ASSISTENTE FINANCEIRA",
+    "tipo": "exato",
+    "en": "YOUR FINANCIAL ASSISTANT",
+    "fr": "VOTRE ASSISTANTE FINANCIÈRE",
+    "es": "TU ASISTENTE FINANCIERA"
+  },
+  {
+    "pt": "Converse sobre seu dinheiro. Enxergue os dados com clareza.",
+    "tipo": "exato",
+    "en": "Talk about your money. See your data clearly.",
+    "fr": "Parlez de votre argent. Comprenez clairement vos données.",
+    "es": "Habla de tu dinero. Mira tus datos con claridad."
+  },
+  {
+    "pt": "Memória",
+    "tipo": "exato",
+    "en": "Memory",
+    "fr": "Mémoire",
+    "es": "Memoria"
+  },
+  {
+    "pt": "Extratos",
+    "tipo": "exato",
+    "en": "Statements",
+    "fr": "Relevés",
+    "es": "Extractos"
+  },
+  {
+    "pt": "Área da Coco",
+    "tipo": "exato",
+    "en": "Coco area",
+    "fr": "Espace Coco",
+    "es": "Área de Coco"
+  },
+  {
+    "pt": "Análises",
+    "tipo": "exato",
+    "en": "Analysis",
+    "fr": "Analyses",
+    "es": "Análisis"
   },
   {
     "pt": "Ícones de interface:",
@@ -3224,13 +3560,6 @@
     "ignorar": true
   },
   {
-    "pt": "Memória",
-    "tipo": "exato",
-    "en": "Memory",
-    "fr": "Mémoire",
-    "es": "Memoria"
-  },
-  {
     "pt": "V3/Coco análise:",
     "tipo": "exato",
     "ignorar": true
@@ -3285,11 +3614,11 @@
     "es": "Foto, extracto PDF o CSV"
   },
   {
-    "pt": "Peça para lançar, analisar ou planejar",
+    "pt": "Pergunte, grave ou envie um arquivo",
     "tipo": "exato",
-    "en": "Ask to record, analyse or plan",
-    "fr": "Demandez de saisir, analyser ou planifier",
-    "es": "Pide registrar, analizar o planificar"
+    "en": "Ask, record, or attach a file",
+    "fr": "Posez une question, enregistrez ou joignez un fichier",
+    "es": "Pregunta, graba o adjunta un archivo"
   },
   {
     "pt": "Pergunta para a Coco",
@@ -3404,20 +3733,6 @@
     "es": "{0} · {1} movimientos · {2} comprobaciones de saldo correctas"
   },
   {
-    "pt": "Entradas",
-    "tipo": "exato",
-    "en": "Incoming",
-    "fr": "Entrées",
-    "es": "Entradas"
-  },
-  {
-    "pt": "Saídas",
-    "tipo": "exato",
-    "en": "Outgoing",
-    "fr": "Sorties",
-    "es": "Salidas"
-  },
-  {
     "pt": "CONTA DESTE EXTRATO",
     "tipo": "exato",
     "en": "ACCOUNT FOR THIS STATEMENT",
@@ -3446,11 +3761,11 @@
     "es": "Leer otro archivo"
   },
   {
-    "pt": "Extratos",
+    "pt": "Agora",
     "tipo": "exato",
-    "en": "Statements",
-    "fr": "Relevés",
-    "es": "Extractos"
+    "en": "Now",
+    "fr": "Maintenant",
+    "es": "Ahora"
   },
   {
     "pt": "preparando sua assistente",
@@ -3465,13 +3780,6 @@
     "en": "Loading consent and memory…",
     "fr": "Chargement du consentement et de la mémoire…",
     "es": "Cargando consentimiento y memoria…"
-  },
-  {
-    "pt": "Tentar novamente",
-    "tipo": "exato",
-    "en": "Try again",
-    "fr": "Réessayer",
-    "es": "Intentar de nuevo"
   },
   {
     "pt": "Coco",
@@ -3500,20 +3808,6 @@
     "en": "Don’t send passwords, ID documents or full account numbers. Revoke the access here whenever you like.",
     "fr": "N’envoyez pas de mots de passe, de pièces d’identité ni de numéros de compte complets. Révoquez l’accès ici quand vous voulez.",
     "es": "No envíes contraseñas, documentos de identidad ni números completos de cuenta. Revoca el acceso aquí cuando quieras."
-  },
-  {
-    "pt": "Autorizo esse uso dos meus dados pela Coco.",
-    "tipo": "exato",
-    "en": "I authorise Coco to use my data this way.",
-    "fr": "J’autorise Coco à utiliser mes données ainsi.",
-    "es": "Autorizo ese uso de mis datos por Coco."
-  },
-  {
-    "pt": "Autorizar Coco",
-    "tipo": "exato",
-    "en": "Authorise Coco",
-    "fr": "Autoriser Coco",
-    "es": "Autorizar a Coco"
   },
   {
     "pt": "Ler extrato local sem autorizar IA",
@@ -3689,48 +3983,6 @@
     "en": "needs your attention",
     "fr": "demande votre attention",
     "es": "de tu atención"
-  },
-  {
-    "pt": "Conversa",
-    "tipo": "exato",
-    "en": "Conversation",
-    "fr": "Conversation",
-    "es": "Conversación"
-  },
-  {
-    "pt": "LANÇAMENTO PARA REVISAR",
-    "tipo": "exato",
-    "en": "ENTRY TO REVIEW",
-    "fr": "ÉCRITURE À VÉRIFIER",
-    "es": "MOVIMIENTO POR REVISAR"
-  },
-  {
-    "pt": "Revisar no formulário",
-    "tipo": "exato",
-    "en": "Review in the form",
-    "fr": "Vérifier dans le formulaire",
-    "es": "Revisar en el formulario"
-  },
-  {
-    "pt": "Nada será salvo sem sua confirmação.",
-    "tipo": "exato",
-    "en": "Nothing is saved without your confirmation.",
-    "fr": "Rien n’est enregistré sans votre confirmation.",
-    "es": "Nada se guarda sin tu confirmación."
-  },
-  {
-    "pt": "MEMÓRIA PARA APROVAR",
-    "tipo": "exato",
-    "en": "MEMORY TO APPROVE",
-    "fr": "MÉMOIRE À APPROUVER",
-    "es": "MEMORIA POR APROBAR"
-  },
-  {
-    "pt": "Guardar esta regra",
-    "tipo": "exato",
-    "en": "Save this rule",
-    "fr": "Enregistrer cette règle",
-    "es": "Guardar esta regla"
   },
   {
     "pt": "Você poderá apagá-la na aba Memória.",
@@ -3920,6 +4172,13 @@
     "en": "your assistant",
     "fr": "votre assistante",
     "es": "tu asistente"
+  },
+  {
+    "pt": "← Voltar para conversa",
+    "tipo": "exato",
+    "en": "← Back to chat",
+    "fr": "← Retour à la conversation",
+    "es": "← Volver a la conversación"
   },
   {
     "pt": "Lançamento não encontrado. Atualize a página.",
@@ -5695,6 +5954,20 @@
     "es": "La conversación no está disponible ahora. Inténtalo de nuevo."
   },
   {
+    "pt": "Não consegui reproduzir o áudio.",
+    "tipo": "exato",
+    "en": "I couldn’t play the audio.",
+    "fr": "Impossible de lire l’audio.",
+    "es": "No pude reproducir el audio."
+  },
+  {
+    "pt": "Não consegui falar esta resposta.",
+    "tipo": "exato",
+    "en": "I couldn’t speak this answer.",
+    "fr": "Impossible de lire cette réponse à voix haute.",
+    "es": "No pude decir esta respuesta en voz alta."
+  },
+  {
     "pt": "O aprendizado da Coco está pausado.",
     "tipo": "exato",
     "en": "Coco’s learning is paused.",
@@ -6306,6 +6579,13 @@
     "en": "Contribution deleted.",
     "fr": "Apport supprimé.",
     "es": "Aportación eliminada."
+  },
+  {
+    "pt": "O que mudou nas minhas entradas e saídas nos últimos seis meses?",
+    "tipo": "exato",
+    "en": "How have my income and expenses changed over the last six months?",
+    "fr": "Comment mes entrées et sorties ont-elles évolué ces six derniers mois ?",
+    "es": "¿Cómo cambiaron mis ingresos y gastos en los últimos seis meses?"
   },
   {
     "pt": "Esta é uma proposta visual; não houve nenhuma ação na sua conta.",

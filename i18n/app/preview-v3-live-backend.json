@@ -43,7 +43,7 @@
  },
  {
   "pt": "Entre na conta para acessar o cofre.",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "Sign in to access the vault.",
   "fr": "Connectez-vous pour accéder au coffre.",
   "es": "Entra en tu cuenta para acceder a la bóveda."
@@ -175,6 +175,20 @@
   "es": "Sesión o conexión no disponible."
  },
  {
+  "pt": "Entre na sua conta para ouvir a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to listen to Coco.",
+  "fr": "Connectez-vous pour écouter Coco.",
+  "es": "Inicia sesión para escuchar a Coco."
+ },
+ {
+  "pt": "Não consegui reproduzir a resposta.",
+  "tipo": "exato",
+  "en": "I couldn’t play the answer.",
+  "fr": "Impossible de lire la réponse.",
+  "es": "No pude reproducir la respuesta."
+ },
+ {
   "pt": "ANTES DE ENTRAR",
   "tipo": "exato",
   "en": "BEFORE YOU START",
@@ -239,42 +253,42 @@
  },
  {
   "pt": "PROTEÇÃO EXTRA",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "EXTRA PROTECTION",
   "fr": "PROTECTION SUPPLÉMENTAIRE",
   "es": "PROTECCIÓN ADICIONAL"
  },
  {
   "pt": "Crie seu PIN de seis dígitos.",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "Create your six-digit PIN.",
   "fr": "Créez votre code PIN à six chiffres.",
   "es": "Crea tu PIN de seis dígitos."
  },
  {
   "pt": "Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "You have confirmed your email. Now choose the PIN that unlocks your sensitive account details. Avoid dates, sequences and repeated digits. The PIN alone cannot sign you in to OAZE.",
   "fr": "Vous avez confirmé votre e-mail. Choisissez maintenant le code PIN qui déverrouille les données sensibles de votre compte. Évitez les dates, les suites et les chiffres répétés. Le code PIN seul ne permet pas d'accéder à OAZE.",
   "es": "Ya confirmaste tu correo. Ahora elige el PIN que desbloquea los datos sensibles de tu cuenta. Evita fechas, secuencias y números repetidos. El PIN por sí solo no permite acceder a OAZE."
  },
  {
   "pt": "CONFIRME O PIN",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "CONFIRM PIN",
   "fr": "CONFIRMEZ LE CODE PIN",
   "es": "CONFIRMA EL PIN"
  },
  {
   "pt": "Criar PIN e continuar",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "Create PIN and continue",
   "fr": "Créer le code PIN et continuer",
   "es": "Crear PIN y continuar"
  },
  {
   "pt": "Os PINs não são iguais.",
- "tipo": "exato",
+  "tipo": "exato",
   "en": "The PINs do not match.",
   "fr": "Les codes PIN ne correspondent pas.",
   "es": "Los PIN no coinciden."
