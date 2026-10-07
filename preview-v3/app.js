@@ -172,7 +172,7 @@
   }
   function walletItems() { return items().filter((x) => x.kind === state.walletKind && !!x.data.hidden === !!state.walletHidden); }
   function itemById(id) { return items().find((x) => x.data.id === id); }
-  function selectedItem() { return walletItems().find((x) => x.data.id === state.selected) || walletItems()[0] || null; }
+  function selectedItem() { const saved=global.V3Carteira?.ultimo('v3-'+state.walletKind+(state.walletHidden?'-hidden':''));return walletItems().find((x) => x.data.id === state.selected) || walletItems().find((x)=>x.data.id===saved) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
   function renderNav() {
     $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','goals','calendar','coco','settings','plan'].map(navButton).join('');
@@ -302,6 +302,8 @@
     if (rot) rot.textContent = `${credit ? 'FATURA' : 'SALDO'} · ${item.data.name || item.data.bank}`;
     if (val) val.textContent = money(walletItemValue(item));
     if (meta) meta.textContent = `${credit ? 'Cartão' : 'Conta'} ${item.data.last4 ? 'final ' + item.data.last4 : 'selecionado(a)'}`;
+    const hideButton=$('[data-action="toggle-wallet-item-hidden"]');
+    if(hideButton){hideButton.dataset.walletId=id;hideButton.setAttribute('aria-label',`${item.data.hidden?'Reexibir':'Ocultar'} ${item.data.name||item.data.bank}`);}
   }
 
   /* Remontado a cada render porque a V3 redesenha por innerHTML: o
@@ -312,7 +314,7 @@
     const raiz = $('.v3-wallet.is-open');
     if (!raiz || !global.V3Carteira) return;
     carrossel = V3Carteira.montar(raiz, {
-      superficie: 'v3-' + state.walletKind,
+      superficie: 'v3-' + state.walletKind + (state.walletHidden?'-hidden':''),
       inicial: state.selected,
       aoTrocar: atualizarBolso
     });
@@ -550,7 +552,7 @@
     return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para escolher pago, não pago ou cancelado.'}</p><div class="v3-tx-pares">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
   }
   function renderWallet() {
-    const chosen = state.walletOpen && state.selected ? selectedItem() : null;
+    const chosen = state.walletOpen ? selectedItem() : null;
     /* =============================================================
        NO CRÉDITO, A LISTA É A FATURA
        -------------------------------------------------------------
@@ -2414,7 +2416,7 @@
        voltar nele, que é como uma carteira de verdade se comporta. */
     if (action==='wallet-hidden'){const next=!state.walletHidden;if(state.page!=='wallet')go('wallet');state.walletHidden=next;state.selected=null;state.walletOpen=true;render();return;}
     if (action==='toggle-wallet-item-hidden'){
-      const item=itemById(target.dataset.walletId);
+      const item=itemById(state.selected || target.dataset.walletId);
       if(!item || demo){toast('Entre na sua conta para alterar a carteira.');return;}
       const hide=!item.data.hidden;
       if(hide && !global.confirm(`Ocultar “${item.data.name||item.data.bank}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.`))return;
