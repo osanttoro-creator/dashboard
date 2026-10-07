@@ -286,11 +286,25 @@
     "es": "VISIÓN GENERAL"
   },
   {
+    "pt": "· compartilhado",
+    "tipo": "exato",
+    "en": "· shared",
+    "fr": "· partagé",
+    "es": "· compartido"
+  },
+  {
     "pt": "Salvando na sua conta…",
     "tipo": "exato",
     "en": "Saving to your account…",
     "fr": "Enregistrement sur votre compte…",
     "es": "Guardando en tu cuenta…"
+  },
+  {
+    "pt": "Perfil compartilhado · leitura",
+    "tipo": "exato",
+    "en": "Shared profile · read-only",
+    "fr": "Profil partagé · lecture seule",
+    "es": "Perfil compartido · solo lectura"
   },
   {
     "pt": "Dados carregados da sua conta",
@@ -3429,6 +3443,27 @@
     "es": "Preguntar a Coco por estas cifras"
   },
   {
+    "pt": "Coco indisponível neste perfil",
+    "tipo": "exato",
+    "en": "Coco unavailable for this profile",
+    "fr": "Coco indisponible pour ce profil",
+    "es": "Coco no disponible en este perfil"
+  },
+  {
+    "pt": "A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.",
+    "tipo": "exato",
+    "en": "The invited account can view the data but cannot send it to AI. Switch to your own profile to talk with Coco.",
+    "fr": "Le compte invité peut voir les données, mais pas les envoyer à l’IA. Revenez à votre profil pour parler avec Coco.",
+    "es": "La cuenta invitada puede ver los datos, pero no enviarlos a la IA. Vuelve a tu perfil para hablar con Coco."
+  },
+  {
+    "pt": "Trocar perfil",
+    "tipo": "exato",
+    "en": "Switch profile",
+    "fr": "Changer de profil",
+    "es": "Cambiar de perfil"
+  },
+  {
     "pt": "Preparando a Coco…",
     "tipo": "exato",
     "en": "Getting Coco ready…",
@@ -3518,6 +3553,13 @@
     "en": "Analysis",
     "fr": "Analyses",
     "es": "Análisis"
+  },
+  {
+    "pt": "Perfil compartilhado · somente leitura · cofre e Coco indisponíveis",
+    "tipo": "exato",
+    "en": "Shared profile · read-only · vault and Coco unavailable",
+    "fr": "Profil partagé · lecture seule · coffre et Coco indisponibles",
+    "es": "Perfil compartido · solo lectura · bóveda y Coco no disponibles"
   },
   {
     "pt": "Ícones de interface:",
@@ -5295,18 +5337,46 @@
     "es": "Elegir periodo"
   },
   {
-    "pt": "seus espaços",
-    "tipo": "exato",
-    "en": "your spaces",
-    "fr": "vos espaces",
-    "es": "tus espacios"
+    "pt": "Compartilhar {0}",
+    "tipo": "padrao",
+    "en": "Share {0}",
+    "fr": "Partager {0}",
+    "es": "Compartir {0}"
   },
   {
-    "pt": "perfil financeiro ativo",
+    "pt": "Compartilhar",
     "tipo": "exato",
-    "en": "active financial profile",
-    "fr": "profil financier actif",
-    "es": "perfil financiero activo"
+    "en": "Share",
+    "fr": "Partager",
+    "es": "Compartir"
+  },
+  {
+    "pt": "Excluir",
+    "tipo": "exato",
+    "en": "Delete",
+    "fr": "Supprimer",
+    "es": "Eliminar"
+  },
+  {
+    "pt": "Perfil compartilhado",
+    "tipo": "exato",
+    "en": "Shared profile",
+    "fr": "Profil partagé",
+    "es": "Perfil compartido"
+  },
+  {
+    "pt": "Perfil removido",
+    "tipo": "exato",
+    "en": "Deleted profile",
+    "fr": "Profil supprimé",
+    "es": "Perfil eliminado"
+  },
+  {
+    "pt": "Revogar",
+    "tipo": "exato",
+    "en": "Revoke",
+    "fr": "Révoquer",
+    "es": "Revocar"
   },
   {
     "pt": "O perfil de demonstração é isolado dos seus dados.",
@@ -5316,11 +5386,25 @@
     "es": "El perfil de demostración está aislado de tus datos."
   },
   {
-    "pt": "NOVO ESPAÇO",
+    "pt": "Nenhum perfil compartilhado com esta conta.",
     "tipo": "exato",
-    "en": "NEW SPACE",
-    "fr": "NOUVEL ESPACE",
-    "es": "NUEVO ESPACIO"
+    "en": "No profiles shared with this account.",
+    "fr": "Aucun profil partagé avec ce compte.",
+    "es": "No hay perfiles compartidos con esta cuenta."
+  },
+  {
+    "pt": "Nenhum convite criado.",
+    "tipo": "exato",
+    "en": "No invitations created.",
+    "fr": "Aucune invitation créée.",
+    "es": "No hay invitaciones creadas."
+  },
+  {
+    "pt": "NOVO PERFIL",
+    "tipo": "exato",
+    "en": "NEW PROFILE",
+    "fr": "NOUVEAU PROFIL",
+    "es": "NUEVO PERFIL"
   },
   {
     "pt": "Ex.: Família ou trabalho",
@@ -5330,11 +5414,74 @@
     "es": "Ej.: Familia o trabajo"
   },
   {
-    "pt": "Criar espaço",
+    "pt": "Criar perfil",
     "tipo": "exato",
-    "en": "Create space",
-    "fr": "Créer un espace",
-    "es": "Crear espacio"
+    "en": "Create profile",
+    "fr": "Créer un profil",
+    "es": "Crear perfil"
+  },
+  {
+    "pt": "Compartilhados comigo",
+    "tipo": "exato",
+    "en": "Shared with me",
+    "fr": "Partagés avec moi",
+    "es": "Compartidos conmigo"
+  },
+  {
+    "pt": "Meus convites",
+    "tipo": "exato",
+    "en": "My invitations",
+    "fr": "Mes invitations",
+    "es": "Mis invitaciones"
+  },
+  {
+    "pt": "Cada link vale para uma conta OAZE e expira em 7 dias. Quem aceitar vê somente o perfil escolhido, sem acesso ao cofre ou permissão para editar. Você pode revogar a qualquer momento.",
+    "tipo": "exato",
+    "en": "Each link is valid for one OAZE account and expires in 7 days. The recipient can only view the selected profile, without vault access or edit permission. You can revoke access at any time.",
+    "fr": "Chaque lien est valable pour un compte OAZE et expire dans 7 jours. Le destinataire peut seulement voir le profil choisi, sans accès au coffre ni droit de modification. Vous pouvez révoquer l’accès à tout moment.",
+    "es": "Cada enlace sirve para una cuenta OAZE y vence en 7 días. Quien lo acepte solo puede ver el perfil elegido, sin acceso a la bóveda ni permiso de edición. Puedes revocar el acceso cuando quieras."
+  },
+  {
+    "pt": "O acesso ao perfil compartilhado foi encerrado.",
+    "tipo": "exato",
+    "en": "Access to the shared profile has ended.",
+    "fr": "L’accès au profil partagé a pris fin.",
+    "es": "El acceso al perfil compartido ha terminado."
+  },
+  {
+    "pt": "seus perfis",
+    "tipo": "exato",
+    "en": "your profiles",
+    "fr": "vos profils",
+    "es": "tus perfiles"
+  },
+  {
+    "pt": "selecione, edite ou compartilhe",
+    "tipo": "exato",
+    "en": "select, edit or share",
+    "fr": "sélectionner, modifier ou partager",
+    "es": "seleccionar, editar o compartir"
+  },
+  {
+    "pt": "Não consegui atualizar os compartilhamentos.",
+    "tipo": "exato",
+    "en": "Couldn’t refresh shared profiles.",
+    "fr": "Impossible d’actualiser les profils partagés.",
+    "es": "No pude actualizar los perfiles compartidos."
+  },
+  {
+    "pt": "Perfil compartilhado em modo de leitura.",
+    "tipo": "exato",
+    "en": "Shared profile opened in read-only mode.",
+    "fr": "Profil partagé ouvert en lecture seule.",
+    "es": "Perfil compartido abierto en modo de solo lectura."
+  },
+  {
+    "pt": "Não consegui abrir o perfil compartilhado.",
+    "tipo": "exato",
+    "en": "Couldn’t open the shared profile.",
+    "fr": "Impossible d’ouvrir le profil partagé.",
+    "es": "No pude abrir el perfil compartido."
   },
   {
     "pt": "O cofre só funciona na conta real.",
@@ -6278,6 +6425,216 @@
     "es": "No pude actualizar la recurrencia."
   },
   {
+    "pt": "Perfil compartilhado: somente leitura. Selecione um perfil seu para editar.",
+    "tipo": "exato",
+    "en": "Shared profile: read-only. Select your own profile to edit.",
+    "fr": "Profil partagé : lecture seule. Sélectionnez votre profil pour modifier.",
+    "es": "Perfil compartido: solo lectura. Selecciona tu perfil para editar."
+  },
+  {
+    "pt": "Encerrar este compartilhamento agora? O acesso será perdido imediatamente.",
+    "tipo": "exato",
+    "en": "End this sharing now? Access will be lost immediately.",
+    "fr": "Mettre fin à ce partage maintenant ? L’accès sera perdu immédiatement.",
+    "es": "¿Terminar este acceso compartido ahora? Se perderá el acceso de inmediato."
+  },
+  {
+    "pt": "Acesso revogado.",
+    "tipo": "exato",
+    "en": "Access revoked.",
+    "fr": "Accès révoqué.",
+    "es": "Acceso revocado."
+  },
+  {
+    "pt": "Não consegui revogar o acesso.",
+    "tipo": "exato",
+    "en": "I couldn’t revoke the access.",
+    "fr": "Je n’ai pas pu révoquer l’accès.",
+    "es": "No pude revocar el acceso."
+  },
+  {
+    "pt": "editar perfil",
+    "tipo": "exato",
+    "en": "edit profile",
+    "fr": "modifier le profil",
+    "es": "editar perfil"
+  },
+  {
+    "pt": "nome do espaço financeiro",
+    "tipo": "exato",
+    "en": "financial space name",
+    "fr": "nom de l’espace financier",
+    "es": "nombre del espacio financiero"
+  },
+  {
+    "pt": "Salvar nome",
+    "tipo": "exato",
+    "en": "Save name",
+    "fr": "Enregistrer le nom",
+    "es": "Guardar nombre"
+  },
+  {
+    "pt": "Editar perfil",
+    "tipo": "exato",
+    "en": "Edit profile",
+    "fr": "Modifier le profil",
+    "es": "Editar perfil"
+  },
+  {
+    "pt": "Mantenha pelo menos um perfil na conta.",
+    "tipo": "exato",
+    "en": "Keep at least one profile in your account.",
+    "fr": "Conservez au moins un profil dans votre compte.",
+    "es": "Mantén al menos un perfil en tu cuenta."
+  },
+  {
+    "pt": "excluir perfil",
+    "tipo": "exato",
+    "en": "delete profile",
+    "fr": "supprimer le profil",
+    "es": "eliminar perfil"
+  },
+  {
+    "pt": "confirmação necessária",
+    "tipo": "exato",
+    "en": "confirmation required",
+    "fr": "confirmation nécessaire",
+    "es": "se requiere confirmación"
+  },
+  {
+    "pt": "apaga seus lançamentos, cartões, metas e convites. Esta ação não tem desfazer.",
+    "tipo": "exato",
+    "en": "deletes your entries, cards, goals and invitations. This cannot be undone.",
+    "fr": "supprime vos écritures, cartes, objectifs et invitations. Cette action est irréversible.",
+    "es": "elimina tus movimientos, tarjetas, metas e invitaciones. Esta acción no se puede deshacer."
+  },
+  {
+    "pt": "Manter perfil",
+    "tipo": "exato",
+    "en": "Keep profile",
+    "fr": "Conserver le profil",
+    "es": "Conservar perfil"
+  },
+  {
+    "pt": "Excluir definitivamente",
+    "tipo": "exato",
+    "en": "Delete permanently",
+    "fr": "Supprimer définitivement",
+    "es": "Eliminar definitivamente"
+  },
+  {
+    "pt": "Excluir perfil",
+    "tipo": "exato",
+    "en": "Delete profile",
+    "fr": "Supprimer le profil",
+    "es": "Eliminar perfil"
+  },
+  {
+    "pt": "Perfil excluído da conta.",
+    "tipo": "exato",
+    "en": "Profile deleted from your account.",
+    "fr": "Profil supprimé de votre compte.",
+    "es": "Perfil eliminado de tu cuenta."
+  },
+  {
+    "pt": "Não foi possível excluir o perfil.",
+    "tipo": "exato",
+    "en": "Couldn’t delete the profile.",
+    "fr": "Impossible de supprimer le profil.",
+    "es": "No se pudo eliminar el perfil."
+  },
+  {
+    "pt": "compartilhar perfil",
+    "tipo": "exato",
+    "en": "share profile",
+    "fr": "partager le profil",
+    "es": "compartir perfil"
+  },
+  {
+    "pt": "Qualquer pessoa que receber o link e tiver uma conta OAZE poderá aceitá-lo uma vez, em até 7 dias. Ela verá os dados financeiros deste perfil em leitura, sem o cofre com PIN. Envie apenas a quem você confia.",
+    "tipo": "exato",
+    "en": "Anyone with the link and an OAZE account can accept it once within 7 days. They will see this profile’s financial data in read-only mode, without the PIN-protected vault. Send it only to someone you trust.",
+    "fr": "Toute personne ayant le lien et un compte OAZE peut l’accepter une seule fois dans les 7 jours. Elle pourra consulter les données financières de ce profil en lecture seule, sans le coffre protégé par PIN. Envoyez-le uniquement à une personne de confiance.",
+    "es": "Cualquier persona con el enlace y una cuenta OAZE puede aceptarlo una sola vez dentro de 7 días. Podrá ver los datos financieros de este perfil en modo de solo lectura, sin la bóveda protegida con PIN. Envíalo solo a alguien de confianza."
+  },
+  {
+    "pt": "Criar link de convite",
+    "tipo": "exato",
+    "en": "Create invitation link",
+    "fr": "Créer un lien d’invitation",
+    "es": "Crear enlace de invitación"
+  },
+  {
+    "pt": "Compartilhar perfil",
+    "tipo": "exato",
+    "en": "Share profile",
+    "fr": "Partager le profil",
+    "es": "Compartir perfil"
+  },
+  {
+    "pt": "convite criado",
+    "tipo": "exato",
+    "en": "invitation created",
+    "fr": "invitation créée",
+    "es": "invitación creada"
+  },
+  {
+    "pt": "válido por 7 dias",
+    "tipo": "exato",
+    "en": "valid for 7 days",
+    "fr": "valable 7 jours",
+    "es": "válido por 7 días"
+  },
+  {
+    "pt": "Envie este link à outra pessoa. Depois de aceito, ele não pode ser usado de novo.",
+    "tipo": "exato",
+    "en": "Send this link to the other person. Once accepted, it cannot be used again.",
+    "fr": "Envoyez ce lien à l’autre personne. Une fois accepté, il ne peut plus être utilisé.",
+    "es": "Envía este enlace a la otra persona. Una vez aceptado, no se puede volver a usar."
+  },
+  {
+    "pt": "Copiar link",
+    "tipo": "exato",
+    "en": "Copy link",
+    "fr": "Copier le lien",
+    "es": "Copiar enlace"
+  },
+  {
+    "pt": "Você pode revogar o acesso em Perfis financeiros.",
+    "tipo": "exato",
+    "en": "You can revoke access in Financial profiles.",
+    "fr": "Vous pouvez révoquer l’accès dans Profils financiers.",
+    "es": "Puedes revocar el acceso en Perfiles financieros."
+  },
+  {
+    "pt": "Convite de perfil",
+    "tipo": "exato",
+    "en": "Profile invitation",
+    "fr": "Invitation de profil",
+    "es": "Invitación de perfil"
+  },
+  {
+    "pt": "Não consegui criar o convite.",
+    "tipo": "exato",
+    "en": "Couldn’t create the invitation.",
+    "fr": "Impossible de créer l’invitation.",
+    "es": "No pude crear la invitación."
+  },
+  {
+    "pt": "Link copiado.",
+    "tipo": "exato",
+    "en": "Link copied.",
+    "fr": "Lien copié.",
+    "es": "Enlace copiado."
+  },
+  {
+    "pt": "Selecione e copie o link.",
+    "tipo": "exato",
+    "en": "Select and copy the link.",
+    "fr": "Sélectionnez et copiez le lien.",
+    "es": "Selecciona y copia el enlace."
+  },
+  {
     "pt": "Demonstração sem conta vinculada.",
     "tipo": "exato",
     "en": "Demo with no account linked.",
@@ -6404,13 +6761,6 @@
     "es": "¿Revocar el acceso de Coco? Las memorias quedan guardadas para que las borres, pero no se usarán mientras el acceso esté revocado."
   },
   {
-    "pt": "Não consegui revogar o acesso.",
-    "tipo": "exato",
-    "en": "I couldn’t revoke the access.",
-    "fr": "Je n’ai pas pu révoquer l’accès.",
-    "es": "No pude revocar el acceso."
-  },
-  {
     "pt": "Confira o extrato e escolha uma conta em reais.",
     "tipo": "exato",
     "en": "Check the statement and choose an account in reais.",
@@ -6451,13 +6801,6 @@
     "en": "Delete {0}? This can’t be undone.",
     "fr": "Supprimer {0} ? Action irréversible.",
     "es": "¿Eliminar {0}? Esta acción no se puede deshacer."
-  },
-  {
-    "pt": "Excluir",
-    "tipo": "exato",
-    "en": "Delete",
-    "fr": "Supprimer",
-    "es": "Eliminar"
   },
   {
     "pt": "Confirmar exclusão",
@@ -6698,6 +7041,27 @@
     "es": "Esta es una propuesta visual; no hubo ninguna acción en tu cuenta."
   },
   {
+    "pt": "Perfil compartilhado: somente leitura.",
+    "tipo": "exato",
+    "en": "Shared profile: read-only.",
+    "fr": "Profil partagé : lecture seule.",
+    "es": "Perfil compartido: solo lectura."
+  },
+  {
+    "pt": "Nome do perfil atualizado.",
+    "tipo": "exato",
+    "en": "Profile name updated.",
+    "fr": "Nom du profil mis à jour.",
+    "es": "Nombre del perfil actualizado."
+  },
+  {
+    "pt": "Não foi possível renomear o perfil.",
+    "tipo": "exato",
+    "en": "Couldn’t rename the profile.",
+    "fr": "Impossible de renommer le profil.",
+    "es": "No se pudo cambiar el nombre del perfil."
+  },
+  {
     "pt": "Não consegui registrar o consentimento.",
     "tipo": "exato",
     "en": "I couldn’t record the consent.",
@@ -6741,9 +7105,23 @@
     "ignorar": true
   },
   {
+    "pt": "O acesso ao perfil compartilhado terminou.",
+    "tipo": "exato",
+    "en": "Access to the shared profile has ended.",
+    "fr": "L’accès au profil partagé a pris fin.",
+    "es": "El acceso al perfil compartido ha terminado."
+  },
+  {
     "pt": "Escape",
     "tipo": "exato",
     "ignorar": true
+  },
+  {
+    "pt": "Não foi possível aceitar o convite.",
+    "tipo": "exato",
+    "en": "Couldn’t accept the invitation.",
+    "fr": "Impossible d’accepter l’invitation.",
+    "es": "No se pudo aceptar la invitación."
   },
   {
     "pt": "V3/primeiros passos:",

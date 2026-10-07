@@ -57,7 +57,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '' };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -124,7 +124,7 @@
     ]
   };
 
-  function profile() { return demo ? sample : Store.profile(); }
+  function profile() { return demo ? sample : (state.sharedProfile || Store.profile()); }
   /* O CANCELADO NÃO SOME DA LISTA
      Calc.entries filtra o cancelado de todo total — inclusive do
      previsto —, que é o certo. Mas tirá-lo também da LISTA o tornaria
@@ -186,10 +186,10 @@
     const owner = demo ? sample.owner : (Store.ownerName() || 'Seu OAZE');
     $('#v3-owner').textContent = owner;
     $('#v3-avatar').innerHTML = avatarMarkup(owner);
-    $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name;
+    $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name + (state.sharedId ? ' · compartilhado' : '');
     $('#v3-demo-note').hidden = false;
     if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
-      ? 'Salvando na sua conta…' : 'Dados carregados da sua conta';
+      ? 'Salvando na sua conta…' : state.sharedId ? 'Perfil compartilhado · leitura' : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
     if (demo) $('#v3-coco-count').textContent = '4';
     const alerts = reminders();
@@ -1369,6 +1369,7 @@
     return `<div class="v3-coco-analysis"><div class="v3-coco-analysis-intro"><span class="v3-label">SEUS DADOS · ${esc(periodLabel(state.ym))}</span><h2>O que os números mostram.</h2><p>Gráficos calculados a partir dos lançamentos do OAZE. Pergunte à Coco o que mudou.</p></div><div class="v3-coco-kpis"><div><span>Entradas</span><strong class="v3-sensitive">${money(now.income)}</strong></div><div><span>Saídas</span><strong class="v3-sensitive">${money(now.expense)}</strong></div><div><span>Resultado</span><strong class="v3-sensitive">${money(now.balance)}</strong></div><div><span>Despesas pendentes</span><strong class="v3-sensitive">${money(pendingValue)}</strong><small>${pending.length} lançamento(s)</small></div></div><section class="v3-coco-chart"><div class="v3-row"><h3>Últimos seis meses</h3><small>entradas <i class="v3-coco-legend income"></i> · saídas <i class="v3-coco-legend expense"></i></small></div><div class="v3-coco-bars" role="img" aria-label="Comparativo de entradas e saídas dos últimos seis meses">${series.map((x)=>`<div class="v3-coco-month"><div class="v3-coco-bar-pair"><span class="income" style="height:${Math.max(2,x.income/max*100)}%" title="${esc(periodLabel(x.ym))}: entradas ${esc(moneyReal(x.income))}"></span><span class="expense" style="height:${Math.max(2,x.expense/max*100)}%" title="${esc(periodLabel(x.ym))}: saídas ${esc(moneyReal(x.expense))}"></span></div><small>${esc(periodLabel(x.ym).split(' ')[0])}</small></div>`).join('')}</div></section><section class="v3-coco-chart"><h3>Para onde saiu</h3>${leaders.length?leaders.map(([id,value])=>`<div class="v3-coco-category"><span>${esc(categoryName(id))}</span><div><i style="width:${Math.max(2,value/Math.max(now.expense,1)*100)}%"></i></div><strong class="v3-sensitive">${money(value)}</strong></div>`).join(''):'<p class="v3-muted">Ainda não há saídas confirmadas neste mês.</p>'}</section><button type="button" class="v3-secondary" data-action="coco-analyze">Perguntar à Coco sobre estes números</button></div>`;
   }
   function renderCoco() {
+    if (state.sharedId) return `<section class="v3-panel"><h2>Coco indisponível neste perfil</h2><p class="v3-muted">A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.</p><button type="button" class="v3-secondary" data-action="profiles">Trocar perfil</button></section>`;
     const consent=!demo&&!cocoAllowed();
     const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}</div></div>`;
     return `<div class="v3-coco-page"><header class="v3-coco-hero"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco, assistente financeira do OAZE"><div><span class="v3-label">SUA ASSISTENTE FINANCEIRA</span><h1>coco<span>.</span></h1><p>Converse sobre seu dinheiro. Enxergue os dados com clareza.</p></div></header><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
@@ -1377,7 +1378,7 @@
     closeStatusMenu(false);
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
-    $('#v3-view').innerHTML = (screens[state.page]||renderHome)();
+    $('#v3-view').innerHTML = (state.sharedId ? '<div class="v3-shared-banner" role="status">Perfil compartilhado · somente leitura · cofre e Coco indisponíveis</div>' : '') + (screens[state.page]||renderHome)();
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
@@ -1410,7 +1411,7 @@
     return Array.from(new Uint8Array(bytes), (byte) => byte.toString(16).padStart(2,'0')).join('');
   }
   function scheduleAnalysisSync() {
-    if (demo || !cocoAllowed() || !state.cocoSettings?.analysis_consented_at || state.cocoSettings?.learning_paused || analysisBusy) return;
+    if (demo || state.sharedId || !cocoAllowed() || !state.cocoSettings?.analysis_consented_at || state.cocoSettings?.learning_paused || analysisBusy) return;
     clearTimeout(analysisTimer);
     analysisTimer = setTimeout(async () => {
       if (V3Backend.saving()) { scheduleAnalysisSync(); return; }
@@ -1917,9 +1918,39 @@
   function periodSheet() {
     openSheet(`${sheetTop('escolher mês','período exibido em todas as telas')}<form class="v3-form" id="v3-form-period"><label>MÊS E ANO<input type="month" name="ym" value="${esc(state.ym)}" required></label><button class="v3-primary" type="submit">Mostrar período</button></form>`,'Escolher período');
   }
-  function profilesSheet() {
+  function profilesContent() {
     const ps=demo?[{id:'sample',name:'Pessoal'}]:Store.state().profiles;
-    openSheet(`${sheetTop('seus espaços','perfil financeiro ativo')}<div class="v3-stack" style="margin-top:22px">${ps.map((p)=>`<button type="button" class="v3-pill${p.id===profile().id?' is-active':''}" data-profile="${esc(p.id)}">${esc(p.name)}</button>`).join('')}</div>${demo?'<p class="v3-muted" style="margin-top:20px">O perfil de demonstração é isolado dos seus dados.</p>':`<form class="v3-form" id="v3-form-profile"><label>NOVO ESPAÇO<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar espaço</button></form>`}`,'Perfis financeiros');
+    const own=ps.map((p)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${(demo ? p.id==='sample' : !state.sharedId&&p.id===Store.profile().id)?' is-active':''}" data-profile="${esc(p.id)}">${esc(p.name)}</button>${demo?'':`<button type="button" class="v3-link" data-action="profile-edit" data-profile-id="${esc(p.id)}" aria-label="Editar ${esc(p.name)}">Editar</button><button type="button" class="v3-link" data-action="profile-share" data-profile-id="${esc(p.id)}" aria-label="Compartilhar ${esc(p.name)}">Compartilhar</button><button type="button" class="v3-link" data-action="profile-delete" data-profile-id="${esc(p.id)}" aria-label="Excluir ${esc(p.name)}">Excluir</button>`}</div>`).join('');
+    const incoming=state.shares.received.map((s)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${state.sharedId===s.id?' is-active':''}" data-action="shared-open" data-share-id="${esc(s.id)}">${esc(s.name||'Perfil compartilhado')}</button><span class="v3-muted">leitura</span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Sair</button></div>`).join('');
+    const outgoing=state.shares.owned.map((s)=>{
+      const p=ps.find((item)=>item.id===s.profile_id);
+      const status=s.accepted?'aceito':new Date(s.expires_at).getTime()<Date.now()?'expirado':'aguardando';
+      return `<div class="v3-profile-row"><span>${esc(p?.name||'Perfil removido')}<small class="v3-muted" style="display:block">${status}</small></span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Revogar</button></div>`;
+    }).join('');
+    return `<div class="v3-stack" style="margin-top:22px">${own}</div>${demo?'<p class="v3-muted" style="margin-top:20px">O perfil de demonstração é isolado dos seus dados.</p>':`<form class="v3-form" id="v3-form-profile"><label>NOVO PERFIL<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar perfil</button></form><h3 class="v3-profile-heading">Compartilhados comigo</h3>${incoming||'<p class="v3-muted">Nenhum perfil compartilhado com esta conta.</p>'}<h3 class="v3-profile-heading">Meus convites</h3>${outgoing||'<p class="v3-muted">Nenhum convite criado.</p>'}<p class="v3-muted" style="margin-top:18px">Cada link vale para uma conta OAZE e expira em 7 dias. Quem aceitar vê somente o perfil escolhido, sem acesso ao cofre ou permissão para editar. Você pode revogar a qualquer momento.</p>`}`;
+  }
+  async function loadShares() {
+    if (demo) return;
+    const result=await V3Backend.share({action:'list'});
+    state.shares={owned:result.owned||[],received:result.received||[]};
+    if (state.sharedId&&!state.shares.received.some((s)=>s.id===state.sharedId)) {
+      state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);render();
+      toast('O acesso ao perfil compartilhado foi encerrado.');
+    }
+  }
+  function profilesSheet() {
+    openSheet(`${sheetTop('seus perfis','selecione, edite ou compartilhe')}<div id="v3-profiles-content">${profilesContent()}</div>`,'Perfis financeiros');
+    if(!demo)loadShares().then(()=>{const content=$('#v3-profiles-content');if(content)content.innerHTML=profilesContent();})
+      .catch((e)=>toast(e.message||'Não consegui atualizar os compartilhamentos.'));
+  }
+  async function openShared(id) {
+    try {
+      const result=await V3Backend.share({action:'read',id});
+      state.sharedProfile=Store.normalizeProfile(result.profile);
+      state.sharedId=id;V3Backend.setActiveShare(id);
+      state.selected=null;state.chat=[];state.cocoAnalyses=[];state.cocoMemories=[];
+      closeSheet();go('home');toast('Perfil compartilhado em modo de leitura.');
+    } catch(e){toast(e.message||'Não consegui abrir o perfil compartilhado.');await loadShares().catch(()=>{});}
   }
   function pinIsSafe(pin) {
     if (!/^\d{6}$/.test(pin) || /(\d)\1{3}/.test(pin) || /^(\d{2})\1{2}$/.test(pin)) return false;
@@ -2351,6 +2382,12 @@
   function handleClick(ev) {
     const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
+    if (state.sharedId && !target.dataset.go && !target.dataset.profile &&
+      !['profiles','close','back','privacy','notifications','period','shared-open','shared-revoke','sign-out','switch-account'].includes(target.dataset.action) &&
+      !['metric','select','walletKind','filter','catKind','calDay','calMonth','calView','scoreMes','calGoto','calDays','periodStep','faturaPasso','billing'].some((key)=>target.dataset[key] != null) &&
+      !target.hasAttribute('data-cal-today')) {
+      toast('Perfil compartilhado: somente leitura. Selecione um perfil seu para editar.');return;
+    }
     if (target.dataset.metric != null) { openHomeMetric(Number(target.dataset.metric)); return; }
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
@@ -2366,7 +2403,7 @@
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){stopCocoAudio();Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
+    if (target.dataset.profile) { if(!demo){stopCocoAudio();state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
@@ -2397,6 +2434,44 @@
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
+    if (action==='shared-open') {openShared(target.dataset.shareId);return;}
+    if (action==='shared-revoke') {
+      if(!confirm('Encerrar este compartilhamento agora? O acesso será perdido imediatamente.'))return;
+      V3Backend.share({action:'revoke',id:target.dataset.shareId}).then(async()=>{
+        await loadShares();profilesSheet();toast('Acesso revogado.');
+      }).catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
+      return;
+    }
+    if (action==='profile-edit') {
+      const p=Store.state().profiles.find((item)=>item.id===target.dataset.profileId);
+      if(!p)return;
+      openSheet(`${sheetTop('editar perfil','nome do espaço financeiro')}<form class="v3-form" id="v3-form-profile-edit"><input type="hidden" name="id" value="${esc(p.id)}"><label>NOME<input name="name" maxlength="60" value="${esc(p.name)}" required></label><button type="submit" class="v3-primary">Salvar nome</button></form>`,'Editar perfil');return;
+    }
+    if (action==='profile-delete') {
+      const p=Store.state().profiles.find((item)=>item.id===target.dataset.profileId);
+      if(!p)return;
+      if(Store.state().profiles.length<=1){toast('Mantenha pelo menos um perfil na conta.');return;}
+      openSheet(`${sheetTop('excluir perfil','confirmação necessária')}<p>Excluir <strong>${esc(p.name)}</strong> apaga seus lançamentos, cartões, metas e convites. Esta ação não tem desfazer.</p><div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="profiles">Manter perfil</button><button type="button" class="v3-primary" data-action="profile-delete-confirm" data-profile-id="${esc(p.id)}">Excluir definitivamente</button></div>`,'Excluir perfil');return;
+    }
+    if (action==='profile-delete-confirm') {
+      V3Backend.deleteProfile(target.dataset.profileId).then(()=>{closeSheet();render();toast('Perfil excluído da conta.');})
+        .catch((e)=>toast(e.message||'Não foi possível excluir o perfil.'));return;
+    }
+    if (action==='profile-share') {
+      const p=Store.state().profiles.find((item)=>item.id===target.dataset.profileId);
+      if(!p)return;
+      openSheet(`${sheetTop('compartilhar perfil',p.name)}<p>Qualquer pessoa que receber o link e tiver uma conta OAZE poderá aceitá-lo uma vez, em até 7 dias. Ela verá os dados financeiros deste perfil em leitura, sem o cofre com PIN. Envie apenas a quem você confia.</p><button type="button" class="v3-primary" style="margin-top:20px" data-action="profile-share-create" data-profile-id="${esc(p.id)}">Criar link de convite</button>`,'Compartilhar perfil');return;
+    }
+    if (action==='profile-share-create') {
+      const button=target;button.disabled=true;
+      V3Backend.share({action:'create',profileId:target.dataset.profileId}).then((result)=>{
+        openSheet(`${sheetTop('convite criado','válido por 7 dias')}<p>Envie este link à outra pessoa. Depois de aceito, ele não pode ser usado de novo.</p><label class="v3-share-link-label">LINK<input id="v3-share-link" readonly value="${esc(result.link)}"></label><button type="button" class="v3-primary" style="margin-top:16px" data-action="profile-share-copy">Copiar link</button><p class="v3-muted" style="margin-top:18px">Você pode revogar o acesso em Perfis financeiros.</p>`,'Convite de perfil');
+      }).catch((e)=>{button.disabled=false;toast(e.message||'Não consegui criar o convite.');});return;
+    }
+    if (action==='profile-share-copy') {
+      const input=$('#v3-share-link');if(!input)return;
+      navigator.clipboard?.writeText(input.value).then(()=>toast('Link copiado.')).catch(()=>{input.select();toast('Selecione e copie o link.');});return;
+    }
     if (action==='account-profile') { if (!demo) accountProfileSheet(); else toast('Demonstração sem conta vinculada.'); return; }
     if (action==='switch-account' || action==='sign-out') {
       if (demo) { toast('Demonstração sem sessão.'); return; }
@@ -2596,12 +2671,19 @@
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save'].includes(formId))return;
     ev.preventDefault();
+    if(state.sharedId && formId!=='v3-form-period'){toast('Perfil compartilhado: somente leitura.');return;}
     if(formId==='v3-form-tx')saveTransaction(ev.target);
     if(formId==='v3-form-account')saveAccount(ev.target);
     if(formId==='v3-form-category')saveCategory(ev.target);
     if(formId==='v3-form-profile')saveProfile(ev.target);
+    if(formId==='v3-form-profile-edit'){
+      const data=new FormData(ev.target);
+      V3Backend.renameProfile(String(data.get('id')||''),String(data.get('name')||''))
+        .then(()=>{closeSheet();render();toast('Nome do perfil atualizado.');})
+        .catch((e)=>toast(e.message||'Não foi possível renomear o perfil.'));
+    }
     if(formId==='v3-form-account-profile')saveAccountProfile(ev.target);
     if(formId==='v3-form-delete-account')confirmDeleteAccount(ev.target);
     if(formId==='v3-form-advance')saveAdvance(ev.target);
@@ -2620,6 +2702,12 @@
   }
   async function boot() {
     if(!demo){try { if(!global.V3Backend || !await V3Backend.start()) return; } catch(e){ console.error('V3/dados:',e); $('#v3-view').innerHTML='<p>Não foi possível carregar sua conta. Seus dados não foram alterados.</p><p><button type="button" id="v3-retry">Tentar novamente</button></p>';$('#v3-retry').addEventListener('click',()=>location.reload());return; }}
+    let inviteToken='';
+    if(!demo){
+      const clean=new URL(location.href);
+      inviteToken=clean.searchParams.get('convite')||'';
+      if(inviteToken){clean.searchParams.delete('convite');history.replaceState(null,'',clean.pathname+clean.search+clean.hash);}
+    }
     if(!demo)Store.onChange(()=>{render();scheduleAnalysisSync();});
     /* O módulo de limites decide; esta tela mostra. Antes ele
        montava o próprio modal com o UI do painel anterior — que não
@@ -2638,6 +2726,12 @@
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     if(!demo) refreshCoco().catch((error)=>console.error('V3/Coco configuração:',error));
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
+    if(!demo)document.addEventListener('visibilitychange',()=>{
+      if(document.hidden||!state.sharedId)return;
+      V3Backend.share({action:'read',id:state.sharedId}).then((result)=>{
+        if(state.sharedId===result.shareId){state.sharedProfile=Store.normalizeProfile(result.profile);render();}
+      }).catch(()=>{state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);render();toast('O acesso ao perfil compartilhado terminou.');});
+    });
     document.addEventListener('click',(event)=>{
       if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);
     });
@@ -2695,6 +2789,10 @@
     document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key?.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName||'')){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{closeStatusMenu(false);});
     render();
+    if(inviteToken){
+      try {const accepted=await V3Backend.share({action:'accept',token:inviteToken});await loadShares();await openShared(accepted.id);}
+      catch(e){toast(e.message||'Não foi possível aceitar o convite.');}
+    }
     /* =============================================================
        PRIMEIROS PASSOS
        -------------------------------------------------------------
@@ -2707,7 +2805,7 @@
        Ele decide sozinho se deve aparecer (Ob.deveOferecer), então
        aqui é só o convite.
        ============================================================= */
-    if (!demo && global.Ob && Ob.talvezOferecer) {
+    if (!demo && !inviteToken && global.Ob && Ob.talvezOferecer) {
       Ob.talvezOferecer().catch((e) => console.error('V3/primeiros passos:', e));
     }
     if (!demo) {

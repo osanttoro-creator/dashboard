@@ -226,6 +226,23 @@ preencher "valor atual", esse número substitui a estimativa.
 
 ## Perfis e backup
 
+Na V3, **Perfis financeiros** permite criar, renomear e excluir espaços. A
+exclusão exige confirmação, recusa apagar o último perfil e usa a revisão do
+banco para não apagar uma edição feita em outro aparelho.
+
+**Compartilhar** cria um link de convite válido por 7 dias e aceito por uma
+única outra conta OAZE. O convidado vê apenas o perfil escolhido, em modo de
+leitura; não recebe o documento completo do dono nem o cofre protegido por PIN.
+O dono pode revogar em **Meus convites**; o convidado pode sair em
+**Compartilhados comigo**. A tabela `oaze_profile_shares` não tem acesso direto
+pelas chaves públicas: a Edge Function `oaze-perfis` valida o usuário e cada
+operação. A migração correspondente é
+`supabase/migrations/20261007001746_perfis_compartilhados.sql`.
+
+Rollback da interface: reverter o commit e publicar novamente. A tabela pode
+permanecer sem uso, sem expor dados; antes de removê-la, revogar convites
+existentes e planejar a comunicação aos usuários afetados.
+
 O seletor na barra lateral troca de perfil; cada um tem contas, cartões, categorias,
 lançamentos e investimentos totalmente separados. Vêm dois prontos: *Pessoal* e
 *PJ / Autônomo*.

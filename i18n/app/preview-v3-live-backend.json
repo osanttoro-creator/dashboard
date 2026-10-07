@@ -7,6 +7,27 @@
   "es": "Tiempo agotado al conectar tu cuenta."
  },
  {
+  "pt": "Entre na conta para compartilhar um perfil.",
+  "tipo": "exato",
+  "en": "Sign in to share a profile.",
+  "fr": "Connectez-vous pour partager un profil.",
+  "es": "Inicia sesión para compartir un perfil."
+ },
+ {
+  "pt": "Compartilhamento indisponível.",
+  "tipo": "exato",
+  "en": "Sharing is unavailable.",
+  "fr": "Le partage est indisponible.",
+  "es": "El uso compartido no está disponible."
+ },
+ {
+  "pt": "Sua sessão expirou. Entre novamente.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again.",
+  "fr": "Votre session a expiré. Reconnectez-vous.",
+  "es": "Tu sesión expiró. Entra de nuevo."
+ },
+ {
   "pt": "Entre na sua conta para consultar a assinatura.",
   "tipo": "exato",
   "en": "Sign in to see the subscription.",
@@ -26,13 +47,6 @@
   "en": "Payment unavailable: connection not configured.",
   "fr": "Paiement indisponible : connexion non configurée.",
   "es": "Pago no disponible: conexión no configurada."
- },
- {
-  "pt": "Sua sessão expirou. Entre novamente.",
-  "tipo": "exato",
-  "en": "Your session expired. Sign in again.",
-  "fr": "Votre session a expiré. Reconnectez-vous.",
-  "es": "Tu sesión expiró. Entra de nuevo."
  },
  {
   "pt": "Pagamento indisponível agora. Nada foi cobrado.",
@@ -294,6 +308,13 @@
   "es": "Los PIN no coinciden."
  },
  {
+  "pt": "Este perfil compartilhado é somente leitura.",
+  "tipo": "exato",
+  "en": "This shared profile is read-only.",
+  "fr": "Ce profil partagé est en lecture seule.",
+  "es": "Este perfil compartido es de solo lectura."
+ },
+ {
   "pt": "Espere a gravação anterior terminar.",
   "tipo": "exato",
   "en": "Wait for the previous recording to finish.",
@@ -320,11 +341,39 @@
   "ignorar": true
  },
  {
+  "pt": "Volte a um perfil seu antes de criar outro.",
+  "tipo": "exato",
+  "en": "Switch to one of your own profiles before creating another.",
+  "fr": "Revenez à l’un de vos profils avant d’en créer un autre.",
+  "es": "Vuelve a uno de tus perfiles antes de crear otro."
+ },
+ {
   "pt": "Entre na sua conta antes de criar um espaço.",
   "tipo": "exato",
   "en": "Sign in before creating a space.",
   "fr": "Connectez-vous avant de créer un espace.",
   "es": "Inicia sesión antes de crear un espacio."
+ },
+ {
+  "pt": "Perfil não encontrado.",
+  "tipo": "exato",
+  "en": "Profile not found.",
+  "fr": "Profil introuvable.",
+  "es": "Perfil no encontrado."
+ },
+ {
+  "pt": "Nome inválido.",
+  "tipo": "exato",
+  "en": "Invalid name.",
+  "fr": "Nom invalide.",
+  "es": "Nombre inválido."
+ },
+ {
+  "pt": "Não é possível excluir este perfil agora.",
+  "tipo": "exato",
+  "en": "This profile cannot be deleted right now.",
+  "fr": "Ce profil ne peut pas être supprimé maintenant.",
+  "es": "No se puede eliminar este perfil ahora."
  },
  {
   "pt": "A conexão com o Supabase não está configurada.",

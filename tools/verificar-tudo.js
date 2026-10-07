@@ -55,6 +55,7 @@ const VERIFICACOES = [
   ['tools/testes/preview-v3-isolada.js', 'prévia V3 pública permanece isolada dos dados reais'],
   ['tools/testes/v3-conexao-real.js', 'V3 real separada, autenticada e sem cache entre contas'],
   ['tools/testes/v3-dados-e-conflito.js', 'conflito, lápide e falha no meio continuam cobertos'],
+  ['tools/testes/v3-perfis-compartilhados.js', 'perfis editáveis e compartilhamento isolado e revogável'],
   ['tools/testes/v3-carteira-instituicoes.js', 'carteira V3, bancos e ícones preservam a interação'],
   ['tools/testes/v3-corte-principal.js', '/app entrega a V3, sem rota de volta, com aceite obrigatório'],
   ['tools/testes/v3-lancamento-e-categoria.js', 'V3 tem os três estados, o meio de pagamento e os seletores de ícone e cor'],

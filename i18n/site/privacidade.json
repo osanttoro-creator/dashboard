@@ -102,10 +102,10 @@
   "es": "Política de privacidad"
  },
  {
-  "pt": "Última atualização: 3 de outubro de 2026 (adendo sobre análises automáticas à versão 01/10/2026)",
-  "en": "Last updated: October 3, 2026 (automatic analysis addendum to the October 1, 2026 version)",
-  "fr": "Dernière mise à jour : 3 octobre 2026 (avenant relatif aux analyses automatiques à la version du 1er octobre 2026)",
-  "es": "Última actualización: 3 de octubre de 2026 (anexo sobre análisis automáticos a la versión del 1 de octubre de 2026)"
+  "pt": "Última atualização: 6 de outubro de 2026 (adendo sobre perfis compartilhados à versão 01/10/2026)",
+  "en": "Last updated: October 6, 2026 (shared-profile addendum to the October 1, 2026 version)",
+  "fr": "Dernière mise à jour : 6 octobre 2026 (ajout sur les profils partagés à la version du 01/10/2026)",
+  "es": "Última actualización: 6 de octubre de 2026 (anexo sobre perfiles compartidos a la versión del 01/10/2026)"
  },
  {
   "pt": "<strong>Minuta pendente de revisão jurídica.</strong> O conteúdo descreve o funcionamento real do produto, mas <strong>não foi revisado por advogado</strong> e faltam dados obrigatórios.",
@@ -298,6 +298,12 @@
   "en": "6. Who we share with",
   "fr": "6. Avec qui nous partageons",
   "es": "6. Con quién compartimos"
+ },
+ {
+  "pt": "<strong>Perfis compartilhados entre usuários.</strong> Se você criar um convite para um perfil financeiro e outra conta OAZE aceitar, essa conta poderá consultar os dados desse perfil, incluindo contas, cartões, lançamentos, metas e investimentos. O convite é individual, expira em 7 dias se não for aceito e pode ser revogado por você a qualquer momento. O acesso é somente leitura e não inclui os dados do cofre protegido por PIN. Antes de compartilhar, confira se o perfil contém dados de outras pessoas. A revogação impede novas consultas, mas não apaga anotações ou capturas que o convidado já tenha feito.",
+  "en": "<strong>Profiles shared between users.</strong> If you create an invitation for a financial profile and another OAZE account accepts it, that account can view the profile’s data, including accounts, cards, entries, goals and investments. The invitation is individual, expires after 7 days if unused and can be revoked by you at any time. Access is read-only and excludes PIN-protected vault data. Before sharing, check whether the profile contains information about other people. Revocation prevents further access but cannot erase notes or screenshots the recipient has already made.",
+  "fr": "<strong>Profils partagés entre utilisateurs.</strong> Si vous créez une invitation pour un profil financier et qu’un autre compte OAZE l’accepte, ce compte peut consulter les données de ce profil, y compris les comptes, cartes, écritures, objectifs et investissements. L’invitation est individuelle, expire après 7 jours si elle n’est pas acceptée et peut être révoquée à tout moment. L’accès est en lecture seule et exclut les données du coffre protégé par PIN. Avant de partager, vérifiez si le profil contient des données d’autres personnes. La révocation empêche de nouvelles consultations, mais n’efface pas les notes ou captures déjà réalisées par le destinataire.",
+  "es": "<strong>Perfiles compartidos entre usuarios.</strong> Si creas una invitación para un perfil financiero y otra cuenta OAZE la acepta, esa cuenta podrá consultar los datos del perfil, incluidas cuentas, tarjetas, movimientos, metas e inversiones. La invitación es individual, vence en 7 días si no se acepta y puedes revocarla en cualquier momento. El acceso es de solo lectura y excluye los datos de la bóveda protegida con PIN. Antes de compartir, comprueba si el perfil contiene datos de otras personas. La revocación impide nuevas consultas, pero no borra notas o capturas que el destinatario ya haya hecho."
  },
  {
   "pt": "Compartilhamos somente o necessário para a operação escolhida. O papel de cada fornecedor pode variar entre operador, suboperador e controlador independente:",

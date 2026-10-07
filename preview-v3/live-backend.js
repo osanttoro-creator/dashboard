@@ -11,9 +11,11 @@
   let refreshPending = false;
   let channel = null;
   let accountProfile = null;
+  let activeShareId = null;
 
   const loginUrl = '/entrar?destino=' + encodeURIComponent(
-    global.location.pathname.startsWith('/app/') ? global.location.pathname : '/app'
+    (global.location.pathname.startsWith('/app/') ? global.location.pathname : '/app') +
+    (/(?:^|[?&])convite=/.test(String(global.location.search || '')) ? global.location.search : '')
   );
   const ownerName = () => String(user?.name || user?.email?.split('@')[0] || 'Seu OAZE').slice(0, 40);
   const stamp = (p) => Math.max(0, Number(p?.updatedAt) || 0);
@@ -30,6 +32,25 @@
   V3Backend.saving = () => saving;
   V3Backend.accountProfile = () => accountProfile;
   V3Backend.withTimeout = bounded;
+  V3Backend.setActiveShare = (id) => { activeShareId = id || null; };
+  V3Backend.share = async function (body) {
+    if (!client || !user) throw new Error('Entre na conta para compartilhar um perfil.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    if (!/^https:\/\//.test(base) || !publicKey) throw new Error('Compartilhamento indisponível.');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token) throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-perfis', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify(body)
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.erro) throw new Error(result.erro || 'Compartilhamento indisponível.');
+    return result;
+  };
   V3Backend.subscription = async function () {
     if (!client || !user) throw new Error('Entre na sua conta para consultar a assinatura.');
     const { data, error } = await bounded(client.from('subscriptions')
@@ -331,6 +352,7 @@
   };
 
   V3Backend.mutate = async function (change) {
+    if (activeShareId) throw new Error('Este perfil compartilhado é somente leitura.');
     if (saving) throw new Error('Espere a gravação anterior terminar.');
     if (!user || !client) throw new Error('Entre na sua conta antes de alterar dados.');
     const profile = Store.profile();
@@ -371,6 +393,7 @@
   };
 
   V3Backend.createProfile = async function (name) {
+    if (activeShareId) throw new Error('Volte a um perfil seu antes de criar outro.');
     if (saving) throw new Error('Espere a gravação anterior terminar.');
     if (!user || !client) throw new Error('Entre na sua conta antes de criar um espaço.');
     const cleanName = String(name || '').trim().slice(0, 60);
@@ -395,6 +418,50 @@
         await V3Backend.reload().catch((error) => console.error('V3/atualização remota:', error));
       }
     }
+  };
+
+  V3Backend.renameProfile = async function (id, name) {
+    if (activeShareId || saving) throw new Error('Espere a gravação anterior terminar.');
+    const current = Store.state().profiles.find((p) => p.id === id);
+    if (!current) throw new Error('Perfil não encontrado.');
+    const clean = String(name || '').trim();
+    if (!clean || clean.length > 60) throw new Error('Nome inválido.');
+    saving = true;
+    try {
+      const payload = JSON.parse(JSON.stringify({ ...current, name: clean }));
+      const { data, error } = await bounded(client.rpc('v3_salvar_perfil', {
+        p_profile: payload, p_expected_updated_at: revisions[id] || 0
+      }));
+      if (error) throw error;
+      const saved = Store.normalizeProfile(data);
+      const index = Store.state().profiles.findIndex((p) => p.id === id);
+      if (index >= 0) Store.state().profiles[index] = saved;
+      revisions[id] = stamp(saved);
+      Store.commit('sync-apply');
+      return saved;
+    } finally {
+      saving = false;
+      if (refreshPending) { refreshPending = false; await V3Backend.reload().catch((error) => console.error('V3/atualização remota:', error)); }
+    }
+  };
+
+  V3Backend.deleteProfile = async function (id) {
+    if (saving || activeShareId) throw new Error('Não é possível excluir este perfil agora.');
+    if (Store.state().profiles.length <= 1) throw new Error('Mantenha pelo menos um perfil na conta.');
+    const found = Store.state().profiles.find((p) => p.id === id);
+    if (!found) throw new Error('Perfil não encontrado.');
+    saving = true;
+    try {
+      const { data, error } = await bounded(client.rpc('v3_excluir_perfil', {
+        p_id: id, p_expected_updated_at: revisions[id] || 0
+      }));
+      if (error) throw error;
+      if (!data) throw new Error('Não foi possível excluir o perfil.');
+      delete revisions[id];
+      Store.deleteProfile(id);
+    } finally { saving = false; }
+    await V3Backend.reload().catch((error) => console.error('V3/atualização remota:', error));
+    return true;
   };
 
   V3Backend.start = async function () {
