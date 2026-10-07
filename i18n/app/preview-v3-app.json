@@ -274,6 +274,11 @@
     "ignorar": true
   },
   {
+    "pt": "-hidden",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
     "pt": "VISÃO GERAL",
     "tipo": "exato",
     "en": "OVERVIEW",
