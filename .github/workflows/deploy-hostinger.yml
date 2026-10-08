@@ -121,7 +121,7 @@ jobs:
           # vale conferir aqui.
           unzip -l "$ZIP_NOME" | grep -q '\.htaccess' \
             || { echo "::error::.htaccess ausente do zip"; exit 1; }
-          for file in app-v3.html preview-v3/index.html preview-v3/app.css preview-v3/app.js preview-v3/live-backend.js; do
+          for file in app-v3.html preview-v3/index.html preview-v3/app.css preview-v3/app.js preview-v3/live-backend.js preview-v3/coco-realtime.js; do
             unzip -p "$ZIP_NOME" "$file" > /dev/null \
               || { echo "::error::previa V3 ausente do zip: $file"; exit 1; }
           done

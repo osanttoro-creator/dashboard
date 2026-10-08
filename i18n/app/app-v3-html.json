@@ -148,6 +148,13 @@
   "es": "Abrir Coco"
  },
  {
+  "pt": "● Coco usando o microfone · encerrar",
+  "tipo": "exato",
+  "en": "● Coco is using the microphone · end",
+  "fr": "● Coco utilise le microphone · terminer",
+  "es": "● Coco usa el micrófono · terminar"
+ },
+ {
   "pt": "Painel do OAZE",
   "tipo": "exato",
   "en": "OAZE panel",

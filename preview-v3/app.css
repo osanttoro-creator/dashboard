@@ -450,3 +450,25 @@
 .v3-fatura-nav{align-items:center;gap:10px;margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line)}
 .v3-fatura-nav small{color:var(--muted);font-size:11px;text-align:center;flex:1}
 .v3-fatura-nav .v3-link{white-space:nowrap;font-size:12px}
+
+/* Coco em tempo real: os estados seguem a identidade do OAZE, sem abrir
+   outra tela nem esconder que o microfone continua ligado. */
+.v3-voice{display:grid;gap:8px;margin:0 0 12px;padding:11px 13px;border:1px solid var(--line);border-radius:18px;background:rgba(95,169,155,.06)}
+.v3-voice-main,.v3-voice-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.v3-voice-main img{width:34px;height:34px;object-fit:contain}
+.v3-voice-status{font-weight:650;font-size:13px;color:var(--milk)}
+.v3-voice-pulse{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.v3-voice[data-state=LISTENING] .v3-voice-pulse{background:var(--teal);box-shadow:0 0 0 5px rgba(95,169,155,.12);animation:v3-voice-breathe 1.5s ease-in-out infinite}
+.v3-voice[data-state=PROCESSING] .v3-voice-pulse{background:var(--teal);animation:v3-voice-breathe .8s ease-in-out infinite}
+.v3-voice[data-state=SPEAKING] .v3-voice-pulse{background:var(--milk);animation:v3-voice-breathe .5s ease-in-out infinite}
+.v3-voice[data-state=INTERRUPTED] .v3-voice-pulse{background:#d1ab74}
+.v3-voice-live{margin-left:auto;color:var(--teal);font-size:10px;font-weight:700;letter-spacing:.08em}
+.v3-voice-actions>.v3-secondary,.v3-voice-actions>.v3-link{min-height:34px;padding:6px 10px;font-size:11px}
+.v3-voice-volume{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:11px}
+.v3-voice-volume input{width:75px;accent-color:var(--teal)}
+.v3-voice-caption{min-height:16px;font-size:12px;color:var(--muted)}
+.v3-voice-global[hidden]{display:none}
+.v3-voice-global{position:fixed;right:16px;bottom:85px;z-index:45;min-height:36px;padding:7px 13px;border:1px solid var(--teal);border-radius:999px;background:#10262d;color:var(--milk);font:600 12px var(--body);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+@keyframes v3-voice-breathe{50%{transform:scale(1.25);opacity:.55}}
+@media(max-width:600px){.v3-voice-actions>.v3-secondary,.v3-voice-actions>.v3-link{flex:1 1 auto}.v3-voice-global{right:10px;bottom:136px}}
+@media(prefers-reduced-motion:reduce){.v3-voice-pulse{animation:none!important}}

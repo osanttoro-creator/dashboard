@@ -145,6 +145,13 @@
       <p>Se você pedir para <strong>ouvir uma resposta</strong>, o texto dessa resposta é enviado
       à OpenAI para gerar uma voz sintética. O áudio volta ao seu navegador para reprodução; o OAZE
       não o guarda no banco nem no armazenamento. A voz é gerada por inteligência artificial.</p>
+      <p>Na <strong>conversa por voz em tempo real</strong>, você autoriza o microfone ao iniciar a sessão.
+      O áudio vai do navegador à OpenAI por uma conexão WebRTC; o servidor OAZE fornece apenas uma
+      credencial temporária, sem expor a chave principal. A transcrição da fala, a resposta em texto
+      e até seis mensagens recentes entram no contexto da conversa. O microfone fica sinalizado na
+      tela e pode ser pausado ou encerrado. O OAZE não guarda o áudio original dessa sessão. Consultas
+      aos seus dados financeiros continuam passando pela função autenticada da Coco; ações financeiras
+      não são executadas sem revisão e confirmação.</p>
       <p>A memória guarda preferências e regras que você confirmar. Se você autorizar também as
       análises automáticas, o OAZE guarda no Supabase um resumo mensal calculado a partir dos dados
       incluídos nos totais: receitas, despesas, valores previstos e principal categoria de gasto.

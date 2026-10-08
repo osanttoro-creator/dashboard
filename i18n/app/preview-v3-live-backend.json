@@ -203,6 +203,20 @@
   "es": "No pude reproducir la respuesta."
  },
  {
+  "pt": "Entre na sua conta para falar com a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to talk with Coco.",
+  "fr": "Connectez-vous pour parler à Coco.",
+  "es": "Inicia sesión para hablar con Coco."
+ },
+ {
+  "pt": "Voz em tempo real indisponível.",
+  "tipo": "exato",
+  "en": "Real-time voice unavailable.",
+  "fr": "Voix en temps réel indisponible.",
+  "es": "Voz en tiempo real no disponible."
+ },
+ {
   "pt": "ANTES DE ENTRAR",
   "tipo": "exato",
   "en": "BEFORE YOU START",

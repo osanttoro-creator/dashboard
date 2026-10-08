@@ -57,7 +57,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, invoiceRef: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -65,6 +65,11 @@
   let cocoPlayer = null;
   let cocoAudioUrl = null;
   let cocoAudioRequest = 0;
+  let voiceSession = null;
+  let voiceStarting = false;
+  let voiceStartVersion = 0;
+  let voiceConsentTimer = null;
+  let voicePendingUserIndex = null;
   let analysisTimer = null;
   let analysisBusy = false;
   let cocoRefreshPending = false;
@@ -1371,7 +1376,7 @@
   function renderCoco() {
     if (state.sharedId) return `<section class="v3-panel"><h2>Coco indisponível neste perfil</h2><p class="v3-muted">A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.</p><button type="button" class="v3-secondary" data-action="profiles">Trocar perfil</button></section>`;
     const consent=!demo&&!cocoAllowed();
-    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}</div></div>`;
+    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${voiceControls()}${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}</div></div>`;
     return `<div class="v3-coco-page"><header class="v3-coco-hero"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco, assistente financeira do OAZE"><div><span class="v3-label">SUA ASSISTENTE FINANCEIRA</span><h1>coco<span>.</span></h1><p>Converse sobre seu dinheiro. Enxergue os dados com clareza.</p></div></header><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
   }
   function render() {
@@ -1379,6 +1384,7 @@
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (state.sharedId ? '<div class="v3-shared-banner" role="status">Perfil compartilhado · somente leitura · cofre e Coco indisponíveis</div>' : '') + (screens[state.page]||renderHome)();
+    const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
@@ -1434,6 +1440,13 @@
       ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
       : `<button type="button" class="v3-coco-icon" data-action="record-audio" aria-label="Gravar áudio" title="Gravar áudio">${cocoMediaIcon('mic')}</button>`;
     return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar arquivo" title="Anexar arquivo">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" hidden>${audio}</div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Pergunte, grave ou envie um arquivo" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}><button type="submit" aria-label="Enviar" ${state.cocoAsking?'disabled':''}>↑</button></form>`;
+  }
+  function voiceControls() {
+    if (demo || !cocoAllowed()) return '';
+    const active = !!voiceSession?.active;
+    const label = active && state.voiceMode==='push' && state.voiceState==='IDLE' ? 'Pronto para falar' : ({ IDLE:'Voz desligada', LISTENING:'Ouvindo', PROCESSING:'Pensando', SPEAKING:'Coco falando', INTERRUPTED:'Interrompida', ERROR:'Erro de voz', OFFLINE:'Sem conexão' }[state.voiceState] || 'Voz desligada');
+    const micOn=active && !!voiceSession.stream?.getAudioTracks().some((track)=>track.enabled);
+    return `<div class="v3-voice" data-state="${esc(state.voiceState)}"><div class="v3-voice-main"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><span class="v3-voice-pulse" aria-hidden="true"></span><span class="v3-voice-status" role="status">${label}</span>${active?`<span class="v3-voice-live">● MICROFONE ${micOn?'ATIVO':'PAUSADO'}</span>`:''}</div><div class="v3-voice-actions">${active?`<button type="button" class="v3-secondary" data-action="voice-stop">Encerrar conversa por voz</button><button type="button" class="v3-link" data-action="voice-mute" aria-pressed="${state.voiceMuted}">${state.voiceMuted?'Ativar microfone':'Pausar microfone'}</button><button type="button" class="v3-link" data-action="voice-reply-mute" aria-pressed="${state.voiceReplyMuted}">${state.voiceReplyMuted?'Ativar respostas faladas':'Desativar respostas faladas'}</button>${state.voicePlaybackBlocked?'<button type="button" class="v3-secondary" data-action="voice-unlock-audio">Ativar som</button>':''}${state.voiceMode==='push'?'<button type="button" class="v3-secondary v3-push-talk" data-voice-push>Segure para falar</button>':''}<label class="v3-voice-volume">Volume <input type="range" min="0" max="100" value="100" data-voice-volume aria-label="Volume da Coco"></label>${state.voiceDevices?.length>1?`<label class="v3-voice-volume">Microfone <select data-voice-device aria-label="Dispositivo de entrada">${state.voiceDevices.map((device)=>`<option value="${esc(device.deviceId)}" ${device.deviceId===state.voiceDevice?'selected':''}>${esc(device.label||'Microfone')}</option>`).join('')}</select></label>`:''}`:`<button type="button" class="v3-secondary" data-action="voice-start" data-voice-mode="continuous">Conversar por voz</button><button type="button" class="v3-link" data-action="voice-start" data-voice-mode="push">Apertar para falar</button>`}</div><p class="v3-voice-caption" id="v3-voice-caption" aria-live="polite">${esc(state.voiceDraftText||state.voiceAnswerDraft)}</p></div>`;
   }
   async function refreshCoco() {
     if (demo) return;
@@ -1944,6 +1957,7 @@
       .catch((e)=>toast(e.message||'Não consegui atualizar os compartilhamentos.'));
   }
   async function openShared(id) {
+    stopVoice();
     try {
       const result=await V3Backend.share({action:'read',id});
       state.sharedProfile=Store.normalizeProfile(result.profile);
@@ -2244,6 +2258,11 @@
     if (demo) { toast('A conversa de demonstração não envia perguntas.'); return; }
     if (!global.Sync || !Sync.currentUser || !Sync.currentUser()) { toast('Entre na sua conta para conversar com a Coco.'); return; }
     if (!cocoAllowed()) { toast('Autorize a Coco antes de conversar.'); return; }
+    if (voiceSession?.active) {
+      if (voiceSession.sendText(q)) {state.chat.push({who:'user',text:q});state.mediaDraft='';render();}
+      else toast('A voz ainda está conectando. Tente novamente em instantes.');
+      return;
+    }
     if (state.cocoAsking) return;
     const speakAfter=state.voiceDraft;
     state.mediaDraft='';state.voiceDraft=false;state.cocoAsking=true;
@@ -2272,6 +2291,103 @@
     state.cocoAsking=false;render();
     if (speakAfter && answered) playCocoAnswer(state.chat.length-1);
   }
+  function updateVoiceCaption() {
+    const caption=$('#v3-voice-caption');
+    if(caption)caption.textContent=state.voiceDraftText||state.voiceAnswerDraft;
+  }
+  function stopVoice() {
+    voiceStartVersion++;voiceStarting=false;
+    clearInterval(voiceConsentTimer);voiceConsentTimer=null;
+    voiceSession?.stop();voiceSession=null;
+    state.voiceState='IDLE';state.voiceDraftText='';state.voiceAnswerDraft='';state.voicePlaybackBlocked=false;
+    voicePendingUserIndex=null;
+    if(state.page==='coco')render();
+  }
+  async function voiceTool(name,args) {
+    if (name==='navegar_oaze') {
+      const allowed=['home','transactions','wallet','investments','categories','goals','calendar','coco','settings','plan'];
+      if(!allowed.includes(args?.tela))return {erro:'Tela inexistente.'};
+      go(args.tela);return {ok:true,tela:args.tela};
+    }
+    if (name!=='consultar_financas'||!cocoAllowed()||state.sharedId)return {erro:'Consulta indisponível.'};
+    const question=String(args?.pergunta||'').trim().slice(0,500);
+    if(!question)return {erro:'Pergunta vazia.'};
+    try {
+      const body=AI.corpoDaPergunta(question);
+      body.profile_id=profile().id;
+      const previous=[];
+      for(let i=0;i<state.chat.length-1;i++){
+        if(state.chat[i]?.who==='user'&&state.chat[i+1]?.who==='coco'){
+          previous.push({pergunta:String(state.chat[i].text).slice(0,500),resposta:String(state.chat[i+1].text).slice(0,600)});i++;
+        }
+      }
+      body.conversa=previous.slice(-3);
+      const result=await AI.chamarFuncao(body);
+      if(result.erro)return {erro:result.mensagem||'Consulta indisponível.'};
+      const proposal=proposalForReview(result.acao_proposta);
+      if(proposal){state.chat.push({who:'coco',text:'Preparei uma proposta para você revisar.',proposal});render();}
+      return {resposta:String(result.texto||'Não encontrei uma resposta.').slice(0,1200),
+        proposta:proposal?'Exibida na tela. Precisa de confirmação humana.':undefined};
+    } catch {return {erro:'Não consegui consultar os dados agora.'};}
+  }
+  async function startVoice(mode) {
+    if(demo||state.sharedId||!cocoAllowed()) {toast('Autorize a Coco em um perfil seu antes de usar a voz.');return;}
+    if(voiceSession?.active||voiceStarting)return;
+    if(!global.CocoRealtime||!navigator.mediaDevices?.getUserMedia){toast('Voz em tempo real indisponível neste navegador. Use a gravação de áudio.');return;}
+    if(!global.confirm('Ativar o microfone para conversar com a Coco? Sua fala será enviada à OpenAI durante a sessão. O OAZE não guarda o áudio original. O indicador ficará visível até você encerrar.'))return;
+    stopCocoAudio();state.voiceMode=mode==='push'?'push':'continuous';
+    voiceStarting=true;const version=++voiceStartVersion;
+    state.voiceState='PROCESSING';render();
+    try {
+      const token=await V3Backend.cocoRealtimeToken();
+      if(version!==voiceStartVersion)return;
+      const session=new CocoRealtime({
+        onState:(value)=>{state.voiceState=value;if(state.page==='coco')render();},
+        onMic:()=>{if(state.page==='coco')render();else{const indicator=$('#v3-voice-global');if(indicator)indicator.hidden=!voiceSession?.stream;}},
+        onDraft:(value)=>{state.voiceDraftText=value;updateVoiceCaption();},
+        onDraftAnswer:(value)=>{state.voiceAnswerDraft=value;updateVoiceCaption();},
+        onLevel:(value)=>{const pulse=$('.v3-voice-pulse');if(pulse)pulse.style.boxShadow=`0 0 ${Math.round(5+value*24)}px rgba(95,169,155,.7)`;},
+        onTurnStopped:()=>{
+          if(voicePendingUserIndex!=null)return;
+          voicePendingUserIndex=state.chat.length;
+          state.chat.push({who:'user',text:'Áudio recebido; transcrição pendente.'});
+          const pending=voicePendingUserIndex;
+          setTimeout(()=>{if(voicePendingUserIndex===pending&&state.chat[pending]){
+            state.chat[pending].text='Áudio recebido; transcrição indisponível.';render();
+          }},5000);
+          render();
+        },
+        onUser:(value)=>{if(value){
+          if(voicePendingUserIndex!=null&&state.chat[voicePendingUserIndex]?.who==='user')state.chat[voicePendingUserIndex].text=value;
+          else state.chat.push({who:'user',text:value});
+          voicePendingUserIndex=null;render();
+        }},
+        onAnswer:(value)=>{if(value){state.chat.push({who:'coco',text:value});render();}},
+        onTool:voiceTool,
+        onError:(value)=>toast(value),
+        onDisconnect:()=>toast('Conexão de voz encerrada. A conversa por texto continua disponível.'),
+        onPlaybackBlocked:()=>{state.voicePlaybackBlocked=true;render();toast('Toque em Ativar som para ouvir a Coco.');},
+        onLimit:()=>toast('Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.')
+      });
+      voiceSession=session;
+      session.setReplyMuted(state.voiceReplyMuted);
+      await session.start({token,mode:state.voiceMode,deviceId:state.voiceDevice,history:state.chat});
+      if(version!==voiceStartVersion){session.stop();return;}
+      if(navigator.mediaDevices.enumerateDevices)try{
+        state.voiceDevices=(await navigator.mediaDevices.enumerateDevices()).filter((device)=>device.kind==='audioinput');
+      }catch{state.voiceDevices=[];}
+      voiceConsentTimer=setInterval(async()=>{
+        if(voiceSession!==session||!session.active)return;
+        try {
+          const settings=await V3Backend.cocoSettings();
+          if(voiceSession!==session)return;
+          if(!settings?.consented_at||settings.revoked_at){stopVoice();toast('A autorização da Coco foi revogada.');}
+        } catch {if(voiceSession===session){stopVoice();toast('Não consegui confirmar sua autorização. A voz foi encerrada.');}}
+      },30000);
+      if(voiceSession===session)render();
+    } catch(error){if(version===voiceStartVersion){stopVoice();toast(error.message||'A voz não conectou. Use a gravação de áudio.');}}
+    finally{if(version===voiceStartVersion)voiceStarting=false;}
+  }
   function stopCocoAudio() {
     cocoAudioRequest++;
     cocoPlayer?.pause();cocoPlayer=null;
@@ -2280,6 +2396,7 @@
     if (state.page==='coco') render();
   }
   async function playCocoAnswer(index) {
+    if(voiceSession?.active){toast('Encerre a conversa por voz antes de ouvir esta resposta.');return;}
     if (state.cocoSpeaking===index) { stopCocoAudio();return; }
     const message=state.chat[index];
     if (demo || !message || message.who!=='coco' || !cocoAllowed()) return;
@@ -2342,6 +2459,7 @@
     } catch (error) { toast(error.message || 'Não consegui ler o arquivo.'); }
   }
   async function toggleCocoRecording() {
+    if(voiceSession?.active){toast('Encerre a conversa por voz antes de gravar um áudio.');return;}
     if (recorder?.state==='recording') { recorder.stop(); return; }
     if (!navigator.mediaDevices?.getUserMedia || !global.MediaRecorder) { toast('Gravação indisponível neste navegador. Confira a permissão do microfone.'); return; }
     try {
@@ -2403,7 +2521,7 @@
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){stopCocoAudio();state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
+    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
@@ -2474,6 +2592,7 @@
     }
     if (action==='account-profile') { if (!demo) accountProfileSheet(); else toast('Demonstração sem conta vinculada.'); return; }
     if (action==='switch-account' || action==='sign-out') {
+      stopVoice();
       if (demo) { toast('Demonstração sem sessão.'); return; }
       V3Backend.signOut().catch((e)=>toast(e.message||'Não foi possível encerrar a sessão.'));
       return;
@@ -2541,7 +2660,7 @@
     if (action==='revoke-coco') {
       if (!global.confirm('Revogar o acesso da Coco? As memórias ficam guardadas para você apagar, mas não serão usadas enquanto o acesso estiver revogado.')) return;
       clearTimeout(analysisTimer);
-      V3Backend.cocoConsent(false).then(()=>{stopCocoAudio();state.chat=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';refreshCoco();})
+      V3Backend.cocoConsent(false).then(()=>{stopVoice();stopCocoAudio();state.chat=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';refreshCoco();})
         .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
     }
@@ -2557,6 +2676,15 @@
       return;
     }
     if (action==='record-audio'){toggleCocoRecording();return;}
+    if (action==='voice-start'){startVoice(target.dataset.voiceMode);return;}
+    if (action==='voice-stop'){stopVoice();return;}
+    if (action==='voice-unlock-audio'){
+      voiceSession?.resumeAudio().then(()=>{state.voicePlaybackBlocked=false;render();})
+        .catch(()=>toast('O navegador ainda bloqueia o áudio. Confira as permissões.'));
+      return;
+    }
+    if (action==='voice-mute'){state.voiceMuted=!state.voiceMuted;voiceSession?.setMuted(state.voiceMuted);render();return;}
+    if (action==='voice-reply-mute'){state.voiceReplyMuted=!state.voiceReplyMuted;voiceSession?.setReplyMuted(state.voiceReplyMuted);render();return;}
     if (action==='retry-coco'){refreshCoco();return;}
     if (action==='close'){closeSheet();return;}
     if (action==='back'){go('more');return;}
@@ -2726,6 +2854,29 @@
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     if(!demo) refreshCoco().catch((error)=>console.error('V3/Coco configuração:',error));
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
+    document.addEventListener('pointerdown',(event)=>{
+      if(event.target.closest?.('[data-voice-push]')){event.preventDefault();voiceSession?.beginPush();}
+    });
+    const finishPush=()=>voiceSession?.endPush();
+    document.addEventListener('pointerup',finishPush);
+    document.addEventListener('pointercancel',finishPush);
+    document.addEventListener('keydown',(event)=>{
+      if(event.target.matches?.('[data-voice-push]')&&[' ','Enter'].includes(event.key)){event.preventDefault();voiceSession?.beginPush();}
+    });
+    document.addEventListener('keyup',(event)=>{
+      if(voiceSession?.pushHeld&&[' ','Enter'].includes(event.key)){event.preventDefault();finishPush();}
+    });
+    document.addEventListener('input',(event)=>{
+      if(event.target.matches?.('[data-voice-volume]'))voiceSession?.setVolume(Number(event.target.value)/100);
+    });
+    document.addEventListener('change',(event)=>{
+      if(event.target.matches?.('[data-voice-device]')){
+        const id=event.target.value;
+        voiceSession?.switchDevice(id).then(()=>{state.voiceDevice=id;render();})
+          .catch(()=>toast('Não consegui trocar o microfone.'));
+      }
+    });
+    addEventListener('pagehide',stopVoice);
     if(!demo)document.addEventListener('visibilitychange',()=>{
       if(document.hidden||!state.sharedId)return;
       V3Backend.share({action:'read',id:state.sharedId}).then((result)=>{

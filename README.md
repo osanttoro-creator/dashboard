@@ -514,3 +514,19 @@ Dados salvos com as paletas anteriores são convertidos automaticamente ao abrir
 > **não** de `color`. Quando o valor de `color` vem de uma custom property que muda na
 > troca de tema, o Chrome deixa a cor presa no valor antigo. O retorno do hover mora
 > no fundo; a cor acompanha o tema na hora.
+
+### Coco por voz em tempo real (em validação local)
+
+O navegador usa `preview-v3/coco-realtime.js` para WebRTC, microfone, transcrição,
+interrupção e reprodução. Uma sessão dura no máximo dez minutos no cliente. A Edge
+Function `oaze-coco-realtime` autentica a conta, verifica o consentimento da Coco,
+limita sessões e pede à OpenAI uma credencial efêmera; a chave principal não vai ao
+navegador. A CSP da Hostinger permite somente o endpoint da OpenAI necessário ao
+WebRTC. Texto e fala alimentam o mesmo histórico da tela. `consultar_financas` usa
+a função financeira autenticada já existente; `navegar_oaze` só abre rotas da lista
+permitida. Nenhuma ferramenta de voz grava lançamentos ou faz pagamentos.
+
+Se o Realtime falhar, continuam disponíveis a gravação curta com transcrição
+revisável e a conversa por texto. Antes de publicar: confirmar acesso do projeto
+OpenAI ao modelo, testar microfone/reprodução em Android e iOS reais, testar uma
+conta autenticada sem dados sensíveis e aprovar o texto atualizado de privacidade.

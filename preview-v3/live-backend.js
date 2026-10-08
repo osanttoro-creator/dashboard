@@ -261,6 +261,23 @@
       return response.blob();
     } finally { global.clearTimeout(timer); }
   };
+  V3Backend.cocoRealtimeToken = async function () {
+    if (!client || !user) throw new Error('Entre na sua conta para falar com a Coco.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token || !/^https:\/\//.test(base) || !publicKey)
+      throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-coco-realtime', {
+      method: 'POST', cache: 'no-store',
+      headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token,
+        'content-type': 'application/json' }, body: '{}'
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.value) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
+    return result.value;
+  };
   async function requirePrivacyAcceptance() {
     const { data, error } = await bounded(client.from('privacy_acceptances')
       .select('policy_version').eq('user_id', user.id)

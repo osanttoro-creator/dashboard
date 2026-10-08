@@ -18,6 +18,9 @@ verify_jwt = true
 [functions.oaze-coco-voz]
 verify_jwt = true
 
+[functions.oaze-coco-realtime]
+verify_jwt = true
+
 [functions.oaze-pagamento]
 verify_jwt = true
 

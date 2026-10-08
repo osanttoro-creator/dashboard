@@ -3682,6 +3682,160 @@
     "es": "Enviar"
   },
   {
+    "pt": "Pronto para falar",
+    "tipo": "exato",
+    "en": "Ready to talk",
+    "fr": "Prêt à parler",
+    "es": "Listo para hablar"
+  },
+  {
+    "pt": "Voz desligada",
+    "tipo": "exato",
+    "en": "Voice off",
+    "fr": "Voix désactivée",
+    "es": "Voz desactivada"
+  },
+  {
+    "pt": "Ouvindo",
+    "tipo": "exato",
+    "en": "Listening",
+    "fr": "À l'écoute",
+    "es": "Escuchando"
+  },
+  {
+    "pt": "Pensando",
+    "tipo": "exato",
+    "en": "Thinking",
+    "fr": "Réflexion",
+    "es": "Pensando"
+  },
+  {
+    "pt": "Coco falando",
+    "tipo": "exato",
+    "en": "Coco speaking",
+    "fr": "Coco parle",
+    "es": "Coco hablando"
+  },
+  {
+    "pt": "Interrompida",
+    "tipo": "exato",
+    "en": "Interrupted",
+    "fr": "Interrompue",
+    "es": "Interrumpida"
+  },
+  {
+    "pt": "Erro de voz",
+    "tipo": "exato",
+    "en": "Voice error",
+    "fr": "Erreur vocale",
+    "es": "Error de voz"
+  },
+  {
+    "pt": "Sem conexão",
+    "tipo": "exato",
+    "en": "Offline",
+    "fr": "Hors ligne",
+    "es": "Sin conexión"
+  },
+  {
+    "pt": "● MICROFONE {0}",
+    "tipo": "padrao",
+    "en": "● MICROPHONE {0}",
+    "fr": "● MICROPHONE {0}",
+    "es": "● MICRÓFONO {0}"
+  },
+  {
+    "pt": "Ativar microfone",
+    "tipo": "exato",
+    "en": "Enable microphone",
+    "fr": "Activer le microphone",
+    "es": "Activar micrófono"
+  },
+  {
+    "pt": "Pausar microfone",
+    "tipo": "exato",
+    "en": "Pause microphone",
+    "fr": "Mettre le microphone en pause",
+    "es": "Pausar micrófono"
+  },
+  {
+    "pt": "Ativar respostas faladas",
+    "tipo": "exato",
+    "en": "Enable spoken replies",
+    "fr": "Activer les réponses vocales",
+    "es": "Activar respuestas habladas"
+  },
+  {
+    "pt": "Desativar respostas faladas",
+    "tipo": "exato",
+    "en": "Turn off spoken replies",
+    "fr": "Désactiver les réponses vocales",
+    "es": "Desactivar respuestas habladas"
+  },
+  {
+    "pt": "Ativar som",
+    "tipo": "exato",
+    "en": "Enable sound",
+    "fr": "Activer le son",
+    "es": "Activar sonido"
+  },
+  {
+    "pt": "Segure para falar",
+    "tipo": "exato",
+    "en": "Hold to talk",
+    "fr": "Maintenir pour parler",
+    "es": "Mantén pulsado para hablar"
+  },
+  {
+    "pt": "Microfone",
+    "tipo": "exato",
+    "en": "Microphone",
+    "fr": "Microphone",
+    "es": "Micrófono"
+  },
+  {
+    "pt": "Dispositivo de entrada",
+    "tipo": "exato",
+    "en": "Input device",
+    "fr": "Périphérique d'entrée",
+    "es": "Dispositivo de entrada"
+  },
+  {
+    "pt": "Encerrar conversa por voz",
+    "tipo": "exato",
+    "en": "End voice conversation",
+    "fr": "Terminer la conversation vocale",
+    "es": "Terminar conversación de voz"
+  },
+  {
+    "pt": "Volume",
+    "tipo": "exato",
+    "en": "Volume",
+    "fr": "Volume",
+    "es": "Volumen"
+  },
+  {
+    "pt": "Volume da Coco",
+    "tipo": "exato",
+    "en": "Coco volume",
+    "fr": "Volume de Coco",
+    "es": "Volumen de Coco"
+  },
+  {
+    "pt": "Conversar por voz",
+    "tipo": "exato",
+    "en": "Talk by voice",
+    "fr": "Parler avec Coco",
+    "es": "Hablar por voz"
+  },
+  {
+    "pt": "Apertar para falar",
+    "tipo": "exato",
+    "en": "Push to talk",
+    "fr": "Appuyer pour parler",
+    "es": "Pulsar para hablar"
+  },
+  {
     "pt": "Não consegui carregar as configurações da Coco.",
     "tipo": "exato",
     "en": "I couldn’t load Coco’s settings.",
@@ -6120,6 +6274,144 @@
     "es": "La conversación no está disponible ahora. Inténtalo de nuevo."
   },
   {
+    "pt": "Tela inexistente.",
+    "tipo": "exato",
+    "en": "Screen not found.",
+    "fr": "Écran introuvable.",
+    "es": "Pantalla no encontrada."
+  },
+  {
+    "pt": "Consulta indisponível.",
+    "tipo": "exato",
+    "en": "Query unavailable.",
+    "fr": "Consultation indisponible.",
+    "es": "Consulta no disponible."
+  },
+  {
+    "pt": "Pergunta vazia.",
+    "tipo": "exato",
+    "en": "Empty question.",
+    "fr": "Question vide.",
+    "es": "Pregunta vacía."
+  },
+  {
+    "pt": "Preparei uma proposta para você revisar.",
+    "tipo": "exato",
+    "en": "I prepared a proposal for you to review.",
+    "fr": "J'ai préparé une proposition à vérifier.",
+    "es": "Preparé una propuesta para que la revises."
+  },
+  {
+    "pt": "Não encontrei uma resposta.",
+    "tipo": "exato",
+    "en": "I couldn't find an answer.",
+    "fr": "Je n'ai pas trouvé de réponse.",
+    "es": "No encontré una respuesta."
+  },
+  {
+    "pt": "Exibida na tela. Precisa de confirmação humana.",
+    "tipo": "exato",
+    "en": "Shown on screen. Human confirmation required.",
+    "fr": "Affichée à l'écran. Confirmation humaine requise.",
+    "es": "Se muestra en pantalla. Requiere confirmación humana."
+  },
+  {
+    "pt": "Não consegui consultar os dados agora.",
+    "tipo": "exato",
+    "en": "I couldn't check the data right now.",
+    "fr": "Je n'ai pas pu consulter les données.",
+    "es": "No pude consultar los datos ahora."
+  },
+  {
+    "pt": "Autorize a Coco em um perfil seu antes de usar a voz.",
+    "tipo": "exato",
+    "en": "Authorize Coco in one of your profiles before using voice.",
+    "fr": "Autorisez Coco dans l'un de vos profils avant d'utiliser la voix.",
+    "es": "Autoriza a Coco en uno de tus perfiles antes de usar la voz."
+  },
+  {
+    "pt": "Voz em tempo real indisponível neste navegador. Use a gravação de áudio.",
+    "tipo": "exato",
+    "en": "Real-time voice is unavailable in this browser. Use audio recording.",
+    "fr": "La voix en temps réel n'est pas disponible dans ce navigateur. Utilisez l'enregistrement audio.",
+    "es": "La voz en tiempo real no está disponible en este navegador. Usa la grabación de audio."
+  },
+  {
+    "pt": "Ativar o microfone para conversar com a Coco? Sua fala será enviada à OpenAI durante a sessão. O OAZE não guarda o áudio original. O indicador ficará visível até você encerrar.",
+    "tipo": "exato",
+    "en": "Turn on the microphone to talk with Coco? Your speech will be sent to OpenAI during the session. OAZE does not store the original audio. The indicator will stay visible until you end the session.",
+    "fr": "Activer le microphone pour parler à Coco ? Votre voix sera envoyée à OpenAI pendant la session. OAZE ne conserve pas l'audio original. L'indicateur restera visible jusqu'à la fin.",
+    "es": "¿Activar el micrófono para hablar con Coco? Tu voz se enviará a OpenAI durante la sesión. OAZE no guarda el audio original. El indicador seguirá visible hasta que termines."
+  },
+  {
+    "pt": "0 0 {0}px rgba(95,169,155,.7)",
+    "tipo": "padrao",
+    "ignorar": true
+  },
+  {
+    "pt": "Áudio recebido; transcrição pendente.",
+    "tipo": "exato",
+    "en": "Audio received; transcription pending.",
+    "fr": "Audio reçu ; transcription en attente.",
+    "es": "Audio recibido; transcripción pendiente."
+  },
+  {
+    "pt": "Áudio recebido; transcrição indisponível.",
+    "tipo": "exato",
+    "en": "Audio received; transcription unavailable.",
+    "fr": "Audio reçu ; transcription indisponible.",
+    "es": "Audio recibido; transcripción no disponible."
+  },
+  {
+    "pt": "Conexão de voz encerrada. A conversa por texto continua disponível.",
+    "tipo": "exato",
+    "en": "Voice connection ended. Text chat is still available.",
+    "fr": "Connexion vocale terminée. Le chat écrit reste disponible.",
+    "es": "Conexión de voz terminada. El chat de texto sigue disponible."
+  },
+  {
+    "pt": "Toque em Ativar som para ouvir a Coco.",
+    "tipo": "exato",
+    "en": "Tap Enable sound to hear Coco.",
+    "fr": "Touchez Activer le son pour entendre Coco.",
+    "es": "Toca Activar sonido para escuchar a Coco."
+  },
+  {
+    "pt": "Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.",
+    "tipo": "exato",
+    "en": "Voice session ended after 10 minutes. You can start another.",
+    "fr": "Session vocale terminée après 10 minutes. Vous pouvez en lancer une autre.",
+    "es": "La sesión de voz terminó después de 10 minutos. Puedes iniciar otra."
+  },
+  {
+    "pt": "A autorização da Coco foi revogada.",
+    "tipo": "exato",
+    "en": "Coco's authorization was revoked.",
+    "fr": "L'autorisation de Coco a été retirée.",
+    "es": "Se revocó la autorización de Coco."
+  },
+  {
+    "pt": "Não consegui confirmar sua autorização. A voz foi encerrada.",
+    "tipo": "exato",
+    "en": "I couldn't confirm your authorization. Voice was ended.",
+    "fr": "Impossible de confirmer votre autorisation. La voix a été arrêtée.",
+    "es": "No pude confirmar tu autorización. La voz se detuvo."
+  },
+  {
+    "pt": "A voz não conectou. Use a gravação de áudio.",
+    "tipo": "exato",
+    "en": "Voice couldn't connect. Use audio recording.",
+    "fr": "La voix n'a pas pu se connecter. Utilisez l'enregistrement audio.",
+    "es": "La voz no se pudo conectar. Usa la grabación de audio."
+  },
+  {
+    "pt": "Encerre a conversa por voz antes de ouvir esta resposta.",
+    "tipo": "exato",
+    "en": "End the voice conversation before playing this reply.",
+    "fr": "Terminez la conversation vocale avant d'écouter cette réponse.",
+    "es": "Termina la conversación de voz antes de escuchar esta respuesta."
+  },
+  {
     "pt": "Não consegui reproduzir o áudio.",
     "tipo": "exato",
     "en": "I couldn’t play the audio.",
@@ -6348,6 +6640,13 @@
     "en": "I couldn’t read the file.",
     "fr": "Je n’ai pas pu lire le fichier.",
     "es": "No pude leer el archivo."
+  },
+  {
+    "pt": "Encerre a conversa por voz antes de gravar um áudio.",
+    "tipo": "exato",
+    "en": "End the voice conversation before recording audio.",
+    "fr": "Terminez la conversation vocale avant d'enregistrer un audio.",
+    "es": "Termina la conversación de voz antes de grabar audio."
   },
   {
     "pt": "Gravação indisponível neste navegador. Confira a permissão do microfone.",
@@ -6775,6 +7074,13 @@
     "es": "Hay un movimiento parecido en esa cuenta. ¿Revisar igualmente? No guardes dos veces el mismo movimiento."
   },
   {
+    "pt": "O navegador ainda bloqueia o áudio. Confira as permissões.",
+    "tipo": "exato",
+    "en": "The browser is still blocking audio. Check its permissions.",
+    "fr": "Le navigateur bloque encore l'audio. Vérifiez les autorisations.",
+    "es": "El navegador aún bloquea el audio. Revisa los permisos."
+  },
+  {
     "pt": "Esta categoria tem lançamentos ou orçamento. Mantenha-a para preservar seus dados.",
     "tipo": "exato",
     "en": "This category has entries or a budget. Keep it to preserve your data.",
@@ -7105,6 +7411,18 @@
     "ignorar": true
   },
   {
+    "pt": "Enter",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Não consegui trocar o microfone.",
+    "tipo": "exato",
+    "en": "Couldn't switch microphones.",
+    "fr": "Impossible de changer de microphone.",
+    "es": "No pude cambiar el micrófono."
+  },
+  {
     "pt": "O acesso ao perfil compartilhado terminou.",
     "tipo": "exato",
     "en": "Access to the shared profile has ended.",
@@ -7160,5 +7478,12 @@
     "pt": "DOMContentLoaded",
     "tipo": "exato",
     "ignorar": true
+  },
+  {
+    "pt": "A voz ainda está conectando. Tente novamente em instantes.",
+    "tipo": "exato",
+    "en": "Voice is still connecting. Try again in a moment.",
+    "fr": "La voix est encore en cours de connexion. Réessayez dans un instant.",
+    "es": "La voz todavía se está conectando. Inténtalo de nuevo en un momento."
   }
 ]
