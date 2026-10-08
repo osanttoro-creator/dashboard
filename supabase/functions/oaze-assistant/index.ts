@@ -1,5 +1,5 @@
 /* =============================================================
-   oaze-assistant — o UGLEZ, do lado seguro
+   oaze-assistant — a Coco, do lado seguro
    -------------------------------------------------------------
    Arquitetura, e ela não tem atalho:
 
@@ -405,7 +405,7 @@ function montarContexto(d: Entrada): string {
 function montarConversa(d: Entrada): string {
   if (!d.conversa?.length) return '';
   return '<conversa_anterior>\n' + d.conversa.map((c) =>
-    'Usuário: ' + c.pergunta + '\nUGLEZ: ' + c.resposta).join('\n---\n') + '\n</conversa_anterior>\n\n';
+    'Usuário: ' + c.pergunta + '\nCoco: ' + c.resposta).join('\n---\n') + '\n</conversa_anterior>\n\n';
 }
 
 /**

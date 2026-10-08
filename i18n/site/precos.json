@@ -204,10 +204,10 @@
   "es": "⟦s0⟧ Cuentas y tarjetas en dólares, euros y otras monedas"
  },
  {
-  "pt": "⟦s0⟧ 10 consultas ao UGLEZ por mês",
-  "en": "⟦s0⟧ 10 UGLEZ queries per month",
-  "fr": "⟦s0⟧ 10 requêtes UGLEZ par mois",
-  "es": "⟦s0⟧ 10 consultas a UGLEZ por mes"
+  "pt": "⟦s0⟧ 10 consultas ao Coco por mês",
+  "en": "⟦s0⟧ 10 Coco queries per month",
+  "fr": "⟦s0⟧ 10 requêtes Coco par mois",
+  "es": "⟦s0⟧ 10 consultas a Coco por mes"
  },
  {
   "pt": "Mais escolhido",
@@ -282,10 +282,10 @@
   "es": "⟦s0⟧ Exportar en CSV y PDF, calendario financiero"
  },
  {
-  "pt": "⟦s0⟧ 60 consultas ao UGLEZ por mês, com assistente flutuante",
-  "en": "⟦s0⟧ 60 UGLEZ queries per month, with the floating assistant",
-  "fr": "⟦s0⟧ 60 requêtes UGLEZ par mois, avec l'assistant flottant",
-  "es": "⟦s0⟧ 60 consultas a UGLEZ por mes, con asistente flotante"
+  "pt": "⟦s0⟧ 60 consultas ao Coco por mês, com assistente flutuante",
+  "en": "⟦s0⟧ 60 Coco queries per month, with the floating assistant",
+  "fr": "⟦s0⟧ 60 requêtes Coco par mois, avec l'assistant flottant",
+  "es": "⟦s0⟧ 60 consultas a Coco por mes, con asistente flotante"
  },
  {
   "pt": "Oásis",
@@ -336,16 +336,16 @@
   "es": "⟦s0⟧ Historial completo y comparación anual"
  },
  {
-  "pt": "⟦s0⟧ Tendências, simulações e projeções do UGLEZ",
-  "en": "⟦s0⟧ UGLEZ trends, simulations and projections",
-  "fr": "⟦s0⟧ Tendances, simulations et projections UGLEZ",
-  "es": "⟦s0⟧ Tendencias, simulaciones y proyecciones de UGLEZ"
+  "pt": "⟦s0⟧ Tendências, simulações e projeções do Coco",
+  "en": "⟦s0⟧ Coco trends, simulations and projections",
+  "fr": "⟦s0⟧ Tendances, simulations et projections Coco",
+  "es": "⟦s0⟧ Tendencias, simulaciones y proyecciones de Coco"
  },
  {
-  "pt": "⟦s0⟧ 200 consultas ao UGLEZ por mês, com assistente flutuante",
-  "en": "⟦s0⟧ 200 UGLEZ queries per month, with the floating assistant",
-  "fr": "⟦s0⟧ 200 requêtes UGLEZ par mois, avec l'assistant flottant",
-  "es": "⟦s0⟧ 200 consultas a UGLEZ por mes, con asistente flotante"
+  "pt": "⟦s0⟧ 200 consultas ao Coco por mês, com assistente flutuante",
+  "en": "⟦s0⟧ 200 Coco queries per month, with the floating assistant",
+  "fr": "⟦s0⟧ 200 requêtes Coco par mois, avec l'assistant flottant",
+  "es": "⟦s0⟧ 200 consultas a Coco por mes, con asistente flotante"
  },
  {
   "pt": "⟦s0⟧ Acesso antecipado e atendimento prioritário",
@@ -546,16 +546,16 @@
   "es": "Completo"
  },
  {
-  "pt": "Coconutz por mês",
-  "en": "Coconutz per month",
-  "fr": "Coconutz par mois",
-  "es": "Coconutz por mes"
+  "pt": "Pedidos à Coco por mês",
+  "en": "Requests to Coco per month",
+  "fr": "Demandes à Coco par mois",
+  "es": "Solicitudes a Coco al mes"
  },
  {
-  "pt": "UGLEZ na página própria",
-  "en": "UGLEZ on its own page",
-  "fr": "UGLEZ sur sa propre page",
-  "es": "UGLEZ en su propia página"
+  "pt": "Coco na página própria",
+  "en": "Coco on its own page",
+  "fr": "Coco sur sa propre page",
+  "es": "Coco en su propia página"
  },
  {
   "pt": "Sim",
@@ -564,10 +564,10 @@
   "es": "Sí"
  },
  {
-  "pt": "UGLEZ flutuante dentro do app",
-  "en": "Floating UGLEZ inside the app",
-  "fr": "UGLEZ flottante dans l'app",
-  "es": "UGLEZ flotante dentro de la app"
+  "pt": "Coco flutuante dentro do app",
+  "en": "Floating Coco inside the app",
+  "fr": "Coco flottante dans l'app",
+  "es": "Coco flotante dentro de la app"
  },
  {
   "pt": "Não",
@@ -660,10 +660,10 @@
   "es": "No. En lugar de una prueba con plazo, Semente es gratis y permanente: usas el producto de verdad, sin cuenta regresiva, y te suscribes cuando los límites se queden cortos."
  },
  {
-  "pt": "O que acontece se eu passar do limite de consultas da UGLEZ?",
-  "en": "What happens if I go over the UGLEZ query limit?",
-  "fr": "Que se passe-t-il si je dépasse la limite de requêtes UGLEZ ?",
-  "es": "¿Qué pasa si supero el límite de consultas de UGLEZ?"
+  "pt": "O que acontece se eu passar do limite de consultas da Coco?",
+  "en": "What happens if I go over the Coco query limit?",
+  "fr": "Que se passe-t-il si je dépasse la limite de requêtes Coco ?",
+  "es": "¿Qué pasa si supero el límite de consultas de Coco?"
  },
  {
   "pt": "As consultas param até o próximo mês, e a tela diz quantas restam antes de você gastar a última. Erro nosso ou indisponibilidade do provedor não consomem consulta — só uma resposta concluída conta.",
@@ -714,10 +714,10 @@
   "es": "Producto"
  },
  {
-  "pt": "UGLEZ",
-  "en": "UGLEZ",
-  "fr": "UGLEZ",
-  "es": "UGLEZ"
+  "pt": "Coco",
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
   "pt": "Conta",

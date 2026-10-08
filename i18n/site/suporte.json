@@ -270,16 +270,16 @@
   "es": "Si <strong>tienes cuenta</strong>, los datos están en el servidor. Entra en la cuenta correcta (revisa el correo) y vuelven. Si aun así no aparecen, escribe a soporte antes de tocar cualquier otra cosa."
  },
  {
-  "pt": "A UGLEZ parou de responder",
-  "en": "UGLEZ stopped responding",
-  "fr": "UGLEZ ne répond plus",
-  "es": "UGLEZ dejó de responder"
+  "pt": "A Coco parou de responder",
+  "en": "Coco stopped responding",
+  "fr": "Coco ne répond plus",
+  "es": "Coco dejó de responder"
  },
  {
   "pt": "Cada plano tem um limite de consultas por mês: 10 no Semente, 60 no Coqueiro, 200 no Oásis. Atingido o limite, ela volta no mês seguinte.",
-  "en": "Each plan has a monthly query limit: 10 on Semente, 60 on Coqueiro, 200 on Oásis. Once you reach it, UGLEZ comes back the following month.",
-  "fr": "Chaque formule a une limite mensuelle de requêtes : 10 avec Semente, 60 avec Coqueiro, 200 avec Oásis. Une fois la limite atteinte, UGLEZ revient le mois suivant.",
-  "es": "Cada plan tiene un límite mensual de consultas: 10 en Semente, 60 en Coqueiro, 200 en Oásis. Al alcanzarlo, UGLEZ vuelve el mes siguiente."
+  "en": "Each plan has a monthly query limit: 10 on Semente, 60 on Coqueiro, 200 on Oásis. Once you reach it, Coco comes back the following month.",
+  "fr": "Chaque formule a une limite mensuelle de requêtes : 10 avec Semente, 60 avec Coqueiro, 200 avec Oásis. Une fois la limite atteinte, Coco revient le mois suivant.",
+  "es": "Cada plan tiene un límite mensual de consultas: 10 en Semente, 60 en Coqueiro, 200 en Oásis. Al alcanzarlo, Coco vuelve el mes siguiente."
  },
  {
   "pt": "Erro nosso ou indisponibilidade do provedor <strong>não</strong> consomem consulta — se você viu um erro, aquela consulta não foi cobrada.",
@@ -300,10 +300,10 @@
   "es": "Producto"
  },
  {
-  "pt": "UGLEZ",
-  "en": "UGLEZ",
-  "fr": "UGLEZ",
-  "es": "UGLEZ"
+  "pt": "Coco",
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
   "pt": "Conta",

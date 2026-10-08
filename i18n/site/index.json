@@ -540,10 +540,10 @@
   "es": "Anual <span class=\"economia\">−16%</span>"
  },
  {
-  "pt": "grátis",
-  "en": "free",
-  "fr": "gratuit",
-  "es": "gratis"
+  "pt": "Semente",
+  "en": "Semente",
+  "fr": "Semente",
+  "es": "Semente"
  },
  {
   "pt": "R$ 0",
@@ -582,10 +582,10 @@
   "es": "Historial de los últimos 3 meses"
  },
  {
-  "pt": "10 coconutz por mês",
-  "en": "10 coconutz per month",
-  "fr": "10 coconutz par mois",
-  "es": "10 coconutz por mes"
+  "pt": "10 pedidos à Coco por mês",
+  "en": "10 requests to Coco per month",
+  "fr": "10 demandes à Coco par mois",
+  "es": "10 solicitudes a Coco al mes"
  },
  {
   "pt": "Ao bater num limite, nada é apagado: o que para é a criação de itens novos daquele tipo.",
@@ -594,10 +594,10 @@
   "es": "Al llegar a un límite no se borra nada: lo que se detiene es la creación de elementos nuevos de ese tipo."
  },
  {
-  "pt": "básico",
-  "en": "basic",
-  "fr": "essentiel",
-  "es": "básico"
+  "pt": "Coqueiro",
+  "en": "Coqueiro",
+  "fr": "Coqueiro",
+  "es": "Coqueiro"
  },
  {
   "pt": "Escolha do OAZE",
@@ -642,22 +642,22 @@
   "es": "24 meses de historial y de comparación"
  },
  {
-  "pt": "60 coconutz por mês",
-  "en": "60 coconutz per month",
-  "fr": "60 coconutz par mois",
-  "es": "60 coconutz por mes"
+  "pt": "60 pedidos à Coco por mês",
+  "en": "60 requests to Coco per month",
+  "fr": "60 demandes à Coco par mois",
+  "es": "60 solicitudes a Coco al mes"
  },
  {
-  "pt": "Assinar o básico",
-  "en": "Subscribe to basic",
-  "fr": "Choisir l’essentiel",
-  "es": "Suscribir el básico"
+  "pt": "Assinar o Coqueiro",
+  "en": "Subscribe to Coqueiro",
+  "fr": "S'abonner à Coqueiro",
+  "es": "Suscribirse a Coqueiro"
  },
  {
-  "pt": "completo",
-  "en": "complete",
-  "fr": "complète",
-  "es": "completo"
+  "pt": "Oásis",
+  "en": "Oásis",
+  "fr": "Oásis",
+  "es": "Oásis"
  },
  {
   "pt": "R$ 29,90",
@@ -684,16 +684,16 @@
   "es": "Historial completo y comparación anual"
  },
  {
-  "pt": "Coco completa: aprende, lança e planeja",
-  "en": "Coco in full: she learns, records and plans",
-  "fr": "Coco au complet : elle apprend, saisit et planifie",
-  "es": "Coco completa: aprende, registra y planifica"
+  "pt": "Coco com conversa, análises e propostas para revisar",
+  "en": "Coco with chat, analysis and proposals for review",
+  "fr": "Coco : conversation, analyses et propositions à valider",
+  "es": "Coco con chat, análisis y propuestas para revisar"
  },
  {
-  "pt": "200 coconutz por mês",
-  "en": "200 coconutz per month",
-  "fr": "200 coconutz par mois",
-  "es": "200 coconutz por mes"
+  "pt": "200 pedidos à Coco por mês",
+  "en": "200 requests to Coco per month",
+  "fr": "200 demandes à Coco par mois",
+  "es": "200 solicitudes a Coco al mes"
  },
  {
   "pt": "Até 3 pessoas no mesmo espaço",
@@ -702,10 +702,10 @@
   "es": "Hasta 3 personas en el mismo espacio"
  },
  {
-  "pt": "Assinar o completo",
-  "en": "Subscribe to complete",
-  "fr": "Choisir la complète",
-  "es": "Suscribir el completo"
+  "pt": "Assinar o Oásis",
+  "en": "Subscribe to Oásis",
+  "fr": "S'abonner à Oásis",
+  "es": "Suscribirse a Oásis"
  },
  {
   "pt": "Cancele quando quiser, direto nas configurações.",
@@ -762,16 +762,16 @@
   "es": "No. La app funciona en este aparato sin ninguna cuenta, con los datos guardados solo aquí. La cuenta sirve para ver los mismos datos en el ordenador y en el móvil, y para hablar con Coco."
  },
  {
-  "pt": "O que são coconutz?",
-  "en": "What are coconutz?",
-  "fr": "Que sont les coconutz ?",
-  "es": "¿Qué son los coconutz?"
+  "pt": "Como funcionam os pedidos à Coco?",
+  "en": "How do requests to Coco work?",
+  "fr": "Comment fonctionnent les demandes à Coco ?",
+  "es": "¿Cómo funcionan las solicitudes a Coco?"
  },
  {
-  "pt": "São os pedidos que você faz à Coco: um pedido, um coconut. O grátis vem com 10 por mês e o completo com 200, e o saldo fica à vista dentro da conversa — você vê quantos sobraram antes de escrever, não quando acabam. Eles voltam na virada de cada mês. Confirmar, desfazer e usar o resto do app não gasta nada.",
-  "en": "They are the requests you make to Coco: one request, one coconut. Free comes with 10 a month and complete with 200, and the balance sits in plain sight inside the conversation — you see how many are left before you write, not when they run out. They come back at the turn of each month. Confirming, undoing and using the rest of the app costs nothing.",
-  "fr": "Ce sont les demandes que vous faites à Coco : une demande, un coconut. La formule gratuite en donne 10 par mois et la complète 200, et le solde est visible dans la conversation — vous voyez ce qu’il reste avant d’écrire, pas quand il n’y en a plus. Ils reviennent au changement de mois. Confirmer, annuler et utiliser le reste de l’application ne coûte rien.",
-  "es": "Son los pedidos que le haces a Coco: un pedido, un coconut. El gratis trae 10 por mes y el completo 200, y el saldo queda a la vista dentro de la conversación — ves cuántos quedan antes de escribir, no cuando se acaban. Vuelven al cambiar el mes. Confirmar, deshacer y usar el resto de la app no gasta nada."
+  "pt": "Pedidos enviados à IA usam a cota do plano: 10 por mês no Semente, 60 no Coqueiro e 200 no Oásis. O contador aparece no app e renova a cada mês. Consultas simples calculadas pelo painel, revisão e desfazer lançamentos não consomem pedidos.",
+  "en": "Requests sent to AI use your plan's quota: 10 per month on Semente, 60 on Coqueiro and 200 on Oásis. The counter appears in the app and resets each month. Simple panel-calculated queries, reviewing and undoing entries do not use requests.",
+  "fr": "Les demandes envoyées à l'IA utilisent le quota du forfait : 10 par mois avec Semente, 60 avec Coqueiro et 200 avec Oásis. Le compteur apparaît dans l'application et se renouvelle chaque mois. Les consultations simples calculées par le tableau de bord, la validation et l'annulation d'écritures ne consomment pas de demandes.",
+  "es": "Las solicitudes enviadas a la IA usan la cuota del plan: 10 al mes en Semente, 60 en Coqueiro y 200 en Oásis. El contador aparece en la app y se renueva cada mes. Las consultas simples calculadas por el panel, revisar y deshacer registros no consumen solicitudes."
  },
  {
   "pt": "O que acontece quando eu bato num limite do grátis?",

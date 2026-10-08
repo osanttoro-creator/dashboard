@@ -38,6 +38,21 @@ const index = ler('index.html');
 if (!index.includes('"@type": "Organization"') || !index.includes('"@type": "WebSite"')) falhas.push('index.html: identidade estruturada incompleta');
 if (!index.includes('Controle financeiro pessoal')) falhas.push('index.html: termo principal não está no título');
 
+/* O kit V2.1 precisa aparecer também nas páginas de apoio e nos idiomas. */
+for (const pasta of ['', 'en/', 'fr/', 'es/']) {
+  for (const arquivo of fs.readdirSync(path.join(raiz, pasta)).filter((nome) => nome.endsWith('.html'))) {
+    const caminho = pasta + arquivo;
+    const html = ler(caminho);
+    const marca = html.match(/<a class="marca"[^>]*>([\s\S]*?)<\/a>/);
+    if (marca && !marca[1].includes('/assets/brand/oaze-logo-escuro.svg')) falhas.push(`${caminho}: cabeçalho usa uma marca diferente do kit atual`);
+    if (/\bUGLEZ\b|coconutz/i.test(html)) falhas.push(`${caminho}: nome da identidade anterior ainda visível`);
+  }
+}
+const cssPublico = ler('assets/css/site.css');
+for (const token of ['--ouro:        #5FA99B', '--noite:       #0D1821', '--tinta:       #F0E5CF', '--fonte-titulo: "Unbounded"', '--fonte-ui:     "Instrument Sans"']) {
+  if (!cssPublico.includes(token)) falhas.push(`site.css: token atual ausente (${token})`);
+}
+
 const sitemap = ler('sitemap.xml');
 for (const rota of ['/app', '/entrar', '/cadastro', '/recuperar-senha', '/redefinir-senha', '/confirmar-email']) {
   if (sitemap.includes(`<loc>${rota}`) || sitemap.includes(`oaze.site${rota}</loc>`)) falhas.push(`sitemap.xml: rota privada incluída (${rota})`);

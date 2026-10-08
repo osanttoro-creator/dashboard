@@ -365,7 +365,7 @@
     { chave: 'goals',                  rotulo: 'Metas ativas',                   tipo: 'limite' },
     { chave: 'recurring_items',        rotulo: 'Recorrências',                   tipo: 'limite' },
     { chave: 'history_months',         rotulo: 'Histórico disponível',           tipo: 'meses' },
-    { chave: 'ai_queries_per_month',   rotulo: 'Coconutz por mês',               tipo: 'limite' },
+    { chave: 'ai_queries_per_month',   rotulo: 'Pedidos à Coco por mês',         tipo: 'limite' },
     { chave: 'uglez_assistente_flutuante', rotulo: 'Coco flutuante no app',      tipo: 'recurso' },
     { chave: 'comparacao_mensal',      rotulo: 'Comparação entre meses',         tipo: 'recurso' },
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },

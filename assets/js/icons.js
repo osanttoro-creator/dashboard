@@ -269,61 +269,7 @@
     return badge;
   };
 
-  /* ============================================================
-     4 · A MARCA OAZE — o coqueiro sobre a água
-     ------------------------------------------------------------
-     UM DESENHO SÓ, EM UM LUGAR SÓ. Antes existiam três marcas
-     diferentes no produto: um sol de raios no cabeçalho do app,
-     um "horizonte sobre água" roxo no favicon e um terceiro
-     desenho colado à mão em cada página pública. Três respostas
-     para a pergunta "qual é a cara do OAZE".
-
-     Este é o símbolo aprovado, e é o ÚNICO ícone figurativo da
-     marca. O UGLEZ não tem desenho próprio -- sem mascote, sem
-     robô, sem rosto: ele é partícula (ver uglez-particulas.js).
-
-     As duas variantes existem por motivos diferentes:
-       'cor'  — medalhão dourado com o coqueiro em azul-petróleo.
-                É a marca. Serve fundo claro e escuro sem troca.
-       'mono' — traço em currentColor, para onde o dourado não
-                sobrevive: e-mail, uma tinta, estado desabilitado.
-     ============================================================ */
-
-  const MARCA_COPA = [
-    'M32 10.5c3.2 5.3 3.9 11.4 1.9 18.4h-3.8c-2-7-1.3-13.1 1.9-18.4z',
-    'M32.4 25.6C25.4 13.4 17.4 11.3 11.2 19.6c6.6-4 13-.7 18.6 8.9z',
-    'M32.4 27.5C22.9 20.7 14.2 24.7 10.8 38.7c4.3-10.2 11.5-12.3 19.7-7.3z',
-    'M31.6 25.6C38.6 13.4 46.6 11.3 52.8 19.6c-6.6-4-13-.7-18.6 8.9z',
-    'M31.6 27.5C41.1 20.7 49.8 24.7 53.2 38.7c-4.3-10.2-11.5-12.3-19.7-7.3z',
-    'M30.5 27.2h3c.6 5.7 1.3 11.2 2.2 16.4H28.3c.9-5.2 1.6-10.7 2.2-16.4z',
-    'M10.9 46.3c6.8-4.9 12.9 4.7 21.1 4.7s14.3-9.6 21.1-4.7c-6.8 6.3-12.9 9-21.1 9s-14.3-2.7-21.1-9z'
-  ];
-
-  /* Anel monocromático: dois arcos, e não um <circle> com stroke,
-     porque stroke escala com o transform e furaria a proporção
-     quando alguém aplicar a marca dentro de outro grupo. */
-  const MARCA_ANEL_MONO =
-    'M32 3a29 29 0 100 58 29 29 0 000-58zm0 3.6a25.4 25.4 0 110 50.8 25.4 25.4 0 010-50.8z';
-
-  let gradiente = 0;
-
-  /**
-   * A marca, como SVG inline.
-   *
-   * @param {number} px      lado do quadrado; 20 é o mínimo em que
-   *                         o coqueiro ainda lê como coqueiro
-   * @param {string} variante 'cor' (padrão) ou 'mono'
-   */
-  /* A MARCA DEIXOU DE SER DESENHADA AQUI
-     -------------------------------------------------------------
-     Até a V2.1 a marca era um medalhão dourado com a copa do
-     coqueiro, montado path a path neste arquivo. Os três elementos
-     — medalhão, coqueiro e ouro — saíram da identidade, e um
-     logotipo redesenhado em código diverge do arquivo oficial no
-     dia seguinte ao redesenho.
-
-     Agora ela é o arquivo do kit, servido como imagem. A variante
-     mono existe para fundos onde o isologo colorido não lê. */
+  /* Marca oficial do kit V2.1; não há desenho alternativo em JavaScript. */
   Icons.oaze = function (px, variante) {
     const lado = px || 24;
     const img = document.createElement('img');

@@ -4,45 +4,47 @@
    Isto NÃO é o app. Nenhuma regra daqui é usada pelo painel, e
    nenhuma regra do style.css é usada aqui. Os dois arquivos são
    independentes de propósito — mas desde setembro de 2026 falam a
-   MESMA identidade: mesmo petróleo, mesmo ouro, mesma tipografia.
+   MESMA identidade OAZE + Coco: Night Ocean, Milk e Oasis Teal.
    Quem entra pelo site e cai no painel não muda de mundo.
 
-   IDENTIDADE VISUAL · V1 (setembro de 2026)
-     Conceito  "Água calma deixa ver o fundo: o OAZE não anima o
-               seu dinheiro, ele o assenta."
-     Arquétipo o Guardião sereno — números exatos, voz baixa.
-     Base      o azul-petróleo #23394D do medalhão, não o preto.
-     Acento    UM só: o ouro do medalhão #D8B45E — ação primária,
-               seleção e selo. Nunca texto corrido, nunca gradiente
-               em texto, nunca moldura de luxo.
-     Regra     70% neutro (fundo é fundo) · 20% estrutura e dado ·
-               10% acento e UGLEZ (só aqui existe luz).
-     Tipos     Newsreader (títulos) · IBM Plex Sans (interface) ·
-               IBM Plex Mono (rótulos). Todas OFL, em
-               assets/vendor/fontes/.
+   IDENTIDADE VISUAL · OAZE + Coco V2.1 (2026)
+     Base      Night Ocean #0D1821 e Coconut Milk #F0E5CF.
+     Acento    Oasis Teal #5FA99B; Mineral Blue #355565 estrutura.
+     Tipos     Unbounded, Instrument Sans e IBM Plex Mono.
+     O logo vem sempre dos masters aprovados em assets/brand/.
    ============================================================= */
 
 /* ---------------------------------------------------------------
    0 · fontes
    --------------------------------------------------------------- */
 @font-face {
-  font-family: "IBM Plex Sans";
-  src: url("/assets/vendor/fontes/ibm-plex-sans-latin.woff2") format("woff2");
-  font-weight: 400 600; font-style: normal; font-display: swap;
+  font-family: "Instrument Sans";
+  src: url("/assets/fonts/InstrumentSans-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: "Newsreader";
-  src: url("/assets/vendor/fontes/newsreader-latin.woff2") format("woff2");
-  font-weight: 400 600; font-style: normal; font-display: swap;
+  font-family: "Instrument Sans";
+  src: url("/assets/fonts/InstrumentSans-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: "Newsreader";
-  src: url("/assets/vendor/fontes/newsreader-italico-latin.woff2") format("woff2");
-  font-weight: 400 500; font-style: italic; font-display: swap;
+  font-family: "Instrument Sans";
+  src: url("/assets/fonts/InstrumentSans-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Unbounded";
+  src: url("/assets/fonts/Unbounded-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Unbounded";
+  src: url("/assets/fonts/Unbounded-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "IBM Plex Mono";
-  src: url("/assets/vendor/fontes/ibm-plex-mono-400-latin.woff2") format("woff2");
+  src: url("/assets/fonts/IBMPlexMono-Regular.ttf") format("truetype");
   font-weight: 400; font-style: normal; font-display: swap;
 }
 
@@ -52,23 +54,24 @@
 :root {
   color-scheme: dark;
 
-  /* marca — o medalhão */
-  --ouro:        #D8B45E;   /* acento único · 9,1:1 sobre a Noite */
-  --ouro-claro:  #F0DA9B;   /* topo do gradiente do medalhão */
-  --ouro-fundo:  #B8912F;   /* base do gradiente */
-  --ancora:      #23394D;   /* petróleo do medalhão · vidro da navegação */
+  /* aliases preservados para os componentes legados, com valores do kit atual */
+  --ouro:        #5FA99B;
+  --ouro-claro:  #F0E5CF;
+  --ouro-fundo:  #355565;
+  --ancora:      #355565;
+  --ouro-texto:  var(--ouro);
 
   /* neutros — do mais fundo ao mais alto */
-  --poco:        #050F16;   /* fundo profundo, rodapé, cortina da lente */
-  --noite:       #071822;   /* fundo padrão */
-  --petroleo:    #0F2A38;   /* superfície sólida de conteúdo */
-  --raso:        #16384A;   /* superfície elevada, campos */
+  --poco:        #0A151D;
+  --noite:       #0D1821;
+  --petroleo:    #142936;
+  --raso:        #203947;
 
   /* tinta */
-  --tinta:       #F1ECE3;   /* texto · 15,3:1 sobre a Noite */
-  --bruma:       #9FB2B8;   /* texto secundário · 8,4:1 */
-  --bruma-2:     #7F959C;   /* terciário, derivado da Bruma · 4,7:1 no Petróleo */
-  --acento-tinta:#071822;   /* texto sobre o ouro */
+  --tinta:       #F0E5CF;
+  --bruma:       #B8C8CA;
+  --bruma-2:     #9FB2B8;
+  --acento-tinta:#0D1821;
 
   /* semânticas (tema escuro) — sempre com sinal, seta ou palavra */
   --receita:     #86CFA4;
@@ -77,7 +80,7 @@
   --alerta:      #E4B77C;
   --critico:     #F09070;
 
-  --uglez:       #4669F0;
+  --uglez:       #5FA99B;
 
   /* nomes antigos, ainda usados em estilos embutidos no HTML */
   --texto:   var(--tinta);
@@ -85,17 +88,18 @@
   --texto-2: var(--bruma);
   --texto-3: var(--bruma-2);
 
-  --borda:       rgba(241, 236, 227, .10);
-  --borda-forte: rgba(241, 236, 227, .20);
-  --borda-ouro:  rgba(216, 180, 94, .45);
+  --borda:       rgba(240, 229, 207, .10);
+  --borda-forte: rgba(240, 229, 207, .20);
+  --borda-ouro:  rgba(95, 169, 155, .45);
 
-  --raio-campo: 4px;
-  --raio:       5px;
-  --raio-lg:    6px;
+  --raio-campo: 12px;
+  --raio:       18px;
+  --raio-lg:    24px;
 
-  --fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
-  --fonte-ui:     "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-titulo: "Unbounded", system-ui, sans-serif;
+  --fonte-ui:     "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --fonte-mono:   "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --fonte-corpo:  var(--fonte-ui);
 
   --sombra: 0 1px 2px rgba(0, 0, 0, .28), 0 12px 24px -16px rgba(0, 0, 0, .6);
 
@@ -151,9 +155,8 @@ h1, h2 {
   margin: 0 0 .45em;
   text-wrap: balance;
 }
-/* A ênfase de conceito: itálico da Newsreader, no ouro. É o único
-   texto dourado do sistema, e só em título. */
-h1 em, h2 em { font-style: italic; color: var(--ouro); }
+/* O kit não inclui Unbounded itálica; a ênfase usa a cor aprovada. */
+h1 em, h2 em { font-style: normal; color: var(--ouro); }
 h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
 h2 { font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
 h3 {
@@ -214,7 +217,7 @@ p.leve { color: var(--bruma); }
    --------------------------------------------------------------- */
 .topo {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(35, 57, 77, .55);   /* Âncora a 55% */
+  background: rgba(13, 24, 33, .9);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid var(--borda);
@@ -225,16 +228,15 @@ p.leve { color: var(--bruma); }
    Areia e vira uma faixa cinza, onde os links somem. Enquanto passa
    por cima de um deles, o cabeçalho engrossa para a Noite; sobre os
    escuros, continua vidro. Quem liga a classe é o narrativa.js. */
-.topo.sobre-claro { background: rgba(7, 24, 34, .92); }
+.topo.sobre-claro { background: rgba(13, 24, 33, .96); }
 .topo .env { display: flex; align-items: center; gap: 18px; height: 68px; max-width: min(1480px, calc(100% - 16px)); }
 
 .marca {
   display: flex; align-items: center; gap: 12px;
-  color: var(--tinta); font: 600 .92rem/1 var(--fonte-ui);
-  letter-spacing: .3em;
+  color: var(--tinta); line-height: 1;
 }
 .marca:hover { color: var(--tinta); }
-.marca img, .marca svg { width: 28px; height: 28px; flex: none; }
+.marca img { display: block; width: 116px; height: 40px; object-fit: contain; flex: none; }
 
 .menu { display: flex; align-items: center; gap: 2px; margin-left: auto; }
 .menu a {
@@ -264,8 +266,8 @@ p.leve { color: var(--bruma); }
 }
 .btn:active { transform: translateY(1px); }
 .btn[aria-disabled="true"] { opacity: .58; cursor: default; pointer-events: none; }
-.btn-principal { background: var(--ouro); color: var(--acento-tinta); }
-.btn-principal:hover { background: var(--ouro-claro); color: var(--acento-tinta); }
+.btn-principal { background: var(--tinta); color: var(--acento-tinta); }
+.btn-principal:hover { background: var(--ouro); color: var(--acento-tinta); }
 .btn-fantasma { background: transparent; color: var(--tinta); border-color: var(--borda-forte); }
 .btn-fantasma:hover { color: var(--tinta); border-color: var(--ouro); }
 .btn-grande { min-height: 52px; padding: 15px 28px; font-size: 1rem; }
@@ -357,7 +359,7 @@ p.leve { color: var(--bruma); }
 .icone {
   width: 40px; height: 40px; margin-bottom: 16px;
   display: grid; place-items: center; border-radius: var(--raio-campo);
-  background: rgba(216, 180, 94, .10); border: 1px solid rgba(216, 180, 94, .28);
+  background: rgba(95, 169, 155, .10); border: 1px solid rgba(95, 169, 155, .28);
   color: var(--ouro);
 }
 .icone svg { width: 20px; height: 20px; }
@@ -391,10 +393,10 @@ p.leve { color: var(--bruma); }
 .alternador button[aria-pressed="true"] { background: var(--ouro); color: var(--acento-tinta); font-weight: 600; }
 .economia {
   display: inline-block; margin-left: 8px; padding: 2px 7px;
-  border-radius: 3px; background: rgba(216, 180, 94, .16); color: var(--ouro-claro);
+  border-radius: 9px; background: rgba(95, 169, 155, .16); color: var(--ouro-claro);
   font: 400 .72rem/1.3 var(--fonte-mono);
 }
-.alternador button[aria-pressed="true"] .economia { background: rgba(7, 24, 34, .16); color: var(--acento-tinta); }
+.alternador button[aria-pressed="true"] .economia { background: rgba(13, 24, 33, .16); color: var(--acento-tinta); }
 
 .planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; max-width: 1200px; margin-inline: auto; }
 .plano {
@@ -507,7 +509,7 @@ p.leve { color: var(--bruma); }
    laranja que grita, nem barra lateral grossa. */
 .aviso {
   margin: 0 0 32px; padding: 18px 0 0;
-  border-top: 1px solid rgba(216, 180, 94, .38);
+  border-top: 1px solid rgba(95, 169, 155, .38);
   color: var(--bruma); font-size: .98rem;
 }
 .aviso strong { color: var(--tinta); }
@@ -1241,7 +1243,7 @@ p.leve { color: var(--bruma); }
     display: flex; flex-direction: column; align-items: stretch;
     position: absolute; left: 0; right: 0; top: 68px;
     margin: 0; padding: 12px var(--gutter);
-    background: rgba(7, 24, 34, .98);
+    background: rgba(13, 24, 33, .98);
     border-bottom: 1px solid var(--borda);
   }
   .topo.aberto .acoes-topo { top: auto; padding-top: 0; padding-bottom: 18px; gap: 10px; }
@@ -1395,8 +1397,8 @@ p.leve { color: var(--bruma); }
   position: fixed; z-index: 10000; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
   width: min(760px, calc(100% - 28px)); transform: translateX(-50%);
   display: flex; align-items: center; gap: 18px; padding: 16px 18px;
-  color: var(--tinta); background: rgba(7, 24, 34, .97);
-  border: 1px solid var(--borda-forte); border-radius: 10px;
+  color: var(--tinta); background: rgba(13, 24, 33, .97);
+  border: 1px solid var(--borda-forte); border-radius: 18px;
   box-shadow: 0 18px 60px rgba(0, 0, 0, .42);
 }
 .aviso-cookies p { margin: 0; font-size: .84rem; line-height: 1.55; color: var(--bruma); }
@@ -1407,10 +1409,10 @@ p.leve { color: var(--bruma); }
   font: 700 .78rem/1.15 var(--fonte-corpo);
   cursor: pointer;
 }
-.aviso-cookies-aceitar { color: #071822; background: var(--ouro); }
+.aviso-cookies-aceitar { color: var(--acento-tinta); background: var(--ouro); }
 .aviso-cookies-recusar { color: var(--ouro-texto); background: transparent; }
 .aviso-cookies-aceitar:hover { background: var(--ouro-claro); }
-.aviso-cookies-recusar:hover { background: rgba(216, 180, 94, .1); }
+.aviso-cookies-recusar:hover { background: rgba(95, 169, 155, .1); }
 .aviso-cookies-botao:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 @media (max-width: 620px) {
   .aviso-cookies { align-items: stretch; flex-direction: column; gap: 12px; }

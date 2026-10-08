@@ -210,10 +210,10 @@
   "es": "<strong>Interés legítimo</strong> (art. 7, IX) — seguridad, prevención del fraude y corrección de defectos, siempre con el mínimo de datos necesarios."
  },
  {
-  "pt": "<strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à Coco (antiga UGLEZ), descrita no §5. Você pode não usar a Coco e o restante do produto continua funcionando igual.",
-  "en": "<strong>Consent</strong> (art. 7, I) — only for sending data to Coco (formerly UGLEZ), as described in §5. You can choose not to use Coco; the rest of the product continues to work.",
-  "fr": "<strong>Consentement</strong> (art. 7, I) — uniquement pour l'envoi de données à Coco (anciennement UGLEZ), comme décrit au §5. Vous pouvez ne pas utiliser Coco ; le reste du produit continue de fonctionner.",
-  "es": "<strong>Consentimiento</strong> (art. 7, I) — solo para enviar datos a Coco (antes UGLEZ), según el §5. Puedes no usar Coco; el resto del producto sigue funcionando."
+  "pt": "<strong>Consentimento</strong> (art. 7º, I) — apenas para o envio de dados à Coco, descrita no §5. Você pode não usar a Coco e o restante do produto continua funcionando igual.",
+  "en": "<strong>Consent</strong> (art. 7, I) — only for sending data to Coco, as described in §5. You can choose not to use Coco; the rest of the product continues to work.",
+  "fr": "<strong>Consentement</strong> (art. 7, I) — uniquement pour l'envoi de données à Coco, comme décrit au §5. Vous pouvez ne pas utiliser Coco ; le reste du produit continue de fonctionner.",
+  "es": "<strong>Consentimiento</strong> (art. 7, I) — solo para enviar datos a Coco, según el §5. Puedes no usar Coco; el resto del producto sigue funcionando."
  },
  {
   "pt": "4. Onde os dados ficam",
@@ -600,10 +600,10 @@
   "es": "Producto"
  },
  {
-  "pt": "UGLEZ",
-  "en": "UGLEZ",
-  "fr": "UGLEZ",
-  "es": "UGLEZ"
+  "pt": "Coco",
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
   "pt": "Conta",
