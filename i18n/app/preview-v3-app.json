@@ -293,18 +293,25 @@
     "es": "· compartido"
   },
   {
-    "pt": "Salvando na sua conta…",
+    "pt": "Salvando no perfil…",
     "tipo": "exato",
-    "en": "Saving to your account…",
-    "fr": "Enregistrement sur votre compte…",
-    "es": "Guardando en tu cuenta…"
+    "en": "Saving to the profile…",
+    "fr": "Enregistrement dans le profil…",
+    "es": "Guardando en el perfil…"
   },
   {
-    "pt": "Perfil compartilhado · leitura",
+    "pt": "edição",
     "tipo": "exato",
-    "en": "Shared profile · read-only",
-    "fr": "Profil partagé · lecture seule",
-    "es": "Perfil compartido · solo lectura"
+    "en": "editing",
+    "fr": "modification",
+    "es": "edición"
+  },
+  {
+    "pt": "Perfil compartilhado · {0}",
+    "tipo": "padrao",
+    "en": "Shared profile · {0}",
+    "fr": "Profil partagé · {0}",
+    "es": "Perfil compartido · {0}"
   },
   {
     "pt": "Dados carregados da sua conta",
@@ -529,41 +536,6 @@
     "es": "terminada en {0}"
   },
   {
-    "pt": "CRÉDITO",
-    "tipo": "exato",
-    "en": "CREDIT",
-    "fr": "CRÉDIT",
-    "es": "CRÉDITO"
-  },
-  {
-    "pt": "DÉBITO",
-    "tipo": "exato",
-    "en": "DEBIT",
-    "fr": "DÉBIT",
-    "es": "DÉBITO"
-  },
-  {
-    "pt": "NÚMERO DO CARTÃO",
-    "tipo": "exato",
-    "en": "CARD NUMBER",
-    "fr": "NUMÉRO DE CARTE",
-    "es": "NÚMERO DE TARJETA"
-  },
-  {
-    "pt": "NÚMERO DA CONTA",
-    "tipo": "exato",
-    "en": "ACCOUNT NUMBER",
-    "fr": "NUMÉRO DE COMPTE",
-    "es": "NÚMERO DE CUENTA"
-  },
-  {
-    "pt": "ANA SOUZA",
-    "tipo": "exato",
-    "en": "ANA SOUZA",
-    "fr": "ANA SOUZA",
-    "es": "ANA SOUZA"
-  },
-  {
     "pt": "Reexibir",
     "tipo": "exato",
     "en": "Show again",
@@ -590,6 +562,41 @@
     "en": "Hide this item",
     "fr": "Masquer cet élément",
     "es": "Ocultar este elemento"
+  },
+  {
+    "pt": "NÚMERO DO CARTÃO",
+    "tipo": "exato",
+    "en": "CARD NUMBER",
+    "fr": "NUMÉRO DE CARTE",
+    "es": "NÚMERO DE TARJETA"
+  },
+  {
+    "pt": "NÚMERO DA CONTA",
+    "tipo": "exato",
+    "en": "ACCOUNT NUMBER",
+    "fr": "NUMÉRO DE COMPTE",
+    "es": "NÚMERO DE CUENTA"
+  },
+  {
+    "pt": "ANA SOUZA",
+    "tipo": "exato",
+    "en": "ANA SOUZA",
+    "fr": "ANA SOUZA",
+    "es": "ANA SOUZA"
+  },
+  {
+    "pt": "CRÉDITO",
+    "tipo": "exato",
+    "en": "CREDIT",
+    "fr": "CRÉDIT",
+    "es": "CRÉDITO"
+  },
+  {
+    "pt": "DÉBITO",
+    "tipo": "exato",
+    "en": "DEBIT",
+    "fr": "DÉBIT",
+    "es": "DÉBITO"
   },
   {
     "pt": "Mostrar carteira principal",
@@ -1841,11 +1848,18 @@
     "es": "Recibido"
   },
   {
-    "pt": "{0} de {1}, {2} evento(s)",
+    "pt": ", dívidas {0}",
     "tipo": "padrao",
-    "en": "{1} {0}, {2} event(s)",
-    "fr": "{0} {1}, {2} événement(s)",
-    "es": "{0} de {1}, {2} evento(s)"
+    "en": ", debts {0}",
+    "fr": ", dettes {0}",
+    "es": ", deudas {0}"
+  },
+  {
+    "pt": "{0} de {1}, {2} evento(s){3}",
+    "tipo": "padrao",
+    "en": "{0} of {1}, {2} event(s){3}",
+    "fr": "{0} de {1}, {2} événement(s){3}",
+    "es": "{0} de {1}, {2} evento(s){3}"
   },
   {
     "pt": "Seg",
@@ -3247,25 +3261,11 @@
     "es": "Perfil {0}"
   },
   {
-    "pt": "COCO ESTÁ AQUI",
+    "pt": "O que você quer entender sobre seu dinheiro?",
     "tipo": "exato",
-    "en": "COCO IS HERE",
-    "fr": "COCO EST LÀ",
-    "es": "COCO ESTÁ AQUÍ"
-  },
-  {
-    "pt": "Comece pelo que você precisa entender.",
-    "tipo": "exato",
-    "en": "Start with what you need to understand.",
-    "fr": "Commencez par ce que vous devez comprendre.",
-    "es": "Empieza por lo que necesitas entender."
-  },
-  {
-    "pt": "Pergunte sobre seus lançamentos, grave uma dúvida ou peça uma proposta. Nada muda na sua carteira sem sua confirmação.",
-    "tipo": "exato",
-    "en": "Ask about your entries, record a question, or request a suggestion. Nothing changes in your wallet without your confirmation.",
-    "fr": "Interrogez vos opérations, enregistrez une question ou demandez une suggestion. Rien ne change dans votre portefeuille sans votre confirmation.",
-    "es": "Pregunta por tus movimientos, graba una duda o pide una propuesta. Nada cambia en tu cartera sin tu confirmación."
+    "en": "What would you like to understand about your money?",
+    "fr": "Que souhaitez-vous comprendre de votre argent ?",
+    "es": "¿Qué quieres entender sobre tu dinero?"
   },
   {
     "pt": "VOCÊ",
@@ -3520,27 +3520,6 @@
     "es": "Transcripción lista. Revisa el texto antes de enviarlo."
   },
   {
-    "pt": "Coco, assistente financeira do OAZE",
-    "tipo": "exato",
-    "en": "Coco, OAZE’s financial assistant",
-    "fr": "Coco, assistante financière d’OAZE",
-    "es": "Coco, asistente financiera de OAZE"
-  },
-  {
-    "pt": "SUA ASSISTENTE FINANCEIRA",
-    "tipo": "exato",
-    "en": "YOUR FINANCIAL ASSISTANT",
-    "fr": "VOTRE ASSISTANTE FINANCIÈRE",
-    "es": "TU ASISTENTE FINANCIERA"
-  },
-  {
-    "pt": "Converse sobre seu dinheiro. Enxergue os dados com clareza.",
-    "tipo": "exato",
-    "en": "Talk about your money. See your data clearly.",
-    "fr": "Parlez de votre argent. Comprenez clairement vos données.",
-    "es": "Habla de tu dinero. Mira tus datos con claridad."
-  },
-  {
     "pt": "Área da Coco",
     "tipo": "exato",
     "en": "Coco area",
@@ -3555,11 +3534,25 @@
     "es": "Análisis"
   },
   {
-    "pt": "Perfil compartilhado · somente leitura · cofre e Coco indisponíveis",
+    "pt": "pode editar os dados financeiros",
     "tipo": "exato",
-    "en": "Shared profile · read-only · vault and Coco unavailable",
-    "fr": "Profil partagé · lecture seule · coffre et Coco indisponibles",
-    "es": "Perfil compartido · solo lectura · bóveda y Coco no disponibles"
+    "en": "can edit financial data",
+    "fr": "peut modifier les données financières",
+    "es": "puede editar los datos financieros"
+  },
+  {
+    "pt": "somente leitura",
+    "tipo": "exato",
+    "en": "read-only",
+    "fr": "lecture seule",
+    "es": "solo lectura"
+  },
+  {
+    "pt": "Perfil compartilhado · {0} · cofre e Coco indisponíveis",
+    "tipo": "padrao",
+    "en": "Shared profile · {0} · vault and Coco unavailable",
+    "fr": "Profil partagé · {0} · coffre et Coco indisponibles",
+    "es": "Perfil compartido · {0} · caja fuerte y Coco no disponibles"
   },
   {
     "pt": "Ícones de interface:",
@@ -5519,11 +5512,46 @@
     "es": "Perfil compartido"
   },
   {
+    "pt": "Convite {0}",
+    "tipo": "padrao",
+    "en": "Invitation {0}",
+    "fr": "Invitation {0}",
+    "es": "Invitación {0}"
+  },
+  {
     "pt": "Perfil removido",
     "tipo": "exato",
     "en": "Deleted profile",
     "fr": "Profil supprimé",
     "es": "Perfil eliminado"
+  },
+  {
+    "pt": "pode editar",
+    "tipo": "exato",
+    "en": "can edit",
+    "fr": "peut modifier",
+    "es": "puede editar"
+  },
+  {
+    "pt": "Deixar só leitura",
+    "tipo": "exato",
+    "en": "Make read-only",
+    "fr": "Passer en lecture seule",
+    "es": "Dejar en solo lectura"
+  },
+  {
+    "pt": "Permitir edição",
+    "tipo": "exato",
+    "en": "Allow editing",
+    "fr": "Autoriser la modification",
+    "es": "Permitir edición"
+  },
+  {
+    "pt": "Mudar acesso de {0} para {1}",
+    "tipo": "padrao",
+    "en": "Change {0}'s access to {1}",
+    "fr": "Changer l’accès de {0} en {1}",
+    "es": "Cambiar el acceso de {0} a {1}"
   },
   {
     "pt": "Revogar",
@@ -5589,11 +5617,11 @@
     "es": "Mis invitaciones"
   },
   {
-    "pt": "Cada link vale para uma conta OAZE e expira em 7 dias. Quem aceitar vê somente o perfil escolhido, sem acesso ao cofre ou permissão para editar. Você pode revogar a qualquer momento.",
+    "pt": "Cada link vale para uma conta OAZE e expira em 7 dias. Escolha leitura ou edição para o perfil convidado; o cofre e a Coco nunca são compartilhados. Você pode alterar a permissão ou revogar o acesso.",
     "tipo": "exato",
-    "en": "Each link is valid for one OAZE account and expires in 7 days. The recipient can only view the selected profile, without vault access or edit permission. You can revoke access at any time.",
-    "fr": "Chaque lien est valable pour un compte OAZE et expire dans 7 jours. Le destinataire peut seulement voir le profil choisi, sans accès au coffre ni droit de modification. Vous pouvez révoquer l’accès à tout moment.",
-    "es": "Cada enlace sirve para una cuenta OAZE y vence en 7 días. Quien lo acepte solo puede ver el perfil elegido, sin acceso a la bóveda ni permiso de edición. Puedes revocar el acceso cuando quieras."
+    "en": "Each link is valid for one OAZE account and expires in 7 days. Choose read-only or editing access for the invited profile; the vault and Coco are never shared. You can change permission or revoke access.",
+    "fr": "Chaque lien est valable pour un compte OAZE et expire après 7 jours. Choisissez la lecture seule ou la modification du profil invité ; le coffre et Coco ne sont jamais partagés. Vous pouvez modifier l’autorisation ou révoquer l’accès.",
+    "es": "Cada enlace sirve para una cuenta OAZE y vence en 7 días. Elige lectura o edición para el perfil invitado; la caja fuerte y Coco nunca se comparten. Puedes cambiar el permiso o revocar el acceso."
   },
   {
     "pt": "O acesso ao perfil compartilhado foi encerrado.",
@@ -5624,6 +5652,13 @@
     "es": "No pude actualizar los perfiles compartidos."
   },
   {
+    "pt": "Perfil compartilhado com edição.",
+    "tipo": "exato",
+    "en": "Shared profile with editing access.",
+    "fr": "Profil partagé avec droit de modification.",
+    "es": "Perfil compartido con permiso de edición."
+  },
+  {
     "pt": "Perfil compartilhado em modo de leitura.",
     "tipo": "exato",
     "en": "Shared profile opened in read-only mode.",
@@ -5643,6 +5678,13 @@
     "en": "The vault is only available in a real account.",
     "fr": "Le coffre est disponible uniquement dans un compte réel.",
     "es": "La bóveda solo está disponible en una cuenta real."
+  },
+  {
+    "pt": "O cofre não é compartilhado com convidados.",
+    "tipo": "exato",
+    "en": "The vault is not shared with guests.",
+    "fr": "Le coffre n’est pas partagé avec les invités.",
+    "es": "La caja fuerte no se comparte con invitados."
   },
   {
     "pt": "criar PIN",
@@ -5937,11 +5979,11 @@
     "es": "Esta inclusión supera el límite de tu plan."
   },
   {
-    "pt": "Conta ou cartão em outra moeda não está disponível no seu plano.",
+    "pt": "Conta ou cartão em outra moeda não está disponível no plano deste perfil.",
     "tipo": "exato",
-    "en": "Accounts or cards in another currency aren’t available on your plan.",
-    "fr": "Les comptes ou cartes dans une autre devise ne sont pas inclus dans votre forfait.",
-    "es": "Las cuentas o tarjetas en otra moneda no están en tu plan."
+    "en": "An account or card in another currency is not available on this profile’s plan.",
+    "fr": "Un compte ou une carte dans une autre devise n’est pas disponible avec le forfait de ce profil.",
+    "es": "Una cuenta o tarjeta en otra moneda no está disponible en el plan de este perfil."
   },
   {
     "pt": "Confira fechamento, vencimento e conta da fatura.",
@@ -6232,6 +6274,13 @@
     "en": "Authorise Coco before chatting.",
     "fr": "Autorisez Coco avant de discuter.",
     "es": "Autoriza a Coco antes de conversar."
+  },
+  {
+    "pt": "A voz ainda está conectando. Tente novamente em instantes.",
+    "tipo": "exato",
+    "en": "Voice is still connecting. Try again in a moment.",
+    "fr": "La voix est encore en cours de connexion. Réessayez dans un instant.",
+    "es": "La voz todavía se está conectando. Inténtalo de nuevo en un momento."
   },
   {
     "pt": "A Coco está indisponível agora.",
@@ -6731,6 +6780,13 @@
     "es": "Perfil compartido: solo lectura. Selecciona tu perfil para editar."
   },
   {
+    "pt": "Esta ação pertence somente à conta dona do perfil.",
+    "tipo": "exato",
+    "en": "Only the profile owner's account can do this.",
+    "fr": "Seul le compte propriétaire du profil peut effectuer cette action.",
+    "es": "Solo la cuenta propietaria del perfil puede hacer esto."
+  },
+  {
     "pt": "Encerrar este compartilhamento agora? O acesso será perdido imediatamente.",
     "tipo": "exato",
     "en": "End this sharing now? Access will be lost immediately.",
@@ -6750,6 +6806,34 @@
     "en": "I couldn’t revoke the access.",
     "fr": "Je n’ai pas pu révoquer l’accès.",
     "es": "No pude revocar el acceso."
+  },
+  {
+    "pt": "Permitir que esta pessoa crie, edite e exclua dados financeiros deste perfil? O cofre e a gestão de convites continuam privados.",
+    "tipo": "exato",
+    "en": "Allow this person to create, edit, and delete this profile’s financial data? The vault and invitation management remain private.",
+    "fr": "Autoriser cette personne à créer, modifier et supprimer les données financières de ce profil ? Le coffre et la gestion des invitations restent privés.",
+    "es": "¿Permitir que esta persona cree, edite y elimine los datos financieros de este perfil? La caja fuerte y la gestión de invitaciones siguen siendo privadas."
+  },
+  {
+    "pt": "Edição liberada para este convite.",
+    "tipo": "exato",
+    "en": "Editing enabled for this invitation.",
+    "fr": "Modification autorisée pour cette invitation.",
+    "es": "Edición habilitada para esta invitación."
+  },
+  {
+    "pt": "Convite alterado para somente leitura.",
+    "tipo": "exato",
+    "en": "Invitation changed to read-only.",
+    "fr": "Invitation passée en lecture seule.",
+    "es": "Invitación cambiada a solo lectura."
+  },
+  {
+    "pt": "Não consegui mudar a permissão.",
+    "tipo": "exato",
+    "en": "Couldn’t change the permission.",
+    "fr": "Impossible de modifier l’autorisation.",
+    "es": "No pude cambiar el permiso."
   },
   {
     "pt": "editar perfil",
@@ -6850,11 +6934,53 @@
     "es": "compartir perfil"
   },
   {
-    "pt": "Qualquer pessoa que receber o link e tiver uma conta OAZE poderá aceitá-lo uma vez, em até 7 dias. Ela verá os dados financeiros deste perfil em leitura, sem o cofre com PIN. Envie apenas a quem você confia.",
+    "pt": "O link pode ser aceito uma vez por outra conta OAZE, em até 7 dias. O convidado acessa só este perfil; cofre e Coco ficam privados.",
     "tipo": "exato",
-    "en": "Anyone with the link and an OAZE account can accept it once within 7 days. They will see this profile’s financial data in read-only mode, without the PIN-protected vault. Send it only to someone you trust.",
-    "fr": "Toute personne ayant le lien et un compte OAZE peut l’accepter une seule fois dans les 7 jours. Elle pourra consulter les données financières de ce profil en lecture seule, sans le coffre protégé par PIN. Envoyez-le uniquement à une personne de confiance.",
-    "es": "Cualquier persona con el enlace y una cuenta OAZE puede aceptarlo una sola vez dentro de 7 días. Podrá ver los datos financieros de este perfil en modo de solo lectura, sin la bóveda protegida con PIN. Envíalo solo a alguien de confianza."
+    "en": "The link can be accepted once by another OAZE account within 7 days. The guest can access only this profile; the vault and Coco remain private.",
+    "fr": "Le lien peut être accepté une seule fois par un autre compte OAZE sous 7 jours. L’invité n’accède qu’à ce profil ; le coffre et Coco restent privés.",
+    "es": "Otra cuenta OAZE puede aceptar el enlace una sola vez, en un plazo de 7 días. El invitado solo accede a este perfil; la caja fuerte y Coco siguen siendo privados."
+  },
+  {
+    "pt": "IDENTIFIQUE O CONVITE",
+    "tipo": "exato",
+    "en": "NAME THIS INVITATION",
+    "fr": "NOMMEZ CETTE INVITATION",
+    "es": "NOMBRA ESTA INVITACIÓN"
+  },
+  {
+    "pt": "Ex.: parceiro, contadora ou equipe",
+    "tipo": "exato",
+    "en": "E.g. partner, accountant, or team",
+    "fr": "Ex. : partenaire, comptable ou équipe",
+    "es": "Ej.: pareja, contadora o equipo"
+  },
+  {
+    "pt": "PERMISSÃO",
+    "tipo": "exato",
+    "en": "PERMISSION",
+    "fr": "AUTORISATION",
+    "es": "PERMISO"
+  },
+  {
+    "pt": "Somente leitura",
+    "tipo": "exato",
+    "en": "Read-only",
+    "fr": "Lecture seule",
+    "es": "Solo lectura"
+  },
+  {
+    "pt": "Pode editar dados financeiros",
+    "tipo": "exato",
+    "en": "Can edit financial data",
+    "fr": "Peut modifier les données financières",
+    "es": "Puede editar datos financieros"
+  },
+  {
+    "pt": "Quem pode editar também pode excluir lançamentos, cartões e metas deste perfil. Você pode mudar ou revogar o acesso depois.",
+    "tipo": "exato",
+    "en": "People with editing access can also delete transactions, cards, and goals in this profile. You can change or revoke access later.",
+    "fr": "Une personne autorisée à modifier peut aussi supprimer les opérations, cartes et objectifs de ce profil. Vous pourrez modifier ou révoquer l’accès ensuite.",
+    "es": "Quien puede editar también puede eliminar movimientos, tarjetas y metas de este perfil. Puedes cambiar o revocar el acceso después."
   },
   {
     "pt": "Criar link de convite",
@@ -6869,6 +6995,13 @@
     "en": "Share profile",
     "fr": "Partager le profil",
     "es": "Compartir perfil"
+  },
+  {
+    "pt": "Este link permitirá editar e excluir dados financeiros do perfil. Criar mesmo assim?",
+    "tipo": "exato",
+    "en": "This link will allow editing and deleting the profile’s financial data. Create it anyway?",
+    "fr": "Ce lien permettra de modifier et de supprimer les données financières du profil. Le créer quand même ?",
+    "es": "Este enlace permitirá editar y eliminar los datos financieros del perfil. ¿Crearlo de todos modos?"
   },
   {
     "pt": "convite criado",
@@ -7478,12 +7611,5 @@
     "pt": "DOMContentLoaded",
     "tipo": "exato",
     "ignorar": true
-  },
-  {
-    "pt": "A voz ainda está conectando. Tente novamente em instantes.",
-    "tipo": "exato",
-    "en": "Voice is still connecting. Try again in a moment.",
-    "fr": "La voix est encore en cours de connexion. Réessayez dans un instant.",
-    "es": "La voz todavía se está conectando. Inténtalo de nuevo en un momento."
   }
 ]

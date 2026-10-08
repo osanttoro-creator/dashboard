@@ -34,7 +34,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
         assert.equal(await page.locator('[data-carteira-prox]').isDisabled(), false);
         assert.equal(await page.locator('[data-carteira-ant]').isDisabled(), false);
       } else {
-        await page.locator('.v3-wallet-item.esta-no-centro').focus();
+        await page.locator('.v3-wallet-item.esta-no-centro .v3-card-select').focus();
         await page.keyboard.press('ArrowLeft');
         assert.equal(await centerId(), 'a2', 'teclado volta do primeiro ao último');
         await page.keyboard.press('ArrowRight');
@@ -60,7 +60,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
         await page.locator('[data-carteira-prox]').click();
         assert.equal(await centerId(), 'c2', 'o crédito também fecha o anel');
       } else {
-        await page.locator('.v3-wallet-item.esta-no-centro').focus();
+        await page.locator('.v3-wallet-item.esta-no-centro .v3-card-select').focus();
         await page.keyboard.press('ArrowLeft');
         assert.equal(await centerId(), 'c1', 'o crédito também volta pelo anel');
       }

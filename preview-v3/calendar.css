@@ -18,6 +18,7 @@
 .v3-cal-day:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .v3-cal-day.is-active{border-color:var(--teal);background:rgba(95,169,155,.18)}
 .v3-cal-day.is-today>span:first-child{display:grid;place-items:center;width:25px;height:25px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--teal);color:var(--night)}
+.v3-cal-debt{max-width:100%;font:500 clamp(9px,1.2vw,11px) var(--mono);color:var(--milk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .v3-cal-marks{display:flex;gap:3px}
 .v3-cal-marks i,.v3-cal-event-kind{display:block;width:6px;height:6px;border-radius:50%;background:var(--blue)}
 .v3-cal-marks i.in,.v3-cal-event-kind.in{background:var(--teal)}
@@ -30,6 +31,7 @@
 .v3-cal-event .v3-mono{font-size:12px}
 @media(max-width:800px){.v3-cal-layout{grid-template-columns:1fr}.v3-cal-day,.v3-cal-empty{min-height:57px}.v3-cal-summary>span{padding:12px}.v3-cal-summary strong{font-size:13px}}
 @media(max-width:420px){.v3-cal-summary{gap:5px}.v3-cal-summary>span{padding:10px 8px}.v3-cal-day,.v3-cal-empty{min-height:48px;padding:7px}.v3-cal-weekdays,.v3-cal-days{gap:2px}.v3-cal-event{grid-template-columns:8px minmax(0,1fr)}.v3-cal-event .v3-mono{grid-column:2}}
+@media(max-width:420px){.v3-cal-debt{font-size:9px;letter-spacing:-.08em}}
 
 /* =============================================================
    TRÊS ALCANCES

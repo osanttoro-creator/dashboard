@@ -12,6 +12,7 @@
   let channel = null;
   let accountProfile = null;
   let activeShareId = null;
+  let activeSharePermission = 'read';
 
   const loginUrl = '/entrar?destino=' + encodeURIComponent(
     (global.location.pathname.startsWith('/app/') ? global.location.pathname : '/app') +
@@ -30,9 +31,14 @@
   V3Backend.user = () => user;
   V3Backend.client = () => client;
   V3Backend.saving = () => saving;
+  V3Backend.activeSharePermission = () => activeSharePermission;
   V3Backend.accountProfile = () => accountProfile;
   V3Backend.withTimeout = bounded;
-  V3Backend.setActiveShare = (id) => { activeShareId = id || null; };
+  V3Backend.setActiveShare = (id, profile, permission) => {
+    activeShareId = id || null;
+    activeSharePermission = activeShareId && permission === 'edit' ? 'edit' : 'read';
+    Store.setProfileOverride(activeShareId ? profile : null);
+  };
   V3Backend.share = async function (body) {
     if (!client || !user) throw new Error('Entre na conta para compartilhar um perfil.');
     const config = global.SupabaseConfig || {};
@@ -369,36 +375,61 @@
   };
 
   V3Backend.mutate = async function (change) {
-    if (activeShareId) throw new Error('Este perfil compartilhado é somente leitura.');
+    if (activeShareId && activeSharePermission !== 'edit') throw new Error('Este perfil compartilhado é somente leitura.');
     if (saving) throw new Error('Espere a gravação anterior terminar.');
     if (!user || !client) throw new Error('Entre na sua conta antes de alterar dados.');
     const profile = Store.profile();
     const id = profile.id;
-    const expected = revisions[id] || 0;
+    const shareId = activeShareId;
+    const expected = shareId ? stamp(profile) : (revisions[id] || 0);
     const before = JSON.parse(JSON.stringify(profile));
     saving = true;
     try {
       change();
       const payload = JSON.parse(JSON.stringify(Store.profile()));
-      const { data, error } = await client.rpc('v3_salvar_perfil', {
-        p_profile: payload,
-        p_expected_updated_at: expected
-      });
+      const { data, error } = await client.rpc(shareId ? 'v3_salvar_perfil_compartilhado' : 'v3_salvar_perfil',
+        shareId ? { p_share_id: shareId, p_profile: payload, p_expected_updated_at: expected }
+          : { p_profile: payload, p_expected_updated_at: expected });
       if (error) throw error;
       const saved = Store.normalizeProfile(data);
-      const index = Store.state().profiles.findIndex((p) => p.id === id);
-      if (index >= 0) Store.state().profiles[index] = saved;
-      revisions[id] = stamp(saved);
+      if (shareId) {
+        if (activeShareId === shareId) {
+          Object.keys(profile).forEach((key) => { delete profile[key]; });
+          Object.assign(profile, saved);
+        }
+      } else {
+        const index = Store.state().profiles.findIndex((p) => p.id === id);
+        if (index >= 0) Store.state().profiles[index] = saved;
+        revisions[id] = stamp(saved);
+      }
       Store.commit('sync-apply');
       return saved;
     } catch (error) {
-      const index = Store.state().profiles.findIndex((p) => p.id === id);
-      if (index >= 0) Store.state().profiles[index] = Store.normalizeProfile(before);
+      if (shareId) {
+        if (activeShareId === shareId) {
+          Object.keys(profile).forEach((key) => { delete profile[key]; });
+          Object.assign(profile, Store.normalizeProfile(before));
+        }
+      } else {
+        const index = Store.state().profiles.findIndex((p) => p.id === id);
+        if (index >= 0) Store.state().profiles[index] = Store.normalizeProfile(before);
+      }
       Store.commit('sync-apply');
       if (error.code === '40001') {
-        refreshPending = true;
+        if (shareId) {
+          try {
+            const latest = await V3Backend.share({ action: 'read', id: shareId });
+            if (activeShareId === shareId) {
+              Object.keys(profile).forEach((key) => { delete profile[key]; });
+              Object.assign(profile, Store.normalizeProfile(latest.profile));
+              activeSharePermission = latest.permission === 'edit' ? 'edit' : 'read';
+              Store.commit('sync-apply');
+            }
+          } catch { activeSharePermission = 'read'; }
+        } else refreshPending = true;
         throw new Error('Este espaço mudou em outro aparelho. Atualizei a tela; confira e tente novamente.');
       }
+      if (shareId && error.code === '42501') { activeSharePermission = 'read'; Store.commit('sync-apply'); }
       throw error;
     } finally {
       saving = false;

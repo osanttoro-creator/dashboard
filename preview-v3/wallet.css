@@ -7,6 +7,11 @@
 .v3-wallet-tabs button.is-active{background:var(--milk);color:var(--night)}
 .v3-wallet-tabs .v3-wallet-hidden-toggle{display:grid;place-items:center;position:relative;min-width:36px;padding:0 6px}
 .v3-wallet-hidden-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none}
+.v3-card-select{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;color:transparent}
+.v3-wallet-item:focus-within{outline:2px solid var(--teal);outline-offset:3px}
+.v3-card-top{pointer-events:none}
+.v3-card-top .v3-card-hide{position:relative;z-index:3;pointer-events:auto;display:grid;place-items:center;flex:none;width:34px;height:34px;margin-left:auto;padding:0;border:1px solid rgba(255,255,255,.3);border-radius:10px;background:rgba(0,0,0,.2);color:inherit}
+.v3-card-hide svg{width:18px;height:18px;stroke:currentColor;fill:none}
 .v3-wallet-hidden-toggle small{position:absolute;top:-5px;right:-4px;min-width:15px;height:15px;border-radius:50%;background:var(--teal);color:var(--night);font:700 10px/15px var(--body)}
 .v3-wallet-stack{position:relative;padding-top:7px;filter:drop-shadow(0 24px 26px rgba(1,7,9,.32))}
 .v3-wallet-list{display:block;max-height:385px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(240,229,207,.24) transparent;padding:14px 20px 29px;margin:0 0 -25px}
@@ -93,7 +98,6 @@
 .v3-bankmark,.v3-wallet-item .v3-bankmark{display:grid;place-items:center;flex:none;width:35px;height:35px;border-radius:9px;background:var(--bank-bg,var(--card-plastic));color:var(--bank-ink,var(--card-ink))}
 .v3-bankmark svg{width:30px;height:30px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.13))}
 .v3-card-top strong{font:600 14px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.v3-wallet-item .v3-type{margin-left:auto;flex:none;padding:4px 7px;border-radius:8px;background:rgba(0,0,0,.16);color:inherit;font:500 9px var(--mono);letter-spacing:.08em}
 .v3-card-body{position:absolute;inset:0;display:block;opacity:0;transform:translateY(10px);transition:opacity .3s ease,transform .42s cubic-bezier(.19,1,.22,1)}
 .v3-wallet-item.is-selected .v3-card-body{opacity:1;transform:translateY(0)}
 .v3-wallet-item .v3-chip,.v3-wallet-item.is-selected .v3-chip{position:absolute;top:56%;left:18px;width:39px;height:29px;border:1px solid rgba(70,56,30,.35);border-radius:6px;background:linear-gradient(135deg,#f7e4ac,#a2936f 52%,#e6d19f);box-shadow:inset 0 0 0 3px rgba(255,255,255,.13)}

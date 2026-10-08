@@ -49,7 +49,7 @@
      do cartão, e pela mesma razão: esconder sem desmontar a frase.
      ============================================================= */
   const moneyReal = (n) => 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const ocultarDigitos = (texto) => String(texto).replace(/\d/g, '•');
+  const ocultarDigitos = (texto) => String(texto).replace(/[\d.,]/g, '*');
   const money = (n) => (state.hideMoney ? ocultarDigitos(moneyReal(n)) : moneyReal(n));
   const pct = (n) => Math.max(0, Math.min(100, Number(n) || 0));
   const safeColor = (x) => /^#[0-9a-f]{6}$/i.test(String(x || '')) ? x : '#5fa99b';
@@ -57,7 +57,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, cocoTab: 'Conversa', cocoView: 'conversation', voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -130,6 +130,7 @@
   };
 
   function profile() { return demo ? sample : (state.sharedProfile || Store.profile()); }
+  function sharedCanEdit() { return !!state.sharedId && state.sharedPermission === 'edit' && V3Backend.activeSharePermission() === 'edit'; }
   /* O CANCELADO NÃO SOME DA LISTA
      Calc.entries filtra o cancelado de todo total — inclusive do
      previsto —, que é o certo. Mas tirá-lo também da LISTA o tornaria
@@ -194,7 +195,7 @@
     $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name + (state.sharedId ? ' · compartilhado' : '');
     $('#v3-demo-note').hidden = false;
     if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
-      ? 'Salvando na sua conta…' : state.sharedId ? 'Perfil compartilhado · leitura' : 'Dados carregados da sua conta';
+      ? 'Salvando no perfil…' : state.sharedId ? `Perfil compartilhado · ${sharedCanEdit()?'edição':'leitura'}` : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
     if (demo) $('#v3-coco-count').textContent = '4';
     const alerts = reminders();
@@ -288,7 +289,8 @@
     const brand=global.Icons?.bankBrand(institution);
     const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
-    return `<button type="button" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(last):''}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(institution,brandInk)}</span><strong>${esc(name)}</strong><span class="v3-type">${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</span></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(last||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></button>`;
+    const visibleLast=state.hideMoney ? ocultarDigitos(last) : last;
+    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(institution,brandInk)}</span><strong>${esc(name)}</strong><button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>${item.kind==='credit'?'NÚMERO DO CARTÃO':'NÚMERO DA CONTA'}</small><span>${item.kind==='credit'?'••••  ••••  ••••  ':''}${esc(visibleLast||'••••')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></div>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -306,9 +308,7 @@
     const meta = bolso.querySelector('.v3-muted');
     if (rot) rot.textContent = `${credit ? 'FATURA' : 'SALDO'} · ${item.data.name || item.data.bank}`;
     if (val) val.textContent = money(walletItemValue(item));
-    if (meta) meta.textContent = `${credit ? 'Cartão' : 'Conta'} ${item.data.last4 ? 'final ' + item.data.last4 : 'selecionado(a)'}`;
-    const hideButton=$('[data-action="toggle-wallet-item-hidden"]');
-    if(hideButton){hideButton.dataset.walletId=id;hideButton.setAttribute('aria-label',`${item.data.hidden?'Reexibir':'Ocultar'} ${item.data.name||item.data.bank}`);}
+    if (meta) meta.textContent = `${credit ? 'Cartão' : 'Conta'} ${item.data.last4 ? 'final ' + (state.hideMoney?ocultarDigitos(item.data.last4):item.data.last4) : 'selecionado(a)'}`;
   }
 
   /* Remontado a cada render porque a V3 redesenha por innerHTML: o
@@ -332,13 +332,12 @@
        de cartões e uma carteira. */
     const chosen = state.walletOpen && list.length ? selectedItem() : null;
     const hiddenCount=items().filter((item)=>item.data.hidden).length;
-    const hideAction=chosen?`<button type="button" class="v3-wallet-hidden-toggle" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(chosen.data.id)}" aria-label="${chosen.data.hidden?'Reexibir':'Ocultar'} ${esc(chosen.data.name||chosen.data.bank)}" title="${chosen.data.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(chosen.data.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`:'';
-    const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button>${hideAction}<button type="button" class="v3-wallet-hidden-toggle${state.walletHidden?' is-active':''}" data-action="wallet-hidden" aria-pressed="${state.walletHidden}" aria-label="${state.walletHidden?'Mostrar carteira principal':'Ver itens ocultos'}" title="${state.walletHidden?'Carteira principal':`${hiddenCount} item(ns) oculto(s)`}">${global.Icons?.lucide(state.walletHidden?'eye-off':'eye',18)?.outerHTML||'◉'}${hiddenCount?`<small>${hiddenCount}</small>`:''}</button></div></div>`;
+    const tabs=`<div class="v3-wallet-head"><span class="v3-label">SUA CARTEIRA</span><div class="v3-wallet-tabs" role="group" aria-label="Visualizar contas ou cartões"><button type="button" data-wallet-kind="debit" aria-pressed="${state.walletKind==='debit'}" class="${state.walletKind==='debit'?'is-active':''}">Débito</button><button type="button" data-wallet-kind="credit" aria-pressed="${state.walletKind==='credit'}" class="${state.walletKind==='credit'?'is-active':''}">Crédito</button><button type="button" class="v3-wallet-hidden-toggle${state.walletHidden?' is-active':''}" data-action="wallet-hidden" aria-pressed="${state.walletHidden}" aria-label="${state.walletHidden?'Mostrar carteira principal':'Ver itens ocultos'}" title="${state.walletHidden?'Carteira principal':`${hiddenCount} item(ns) oculto(s)`}">${global.Icons?.lucide(state.walletHidden?'eye-off':'eye',18)?.outerHTML||'◉'}${hiddenCount?`<small>${hiddenCount}</small>`:''}</button></div></div>`;
     if (!items().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>sua carteira começa aqui</h2><p>Adicione uma conta ou cartão para ver seus saldos neste bolso.</p><button type="button" data-action="add-account" class="v3-primary" style="margin-top:20px">Adicionar conta</button></div>`;
     const credit=state.walletKind==='credit';
     const total=chosen ? walletItemValue(chosen) : state.walletHidden ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : credit ? list.reduce((sum,item)=>sum+walletItemValue(item),0) : accountsBalance();
     const summaryLabel=chosen ? `${credit?'FATURA':'SALDO'} · ${chosen.data.name || chosen.data.bank}` : state.walletHidden?'ITENS OCULTOS':credit?'FATURAS ABERTAS':'SALDO EM CONTAS';
-    const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(chosen.data.last4):'selecionado(a)'}` : state.walletHidden ? `${list.length} item(ns) oculto(s)` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
+    const summaryMeta=chosen ? `${credit?'Cartão':'Conta'} ${chosen.data.last4?'final '+esc(state.hideMoney?ocultarDigitos(chosen.data.last4):chosen.data.last4):'selecionado(a)'}` : state.walletHidden ? `${list.length} item(ns) oculto(s)` : credit?`${list.length} cartão(ões) de crédito`:`${list.length} conta(s) de débito`;
     return `<section class="v3-wallet${expanded ? ' v3-wallet-expanded' : ''}${chosen?' has-selected':''}${state.walletOpen?' is-open':' is-closed'}" aria-label="Carteira de ${credit?'crédito':'débito'}">${tabs}<div class="v3-wallet-stack"><div class="v3-wallet-list" id="v3-wallet-list" aria-hidden="${!state.walletOpen}" ${state.walletOpen?'':'inert'}>${list.length?list.map((x,i)=>cardButton(x,chosen?.data.id===x.data.id,i)).join(''):`<div class="v3-wallet-no-cards">Nenhum ${credit?'cartão de crédito':'conta de débito'} neste espaço.</div>`}</div>${list.length>1?`<button class="v3-carteira-seta v3-carteira-ant" type="button" data-carteira-ant aria-label="Cartão anterior"><span aria-hidden="true">&lsaquo;</span></button><button class="v3-carteira-seta v3-carteira-prox" type="button" data-carteira-prox aria-label="Próximo cartão"><span aria-hidden="true">&rsaquo;</span></button><div class="v3-carteira-pontos" aria-hidden="true">${list.map(()=>'<i data-carteira-ponto></i>').join('')}</div>`:''}<button class="v3-wallet-pocket" type="button" data-action="wallet-toggle" aria-expanded="${state.walletOpen}" aria-controls="v3-wallet-list"><img class="v3-pocket-logo" src="/assets/brand/oaze-isologo-mono-milk.svg" alt=""><span class="v3-label">${esc(summaryLabel)}</span><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-muted">${summaryMeta}</span><span class="v3-pocket-hint">Toque na carteira para ${state.walletOpen?'fechar':'abrir'} <span class="v3-pocket-chevron" aria-hidden="true">⌃</span></span></button></div></section>`;
   }
   function quickActions() { return `<div class="v3-quick">${[['Despesa','down'],['Receita','arrow'],['Transferir','transactions'],['Aporte','investments']].map(([n,i]) => `<button type="button" data-action="new" data-kind="${n.toLowerCase()}">${icon(i)}${n}</button>`).join('')}</div>`; }
@@ -584,7 +583,7 @@
       : null;
     const related = chosen ? currentTransactions().filter((x) => x.cardId === chosen.data.id || x.accountId === chosen.data.id).slice(0, 8) : [];
     const itemAmount=walletItemValue(chosen);
-    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(refFatura).split(' de ')[0].toUpperCase())}${fatura ? ` · ${fatura.paid ? 'paga' : fatura.parcial ? 'parcial' : 'em aberto'}` : ''}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.name || chosen.data.bank)} •• ${esc(chosen.data.last4 || '••••')}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="edit-wallet-item" data-wallet-id="${esc(chosen.data.id)}">Editar ${chosen.kind==='credit'?'cartão':'conta'}</button><button class="v3-secondary" type="button" data-action="vault" data-wallet-id="${esc(chosen.data.id)}">Dados da conta · PIN</button>${chosen.kind==='credit'?`<button class="v3-secondary" type="button" data-action="pay-invoice" data-wallet-id="${esc(chosen.data.id)}">Pagar fatura</button>${fatura?`<button class="v3-secondary" type="button" data-action="fatura-quitar">${fatura.quitada||fatura.paid?'Reabrir fatura':'Encerrar fatura'}</button>${fatura.pago>0?`<button class="v3-secondary" type="button" data-action="fatura-desfazer">Desfazer pagamentos</button>`:''}`:''}`:''}</div>${fatura ? `<div class="v3-row v3-fatura-nav"><button type="button" class="v3-link" data-fatura-passo="-1" data-fatura-de="${esc(refFatura)}" aria-label="Fatura anterior">&lsaquo; anterior</button><small class="v3-mono">${esc(periodLabel(refFatura))} · fecha ${esc(shortDate(fatura.closeDate))} · vence ${esc(shortDate(fatura.dueDate))}</small><button type="button" class="v3-link" data-fatura-passo="1" data-fatura-de="${esc(refFatura)}" aria-label="Próxima fatura">próxima &rsaquo;</button></div>` : ''}${fatura && fatura.items.length ? fatura.items.map((it) => { const falta=U.round2(Math.max(0,it.amount-(it.adiantado||0))); return `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(it.date))}</span><strong>${esc(it.description)}</strong><span class="v3-mono">${it.adiantado?'ADIANTADO':'NA FATURA'}</span><span class="v3-mono v3-negative v3-sensitive">− ${money(it.amount)}</span>${falta>0?`<button type="button" class="v3-link" data-adiantar="${esc(it.key)}" data-adiantar-cartao="${esc(chosen.data.id)}">adiantar</button>`:'<span class="v3-mono v3-muted">pago</span>'}</div>`; }).join('') : related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
+    return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(refFatura).split(' de ')[0].toUpperCase())}${fatura ? ` · ${fatura.paid ? 'paga' : fatura.parcial ? 'parcial' : 'em aberto'}` : ''}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.name || chosen.data.bank)} •• ${esc(state.hideMoney ? ocultarDigitos(chosen.data.last4 || '••••') : (chosen.data.last4 || '••••'))}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="edit-wallet-item" data-wallet-id="${esc(chosen.data.id)}">Editar ${chosen.kind==='credit'?'cartão':'conta'}</button><button class="v3-secondary" type="button" data-action="vault" data-wallet-id="${esc(chosen.data.id)}">Dados da conta · PIN</button>${chosen.kind==='credit'?`<button class="v3-secondary" type="button" data-action="pay-invoice" data-wallet-id="${esc(chosen.data.id)}">Pagar fatura</button>${fatura?`<button class="v3-secondary" type="button" data-action="fatura-quitar">${fatura.quitada||fatura.paid?'Reabrir fatura':'Encerrar fatura'}</button>${fatura.pago>0?`<button class="v3-secondary" type="button" data-action="fatura-desfazer">Desfazer pagamentos</button>`:''}`:''}`:''}</div>${fatura ? `<div class="v3-row v3-fatura-nav"><button type="button" class="v3-link" data-fatura-passo="-1" data-fatura-de="${esc(refFatura)}" aria-label="Fatura anterior">&lsaquo; anterior</button><small class="v3-mono">${esc(periodLabel(refFatura))} · fecha ${esc(shortDate(fatura.closeDate))} · vence ${esc(shortDate(fatura.dueDate))}</small><button type="button" class="v3-link" data-fatura-passo="1" data-fatura-de="${esc(refFatura)}" aria-label="Próxima fatura">próxima &rsaquo;</button></div>` : ''}${fatura && fatura.items.length ? fatura.items.map((it) => { const falta=U.round2(Math.max(0,it.amount-(it.adiantado||0))); return `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(it.date))}</span><strong>${esc(it.description)}</strong><span class="v3-mono">${it.adiantado?'ADIANTADO':'NA FATURA'}</span><span class="v3-mono v3-negative v3-sensitive">− ${money(it.amount)}</span>${falta>0?`<button type="button" class="v3-link" data-adiantar="${esc(it.key)}" data-adiantar-cartao="${esc(chosen.data.id)}">adiantar</button>`:'<span class="v3-mono v3-muted">pago</span>'}</div>`; }).join('') : related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
   }
   /* A demonstração não tem Calc com Store por trás, mas tem aportes
      com data e valor — o bastante para desenhar a mesma história:
@@ -936,7 +935,8 @@
       if (n < 1 || n > days) return '<span class="v3-cal-empty" aria-hidden="true"></span>';
       const iso = calIso(state.ym, n);
       const rows = events[n] || [];
-      return `<button type="button" class="v3-cal-day${n === day ? ' is-active' : ''}${iso === today ? ' is-today' : ''}" data-cal-day="${n}" aria-label="${n} de ${esc(niceMonth(state.ym))}, ${rows.length} evento(s)" aria-pressed="${n === day}"><span>${n}</span><span class="v3-cal-marks" aria-hidden="true">${rows.slice(0, 3).map((e) => `<i class="${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></i>`).join('')}</span></button>`;
+      const divida = U.round2(rows.filter((e) => e.tipo === 'out' || e.tipo === 'due').reduce((sum, e) => sum + Number(e.valor || 0), 0));
+      return `<button type="button" class="v3-cal-day${n === day ? ' is-active' : ''}${iso === today ? ' is-today' : ''}" data-cal-day="${n}" aria-label="${n} de ${esc(niceMonth(state.ym))}, ${rows.length} evento(s)${divida ? `, dívidas ${money(divida)}` : ''}" aria-pressed="${n === day}"><span>${n}</span>${divida ? `<small class="v3-cal-debt v3-sensitive">${money(divida)}</small>` : ''}<span class="v3-cal-marks" aria-hidden="true">${rows.slice(0, 3).map((e) => `<i class="${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></i>`).join('')}</span></button>`;
     }).join('');
     return `<div class="v3-grid v3-cal-layout"><section class="v3-panel v3-cal-grid" aria-label="Dias de ${esc(niceMonth(state.ym))}"><div class="v3-cal-weekdays">${['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((d) => `<span>${d}</span>`).join('')}</div><div class="v3-cal-days">${cells}</div></section>`
       + `<section class="v3-panel v3-cal-detail"><span class="v3-label">DIA ${String(day).padStart(2, '0')}</span><h2>${esc(shortDate(calIso(state.ym, day)))}</h2>`
@@ -1356,7 +1356,7 @@
     return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','goals','calendar','coco','settings','plan'].map((p)=>`<button type="button" data-go="${p}">${p === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
   }
   function cocoMessages() {
-    if (!state.chat.length) return '<div class="v3-coco-empty"><span class="v3-label">COCO ESTÁ AQUI</span><h2>Comece pelo que você precisa entender.</h2><p>Pergunte sobre seus lançamentos, grave uma dúvida ou peça uma proposta. Nada muda na sua carteira sem sua confirmação.</p></div>';
+    if (!state.chat.length) return '<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><p>O que você quer entender sobre seu dinheiro?</p></div>';
     return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}"><span class="v3-label">${x.who==='user'?'VOCÊ':'COCO'}</span><p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function renderCocoAnalysis() {
@@ -1377,13 +1377,13 @@
     if (state.sharedId) return `<section class="v3-panel"><h2>Coco indisponível neste perfil</h2><p class="v3-muted">A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.</p><button type="button" class="v3-secondary" data-action="profiles">Trocar perfil</button></section>`;
     const consent=!demo&&!cocoAllowed();
     const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : state.cocoView==='analysis' ? renderCocoAnalysis() : `<div class="v3-coco-conversation"><div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div><div class="v3-coco-composer">${voiceControls()}${state.voiceDraft?'<p class="v3-coco-review" role="status">Transcrição pronta. Confira o texto antes de enviar.</p>':''}${cocoMediaControls()}</div></div>`;
-    return `<div class="v3-coco-page"><header class="v3-coco-hero"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco, assistente financeira do OAZE"><div><span class="v3-label">SUA ASSISTENTE FINANCEIRA</span><h1>coco<span>.</span></h1><p>Converse sobre seu dinheiro. Enxergue os dados com clareza.</p></div></header><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
+    return `<div class="v3-coco-page"><div class="v3-coco-switch" role="group" aria-label="Área da Coco"><button type="button" data-coco-view="conversation" aria-pressed="${state.cocoView==='conversation'}">Conversa</button><button type="button" data-coco-view="analysis" aria-pressed="${state.cocoView==='analysis'}">Análises</button></div>${content}</div>`;
   }
   function render() {
     closeStatusMenu(false);
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
-    $('#v3-view').innerHTML = (state.sharedId ? '<div class="v3-shared-banner" role="status">Perfil compartilhado · somente leitura · cofre e Coco indisponíveis</div>' : '') + (screens[state.page]||renderHome)();
+    $('#v3-view').innerHTML = (state.sharedId ? `<div class="v3-shared-banner" role="status">Perfil compartilhado · ${sharedCanEdit()?'pode editar os dados financeiros':'somente leitura'} · cofre e Coco indisponíveis</div>` : '') + (screens[state.page]||renderHome)();
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
@@ -1934,20 +1934,20 @@
   function profilesContent() {
     const ps=demo?[{id:'sample',name:'Pessoal'}]:Store.state().profiles;
     const own=ps.map((p)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${(demo ? p.id==='sample' : !state.sharedId&&p.id===Store.profile().id)?' is-active':''}" data-profile="${esc(p.id)}">${esc(p.name)}</button>${demo?'':`<button type="button" class="v3-link" data-action="profile-edit" data-profile-id="${esc(p.id)}" aria-label="Editar ${esc(p.name)}">Editar</button><button type="button" class="v3-link" data-action="profile-share" data-profile-id="${esc(p.id)}" aria-label="Compartilhar ${esc(p.name)}">Compartilhar</button><button type="button" class="v3-link" data-action="profile-delete" data-profile-id="${esc(p.id)}" aria-label="Excluir ${esc(p.name)}">Excluir</button>`}</div>`).join('');
-    const incoming=state.shares.received.map((s)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${state.sharedId===s.id?' is-active':''}" data-action="shared-open" data-share-id="${esc(s.id)}">${esc(s.name||'Perfil compartilhado')}</button><span class="v3-muted">leitura</span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Sair</button></div>`).join('');
+    const incoming=state.shares.received.map((s)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${state.sharedId===s.id?' is-active':''}" data-action="shared-open" data-share-id="${esc(s.id)}">${esc(s.name||'Perfil compartilhado')}</button><span class="v3-muted">${s.permission==='edit'?'edição':'leitura'}</span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Sair</button></div>`).join('');
     const outgoing=state.shares.owned.map((s)=>{
       const p=ps.find((item)=>item.id===s.profile_id);
       const status=s.accepted?'aceito':new Date(s.expires_at).getTime()<Date.now()?'expirado':'aguardando';
-      return `<div class="v3-profile-row"><span>${esc(p?.name||'Perfil removido')}<small class="v3-muted" style="display:block">${status}</small></span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Revogar</button></div>`;
+      return `<div class="v3-profile-row"><span><strong>${esc(s.label||'Convite '+s.id.slice(0,8))}</strong><small class="v3-muted" style="display:block">${esc(p?.name||'Perfil removido')} · ${status} · ${s.permission==='edit'?'pode editar':'somente leitura'}</small></span><button type="button" class="v3-link" data-action="shared-permission" data-share-id="${esc(s.id)}" data-permission="${s.permission==='edit'?'read':'edit'}" aria-label="Mudar acesso de ${esc(s.label||p?.name||'convite')} para ${s.permission==='edit'?'somente leitura':'edição'}">${s.permission==='edit'?'Deixar só leitura':'Permitir edição'}</button><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Revogar</button></div>`;
     }).join('');
-    return `<div class="v3-stack" style="margin-top:22px">${own}</div>${demo?'<p class="v3-muted" style="margin-top:20px">O perfil de demonstração é isolado dos seus dados.</p>':`<form class="v3-form" id="v3-form-profile"><label>NOVO PERFIL<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar perfil</button></form><h3 class="v3-profile-heading">Compartilhados comigo</h3>${incoming||'<p class="v3-muted">Nenhum perfil compartilhado com esta conta.</p>'}<h3 class="v3-profile-heading">Meus convites</h3>${outgoing||'<p class="v3-muted">Nenhum convite criado.</p>'}<p class="v3-muted" style="margin-top:18px">Cada link vale para uma conta OAZE e expira em 7 dias. Quem aceitar vê somente o perfil escolhido, sem acesso ao cofre ou permissão para editar. Você pode revogar a qualquer momento.</p>`}`;
+    return `<div class="v3-stack" style="margin-top:22px">${own}</div>${demo?'<p class="v3-muted" style="margin-top:20px">O perfil de demonstração é isolado dos seus dados.</p>':`<form class="v3-form" id="v3-form-profile"><label>NOVO PERFIL<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar perfil</button></form><h3 class="v3-profile-heading">Compartilhados comigo</h3>${incoming||'<p class="v3-muted">Nenhum perfil compartilhado com esta conta.</p>'}<h3 class="v3-profile-heading">Meus convites</h3>${outgoing||'<p class="v3-muted">Nenhum convite criado.</p>'}<p class="v3-muted" style="margin-top:18px">Cada link vale para uma conta OAZE e expira em 7 dias. Escolha leitura ou edição para o perfil convidado; o cofre e a Coco nunca são compartilhados. Você pode alterar a permissão ou revogar o acesso.</p>`}`;
   }
   async function loadShares() {
     if (demo) return;
     const result=await V3Backend.share({action:'list'});
     state.shares={owned:result.owned||[],received:result.received||[]};
     if (state.sharedId&&!state.shares.received.some((s)=>s.id===state.sharedId)) {
-      state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);render();
+      state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);render();
       toast('O acesso ao perfil compartilhado foi encerrado.');
     }
   }
@@ -1961,9 +1961,10 @@
     try {
       const result=await V3Backend.share({action:'read',id});
       state.sharedProfile=Store.normalizeProfile(result.profile);
-      state.sharedId=id;V3Backend.setActiveShare(id);
+      state.sharedId=id;state.sharedPermission=result.permission==='edit'?'edit':'read';state.sharedRights=result.rights||null;
+      V3Backend.setActiveShare(id,state.sharedProfile,state.sharedPermission);
       state.selected=null;state.chat=[];state.cocoAnalyses=[];state.cocoMemories=[];
-      closeSheet();go('home');toast('Perfil compartilhado em modo de leitura.');
+      closeSheet();go('home');toast(sharedCanEdit()?'Perfil compartilhado com edição.':'Perfil compartilhado em modo de leitura.');
     } catch(e){toast(e.message||'Não consegui abrir o perfil compartilhado.');await loadShares().catch(()=>{});}
   }
   function pinIsSafe(pin) {
@@ -1975,6 +1976,7 @@
   }
   async function openVault(id) {
     if (demo) { toast('O cofre só funciona na conta real.'); return; }
+    if (state.sharedId) { toast('O cofre não é compartilhado com convidados.'); return; }
     const item=itemById(id);
     if (!item) { toast('Conta ou cartão não encontrado.'); return; }
     try {
@@ -2013,10 +2015,18 @@
     finally { form.elements.pin.value=''; }
   }
   function parseMoney(raw) { const n=U.parseMoney(String(raw||'')); return n==null?NaN:U.round2(n); }
-  function canAdd(limit,ym) { return !global.Limites || !Limites.cabe || Limites.cabe(limit,ym); }
+  function canAdd(limit,ym) {
+    if(state.sharedId){
+      if(!sharedCanEdit() || !state.sharedRights || !global.Limites)return false;
+      const ceiling=state.sharedRights.limites?.[limit];
+      return ceiling==null || Limites.contar(limit,ym)<Number(ceiling);
+    }
+    return !global.Limites || !Limites.cabe || Limites.cabe(limit,ym);
+  }
+  async function limitsReady() { return state.sharedId ? !!state.sharedRights : !!(await limitsPromise); }
   async function saveTransaction(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), id=String(fd.get('id')||''), kind=fd.get('kind'), amount=parseMoney(fd.get('amount'));
     let date=String(fd.get('date')||''), description=String(fd.get('description')||'').trim(), source=String(fd.get('source')||'');
     if (!(amount>0) || !U.isValidISO(date) || !description || !source) { toast('Confira valor, descrição, data e conta/cartão.'); return; }
@@ -2082,7 +2092,7 @@
   }
   async function saveAccount(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), id=String(fd.get('id')||''), type=String(fd.get('type')||''),name=String(fd.get('name')||'').trim();
     const selectedBank=String(fd.get('bank')||'').trim(),bank=selectedBank==='Outro'?(String(fd.get('customBank')||'').trim()||'Outro'):selectedBank;
     const last4=String(fd.get('last4')||'').replace(/\D/g,'').slice(-4),amount=parseMoney(fd.get('amount'));
@@ -2093,7 +2103,7 @@
       toast('Confira nome, instituição, moeda, cotação e valor.'); return;
     }
     if (!existing&&!canAdd(type==='card'?'credit_cards':'accounts',state.ym)) { toast('Esta inclusão ultrapassa o limite do seu plano.'); return; }
-    if (moeda!=='BRL'&&(!existing||existing.moeda==='BRL')&&global.Limites&&!Limites.pode('cartoes_internacionais')) { toast('Conta ou cartão em outra moeda não está disponível no seu plano.'); return; }
+    if (moeda!=='BRL'&&(!existing||existing.moeda==='BRL')&&global.Limites&&!(state.sharedId?state.sharedRights?.recursos?.cartoes_internacionais:Limites.pode('cartoes_internacionais'))) { toast('Conta ou cartão em outra moeda não está disponível no plano deste perfil.'); return; }
     const initial=Number.isFinite(amount)?amount:0, considerado=fd.get('considerado')==='on';
     try {
       await V3Backend.mutate(() => {
@@ -2115,7 +2125,7 @@
   }
   async function saveCategory(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form),id=String(fd.get('id')||''),kind=String(fd.get('kind')||''),name=String(fd.get('name')||'').trim();
     const iconName=String(fd.get('icon')||''),color=String(fd.get('color')||'');
     const editing=id?Store.categories.get(id):null;
@@ -2129,7 +2139,7 @@
   }
   async function saveProfile(form) {
     if (demo) { toast('Demonstração: nenhum espaço foi criado.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const name=String(new FormData(form).get('name')||'').trim();
     if (!name) { toast('Dê um nome ao novo espaço.'); return; }
     if (!canAdd('workspaces',state.ym)) { toast('Este espaço ultrapassa o limite do seu plano.'); return; }
@@ -2175,7 +2185,7 @@
   }
   async function saveGoal(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd = new FormData(form), id = String(fd.get('id') || '');
     const name = String(fd.get('name') || '').trim(), target = parseMoney(fd.get('target'));
     const existing = id ? Store.goals.get(id) : null;
@@ -2200,7 +2210,7 @@
   }
   async function saveBudget(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-    if (!await limitsPromise) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
+    if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd = new FormData(form), categoryId = String(fd.get('category') || ''), limit = parseMoney(fd.get('limit'));
     if (!profile().categories.some((c) => c.id === categoryId && c.kind === 'expense') || !(limit > 0)) { toast('Escolha uma categoria e um valor válido.'); return; }
     if (!Store.budgets.get(categoryId) && !canAdd('budgets', state.ym)) { toast('Este orçamento ultrapassa o limite do seu plano.'); return; }
@@ -2500,11 +2510,16 @@
   function handleClick(ev) {
     const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
-    if (state.sharedId && !target.dataset.go && !target.dataset.profile &&
+    if (state.sharedId && !sharedCanEdit() && !target.dataset.go && !target.dataset.profile &&
       !['profiles','close','back','privacy','notifications','period','shared-open','shared-revoke','sign-out','switch-account'].includes(target.dataset.action) &&
       !['metric','select','walletKind','filter','catKind','calDay','calMonth','calView','scoreMes','calGoto','calDays','periodStep','faturaPasso','billing'].some((key)=>target.dataset[key] != null) &&
       !target.hasAttribute('data-cal-today')) {
       toast('Perfil compartilhado: somente leitura. Selecione um perfil seu para editar.');return;
+    }
+    if (state.sharedId && sharedCanEdit() &&
+      (['vault','delete-account','download-backup','profile-edit','profile-delete','profile-delete-confirm',
+        'profile-share','profile-share-create','shared-permission'].includes(target.dataset.action))) {
+      toast('Esta ação pertence somente à conta dona do perfil.');return;
     }
     if (target.dataset.metric != null) { openHomeMetric(Number(target.dataset.metric)); return; }
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
@@ -2521,7 +2536,7 @@
     if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
+    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
@@ -2560,6 +2575,16 @@
       }).catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
     }
+    if (action==='shared-permission') {
+      const permission=target.dataset.permission;
+      if (!['read','edit'].includes(permission)) return;
+      if (permission==='edit' && !confirm('Permitir que esta pessoa crie, edite e exclua dados financeiros deste perfil? O cofre e a gestão de convites continuam privados.')) return;
+      target.disabled=true;
+      V3Backend.share({action:'set_permission',id:target.dataset.shareId,permission}).then(async()=>{
+        await loadShares();profilesSheet();toast(permission==='edit'?'Edição liberada para este convite.':'Convite alterado para somente leitura.');
+      }).catch((e)=>{target.disabled=false;toast(e.message||'Não consegui mudar a permissão.');});
+      return;
+    }
     if (action==='profile-edit') {
       const p=Store.state().profiles.find((item)=>item.id===target.dataset.profileId);
       if(!p)return;
@@ -2578,11 +2603,14 @@
     if (action==='profile-share') {
       const p=Store.state().profiles.find((item)=>item.id===target.dataset.profileId);
       if(!p)return;
-      openSheet(`${sheetTop('compartilhar perfil',p.name)}<p>Qualquer pessoa que receber o link e tiver uma conta OAZE poderá aceitá-lo uma vez, em até 7 dias. Ela verá os dados financeiros deste perfil em leitura, sem o cofre com PIN. Envie apenas a quem você confia.</p><button type="button" class="v3-primary" style="margin-top:20px" data-action="profile-share-create" data-profile-id="${esc(p.id)}">Criar link de convite</button>`,'Compartilhar perfil');return;
+      openSheet(`${sheetTop('compartilhar perfil',p.name)}<p>O link pode ser aceito uma vez por outra conta OAZE, em até 7 dias. O convidado acessa só este perfil; cofre e Coco ficam privados.</p><label class="v3-share-link-label">IDENTIFIQUE O CONVITE<input id="v3-share-label" maxlength="60" placeholder="Ex.: parceiro, contadora ou equipe"></label><label class="v3-share-link-label">PERMISSÃO<select id="v3-share-permission"><option value="read">Somente leitura</option><option value="edit">Pode editar dados financeiros</option></select></label><p class="v3-muted">Quem pode editar também pode excluir lançamentos, cartões e metas deste perfil. Você pode mudar ou revogar o acesso depois.</p><button type="button" class="v3-primary" style="margin-top:20px" data-action="profile-share-create" data-profile-id="${esc(p.id)}">Criar link de convite</button>`,'Compartilhar perfil');return;
     }
     if (action==='profile-share-create') {
       const button=target;button.disabled=true;
-      V3Backend.share({action:'create',profileId:target.dataset.profileId}).then((result)=>{
+      const permission=$('#v3-share-permission')?.value==='edit'?'edit':'read';
+      const label=String($('#v3-share-label')?.value||'').trim().slice(0,60);
+      if(permission==='edit'&&!confirm('Este link permitirá editar e excluir dados financeiros do perfil. Criar mesmo assim?')){button.disabled=false;return;}
+      V3Backend.share({action:'create',profileId:target.dataset.profileId,permission,label}).then((result)=>{
         openSheet(`${sheetTop('convite criado','válido por 7 dias')}<p>Envie este link à outra pessoa. Depois de aceito, ele não pode ser usado de novo.</p><label class="v3-share-link-label">LINK<input id="v3-share-link" readonly value="${esc(result.link)}"></label><button type="button" class="v3-primary" style="margin-top:16px" data-action="profile-share-copy">Copiar link</button><p class="v3-muted" style="margin-top:18px">Você pode revogar o acesso em Perfis financeiros.</p>`,'Convite de perfil');
       }).catch((e)=>{button.disabled=false;toast(e.message||'Não consegui criar o convite.');});return;
     }
@@ -2610,7 +2638,7 @@
        voltar nele, que é como uma carteira de verdade se comporta. */
     if (action==='wallet-hidden'){const next=!state.walletHidden;if(state.page!=='wallet')go('wallet');state.walletHidden=next;state.selected=null;state.walletOpen=true;render();return;}
     if (action==='toggle-wallet-item-hidden'){
-      const item=itemById(state.selected || target.dataset.walletId);
+      const item=itemById(target.dataset.walletId);
       if(!item || demo){toast('Entre na sua conta para alterar a carteira.');return;}
       const hide=!item.data.hidden;
       if(hide && !global.confirm(`Ocultar “${item.data.name||item.data.bank}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.`))return;
@@ -2801,7 +2829,11 @@
     const formId=ev.target.getAttribute('id');
     if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save'].includes(formId))return;
     ev.preventDefault();
-    if(state.sharedId && formId!=='v3-form-period'){toast('Perfil compartilhado: somente leitura.');return;}
+    if(state.sharedId && formId!=='v3-form-period' &&
+      (!sharedCanEdit() || !['v3-form-tx','v3-form-account','v3-form-category','v3-form-invoice',
+        'v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget'].includes(formId))){
+      toast(sharedCanEdit()?'Esta ação pertence somente à conta dona do perfil.':'Perfil compartilhado: somente leitura.');return;
+    }
     if(formId==='v3-form-tx')saveTransaction(ev.target);
     if(formId==='v3-form-account')saveAccount(ev.target);
     if(formId==='v3-form-category')saveCategory(ev.target);
@@ -2879,9 +2911,15 @@
     addEventListener('pagehide',stopVoice);
     if(!demo)document.addEventListener('visibilitychange',()=>{
       if(document.hidden||!state.sharedId)return;
-      V3Backend.share({action:'read',id:state.sharedId}).then((result)=>{
-        if(state.sharedId===result.shareId){state.sharedProfile=Store.normalizeProfile(result.profile);render();}
-      }).catch(()=>{state.sharedId=null;state.sharedProfile=null;V3Backend.setActiveShare(null);render();toast('O acesso ao perfil compartilhado terminou.');});
+      if(V3Backend.saving())return;
+      const shareId=state.sharedId;
+      V3Backend.share({action:'read',id:shareId}).then((result)=>{
+        if(state.sharedId===result.shareId&&!V3Backend.saving()){
+          state.sharedProfile=Store.normalizeProfile(result.profile);
+          state.sharedPermission=result.permission==='edit'?'edit':'read';state.sharedRights=result.rights||null;
+          V3Backend.setActiveShare(shareId,state.sharedProfile,state.sharedPermission);render();
+        }
+      }).catch(()=>{if(state.sharedId!==shareId)return;state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);render();toast('O acesso ao perfil compartilhado terminou.');});
     });
     document.addEventListener('click',(event)=>{
       if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);

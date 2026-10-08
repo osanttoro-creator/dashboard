@@ -241,6 +241,7 @@
   Store.colorName = (hex) => COLOR_NAMES[String(hex || '').toUpperCase()] || String(hex || '');
 
   let state = null;
+  let profileOverride = null;
   let revisao = 0;
   const listeners = [];
 
@@ -686,7 +687,10 @@
   };
 
   Store.state = () => state;
-  Store.profile = () => state.profiles.find((p) => p.id === state.activeProfileId) || state.profiles[0];
+  Store.profile = () => profileOverride || state.profiles.find((p) => p.id === state.activeProfileId) || state.profiles[0];
+  /* O perfil recebido vive apenas na memória da aba. Nunca entra na lista de
+     perfis próprios, no backup nem no documento public.dados do convidado. */
+  Store.setProfileOverride = (profile) => { profileOverride = profile || null; };
 
   /* Contador de mudanças. Quem guarda cálculo derivado (o Calc)
      pergunta por ele em vez de recalcular: enquanto a revisão não

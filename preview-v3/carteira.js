@@ -150,8 +150,13 @@
         const distancia = Math.abs(k - centro);
         n.style.zIndex = String(quantidade - Math.min(distancia, quantidade - distancia));
         n.classList.toggle('esta-no-centro', k === centro);
-        n.setAttribute('aria-pressed', k === centro ? 'true' : 'false');
-        n.tabIndex = k === centro ? 0 : -1;
+        const seletor = n.querySelector('.v3-card-select');
+        if (seletor) {
+          seletor.setAttribute('aria-pressed', k === centro ? 'true' : 'false');
+          seletor.tabIndex = k === centro ? 0 : -1;
+        }
+        const ocultar = n.querySelector('.v3-card-hide');
+        if (ocultar) ocultar.tabIndex = k === centro ? 0 : -1;
       });
       pontos.forEach((n, k) => n.classList.toggle('e-agora', k === centro));
       if (o.aoTrocar) o.aoTrocar(nos[centro].dataset.select);
@@ -281,6 +286,7 @@
       const cartao = ev.target.closest('.v3-wallet-item');
       if (!cartao) return;
       if (decidiu && Math.abs(ev.clientX - x0) > 6) { ev.stopPropagation(); ev.preventDefault(); return; }
+      if (ev.target.closest('[data-action="toggle-wallet-item-hidden"]')) return;
       const i = nos.indexOf(cartao);
       if (i < 0 || i === centro) return;   // o do meio segue para a ação dele
       ev.stopPropagation(); ev.preventDefault();
@@ -293,7 +299,7 @@
       if (!passos[ev.key]) return;
       ev.preventDefault();
       irPara(indiceVirtual + passos[ev.key], true);
-      if (nos[indice]) nos[indice].focus();
+      nos[indice]?.querySelector('.v3-card-select')?.focus();
     });
 
     if (setaAnt) setaAnt.addEventListener('click', (ev) => { ev.stopPropagation(); irPara(indiceVirtual - 1, true); });
