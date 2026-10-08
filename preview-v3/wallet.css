@@ -94,7 +94,7 @@
 .v3-wallet-item:hover,.v3-wallet-item:focus-visible{transform:translateY(-9px);z-index:3}
 .v3-wallet-item.is-selected{display:block;align-items:initial;flex-wrap:initial;height:auto;aspect-ratio:1.586;margin-bottom:14px;padding:16px 18px;transform:translateY(-6px) rotate(-1.2deg);z-index:7;box-shadow:0 19px 37px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.35);animation:v3-card-reveal .48s cubic-bezier(.19,1,.22,1) both}
 .v3-wallet-item.is-selected:hover{transform:translateY(-10px) rotate(-1.2deg)}
-.v3-card-top{position:absolute;z-index:1;top:17px;left:18px;right:18px;display:flex;align-items:center;gap:11px;min-width:0;height:35px}
+.v3-card-top{position:absolute;z-index:3;top:17px;left:18px;right:18px;display:flex;align-items:center;gap:11px;min-width:0;height:35px}
 .v3-bankmark,.v3-wallet-item .v3-bankmark{display:grid;place-items:center;flex:none;width:35px;height:35px;border-radius:9px;background:var(--bank-bg,var(--card-plastic));color:var(--bank-ink,var(--card-ink))}
 .v3-bankmark svg{width:30px;height:30px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.13))}
 .v3-card-top strong{font:600 14px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

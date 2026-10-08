@@ -220,21 +220,34 @@
   };
 
   /** Tudo o que sai numa pergunta — a mesma função serve ao envio e à tela "Dados usados". */
-  AI.corpoDaPergunta = function (pergunta) {
+  AI.corpoDaPergunta = function (pergunta, mesExibido) {
+    const periodo = mesExibido || App.ym;
     return {
       pergunta,
-      periodo: App.ym,
+      periodo,
       escopo: global.Ug && Ug.escopo ? Ug.escopo() : 'mes',
-      resumo: AI.resumoAgregado(),
-      ano: AI.resumoDoAno(),
+      resumo: AI.resumoAgregado(periodo),
+      ano: AI.resumoDoAno(periodo),
       /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
          é a Edge Function, pelo plano. Ver AI.historico. */
-      historico: AI.historico(),
+      historico: AI.historico(periodo),
       conversa: AI.conversaRecente(),
       /* A resposta vem na língua da tela. É só a chave ('en'); o nome
          da língua que entra nas instruções é escrito no servidor. */
       idioma: (global.I18n && global.I18n.lang) || 'pt'
     };
+  };
+
+  /* Totais simples não precisam de um modelo para fazer aritmética.
+     Esta consulta usa a mesma fonte do painel e nunca consome cota de IA. */
+  AI.consultaMesPassado = function (pergunta) {
+    const q = U.norm(String(pergunta || ''));
+    if (!/\b(mes passado|mes anterior)\b/.test(q) || !/\b(total|receitas?|despesas?|saldo|entrou|saiu)\b/.test(q)) return null;
+    if (/\b(compar\w*|por que|porque|previs\w*|projec\w*|categoria\w*|conta\w*|cartao\w*|comprei|compra\w*|gastei|paguei|lance\w*|registr\w*|adicione\w*|salv\w*)\b/.test(q)) return null;
+    const periodo = U.addMonths(U.todayYM(), -1);
+    const totais = Calc.monthTotals(periodo);
+    const comDados = (totais.entries || []).some((e) => e.confirmed && e.contaNosTotais !== false && ['income','expense'].includes(e.kind));
+    return { periodo, comDados, receitas: totais.income, despesas: totais.expense, saldo: totais.balance };
   };
 
   /**

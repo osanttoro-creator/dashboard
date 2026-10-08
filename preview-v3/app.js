@@ -273,7 +273,7 @@
       return `<label class="v3-bank-option" data-banco="${esc(U.norm(name))}"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
     }).join('');
     const ehOutro=!!selected && !selectedKey;
-    return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend><p>Escolha a instituição; o nome da conta pode ser personalizado.</p>`
+    return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend>`
       + `<input type="search" class="v3-bank-busca" id="v3-bank-busca" placeholder="Buscar banco…" aria-label="Buscar banco" autocomplete="off">`
       + `<div class="v3-bank-options" id="v3-bank-options">${opcoes}`
       + `<label class="v3-bank-option v3-bank-other" data-banco="outro outra instituicao"><input type="radio" name="bank" value="Outro" ${ehOutro?'checked':''}><span class="v3-bank-option-logo">${icon('wallet')}</span><span>Outro</span></label></div>`
@@ -883,7 +883,6 @@
     const totalAno = linhas.reduce((n, l) => n + l.balance, 0);
     return `<section class="v3-panel v3-cal-ano" aria-label="Meses de ${esc(ano)}">`
       + `<div class="v3-row"><h2>${esc(ano)}</h2><strong class="v3-mono v3-sensitive ${totalAno < 0 ? 'v3-negative' : 'v3-positive'}">${money(totalAno)}</strong></div>`
-      + `<p class="v3-muted">Entradas e saídas de cada mês, na mesma escala. Toque num mês para abrir os dias.</p>`
       + `<div class="v3-cal-meses">${corpo}</div></section>`;
   }
 
@@ -1185,7 +1184,7 @@
       + `<section class="v3-panel v3-rep-tabela"><h2>mês a mês</h2>`
       + `<div class="v3-rep-linha v3-rep-cabeca"><span>MÊS</span><span>RECEITAS</span><span>DESPESAS</span><span>SALDO</span><span>ACUMULADO</span></div>`
       + linhas
-      + `<p class="v3-muted">Acumulado é o saldo somado desde janeiro. Toque num mês para abrir o calendário dele.</p></section>`
+      + `</section>`
       + `<section class="v3-panel"><h2>investido</h2><p class="v3-money v3-sensitive">${money(investidoAte(ano))}</p>`
       + `<small>Valor da carteira de investimentos em 31 de dezembro de ${ano}.</small></section></div>`;
   }
@@ -1299,14 +1298,14 @@
   }
   function renderSettings() {
     const signed = !demo && global.V3Backend && V3Backend.user();
-    const row = (label, detail, attr, value='abrir ›') => `<button type="button" class="v3-setting-row" ${attr}><span>${label}<small>${detail}</small></span><span class="v3-muted">${value}</span></button>`;
+    const row = (label, detail, attr, value='abrir ›') => `<button type="button" class="v3-setting-row" ${attr}><span>${label}</span><span class="v3-muted">${value}</span></button>`;
     const usage = signed && global.Limites && Limites.contar ? [
       ['Espaços', 'workspaces'], ['Contas', 'accounts'], ['Cartões', 'credit_cards'],
       ['Categorias', 'custom_categories'], ['Orçamentos', 'budgets'], ['Metas', 'goals'],
       ['Recorrências', 'recurring_items']
     ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
     const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', 'Nome, foto do login e idioma', 'data-action="account-profile"')}${row('Trocar conta', 'Entre com outro e-mail sem misturar dados', 'data-action="switch-account"')}${row('Sair', 'Encerrar a sessão neste aparelho', 'data-action="sign-out"')}${row('Excluir conta', 'Exclusão definitiva após confirmação por e-mail', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização<small>${signed?'Dados conectados à sua conta':'Entre na conta para sincronizar'}</small></span></div><div class="v3-setting-row"><span>Biometria e PIN<small>Não disponíveis na versão web; não simulamos proteção inexistente.</small></span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', 'Recursos, cobrança e cancelamento', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte<small>Central de ajuda e contato</small></span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', 'Foto e áudio somente após envio confirmado', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', 'Revisar, pausar ou apagar regras e análises', 'data-action="coco-memory"')}${row('Notificações', 'Lembretes até o fim do mês', 'data-action="notifications"')}${row('Perfis financeiros', `Ativo: ${esc(profile().name||'Pessoal')}`, 'data-action="profiles"')}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
   }
   function accountProfileSheet() {
     const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
@@ -1341,15 +1340,16 @@
     const list = global.Planos ? Planos.LISTA : [];
     const sub = state.subscription, current = sub?.plan_id || 'free';
     const paid = current !== 'free' && ['active', 'past_due', 'canceled'].includes(sub?.status) && (!sub?.current_period_end || new Date(sub.current_period_end) > new Date());
+    const linkedSubscription=!!(sub?.stripe_subscription_id || sub?.asaas_subscription_id);
     const period = state.billing === 'annual' ? 'ano' : 'mês';
     const status = demo ? 'Prévia: nenhuma assinatura é criada aqui.' : state.billingError ? `Não consegui consultar sua assinatura: ${esc(state.billingError)}` : !sub ? 'Consultando sua assinatura…' : paid ? `Plano ${esc(Planos.get(current).nome)} · ${sub.cancel_at_period_end ? 'cancelamento agendado' : sub.status === 'past_due' ? 'pagamento pendente' : 'ativo'}` : 'Seu plano atual é Semente.';
-    return `<div class="v3-plan-head"><p class="v3-muted">O cartão é informado na página segura da Stripe. Seu plano só muda após a confirmação do pagamento.</p><div class="v3-segment" role="group" aria-label="Ciclo de cobrança"><button type="button" data-billing="monthly" class="${state.billing === 'monthly' ? 'is-active' : ''}" aria-pressed="${state.billing === 'monthly'}">Mensal</button><button type="button" data-billing="annual" class="${state.billing === 'annual' ? 'is-active' : ''}" aria-pressed="${state.billing === 'annual'}">Anual</button></div></div><p class="v3-plan-status" role="status">${status}</p><div class="v3-grid v3-plan-grid">${list.map((p) => {
+    return `<div class="v3-plan-head"><div class="v3-segment" role="group" aria-label="Ciclo de cobrança"><button type="button" data-billing="monthly" class="${state.billing === 'monthly' ? 'is-active' : ''}" aria-pressed="${state.billing === 'monthly'}">Mensal</button><button type="button" data-billing="annual" class="${state.billing === 'annual' ? 'is-active' : ''}" aria-pressed="${state.billing === 'annual'}">Anual</button></div></div><p class="v3-plan-status" role="status">${status}</p>${!demo&&paid&&!sub.cancel_at_period_end&&!linkedSubscription?'<p class="v3-plan-alert" role="alert">Não foi possível identificar a assinatura ligada a este plano. <a href="/suporte">Peça ajuda para conferir a cobrança ou cancelar</a> antes de assinar outro.</p>':''}<div class="v3-grid v3-plan-grid">${list.map((p) => {
       const isCurrent = p.id === current && (p.id === 'free' || paid);
       const disabled = demo || !sub || !!state.billingError || state.paymentBusy || isCurrent || (paid && !sub.cancel_at_period_end) || p.id === 'free';
       const price = state.billing === 'annual' ? p.anualCentavos : p.mensalCentavos;
       const label = isCurrent ? 'Plano atual' : p.id === 'free' ? 'Plano inicial' : paid && !sub.cancel_at_period_end ? 'Cancele o plano atual antes' : demo ? 'Disponível no app' : 'Assinar com Stripe';
-      return `<section class="v3-panel v3-plan${p.destaque ? ' highlight' : ''}"><div class="v3-row"><h2>${esc(p.nome)}</h2>${p.destaque ? '<span class="v3-label" style="color:inherit">PLANO PRINCIPAL</span>' : ''}</div><p class="v3-money">${money(price / 100)} <span style="font:400 13px var(--body)">por ${period}</span></p><p>${esc(p.descricao)}</p><ul><li>${p.limites.workspaces == null ? 'Espaços sem limite' : 'Até ' + p.limites.workspaces + ' espaços'}</li><li>${p.limites.accounts == null ? 'Contas sem limite' : 'Até ' + p.limites.accounts + ' contas'}</li><li>${p.limites.credit_cards == null ? 'Cartões sem limite' : 'Até ' + p.limites.credit_cards + ' cartões'}</li><li>${p.limites.ai_queries_per_month == null ? 'Coco sem limite' : p.limites.ai_queries_per_month + ' pedidos à Coco por mês'}</li></ul><button type="button" class="${p.destaque ? 'v3-secondary' : 'v3-primary'}" data-action="subscribe" data-plan="${esc(p.id)}" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
-    }).join('')}</div>${!demo && paid && !sub.cancel_at_period_end && (sub.stripe_subscription_id || sub.asaas_subscription_id) ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
+      return `<section class="v3-panel v3-plan${p.destaque ? ' highlight' : ''}"><div class="v3-row"><h2>${esc(p.nome)}</h2>${p.destaque ? '<span class="v3-label" style="color:inherit">PLANO PRINCIPAL</span>' : ''}</div><p class="v3-money">${money(price / 100)} <span style="font:400 13px var(--body)">por ${period}</span></p><ul><li>${p.limites.workspaces == null ? 'Espaços sem limite' : 'Até ' + p.limites.workspaces + ' espaços'}</li><li>${p.limites.accounts == null ? 'Contas sem limite' : 'Até ' + p.limites.accounts + ' contas'}</li><li>${p.limites.credit_cards == null ? 'Cartões sem limite' : 'Até ' + p.limites.credit_cards + ' cartões'}</li><li>${p.limites.ai_queries_per_month == null ? 'Coco sem limite' : p.limites.ai_queries_per_month + ' pedidos à Coco por mês'}</li></ul><button type="button" class="${p.destaque ? 'v3-secondary' : 'v3-primary'}" data-action="subscribe" data-plan="${esc(p.id)}" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
+    }).join('')}</div>${!demo && paid && !sub.cancel_at_period_end && linkedSubscription ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
   }
   function renderMore() {
     const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'calendário e recorrências', coco: 'conversa e análises', settings: 'segurança, dados', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
@@ -1357,7 +1357,7 @@
   }
   function cocoMessages() {
     if (!state.chat.length) return '<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><p>O que você quer entender sobre seu dinheiro?</p></div>';
-    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}"><span class="v3-label">${x.who==='user'?'VOCÊ':'COCO'}</span><p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small><button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar no formulário</button><small>Nada será salvo sem sua confirmação.</small></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
+    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}"><span class="v3-label">${x.who==='user'?'VOCÊ':'COCO'}</span><p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function renderCocoAnalysis() {
     const months=Array.from({length:6},(_,i)=>U.addMonths(state.ym,i-5));
@@ -2258,10 +2258,22 @@
     if (!(valor>0) || !Number.isFinite(valor) || !U.isValidISO(data) || !descricao) return null;
     const sourceText=U.norm(String(raw.origem||''));
     const pool=raw.forma_pagamento==='card'?profile().cards.filter((c)=>!c.hidden):profile().accounts.filter((a)=>!a.archived&&!a.hidden);
-    const matches=sourceText?pool.filter((item)=>[item.name,item.bank,item.last4].some((value)=>value&&U.norm(String(value))===sourceText)):[];
+    const sourceAliases=(value)=>{
+      const normalized=U.norm(String(value||''));
+      return [normalized,normalized.replace(/^(cartao de credito|cartao de debito|conta|cartao)\s+/, '')].filter(Boolean);
+    };
+    const mentioned=sourceAliases(sourceText);
+    const matches=sourceText?pool.filter((item)=>[item.name,item.bank,item.last4].some((value)=>
+      value&&sourceAliases(value).some((alias)=>mentioned.includes(alias)))):[];
     const categoryText=U.norm(String(raw.categoria||''));
     const categories=categoryText?profile().categories.filter((item)=>item.kind===raw.tipo&&U.norm(item.name)===categoryText):[];
-    return {tipo:raw.tipo,descricao,valor:U.round2(valor),data,confirmado:raw.confirmado===true,source:matches.length===1?`${raw.forma_pagamento}:${matches[0].id}`:'',categoryId:categories.length===1?categories[0].id:''};
+    return {tipo:raw.tipo,descricao,valor:U.round2(valor),data,confirmado:raw.confirmado===true,source:matches.length===1?`${raw.forma_pagamento}:${matches[0].id}`:'',sourceNeedsReview:!!sourceText&&matches.length!==1,categoryId:categories.length===1?categories[0].id:''};
+  }
+  function preciseMonthlyAnswer(question) {
+    const result=AI.consultaMesPassado(question);
+    if (!result) return '';
+    if (!result.comDados) return `Não encontrei lançamentos confirmados em ${periodLabel(result.periodo)} neste perfil.`;
+    return `Em ${periodLabel(result.periodo)}, os lançamentos confirmados no OAZE somam ${moneyReal(result.receitas)} de receitas e ${moneyReal(result.despesas)} de despesas. Saldo do período: ${moneyReal(result.saldo)}.`;
   }
   async function askCoco(form) {
     const q=String(new FormData(form).get('question')||'').trim(); if (!q) return;
@@ -2274,6 +2286,14 @@
       return;
     }
     if (state.cocoAsking) return;
+    const precise=preciseMonthlyAnswer(q);
+    if (precise) {
+      const speakAfter=state.voiceDraft;
+      state.mediaDraft='';state.voiceDraft=false;
+      state.chat.push({who:'user',text:q},{who:'coco',text:precise});render();
+      if(speakAfter)playCocoAnswer(state.chat.length-1);
+      return;
+    }
     const speakAfter=state.voiceDraft;
     state.mediaDraft='';state.voiceDraft=false;state.cocoAsking=true;
     const previous=[];
@@ -2287,7 +2307,7 @@
     state.chat.push({who:'user',text:q}); render();
     let answered=false;
     try {
-      const body=AI.corpoDaPergunta(q);
+      const body=AI.corpoDaPergunta(q,state.ym);
       body.conversa=previous.slice(-3);
       body.profile_id=profile().id;
       const r=await AI.chamarFuncao(body);
@@ -2323,7 +2343,7 @@
     const question=String(args?.pergunta||'').trim().slice(0,500);
     if(!question)return {erro:'Pergunta vazia.'};
     try {
-      const body=AI.corpoDaPergunta(question);
+      const body=AI.corpoDaPergunta(question,state.ym);
       body.profile_id=profile().id;
       const previous=[];
       for(let i=0;i<state.chat.length-1;i++){

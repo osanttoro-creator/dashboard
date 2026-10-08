@@ -466,13 +466,6 @@
     "es": "BANCO O ENTIDAD"
   },
   {
-    "pt": "Escolha a instituição; o nome da conta pode ser personalizado.",
-    "tipo": "exato",
-    "en": "Choose the institution; the account name can be customised.",
-    "fr": "Choisissez l’établissement ; le nom du compte est personnalisable.",
-    "es": "Elige la entidad; el nombre de la cuenta se puede personalizar."
-  },
-  {
     "pt": "Buscar banco…",
     "tipo": "exato",
     "en": "Search bank…",
@@ -1778,13 +1771,6 @@
     "es": "Meses de {0}"
   },
   {
-    "pt": "Entradas e saídas de cada mês, na mesma escala. Toque num mês para abrir os dias.",
-    "tipo": "exato",
-    "en": "Each month’s income and outgoings, on the same scale. Tap a month to open its days.",
-    "fr": "Entrées et sorties de chaque mois, à la même échelle. Touchez un mois pour voir ses jours.",
-    "es": "Entradas y salidas de cada mes, en la misma escala. Toca un mes para abrir sus días."
-  },
-  {
     "pt": "terça",
     "tipo": "exato",
     "en": "Tuesday",
@@ -2329,13 +2315,6 @@
     "es": "MES"
   },
   {
-    "pt": "Acumulado é o saldo somado desde janeiro. Toque num mês para abrir o calendário dele.",
-    "tipo": "exato",
-    "en": "The running total is the balance added up since January. Tap a month to open its calendar.",
-    "fr": "Le cumul est le solde additionné depuis janvier. Touchez un mois pour ouvrir son calendrier.",
-    "es": "El acumulado es el saldo sumado desde enero. Toca un mes para abrir su calendario."
-  },
-  {
     "pt": "Valor da carteira de investimentos em 31 de dezembro de {0}.",
     "tipo": "padrao",
     "en": "Value of the investment portfolio on 31 December {0}.",
@@ -2594,13 +2573,6 @@
     "es": "Sus datos"
   },
   {
-    "pt": "Nome, foto do login e idioma",
-    "tipo": "exato",
-    "en": "Name, login photo and language",
-    "fr": "Nom, photo de connexion et langue",
-    "es": "Nombre, foto del inicio de sesión e idioma"
-  },
-  {
     "pt": "data-action=\"account-profile\"",
     "tipo": "exato",
     "ignorar": true
@@ -2611,13 +2583,6 @@
     "en": "Switch account",
     "fr": "Changer de compte",
     "es": "Cambiar de cuenta"
-  },
-  {
-    "pt": "Entre com outro e-mail sem misturar dados",
-    "tipo": "exato",
-    "en": "Sign in with another email without mixing data",
-    "fr": "Connectez-vous avec une autre adresse sans mélanger les données",
-    "es": "Entre con otro correo sin mezclar datos"
   },
   {
     "pt": "data-action=\"switch-account\"",
@@ -2632,13 +2597,6 @@
     "es": "Salir"
   },
   {
-    "pt": "Encerrar a sessão neste aparelho",
-    "tipo": "exato",
-    "en": "Sign out on this device",
-    "fr": "Se déconnecter sur cet appareil",
-    "es": "Cerrar la sesión en este dispositivo"
-  },
-  {
     "pt": "data-action=\"sign-out\"",
     "tipo": "exato",
     "ignorar": true
@@ -2651,30 +2609,23 @@
     "es": "Eliminar cuenta"
   },
   {
-    "pt": "Exclusão definitiva após confirmação por e-mail",
-    "tipo": "exato",
-    "en": "Permanent deletion after email confirmation",
-    "fr": "Suppression définitive après confirmation par e-mail",
-    "es": "Eliminación definitiva tras la confirmación por correo"
-  },
-  {
     "pt": "data-action=\"delete-account\"",
     "tipo": "exato",
     "ignorar": true
   },
   {
-    "pt": "Dados conectados à sua conta",
+    "pt": "Conectada",
     "tipo": "exato",
-    "en": "Data connected to your account",
-    "fr": "Données reliées à votre compte",
-    "es": "Datos conectados a su cuenta"
+    "en": "Connected",
+    "fr": "Connectée",
+    "es": "Conectada"
   },
   {
-    "pt": "Entre na conta para sincronizar",
+    "pt": "Sem sessão",
     "tipo": "exato",
-    "en": "Sign in to sync",
-    "fr": "Connectez-vous pour synchroniser",
-    "es": "Entre en la cuenta para sincronizar"
+    "en": "Signed out",
+    "fr": "Hors session",
+    "es": "Sin sesión"
   },
   {
     "pt": "Plano e assinatura",
@@ -2682,13 +2633,6 @@
     "en": "Plan and subscription",
     "fr": "Forfait et abonnement",
     "es": "Plan y suscripción"
-  },
-  {
-    "pt": "Recursos, cobrança e cancelamento",
-    "tipo": "exato",
-    "en": "Features, billing and cancellation",
-    "fr": "Fonctionnalités, facturation et résiliation",
-    "es": "Funciones, cobro y cancelación"
   },
   {
     "pt": "data-go=\"plan\"",
@@ -2715,13 +2659,6 @@
     "en": "Coco’s consent",
     "fr": "Consentement de Coco",
     "es": "Consentimiento de Coco"
-  },
-  {
-    "pt": "Foto e áudio somente após envio confirmado",
-    "tipo": "exato",
-    "en": "Photo and audio only after confirmed sending",
-    "fr": "Photo et audio seulement après envoi confirmé",
-    "es": "Foto y audio solo tras envío confirmado"
   },
   {
     "pt": "data-action=\"coco\"",
@@ -2757,23 +2694,9 @@
     "es": "Memoria de Coco"
   },
   {
-    "pt": "Revisar, pausar ou apagar regras e análises",
-    "tipo": "exato",
-    "en": "Review, pause or delete rules and analyses",
-    "fr": "Revoir, mettre en pause ou supprimer règles et analyses",
-    "es": "Revisar, pausar o borrar reglas y análisis"
-  },
-  {
     "pt": "data-action=\"coco-memory\"",
     "tipo": "exato",
     "ignorar": true
-  },
-  {
-    "pt": "Lembretes até o fim do mês",
-    "tipo": "exato",
-    "en": "Reminders until the end of the month",
-    "fr": "Rappels jusqu'à la fin du mois",
-    "es": "Recordatorios hasta el fin del mes"
   },
   {
     "pt": "data-action=\"notifications\"",
@@ -2786,13 +2709,6 @@
     "en": "Financial profiles",
     "fr": "Profils financiers",
     "es": "Perfiles financieros"
-  },
-  {
-    "pt": "Ativo: {0}",
-    "tipo": "padrao",
-    "en": "Active: {0}",
-    "fr": "Actif : {0}",
-    "es": "Activo: {0}"
   },
   {
     "pt": "data-action=\"profiles\"",
@@ -2814,18 +2730,32 @@
     "es": "Sesión y sincronización"
   },
   {
-    "pt": "Biometria e PIN",
+    "pt": "PIN do cofre",
     "tipo": "exato",
-    "en": "Biometrics and PIN",
-    "fr": "Biométrie et code PIN",
-    "es": "Biometría y PIN"
+    "en": "Vault PIN",
+    "fr": "Code PIN du coffre",
+    "es": "PIN de la bóveda"
   },
   {
-    "pt": "Não disponíveis na versão web; não simulamos proteção inexistente.",
+    "pt": "na carteira",
     "tipo": "exato",
-    "en": "Not available in the web version; we do not simulate protection that does not exist.",
-    "fr": "Indisponibles dans la version web ; nous ne simulons pas une protection qui n'existe pas.",
-    "es": "No disponibles en la versión web; no simulamos una protección que no existe."
+    "en": "in the wallet",
+    "fr": "dans le portefeuille",
+    "es": "en la cartera"
+  },
+  {
+    "pt": "Biometria",
+    "tipo": "exato",
+    "en": "Biometrics",
+    "fr": "Biométrie",
+    "es": "Biometría"
+  },
+  {
+    "pt": "indisponível na web",
+    "tipo": "exato",
+    "en": "unavailable on the web",
+    "fr": "indisponible sur le web",
+    "es": "no disponible en la web"
   },
   {
     "pt": "PLANO E AJUDA",
@@ -2840,13 +2770,6 @@
     "en": "Help and support",
     "fr": "Aide et assistance",
     "es": "Ayuda y soporte"
-  },
-  {
-    "pt": "Central de ajuda e contato",
-    "tipo": "exato",
-    "en": "Help centre and contact",
-    "fr": "Centre d'aide et contact",
-    "es": "Centro de ayuda y contacto"
   },
   {
     "pt": "COCO E DADOS",
@@ -3065,6 +2988,27 @@
     "es": "Tu plan actual es Semente."
   },
   {
+    "pt": "Não foi possível identificar a assinatura ligada a este plano.",
+    "tipo": "exato",
+    "en": "We couldn't identify the subscription linked to this plan.",
+    "fr": "Nous n'avons pas pu identifier l'abonnement lié à cette formule.",
+    "es": "No pudimos identificar la suscripción vinculada a este plan."
+  },
+  {
+    "pt": "Peça ajuda para conferir a cobrança ou cancelar",
+    "tipo": "exato",
+    "en": "Ask support to check billing or cancel",
+    "fr": "Demandez de l'aide pour vérifier la facturation ou annuler",
+    "es": "Pide ayuda para revisar el cobro o cancelar"
+  },
+  {
+    "pt": "antes de assinar outro.",
+    "tipo": "exato",
+    "en": "before subscribing to another plan.",
+    "fr": "avant de souscrire une autre formule.",
+    "es": "antes de contratar otro plan."
+  },
+  {
     "pt": "Plano atual",
     "tipo": "exato",
     "en": "Current plan",
@@ -3175,13 +3119,6 @@
     "en": "Cancel subscription renewal",
     "fr": "Annuler le renouvellement de l’abonnement",
     "es": "Cancelar la renovación de la suscripción"
-  },
-  {
-    "pt": "O cartão é informado na página segura da Stripe. Seu plano só muda após a confirmação do pagamento.",
-    "tipo": "exato",
-    "en": "The card is entered on Stripe’s secure page. Your plan only changes after the payment is confirmed.",
-    "fr": "La carte est saisie sur la page sécurisée de Stripe. Votre forfait ne change qu’après confirmation du paiement.",
-    "es": "La tarjeta se introduce en la página segura de Stripe. Tu plan solo cambia tras confirmarse el pago."
   },
   {
     "pt": "Ciclo de cobrança",
@@ -3296,6 +3233,13 @@
     "es": "Escuchar respuesta"
   },
   {
+    "pt": "Conta não identificada. Escolha no formulário.",
+    "tipo": "exato",
+    "en": "Account not identified. Choose one in the form.",
+    "fr": "Compte non identifié. Choisissez-le dans le formulaire.",
+    "es": "Cuenta no identificada. Elígela en el formulario."
+  },
+  {
     "pt": "LANÇAMENTO PARA REVISAR",
     "tipo": "exato",
     "en": "ENTRY TO REVIEW",
@@ -3303,18 +3247,11 @@
     "es": "MOVIMIENTO POR REVISAR"
   },
   {
-    "pt": "Revisar no formulário",
+    "pt": "Revisar antes de salvar",
     "tipo": "exato",
-    "en": "Review in the form",
-    "fr": "Vérifier dans le formulaire",
-    "es": "Revisar en el formulario"
-  },
-  {
-    "pt": "Nada será salvo sem sua confirmação.",
-    "tipo": "exato",
-    "en": "Nothing is saved without your confirmation.",
-    "fr": "Rien n’est enregistré sans votre confirmation.",
-    "es": "Nada se guarda sin tu confirmación."
+    "en": "Review before saving",
+    "fr": "Vérifier avant d'enregistrer",
+    "es": "Revisar antes de guardar"
   },
   {
     "pt": "MEMÓRIA PARA APROVAR",
@@ -4177,6 +4114,20 @@
     "en": "needs your attention",
     "fr": "demande votre attention",
     "es": "de tu atención"
+  },
+  {
+    "pt": "Revisar no formulário",
+    "tipo": "exato",
+    "en": "Review in the form",
+    "fr": "Vérifier dans le formulaire",
+    "es": "Revisar en el formulario"
+  },
+  {
+    "pt": "Nada será salvo sem sua confirmação.",
+    "tipo": "exato",
+    "en": "Nothing is saved without your confirmation.",
+    "fr": "Rien n’est enregistré sans votre confirmation.",
+    "es": "Nada se guarda sin tu confirmación."
   },
   {
     "pt": "Você poderá apagá-la na aba Memória.",
@@ -6253,6 +6204,20 @@
     "en": "Couldn’t cancel the renewal.",
     "fr": "Impossible d’annuler le renouvellement.",
     "es": "No se pudo cancelar la renovación."
+  },
+  {
+    "pt": "Não encontrei lançamentos confirmados em {0} neste perfil.",
+    "tipo": "padrao",
+    "en": "I found no confirmed entries for {0} in this profile.",
+    "fr": "Je n'ai trouvé aucune opération confirmée pour {0} dans ce profil.",
+    "es": "No encontré movimientos confirmados de {0} en este perfil."
+  },
+  {
+    "pt": "Em {0}, os lançamentos confirmados no OAZE somam {1} de receitas e {2} de despesas. Saldo do período: {3}.",
+    "tipo": "padrao",
+    "en": "In {0}, confirmed OAZE entries total {1} in income and {2} in expenses. Net for the period: {3}.",
+    "fr": "En {0}, les opérations confirmées dans OAZE totalisent {1} de revenus et {2} de dépenses. Solde de la période : {3}.",
+    "es": "En {0}, los movimientos confirmados en OAZE suman {1} de ingresos y {2} de gastos. Saldo del período: {3}."
   },
   {
     "pt": "A conversa de demonstração não envia perguntas.",
