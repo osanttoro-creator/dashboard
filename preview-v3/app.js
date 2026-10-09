@@ -2430,6 +2430,7 @@
         onError:(value)=>toast(value),
         onDisconnect:()=>toast('Conexão de voz encerrada. A conversa por texto continua disponível.'),
         onPlaybackBlocked:()=>{state.voicePlaybackBlocked=true;render();toast('Toque em Ativar som para ouvir a Coco.');},
+        onDeviceFallback:()=>{state.voiceDevice='';toast('O microfone anterior não está disponível. Usando o microfone padrão.');},
         onLimit:()=>toast('Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.')
       });
       voiceSession=session;
@@ -2451,7 +2452,18 @@
         } catch {if(voiceSession===session){stopVoice();toast('Não consegui confirmar sua autorização. A voz foi encerrada.');}}
       },30000);
       if(voiceSession===session)render();
-    } catch(error){if(version===voiceStartVersion){stopVoice();toast(error.message||'A voz não conectou. Use a gravação de áudio.');}}
+    } catch(error){if(version===voiceStartVersion){
+      stopVoice();
+      const micError=error?.name;
+      const message=micError==='NotAllowedError'||micError==='PermissionDeniedError'
+        ? 'O navegador bloqueou o microfone. Libere a permissão de microfone para oaze.site nas configurações do navegador e tente novamente.'
+        : micError==='NotFoundError'||micError==='DevicesNotFoundError'||micError==='OverconstrainedError'
+          ? 'Nenhum microfone disponível neste aparelho. Conecte ou habilite um microfone e tente novamente.'
+          : micError==='NotReadableError'||micError==='TrackStartError'
+            ? 'O microfone está em uso por outro aplicativo. Feche o outro aplicativo e tente novamente.'
+            : error.message||'A voz não conectou. Use a gravação de áudio.';
+      toast(message);
+    }}
     finally{if(version===voiceStartVersion)voiceStarting=false;}
   }
   function stopCocoAudio() {

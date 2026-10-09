@@ -6461,6 +6461,13 @@
   "es": "Toca Activar sonido para escuchar a Coco."
  },
  {
+  "pt": "O microfone anterior não está disponível. Usando o microfone padrão.",
+  "tipo": "exato",
+  "en": "The previous microphone is unavailable. Using the default microphone.",
+  "fr": "L'ancien microphone n'est plus disponible. Utilisation du microphone par défaut.",
+  "es": "El micrófono anterior no está disponible. Se usará el micrófono predeterminado."
+ },
+ {
   "pt": "Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.",
   "tipo": "exato",
   "en": "Voice session ended after 10 minutes. You can start another.",
@@ -6480,6 +6487,62 @@
   "en": "I couldn't confirm your authorization. Voice was ended.",
   "fr": "Impossible de confirmer votre autorisation. La voix a été arrêtée.",
   "es": "No pude confirmar tu autorización. La voz se detuvo."
+ },
+ {
+  "pt": "NotAllowedError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "PermissionDeniedError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "O navegador bloqueou o microfone. Libere a permissão de microfone para oaze.site nas configurações do navegador e tente novamente.",
+  "tipo": "exato",
+  "en": "The browser blocked the microphone. Allow microphone access for oaze.site in your browser settings and try again.",
+  "fr": "Le navigateur a bloqué le microphone. Autorisez le microphone pour oaze.site dans les paramètres du navigateur, puis réessayez.",
+  "es": "El navegador bloqueó el micrófono. Permite el acceso al micrófono para oaze.site en la configuración del navegador e inténtalo de nuevo."
+ },
+ {
+  "pt": "NotFoundError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "DevicesNotFoundError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "OverconstrainedError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nenhum microfone disponível neste aparelho. Conecte ou habilite um microfone e tente novamente.",
+  "tipo": "exato",
+  "en": "No microphone is available on this device. Connect or enable one and try again.",
+  "fr": "Aucun microphone n'est disponible sur cet appareil. Connectez-en ou activez-en un, puis réessayez.",
+  "es": "No hay ningún micrófono disponible en este dispositivo. Conecta o habilita uno e inténtalo de nuevo."
+ },
+ {
+  "pt": "NotReadableError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "TrackStartError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "O microfone está em uso por outro aplicativo. Feche o outro aplicativo e tente novamente.",
+  "tipo": "exato",
+  "en": "Another app is using the microphone. Close that app and try again.",
+  "fr": "Une autre application utilise le microphone. Fermez-la, puis réessayez.",
+  "es": "Otra aplicación está usando el micrófono. Ciérrala e inténtalo de nuevo."
  },
  {
   "pt": "A voz não conectou. Use a gravação de áudio.",

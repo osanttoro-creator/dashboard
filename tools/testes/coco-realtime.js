@@ -15,6 +15,8 @@ const config = read('supabase/config.toml');
 const privacy = read('privacidade.html');
 
 assert.match(edge, /\/v1\/live\/sessions/);
+assert.match(edge, /const sdp = typeof raw\.sdp === 'string' \? raw\.sdp : ''/);
+assert.doesNotMatch(edge, /raw\.sdp\.trim\(\)/);
 assert.match(edge, /model: 'gpt-live-1'/);
 assert.match(edge, /store: false/);
 assert.match(edge, /OAZE_COCO_BRAIN_MODEL/);
@@ -108,5 +110,16 @@ const voice = new ctx.CocoRealtime({
   voice.stop();
   assert.equal(trackStopped, 1); assert.equal(pcClosed, 1); assert.equal(dcClosed, 1);
   assert.equal(status.at(-1), 'IDLE');
+  let attempts = 0, fallback = 0;
+  ctx.navigator.mediaDevices.getUserMedia = async (request) => {
+    attempts++;
+    if (request.audio.deviceId) throw Object.assign(new Error('Requested device not found'), { name: 'NotFoundError' });
+    return stream;
+  };
+  const recovered = new ctx.CocoRealtime({ onDeviceFallback: () => fallback++ });
+  await recovered.start({ deviceId: 'microfone-antigo', connect: async () => ({ sdp: 'v=0\r\no=server' }) });
+  assert.equal(attempts, 2, 'tenta o microfone padrão uma vez após dispositivo antigo desaparecer');
+  assert.equal(fallback, 1);
+  recovered.stop();
   console.log('Coco Live: WebRTC servidor, transcrição, dívida, tools e encerramento limpo.');
 })().catch((error) => { console.error(error); process.exitCode = 1; });

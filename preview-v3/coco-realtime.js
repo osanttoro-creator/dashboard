@@ -54,10 +54,17 @@
       this.events.clear(); this.calls.clear(); this.batches.clear(); this.delegations.clear();
       this.setState('PROCESSING');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: {
-          ...(deviceId ? { deviceId: { exact: deviceId } } : {}), echoCancellation: true,
-          noiseSuppression: true, autoGainControl: true
-        } });
+        const audioOptions = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+        let stream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ audio: deviceId
+            ? { ...audioOptions, deviceId: { exact: deviceId } } : audioOptions });
+        } catch (error) {
+          // O identificador de um microfone pode mudar após reconectar o aparelho.
+          if (!deviceId || !['NotFoundError', 'OverconstrainedError'].includes(error?.name)) throw error;
+          stream = await navigator.mediaDevices.getUserMedia({ audio: audioOptions });
+          this.cb.onDeviceFallback?.();
+        }
         if (!current()) { stream.getTracks().forEach((track) => track.stop()); throw new Error('Conexão cancelada.'); }
         this.stream = stream;
         if (this.mode === 'push') this.stream.getAudioTracks().forEach((track) => { track.enabled = false; });

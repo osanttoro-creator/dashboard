@@ -59,7 +59,8 @@ Deno.serve(async (req: Request) => {
   catch (error) { return reply(origin, error instanceof Error && error.message === 'corpo_excedido' ? 413 : 400,
     { mensagem: 'Pedido inválido.' }); }
   const raw = input && typeof input === 'object' ? input as Record<string, unknown> : {};
-  const sdp = typeof raw.sdp === 'string' ? raw.sdp.trim() : '';
+  // SDP é um protocolo de linhas CRLF; trim() remove a última quebra e invalida a oferta.
+  const sdp = typeof raw.sdp === 'string' ? raw.sdp : '';
   if (!sdp.startsWith('v=0') || !sdp.includes('m=audio') || sdp.length > 48_000)
     return reply(origin, 400, { mensagem: 'Conexão de voz inválida.' });
   const history = Array.isArray(raw.history) ? raw.history.slice(-6).flatMap((entry) => {
