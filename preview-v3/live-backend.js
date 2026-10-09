@@ -267,7 +267,7 @@
       return response.blob();
     } finally { global.clearTimeout(timer); }
   };
-  V3Backend.cocoRealtimeToken = async function () {
+  V3Backend.cocoLiveSession = async function (sdp, history) {
     if (!client || !user) throw new Error('Entre na sua conta para falar com a Coco.');
     const config = global.SupabaseConfig || {};
     const base = String(config.url || '').replace(/\/+$/, '');
@@ -278,11 +278,14 @@
     const response = await bounded(fetch(base + '/functions/v1/oaze-coco-realtime', {
       method: 'POST', cache: 'no-store',
       headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token,
-        'content-type': 'application/json' }, body: '{}'
+        'content-type': 'application/json' }, body: JSON.stringify({
+          sdp: String(sdp || '').slice(0, 48000),
+          history: Array.isArray(history) ? history.slice(-6) : []
+        })
     }));
     const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.value) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
-    return result.value;
+    if (!response.ok || !result.sdp) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
+    return { sdp: result.sdp, sessionId: result.session_id || null };
   };
   async function requirePrivacyAcceptance() {
     const { data, error } = await bounded(client.from('privacy_acceptances')

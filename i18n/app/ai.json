@@ -103,6 +103,48 @@
   "es": "Otro"
  },
  {
+  "pt": "Cartão {0}",
+  "tipo": "padrao",
+  "en": "Card {0}",
+  "fr": "Carte {0}",
+  "es": "Tarjeta {0}"
+ },
+ {
+  "pt": "taxa de juros ou CET das obrigações",
+  "tipo": "exato",
+  "en": "interest rate or total effective cost of the obligations",
+  "fr": "taux d’intérêt ou coût effectif total des obligations",
+  "es": "tasa de interés o coste efectivo total de las obligaciones"
+ },
+ {
+  "pt": "saldo devedor de empréstimos externos não cadastrados",
+  "tipo": "exato",
+  "en": "outstanding balance of external loans not registered",
+  "fr": "solde restant dû des prêts externes non enregistrés",
+  "es": "saldo pendiente de préstamos externos no registrados"
+ },
+ {
+  "pt": "pagamento mínimo, despesas essenciais e capacidade mensal de quitação",
+  "tipo": "exato",
+  "en": "minimum payment, essential expenses and monthly repayment capacity",
+  "fr": "paiement minimum, dépenses essentielles et capacité de remboursement",
+  "es": "pago mínimo, gastos esenciales y capacidad de pago"
+ },
+ {
+  "pt": "condições reais de renegociação",
+  "tipo": "exato",
+  "en": "actual renegotiation terms",
+  "fr": "conditions réelles de renégociation",
+  "es": "condiciones reales de renegociación"
+ },
+ {
+  "pt": "Caixa é saldo em contas, antes de descontar crédito. Sobra histórica não é capacidade de quitação. Pendências no débito exigem confirmação de obrigação. Previsões e parcelas já estão nos agregados, não some novamente. Ausência de empréstimo cadastrado não significa ausência de dívida.",
+  "tipo": "exato",
+  "en": "Cash is the account balance before credit deductions. Historical surplus is not repayment capacity. Pending debit expenses require confirmation. Forecasts and installments are already aggregated; do not add them again. No registered loan does not mean no debt.",
+  "fr": "La trésorerie est le solde avant déduction du crédit. L'excédent historique n'est pas une capacité de remboursement. Les dépenses en attente doivent être confirmées. Prévisions et échéances sont déjà agrégées. Aucun prêt enregistré ne signifie pas aucune dette.",
+  "es": "El efectivo es el saldo antes de descontar crédito. El sobrante histórico no es capacidad de pago. Los gastos pendientes deben confirmarse. Previsiones y cuotas ya están agregadas. No tener préstamos registrados no significa no tener deudas."
+ },
+ {
   "pt": "Assistente não configurado.",
   "tipo": "exato",
   "en": "Assistant not set up.",

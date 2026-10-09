@@ -30,6 +30,7 @@
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
+import { BACKEND_INSTRUCTIONS } from '../oaze-coco-realtime/prompts.ts';
 
 /* ---------------- configuração ---------------- */
 
@@ -197,6 +198,7 @@ type Entrada = {
   /* Meses do ano exibido e anteriores, quando o plano permite
      comparação. O cliente pode mandar; a função poda pelo plano. */
   historico?: MesHistorico[];
+  dividas?: ReturnType<typeof normalizarDividas>;
   /* Totais do ano exibido. Vão para todos os planos: é um resumo,
      não uma série de comparação mês a mês. */
   ano?: {
@@ -235,6 +237,73 @@ const texto = (v: unknown, max: number): string =>
   typeof v === 'string'
     ? v.replace(/[\u0000-\u001F\u007F]+/g, ' ').trim().slice(0, max)
     : '';
+
+/* O retrato de dívida é uma lista fechada de valores, datas e aliases.
+   Nenhuma descrição, nome bancário ou instrução fornecida pelo cliente passa.
+   Comparações e cenários continuam limitados pelo mesmo perfil do plano. */
+function normalizarDividas(bruto: unknown, perfil: typeof PERFIL['free']) {
+  if (!bruto || typeof bruto !== 'object' || Array.isArray(bruto)) return undefined;
+  const b = bruto as Record<string, any>;
+  const lista = (v: unknown, max: number): any[] => Array.isArray(v) ? v.slice(0, max) : [];
+  const obj = (v: unknown): Record<string, any> => v && typeof v === 'object' && !Array.isArray(v) ? v as Record<string, any> : {};
+  const valor = (v: unknown, positivo = true): number | undefined => {
+    const n = numero(v);
+    return n !== undefined && Math.abs(n) <= 1e12 && (!positivo || n >= 0) ? n : undefined;
+  };
+  const inteiro = (v: unknown): number => Number.isInteger(v) ? Math.min(100_000, Math.max(0, Number(v))) : 0;
+  const periodo = (v: unknown): string => typeof v === 'string' && /^(20\d{2}|2100)-(0[1-9]|1[0-2])$/.test(v) ? v : '';
+  const data = (v: unknown): string => {
+    if (typeof v !== 'string' || !/^(20\d{2}|2100)-(0[1-9]|1[0-2])-\d{2}$/.test(v)) return '';
+    const d = new Date(v + 'T00:00:00Z');
+    return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === v ? v : '';
+  };
+  const referencia = data(b.dataReferencia);
+  if (!referencia) return undefined;
+  const meses = (v: unknown) => lista(v, 6).map((m) => ({
+    periodo: periodo(m?.periodo), receitas: valor(m?.receitas), despesas: valor(m?.despesas),
+    saldo: valor(m?.saldo, false), saldoCaixa: valor(m?.saldoCaixa, false),
+    previstoReceitas: valor(m?.previstoReceitas), previstoDespesas: valor(m?.previstoDespesas)
+  })).filter((m) => m.periodo);
+  const faturas = lista(b.faturas, 8).map((f) => ({
+    origem: typeof f?.origem === 'string' && /^Cartão [1-9]\d{0,3}$/.test(f.origem) ? f.origem : 'Cartão',
+    referencia: periodo(f?.referencia), saldo: valor(f?.saldo), previsto: valor(f?.previsto),
+    vencimento: data(f?.vencimento), vencida: false,
+    pagamentoParcial: f?.pagamentoParcial === true, taxaOuCET: null, pagamentoMinimo: null
+  })).filter((f) => f.referencia && f.vencimento && (f.saldo !== undefined || f.previsto !== undefined))
+    .map((f) => ({ ...f, vencida: f.vencimento < referencia && (f.saldo ?? 0) > 0 }));
+  const pendentes = lista(b.compromissosPendentes, 7).map((p) => ({
+    periodo: p?.periodo === 'vencidos' ? 'vencidos' : periodo(p?.periodo),
+    quantidade: inteiro(p?.quantidade), total: valor(p?.total)
+  })).filter((p) => p.periodo && p.total !== undefined);
+  const h = obj(b.historico), c = obj(b.cobertura), p = obj(b.parcelamentos);
+  const passado = perfil.comparacoes ? meses(h.meses) : [];
+  const comDados = passado.filter((m) => m.receitas || m.despesas);
+  const media = (campo: 'receitas' | 'despesas' | 'saldo' | 'saldoCaixa') => comDados.length
+    && comDados.every((m) => m[campo] !== undefined)
+    ? numero(comDados.reduce((t, m) => t + (m[campo] ?? 0), 0) / comDados.length) : undefined;
+  const divida = valor(b.totalDividaConfirmada);
+  const previsto = valor(b.totalCompromissosPrevistos);
+  const caixa = valor(b.caixaDisponivel, false);
+  return {
+    versao: 2, dataReferencia: referencia, caixaDisponivel: caixa,
+    saldoAposDividaConfirmada: caixa !== undefined && divida !== undefined ? numero(caixa - divida) : undefined,
+    totalDividaConfirmada: divida, totalCompromissosPrevistos: previsto,
+    totalObrigacoesMapeadas: divida !== undefined && previsto !== undefined ? numero(divida + previsto) : undefined,
+    faturas, compromissosPendentes: pendentes,
+    cobertura: { desde: data(c.desde) || undefined, fluxoAte: data(c.fluxoAte) || undefined,
+      totalFaturas: Math.max(faturas.length, inteiro(c.totalFaturas)),
+      faturasOmitidas: Math.max(0, inteiro(c.totalFaturas) - faturas.length),
+      saldoOmitido: valor(c.saldoOmitido), previstoOmitido: valor(c.previstoOmitido) },
+    parcelamentos: { quantidade: inteiro(p.quantidade), parcelasRestantes: inteiro(p.parcelasRestantes), incluidoNasFaturas: true },
+    historico: perfil.comparacoes ? { meses: passado, mesesComMovimento: comDados.length,
+      mediaReceitas: media('receitas'), mediaDespesas: media('despesas'),
+      mediaSobra: media('saldo'), mediaSobraCaixa: media('saldoCaixa') } : undefined,
+    futuro: perfil.simulacoes ? meses(b.futuro) : [],
+    dadosAusentes: ['taxa de juros ou CET das obrigações', 'saldo devedor de empréstimos externos não cadastrados',
+      'pagamento mínimo, despesas essenciais e capacidade mensal de quitação', 'condições reais de renegociação'],
+    limites: 'Caixa é saldo em contas antes de descontar crédito. Sobra histórica não é capacidade de quitação. Pendência no débito exige confirmar se a obrigação existe. Parcelas já estão nas faturas, não some novamente. Ausência de empréstimo cadastrado não prova ausência de dívida.'
+  };
+}
 
 /**
  * Normaliza e PODA. O que não está no schema não passa: se o
@@ -302,6 +371,7 @@ function validar(bruto: unknown, perfil: typeof PERFIL['free']):
     periodo,
     escopo,
     historico,
+    dividas: normalizarDividas(b.dividas, perfil),
     ano,
     conversa,
     idioma,
@@ -397,6 +467,10 @@ function montarContexto(d: Entrada): string {
       ' | previsto: receitas ' + brl(h.previstoReceitas) + ', despesas ' + brl(h.previstoDespesas) +
       ' | fixas ' + brl(h.fixas) +
       (h.categorias?.length ? ' | ' + h.categorias.map((c) => c.nome + ' ' + brl(c.total)).join(', ') : '')));
+  }
+  if (d.dividas) {
+    l.push('Retrato temporal de obrigações (confirmado separado do previsto; parcelas são um subconjunto das faturas):');
+    l.push(JSON.stringify(d.dividas));
   }
   return l.join('\n');
 }
@@ -651,7 +725,9 @@ Deno.serve(async (req: Request) => {
         /* O prompt base é igual para todos; o que muda é o
            parágrafo do plano — e, principalmente, os dados que
            chegaram (ou não) no contexto. */
-        instructions: SISTEMA + '\n\nRegras deste plano:\n' + perfil.estilo +
+        instructions: SISTEMA + '\n\n' + BACKEND_INSTRUCTIONS +
+          '\n\nNesta conversa escrita, o retrato de dívida validado já está em dados_financeiros. Use esses valores; não chame ferramentas inexistentes nem repita números do saldo como capacidade de pagamento. Respeite as regras de idioma e do plano abaixo.' +
+          '\n\nRegras deste plano:\n' + perfil.estilo +
           '\n\nIdioma da resposta: ' + IDIOMAS[v.dados.idioma] + '. Os valores são em reais (R$): mantenha o símbolo.',
         input: '<dados_financeiros>\n' + contexto +
           '\nData de hoje no Brasil: ' + hojeBrasil +

@@ -12,8 +12,9 @@ const privacy = read('privacidade.html');
 const config = read('supabase/config.toml');
 
 assert.match(app, /coco:renderCoco/);
-assert.match(app, /data-coco-view="conversation"/);
-assert.match(app, /data-coco-view="analysis"/);
+assert.match(app, /data-action="coco-mode" data-mode="text"/);
+assert.match(app, /data-action="coco-mode" data-mode="voice"/);
+assert.match(app, /topic==='analysis'/);
 assert.match(app, /function renderCocoAnalysis\(\)/);
 assert.match(app, /navigator\.mediaDevices\.getUserMedia/);
 assert.match(app, /data-action="record-audio" aria-label="Gravar áudio"/);

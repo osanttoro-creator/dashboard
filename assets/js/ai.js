@@ -227,6 +227,7 @@
       periodo,
       escopo: global.Ug && Ug.escopo ? Ug.escopo() : 'mes',
       resumo: AI.resumoAgregado(periodo),
+      dividas: AI.resumoDividas(),
       ano: AI.resumoDoAno(periodo),
       /* O histórico vai sempre; quem decide se ele CHEGA ao modelo
          é a Edge Function, pelo plano. Ver AI.historico. */
@@ -332,6 +333,152 @@
     } catch (e) { /* segue com carteira zerada */ }
 
     return resumo;
+  };
+
+  /**
+   * Retrato temporal para uma análise de dívidas. Não manda nomes de
+   * contas, cartões, estabelecimentos ou descrições: o modelo recebe
+   * apenas aliases e valores agregados. O OAZE ainda não cadastra o
+   * CET de empréstimos; ausência de taxa é declarada, nunca vira zero.
+   */
+  AI.resumoDividas = function () {
+    const prof = Store.profile();
+    const hoje = U.todayISO();
+    const atual = U.todayYM();
+    const mesesPassados = U.monthRange(U.addMonths(atual, -6), U.addMonths(atual, -1));
+    const mesesFuturos = U.monthRange(atual, U.addMonths(atual, 5));
+    const mensal = (periodo) => {
+      const t = Calc.monthTotals(periodo, prof);
+      return {
+        periodo,
+        receitas: U.round2(t.income),
+        despesas: U.round2(t.expense),
+        saldo: U.round2(t.balance),
+        saldoCaixa: U.round2(t.saldoCaixa),
+        previstoReceitas: U.round2(t.plannedIncome),
+        previstoDespesas: U.round2(t.plannedExpense)
+      };
+    };
+    const passado = mesesPassados.map(mensal);
+    const comMovimento = passado.filter((m) => m.receitas || m.despesas);
+    const media = (campo) => comMovimento.length
+      ? U.round2(U.sum(comMovimento, (m) => m[campo]) / comMovimento.length) : null;
+    const ate = U.monthEnd(U.addMonths(atual, 5));
+    const desde = Calc.earliestDate(prof);
+    const entries = Calc.entries(desde, ate, prof).filter((e) => e.contaNosTotais !== false);
+    const faturas = [];
+    const parcelas = new Map();
+    (prof.cards || []).filter((card) => card.considerado !== false).forEach((card, indice) => {
+      /* A referência vem das compras registradas, inclusive antigas e parcelas
+         posteriores aos seis meses. Uma janela fixa perderia dívida vencida. */
+      const refs = new Set();
+      (prof.transactions || []).filter((tx) => tx.kind === 'expense' && tx.cardId === card.id && !tx.recurring)
+        .forEach((tx) => { if (U.isValidISO(tx.date)) refs.add(Calc.invoiceRefOfDate(card, tx.date)); });
+      entries.filter((e) => e.kind === 'expense' && e.cardId === card.id && e.recurring)
+        .forEach((e) => refs.add(Calc.invoiceRefOfDate(card, e.date)));
+      Object.keys(prof.invoices || {}).forEach((key) => {
+        const [id, ref] = key.split('|');
+        if (id === card.id && /^\d{4}-(0[1-9]|1[0-2])$/.test(ref)) refs.add(ref);
+      });
+      Array.from(refs).sort().forEach((ref) => {
+        const inv = Calc.invoice(card.id, ref, prof);
+        if (!inv) return;
+        const registro = (prof.invoices || {})[Store.invoiceKey(card.id, ref)];
+        if (registro && registro.quitada) return;
+        /* restante no Calc inclui o previsto. Aqui pagamentos e adiantamentos
+           realizados abatem primeiro as compras confirmadas; o restante futuro
+           continua identificado como previsão. Pagamento agendado não é pago. */
+        const pagou = U.sum(inv.pagamentos.filter((p) => p.at <= hoje), (p) => +p.amount || 0);
+        let realizado = 0, previsto = 0;
+        inv.items.forEach((item) => {
+          const ad = inv.adiantamentos[item.key];
+          const adiantado = ad && ad.at <= hoje ? +ad.amount || 0 : 0;
+          const restante = Math.max(0, (+item.amount || 0) - adiantado);
+          if (item.confirmed) realizado += restante; else previsto += restante;
+        });
+        const saldo = U.round2(Math.max(0, realizado - pagou));
+        const previsao = U.round2(Math.max(0, previsto - Math.max(0, pagou - realizado)));
+        if (saldo <= 0 && previsao <= 0) return;
+        let pagamentoAAlocar = pagou;
+        inv.items.slice().sort((a, b) => Number(b.confirmed) - Number(a.confirmed)).forEach((item) => {
+          const ad = inv.adiantamentos[item.key];
+          const adiantado = ad && ad.at <= hoje ? +ad.amount || 0 : 0;
+          const itemRestante = Math.max(0, (+item.amount || 0) - adiantado);
+          const restante = Math.max(0, itemRestante - pagamentoAAlocar);
+          pagamentoAAlocar = Math.max(0, pagamentoAAlocar - itemRestante);
+          if (!item.installment || restante <= 0) return;
+          const key = card.id + '|' + (item.installment.groupId || item.txId);
+          const grupo = parcelas.get(key) || { parcelasRestantes: 0 };
+          grupo.parcelasRestantes += 1;
+          parcelas.set(key, grupo);
+        });
+        faturas.push({
+          origem: 'Cartão ' + (indice + 1),
+          referencia: inv.ref,
+          saldo,
+          previsto: previsao,
+          vencimento: inv.dueDate,
+          vencida: inv.dueDate < hoje && saldo > 0,
+          pagamentoParcial: (pagou > 0 || inv.pagoAdiantado > 0) && saldo > 0,
+          taxaOuCET: null,
+          pagamentoMinimo: null
+        });
+      });
+    });
+    faturas.sort((a, b) => Number(b.vencida) - Number(a.vencida) || a.vencimento.localeCompare(b.vencimento));
+
+    /* Pendência no débito não prova obrigação contraída: pode ser apenas uma
+       previsão ainda não ocorrida. Agrupar os vencidos preserva todo o passado
+       sem expor descrições nem aumentar indefinidamente o contexto. Crédito já
+       está nas faturas e não é somado de novo aqui. */
+    const pendentes = entries.filter((e) => e.kind === 'expense' && !e.confirmed && e.method !== 'card');
+    const porMes = new Map();
+    pendentes.forEach((e) => {
+      const periodo = e.date < hoje ? 'vencidos' : U.ymOf(e.date);
+      const item = porMes.get(periodo) || { periodo, quantidade: 0, total: 0 };
+      item.quantidade += 1; item.total = U.round2(item.total + (+e.amount || 0));
+      porMes.set(periodo, item);
+    });
+    const caixa = (() => { try { return U.round2(Calc.totalAccountsBalance(hoje, prof)); } catch { return null; } })();
+    const divida = U.round2(U.sum(faturas, (item) => item.saldo));
+    const previsto = U.round2(U.sum(faturas, (item) => item.previsto) + U.sum(pendentes, (e) => +e.amount || 0));
+
+    return {
+      versao: 2,
+      dataReferencia: hoje,
+      caixaDisponivel: caixa,
+      saldoAposDividaConfirmada: caixa === null ? null : U.round2(caixa - divida),
+      historico: {
+        meses: passado,
+        mesesComMovimento: comMovimento.length,
+        mediaReceitas: media('receitas'),
+        mediaDespesas: media('despesas'),
+        mediaSobra: comMovimento.length ? U.round2(media('receitas') - media('despesas')) : null,
+        mediaSobraCaixa: media('saldoCaixa')
+      },
+      futuro: mesesFuturos.map(mensal),
+      faturas: faturas.slice(0, 8),
+      cobertura: { desde, fluxoAte: ate, totalFaturas: faturas.length,
+        faturasOmitidas: Math.max(0, faturas.length - 8),
+        saldoOmitido: U.round2(U.sum(faturas.slice(8), (f) => f.saldo)),
+        previstoOmitido: U.round2(U.sum(faturas.slice(8), (f) => f.previsto)) },
+      compromissosPendentes: Array.from(porMes.values()),
+      parcelamentos: {
+        quantidade: parcelas.size,
+        parcelasRestantes: U.sum(Array.from(parcelas.values()), (g) => g.parcelasRestantes),
+        incluidoNasFaturas: true
+      },
+      totalDividaConfirmada: divida,
+      totalCompromissosPrevistos: previsto,
+      totalObrigacoesMapeadas: U.round2(divida + previsto),
+      dadosAusentes: [
+        'taxa de juros ou CET das obrigações',
+        'saldo devedor de empréstimos externos não cadastrados',
+        'pagamento mínimo, despesas essenciais e capacidade mensal de quitação',
+        'condições reais de renegociação'
+      ],
+      limites: 'Caixa é saldo em contas, antes de descontar crédito. Sobra histórica não é capacidade de quitação. Pendências no débito exigem confirmação de obrigação. Previsões e parcelas já estão nos agregados, não some novamente. Ausência de empréstimo cadastrado não significa ausência de dívida.'
+    };
   };
 
   /* ============================================================
