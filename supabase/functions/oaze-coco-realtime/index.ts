@@ -118,7 +118,13 @@ Deno.serve(async (req: Request) => {
       })
     });
     if (!provider.ok) {
-      console.error(JSON.stringify({ evento: 'coco_live_falhou', status: provider.status }));
+      const failure = await provider.json().catch(() => ({}));
+      const detail = failure && typeof failure === 'object' && 'error' in failure
+        ? (failure as { error?: Record<string, unknown> }).error : undefined;
+      const safe = (value: unknown) => typeof value === 'string'
+        && /^[a-zA-Z0-9_.-]{1,100}$/.test(value) ? value : null;
+      console.error(JSON.stringify({ evento: 'coco_live_falhou', status: provider.status,
+        tipo: safe(detail?.type), codigo: safe(detail?.code), campo: safe(detail?.param) }));
       return reply(origin, 502, { mensagem: 'A sessão de voz não pôde ser aberta. Use a conversa por texto.' });
     }
     const live = await provider.json();
