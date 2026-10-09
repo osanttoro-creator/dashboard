@@ -93,11 +93,14 @@ const voice = new ctx.CocoRealtime({
   voice.handle({ type: 'response.output_audio_transcript.done' });
   assert.deepEqual(user, ['Hoje']); assert.deepEqual(answer, ['Tudo bem.']);
 
-  voice.handle({ type: 'response.event', event: { type: 'response.output_item.done', item: {
+  voice.handle({ type: 'response.event', delegation_id: 'd1', event: { type: 'response.created', response: { id: 'r1' } } });
+  voice.handle({ type: 'response.event', delegation_id: 'd1', event: { type: 'response.output_item.done', item: {
     type: 'function_call', name: 'analisar_dividas', call_id: 'c1',
     arguments: '{"objetivo":"priorizar","valor_extra_mensal":300}'
   } } });
-  voice.handle({ type: 'response.event', event: { type: 'response.completed' } });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.ok(!sent.some((x) => x.item?.call_id === 'c1'), 'resultado aguarda fechamento do lote');
+  voice.handle({ type: 'response.event', delegation_id: 'd1', event: { type: 'response.completed', response: { id: 'r1', output: [] } } });
   await new Promise((resolve) => setTimeout(resolve, 0));
   assert.equal(tools[0][0], 'analisar_dividas');
   assert.ok(sent.some((x) => x.type === 'response.item.create' && x.item?.call_id === 'c1'));

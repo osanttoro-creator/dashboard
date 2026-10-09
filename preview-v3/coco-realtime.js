@@ -267,7 +267,9 @@
         case 'session.delegation.created': this.setState('PROCESSING'); break;
         case 'response.event': {
           const nested = event.event || {};
-          const key = nested.response_id || nested.response?.id || event.response_id || 'current';
+          const responseId = nested.response_id || nested.response?.id || event.response_id;
+          if (event.delegation_id && responseId) this.delegations.set(event.delegation_id, responseId);
+          const key = responseId || this.delegations.get(event.delegation_id) || event.delegation_id || 'current';
           let batch = this.batches.get(key);
           if (!batch) { batch = { calls: [], completed: false, continued: false }; this.batches.set(key, batch); }
           if (nested.type === 'response.created') this.responding = true;
@@ -338,7 +340,7 @@
       this.inputText = ''; this.outputText = ''; this.pushHeld = false; this.sessionId = null;
       this.responding = false;
       clearTimeout(this.readyTimer); this.readyTimer = null; this.sessionReady = false;
-      this.batches.clear(); this.calls.clear(); this.events.clear();
+      this.batches.clear(); this.calls.clear(); this.events.clear(); this.delegations.clear();
       this.cb.onMic?.(false); this.cb.onDraft?.(''); this.cb.onDraftAnswer?.('');
       this.setState(finalState);
     }
