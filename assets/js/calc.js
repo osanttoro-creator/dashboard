@@ -931,7 +931,8 @@
     const at = atISO || U.todayISO();
     if (inv.date > at) return 0;
     if (inv.currentValue != null && at >= U.todayISO()) return U.round2(inv.currentValue);
-    const years = Math.max(0, U.yearsBetween(inv.date, at));
+    const valuedAt = inv.maturityDate && at > inv.maturityDate ? inv.maturityDate : at;
+    const years = Math.max(0, U.yearsBetween(inv.date, valuedAt));
     const rate = (+inv.rate || 0) / 100;
     return U.round2((+inv.amount || 0) * Math.pow(1 + rate, years));
   };

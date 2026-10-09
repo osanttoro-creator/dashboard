@@ -12,12 +12,12 @@ const privacy = read('privacidade.html');
 const config = read('supabase/config.toml');
 
 assert.match(app, /coco:renderCoco/);
-assert.match(app, /data-action="coco-mode" data-mode="text"/);
-assert.match(app, /data-action="coco-mode" data-mode="voice"/);
+assert.match(app, /data-action="record-audio" aria-label="Gravar áudio"/);
+assert.match(app, /state\.mediaDraft\.trim\(\)\?'hidden':''/, 'o microfone some quando há texto');
+assert.match(app, /if\(send\)send\.hidden=!hasText/, 'o botão de envio aparece ao digitar');
 assert.match(app, /topic==='analysis'/);
 assert.match(app, /function renderCocoAnalysis\(\)/);
 assert.match(app, /navigator\.mediaDevices\.getUserMedia/);
-assert.match(app, /data-action="record-audio" aria-label="Gravar áudio"/);
 assert.doesNotMatch(app, /data-action="choose-coco-audio"/);
 assert.match(app, /type="file" hidden/, 'o anexo permite selecionar qualquer arquivo');
 assert.match(app, /readCocoMedia\(file,true\)/, 'a gravação entra na conversa automaticamente após confirmação');

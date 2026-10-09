@@ -71,6 +71,11 @@ assert.doesNotMatch(app, /<input type="color" name="color"/, 'a cor não é sele
 assert.match(app, /function corPadraoDeCategoria/, 'categoria nova nasce numa cor da paleta');
 assert.match(css, /\.v3-color-fam/);
 assert.match(css, /\.v3-icon-opt/);
+assert.match(app, /\[data-transaction\],\[data-category\],\[data-goal\]/, 'a edição de categoria precisa alcançar o delegador de cliques');
+assert.match(app, /categoryForm\(target\.dataset\.category\)/, 'tocar numa categoria existente abre sua edição');
+for (const color of ['Amarelo Limão', 'Azul Cobalto', 'Rosa Chiclete', 'Verde Pinho', 'Violeta', 'Canela', 'Cinza Gelo']) {
+  assert.ok(store.includes(color), `falta a família de cor ${color}`);
+}
 
 /* ---- o calendário em três alcances ---- */
 /* Cada vista responde uma pergunta diferente: em que meses eu sobro

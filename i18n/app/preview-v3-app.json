@@ -1332,6 +1332,62 @@
   "es": "Editar"
  },
  {
+  "pt": "Vence em {0}",
+  "tipo": "padrao",
+  "en": "Matures on {0}",
+  "fr": "Échéance le {0}",
+  "es": "Vence el {0}"
+ },
+ {
+  "pt": "Sem vencimento informado",
+  "tipo": "exato",
+  "en": "No maturity date provided",
+  "fr": "Aucune date d’échéance renseignée",
+  "es": "Sin fecha de vencimiento"
+ },
+ {
+  "pt": "liquidez diária",
+  "tipo": "exato",
+  "en": "daily liquidity",
+  "fr": "liquidité quotidienne",
+  "es": "liquidez diaria"
+ },
+ {
+  "pt": "resgate no vencimento",
+  "tipo": "exato",
+  "en": "redeem at maturity",
+  "fr": "retrait à l’échéance",
+  "es": "rescate al vencimiento"
+ },
+ {
+  "pt": "liquidez não informada",
+  "tipo": "exato",
+  "en": "liquidity not provided",
+  "fr": "liquidité non renseignée",
+  "es": "liquidez no informada"
+ },
+ {
+  "pt": "Dinheiro reservado",
+  "tipo": "exato",
+  "en": "Money set aside",
+  "fr": "Argent mis de côté",
+  "es": "Dinero reservado"
+ },
+ {
+  "pt": "Crie uma reserva para um objetivo ou emergência.",
+  "tipo": "exato",
+  "en": "Create a pot for a goal or an emergency.",
+  "fr": "Créez une cagnotte pour un projet ou une urgence.",
+  "es": "Crea una alcancía para una meta o emergencia."
+ },
+ {
+  "pt": "Nenhum CDB registrado neste perfil.",
+  "tipo": "exato",
+  "en": "No CDB registered in this profile.",
+  "fr": "Aucun CDB enregistré dans ce profil.",
+  "es": "No hay CDB registrados en este perfil."
+ },
+ {
   "pt": "Evolução dos investimentos: o que foi aportado e quanto vale hoje",
   "tipo": "exato",
   "en": "Investment growth: what was contributed and what it’s worth today",
@@ -1409,6 +1465,41 @@
   "es": "{0} meses"
  },
  {
+  "pt": "Criar porquinho",
+  "tipo": "exato",
+  "en": "Create savings pot",
+  "fr": "Créer une cagnotte",
+  "es": "Crear alcancía"
+ },
+ {
+  "pt": "Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.",
+  "tipo": "exato",
+  "en": "Set money aside from an account without counting it twice.",
+  "fr": "Mettez de l’argent de côté depuis un compte sans le compter deux fois.",
+  "es": "Aparta dinero de una cuenta sin contarlo dos veces."
+ },
+ {
+  "pt": "CDBs",
+  "tipo": "exato",
+  "en": "CDBs",
+  "fr": "CDB",
+  "es": "CDB"
+ },
+ {
+  "pt": "Registrar CDB",
+  "tipo": "exato",
+  "en": "Add CDB",
+  "fr": "Ajouter un CDB",
+  "es": "Registrar CDB"
+ },
+ {
+  "pt": "Acompanhe aporte, prazo, liquidez e valor informado pelo banco.",
+  "tipo": "exato",
+  "en": "Track the deposit, term, liquidity and value reported by the bank.",
+  "fr": "Suivez le dépôt, l’échéance, la liquidité et la valeur indiquée par la banque.",
+  "es": "Consulta el aporte, plazo, liquidez y valor informado por el banco."
+ },
+ {
   "pt": "PATRIMÔNIO INVESTIDO",
   "tipo": "exato",
   "en": "INVESTED ASSETS",
@@ -1423,11 +1514,11 @@
   "es": "{0} {1} sobre lo aportado"
  },
  {
-  "pt": "seus aportes",
+  "pt": "todos os aportes",
   "tipo": "exato",
-  "en": "your contributions",
-  "fr": "vos apports",
-  "es": "tus aportaciones"
+  "en": "all deposits",
+  "fr": "tous les apports",
+  "es": "todos los aportes"
  },
  {
   "pt": "Novo aporte",
@@ -1547,6 +1638,13 @@
   "en": "{0} registered",
   "fr": "{0} enregistrées",
   "es": "{0} registradas"
+ },
+ {
+  "pt": "Editar categoria {0}",
+  "tipo": "padrao",
+  "en": "Edit category {0}",
+  "fr": "Modifier la catégorie {0}",
+  "es": "Editar categoría {0}"
  },
  {
   "pt": "Editar ›",
@@ -2119,6 +2217,13 @@
   "en": "your financial health",
   "fr": "votre santé financière",
   "es": "su salud financiera"
+ },
+ {
+  "pt": "Por que recebi esta nota?",
+  "tipo": "exato",
+  "en": "Why did I get this score?",
+  "fr": "Pourquoi ai-je obtenu cette note ?",
+  "es": "¿Por qué recibí esta puntuación?"
  },
  {
   "pt": "MÊS A MÊS",
@@ -3506,32 +3611,11 @@
   "es": "Coco está pensando…"
  },
  {
-  "pt": "Transcrição pronta. Confira o texto antes de enviar.",
+  "pt": "Gravando áudio. Toque no microfone para enviar.",
   "tipo": "exato",
-  "en": "Transcript ready. Check the text before sending.",
-  "fr": "Transcription prête. Vérifiez le texte avant l’envoi.",
-  "es": "Transcripción lista. Revisa el texto antes de enviarlo."
- },
- {
-  "pt": "Voltar ao OAZE",
-  "tipo": "exato",
-  "en": "Back to OAZE",
-  "fr": "Retour à OAZE",
-  "es": "Volver a OAZE"
- },
- {
-  "pt": "Modo da conversa",
-  "tipo": "exato",
-  "en": "Conversation mode",
-  "fr": "Mode de conversation",
-  "es": "Modo de conversación"
- },
- {
-  "pt": "{0} Voz",
-  "tipo": "padrao",
-  "en": "{0} Voice",
-  "fr": "{0} Voix",
-  "es": "{0} Voz"
+  "en": "Recording audio. Tap the microphone to send.",
+  "fr": "Enregistrement en cours. Touchez le microphone pour envoyer.",
+  "es": "Grabando audio. Toca el micrófono para enviar."
  },
  {
   "pt": "Voltar ao painel",
@@ -3661,11 +3745,11 @@
   "es": "Adjuntar archivo"
  },
  {
-  "pt": "Pergunte, grave ou envie um arquivo",
+  "pt": "Mensagem para a Coco",
   "tipo": "exato",
-  "en": "Ask, record, or attach a file",
-  "fr": "Posez une question, enregistrez ou joignez un fichier",
-  "es": "Pregunta, graba o adjunta un archivo"
+  "en": "Message to Coco",
+  "fr": "Message à Coco",
+  "es": "Mensaje para Coco"
  },
  {
   "pt": "Pergunta para a Coco",
@@ -3675,11 +3759,11 @@
   "es": "Pregunta para Coco"
  },
  {
-  "pt": "Enviar",
+  "pt": "Enviar mensagem",
   "tipo": "exato",
-  "en": "Send",
-  "fr": "Envoyer",
-  "es": "Enviar"
+  "en": "Send message",
+  "fr": "Envoyer le message",
+  "es": "Enviar mensaje"
  },
  {
   "pt": "Vamos conversar?",
@@ -4847,6 +4931,13 @@
   "es": "Cuenta o tarjeta"
  },
  {
+  "pt": "COR DE OUTRO",
+  "tipo": "exato",
+  "en": "OTHER COLOR",
+  "fr": "COULEUR AUTRE",
+  "es": "COLOR DE OTRO"
+ },
+ {
   "pt": "Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.",
   "tipo": "exato",
   "en": "All available. Choose the payment method when recording an expense or income.",
@@ -5106,18 +5197,25 @@
   "es": "No se pudo registrar el adelanto."
  },
  {
-  "pt": "editar aporte",
+  "pt": "editar investimento",
   "tipo": "exato",
-  "en": "edit contribution",
-  "fr": "modifier l’apport",
-  "es": "editar aportación"
+  "en": "edit investment",
+  "fr": "modifier l’investissement",
+  "es": "editar inversión"
  },
  {
-  "pt": "novo aporte",
+  "pt": "novo porquinho",
   "tipo": "exato",
-  "en": "new contribution",
-  "fr": "nouvel apport",
-  "es": "nueva aportación"
+  "en": "new savings pot",
+  "fr": "nouvelle cagnotte",
+  "es": "nueva alcancía"
+ },
+ {
+  "pt": "novo investimento",
+  "tipo": "exato",
+  "en": "new investment",
+  "fr": "nouvel investissement",
+  "es": "nueva inversión"
  },
  {
   "pt": "carteira de investimentos",
@@ -5141,18 +5239,11 @@
   "es": "Eliminar aportación"
  },
  {
-  "pt": "NOME DO INVESTIMENTO",
+  "pt": "Ex.: reserva de emergência",
   "tipo": "exato",
-  "en": "INVESTMENT NAME",
-  "fr": "NOM DE L’INVESTISSEMENT",
-  "es": "NOMBRE DE LA INVERSIÓN"
- },
- {
-  "pt": "Ex.: Tesouro Selic",
-  "tipo": "exato",
-  "en": "E.g.: Treasury bond",
-  "fr": "Ex. : obligation d’État",
-  "es": "Ej.: bono del Tesoro"
+  "en": "E.g. emergency fund",
+  "fr": "Ex. : fonds d’urgence",
+  "es": "Ej.: fondo de emergencia"
  },
  {
   "pt": "VALOR APORTADO (R$)",
@@ -5183,6 +5274,34 @@
   "es": "VALOR ACTUAL INDICADO (R$)"
  },
  {
+  "pt": "Não informada",
+  "tipo": "exato",
+  "en": "Not provided",
+  "fr": "Non renseignée",
+  "es": "No informada"
+ },
+ {
+  "pt": "Diária",
+  "tipo": "exato",
+  "en": "Daily",
+  "fr": "Quotidienne",
+  "es": "Diaria"
+ },
+ {
+  "pt": "No vencimento",
+  "tipo": "exato",
+  "en": "At maturity",
+  "fr": "À l’échéance",
+  "es": "Al vencimiento"
+ },
+ {
+  "pt": "Taxa prefixada estimada. Para CDB atrelado ao CDI, informe o valor atual do banco; o OAZE não consulta CDI automaticamente.",
+  "tipo": "exato",
+  "en": "Estimated fixed annual rate. For CDI-linked CDBs, enter the current bank value; OAZE does not fetch CDI automatically.",
+  "fr": "Taux fixe annuel estimé. Pour les CDB liés au CDI, indiquez la valeur actuelle de la banque ; OAZE ne récupère pas le CDI automatiquement.",
+  "es": "Tasa fija anual estimada. Para CDB vinculados al CDI, introduce el valor actual del banco; OAZE no consulta el CDI automáticamente."
+ },
+ {
   "pt": "DEBITAR DE UMA CONTA",
   "tipo": "exato",
   "en": "DEBIT FROM AN ACCOUNT",
@@ -5197,11 +5316,11 @@
   "es": "No debitar"
  },
  {
-  "pt": "Se escolher uma conta, o aporte será descontado do saldo dela. O valor atual informado substitui a estimativa de rentabilidade.",
+  "pt": "Porquinhos não rendem automaticamente aqui. Ao vinculá-los a uma conta, o valor sai do saldo disponível e continua no patrimônio, sem contagem dupla.",
   "tipo": "exato",
-  "en": "If you choose an account, the contribution is deducted from its balance. The current value you enter replaces the return estimate.",
-  "fr": "Si vous choisissez un compte, l’apport est déduit de son solde. La valeur actuelle saisie remplace l’estimation de rendement.",
-  "es": "Si eliges una cuenta, la aportación se descuenta de su saldo. El valor actual indicado sustituye la estimación de rentabilidad."
+  "en": "Savings pots do not earn interest automatically here. When linked to an account, the amount leaves the available balance but remains in net worth, without double counting.",
+  "fr": "Les cagnottes ne génèrent pas automatiquement des intérêts ici. Reliée à un compte, la somme quitte le solde disponible mais reste dans le patrimoine, sans double comptage.",
+  "es": "Las alcancías no generan intereses automáticamente aquí. Al vincularlas a una cuenta, el importe sale del saldo disponible y permanece en el patrimonio, sin duplicarse."
  },
  {
   "pt": "editar meta",
@@ -5356,6 +5475,251 @@
   "en": "Work",
   "fr": "Travail",
   "es": "Trabajo"
+ },
+ {
+  "pt": "Bebê",
+  "tipo": "exato",
+  "en": "Baby",
+  "fr": "Bébé",
+  "es": "Bebé"
+ },
+ {
+  "pt": "Ônibus",
+  "tipo": "exato",
+  "en": "Bus",
+  "fr": "Bus",
+  "es": "Autobús"
+ },
+ {
+  "pt": "Festa",
+  "tipo": "exato",
+  "en": "Party",
+  "fr": "Fête",
+  "es": "Fiesta"
+ },
+ {
+  "pt": "Doação",
+  "tipo": "exato",
+  "en": "Donation",
+  "fr": "Don",
+  "es": "Donación"
+ },
+ {
+  "pt": "Pet",
+  "tipo": "exato",
+  "en": "Pet",
+  "fr": "Animal",
+  "es": "Mascota"
+ },
+ {
+  "pt": "Água",
+  "tipo": "exato",
+  "en": "Water",
+  "fr": "Eau",
+  "es": "Agua"
+ },
+ {
+  "pt": "Academia",
+  "tipo": "exato",
+  "en": "Gym",
+  "fr": "Salle de sport",
+  "es": "Gimnasio"
+ },
+ {
+  "pt": "Gás",
+  "tipo": "exato",
+  "en": "Gas",
+  "fr": "Gaz",
+  "es": "Gas"
+ },
+ {
+  "pt": "Combustível",
+  "tipo": "exato",
+  "en": "Fuel",
+  "fr": "Carburant",
+  "es": "Combustible"
+ },
+ {
+  "pt": "Presente",
+  "tipo": "exato",
+  "en": "Gift",
+  "fr": "Cadeau",
+  "es": "Regalo"
+ },
+ {
+  "pt": "Ótica",
+  "tipo": "exato",
+  "en": "Eyewear",
+  "fr": "Optique",
+  "es": "Óptica"
+ },
+ {
+  "pt": "Obras",
+  "tipo": "exato",
+  "en": "Renovation",
+  "fr": "Travaux",
+  "es": "Obras"
+ },
+ {
+  "pt": "Tecnologia",
+  "tipo": "exato",
+  "en": "Technology",
+  "fr": "Technologie",
+  "es": "Tecnología"
+ },
+ {
+  "pt": "Viagem",
+  "tipo": "exato",
+  "en": "Travel",
+  "fr": "Voyage",
+  "es": "Viaje"
+ },
+ {
+  "pt": "Música",
+  "tipo": "exato",
+  "en": "Music",
+  "fr": "Musique",
+  "es": "Música"
+ },
+ {
+  "pt": "Encomenda",
+  "tipo": "exato",
+  "en": "Parcel",
+  "fr": "Colis",
+  "es": "Paquete"
+ },
+ {
+  "pt": "Férias",
+  "tipo": "exato",
+  "en": "Vacation",
+  "fr": "Vacances",
+  "es": "Vacaciones"
+ },
+ {
+  "pt": "Taxas",
+  "tipo": "exato",
+  "en": "Fees",
+  "fr": "Frais",
+  "es": "Tasas"
+ },
+ {
+  "pt": "Avião",
+  "tipo": "exato",
+  "en": "Flight",
+  "fr": "Avion",
+  "es": "Avión"
+ },
+ {
+  "pt": "Beleza",
+  "tipo": "exato",
+  "en": "Beauty",
+  "fr": "Beauté",
+  "es": "Belleza"
+ },
+ {
+  "pt": "Seguro",
+  "tipo": "exato",
+  "en": "Insurance",
+  "fr": "Assurance",
+  "es": "Seguro"
+ },
+ {
+  "pt": "Roupas",
+  "tipo": "exato",
+  "en": "Clothing",
+  "fr": "Vêtements",
+  "es": "Ropa"
+ },
+ {
+  "pt": "Mercado",
+  "tipo": "exato",
+  "en": "Groceries",
+  "fr": "Courses",
+  "es": "Supermercado"
+ },
+ {
+  "pt": "Celular",
+  "tipo": "exato",
+  "en": "Mobile phone",
+  "fr": "Téléphone mobile",
+  "es": "Celular"
+ },
+ {
+  "pt": "Móveis",
+  "tipo": "exato",
+  "en": "Furniture",
+  "fr": "Meubles",
+  "es": "Muebles"
+ },
+ {
+  "pt": "Cuidados",
+  "tipo": "exato",
+  "en": "Care",
+  "fr": "Soins",
+  "es": "Cuidados"
+ },
+ {
+  "pt": "Especial",
+  "tipo": "exato",
+  "en": "Special",
+  "fr": "Spécial",
+  "es": "Especial"
+ },
+ {
+  "pt": "Médico",
+  "tipo": "exato",
+  "en": "Doctor",
+  "fr": "Médecin",
+  "es": "Médico"
+ },
+ {
+  "pt": "Ingresso",
+  "tipo": "exato",
+  "en": "Ticket",
+  "fr": "Billet",
+  "es": "Entrada"
+ },
+ {
+  "pt": "Frete",
+  "tipo": "exato",
+  "en": "Shipping",
+  "fr": "Livraison",
+  "es": "Envío"
+ },
+ {
+  "pt": "Streaming",
+  "tipo": "exato",
+  "en": "Streaming",
+  "fr": "Streaming",
+  "es": "Streaming"
+ },
+ {
+  "pt": "Proteção",
+  "tipo": "exato",
+  "en": "Protection",
+  "fr": "Protection",
+  "es": "Protección"
+ },
+ {
+  "pt": "Família",
+  "tipo": "exato",
+  "en": "Family",
+  "fr": "Famille",
+  "es": "Familia"
+ },
+ {
+  "pt": "Conserto",
+  "tipo": "exato",
+  "en": "Repair",
+  "fr": "Réparation",
+  "es": "Reparación"
+ },
+ {
+  "pt": "Energia",
+  "tipo": "exato",
+  "en": "Energy",
+  "fr": "Énergie",
+  "es": "Energía"
  },
  {
   "pt": "editar categoria",

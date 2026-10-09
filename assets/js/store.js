@@ -43,44 +43,24 @@
      cor: vem sempre com ícone e nome.
      ------------------------------------------------------------ */
   /* ------------------------------------------------------------
-     AS CORES DAS CATEGORIAS, NA V2.1
+     CORES DAS CATEGORIAS
      ------------------------------------------------------------
-     Eram 28 cores soltas da identidade antiga — terracota, âmbar,
-     ferrugem, bronze — escolhidas quando o acento do app era ouro.
-     Com a V2.1 elas passaram a brigar com a tela em que vivem.
-
-     Agora são DOZE, e não vinte e oito, porque seletor de cor não é
-     paleta de pintor: com vinte e oito a pessoa escolhe por sorteio,
-     e duas categorias acabam com tons que ninguém distingue de
-     relance. Doze é o que ainda dá para percorrer com o olho.
-
-     São SEIS MATIZES, ancorados na marca — teal e mineral vêm da
-     paleta, tangerina vem da Coco — em DOIS TONS cada. Saturação e
-     claridade são as mesmas para todas: é isso que faz família. Uma
-     cor mais clara que as outras pularia da tela e viraria destaque
-     sem ninguém ter pedido.
-
-     Todas passam 4,5:1 com texto branco por cima; a mais fraca é o
-     teal, com 4,99:1. As cores antigas continuam funcionando em
-     dados já salvos — o seletor acrescenta a cor herdada quando ela
-     não está na lista, e ninguém perde a categoria que pintou.
-
-     A paleta é escrita POR FAMÍLIA, e não como doze cores soltas,
-     porque é essa estrutura que o seletor mostra na tela: seis
-     colunas com dois tons cada, em vez de uma fileira de quadrados
-     iguais onde qualquer escolha parece tão boa quanto outra.
+     Os tons pedidos ficam agrupados por família no seletor. A cor
+     antiga de uma categoria continua disponível como cor herdada.
+     O contraste do ícone é escolhido para cada fundo, claro ou escuro.
      ------------------------------------------------------------ */
   const COLOR_FAMILIES = [
-    { nome: 'Teal', tons: ['#3E7A6D', '#305A51'] },
-    { nome: 'Mineral', tons: ['#3E647A', '#304A5A'] },
-    { nome: 'Índigo', tons: ['#3E467A', '#30365A'] },
-    { nome: 'Ameixa', tons: ['#5A3E7A', '#43305A'] },
-    { nome: 'Tangerina', tons: ['#7A503E', '#5A3D30'] },
-    { nome: 'Oliva', tons: ['#577A3E', '#415A30'] }
+    { nome: 'Amarelos', tons: ['#E8BE35','#F6D84B','#C7D93A'] },
+    { nome: 'Azuis', tons: ['#3777C7','#79C8E8','#294BA5','#35B4BE'] },
+    { nome: 'Vermelhos e rosas', tons: ['#DB514C','#952C38','#A84583','#BD344D','#823447','#60304B','#EDABBE','#E85C9B'] },
+    { nome: 'Verdes', tons: ['#4E9C60','#95CC82','#285F45','#75C7AD','#5EAD56','#265946','#36A798'] },
+    { nome: 'Laranjas e violetas', tons: ['#E78B45','#F6AE78','#AF572E','#B68FD1','#744BA5'] },
+    { nome: 'Marrons', tons: ['#80533D','#AF8061','#4F342C','#A86B48','#B88939'] },
+    { nome: 'Neutros', tons: ['#F5F2EA','#111820','#DCE4E7','#424D55'] }
   ];
   const PALETTE = COLOR_FAMILIES.map((f) => f.tons[0]);
-  const PALETTE_EXTRA = COLOR_FAMILIES.map((f) => f.tons[1]);
-  const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA);
+  const PALETTE_EXTRA = COLOR_FAMILIES.flatMap((f) => f.tons.slice(1));
+  const ALL_COLORS = COLOR_FAMILIES.flatMap((f) => f.tons);
 
   /* ------------------------------------------------------------
      MEIOS DE PAGAMENTO
@@ -115,7 +95,14 @@
   /* O nome existe para o leitor de tela e para a dica do seletor:
      "Cor #7A3B45" não é um rótulo, é um número de série. */
   const COLOR_NAMES = {
-    /* ---- a família V2.1: seis matizes, dois tons ---- */
+    '#E8BE35':'Amarelo','#F6D84B':'Amarelo Canário','#C7D93A':'Amarelo Limão',
+    '#3777C7':'Azul','#79C8E8':'Azul Céu','#294BA5':'Azul Cobalto','#35B4BE':'Azul Turquesa',
+    '#DB514C':'Vermelho','#952C38':'Vermelho Escuro','#A84583':'Vermelho Violeta','#BD344D':'Carmim','#823447':'Bordô','#60304B':'Vinho','#EDABBE':'Rosa Claro','#E85C9B':'Rosa Chiclete',
+    '#4E9C60':'Verde','#95CC82':'Verde Claro','#285F45':'Verde Escuro','#75C7AD':'Verde Água','#5EAD56':'Verde Folha','#265946':'Verde Pinho','#36A798':'Verde Turquesa',
+    '#E78B45':'Laranja','#F6AE78':'Laranja Claro','#AF572E':'Laranja Escuro','#B68FD1':'Lilás','#744BA5':'Violeta',
+    '#80533D':'Marrom','#AF8061':'Marrom Claro','#4F342C':'Marrom Escuro','#A86B48':'Canela','#B88939':'Ocre',
+    '#F5F2EA':'Branco','#111820':'Preto','#DCE4E7':'Cinza Gelo','#424D55':'Cinza Escuro',
+    /* Cores antigas continuam nomeadas para dados já existentes. */
     '#3E7A6D': 'Teal', '#305A51': 'Teal profundo',
     '#3E647A': 'Mineral', '#304A5A': 'Mineral profundo',
     '#3E467A': 'Índigo', '#30365A': 'Índigo profundo',
@@ -198,7 +185,7 @@
   ];
 
   const ACCOUNT_TYPES = ['Conta corrente', 'Conta poupança', 'Conta de pagamento', 'Carteira / dinheiro', 'Conta investimento'];
-  const INVESTMENT_TYPES = ['Renda fixa', 'Tesouro Direto', 'CDB', 'Fundo de investimento', 'Ações', 'FIIs', 'ETF', 'Criptomoeda', 'Previdência', 'Poupança', 'Outro'];
+  const INVESTMENT_TYPES = ['Porquinho', 'Renda fixa', 'Tesouro Direto', 'CDB', 'Fundo de investimento', 'Ações', 'FIIs', 'ETF', 'Criptomoeda', 'Previdência', 'Poupança', 'Outro'];
 
   /* mesmos hexes que a migração produz — perfil novo e migrado ficam iguais */
   const DEFAULT_EXPENSE_CATS = [
@@ -509,6 +496,8 @@
       rate: +i.rate || 0,
       currentValue: i.currentValue === '' || i.currentValue == null ? null : U.round2(+i.currentValue),
       accountId: i.accountId || null,
+      maturityDate: U.isValidISO(i.maturityDate) ? i.maturityDate : null,
+      liquidity: ['diaria','vencimento'].includes(i.liquidity) ? i.liquidity : null,
       notes: String(i.notes || '')
     }));
     prof.invoices = normalizeInvoices(prof.invoices);

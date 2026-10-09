@@ -456,6 +456,29 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-invest-legenda i.e-aporte{border-top:2px dashed rgba(240,229,207,.45)}
 .v3-invest-legenda strong{margin-left:auto;font-size:12px}
 @media(max-width:540px){.v3-invest-legenda strong{margin-left:0;flex:1 1 100%}}
+.v3-chat-form [hidden],.v3-form [hidden]{display:none!important}
+.v3-chat-form>.v3-coco-icon{flex:none;width:42px;height:42px}
+.v3-category-svg{width:1.2em;height:1.2em;display:block}
+.v3-cat-icon{color:var(--swatch-ink,var(--night))}
+.v3-icon-opt .v3-category-svg{width:21px;height:21px}
+.v3-color-tira{max-height:245px;overflow:auto;align-items:start;padding:3px}
+.v3-color-fam{grid-auto-flow:row;align-content:start}
+.v3-color-opt>span{border-color:rgba(13,24,33,.28)}
+.v3-invest-page{display:grid;gap:16px}
+.v3-invest-collections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.v3-invest-collections .v3-panel{display:grid;align-content:start;gap:12px}
+.v3-invest-bucket{width:100%;display:flex;align-items:center;justify-content:space-between;gap:15px;text-align:left;padding:14px;border:1px solid var(--line);border-radius:17px;background:rgba(240,229,207,.045);color:var(--milk)}
+.v3-invest-bucket:hover,.v3-invest-bucket:focus-visible{border-color:var(--teal)}
+.v3-invest-bucket span{display:grid;gap:3px}.v3-invest-bucket small{line-height:1.35}
+.v3-score-details{display:grid;gap:13px}
+.v3-score-details summary{cursor:pointer;list-style:none;width:max-content;max-width:100%;padding:9px 15px;border:1px solid var(--line);border-radius:999px;color:var(--milk)}
+.v3-score-details summary::-webkit-details-marker{display:none}
+.v3-score-details summary:after{content:'⌄';margin-left:12px;color:var(--teal)}
+.v3-score-details[open] summary:after{content:'⌃'}
+.v3-score-details[open]>p,.v3-score-details[open]>.v3-score-hist,.v3-score-details[open]>.v3-score-lista{margin-top:13px}
+.v3-score-details:not([open])>:not(summary){display:none!important}
+@media(min-width:901px){.v3-home>.v3-score{grid-template-columns:1fr}.v3-home>.v3-score .v3-score-lista{grid-column:auto;grid-row:auto}.v3-home>.v3-score>p:last-child{grid-column:auto}}
+@media(max-width:700px){.v3-invest-collections{grid-template-columns:1fr}.v3-invest-bucket{align-items:flex-start;flex-direction:column}}
 
 /* Andar entre faturas: a fatura não coincide com o mês, então ela
    tem navegação própria, com as datas do ciclo à vista. */

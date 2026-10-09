@@ -5,46 +5,53 @@
   "ignorar": true
  },
  {
-  "pt": "Teal",
+  "pt": "Amarelos",
   "tipo": "exato",
-  "en": "Teal",
-  "fr": "Sarcelle",
-  "es": "Teal"
+  "en": "Yellows",
+  "fr": "Jaunes",
+  "es": "Amarillos"
  },
  {
-  "pt": "Mineral",
+  "pt": "Azuis",
   "tipo": "exato",
-  "en": "Mineral",
-  "fr": "Minéral",
-  "es": "Mineral"
+  "en": "Blues",
+  "fr": "Bleus",
+  "es": "Azules"
  },
  {
-  "pt": "Índigo",
+  "pt": "Vermelhos e rosas",
   "tipo": "exato",
-  "en": "Indigo",
-  "fr": "Indigo",
-  "es": "Índigo"
+  "en": "Reds and pinks",
+  "fr": "Rouges et roses",
+  "es": "Rojos y rosas"
  },
  {
-  "pt": "Ameixa",
+  "pt": "Verdes",
   "tipo": "exato",
-  "en": "Plum",
-  "fr": "Prune",
-  "es": "Ciruela"
+  "en": "Greens",
+  "fr": "Verts",
+  "es": "Verdes"
  },
  {
-  "pt": "Tangerina",
+  "pt": "Laranjas e violetas",
   "tipo": "exato",
-  "en": "Tangerine",
-  "fr": "Mandarine",
-  "es": "Mandarina"
+  "en": "Oranges and purples",
+  "fr": "Oranges et violets",
+  "es": "Naranjas y violetas"
  },
  {
-  "pt": "Oliva",
+  "pt": "Marrons",
   "tipo": "exato",
-  "en": "Olive",
-  "fr": "Olive",
-  "es": "Oliva"
+  "en": "Browns",
+  "fr": "Bruns",
+  "es": "Marrones"
+ },
+ {
+  "pt": "Neutros",
+  "tipo": "exato",
+  "en": "Neutrals",
+  "fr": "Neutres",
+  "es": "Neutros"
  },
  {
   "pt": "Pix",
@@ -89,11 +96,277 @@
   "es": "Efectivo"
  },
  {
+  "pt": "Amarelo",
+  "tipo": "exato",
+  "en": "Yellow",
+  "fr": "Jaune",
+  "es": "Amarillo"
+ },
+ {
+  "pt": "Amarelo Canário",
+  "tipo": "exato",
+  "en": "Canary yellow",
+  "fr": "Jaune canari",
+  "es": "Amarillo canario"
+ },
+ {
+  "pt": "Amarelo Limão",
+  "tipo": "exato",
+  "en": "Lemon yellow",
+  "fr": "Jaune citron",
+  "es": "Amarillo limón"
+ },
+ {
+  "pt": "Azul",
+  "tipo": "exato",
+  "en": "Blue",
+  "fr": "Bleu",
+  "es": "Azul"
+ },
+ {
+  "pt": "Azul Céu",
+  "tipo": "exato",
+  "en": "Sky blue",
+  "fr": "Bleu ciel",
+  "es": "Azul cielo"
+ },
+ {
+  "pt": "Azul Cobalto",
+  "tipo": "exato",
+  "en": "Cobalt blue",
+  "fr": "Bleu cobalt",
+  "es": "Azul cobalto"
+ },
+ {
+  "pt": "Azul Turquesa",
+  "tipo": "exato",
+  "en": "Turquoise blue",
+  "fr": "Bleu turquoise",
+  "es": "Azul turquesa"
+ },
+ {
+  "pt": "Vermelho",
+  "tipo": "exato",
+  "en": "Red",
+  "fr": "Rouge",
+  "es": "Rojo"
+ },
+ {
+  "pt": "Vermelho Escuro",
+  "tipo": "exato",
+  "en": "Dark red",
+  "fr": "Rouge foncé",
+  "es": "Rojo oscuro"
+ },
+ {
+  "pt": "Vermelho Violeta",
+  "tipo": "exato",
+  "en": "Red violet",
+  "fr": "Rouge violacé",
+  "es": "Rojo violeta"
+ },
+ {
+  "pt": "Carmim",
+  "tipo": "exato",
+  "en": "Crimson",
+  "fr": "Cramoisi",
+  "es": "Carmesí"
+ },
+ {
+  "pt": "Bordô",
+  "tipo": "exato",
+  "en": "Burgundy",
+  "fr": "Bordeaux",
+  "es": "Burdeos"
+ },
+ {
+  "pt": "Vinho",
+  "tipo": "exato",
+  "en": "Wine",
+  "fr": "Bordeaux",
+  "es": "Vino"
+ },
+ {
+  "pt": "Rosa Claro",
+  "tipo": "exato",
+  "en": "Light pink",
+  "fr": "Rose clair",
+  "es": "Rosa claro"
+ },
+ {
+  "pt": "Rosa Chiclete",
+  "tipo": "exato",
+  "en": "Bubblegum pink",
+  "fr": "Rose bonbon",
+  "es": "Rosa chicle"
+ },
+ {
+  "pt": "Verde",
+  "tipo": "exato",
+  "en": "Green",
+  "fr": "Vert",
+  "es": "Verde"
+ },
+ {
+  "pt": "Verde Claro",
+  "tipo": "exato",
+  "en": "Light green",
+  "fr": "Vert clair",
+  "es": "Verde claro"
+ },
+ {
+  "pt": "Verde Escuro",
+  "tipo": "exato",
+  "en": "Dark green",
+  "fr": "Vert foncé",
+  "es": "Verde oscuro"
+ },
+ {
+  "pt": "Verde Água",
+  "tipo": "exato",
+  "en": "Seafoam green",
+  "fr": "Vert d’eau",
+  "es": "Verde agua"
+ },
+ {
+  "pt": "Verde Folha",
+  "tipo": "exato",
+  "en": "Leaf green",
+  "fr": "Vert feuille",
+  "es": "Verde hoja"
+ },
+ {
+  "pt": "Verde Pinho",
+  "tipo": "exato",
+  "en": "Pine green",
+  "fr": "Vert sapin",
+  "es": "Verde pino"
+ },
+ {
+  "pt": "Verde Turquesa",
+  "tipo": "exato",
+  "en": "Turquoise green",
+  "fr": "Vert turquoise",
+  "es": "Verde turquesa"
+ },
+ {
+  "pt": "Laranja",
+  "tipo": "exato",
+  "en": "Orange",
+  "fr": "Orange",
+  "es": "Naranja"
+ },
+ {
+  "pt": "Laranja Claro",
+  "tipo": "exato",
+  "en": "Light orange",
+  "fr": "Orange clair",
+  "es": "Naranja claro"
+ },
+ {
+  "pt": "Laranja Escuro",
+  "tipo": "exato",
+  "en": "Dark orange",
+  "fr": "Orange foncé",
+  "es": "Naranja oscuro"
+ },
+ {
+  "pt": "Lilás",
+  "tipo": "exato",
+  "en": "Lilac",
+  "fr": "Lilas",
+  "es": "Lila"
+ },
+ {
+  "pt": "Violeta",
+  "tipo": "exato",
+  "en": "Violet",
+  "fr": "Violet",
+  "es": "Violeta"
+ },
+ {
+  "pt": "Marrom",
+  "tipo": "exato",
+  "en": "Brown",
+  "fr": "Brun",
+  "es": "Marrón"
+ },
+ {
+  "pt": "Marrom Claro",
+  "tipo": "exato",
+  "en": "Light brown",
+  "fr": "Brun clair",
+  "es": "Marrón claro"
+ },
+ {
+  "pt": "Marrom Escuro",
+  "tipo": "exato",
+  "en": "Dark brown",
+  "fr": "Brun foncé",
+  "es": "Marrón oscuro"
+ },
+ {
+  "pt": "Canela",
+  "tipo": "exato",
+  "en": "Cinnamon",
+  "fr": "Cannelle",
+  "es": "Canela"
+ },
+ {
+  "pt": "Ocre",
+  "tipo": "exato",
+  "en": "Ochre",
+  "fr": "Ocre",
+  "es": "Ocre"
+ },
+ {
+  "pt": "Branco",
+  "tipo": "exato",
+  "en": "White",
+  "fr": "Blanc",
+  "es": "Blanco"
+ },
+ {
+  "pt": "Preto",
+  "tipo": "exato",
+  "en": "Black",
+  "fr": "Noir",
+  "es": "Negro"
+ },
+ {
+  "pt": "Cinza Gelo",
+  "tipo": "exato",
+  "en": "Ice gray",
+  "fr": "Gris glacier",
+  "es": "Gris hielo"
+ },
+ {
+  "pt": "Cinza Escuro",
+  "tipo": "exato",
+  "en": "Dark gray",
+  "fr": "Gris foncé",
+  "es": "Gris oscuro"
+ },
+ {
+  "pt": "Teal",
+  "tipo": "exato",
+  "en": "Teal",
+  "fr": "Sarcelle",
+  "es": "Teal"
+ },
+ {
   "pt": "Teal profundo",
   "tipo": "exato",
   "en": "Deep teal",
   "fr": "Sarcelle profond",
   "es": "Teal profundo"
+ },
+ {
+  "pt": "Mineral",
+  "tipo": "exato",
+  "en": "Mineral",
+  "fr": "Minéral",
+  "es": "Mineral"
  },
  {
   "pt": "Mineral profundo",
@@ -103,11 +376,25 @@
   "es": "Mineral profundo"
  },
  {
+  "pt": "Índigo",
+  "tipo": "exato",
+  "en": "Indigo",
+  "fr": "Indigo",
+  "es": "Índigo"
+ },
+ {
   "pt": "Índigo profundo",
   "tipo": "exato",
   "en": "Deep indigo",
   "fr": "Indigo profond",
   "es": "Índigo profundo"
+ },
+ {
+  "pt": "Ameixa",
+  "tipo": "exato",
+  "en": "Plum",
+  "fr": "Prune",
+  "es": "Ciruela"
  },
  {
   "pt": "Ameixa profundo",
@@ -117,11 +404,25 @@
   "es": "Ciruela profundo"
  },
  {
+  "pt": "Tangerina",
+  "tipo": "exato",
+  "en": "Tangerine",
+  "fr": "Mandarine",
+  "es": "Mandarina"
+ },
+ {
   "pt": "Tangerina profundo",
   "tipo": "exato",
   "en": "Deep tangerine",
   "fr": "Mandarine profond",
   "es": "Mandarina profundo"
+ },
+ {
+  "pt": "Oliva",
+  "tipo": "exato",
+  "en": "Olive",
+  "fr": "Olive",
+  "es": "Oliva"
  },
  {
   "pt": "Oliva profundo",
@@ -234,13 +535,6 @@
   "en": "Copper",
   "fr": "Cuivre",
   "es": "Cobre"
- },
- {
-  "pt": "Vinho",
-  "tipo": "exato",
-  "en": "Wine",
-  "fr": "Bordeaux",
-  "es": "Vino"
  },
  {
   "pt": "Jade",
@@ -525,6 +819,13 @@
   "en": "Investment account",
   "fr": "Compte d'investissement",
   "es": "Cuenta de inversión"
+ },
+ {
+  "pt": "Porquinho",
+  "tipo": "exato",
+  "en": "Savings pot",
+  "fr": "Cagnotte",
+  "es": "Alcancía"
  },
  {
   "pt": "Renda fixa",
