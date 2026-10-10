@@ -65,7 +65,7 @@ assert.match(store, /MEIOS_OFERECIVEIS/);
 assert.match(app, /function iconPicker\(atual,choices\)/);
 assert.match(app, /type="radio" name="icon"/, 'o ícone é caixa de seleção, não lista de nomes');
 assert.doesNotMatch(app, /<label>ÍCONE<select name="icon">/, 'a lista de nomes não deve voltar');
-assert.match(app, /function colorPicker\(atual\)/);
+assert.match(app, /function colorPicker\(atual, fieldName='color', required=true\)/);
 assert.match(app, /Store\.COLOR_FAMILIES/);
 assert.doesNotMatch(app, /<input type="color" name="color"/, 'a cor não é seleção livre');
 assert.match(app, /function corPadraoDeCategoria/, 'categoria nova nasce numa cor da paleta');

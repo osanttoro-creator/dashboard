@@ -1751,7 +1751,7 @@
     const oferecidos=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
     openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
     const form=document.getElementById('v3-form-account');
-    form?.querySelector('.v3-bank-picker')?.insertAdjacentHTML('afterend',`<label id="v3-custom-bank-color" ${existing?.bank&&!bankKey(existing.bank)?'':'hidden'}>COR DE OUTRO<input type="color" name="customColor" value="${safeColor(existing?.color||'#355565')}"></label>`);
+    form?.querySelector('.v3-bank-picker')?.insertAdjacentHTML('afterend',`<div id="v3-custom-bank-color" ${existing?.bank&&!bankKey(existing.bank)?'':'hidden'}>${colorPicker(safeColor(existing?.color||Store.PALETTE?.[0]||'#E8BE35'),'customColor',false)}</div>`);
     form?.querySelectorAll('.v3-meios input').forEach((input)=>{input.checked=true;input.disabled=true;});
     const meiosHint=form?.querySelector('.v3-meios small');
     if(meiosHint)meiosHint.textContent='Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.';
@@ -1916,7 +1916,7 @@
       `<label class="v3-icon-opt" title="${esc(label)}"><input type="radio" name="icon" value="${esc(key)}" ${key===atual?'checked':''} required><span aria-hidden="true">${categoryIconMarkup(key)}</span><small>${esc(label)}</small></label>`
     ).join('')}</div></fieldset>`;
   }
-  function colorPicker(atual) {
+  function colorPicker(atual, fieldName='color', required=true) {
     const familias=(Store.COLOR_FAMILIES||[]).slice();
     const conhecidas=familias.reduce((acc,f)=>acc.concat(f.tons),[]);
     /* Uma cor herdada de dados antigos ganha a própria coluna: ninguém
@@ -1927,7 +1927,7 @@
     const ehAtual=(c)=>String(c).toLowerCase()===String(atual).toLowerCase();
     return `<fieldset class="v3-color-picker"><legend>COR</legend><div class="v3-color-tira">${familias.map((f)=>
       `<div class="v3-color-fam${f.herdada?' is-herdada':''}">${f.tons.map((c)=>
-        `<label class="v3-color-opt" title="${esc(Store.colorName?Store.colorName(c):c)}" style="--cor:${esc(c)}"><input type="radio" name="color" value="${esc(c)}" ${ehAtual(c)?'checked':''} required><span aria-hidden="true"></span></label>`
+        `<label class="v3-color-opt" title="${esc(Store.colorName?Store.colorName(c):c)}" style="--cor:${esc(c)}"><input type="radio" name="${esc(fieldName)}" value="${esc(c)}" ${ehAtual(c)?'checked':''} ${required?'required':''} aria-label="${esc(Store.colorName?Store.colorName(c):c)}"><span aria-hidden="true"></span></label>`
       ).join('')}</div>`
     ).join('')}</div></fieldset>`;
   }
@@ -2119,7 +2119,8 @@
     const existing=id?(type==='card'?Store.cards.get(id):Store.accounts.get(id)):null;
     const moeda=String(fd.get('moeda')||'BRL'),cotacao=moeda==='BRL'?null:parseMoney(fd.get('cotacao'));
     const knownCurrency=moeda==='BRL'||Store.MOEDAS.some((m)=>m.code===moeda);
-    if (!['card','account'].includes(type) || (id&&!existing) || !name || !selectedBank || (selectedBank!=='Outro'&&!bankKey(bank)) || (selectedBank==='Outro'&&(!/^#[0-9a-f]{6}$/i.test(customColor)||bankKey(bank))) || !knownCurrency || (moeda!=='BRL'&&!(cotacao>0)) || (!Number.isFinite(amount)&&String(fd.get('amount')||'').trim()) || amount<0) {
+    const allowedCustomColor=(Store.ALL_COLORS||[]).some((color)=>color.toLowerCase()===customColor.toLowerCase()) || (existing?.color && safeColor(existing.color).toLowerCase()===customColor.toLowerCase());
+    if (!['card','account'].includes(type) || (id&&!existing) || !name || !selectedBank || (selectedBank!=='Outro'&&!bankKey(bank)) || (selectedBank==='Outro'&&(!/^#[0-9a-f]{6}$/i.test(customColor)||!allowedCustomColor||bankKey(bank))) || !knownCurrency || (moeda!=='BRL'&&!(cotacao>0)) || (!Number.isFinite(amount)&&String(fd.get('amount')||'').trim()) || amount<0) {
       toast('Confira nome, instituição, moeda, cotação e valor.'); return;
     }
     if (!existing&&!canAdd(type==='card'?'credit_cards':'accounts',state.ym)) { toast('Esta inclusão ultrapassa o limite do seu plano.'); return; }
