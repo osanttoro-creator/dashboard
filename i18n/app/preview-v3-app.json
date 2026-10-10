@@ -3611,13 +3611,6 @@
   "es": "Coco está pensando…"
  },
  {
-  "pt": "Gravando áudio. Toque no microfone para enviar.",
-  "tipo": "exato",
-  "en": "Recording audio. Tap the microphone to send.",
-  "fr": "Enregistrement en cours. Touchez le microphone pour envoyer.",
-  "es": "Grabando audio. Toca el micrófono para enviar."
- },
- {
   "pt": "Voltar ao painel",
   "tipo": "exato",
   "en": "Back to dashboard",
@@ -3724,18 +3717,11 @@
   "ignorar": true
  },
  {
-  "pt": "Parar gravação",
+  "pt": "Conversar por voz",
   "tipo": "exato",
-  "en": "Stop recording",
-  "fr": "Arrêter l’enregistrement",
-  "es": "Detener grabación"
- },
- {
-  "pt": "Gravar áudio",
-  "tipo": "exato",
-  "en": "Record audio",
-  "fr": "Enregistrer un audio",
-  "es": "Grabar audio"
+  "en": "Talk by voice",
+  "fr": "Parler avec Coco",
+  "es": "Hablar por voz"
  },
  {
   "pt": "Anexar arquivo",
@@ -3843,32 +3829,11 @@
   "es": "Terminar conversación de voz"
  },
  {
-  "pt": "Voltar para texto",
-  "tipo": "exato",
-  "en": "Back to text",
-  "fr": "Revenir au texte",
-  "es": "Volver al texto"
- },
- {
-  "pt": "Texto",
-  "tipo": "exato",
-  "en": "Text",
-  "fr": "Texte",
-  "es": "Texto"
- },
- {
   "pt": "Conectando…",
   "tipo": "exato",
   "en": "Connecting…",
   "fr": "Connexion…",
   "es": "Conectando…"
- },
- {
-  "pt": "Conversar por voz",
-  "tipo": "exato",
-  "en": "Talk by voice",
-  "fr": "Parler avec Coco",
-  "es": "Hablar por voz"
  },
  {
   "pt": "Ativar som",
@@ -3897,6 +3862,13 @@
   "en": "Voice conversation",
   "fr": "Conversation vocale",
   "es": "Conversación por voz"
+ },
+ {
+  "pt": "Escrever em texto",
+  "tipo": "exato",
+  "en": "Type instead",
+  "fr": "Écrire un message",
+  "es": "Escribir un mensaje"
  },
  {
   "pt": "Não consegui carregar as configurações da Coco.",
@@ -4929,13 +4901,6 @@
   "en": "Account or card",
   "fr": "Compte ou carte",
   "es": "Cuenta o tarjeta"
- },
- {
-  "pt": "COR DE OUTRO",
-  "tipo": "exato",
-  "en": "OTHER COLOR",
-  "fr": "COULEUR AUTRE",
-  "es": "COLOR DE OTRO"
  },
  {
   "pt": "Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.",
@@ -6783,18 +6748,11 @@
   "es": "Autoriza a Coco en uno de tus perfiles antes de usar la voz."
  },
  {
-  "pt": "Voz em tempo real indisponível neste navegador. Use a gravação de áudio.",
+  "pt": "Voz em tempo real indisponível neste navegador.",
   "tipo": "exato",
-  "en": "Real-time voice is unavailable in this browser. Use audio recording.",
-  "fr": "La voix en temps réel n'est pas disponible dans ce navigateur. Utilisez l'enregistrement audio.",
-  "es": "La voz en tiempo real no está disponible en este navegador. Usa la grabación de audio."
- },
- {
-  "pt": "Ativar o microfone para conversar com a Coco? Sua fala será enviada à OpenAI durante a sessão. O OAZE não guarda o áudio original. O indicador ficará visível até você encerrar.",
-  "tipo": "exato",
-  "en": "Turn on the microphone to talk with Coco? Your speech will be sent to OpenAI during the session. OAZE does not store the original audio. The indicator will stay visible until you end the session.",
-  "fr": "Activer le microphone pour parler à Coco ? Votre voix sera envoyée à OpenAI pendant la session. OAZE ne conserve pas l'audio original. L'indicateur restera visible jusqu'à la fin.",
-  "es": "¿Activar el micrófono para hablar con Coco? Tu voz se enviará a OpenAI durante la sesión. OAZE no guarda el audio original. El indicador seguirá visible hasta que termines."
+  "en": "Real-time voice is unavailable in this browser.",
+  "fr": "La voix en temps réel n'est pas disponible dans ce navigateur.",
+  "es": "La voz en tiempo real no está disponible en este navegador."
  },
  {
   "pt": "Áudio recebido; transcrição pendente.",
@@ -6909,11 +6867,11 @@
   "es": "Otra aplicación está usando el micrófono. Ciérrala e inténtalo de nuevo."
  },
  {
-  "pt": "A voz não conectou. Use a gravação de áudio.",
+  "pt": "A voz não conectou. Tente novamente.",
   "tipo": "exato",
-  "en": "Voice couldn't connect. Use audio recording.",
-  "fr": "La voix n'a pas pu se connecter. Utilisez l'enregistrement audio.",
-  "es": "La voz no se pudo conectar. Usa la grabación de audio."
+  "en": "Voice could not connect. Try again.",
+  "fr": "La voix n'a pas pu se connecter. Réessayez.",
+  "es": "La voz no se pudo conectar. Inténtalo de nuevo."
  },
  {
   "pt": "Encerre a conversa por voz antes de ouvir esta resposta.",

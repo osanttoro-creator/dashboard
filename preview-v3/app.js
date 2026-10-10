@@ -1391,7 +1391,7 @@
   function renderCoco() {
     if (state.sharedId) return `<section class="v3-panel"><h2>Coco indisponível neste perfil</h2><p class="v3-muted">A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.</p><button type="button" class="v3-secondary" data-action="profiles">Trocar perfil</button></section>`;
     const consent=!demo&&!cocoAllowed();
-    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : `<div class="v3-coco-conversation">${state.cocoView==='analysis'?renderCocoAnalysis():`<div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div>`}<div class="v3-coco-composer">${cocoTools()}${recorder?.state==='recording'?'<p class="v3-coco-review" role="status">Gravando áudio. Toque no microfone para enviar.</p>':''}${cocoMediaControls()}</div></div>`;
+    const content=!demo&&!state.cocoSettings ? `<div class="v3-coco-loading" role="status">${state.cocoError?esc(state.cocoError):'Preparando a Coco…'} ${state.cocoError?'<button type="button" class="v3-secondary" data-action="retry-coco">Tentar novamente</button>':''}</div>` : consent ? `<div class="v3-coco-consent"><h2>Antes de conversar</h2><p>O OAZE envia à OpenAI sua pergunta e os resumos financeiros necessários. Foto ou áudio só são enviados após sua confirmação. Não envie senhas ou números completos de conta.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button type="submit" class="v3-primary">Autorizar Coco</button></form></div>` : `<div class="v3-coco-conversation">${cocoMode==='voice'?voiceControls():`${state.cocoView==='analysis'?renderCocoAnalysis():`<div class="v3-coco-stream" id="v3-chat" role="log" aria-live="polite">${cocoMessages()}${state.cocoAsking?'<p class="v3-coco-thinking" role="status">Coco está pensando…</p>':''}</div>`}<div class="v3-coco-composer">${cocoTools()}${cocoMediaControls()}</div>`}</div>`;
     return `<div class="v3-coco-page"><header class="v3-coco-header"><div class="v3-coco-title"><h1>coco</h1></div><button type="button" class="v3-coco-home" data-go="home" aria-label="Voltar ao painel">${icon('home')}</button></header>${content}</div>`;
   }
   function render() {
@@ -1455,9 +1455,7 @@
     }, 750);
   }
   function cocoMediaControls() {
-    const audio = recorder?.state === 'recording'
-      ? `<button type="button" class="v3-coco-icon is-recording" data-action="record-audio" aria-label="Parar gravação" title="Parar gravação" aria-pressed="true">${cocoMediaIcon('stop')}</button>`
-      : `<button type="button" class="v3-coco-icon" data-action="record-audio" aria-label="Gravar áudio" title="Gravar áudio" ${state.mediaDraft.trim()?'hidden':''}>${cocoMediaIcon('mic')}</button>`;
+    const audio = `<button type="button" class="v3-coco-icon" data-action="voice-start" data-voice-mode="continuous" aria-label="Conversar por voz" title="Conversar por voz" ${state.mediaDraft.trim()?'hidden':''}>${cocoMediaIcon('mic')}</button>`;
     return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar arquivo" title="Anexar arquivo">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Mensagem para a Coco" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}>${audio}<button type="submit" aria-label="Enviar mensagem" ${state.mediaDraft.trim()?'':'hidden'} ${state.cocoAsking?'disabled':''}>↑</button></form>`;
   }
   function voiceControls() {
@@ -1465,7 +1463,7 @@
     const label = ({ IDLE:'Vamos conversar?', LISTENING:'Ouvindo você', PROCESSING:'Conferindo seu OAZE', SPEAKING:'Coco está falando', INTERRUPTED:'Pode falar', ERROR:'Não consegui conectar', OFFLINE:'Conexão encerrada' }[state.voiceState] || 'Vamos conversar?');
     const micOn=active && !!voiceSession.stream?.getAudioTracks().some((track)=>track.enabled);
     const actor='/assets/coco/'+(state.voiceState==='SPEAKING'?'corpo-explicando':'corpo-neutra_acolhedora')+'.webp';
-    return `<section class="v3-coco-voice-stage v3-voice" data-state="${esc(state.voiceState)}" aria-label="Conversa por voz"><div class="v3-coco-actor"><span class="v3-coco-water-ring" aria-hidden="true"></span><img class="v3-coco-echo echo-one" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-echo echo-two" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-character" src="${actor}" alt="Coco"></div><h2 class="v3-voice-status" role="status">${label}</h2><div class="v3-voice-wave" aria-hidden="true">${'<i></i>'.repeat(7)}</div><p class="v3-voice-caption" id="v3-voice-caption" aria-live="polite">${esc(state.voiceAnswerDraft||state.voiceDraftText||state.chat.at(-1)?.text||'')}</p><div class="v3-voice-actions">${active?`<button type="button" class="v3-voice-control" data-action="voice-mute" aria-label="${state.voiceMuted?'Ativar microfone':'Pausar microfone'}" aria-pressed="${state.voiceMuted}">${cocoMediaIcon(state.voiceMuted?'mute':'mic')}<span>${state.voiceMuted?'Ativar':'Pausar'}</span></button><button type="button" class="v3-voice-control is-stop" data-action="voice-stop" aria-label="Encerrar conversa por voz">${cocoMediaIcon('stop')}<span>Encerrar</span></button><button type="button" class="v3-voice-control" data-action="coco-mode" data-mode="text" aria-label="Voltar para texto">${cocoMediaIcon('text')}<span>Texto</span></button>`:`<button type="button" class="v3-primary" data-action="voice-start" data-voice-mode="continuous" ${voiceStarting?'disabled':''}>${voiceStarting?'Conectando…':'Conversar por voz'}</button>`}${state.voicePlaybackBlocked?'<button type="button" class="v3-secondary" data-action="voice-unlock-audio">Ativar som</button>':''}</div>${active?`<span class="v3-voice-live">${micOn?'Microfone ativo':'Microfone pausado'}</span>`:''}</section>`;
+    return `<section class="v3-coco-voice-stage v3-voice" data-state="${esc(state.voiceState)}" aria-label="Conversa por voz"><div class="v3-coco-actor"><span class="v3-coco-water-ring" aria-hidden="true"></span><img class="v3-coco-echo echo-one" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-echo echo-two" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-character" src="${actor}" alt="Coco"></div><h2 class="v3-voice-status" role="status">${label}</h2><div class="v3-voice-wave" aria-hidden="true">${'<i></i>'.repeat(7)}</div><p class="v3-voice-caption" id="v3-voice-caption" aria-live="polite">${esc(state.voiceAnswerDraft||state.voiceDraftText||state.chat.at(-1)?.text||'')}</p><div class="v3-voice-actions">${active?`<button type="button" class="v3-voice-control" data-action="voice-mute" aria-label="${state.voiceMuted?'Ativar microfone':'Pausar microfone'}" aria-pressed="${state.voiceMuted}">${cocoMediaIcon(state.voiceMuted?'mute':'mic')}<span>${state.voiceMuted?'Ativar':'Pausar'}</span></button><button type="button" class="v3-voice-control is-stop" data-action="voice-stop" aria-label="Encerrar conversa por voz">${cocoMediaIcon('stop')}<span>Encerrar</span></button>`:`<button type="button" class="v3-primary" data-action="voice-start" data-voice-mode="continuous" ${voiceStarting?'disabled':''}>${voiceStarting?'Conectando…':'Conversar por voz'}</button>`}<button type="button" class="v3-voice-control" data-action="coco-mode" data-mode="text" aria-label="Escrever em texto">${cocoMediaIcon('text')}<span>Escrever em texto</span></button>${state.voicePlaybackBlocked?'<button type="button" class="v3-secondary" data-action="voice-unlock-audio">Ativar som</button>':''}</div>${active?`<span class="v3-voice-live">${micOn?'Microfone ativo':'Microfone pausado'}</span>`:''}</section>`;
   }
   async function refreshCoco() {
     if (demo) return;
@@ -2359,7 +2357,8 @@
   function stopVoice() {
     voiceStartVersion++;voiceStarting=false;
     clearInterval(voiceConsentTimer);voiceConsentTimer=null;
-    voiceSession?.stop();voiceSession=null;
+    cocoMode='text';
+    const session=voiceSession;voiceSession=null;session?.stop();
     state.voiceState='IDLE';state.voiceDraftText='';state.voiceAnswerDraft='';state.voicePlaybackBlocked=false;
     voicePendingUserIndex=null;
     if(state.page==='coco')render();
@@ -2405,17 +2404,16 @@
     } catch {return {erro:'Não consegui consultar os dados agora.'};}
   }
   async function startVoice(mode) {
-    if(demo){toast('Prévia visual: o microfone não é aberto aqui.');return;}
+    if(demo){cocoMode='voice';state.voiceState='IDLE';render();toast('Prévia visual: o microfone não é aberto aqui.');return;}
     if(state.sharedId||!cocoAllowed()) {toast('Autorize a Coco em um perfil seu antes de usar a voz.');return;}
     if(voiceSession?.active||voiceStarting)return;
-    if(!global.CocoRealtime||!navigator.mediaDevices?.getUserMedia){toast('Voz em tempo real indisponível neste navegador. Use a gravação de áudio.');return;}
-    if(!global.confirm('Ativar o microfone para conversar com a Coco? Sua fala será enviada à OpenAI durante a sessão. O OAZE não guarda o áudio original. O indicador ficará visível até você encerrar.'))return;
+    if(!global.CocoRealtime||!navigator.mediaDevices?.getUserMedia){toast('Voz em tempo real indisponível neste navegador.');return;}
     stopCocoAudio();cocoMode='voice';state.voiceMuted=false;state.voiceMode=mode==='push'?'push':'continuous';
     voiceStarting=true;const version=++voiceStartVersion;
     state.voiceState='PROCESSING';render();
     try {
       const session=new CocoRealtime({
-        onState:(value)=>{state.voiceState=value;if(state.page==='coco')updateVoiceVisual();},
+        onState:(value)=>{state.voiceState=value;if(voiceSession===session&&!session.active&&!voiceStarting){stopVoice();return;}if(state.page==='coco')updateVoiceVisual();},
         onMic:()=>{if(state.page==='coco')render();else{const indicator=$('#v3-voice-global');if(indicator)indicator.hidden=!voiceSession?.stream;}},
         onDraft:(value)=>{state.voiceDraftText=value;updateVoiceCaption();},
         onDraftAnswer:(value)=>{state.voiceAnswerDraft=value;updateVoiceCaption();},
@@ -2438,10 +2436,10 @@
         onAnswer:(value)=>{if(value){state.chat.push({who:'coco',text:value});render();}},
         onTool:voiceTool,
         onError:(value)=>toast(value),
-        onDisconnect:()=>toast('Conexão de voz encerrada. A conversa por texto continua disponível.'),
+        onDisconnect:()=>{if(voiceSession===session){stopVoice();toast('Conexão de voz encerrada. A conversa por texto continua disponível.');}},
         onPlaybackBlocked:()=>{state.voicePlaybackBlocked=true;render();toast('Toque em Ativar som para ouvir a Coco.');},
         onDeviceFallback:()=>{state.voiceDevice='';toast('O microfone anterior não está disponível. Usando o microfone padrão.');},
-        onLimit:()=>toast('Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.')
+        onLimit:()=>{if(voiceSession===session){stopVoice();toast('Sessão de voz encerrada após 10 minutos. Você pode iniciar outra.');}}
       });
       voiceSession=session;
       session.setReplyMuted(state.voiceReplyMuted);
@@ -2471,7 +2469,7 @@
           ? 'Nenhum microfone disponível neste aparelho. Conecte ou habilite um microfone e tente novamente.'
           : micError==='NotReadableError'||micError==='TrackStartError'
             ? 'O microfone está em uso por outro aplicativo. Feche o outro aplicativo e tente novamente.'
-            : error.message||'A voz não conectou. Use a gravação de áudio.';
+            : error.message||'A voz não conectou. Tente novamente.';
       toast(message);
     }}
     finally{if(version===voiceStartVersion)voiceStarting=false;}
@@ -2781,7 +2779,6 @@
       composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
       return;
     }
-    if (action==='record-audio'){toggleCocoRecording();return;}
     if (action==='coco-mode') {
       const draft=$('#v3-chat-form [name="question"]');if(draft)state.mediaDraft=draft.value;
       const mode=target.dataset.mode==='voice'?'voice':'text';
@@ -3071,9 +3068,9 @@
       if(ev.target.name==='question' && ev.target.closest('#v3-chat-form')){
         state.mediaDraft=ev.target.value;
         const form=ev.target.form,hasText=!!ev.target.value.trim();
-        const send=form?.querySelector('button[type="submit"]'),mic=form?.querySelector('[data-action="record-audio"]');
+        const send=form?.querySelector('button[type="submit"]'),mic=form?.querySelector('[data-action="voice-start"]');
         if(send)send.hidden=!hasText;
-        if(mic && recorder?.state!=='recording')mic.hidden=hasText;
+        if(mic)mic.hidden=hasText;
         return;
       }
       if(ev.target.name==='description' && ev.target.closest('#v3-form-tx')){clearTimeout(sugestaoTimer);const f=ev.target.form;sugestaoTimer=setTimeout(()=>atualizarSugestao(f),160);return;}
