@@ -231,6 +231,48 @@
         "value": "plexmono",
         "createdAt": "2026-10-13T17:44:38.279Z",
         "reason": "A V3 declara a mesma família com o nome curto PlexMono em preview-v3/app.css; DESIGN.md documenta IBM Plex Mono. Maquete espelha a convenção do app."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "instrument",
+        "createdAt": "2026-10-13T23:33:13.120Z",
+        "reason": "A V3 declara a familia com o nome curto Instrument em preview-v3/app.css; DESIGN.md documenta Instrument Sans."
+      },
+      {
+        "rule": "extreme-negative-tracking",
+        "value": "*",
+        "files": [
+          "preview-v3/proposta-v4.html"
+        ],
+        "createdAt": "2026-10-13T23:33:26.722Z",
+        "reason": "DESIGN.md:171 documenta tracking -0.05em para o display Unbounded; o detector e mais apertado que a marca, e a maquete tem de usar a tipografia da marca."
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "preview-v3/proposta-v4.html"
+        ],
+        "createdAt": "2026-10-13T23:33:27.394Z",
+        "reason": "Falso positivo: o detector resolve o fundo como #35353f, cor que nao existe na pagina. O vermelho #d98078 cai sobre #0d1821 (6,3:1) ou #132633 (5,4:1), ambos acima de 4,5:1, calculado a mao."
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "preview-v3/proposta-v4.html"
+        ],
+        "createdAt": "2026-10-13T23:33:27.803Z",
+        "reason": "A maquete desenha a moldura do aparelho (.fone-corpo e .mesa), que tem fundo proprio; o detector conta a moldura como cartao, entao todo bloco dentro do celular vira cartao-dentro-de-cartao."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "preview-v3/proposta-v4.html"
+        ],
+        "createdAt": "2026-10-13T23:34:33.359Z",
+        "reason": "Falso positivo estrutural de maquete: a moldura do aparelho e a tela dentro dela tem fundo proprio, e tela de aplicativo e preenchida pelo conteudo por definicao. O conteudo real (.mesa-corpo, .mesa-lado, .fone-tela) tem padding."
       }
     ]
   }
