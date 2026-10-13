@@ -217,6 +217,16 @@
   "es": "Voz en tiempo real no disponible."
  },
  {
+  "pt": "V3/consentimento Coco:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/aceite pendente:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "ANTES DE ENTRAR",
   "tipo": "exato",
   "en": "BEFORE YOU START",
@@ -231,11 +241,11 @@
   "es": "Tus datos, tus reglas."
  },
  {
-  "pt": "Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.",
+  "pt": "Esta é a única autorização que o OAZE pede. Sem ela, o aplicativo não carrega seus dados financeiros.",
   "tipo": "exato",
-  "en": "Read the Privacy Policy and the Terms of use before continuing. Without acceptance, the app doesn’t load your financial data.",
-  "fr": "Lisez la politique de confidentialité et les conditions d’utilisation avant de continuer. Sans acceptation, l’application ne charge pas vos données financières.",
-  "es": "Lee la Política de privacidad y los Términos de uso antes de continuar. Sin la aceptación, la aplicación no carga tus datos financieros."
+  "en": "This is the only authorization OAZE asks for. Without it, the app does not load your financial data.",
+  "fr": "C’est la seule autorisation que OAZE demande. Sans elle, l’application ne charge pas vos données financières.",
+  "es": "Esta es la única autorización que OAZE pide. Sin ella, la aplicación no carga tus datos financieros."
  },
  {
   "pt": "Política de privacidade",
@@ -252,18 +262,18 @@
   "es": "Términos de uso"
  },
  {
-  "pt": "Li e aceito a Política de privacidade (versão 01/10/2026).",
+  "pt": "Li e aceito a Política de privacidade (versão 01/10/2026) e os Termos de uso, e autorizo a Coco a usar meus dados financeiros para me responder.",
   "tipo": "exato",
-  "en": "I’ve read and accept the Privacy Policy (version 01/10/2026).",
-  "fr": "J’ai lu et j’accepte la politique de confidentialité (version 01/10/2026).",
-  "es": "He leído y acepto la Política de privacidad (versión 01/10/2026)."
+  "en": "I have read and accept the Privacy Policy (version 2026-10-01) and the Terms of use, and I authorize Coco to use my financial data to answer me.",
+  "fr": "J’ai lu et j’accepte la Politique de confidentialité (version 01/10/2026) et les Conditions d’utilisation, et j’autorise Coco à utiliser mes données financières pour me répondre.",
+  "es": "He leído y acepto la Política de privacidad (versión 01/10/2026) y los Términos de uso, y autorizo a Coco a usar mis datos financieros para responderme."
  },
  {
-  "pt": "Aceitar e entrar",
+  "pt": "Autorizar e entrar",
   "tipo": "exato",
-  "en": "Accept and enter",
-  "fr": "Accepter et entrer",
-  "es": "Aceptar y entrar"
+  "en": "Authorize and sign in",
+  "fr": "Autoriser et entrer",
+  "es": "Autorizar y entrar"
  },
  {
   "pt": "Não aceitar",
@@ -273,11 +283,18 @@
   "es": "No aceptar"
  },
  {
-  "pt": "Não consegui registrar o aceite. Tente novamente; seus dados não foram carregados.",
+  "pt": "A Coco pode ser revogada depois em Configurações.",
   "tipo": "exato",
-  "en": "I couldn’t record the acceptance. Try again; your data wasn’t loaded.",
-  "fr": "Je n’ai pas pu enregistrer l’acceptation. Réessayez ; vos données n’ont pas été chargées.",
-  "es": "No pude registrar la aceptación. Inténtalo de nuevo; tus datos no se cargaron."
+  "en": "You can revoke Coco later in Settings.",
+  "fr": "Vous pouvez révoquer Coco plus tard dans les Réglages.",
+  "es": "Puedes revocar a Coco después en Configuración."
+ },
+ {
+  "pt": "Não consegui registrar a autorização. Tente novamente; seus dados não foram carregados.",
+  "tipo": "exato",
+  "en": "I couldn’t record the authorization. Try again; your data was not loaded.",
+  "fr": "Je n’ai pas pu enregistrer l’autorisation. Réessayez ; vos données n’ont pas été chargées.",
+  "es": "No pude registrar la autorización. Inténtalo de nuevo; tus datos no se cargaron."
  },
  {
   "pt": "PROTEÇÃO EXTRA",

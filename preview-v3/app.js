@@ -458,7 +458,7 @@
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
-    return `<div class="v3-mobile-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${renderHomeMetrics()}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}</div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div>${painelScore()}</div>`;
+    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${renderHomeMetrics()}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}</div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div>${painelScore()}</div>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -1316,7 +1316,7 @@
       ['Recorrências', 'recurring_items']
     ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
     const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Avisos que você escondeu', '', 'data-action="reset-asks"', Object.keys(askSilenced()).length?'reativar ›':'nenhum')}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
   }
   function accountProfileSheet() {
     const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
@@ -1415,6 +1415,49 @@
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
     clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.hidden=true;},4500);
+  }
+
+  /* =============================================================
+     PERGUNTAR UMA VEZ
+     -------------------------------------------------------------
+     O confirm() do navegador não tem memória: a mesma pergunta
+     reaparece na décima vez que a pessoa oculta um cartão, e aí ela
+     deixa de ler qualquer aviso — inclusive os que importam. Este
+     diálogo é o confirm com uma caixa a mais: "não perguntar
+     novamente", guardada por CHAVE, só neste aparelho.
+
+     O QUE NÃO ENTRA AQUI
+     Ação sem volta continua no confirm() cru: excluir a conta,
+     revogar a Coco, liberar edição de um perfil para outra pessoa.
+     Silenciar um aviso só é aceitável quando desfazer é barato.
+
+     A lista silenciada é reversível em Configurações; uma porta que
+     só fecha vira defeito no dia em que a pessoa muda de ideia.
+     ============================================================= */
+  const ASK_KEY='oaze.v3.naoPerguntar';
+  function askSilenced(){ try { return JSON.parse(localStorage.getItem(ASK_KEY)||'{}')||{}; } catch (e) { return {}; } }
+  function askSilence(key){ try { const s=askSilenced(); s[key]=1; localStorage.setItem(ASK_KEY,JSON.stringify(s)); } catch (e) { /* sem armazenamento: continua perguntando */ } }
+  function askReset(){ try { localStorage.removeItem(ASK_KEY); } catch (e) { /* nada a limpar */ } }
+  function ask(key, message, confirmLabel) {
+    if (key && askSilenced()[key]) return Promise.resolve(true);
+    return new Promise((resolve) => {
+      const previous=document.activeElement;
+      const box=document.createElement('div');
+      box.className='v3-ask';
+      box.innerHTML=`<div class="v3-ask-scrim" data-ask="no"></div><div class="v3-ask-card" role="dialog" aria-modal="true" aria-labelledby="v3-ask-text"><p id="v3-ask-text">${esc(message)}</p>${key?'<label class="v3-check"><input type="checkbox" id="v3-ask-mute"> Não perguntar novamente neste aparelho</label>':''}<div class="v3-ask-actions"><button type="button" class="v3-secondary" data-ask="no">Cancelar</button><button type="button" class="v3-primary" data-ask="yes">${esc(confirmLabel||'Continuar')}</button></div></div>`;
+      document.body.appendChild(box);
+      const finish=(answer)=>{
+        if (answer && key && box.querySelector('#v3-ask-mute')?.checked) askSilence(key);
+        document.removeEventListener('keydown',onKey);
+        box.remove();
+        if (previous?.isConnected) previous.focus();
+        resolve(answer);
+      };
+      const onKey=(event)=>{ if (event.key==='Escape') { event.preventDefault(); finish(false); } };
+      box.addEventListener('click',(event)=>{ const hit=event.target.closest('[data-ask]'); if (hit) finish(hit.dataset.ask==='yes'); });
+      document.addEventListener('keydown',onKey);
+      box.querySelector('[data-ask="yes"]').focus();
+    });
   }
   function closeSheet() {
     if (recorder?.state==='recording') { recorder.onstop=null;recorder.stop();microphone?.getTracks().forEach((track)=>track.stop());recorder=null;microphone=null; }
@@ -2534,7 +2577,7 @@
     if (!image && !audio) { toast('Arquivo escolhido, mas este formato ainda não pode ser lido. Use foto, áudio, extrato PDF/CSV ou texto.'); return; }
     const max=image?4_000_000:8_000_000;
     if (file.size>max || file.size<100) { toast('Arquivo fora do limite: foto até 4 MB, áudio até 8 MB.'); return; }
-    if (!global.confirm(`Enviar ${image?'esta foto':'este áudio'} à Coco? O conteúdo pode incluir dados sensíveis e será processado pela OpenAI. O arquivo não ficará guardado no OAZE.`)) return;
+    if (!await ask('coco-midia',`Enviar ${image?'esta foto':'este áudio'} à Coco? O conteúdo pode incluir dados sensíveis e será processado pela OpenAI. O arquivo não ficará guardado no OAZE.`,'Enviar')) return;
     toast('Lendo arquivo…');
     try {
       const result=await V3Backend.cocoReadMedia(file,profile().id);
@@ -2567,7 +2610,7 @@
     const tx = profile().transactions.find((item) => item.id === id && item.recurring);
     if (!tx) { toast('Esta recorrência não existe mais.'); return; }
     if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
-    if (action === 'end-recurring' && !global.confirm(`Encerrar “${tx.description}” após ${periodLabel(state.ym)}? O histórico permanece.`)) return;
+    if (action === 'end-recurring' && !await ask('encerrar-recorrencia',`Encerrar “${tx.description}” após ${periodLabel(state.ym)}? O histórico permanece.`,'Encerrar')) return;
     try {
       await V3Backend.mutate(() => {
         const current = Store.transactions.get(id);
@@ -2717,11 +2760,13 @@
       const item=itemById(target.dataset.walletId);
       if(!item || demo){toast('Entre na sua conta para alterar a carteira.');return;}
       const hide=!item.data.hidden;
-      if(hide && !global.confirm(`Ocultar “${item.data.name||item.data.bank}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.`))return;
-      V3Backend.mutate(()=>{
+      const esconder=()=>V3Backend.mutate(()=>{
         const collection=item.kind==='credit'?Store.cards:Store.accounts;
         collection.update(item.data.id,{hidden:hide});
       }).then(()=>{state.selected=null;render();toast(hide?'Item oculto. Abra o olho para vê-lo.':'Item reexibido na carteira.');}).catch((e)=>toast(e.message||'Não consegui mudar a visibilidade.'));
+      if(!hide){esconder();return;}
+      ask('ocultar-item',`Ocultar “${item.data.name||item.data.bank}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.`,'Ocultar')
+        .then((sim)=>{ if(sim) esconder(); });
       return;
     }
     if (action==='wallet-toggle'){state.walletOpen=!state.walletOpen;render();return;}
@@ -2774,9 +2819,13 @@
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
       if (!Number.isInteger(index) || !item || !account || state.importPreview.checks.failed) { toast('Confira o extrato e escolha uma conta em reais.');return; }
-      if (importDuplicate(item,account.id) && !global.confirm('Existe um lançamento parecido nessa conta. Revisar mesmo assim? Não salve duas vezes o mesmo movimento.')) return;
-      const suggestion=importCategorySuggestion(item,account.id);
-      composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
+      const revisar=()=>{
+        const suggestion=importCategorySuggestion(item,account.id);
+        composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
+      };
+      if (!importDuplicate(item,account.id)) { revisar(); return; }
+      ask('import-duplicado','Existe um lançamento parecido nessa conta. Revisar mesmo assim? Não salve duas vezes o mesmo movimento.','Revisar')
+        .then((sim)=>{ if(sim) revisar(); });
       return;
     }
     if (action==='coco-mode') {
@@ -2912,6 +2961,7 @@
     if (action==='vault'){openVault(target.dataset.walletId);return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
     if (action==='notifications'){openNotifications();return;}
+    if (action==='reset-asks'){askReset();render();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
     if (action==='plan-info'){go('plan');return;}
     if (action==='demo-only'){toast('Esta é uma proposta visual; não houve nenhuma ação na sua conta.');return;}
   }

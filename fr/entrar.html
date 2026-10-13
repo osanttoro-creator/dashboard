@@ -50,6 +50,27 @@
            região que já estava na árvore. -->
       <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
 
+      <!-- ══════ UMA AUTORIZAÇÃO, NO LUGAR DE TRÊS ══════
+           O OAZE perguntava em três momentos diferentes: aceite de
+           privacidade depois de entrar, autorização da Coco na
+           primeira conversa, e os avisos soltos pelo caminho. Três
+           paredes seguidas não protegem mais do que uma; só ensinam a
+           clicar em "aceitar" sem ler.
+
+           A pergunta agora é aqui, antes de entrar, e vale para tudo.
+           Sem a caixa marcada o login não acontece — não é um aviso
+           que se fecha no X, é a condição da entrada. O registro no
+           servidor é feito na primeira carga autenticada, porque o
+           link mágico e o Google voltam numa página nova e a marca
+           feita aqui precisa atravessar essa volta. -->
+      <div class="consentimento-entrada">
+        <label class="consentimento-caixa" for="aceite">
+          <input type="checkbox" id="aceite" name="aceite" required>
+          <span>J’ai lu et j’accepte la <a href="/fr/privacidade" target="_blank" rel="noopener noreferrer">Politique de confidentialité</a> et les <a href="/fr/termos" target="_blank" rel="noopener noreferrer">Conditions d’utilisation</a>, et j’autorise Coco à utiliser mes données financières pour me répondre. Je peux révoquer Coco dans les réglages.</span>
+        </label>
+        <p class="erro" id="aceite-erro" hidden></p>
+      </div>
+
       <!-- Entrada social. Os dois botões nascem escondidos: o script
            pergunta ao Supabase quais provedores estão ligados e mostra
            só os que existem. Com nenhum ligado, esta página fica
@@ -154,6 +175,54 @@
   var ligados = {};
   var recolheu = false;
 
+  /* ---- a autorização única ----
+     Uma função só, consultada por todas as portas: Google, Apple,
+     link mágico e senha. Deixar cada caminho decidir sozinho é como
+     o OAZE chegou a três perguntas diferentes.
+
+     O que fica guardado aqui é a INTENÇÃO, não o aceite: o registro
+     válido é a linha no servidor, gravada na primeira carga
+     autenticada. Sem esta marca, o app volta a perguntar — perder o
+     localStorage não pode virar permissão presumida. */
+  var aceite = document.getElementById('aceite');
+  var aceiteErro = document.getElementById('aceite-erro');
+  function marcarAceite() {
+    try {
+      A.guardarAceitePendente(A.novoAceite('entrar'));
+    } catch (e) { /* sem armazenamento: o app pergunta de novo, e tudo bem */ }
+  }
+
+  function autorizado() {
+    if (aceite && aceite.checked) { marcarAceite(); return true; }
+    if (aceiteErro) {
+      aceiteErro.textContent = 'Cochez l’autorisation pour entrer.';
+      aceiteErro.hidden = false;
+    }
+    if (aceite) { aceite.focus(); }
+    return false;
+  }
+
+  if (aceite) {
+    aceite.addEventListener('change', function () {
+      if (aceiteErro) aceiteErro.hidden = true;
+      if (aceite.checked) { marcarAceite(); armarToqueUnico(); }
+    });
+  }
+
+  /* O toque único do Google entra sozinho e não passa por botão
+     nenhum — por isso ele só é armado DEPOIS da autorização, e uma
+     vez só. */
+  var toqueArmado = false;
+  var toquePronto = false;
+  function armarToqueUnico() {
+    if (toqueArmado || !toquePronto || !aceite || !aceite.checked) return;
+    toqueArmado = true;
+    A.umToque(function (err) {
+      if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
+      location.replace(A.destino());
+    });
+  }
+
   var perguntou = A.provedores();
 
   /* E desenha agora com o que se sabia da última visita, sem esperar
@@ -169,12 +238,7 @@
       /* O toque único só depois de saber que ninguém está logado --
          a bolha aparecendo para quem já entrou seria ruído antes do
          redirecionamento. Por isso ele não vem da memória. */
-      if (p.google) {
-        A.umToque(function (err) {
-          if (err) { A.diz(recado, A.frase(err), 'erro'); return; }
-          location.replace(A.destino());
-        });
-      }
+      if (p.google) { toquePronto = true; armarToqueUnico(); }
     });
   });
 
@@ -201,6 +265,7 @@
       ligados[par[0]] = true;
       b.addEventListener('click', function () {
         A.diz(recado, '');
+        if (!autorizado()) return;
         A.ocupado(b, true, 'Ouverture…');
         A.entrarCom(par[0]).then(function (r) {
           if (r && r.error) throw r.error;
@@ -252,6 +317,7 @@
     e.preventDefault();
     A.diz(recado, '');
     if (!valida()) return;
+    if (!autorizado()) return;
 
     A.ocupado(botao, true, 'Connexion…');
     try {
@@ -275,6 +341,7 @@
       email.focus();
       return;
     }
+    if (!autorizado()) return;
     A.ocupado(botaoMagico, true, 'Envoi…');
     try {
       var r = await A.linkMagico(email.value.trim());

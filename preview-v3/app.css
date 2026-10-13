@@ -20,7 +20,22 @@
 .v3-main{position:relative}
 .v3-main{margin:0 auto;align-self:start}
 .v3-demo-note{position:absolute;top:24px;right:260px;width:max-content;max-width:240px;margin:0;padding:5px 9px;font:400 10px var(--mono);letter-spacing:.02em}
-.v3-mobile-greeting,.v3-wave-period{display:none}
+/* =============================================================
+   O OLÁ TAMBÉM NO COMPUTADOR
+   -------------------------------------------------------------
+   A saudação nasceu como peça de celular: no computador a tela de
+   início abria com a palavra "início" no cabeçalho, e quem estava
+   usando o OAZE não aparecia em lugar nenhum. Agora ela vale nos
+   dois, com proporção maior na mesa. O h1 continua no cabeçalho,
+   só que fora da vista na Início — leitor de tela continua tendo
+   um título de página; o olho lê o nome de quem entrou. */
+.v3-wave-period{display:none}
+.v3-greeting{display:flex;align-items:center;gap:16px;margin:2px 0 22px}
+.v3-greeting .v3-avatar{width:56px;height:56px;border:2px solid var(--teal);font-size:24px}
+.v3-greeting>span:last-child{display:grid;line-height:1.15;min-width:0}
+.v3-greeting small{font-size:14px}
+.v3-greeting strong{font:500 clamp(25px,2.3vw,34px) var(--display);letter-spacing:-.055em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v3-top[data-home='true'] .v3-title-wrap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .v3-pocket-hint{display:block;margin-top:15px;color:#bac9c9;font-weight:600;font-size:12px}
 /* =============================================================
    OCULTAR SALDOS
@@ -52,8 +67,8 @@
 .v3-timeline>div>span:first-child{grid-column:2;min-width:0}
 .v3-timeline>div>span:last-child{grid-column:3;white-space:nowrap;font-size:11px}
 .v3-timeline strong{display:block;margin-top:3px}
-@media(max-width:900px){.v3-demo-note{position:static;max-width:none;width:fit-content;margin:0 0 13px}.v3-top[data-home='true']{position:absolute;top:30px;right:18px;min-height:0;height:0;margin:0}.v3-top[data-home='true'] .v3-title-wrap{display:none}.v3-mobile-greeting{display:flex;align-items:center;gap:13px;min-height:57px;margin:5px 0 16px;padding-right:0}.v3-mobile-greeting .v3-avatar{width:52px;height:52px;border:2px solid var(--teal);font-size:23px}.v3-mobile-greeting>span:last-child{display:grid;line-height:1.15;min-width:0}.v3-mobile-greeting small{font-size:14px}.v3-mobile-greeting strong{font:500 clamp(19px,5vw,26px) var(--display);letter-spacing:-.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v3-wave-period{display:block;position:absolute;top:21px;right:18px}.v3-wave{position:relative}.v3-wave .v3-row{padding-top:19px}.v3-wallet-pocket{min-height:202px}.v3-wallet-pocket .v3-muted{display:block}.v3-wallet-item:not(.is-selected){height:41px}.v3-wallet-list{padding:0 20px}}
-@media(max-width:540px){.v3-demo-note{font-size:9px;padding:4px 7px}.v3-top[data-home='true']{position:static;height:auto;min-height:0;margin:0 0 4px;justify-content:flex-end}.v3-mobile-greeting{padding-right:0}.v3-wallet-pocket{min-height:195px}.v3-wallet-list{padding:0 13px}.v3-pocket-hint{font-size:11px}.v3-wave .v3-meta{position:absolute;top:69px;right:18px;gap:6px}.v3-wave .v3-meta .v3-label{font-size:8px}.v3-wave .v3-meta strong{font-size:9px}.v3-wave .v3-money{font-size:clamp(28px,7vw,37px)}.v3-wave svg{margin-top:40px}.v3-timeline>div{grid-template-columns:13px minmax(0,1fr)}.v3-timeline>div>span:last-child{grid-column:2;margin-left:0!important}}
+@media(max-width:900px){.v3-demo-note{position:static;max-width:none;width:fit-content;margin:0 0 13px}.v3-top[data-home='true']{position:absolute;top:30px;right:18px;min-height:0;height:0;margin:0}.v3-top[data-home='true'] .v3-title-wrap{display:none}.v3-greeting{display:flex;align-items:center;gap:13px;min-height:57px;margin:5px 0 16px;padding-right:0}.v3-greeting .v3-avatar{width:52px;height:52px;border:2px solid var(--teal);font-size:23px}.v3-greeting>span:last-child{display:grid;line-height:1.15;min-width:0}.v3-greeting small{font-size:14px}.v3-greeting strong{font:500 clamp(19px,5vw,26px) var(--display);letter-spacing:-.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v3-wave-period{display:block;position:absolute;top:21px;right:18px}.v3-wave{position:relative}.v3-wave .v3-row{padding-top:19px}.v3-wallet-pocket{min-height:202px}.v3-wallet-pocket .v3-muted{display:block}.v3-wallet-item:not(.is-selected){height:41px}.v3-wallet-list{padding:0 20px}}
+@media(max-width:540px){.v3-demo-note{font-size:9px;padding:4px 7px}.v3-top[data-home='true']{position:static;height:auto;min-height:0;margin:0 0 4px;justify-content:flex-end}.v3-greeting{padding-right:0}.v3-wallet-pocket{min-height:195px}.v3-wallet-list{padding:0 13px}.v3-pocket-hint{font-size:11px}.v3-wave .v3-meta{position:absolute;top:69px;right:18px;gap:6px}.v3-wave .v3-meta .v3-label{font-size:8px}.v3-wave .v3-meta strong{font-size:9px}.v3-wave .v3-money{font-size:clamp(28px,7vw,37px)}.v3-wave svg{margin-top:40px}.v3-timeline>div{grid-template-columns:13px minmax(0,1fr)}.v3-timeline>div>span:last-child{grid-column:2;margin-left:0!important}}
 .v3-demo-note{left:180px;right:auto;top:35px;max-width:none}
 @media(max-width:900px){.v3-demo-note{position:static;max-width:none;width:fit-content;margin:0 0 13px}}
 .v3-segment.v3-mobile-only{display:none}
@@ -507,3 +522,19 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 @keyframes v3-voice-breathe{50%{transform:scale(1.25);opacity:.55}}
 @media(max-width:600px){.v3-voice-actions>.v3-secondary,.v3-voice-actions>.v3-link{flex:1 1 auto}.v3-voice-global{right:10px;bottom:136px}}
 @media(prefers-reduced-motion:reduce){.v3-voice-pulse{animation:none!important}}
+
+/* =============================================================
+   O AVISO QUE PODE SER CALADO
+   -------------------------------------------------------------
+   O confirm() do navegador não aceita uma caixa de "não perguntar
+   novamente" — por isso este diálogo existe em HTML. Ele fica
+   acima da gaveta (.v3-overlay) porque pode ser disparado de
+   dentro dela, e volta o foco para onde estava ao fechar.
+   ============================================================= */
+.v3-ask{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px}
+.v3-ask-scrim{position:absolute;inset:0;background:rgba(5,14,20,.72);backdrop-filter:blur(3px)}
+.v3-ask-card{position:relative;width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 20px 60px #020a0f}
+.v3-ask-card p{margin:0 0 16px;line-height:1.5}
+.v3-ask-card .v3-check{display:flex;align-items:center;gap:9px;margin:0 0 20px;font-size:13px;color:var(--muted)}
+.v3-ask-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.v3-ask-actions button{min-height:44px;padding:0 20px;border-radius:24px}

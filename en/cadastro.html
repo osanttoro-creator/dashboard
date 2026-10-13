@@ -47,9 +47,9 @@
       <div class="aceite-privacidade" id="aceite-bloco">
         <label for="aceite-privacidade">
           <input type="checkbox" id="aceite-privacidade" aria-describedby="aceite-dica aceite-privacidade-erro">
-          <span>I have read and accept the <a href="/en/privacidade" target="_blank" rel="noopener">Privacy policy</a>.</span>
+          <span>I have read and accept the <a href="/en/privacidade" target="_blank" rel="noopener">Privacy Policy</a> and the <a href="/en/termos" target="_blank" rel="noopener">Terms of use</a>, and I authorize Coco to use my financial data to answer me. I can revoke Coco in settings.</span>
         </label>
-        <p class="dica" id="aceite-dica">Required to create and start the account.</p>
+        <p class="dica" id="aceite-dica">Required to create the account. It is the only authorization OAZE asks for.</p>
         <p class="erro" id="aceite-privacidade-erro" role="alert" hidden></p>
       </div>
 
@@ -151,7 +151,7 @@
 
   function aceiteObrigatorio() {
     if (aceite.checked) { mostraErroAceite(''); return true; }
-    mostraErroAceite('Accept the Privacy policy to continue.');
+    mostraErroAceite('Check the authorization to continue.');
     aceite.focus();
     return false;
   }

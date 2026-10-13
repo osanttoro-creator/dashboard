@@ -47,9 +47,9 @@
       <div class="aceite-privacidade" id="aceite-bloco">
         <label for="aceite-privacidade">
           <input type="checkbox" id="aceite-privacidade" aria-describedby="aceite-dica aceite-privacidade-erro">
-          <span>J'ai lu et j'accepte la <a href="/fr/privacidade" target="_blank" rel="noopener">Politique de confidentialité</a>.</span>
+          <span>J’ai lu et j’accepte la <a href="/fr/privacidade" target="_blank" rel="noopener">Politique de confidentialité</a> et les <a href="/fr/termos" target="_blank" rel="noopener">Conditions d’utilisation</a>, et j’autorise Coco à utiliser mes données financières pour me répondre. Je peux révoquer Coco dans les réglages.</span>
         </label>
-        <p class="dica" id="aceite-dica">Obligatoire pour créer et démarrer le compte.</p>
+        <p class="dica" id="aceite-dica">Obligatoire pour créer le compte. C’est la seule autorisation que OAZE demande.</p>
         <p class="erro" id="aceite-privacidade-erro" role="alert" hidden></p>
       </div>
 
@@ -151,7 +151,7 @@
 
   function aceiteObrigatorio() {
     if (aceite.checked) { mostraErroAceite(''); return true; }
-    mostraErroAceite('Acceptez la Politique de confidentialité pour continuer.');
+    mostraErroAceite('Cochez l’autorisation pour continuer.');
     aceite.focus();
     return false;
   }

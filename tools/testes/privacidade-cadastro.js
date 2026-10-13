@@ -33,7 +33,7 @@ exigir(/privacy_policy_version/.test(auth) && /privacy_accepted_at/.test(auth),
   'cadastro por e-mail não envia versão e data do aceite');
 exigir(/privacy_acceptances/.test(gate) && /\.eq\('user_id', user\.id\)/.test(gate),
   'o app não verifica o aceite da própria conta');
-exigir(/await requirePrivacyAcceptance\(\)/.test(gate),
+exigir(/await requireConsent\(\)/.test(gate),
   'o boot não exige a verificação de privacidade antes de carregar dados');
 exigir(/v3-privacy-decline[\s\S]{0,400}?auth\.signOut/.test(gate),
   'recusar o aceite não encerra a sessão');
@@ -45,6 +45,28 @@ exigir(/validar_aceite_privacidade/.test(sql) && /privacy_policy_required/.test(
   'o hook de criação não recusa e-mail sem aceite');
 exigir(/\[auth\.hook\.before_user_created\][\s\S]*?enabled\s*=\s*true/.test(config),
   'o hook antes de criar usuário não está ligado');
+
+/* A AUTORIZAÇÃO ÚNICA, NA PORTA
+   O OAZE pedia três vezes: privacidade depois de entrar, Coco na
+   primeira conversa, avisos pelo caminho. Agora a pergunta é uma só
+   e acontece antes de a sessão existir. Estas verificações guardam
+   as duas metades disso: a caixa existe e vem antes dos botões de
+   entrada, e NENHUM dos caminhos (Google/Apple, link mágico, senha)
+   passa sem consultá-la. */
+const entrar = ler('entrar.html');
+exigir(/id="aceite"/.test(entrar), 'entrar.html não mostra a autorização');
+exigir(entrar.indexOf('id="aceite"') < entrar.indexOf('id="social"'),
+  'entrar.html mostra os métodos de entrada antes da autorização');
+exigir((entrar.match(/if \(!autorizado\(\)\) return;/g) || []).length >= 3,
+  'entrar.html deixa algum caminho de entrada passar sem autorização');
+exigir(/toquePronto = true/.test(entrar) && /armarToqueUnico/.test(entrar),
+  'o toque único do Google entra sem passar pela autorização');
+exigir(/guardarAceitePendente\(A\.novoAceite\('entrar'\)\)/.test(entrar),
+  'entrar.html não deixa marca do aceite para o app gravar');
+exigir(/coco: true/.test(auth), 'o aceite não cobre a Coco, e ela voltaria a perguntar');
+exigir(/localStorage\.setItem\(CHAVE_ACEITE_PENDENTE/.test(auth),
+  'o aceite não sobrevive à volta do link mágico, que abre outra aba');
+exigir(/pendente\.coco/.test(gate), 'o app não aproveita a autorização da Coco feita na porta');
 
 if (falhas.length) {
   console.error('Aceite de privacidade incompleto:');

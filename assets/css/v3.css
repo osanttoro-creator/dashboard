@@ -1053,9 +1053,20 @@ body::before {
   /* Sem movimento não há portal: a página começa aberta e a cena
      começa montada. É o estado final, não um buraco. */
   .portal { height: auto; }
-  .portal-palco { position: static; height: auto; }
+  .portal-palco { position: static; height: auto; display: flex; flex-direction: column; }
   .portal-mundo { position: static; }
-  .portal-painel, .portal-letreiro, .portal-dica, .portal-barra { display: none; }
+  .portal-painel, .portal-dica, .portal-barra { display: none; }
+  /* A boas-vindas continua: quem pediu menos movimento pediu menos
+     movimento, não menos marca. */
+  .portal-letreiro {
+    position: static; inset: auto; order: -1;
+    opacity: 1; pointer-events: auto;
+    padding: 102px 18px 0;
+  }
+  .portal-boas { transform: none; opacity: 1; }
+  .portal-marca { transform: none; width: min(74vw, 420px); }
+  .anima .portal-logo { opacity: 1; animation: none; }
+  .anima .portal-logo-esq, .anima .portal-logo-dir { translate: none; }
   .palco3 { --a: 1; --b: 1; --c: 1; }
   .palco3 .ap-fone .quadro:not(.is-ativo) { opacity: 0; }
 }
@@ -1244,9 +1255,23 @@ body::before {
    palco preso a 100vh cortava a manchete atrás do cabeçalho. */
 @media (max-width: 520px) and (max-height: 740px) {
   .portal { height: auto; }
-  .portal-palco { position: relative; height: auto; overflow: visible; }
-  .portal-mundo { position: relative; overflow: visible; padding-block: 96px 28px; }
-  .portal-painel, .portal-letreiro, .portal-dica, .portal-barra { display: none; }
+  .portal-palco { position: relative; height: auto; overflow: visible; display: flex; flex-direction: column; }
+  .portal-mundo { position: relative; overflow: visible; padding-block: 14px 28px; }
+  .portal-painel, .portal-dica, .portal-barra { display: none; }
+  /* O LETREIRO NÃO É MÁQUINA DE ROLAGEM, É A BOAS-VINDAS
+     Painéis, dica e barra existem só para a abertura; sem o portal
+     eles não têm função. O "bem-vindo ao OAZE" tem: era a primeira
+     coisa que a pessoa lia. Escondê-lo junto com o resto fez o
+     celular baixo abrir o site sem nunca mostrar a marca. Aqui ele
+     volta parado, no topo, antes do herói. */
+  .portal-letreiro {
+    position: static; inset: auto; order: -1;
+    opacity: 1; pointer-events: auto;
+    padding: 102px 18px 0;
+  }
+  .portal-boas { transform: none; opacity: 1; }
+  .portal-marca { transform: none; width: min(74vw, 380px); }
+  .anima .portal-logo-esq, .anima .portal-logo-dir { translate: none; }
   .portal .palco3 { --a: 1 !important; --b: 1 !important; --c: 1 !important; }
 }
 

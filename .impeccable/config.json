@@ -225,6 +225,12 @@
         ],
         "createdAt": "2026-10-01T12:53:22.245Z",
         "reason": "Claude: medido no DOM renderizado em 01/10/2026 -- 39 elementos .card na tela e ZERO com outro .card como ancestral. O detector le a marcacao estatica; em execucao as secoes sao irmas, nao aninhadas. Escopo limitado ao app.html: as demais paginas seguem cobertas pela regra."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "plexmono",
+        "createdAt": "2026-10-13T17:44:38.279Z",
+        "reason": "A V3 declara a mesma família com o nome curto PlexMono em preview-v3/app.css; DESIGN.md documenta IBM Plex Mono. Maquete espelha a convenção do app."
       }
     ]
   }

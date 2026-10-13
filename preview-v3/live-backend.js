@@ -287,14 +287,72 @@
     if (!response.ok || !result.sdp) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
     return { sdp: result.sdp, sessionId: result.session_id || null };
   };
-  async function requirePrivacyAcceptance() {
-    const { data, error } = await bounded(client.from('privacy_acceptances')
-      .select('policy_version').eq('user_id', user.id)
-      .eq('policy_version', '2026-10-01').maybeSingle());
-    if (error) throw error;
-    if (data) return;
+  /* =============================================================
+     UMA AUTORIZAÇÃO SÓ, E ELA É A DA ENTRADA
+     -------------------------------------------------------------
+     Eram três perguntas em momentos diferentes: a privacidade logo
+     depois de entrar, a Coco na primeira conversa, e os avisos
+     soltos pelo caminho. Três paredes seguidas não protegem mais
+     do que uma — ensinam a clicar em "aceitar" sem ler, que é o
+     contrário de consentir.
+
+     A pergunta agora é feita em /entrar e /cadastro, antes de a
+     sessão existir, e atravessa até aqui marcada em
+     SiteAuth.aceitePendente(). Esta função só GRAVA o que já foi
+     respondido. A tela abaixo é o resgate de quem entrou antes
+     desta mudança ou perdeu a marca pelo caminho — e ela também
+     pergunta uma vez só, pelas duas coisas.
+
+     O que NÃO muda: sem registro gravado no banco, nenhum documento
+     financeiro é lido. Marca de navegador não é prova de aceite; é
+     intenção que ainda precisa virar linha no servidor. */
+  async function gravarPrivacidade(source) {
+    const result = await bounded(client.from('privacy_acceptances').insert({
+      user_id: user.id,
+      policy_version: '2026-10-01',
+      accepted_at: new Date().toISOString(),
+      source: String(source || 'app').slice(0, 40)
+    }));
+    if (result.error && result.error.code !== '23505') throw result.error;
+  }
+  /* A Coco faz parte da mesma autorização, mas não pode derrubar a
+     entrada: se a gravação dela falhar, o app abre mesmo assim e ela
+     volta a pedir quando for usada. */
+  async function gravarCoco() {
+    try { await V3Backend.cocoConsent(true); return true; }
+    catch (error) { console.error('V3/consentimento Coco:', error); return false; }
+  }
+  async function requireConsent() {
+    const [privacidade, coco] = await Promise.all([
+      bounded(client.from('privacy_acceptances').select('policy_version')
+        .eq('user_id', user.id).eq('policy_version', '2026-10-01').maybeSingle()),
+      V3Backend.cocoSettings().catch(() => null)
+    ]);
+    if (privacidade.error) throw privacidade.error;
+    let temPrivacidade = !!privacidade.data;
+    const temCoco = !!(coco && coco.consented_at && !coco.revoked_at);
+    if (temPrivacidade && temCoco) return;
+
+    const pendente = (global.SiteAuth && global.SiteAuth.aceitePendente) ? global.SiteAuth.aceitePendente() : null;
+    if (pendente) {
+      try {
+        if (!temPrivacidade) { await gravarPrivacidade(pendente.source); temPrivacidade = true; }
+        if (!temCoco && pendente.coco) await gravarCoco();
+        if (global.SiteAuth && global.SiteAuth.limparAceitePendente) global.SiteAuth.limparAceitePendente();
+      } catch (error) { console.error('V3/aceite pendente:', error); }
+    }
+
+    /* QUEM TRANCA O APP É A PRIVACIDADE, NÃO A COCO
+       O aceite da privacidade é a condição para ler qualquer
+       documento financeiro — sem ele não há o que mostrar. A Coco é
+       autorização de uso de um recurso: faltando só ela, o app abre
+       e ela mesma pede quando for aberta. Trancar a entrada por
+       causa da Coco transformaria quem já estava dentro em refém de
+       uma pergunta que ele pode querer responder 'não'. */
+    if (temPrivacidade) return;
+
     const view = document.getElementById('v3-view');
-    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">ANTES DE ENTRAR</span><h2>Seus dados, suas regras.</h2><p>Leia a Política de privacidade e os Termos de uso antes de continuar. Sem o aceite, o aplicativo não carrega seus dados financeiros.</p><p><a href="/privacidade" target="_blank" rel="noopener noreferrer">Política de privacidade</a> · <a href="/termos" target="_blank" rel="noopener noreferrer">Termos de uso</a></p><form id="v3-privacy-form"><label><input type="checkbox" name="accept" required> Li e aceito a Política de privacidade (versão 01/10/2026).</label><button type="submit" class="v3-primary">Aceitar e entrar</button><button type="button" class="v3-secondary" id="v3-privacy-decline">Não aceitar</button><p role="alert" id="v3-privacy-error" hidden></p></form></section>';
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">ANTES DE ENTRAR</span><h2>Seus dados, suas regras.</h2><p>Esta é a única autorização que o OAZE pede. Sem ela, o aplicativo não carrega seus dados financeiros.</p><p><a href="/privacidade" target="_blank" rel="noopener noreferrer">Política de privacidade</a> · <a href="/termos" target="_blank" rel="noopener noreferrer">Termos de uso</a></p><form id="v3-privacy-form"><label><input type="checkbox" name="accept" required> Li e aceito a Política de privacidade (versão 01/10/2026) e os Termos de uso, e autorizo a Coco a usar meus dados financeiros para me responder.</label><button type="submit" class="v3-primary">Autorizar e entrar</button><button type="button" class="v3-secondary" id="v3-privacy-decline">Não aceitar</button><p class="v3-muted">A Coco pode ser revogada depois em Configurações.</p><p role="alert" id="v3-privacy-error" hidden></p></form></section>';
     await new Promise((resolve) => {
       document.getElementById('v3-privacy-decline').addEventListener('click', async () => {
         await client.auth.signOut().catch(() => {});
@@ -308,16 +366,11 @@
         const status = document.getElementById('v3-privacy-error');
         button.disabled = true;
         try {
-          const result = await bounded(client.from('privacy_acceptances').insert({
-            user_id: user.id,
-            policy_version: '2026-10-01',
-            accepted_at: new Date().toISOString(),
-            source: 'app_bloqueio'
-          }));
-          if (result.error && result.error.code !== '23505') throw result.error;
+          if (!temPrivacidade) await gravarPrivacidade('app_bloqueio');
+          await gravarCoco();
           resolve();
         } catch (error) {
-          status.textContent = 'Não consegui registrar o aceite. Tente novamente; seus dados não foram carregados.';
+          status.textContent = 'Não consegui registrar a autorização. Tente novamente; seus dados não foram carregados.';
           status.hidden = false;
           button.disabled = false;
         }
@@ -534,7 +587,7 @@
       photo: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || ''
     };
     // Nenhum documento financeiro é lido antes do aceite obrigatório.
-    await requirePrivacyAcceptance();
+    await requireConsent();
     if (authUser.user_metadata?.oaze_pin_required === true) await requirePinSetup();
     const { data: profileRow, error: profileError } = await bounded(client.from('profiles')
       .select('nome,moeda,pais,fuso').eq('user_id', user.id).maybeSingle());

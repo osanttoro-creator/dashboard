@@ -41,30 +41,53 @@
       typeof a.source === 'string' && a.source.length <= 40);
   }
 
+  /* UMA AUTORIZAÇÃO, NÃO TRÊS
+     O texto da caixa em /entrar e /cadastro cobre privacidade,
+     termos e o uso dos dados financeiros pela Coco. Por isso o aceite
+     carrega `coco`: sem esse campo, o app voltaria a abrir a tela de
+     consentimento da Coco na primeira conversa — a segunda pergunta
+     que já havia sido respondida na porta. Revogar a Coco continua
+     possível em Configurações, e revogar é o que desfaz isto. */
   A.novoAceite = function (origem) {
     return {
       policy_version: POLITICA_PRIVACIDADE_VERSAO,
       accepted_at: new Date().toISOString(),
-      source: String(origem || 'cadastro').slice(0, 40)
+      source: String(origem || 'cadastro').slice(0, 40),
+      coco: true
     };
   };
 
-  /* O OAuth atravessa outro site. sessionStorage preserva apenas o
-     aceite desta aba até a volta; a prova durável será gravada no
-     banco, vinculada ao usuário autenticado, já dentro do app. */
+  /* O OAuth atravessa outro site e o link mágico volta por uma ABA
+     NOVA — e sessionStorage não atravessa aba. Guardar só nele fazia
+     quem entrou por e-mail ser perguntado de novo lá dentro, que é
+     exatamente a repetição que o aceite único veio resolver. Então
+     são dois lugares: a aba, que é o normal, e o aparelho, que é o
+     resgate. Nenhum dos dois é a prova: a prova durável é a linha
+     gravada no banco, vinculada ao usuário autenticado, já dentro
+     do app. Sem marca, pergunta-se de novo — perder o armazenamento
+     nunca pode virar permissão presumida. */
   A.guardarAceitePendente = function (aceite) {
     if (!aceiteValido(aceite)) throw new Error('privacy_policy_required');
-    global.sessionStorage.setItem(CHAVE_ACEITE_PENDENTE, JSON.stringify(aceite));
+    var texto = JSON.stringify(aceite);
+    try { global.sessionStorage.setItem(CHAVE_ACEITE_PENDENTE, texto); } catch (e) {}
+    try { global.localStorage.setItem(CHAVE_ACEITE_PENDENTE, texto); } catch (e) {}
     return aceite;
   };
   A.aceitePendente = function () {
-    try {
-      var a = JSON.parse(global.sessionStorage.getItem(CHAVE_ACEITE_PENDENTE) || 'null');
-      return aceiteValido(a) ? a : null;
-    } catch (e) { return null; }
+    var fontes = [];
+    try { fontes.push(global.sessionStorage.getItem(CHAVE_ACEITE_PENDENTE)); } catch (e) {}
+    try { fontes.push(global.localStorage.getItem(CHAVE_ACEITE_PENDENTE)); } catch (e) {}
+    for (var i = 0; i < fontes.length; i++) {
+      try {
+        var a = JSON.parse(fontes[i] || 'null');
+        if (aceiteValido(a)) return a;
+      } catch (e) { /* lixo guardado: segue para a próxima fonte */ }
+    }
+    return null;
   };
   A.limparAceitePendente = function () {
     try { global.sessionStorage.removeItem(CHAVE_ACEITE_PENDENTE); } catch (e) {}
+    try { global.localStorage.removeItem(CHAVE_ACEITE_PENDENTE); } catch (e) {}
   };
 
   /* ---------------------------------------------------------------

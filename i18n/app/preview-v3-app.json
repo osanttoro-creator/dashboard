@@ -2809,6 +2809,25 @@
   "ignorar": true
  },
  {
+  "pt": "Avisos que você escondeu",
+  "tipo": "exato",
+  "en": "Warnings you hid",
+  "fr": "Avertissements que vous avez masqués",
+  "es": "Avisos que ocultaste"
+ },
+ {
+  "pt": "data-action=\"reset-asks\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "reativar ›",
+  "tipo": "exato",
+  "en": "reactivate ›",
+  "fr": "réactiver ›",
+  "es": "reactivar ›"
+ },
+ {
   "pt": "Perfis financeiros",
   "tipo": "exato",
   "en": "Financial profiles",
@@ -3647,6 +3666,30 @@
  },
  {
   "pt": "Uicons by Flaticon",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze.v3.naoPerguntar",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não perguntar novamente neste aparelho",
+  "tipo": "exato",
+  "en": "Don’t ask again on this device",
+  "fr": "Ne plus demander sur cet appareil",
+  "es": "No preguntar de nuevo en este dispositivo"
+ },
+ {
+  "pt": "Cancelar",
+  "tipo": "exato",
+  "en": "Cancel",
+  "fr": "Annuler",
+  "es": "Cancelar"
+ },
+ {
+  "pt": "Escape",
   "tipo": "exato",
   "ignorar": true
  },
@@ -7090,6 +7133,13 @@
   "es": "¿Enviar {0} a Coco? Puede contener datos sensibles y será procesado por OpenAI. OAZE no guardará el archivo."
  },
  {
+  "pt": "Enviar",
+  "tipo": "exato",
+  "en": "Send",
+  "fr": "Envoyer",
+  "es": "Enviar"
+ },
+ {
   "pt": "Lendo arquivo…",
   "tipo": "exato",
   "en": "Reading file…",
@@ -7522,13 +7572,6 @@
   "es": "Inicia sesión para cambiar la cartera."
  },
  {
-  "pt": "Ocultar “{0}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.",
-  "tipo": "padrao",
-  "en": "Hide “{0}”? It will leave the main wallet and income/expense selectors. It may still count in totals if selected and remain accessible through the wallet eye.",
-  "fr": "Masquer « {0} » ? Il disparaîtra du portefeuille principal et des sélecteurs de revenus et dépenses. Il pourra rester dans les totaux si cette option est cochée et sera accessible via l’œil du portefeuille.",
-  "es": "¿Ocultar «{0}»? Saldrá de la cartera principal y de los selectores de ingresos y gastos. Podrá seguir en los totales si esa opción está marcada y estará disponible desde el ojo de la cartera."
- },
- {
   "pt": "Item oculto. Abra o olho para vê-lo.",
   "tipo": "exato",
   "en": "Item hidden. Open the eye to see it.",
@@ -7548,6 +7591,13 @@
   "en": "Could not change visibility.",
   "fr": "Impossible de modifier la visibilité.",
   "es": "No se pudo cambiar la visibilidad."
+ },
+ {
+  "pt": "Ocultar “{0}”? Ele sairá da carteira principal e dos seletores de receitas e despesas. Poderá continuar nos totais se essa opção estiver marcada e ficará acessível pelo olho da carteira.",
+  "tipo": "padrao",
+  "en": "Hide “{0}”? It will leave the main wallet and income/expense selectors. It may still count in totals if selected and remain accessible through the wallet eye.",
+  "fr": "Masquer « {0} » ? Il disparaîtra du portefeuille principal et des sélecteurs de revenus et dépenses. Il pourra rester dans les totaux si cette option est cochée et sera accessible via l’œil du portefeuille.",
+  "es": "¿Ocultar «{0}»? Saldrá de la cartera principal y de los selectores de ingresos y gastos. Podrá seguir en los totales si esa opción está marcada y estará disponible desde el ojo de la cartera."
  },
  {
   "pt": "Esta proposta não está mais disponível.",
@@ -7914,6 +7964,13 @@
   "es": "¿Cómo cambiaron mis ingresos y gastos en los últimos seis meses?"
  },
  {
+  "pt": "Os avisos voltarão a aparecer neste aparelho.",
+  "tipo": "exato",
+  "en": "Warnings will appear again on this device.",
+  "fr": "Les avertissements réapparaîtront sur cet appareil.",
+  "es": "Los avisos volverán a aparecer en este dispositivo."
+ },
+ {
   "pt": "Esta é uma proposta visual; não houve nenhuma ação na sua conta.",
   "tipo": "exato",
   "en": "This is a visual proposal; nothing happened on your account.",
@@ -8002,11 +8059,6 @@
   "en": "Access to the shared profile has ended.",
   "fr": "L’accès au profil partagé a pris fin.",
   "es": "El acceso al perfil compartido ha terminado."
- },
- {
-  "pt": "Escape",
-  "tipo": "exato",
-  "ignorar": true
  },
  {
   "pt": "Não foi possível aceitar o convite.",

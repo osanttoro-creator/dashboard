@@ -54,8 +54,8 @@ assert.match(v3, /class="v3-logo" href="\/app"/);
 
 /* Privacidade antes de dado, sempre. */
 assert.match(backend, /\.from\('privacy_acceptances'\)/);
-assert.match(backend, /await requirePrivacyAcceptance\(\)/);
-assert.match(backend, /source: 'app_bloqueio'/);
+assert.match(backend, /await requireConsent\(\)/);
+assert.match(backend, /app_bloqueio/);
 
 assert.match(app, /const initialPaths = /);
 assert.match(app, /OazeCookies\.mostrar\(\)/);

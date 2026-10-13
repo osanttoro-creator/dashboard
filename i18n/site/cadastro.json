@@ -24,12 +24,6 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
- },
- {
   "pt": "Entrar",
   "en": "Sign in",
   "fr": "Se connecter",
@@ -48,16 +42,16 @@
   "es": "Plan Semilla (Semente): gratis, sin tarjeta de crédito y sin fecha de vencimiento."
  },
  {
-  "pt": "Li e aceito a <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a>.",
-  "en": "I have read and accept the <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>.",
-  "fr": "J'ai lu et j'accepte la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Politique de confidentialité</a>.",
-  "es": "He leído y acepto la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidad</a>."
+  "pt": "Li e aceito a <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> e os <a href=\"/termos\" target=\"_blank\" rel=\"noopener\">Termos de uso</a>, e autorizo a Coco a usar meus dados financeiros para me responder. Posso revogar a Coco nas configurações.",
+  "en": "I have read and accept the <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a> and the <a href=\"/termos\" target=\"_blank\" rel=\"noopener\">Terms of use</a>, and I authorize Coco to use my financial data to answer me. I can revoke Coco in settings.",
+  "fr": "J’ai lu et j’accepte la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Politique de confidentialité</a> et les <a href=\"/termos\" target=\"_blank\" rel=\"noopener\">Conditions d’utilisation</a>, et j’autorise Coco à utiliser mes données financières pour me répondre. Je peux révoquer Coco dans les réglages.",
+  "es": "He leído y acepto la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener\">Política de privacidad</a> y los <a href=\"/termos\" target=\"_blank\" rel=\"noopener\">Términos de uso</a>, y autorizo a Coco a usar mis datos financieros para responderme. Puedo revocar a Coco en la configuración."
  },
  {
-  "pt": "Obrigatório para criar e iniciar a conta.",
-  "en": "Required to create and start the account.",
-  "fr": "Obligatoire pour créer et démarrer le compte.",
-  "es": "Obligatorio para crear e iniciar la cuenta."
+  "pt": "Obrigatório para criar a conta. É a única autorização que o OAZE pede.",
+  "en": "Required to create the account. It is the only authorization OAZE asks for.",
+  "fr": "Obligatoire pour créer le compte. C’est la seule autorisation que OAZE demande.",
+  "es": "Obligatorio para crear la cuenta. Es la única autorización que OAZE pide."
  },
  {
   "pt": "Criar conta com Google",
@@ -138,10 +132,10 @@
   "es": "¿Ya tienes cuenta? <a href=\"/entrar\">Inicia sesión</a>"
  },
  {
-  "pt": "Aceite a Política de privacidade para continuar.",
-  "en": "Accept the Privacy policy to continue.",
-  "fr": "Acceptez la Politique de confidentialité pour continuer.",
-  "es": "Acepta la Política de privacidad para continuar."
+  "pt": "Marque a autorização para continuar.",
+  "en": "Check the authorization to continue.",
+  "fr": "Cochez l’autorisation pour continuer.",
+  "es": "Marca la autorización para continuar."
  },
  {
   "pt": "Abrindo…",

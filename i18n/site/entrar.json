@@ -24,12 +24,6 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
- },
- {
   "pt": "Criar conta",
   "en": "Create account",
   "fr": "Créer un compte",
@@ -46,6 +40,12 @@
   "en": "Your data in sync on every device.",
   "fr": "Vos données synchronisées sur tous vos appareils.",
   "es": "Tus datos sincronizados en todos tus dispositivos."
+ },
+ {
+  "pt": "Li e aceito a <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener noreferrer\">Política de privacidade</a> e os <a href=\"/termos\" target=\"_blank\" rel=\"noopener noreferrer\">Termos de uso</a>, e autorizo a Coco a usar meus dados financeiros para me responder. Posso revogar a Coco nas configurações.",
+  "en": "I have read and accept the <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener noreferrer\">Privacy Policy</a> and the <a href=\"/termos\" target=\"_blank\" rel=\"noopener noreferrer\">Terms of use</a>, and I authorize Coco to use my financial data to answer me. I can revoke Coco in settings.",
+  "fr": "J’ai lu et j’accepte la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener noreferrer\">Politique de confidentialité</a> et les <a href=\"/termos\" target=\"_blank\" rel=\"noopener noreferrer\">Conditions d’utilisation</a>, et j’autorise Coco à utiliser mes données financières pour me répondre. Je peux révoquer Coco dans les réglages.",
+  "es": "He leído y acepto la <a href=\"/privacidade\" target=\"_blank\" rel=\"noopener noreferrer\">Política de privacidad</a> y los <a href=\"/termos\" target=\"_blank\" rel=\"noopener noreferrer\">Términos de uso</a>, y autorizo a Coco a usar mis datos financieros para responderme. Puedo revocar a Coco en la configuración."
  },
  {
   "pt": "Continuar com Google",
@@ -136,6 +136,12 @@
   "en": "You can use OAZE without an account — your data stays on this device only. <a href=\"/#perguntas\">See the difference</a>.",
   "fr": "Vous pouvez utiliser OAZE sans compte — les données restent uniquement sur cet appareil. <a href=\"/#perguntas\">Comprendre la différence</a>.",
   "es": "Puedes usar OAZE sin cuenta: los datos se quedan solo en este dispositivo. <a href=\"/#perguntas\">Entiende la diferencia</a>."
+ },
+ {
+  "pt": "Marque a autorização para entrar.",
+  "en": "Check the authorization to sign in.",
+  "fr": "Cochez l’autorisation pour entrer.",
+  "es": "Marca la autorización para entrar."
  },
  {
   "pt": "Abrindo…",
