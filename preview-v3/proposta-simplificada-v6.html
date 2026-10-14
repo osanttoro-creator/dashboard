@@ -2,49 +2,12 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#0d1821">
-  <title>OAZE — prévia de organização da V3</title>
-  <link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
-  <style>
-    @font-face{font-family:Instrument;src:url('/assets/fonts/InstrumentSans-Regular.ttf')}
-    @font-face{font-family:Instrument;src:url('/assets/fonts/InstrumentSans-SemiBold.ttf');font-weight:600}
-    :root{color-scheme:dark;font-family:Instrument,Arial,sans-serif}
-    *{box-sizing:border-box}
-    body{margin:0;background:#0d1821;color:#f0e5cf}
-    button{font:inherit;cursor:pointer}
-    button:focus-visible{outline:2px solid #5fa99b;outline-offset:3px}
-    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px clamp(15px,3vw,36px);background:#f0e5cf;color:#0d1821}
-    .toolbar strong{display:block;font-size:15px}
-    .toolbar small{display:block;font-size:12px}
-    .devices{display:flex;gap:6px}
-    .devices button{border:1px solid #0d182133;border-radius:11px;background:transparent;color:#0d1821;padding:8px 13px}
-    .devices button[aria-pressed="true"]{background:#0d1821;color:#f0e5cf}
-    .workspace{display:grid;place-items:center;min-height:calc(100dvh - 66px);padding:15px;background:radial-gradient(80% 90% at 50% 0%,#213f49,#0d1821 70%)}
-    .frame{display:block;width:min(100%,1440px);height:min(850px,calc(100dvh - 104px));min-height:620px;border:1px solid #f0e5cf30;border-radius:19px;background:#0d1821;box-shadow:0 25px 65px #030a0db3;overflow:hidden}
-    .frame.mobile{width:min(390px,100%);height:min(800px,calc(100dvh - 104px));border-radius:32px}
-    iframe{display:block;width:100%;height:100%;border:0;background:#0d1821}
-    @media(max-width:700px){.toolbar small{display:none}.toolbar strong{font-size:12px}.devices button{padding:7px 9px}.workspace{padding:9px}.frame:not(.mobile){height:calc(100dvh - 90px)}}
-  </style>
+  <meta http-equiv="refresh" content="0;url=/preview-v3/index.html?demo=1&amp;layout=v6#home">
+  <title>OAZE — prévia da V3</title>
 </head>
 <body>
-  <header class="toolbar"><div><strong>OAZE · organização da V3</strong><small>A demonstração usa a carteira, a entrada monetária e os ícones reais do app. Dados fictícios.</small></div><div class="devices" role="group" aria-label="Tamanho da prévia"><button type="button" data-device="desktop" aria-pressed="true">Desktop</button><button type="button" data-device="mobile" aria-pressed="false">Celular</button></div></header>
-  <main class="workspace"><div class="frame" id="frame"><iframe id="app" title="Demonstração funcional do OAZE V3" src="/preview-v3/index.html?demo=1#home"></iframe></div></main>
-  <script>
-    const frame=document.querySelector('#frame');
-    const app=document.querySelector('#app');
-    document.querySelectorAll('[data-device]').forEach(button=>button.addEventListener('click',()=>{
-      const mobile=button.dataset.device==='mobile';
-      frame.classList.toggle('mobile',mobile);
-      document.querySelectorAll('[data-device]').forEach(choice=>choice.setAttribute('aria-pressed',String(choice===button)));
-    }));
-    app.addEventListener('load',()=>{
-      const sheet=app.contentDocument.createElement('link');
-      sheet.rel='stylesheet';
-      sheet.href='/preview-v3/proposta-simplificada-v6.css';
-      app.contentDocument.head.append(sheet);
-    });
-  </script>
+  <p>Abrindo a <a href="/preview-v3/index.html?demo=1&amp;layout=v6#home">prévia funcional do OAZE V3</a>…</p>
 </body>
 </html>
