@@ -942,6 +942,102 @@
   "es": "Indicadores del mes"
  },
  {
+  "pt": "oaze.v3.inicio",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Sobra e curva do mês",
+  "tipo": "exato",
+  "en": "Month’s leftover and curve",
+  "fr": "Reste et courbe du mois",
+  "es": "Sobrante y curva del mes"
+ },
+ {
+  "pt": "Onde foi o mês",
+  "tipo": "exato",
+  "en": "Where the month went",
+  "fr": "Où est passé le mois",
+  "es": "A dónde fue el mes"
+ },
+ {
+  "pt": "Até o fim do mês",
+  "tipo": "exato",
+  "en": "Until the end of the month",
+  "fr": "Jusqu’à la fin du mois",
+  "es": "Hasta el fin de mes"
+ },
+ {
+  "pt": "Investimentos",
+  "tipo": "exato",
+  "en": "Investments",
+  "fr": "Investissements",
+  "es": "Inversiones"
+ },
+ {
+  "pt": "Ações rápidas",
+  "tipo": "exato",
+  "en": "Quick actions",
+  "fr": "Actions rapides",
+  "es": "Acciones rápidas"
+ },
+ {
+  "pt": "OAZE Score",
+  "tipo": "exato",
+  "en": "OAZE Score",
+  "fr": "Score OAZE",
+  "es": "OAZE Score"
+ },
+ {
+  "pt": "gerenciar tela inicial",
+  "tipo": "exato",
+  "en": "manage home screen",
+  "fr": "gérer l’écran d’accueil",
+  "es": "gestionar la pantalla de inicio"
+ },
+ {
+  "pt": "o que aparece na Início",
+  "tipo": "exato",
+  "en": "what shows on Home",
+  "fr": "ce qui apparaît sur l’Accueil",
+  "es": "lo que aparece en Inicio"
+ },
+ {
+  "pt": "A carteira e a saudação ficam sempre. O resto é escolha sua, e vale neste aparelho.",
+  "tipo": "exato",
+  "en": "The wallet and the greeting always stay. The rest is your choice, and it applies to this device.",
+  "fr": "Le portefeuille et le message d’accueil restent toujours. Le reste est votre choix, et vaut pour cet appareil.",
+  "es": "La cartera y el saludo siempre se quedan. El resto es tu elección, y vale en este dispositivo."
+ },
+ {
+  "pt": "Gerenciar tela inicial",
+  "tipo": "exato",
+  "en": "Manage home screen",
+  "fr": "Gérer l’écran d’accueil",
+  "es": "Gestionar la pantalla de inicio"
+ },
+ {
+  "pt": "aportado {0} · rendimento",
+  "tipo": "padrao",
+  "en": "contributed {0} · return",
+  "fr": "versé {0} · rendement",
+  "es": "aportado {0} · rendimiento"
+ },
+ {
+  "pt": "Nenhum aporte registrado até aqui. Registre o que você já guardou para acompanhar o rendimento.",
+  "tipo": "exato",
+  "en": "No contribution recorded so far. Record what you have already saved to follow the return.",
+  "fr": "Aucun versement enregistré jusqu’ici. Enregistrez ce que vous avez déjà mis de côté pour suivre le rendement.",
+  "es": "Ningún aporte registrado hasta aquí. Registra lo que ya guardaste para seguir el rendimiento."
+ },
+ {
+  "pt": "ver tudo",
+  "tipo": "exato",
+  "en": "see all",
+  "fr": "tout voir",
+  "es": "ver todo"
+ },
+ {
   "pt": "seu painel começa aqui",
   "tipo": "exato",
   "en": "your panel starts here",
@@ -991,13 +1087,6 @@
   "es": "buenas noches"
  },
  {
-  "pt": "SALDO TOTAL",
-  "tipo": "exato",
-  "en": "TOTAL BALANCE",
-  "fr": "SOLDE TOTAL",
-  "es": "SALDO TOTAL"
- },
- {
   "pt": "onde foi o mês",
   "tipo": "exato",
   "en": "where the month went",
@@ -1005,18 +1094,18 @@
   "es": "a dónde fue el mes"
  },
  {
-  "pt": "ver tudo",
-  "tipo": "exato",
-  "en": "see all",
-  "fr": "tout voir",
-  "es": "ver todo"
- },
- {
   "pt": "até o fim do mês",
   "tipo": "exato",
   "en": "until the end of the month",
   "fr": "jusqu’à la fin du mois",
   "es": "hasta fin de mes"
+ },
+ {
+  "pt": "SALDO TOTAL",
+  "tipo": "exato",
+  "en": "TOTAL BALANCE",
+  "fr": "SOLDE TOTAL",
+  "es": "SALDO TOTAL"
  },
  {
   "pt": "Esse lançamento mudou. Atualize a página e tente novamente.",
@@ -1066,11 +1155,105 @@
   "es": "No se pudo guardar el estado."
  },
  {
+  "pt": "Entradas",
+  "tipo": "exato",
+  "en": "Incoming",
+  "fr": "Entrées",
+  "es": "Entradas"
+ },
+ {
+  "pt": "Saídas",
+  "tipo": "exato",
+  "en": "Outgoing",
+  "fr": "Sorties",
+  "es": "Salidas"
+ },
+ {
   "pt": "Cartões",
   "tipo": "exato",
   "en": "Cards",
   "fr": "Cartes",
   "es": "Tarjetas"
+ },
+ {
+  "pt": "Pendentes",
+  "tipo": "exato",
+  "en": "Pending",
+  "fr": "En attente",
+  "es": "Pendientes"
+ },
+ {
+  "pt": "card:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "account:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Todas",
+  "tipo": "exato",
+  "en": "All",
+  "fr": "Toutes",
+  "es": "Todas"
+ },
+ {
+  "pt": "Previsto",
+  "tipo": "exato",
+  "en": "Planned",
+  "fr": "Prévu",
+  "es": "Previsto"
+ },
+ {
+  "pt": "SITUAÇÃO",
+  "tipo": "exato",
+  "en": "STATUS",
+  "fr": "STATUT",
+  "es": "SITUACIÓN"
+ },
+ {
+  "pt": "Todas as contas e cartões",
+  "tipo": "exato",
+  "en": "All accounts and cards",
+  "fr": "Tous les comptes et cartes",
+  "es": "Todas las cuentas y tarjetas"
+ },
+ {
+  "pt": "Descrição, categoria ou observação",
+  "tipo": "exato",
+  "en": "Description, category or note",
+  "fr": "Description, catégorie ou note",
+  "es": "Descripción, categoría o nota"
+ },
+ {
+  "pt": "Aplicar",
+  "tipo": "exato",
+  "en": "Apply",
+  "fr": "Appliquer",
+  "es": "Aplicar"
+ },
+ {
+  "pt": "Limpar filtros",
+  "tipo": "exato",
+  "en": "Clear filters",
+  "fr": "Effacer les filtres",
+  "es": "Borrar filtros"
+ },
+ {
+  "pt": "O período continua sendo o mês escolhido no topo. Os filtros valem só nesta sessão.",
+  "tipo": "exato",
+  "en": "The period is still the month chosen at the top. Filters apply only to this session.",
+  "fr": "La période reste le mois choisi en haut. Les filtres ne valent que pour cette session.",
+  "es": "El período sigue siendo el mes elegido arriba. Los filtros valen solo en esta sesión."
+ },
+ {
+  "pt": "Filtros",
+  "tipo": "exato",
+  "en": "Filters",
+  "fr": "Filtres",
+  "es": "Filtros"
  },
  {
   "pt": "CARTÃO",
@@ -1129,6 +1312,13 @@
   "es": "{0} previsto{1}"
  },
  {
+  "pt": "Tudo",
+  "tipo": "exato",
+  "en": "All",
+  "fr": "Tout",
+  "es": "Todo"
+ },
+ {
   "pt": "Na demonstração, os controles não alteram sua conta.",
   "tipo": "exato",
   "en": "In the demo, the controls don’t change your account.",
@@ -1141,6 +1331,20 @@
   "en": "Tap the circle to choose paid, unpaid, or canceled.",
   "fr": "Touchez le cercle pour choisir payé, impayé ou annulé.",
   "es": "Toca el círculo para elegir pagado, pendiente o cancelado."
+ },
+ {
+  "pt": "Abrir filtros",
+  "tipo": "exato",
+  "en": "Open filters",
+  "fr": "Ouvrir les filtres",
+  "es": "Abrir filtros"
+ },
+ {
+  "pt": "Filtros{0}",
+  "tipo": "padrao",
+  "en": "Filters{0}",
+  "fr": "Filtres{0}",
+  "es": "Filtros{0}"
  },
  {
   "pt": "Só o que está confirmado entra nos totais. {0}",
@@ -3490,20 +3694,6 @@
   "es": "Gráficos calculados a partir de tus movimientos en OAZE. Pregunta a Coco qué cambió."
  },
  {
-  "pt": "Entradas",
-  "tipo": "exato",
-  "en": "Incoming",
-  "fr": "Entrées",
-  "es": "Entradas"
- },
- {
-  "pt": "Saídas",
-  "tipo": "exato",
-  "en": "Outgoing",
-  "fr": "Sorties",
-  "es": "Salidas"
- },
- {
   "pt": "Resultado",
   "tipo": "exato",
   "en": "Net result",
@@ -4474,16 +4664,6 @@
   "es": "Movimiento no encontrado. Actualiza la página."
  },
  {
-  "pt": "card:{0}",
-  "tipo": "padrao",
-  "ignorar": true
- },
- {
-  "pt": "account:{0}",
-  "tipo": "padrao",
-  "ignorar": true
- },
- {
   "pt": "card:",
   "tipo": "exato",
   "en": "card:",
@@ -4666,6 +4846,20 @@
   "es": "Ej.: supermercado"
  },
  {
+  "pt": "A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.",
+  "tipo": "exato",
+  "en": "The purchase lands on this statement; OAZE picks the right day inside the cycle.",
+  "fr": "L’achat tombe sur ce relevé ; OAZE choisit le bon jour dans le cycle.",
+  "es": "La compra cae en esta factura; OAZE elige el día correcto dentro del ciclo."
+ },
+ {
+  "pt": "Mais detalhes",
+  "tipo": "exato",
+  "en": "More details",
+  "fr": "Plus de détails",
+  "es": "Más detalles"
+ },
+ {
   "pt": "Não informado",
   "tipo": "exato",
   "en": "Not specified",
@@ -4678,20 +4872,6 @@
   "en": "How the money came into or left this account.",
   "fr": "Comment l’argent est entré ou sorti de ce compte.",
   "es": "Cómo entró o salió el dinero de esta cuenta."
- },
- {
-  "pt": "A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.",
-  "tipo": "exato",
-  "en": "The purchase lands on this statement; OAZE picks the right day inside the cycle.",
-  "fr": "L’achat tombe sur ce relevé ; OAZE choisit le bon jour dans le cycle.",
-  "es": "La compra cae en esta factura; OAZE elige el día correcto dentro del ciclo."
- },
- {
-  "pt": "SITUAÇÃO",
-  "tipo": "exato",
-  "en": "STATUS",
-  "fr": "STATUT",
-  "es": "SITUACIÓN"
  },
  {
   "pt": "Repetir mensalmente",
@@ -7969,6 +8149,13 @@
   "en": "Warnings will appear again on this device.",
   "fr": "Les avertissements réapparaîtront sur cet appareil.",
   "es": "Los avisos volverán a aparecer en este dispositivo."
+ },
+ {
+  "pt": "Filtros limpos.",
+  "tipo": "exato",
+  "en": "Filters cleared.",
+  "fr": "Filtres effacés.",
+  "es": "Filtros borrados."
  },
  {
   "pt": "Esta é uma proposta visual; não houve nenhuma ação na sua conta.",

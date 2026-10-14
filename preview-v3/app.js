@@ -64,7 +64,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -454,11 +454,85 @@
     if (!metric) return;
     openSheet(`${sheetTop(metric.title, niceMonth(state.ym))}<p class="v3-money v3-sensitive v3-metric-detail">${money(metric.value)}</p><div class="v3-metric-lines">${metric.detail.map((line) => `<p>${esc(line)}</p>`).join('')}</div><p class="v3-muted">${esc(metric.note)}</p>`, metric.title);
   }
+  /* =============================================================
+     A INÍCIO É UMA PILHA DE BLOCOS, E A CARTEIRA VEM PRIMEIRO
+     -------------------------------------------------------------
+     A tela abria com quatro indicadores, depois a carteira, depois
+     as ações rápidas, a curva, as categorias, os próximos e o
+     score. São três camadas de resumo antes de a pessoa chegar no
+     próprio dinheiro — e a carteira, que é a peça que distingue o
+     OAZE, nascia abaixo da dobra no celular.
+
+     Agora a carteira é a primeira peça e o resto é uma lista de
+     blocos do mesmo tamanho, cada um com um assunto. NADA FOI
+     APAGADO: indicadores, ações rápidas e score continuam aqui,
+     desligados por padrão e a um toque de distância em 'gerenciar
+     tela inicial'. Desligar por padrão é uma aposta de que a maioria
+     não usa os três ao mesmo tempo; ligar de volta custa um toque, e
+     esconder sem porta de volta é que seria perda.
+
+     A escolha mora no aparelho, não na conta: é preferência de quem
+     está olhando, não dado financeiro. Trocar de aparelho começa de
+     novo no padrão, e isso é aceitável para uma preferência de tela.
+     ============================================================= */
+  const CHAVE_INICIO = 'oaze.v3.inicio';
+  const BLOCOS_INICIO = [
+    { id: 'sobra', nome: 'Sobra e curva do mês', padrao: true },
+    { id: 'categorias', nome: 'Onde foi o mês', padrao: true },
+    { id: 'proximos', nome: 'Até o fim do mês', padrao: true },
+    { id: 'investimentos', nome: 'Investimentos', padrao: true },
+    { id: 'indicadores', nome: 'Indicadores do mês', padrao: false },
+    { id: 'atalhos', nome: 'Ações rápidas', padrao: false },
+    { id: 'score', nome: 'OAZE Score', padrao: false }
+  ];
+  function blocosEscolhidos() {
+    try { return JSON.parse(localStorage.getItem(CHAVE_INICIO) || '{}') || {}; }
+    catch (e) { return {}; }
+  }
+  function blocoLigado(id) {
+    const escolhido = blocosEscolhidos()[id];
+    if (typeof escolhido === 'boolean') return escolhido;
+    return !!(BLOCOS_INICIO.find((b) => b.id === id) || {}).padrao;
+  }
+  function alternarBloco(id) {
+    const atual = blocosEscolhidos();
+    atual[id] = !blocoLigado(id);
+    try { localStorage.setItem(CHAVE_INICIO, JSON.stringify(atual)); } catch (e) { /* sem armazenamento: vale só nesta sessão */ }
+  }
+  function painelBlocosInicio() {
+    const linhas = BLOCOS_INICIO.map((b) => `<label class="v3-setting-row v3-bloco-linha"><span>${esc(b.nome)}</span><input type="checkbox" data-bloco="${esc(b.id)}" ${blocoLigado(b.id) ? 'checked' : ''}></label>`).join('');
+    openSheet(`${sheetTop('gerenciar tela inicial', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. O resto é escolha sua, e vale neste aparelho.</p><section class="v3-panel" style="margin-top:16px">${linhas}</section>`, 'Gerenciar tela inicial');
+  }
+  /* O bloco de investimentos na Início usa a mesma conta da tela de
+     investimentos: valor hoje, quanto foi aportado e a diferença. */
+  function resumoInvestimentos() {
+    const at = U.monthEnd(state.ym);
+    const list = (profile().investments || []).filter((x) => x.date <= at);
+    const valueAt = (x) => demo ? Number(x.currentValue == null ? x.amount : x.currentValue) || 0 : Calc.investmentValueAt(x, at, profile());
+    const total = list.reduce((sum, x) => sum + valueAt(x), 0);
+    const contributed = list.reduce((sum, x) => sum + Number(x.amount || 0), 0);
+    const byType = new Map();
+    list.forEach((x) => byType.set(x.type || 'Outro', (byType.get(x.type || 'Outro') || 0) + valueAt(x)));
+    const colors = ['#5fa99b', '#8fb0c0', '#f0e5cf', '#729cab'];
+    const mix = [...byType].map(([name, value], i) => ({ name, value, color: colors[i % colors.length] })).filter((x) => x.value > 0);
+    return { total, contributed, gain: total - contributed, mix, count: list.length };
+  }
+  function painelInvestimentos() {
+    const r = resumoInvestimentos();
+    const corpo = r.count
+      ? `<strong class="v3-money v3-sensitive">${money(r.total)}</strong><small class="v3-muted">aportado ${money(r.contributed)} · rendimento <span class="${r.gain < 0 ? 'v3-negative' : 'v3-positive'}">${r.gain < 0 ? '−' : '+'} ${money(Math.abs(r.gain))}</span></small>` +
+        (r.mix.length ? `<div class="v3-invest-trilho" aria-hidden="true">${r.mix.map((m) => `<i style="width:${pct(100 * m.value / r.total)}%;background:${safeColor(m.color)}"></i>`).join('')}</div><div class="v3-invest-legenda">${r.mix.map((m) => `<span><i style="background:${safeColor(m.color)}"></i>${esc(m.name)}</span>`).join('')}</div>` : '')
+      : '<p class="v3-muted">Nenhum aporte registrado até aqui. Registre o que você já guardou para acompanhar o rendimento.</p>';
+    return `<section class="v3-panel"><div class="v3-row"><h2>investimentos</h2><button type="button" class="v3-link" data-go="investments">ver tudo</button></div>${corpo}</section>`;
+  }
   function renderHome() {
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
-    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${renderHomeMetrics()}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${quickActions()}</div><div class="v3-stack">${wave()}<div class="v3-grid v3-half"><section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section><section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section></div></div>${painelScore()}</div>`;
+    const metade = [blocoLigado('categorias') ? `<section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '',
+      blocoLigado('proximos') ? `<section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section>` : ''].filter(Boolean).join('');
+    const direita = [blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : '', blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
+    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${blocoLigado('score') ? painelScore() : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -515,8 +589,65 @@
     } catch (error) { render(); toast(error.message || 'Não foi possível salvar a situação.'); }
     finally { statusBusy = false; }
   }
+  /* =============================================================
+     OS CORTES SÃO PERGUNTAS, E PERGUNTA MORA EM FILTRO
+     -------------------------------------------------------------
+     A faixa antiga misturava duas coisas no mesmo lugar: meio de
+     pagamento (Pix, Débito, Crédito) e tipo de instrumento
+     (Cartões). Quem queria 'só o que ainda não paguei' ou 'só
+     mercado' não tinha por onde, e acabava lendo a lista inteira.
+
+     Agora a faixa guarda os cortes de um toque — tudo, entradas,
+     saídas, cartões, pendentes — e o resto mora num painel: em que
+     situação, em qual conta, de qual categoria, e busca por texto.
+     O painel conta quantos cortes estão ativos para a faixa nunca
+     mentir sobre o que a lista está escondendo.
+
+     O filtro é de SESSÃO, não de conta: ele muda o que se vê, não o
+     que existe, e guardá-lo entre visitas faria a pessoa voltar a
+     uma lista incompleta sem lembrar por quê.
+     ============================================================= */
+  function filtrosAtivos() {
+    const f = state.filtros;
+    return ['situacao', 'fonte', 'categoria'].filter((k) => f[k] && f[k] !== 'todas').length + (f.busca.trim() ? 1 : 0);
+  }
+  function limparFiltros() { state.filtros = { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }; }
+  function passaNoFiltro(x) {
+    const f = state.filtros;
+    const rapido = state.filter;
+    if (rapido === 'Entradas' && x.kind !== 'income') return false;
+    if (rapido === 'Saídas' && x.kind !== 'expense') return false;
+    if (rapido === 'Cartões' && !x.cardId) return false;
+    if (rapido === 'Pendentes' && (x.confirmed || x.cancelado)) return false;
+    if (f.situacao === 'pago' && !(x.confirmed && !x.cancelado)) return false;
+    if (f.situacao === 'previsto' && !(!x.confirmed && !x.cancelado)) return false;
+    if (f.situacao === 'cancelado' && !x.cancelado) return false;
+    if (f.fonte !== 'todas' && f.fonte !== (x.cardId ? 'card:' + x.cardId : 'account:' + x.accountId)) return false;
+    if (f.categoria !== 'todas' && f.categoria !== x.categoryId) return false;
+    const busca = f.busca.trim().toLowerCase();
+    if (busca) {
+      const alvo = [x.description, x.notes, categoryName(x.categoryId), x.methodLabel].filter(Boolean).join(' ').toLowerCase();
+      if (!alvo.includes(busca)) return false;
+    }
+    return true;
+  }
+  function painelFiltros() {
+    const f = state.filtros;
+    const contas = profile().accounts.filter((a) => !a.archived).map((a) => `<option value="account:${esc(a.id)}" ${f.fonte === 'account:' + a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('');
+    const cartoes = profile().cards.filter((c) => !c.archived).map((c) => `<option value="card:${esc(c.id)}" ${f.fonte === 'card:' + c.id ? 'selected' : ''}>${esc(c.name || c.bank)}</option>`).join('');
+    const categorias = profile().categories.map((c) => `<option value="${esc(c.id)}" ${f.categoria === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+    const opcao = (v, rot) => `<option value="${v}" ${f.situacao === v ? 'selected' : ''}>${rot}</option>`;
+    openSheet(`${sheetTop('filtros', niceMonth(state.ym))}<form class="v3-form" id="v3-form-filtros">`
+      + `<label>SITUAÇÃO<select name="situacao">${opcao('todas', 'Todas')}${opcao('pago', 'Pago')}${opcao('previsto', 'Previsto')}${opcao('cancelado', 'Cancelado')}</select></label>`
+      + `<label>ONDE<select name="fonte"><option value="todas" ${f.fonte === 'todas' ? 'selected' : ''}>Todas as contas e cartões</option>${contas}${cartoes}</select></label>`
+      + `<label>CATEGORIA<select name="categoria"><option value="todas" ${f.categoria === 'todas' ? 'selected' : ''}>Todas</option>${categorias}</select></label>`
+      + `<label>BUSCA<input name="busca" maxlength="60" value="${esc(f.busca)}" placeholder="Descrição, categoria ou observação"></label>`
+      + `<button type="submit" class="v3-primary">Aplicar</button>`
+      + `<button type="button" class="v3-secondary" data-action="limpar-filtros">Limpar filtros</button>`
+      + `<p class="v3-muted">O período continua sendo o mês escolhido no topo. Os filtros valem só nesta sessão.</p></form>`, 'Filtros');
+  }
   function renderTransactions() {
-    const rows = currentTransactions({ comCancelados: true }).filter((t) => state.filter === 'Todos' || (state.filter === 'Crédito' ? !!t.cardId : state.filter === 'Débito' ? !t.cardId : state.filter === 'Cartões' ? !!t.cardId : (t.methodLabel || '').toUpperCase().includes('PIX'))).sort((a, b) => b.date.localeCompare(a.date));
+    const rows = currentTransactions({ comCancelados: true }).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
     const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
@@ -562,7 +693,8 @@
         + `</section>`;
     });
 
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Pix','Cartões','Débito','Crédito'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f}</button>`).join('')}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para escolher pago, não pago ou cancelado.'}</p><div class="v3-tx-pares">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
+    const ativos = filtrosAtivos();
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Entradas','Saídas','Cartões','Pendentes'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f === 'Todos' ? 'Tudo' : f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>${ativos ? '<button type="button" class="v3-link" data-action="limpar-filtros">limpar</button>' : ''}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para escolher pago, não pago ou cancelado.'}</p><div class="v3-tx-pares">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -1603,7 +1735,7 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><details class="v3-mais" ${editing?.recurring || Number(editing?.installments) > 1 ? 'open' : ''}><summary>Mais detalhes</summary><div class="v3-mais-corpo"><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label></div></details><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     const txForm=document.getElementById('v3-form-tx');
     const destination=txForm.elements.destination;
     if(destination) destination.innerHTML='<option value="">Selecione</option>'+profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${editing?.toAccountId===a.id?'selected':''}>${esc(a.name||a.bank)} •• ${esc(a.last4||'')} · ${esc(a.moeda||'BRL')}</option>`).join('');
@@ -2962,17 +3094,28 @@
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
     if (action==='notifications'){openNotifications();return;}
     if (action==='reset-asks'){askReset();render();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
+    if (action==='home-blocks'){painelBlocosInicio();return;}
+    if (action==='filtros'){painelFiltros();return;}
+    if (action==='limpar-filtros'){limparFiltros();state.filter='Todos';closeSheet();render();toast('Filtros limpos.');return;}
     if (action==='plan-info'){go('plan');return;}
     if (action==='demo-only'){toast('Esta é uma proposta visual; não houve nenhuma ação na sua conta.');return;}
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save','v3-form-filtros'].includes(formId))return;
     ev.preventDefault();
-    if(state.sharedId && formId!=='v3-form-period' &&
+    /* Filtrar não escreve nada: é mudar o que se vê. Barrar isso
+       num perfil compartilhado só deixaria o convidado sem navegar
+       pela lista que ele já tem direito de ler. */
+    if(state.sharedId && formId!=='v3-form-period' && formId!=='v3-form-filtros' &&
       (!sharedCanEdit() || !['v3-form-tx','v3-form-account','v3-form-category','v3-form-invoice',
         'v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget'].includes(formId))){
       toast(sharedCanEdit()?'Esta ação pertence somente à conta dona do perfil.':'Perfil compartilhado: somente leitura.');return;
+    }
+    if(formId==='v3-form-filtros'){
+      const fd=new FormData(ev.target);
+      state.filtros={situacao:String(fd.get('situacao')||'todas'),fonte:String(fd.get('fonte')||'todas'),categoria:String(fd.get('categoria')||'todas'),busca:String(fd.get('busca')||'').slice(0,60)};
+      closeSheet();render();return;
     }
     if(formId==='v3-form-tx')saveTransaction(ev.target);
     if(formId==='v3-form-account')saveAccount(ev.target);
@@ -3042,6 +3185,14 @@
       if(event.target.matches?.('[data-voice-volume]'))voiceSession?.setVolume(Number(event.target.value)/100);
     });
     document.addEventListener('change',(event)=>{
+      /* A escolha dos blocos muda a Início por baixo da gaveta aberta:
+         redesenhar a tela inteira fecharia a gaveta e a pessoa
+         perderia o lugar onde estava marcando. */
+      if(event.target.matches?.('[data-bloco]')){
+        alternarBloco(event.target.dataset.bloco);
+        if(state.page==='home'){const vista=$('#v3-view');if(vista)vista.innerHTML=renderHome();}
+        return;
+      }
       if(event.target.matches?.('[data-voice-device]')){
         const id=event.target.value;
         voiceSession?.switchDevice(id).then(()=>{state.voiceDevice=id;render();})

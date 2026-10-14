@@ -75,9 +75,17 @@ assert.match(calc, /try \{ ativo = P\(\); \} catch \(e\) \{ ativo = null; \}/);
 assert.match(app, /function painelScore\(\)/);
 assert.match(app, /function historicoDoScore\(\)/);
 /* O painel mora no INÍCIO, abaixo da carteira, e não mais dentro de
-   Análises: foi onde ele foi pedido. */
-assert.match(app, /\$\{quickActions\(\)\}<\/div>/);
-assert.ok(/\$\{painelScore\(\)\}<\/div>`;/.test(app), 'o painel fecha a grade do início, abaixo das duas colunas');
+   Análises: foi onde ele foi pedido. Desde a reorganização da Início
+   ele e as ações rápidas nascem DESLIGADOS — continuam no mesmo lugar
+   da grade, atrás de um toque em "gerenciar tela inicial". Desligado
+   por padrão não pode virar apagado, e por isso a porta de volta é
+   exigida aqui junto. */
+assert.match(app, /blocoLigado\('atalhos'\) \? quickActions\(\) : ''\}<\/div>/);
+assert.ok(/blocoLigado\('score'\) \? painelScore\(\) : ''\}<\/div>/.test(app),
+  'o painel fecha a grade do início, abaixo das duas colunas');
+assert.match(app, /id: 'score'/, 'o score precisa estar na lista de blocos da Início');
+assert.match(app, /id: 'atalhos'/, 'as ações rápidas precisam estar na lista de blocos da Início');
+assert.match(app, /data-action="home-blocks"/, 'sem o botão de gerenciar, bloco desligado vira bloco perdido');
 assert.doesNotMatch(app, /\+ painelScore\(\)\n/, 'o score saiu de Análises quando foi para o início');
 
 /* A frase do que há mais a ganhar compara FRAÇÃO do peso: ponto

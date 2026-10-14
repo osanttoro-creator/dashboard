@@ -538,3 +538,43 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-ask-card .v3-check{display:flex;align-items:center;gap:9px;margin:0 0 20px;font-size:13px;color:var(--muted)}
 .v3-ask-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .v3-ask-actions button{min-height:44px;padding:0 20px;border-radius:24px}
+
+/* =============================================================
+   A INÍCIO COMO PILHA DE BLOCOS
+   -------------------------------------------------------------
+   O botão de gerenciar fecha a pilha: é a porta de volta dos
+   blocos desligados, e por isso ele é discreto mas está sempre
+   visível — escondê-lo num menu transformaria "desligado por
+   padrão" em "sumiu".
+   ============================================================= */
+.v3-gerenciar{display:block;width:100%;max-width:420px;margin:18px auto 0;padding:14px;border:1px dashed rgba(240,229,207,.2);border-radius:22px;background:transparent;color:var(--muted);font-size:13px}
+.v3-gerenciar:hover{border-color:var(--teal);color:var(--milk)}
+.v3-bloco-linha{cursor:pointer}
+.v3-bloco-linha input{width:19px;height:19px;accent-color:var(--teal)}
+.v3-invest-trilho{display:flex;height:6px;border-radius:6px;overflow:hidden;margin-top:15px;background:rgba(240,229,207,.08)}
+.v3-invest-trilho i{display:block;height:100%}
+.v3-invest-legenda{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:11px;font-size:12px;color:var(--muted)}
+.v3-invest-legenda span{display:inline-flex;align-items:center;gap:7px}
+.v3-invest-legenda i{width:10px;height:10px;border-radius:3px;flex:none}
+.v3-pill-filtros{border:1px dashed rgba(95,169,155,.5);color:var(--teal)}
+.v3-pill-filtros.is-active{background:var(--teal);border-style:solid;color:#0b1d1a}
+.v3-filter{flex-wrap:wrap;align-items:center}
+
+/* A dobra do lançamento: continua sendo formulário, não acordeão
+   decorativo — por isso o marcador é uma seta discreta e a área de
+   toque tem altura de botão. */
+.v3-mais{margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+.v3-mais>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:0 2px;cursor:pointer;color:var(--milk);font-weight:600;font-size:14px;list-style:none}
+.v3-mais>summary::-webkit-details-marker{display:none}
+.v3-mais>summary:after{content:'⌄';color:var(--muted);font-size:17px;line-height:1}
+.v3-mais[open]>summary:after{content:'⌃'}
+.v3-mais>summary:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.v3-mais-corpo{display:grid;gap:14px;padding-top:4px}
+/* No celular a faixa de filtros rola de lado em vez de quebrar em
+   duas linhas: quebrada ela comia 90px de altura antes da primeira
+   transação, que é o espaço que a lista precisa. */
+@media(max-width:620px){
+  .v3-filter{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin:0 -15px;padding-inline:15px}
+  .v3-filter::-webkit-scrollbar{display:none}
+  .v3-filter>*{flex:none}
+}
