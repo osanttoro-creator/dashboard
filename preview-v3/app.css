@@ -611,6 +611,11 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-planning-row>span:last-child{color:var(--teal);font-size:12px;white-space:nowrap}
 .v3-new{height:56px;min-height:56px;border-radius:20px;padding:0 17px;font-size:15px;box-shadow:0 5px 18px rgba(0,0,0,.24),inset 0 -2px 0 rgba(10,21,29,.14)}
 .v3-tx-pares.is-single{grid-template-columns:minmax(0,1fr)}
+@media(min-width:621px) and (max-width:1250px){
+  .v3-trans-head{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
+  .v3-trans-head .v3-filter{flex-wrap:nowrap}
+  .v3-trans-head .v3-totals{justify-content:flex-start;text-align:left}
+}
 @media(max-width:700px){
   .v3-planning-income,.v3-planning-list{grid-template-columns:1fr}
   .v3-invest-tabs{width:100%}
