@@ -1,0 +1,15 @@
+/* Prévia visual sobre o app funcional. Não substitui app.js nem wallet.css. */
+.v3-main{max-width:none}
+.v3-home-metrics{gap:10px}
+.v3-home-metric{min-height:102px;padding:15px 17px}
+.v3-home .v3-grid.v3-half{gap:10px}
+.v3-home .v3-wave{min-height:280px}
+.v3-home .v3-wave .v3-money{font-size:clamp(30px,3.7vw,45px)}
+.v3-trans-head .v3-totals{gap:16px}
+.v3-trans-head .v3-totals strong{font-size:clamp(22px,2.6vw,34px);line-height:1.08}
+#v3-form-tx #v3-tx-amount-label{display:block;margin:12px 0 19px}
+#v3-form-tx #v3-tx-amount-label input{height:auto;min-height:85px;padding:9px 0 14px;border:0;border-bottom:1px solid rgba(240,229,207,.28);border-radius:0;background:transparent;color:#f0e5cf;font:500 clamp(40px,5vw,62px)/1.05 var(--display);letter-spacing:-.065em;font-variant-numeric:tabular-nums}
+#v3-form-tx #v3-tx-amount-label input:focus-visible{outline:2px solid #5fa99b;outline-offset:3px}
+#v3-form-tx #v3-tx-amount-label input::placeholder{color:#f0e5cf70}
+@media(max-width:900px){.v3-home .v3-wave{min-height:245px}.v3-home-metrics{margin-top:12px}}
+@media(max-width:540px){.v3-home-metric{min-height:94px;padding:12px}.v3-trans-head .v3-totals strong{font-size:clamp(17px,5vw,23px)}#v3-form-tx #v3-tx-amount-label input{min-height:77px;font-size:clamp(39px,12vw,51px)}}
