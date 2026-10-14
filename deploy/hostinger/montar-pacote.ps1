@@ -71,6 +71,70 @@ foreach ($d in $pastas) {
 
 Copy-Item (Join-Path $PSScriptRoot '.htaccess') -Destination $destino
 
+# ---- 2b · carimbo de versao nos enderecos ----
+# POR QUE ISTO EXISTE
+#
+# O site nao tem build: app.js e app.css sao servidos sempre no mesmo
+# endereco. A Hostinger manda "Cache-Control: max-age=0,
+# must-revalidate" JUNTO com um "Expires" de uma semana a frente, e
+# navegador que escolhe o Expires serve o arquivo velho do disco sem
+# perguntar nada ao servidor. O resultado era publicar e a pessoa nao
+# ver -- com o deploy verde e os arquivos certos no servidor.
+#
+# O carimbo e o HASH DO PROPRIO ARQUIVO, nao a data. Com a data, todo
+# deploy invalidaria tudo e o cache deixaria de servir para alguma
+# coisa; com o hash, so muda o endereco do que de fato mudou. O valor
+# que esta no HTML do repositorio e so um lugar reservado: quem decide
+# e este passo, aqui, sobre a copia que vai para o ar.
+#
+# Endereco apontando para arquivo que nao foi empacotado e erro, nao
+# aviso: e a mesma regra da lista explicita la em cima. Em producao
+# isso seria um 404 silencioso numa folha de estilo.
+Write-Host ""
+Write-Host "  Carimbando a versao nos enderecos..." -ForegroundColor Cyan
+
+$assinaturas = @{}
+$semAlvo     = @()
+$carimbados  = 0
+
+foreach ($pagina in (Get-ChildItem $destino -Recurse -File -Filter *.html)) {
+  $texto = Get-Content $pagina.FullName -Raw
+  $novo  = [regex]::Replace($texto, '((?:src|href)=")(/(?:preview-v3|assets)/[^"?]+\.(?:js|css))(\?v=[^"]*)?(")', {
+    param($m)
+    $enderecoWeb = $m.Groups[2].Value
+    if (-not $assinaturas.ContainsKey($enderecoWeb)) {
+      $alvo = Join-Path $destino $enderecoWeb.TrimStart('/')
+      if (Test-Path $alvo) {
+        $assinaturas[$enderecoWeb] = (Get-FileHash $alvo -Algorithm SHA256).Hash.Substring(0, 10).ToLower()
+      } else {
+        $assinaturas[$enderecoWeb] = $null
+      }
+    }
+    $assinatura = $assinaturas[$enderecoWeb]
+    if ($null -eq $assinatura) {
+      $script:semAlvo += $enderecoWeb
+      return $m.Value
+    }
+    $script:carimbados++
+    return $m.Groups[1].Value + $enderecoWeb + '?v=' + $assinatura + $m.Groups[4].Value
+  })
+  if ($novo -ne $texto) {
+    # WriteAllText sem BOM: Set-Content do PowerShell 5.1 carimba um
+    # BOM que nao estava la, e o arquivo deixa de bater byte a byte
+    # com o do repositorio na conferencia depois do deploy.
+    [System.IO.File]::WriteAllText($pagina.FullName, $novo, (New-Object System.Text.UTF8Encoding $false))
+  }
+}
+
+if ($semAlvo.Count -gt 0) {
+  Write-Host ""
+  Write-Host "  PACOTE NAO GERADO - endereco sem arquivo no pacote:" -ForegroundColor Red
+  $semAlvo | Select-Object -Unique | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
+  Remove-Item $destino -Recurse -Force
+  exit 1
+}
+Write-Host "    $carimbados endereco(s) carimbado(s)" -ForegroundColor DarkGray
+
 # ---- 3 · conferencia de segredos ----
 # A ultima chance de perceber uma chave antes de ela virar publica.
 #
