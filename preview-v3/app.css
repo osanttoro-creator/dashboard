@@ -578,3 +578,43 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
   .v3-filter::-webkit-scrollbar{display:none}
   .v3-filter>*{flex:none}
 }
+
+/* O gráfico não pode comprimir os cartões de categoria até quebrar letras. */
+@media(min-width:901px) and (max-width:1250px){
+  .v3-categories{grid-template-columns:minmax(0,1fr)}
+  .v3-cat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+.v3-cat-tile{min-width:0;gap:10px;padding:16px}
+.v3-cat-tile .v3-cat-id{min-width:0;overflow-wrap:normal}
+.v3-cat-tile .v3-cat-id strong{line-height:1.2;overflow-wrap:break-word}
+.v3-cat-tile>.v3-mono{max-width:100%;font-size:12px}
+.v3-category-create{min-height:43px;padding:0 19px;white-space:nowrap}
+@media(max-width:540px){.v3-category-create{padding:0 13px;font-size:12px}}
+
+/* Planejamento e metas são seções de Investimentos, não destinos soltos. */
+.v3-invest-tabs{width:min(100%,570px);margin:0 0 22px}
+.v3-invest-tabs button{white-space:nowrap}
+.v3-planning{display:grid;gap:18px;max-width:940px}
+.v3-planning-income{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);align-items:center;gap:24px}
+.v3-planning-income .v3-money{display:block;margin:8px 0;font-size:clamp(27px,3vw,38px)}
+.v3-planning-income small{display:block}
+.v3-planning-income .v3-form{margin:0}
+.v3-planning-summary{display:flex;flex-wrap:wrap;gap:10px 28px;margin:19px 0;padding:15px 0;border-block:1px solid var(--line)}
+.v3-planning-summary span{display:grid;gap:3px;color:var(--muted)}
+.v3-planning-summary strong{font:500 17px var(--mono);color:var(--milk)}
+.v3-planning-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.v3-planning-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;min-width:0;text-align:left;padding:13px;border:1px solid var(--line);border-radius:18px;background:rgba(240,229,207,.03);color:var(--milk)}
+.v3-planning-row:hover{border-color:var(--teal)}
+.v3-planning-row .v3-cat-icon{width:44px;height:44px;flex:none}
+.v3-planning-row>span:nth-child(2){min-width:0}
+.v3-planning-row strong,.v3-planning-row small{display:block}
+.v3-planning-row>span:last-child{color:var(--teal);font-size:12px;white-space:nowrap}
+.v3-new{height:56px;min-height:56px;border-radius:20px;padding:0 17px;font-size:15px;box-shadow:0 5px 18px rgba(0,0,0,.24),inset 0 -2px 0 rgba(10,21,29,.14)}
+.v3-tx-pares.is-single{grid-template-columns:minmax(0,1fr)}
+@media(max-width:700px){
+  .v3-planning-income,.v3-planning-list{grid-template-columns:1fr}
+  .v3-invest-tabs{width:100%}
+  .v3-invest-tabs button{padding:8px 6px;font-size:12px}
+  .v3-planning>section:nth-child(2)>.v3-row{align-items:stretch;flex-direction:column}
+  .v3-planning>section:nth-child(2)>.v3-row>.v3-secondary{width:100%}
+}

@@ -6,8 +6,8 @@
   // A prévia continua isolada; somente app-v3.html habilita a conta real.
   const demo = document.documentElement.dataset.oazeMode !== 'live';
   const routes = ['home', 'transactions', 'wallet', 'investments', 'categories', 'goals', 'calendar', 'coco', 'reminders', 'reports', 'settings', 'plan'];
-  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'metas e orçamentos', calendar: 'agenda', coco: 'coco', reminders: 'agenda', reports: 'início', settings: 'configurações', plan: 'plano', more: 'mais' };
-  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'goals', '/app/recorrencias': 'calendar', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'coco', '/app/uglez': 'coco' };
+  const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'planejamento', calendar: 'agenda', coco: 'coco', reminders: 'agenda', reports: 'início', settings: 'configurações', plan: 'plano', more: 'mais' };
+  const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'investments/planning', '/app/recorrencias': 'calendar', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'coco', '/app/uglez': 'coco' };
   const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const extraCategoryIcons = new Set(['baby','bus','cake','church','coffee','dog','droplet','dumbbell','film','flame','fuel','gift','glasses','hammer','key','laptop','map-pin','music','package','palmtree','percent','piggy-bank','pill','plane','scissors','shield','shirt','shopping-cart','smartphone','sofa','sparkles','star','stethoscope','ticket','truck','tv','umbrella','users','wifi','wrench','zap']);
   const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
@@ -64,7 +64,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -128,7 +128,7 @@
       { id: 'g2', name: 'Viagem para a Chapada', saved: 2100, target: 6000, deadline: '2027-07-01' },
       { id: 'g3', name: 'Notebook novo', saved: 1800, target: 4500, deadline: '2027-03-01' }
     ],
-    budgets: { alimentacao: 1000, transporte: 600, lazer: 500, assinaturas: 200 },
+    budgets: { alimentacao: 1000, transporte: 600, lazer: 500, assinaturas: 200 }, planningSalary: 6500,
     categoryAmounts: { moradia: 1850, alimentacao: 1120.4, outros: 533.8, transporte: 486, lazer: 412.3, compras: 315.7, assinaturas: 120, saude: 74.2 },
     reminders: [
       { title: 'Internet', date: '2026-09-30', amount: 119.9, sub: 'débito automático · no dia, às 9h' },
@@ -190,7 +190,7 @@
   function selectedItem() { const saved=global.V3Carteira?.ultimo('v3-'+state.walletKind+(state.walletHidden?'-hidden':''));return walletItems().find((x) => x.data.id === state.selected) || walletItems().find((x)=>x.data.id===saved) || walletItems()[0] || null; }
   function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
   function renderNav() {
-    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','goals','calendar','coco','settings','plan'].map(navButton).join('');
+    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','calendar','coco','settings'].map(navButton).join('');
     $('#v3-mobile-nav').innerHTML = ['home','transactions'].map((p) => `<button type="button" data-go="${p}" class="${state.page === p ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('') + '<button type="button" data-action="new" class="v3-bottom-plus" aria-label="Novo lançamento">+</button>' + ['wallet','more'].map((p) => `<button type="button" data-go="${p}" class="${(p === 'more' ? !['home','transactions','wallet'].includes(state.page) : state.page === p) ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('');
   }
   function renderHead() {
@@ -638,6 +638,7 @@
     const categorias = profile().categories.map((c) => `<option value="${esc(c.id)}" ${f.categoria === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
     const opcao = (v, rot) => `<option value="${v}" ${f.situacao === v ? 'selected' : ''}>${rot}</option>`;
     openSheet(`${sheetTop('filtros', niceMonth(state.ym))}<form class="v3-form" id="v3-form-filtros">`
+      + `<label>MOSTRAR<select name="rapido">${[['Todos','Todos os lançamentos'],['Entradas','Entradas'],['Saídas','Saídas'],['Cartões','Somente cartões'],['Pendentes','Somente pendentes']].map(([v,label])=>`<option value="${v}" ${state.filter===v?'selected':''}>${label}</option>`).join('')}</select></label>`
       + `<label>SITUAÇÃO<select name="situacao">${opcao('todas', 'Todas')}${opcao('pago', 'Pago')}${opcao('previsto', 'Previsto')}${opcao('cancelado', 'Cancelado')}</select></label>`
       + `<label>ONDE<select name="fonte"><option value="todas" ${f.fonte === 'todas' ? 'selected' : ''}>Todas as contas e cartões</option>${contas}${cartoes}</select></label>`
       + `<label>CATEGORIA<select name="categoria"><option value="todas" ${f.categoria === 'todas' ? 'selected' : ''}>Todas</option>${categorias}</select></label>`
@@ -678,6 +679,7 @@
       { chave: 'transfer', titulo: 'transferências', vazio: '', classe: '', sinal: '' }
     ];
     const listas = grupos.map((g) => {
+      if ((state.filter === 'Entradas' && g.chave !== 'income') || (state.filter === 'Saídas' && g.chave !== 'expense')) return '';
       const doGrupo = rows.filter((x) => x.kind === g.chave);
       /* Transferência só existe na tela quando existe no mês. */
       if (g.chave === 'transfer' && !doGrupo.length) return '';
@@ -694,7 +696,7 @@
     });
 
     const ativos = filtrosAtivos();
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Todos','Entradas','Saídas','Cartões','Pendentes'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}">${f === 'Todos' ? 'Tudo' : f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>${ativos ? '<button type="button" class="v3-link" data-action="limpar-filtros">limpar</button>' : ''}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted">Só o que está confirmado entra nos totais. ${demo ? 'Na demonstração, os controles não alteram sua conta.' : 'Toque no círculo para escolher pago, não pago ou cancelado.'}</p><div class="v3-tx-pares">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Entradas','Saídas'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}" aria-pressed="${state.filter === f}">${f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos || !['Todos','Entradas','Saídas'].includes(state.filter) ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button></div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -747,6 +749,8 @@
   }
 
   function renderInvestments() {
+    if (state.investTab === 'planning') return renderPlanning();
+    if (state.investTab === 'goals') return renderGoals();
     const at = U.monthEnd(state.ym), list = (profile().investments || []).filter((x) => x.date <= at).slice().sort((a, b) => b.date.localeCompare(a.date));
     const valueAt = (x) => demo ? Number(x.currentValue == null ? x.amount : x.currentValue) || 0 : Calc.investmentValueAt(x, at, profile());
     const total = list.reduce((sum, x) => sum + valueAt(x), 0);
@@ -837,7 +841,7 @@
     return `<div class="v3-stack"><div class="v3-row"><div class="v3-segment" style="max-width:330px">`
       + `<button type="button" data-cat-kind="expense" class="${state.catKind==='expense'?'is-active':''}">Despesas</button>`
       + `<button type="button" data-cat-kind="income" class="${state.catKind==='income'?'is-active':''}">Receitas</button></div>`
-      + `<button type="button" class="v3-link" data-action="add-category">Nova categoria</button></div>`
+      + `<button type="button" class="v3-primary v3-category-create" data-action="add-category">＋ Nova categoria</button></div>`
       + `<div class="v3-grid v3-categories"><section class="v3-panel">`
       + `<div class="v3-donut" style="--donut:conic-gradient(${esc(stops)})" data-total="${esc(money(total))}"></div>`
       + `<p class="v3-muted" style="text-align:center">${rows.length ? `${esc(rows[0].name)} é ${Math.round(rows[0].value/total*100)}% do total em ${esc(niceMonth(state.ym).split(' de ')[0])}.` : 'As categorias aparecem com lançamentos confirmados.'}</p></section>`
@@ -895,10 +899,21 @@
   }
 
   function renderGoals() {
-    const gs = profile().goals || [], budgets = Object.entries(profile().budgets || {}).map(([id,limit]) => ({id,limit,used:(categoryTotals('expense').find((x)=>x.id===id)||{}).value||0}));
+    const gs = profile().goals || [];
     const goalsHtml = gs.length ? gs.map((g) => `<section class="v3-panel v3-goal"><div class="v3-row"><h2>${esc(g.name)}</h2><button type="button" class="v3-link" data-goal="${esc(g.id)}">Editar</button></div><small class="v3-mono">${g.deadline ? 'até '+esc(shortDate(g.deadline)) : 'sem prazo'}</small><p class="v3-money v3-sensitive">${money(g.saved)} <span class="v3-muted" style="font:400 12px var(--mono)">de ${money(g.target)}</span></p><div class="v3-bar"><span style="width:${pct(100*g.saved/(g.target||1))}%"></span></div><p style="margin-top:12px">● &nbsp; Faltam ${money(Math.max(0,g.target-g.saved))}.</p>${ritmoDaMeta(g)}</section>`).join('') : '<section class="v3-panel"><p class="v3-muted">Você ainda não definiu metas.</p></section>';
-    const budgetsHtml = budgets.length ? budgets.map((b) => `<div class="v3-budget-row"><div class="v3-row"><strong>${esc(categoryName(b.id))}</strong><button type="button" class="v3-link" data-budget="${esc(b.id)}" aria-label="Editar orçamento de ${esc(categoryName(b.id))}">Editar</button></div><strong class="v3-mono v3-sensitive">${money(b.used)} / ${money(b.limit)}</strong><div class="v3-bar"><span style="width:${pct(100*b.used/b.limit)}%;background:${b.used>b.limit?'var(--blue)':'var(--teal)'}"></span></div><small>${b.used>b.limit?'Passou '+money(b.used-b.limit)+' do planejado.':'Restam '+money(b.limit-b.used)+' neste mês.'}</small></div>`).join('') : '<p class="v3-muted">Nenhum orçamento definido para categorias.</p>';
     return `<div class="v3-grid v3-goals"><div class="v3-goal-column" data-column="goals"><div class="v3-row"><span class="v3-label v3-section-title">METAS</span><button type="button" class="v3-link" data-action="add-goal">Nova meta</button></div>${goalsHtml}</div></div>`; }
+  function investmentTabs() {
+    return `<nav class="v3-invest-tabs v3-segment" aria-label="Áreas de investimentos">${[['overview','Investimentos'],['planning','Planejamento'],['goals','Metas']].map(([tab,label])=>`<button type="button" data-invest-tab="${tab}" class="${state.investTab===tab?'is-active':''}" aria-current="${state.investTab===tab?'page':'false'}">${label}</button>`).join('')}</nav>`;
+  }
+  function renderPlanning() {
+    const salary = Number(profile().planningSalary || 0);
+    const budgets = profile().budgets || {};
+    const used = categoryTotals('expense');
+    const categories = profile().categories.filter((c) => c.kind === 'expense').sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+    const planned = U.round2(Object.values(budgets).reduce((sum, amount)=>sum + Number(amount || 0), 0));
+    const remain = U.round2(salary - planned);
+    return `<div class="v3-planning"><section class="v3-panel v3-planning-income"><div><span class="v3-label">SALÁRIO MENSAL PLANEJADO</span><strong class="v3-money v3-sensitive">${money(salary)}</strong><small>Referência manual para os tetos. Não vira lançamento.</small></div><form id="v3-form-planning-salary" class="v3-form"><label>VALOR POR MÊS (R$)<input name="salary" data-money="true" inputmode="decimal" value="${esc(salary ? salary.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '')}" placeholder="0,00" required></label><button type="submit" class="v3-primary">Salvar salário</button></form></section><section class="v3-panel"><div class="v3-row"><div><h2>tetos por categoria</h2><small>Você define cada valor; nenhum teto é criado automaticamente.</small></div><button type="button" class="v3-secondary" data-action="add-budget">Definir teto</button></div><div class="v3-planning-summary"><span>Tetos definidos <strong class="v3-sensitive">${money(planned)}</strong></span><span>Salário menos tetos <strong class="v3-sensitive ${remain<0?'v3-negative':''}">${salary ? money(remain) : '—'}</strong></span></div><div class="v3-planning-list">${categories.map((c)=>{const limit=Number(budgets[c.id]||0);const spent=Number(used.find((r)=>r.id===c.id)?.value||0);return `<button type="button" class="v3-planning-row" ${limit?`data-budget="${esc(c.id)}"`:`data-budget-novo="${esc(c.id)}"`}><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)};--swatch-ink:${U.inkFor(safeColor(c.color))}">${categoryIconMarkup(categoryIcon(c.icon))}</span><span><strong>${esc(c.name)}</strong><small>${limit?`Gasto ${money(spent)} de ${money(limit)}`:'Sem teto definido'}</small></span><span>${limit?'Editar teto':'Definir teto'} ›</span></button>`}).join('')}</div></section></div>`;
+  }
   function reminders(from, to) {
     const today = from || U.todayISO(), until = new Date(); until.setDate(until.getDate()+30); const max = to || until.toISOString().slice(0,10);
     if (demo) return sample.reminders.filter((item) => item.date >= today && item.date <= max);
@@ -1496,7 +1511,7 @@
   }
   function renderMore() {
     const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'calendário e recorrências', coco: 'conversa e análises', settings: 'segurança, dados', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
-    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','goals','calendar','coco','settings','plan'].map((p)=>`<button type="button" data-go="${p}">${p === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
+    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','calendar','coco','settings'].map((p)=>`<button type="button" data-go="${p}">${p === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
   }
   function cocoMessages() {
     if (!state.chat.length) return '<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><p>O que você quer entender sobre seu dinheiro?</p></div>';
@@ -1530,7 +1545,7 @@
     closeStatusMenu(false);
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
-    $('#v3-view').innerHTML = (state.sharedId ? `<div class="v3-shared-banner" role="status">Perfil compartilhado · ${sharedCanEdit()?'pode editar os dados financeiros':'somente leitura'} · cofre e Coco indisponíveis</div>` : '') + (screens[state.page]||renderHome)();
+    $('#v3-view').innerHTML = (state.sharedId ? `<div class="v3-shared-banner" role="status">Perfil compartilhado · ${sharedCanEdit()?'pode editar os dados financeiros':'somente leitura'} · cofre e Coco indisponíveis</div>` : '') + (state.page==='investments'?investmentTabs():'') + (screens[state.page]||renderHome)();
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
@@ -1542,7 +1557,7 @@
     }
     montarCarteira();
   }
-  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page}`); }
+  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
@@ -2415,6 +2430,15 @@
       closeSheet(); render(); toast('Orçamento salvo na sua conta.');
     } catch (error) { toast(error.message || 'Não foi possível salvar o orçamento.'); }
   }
+  async function savePlanningSalary(form) {
+    if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+    const salary = parseMoney(new FormData(form).get('salary'));
+    if (!Number.isFinite(salary) || salary < 0 || salary > 1000000000) { toast('Confira o salário mensal.'); return; }
+    try {
+      await V3Backend.mutate(() => { Store.profile().planningSalary = salary; Store.commit('planning-salary'); });
+      render(); toast('Salário do planejamento salvo.');
+    } catch (error) { toast(error.message || 'Não foi possível salvar o planejamento.'); }
+  }
   async function refreshSubscription() {
     if (demo) return;
     try {
@@ -2759,11 +2783,11 @@
     } catch (error) { toast(error.message || 'Não consegui atualizar a recorrência.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (state.sharedId && !sharedCanEdit() && !target.dataset.go && !target.dataset.profile &&
       !['profiles','close','back','privacy','notifications','period','shared-open','shared-revoke','sign-out','switch-account'].includes(target.dataset.action) &&
-      !['metric','select','walletKind','filter','catKind','calDay','calMonth','calView','scoreMes','calGoto','calDays','periodStep','faturaPasso','billing'].some((key)=>target.dataset[key] != null) &&
+      !['metric','select','walletKind','filter','catKind','investTab','calDay','calMonth','calView','scoreMes','calGoto','calDays','periodStep','faturaPasso','billing'].some((key)=>target.dataset[key] != null) &&
       !target.hasAttribute('data-cal-today')) {
       toast('Perfil compartilhado: somente leitura. Selecione um perfil seu para editar.');return;
     }
@@ -2774,13 +2798,14 @@
     }
     if (target.dataset.metric != null) { openHomeMetric(Number(target.dataset.metric)); return; }
     if (target.dataset.go) { closeSheet(); go(target.dataset.go); return; }
+    if (target.dataset.investTab) { state.investTab=target.dataset.investTab; render(); history.replaceState(null,'',`${location.pathname}${location.search}#investments${state.investTab==='overview'?'':'/'+state.investTab}`); return; }
     /* Com o carrossel, quem traz um cartão para o meio é o gesto (ou
        a seta), e isso não redesenha a tela. Aqui sobra o caso do
        cartão do meio: ele já está escolhido, e clicar de novo não
        deve desescolhê-lo — a carteira ficaria sem cartão aberto. */
     if (target.dataset.select) { state.selected=target.dataset.select; state.invoiceRef=null; render(); return; }
     if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
-    if (target.dataset.filter) { state.filter=target.dataset.filter; render(); return; }
+    if (target.dataset.filter) { state.filter=state.filter===target.dataset.filter?'Todos':target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.cocoView) { state.cocoView=target.dataset.cocoView;render();return; }
@@ -3102,18 +3127,20 @@
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save','v3-form-filtros'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-planning-salary','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save','v3-form-filtros'].includes(formId))return;
     ev.preventDefault();
     /* Filtrar não escreve nada: é mudar o que se vê. Barrar isso
        num perfil compartilhado só deixaria o convidado sem navegar
        pela lista que ele já tem direito de ler. */
     if(state.sharedId && formId!=='v3-form-period' && formId!=='v3-form-filtros' &&
       (!sharedCanEdit() || !['v3-form-tx','v3-form-account','v3-form-category','v3-form-invoice',
-        'v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget'].includes(formId))){
+        'v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-planning-salary'].includes(formId))){
       toast(sharedCanEdit()?'Esta ação pertence somente à conta dona do perfil.':'Perfil compartilhado: somente leitura.');return;
     }
     if(formId==='v3-form-filtros'){
       const fd=new FormData(ev.target);
+      const rapido=String(fd.get('rapido')||'Todos');
+      state.filter=['Todos','Entradas','Saídas','Cartões','Pendentes'].includes(rapido)?rapido:'Todos';
       state.filtros={situacao:String(fd.get('situacao')||'todas'),fonte:String(fd.get('fonte')||'todas'),categoria:String(fd.get('categoria')||'todas'),busca:String(fd.get('busca')||'').slice(0,60)};
       closeSheet();render();return;
     }
@@ -3135,6 +3162,7 @@
     if(formId==='v3-form-goal')saveGoal(ev.target);
     if(formId==='v3-form-goal-deposit')saveGoalDeposit(ev.target);
     if(formId==='v3-form-budget')saveBudget(ev.target);
+    if(formId==='v3-form-planning-salary')savePlanningSalary(ev.target);
     if(formId==='v3-form-period'){state.ym=String(new FormData(ev.target).get('ym'));closeSheet();render();}
     if(formId==='v3-form-vault-setup')vaultSetup(ev.target);
     if(formId==='v3-form-vault-unlock')vaultUnlock(ev.target);
@@ -3164,7 +3192,11 @@
     }
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
     const path=location.pathname.replace(/\/+$/,'') || '/app';
-    const requested=location.hash.slice(1) || initialPaths[path];state.page=names[requested]?(requested==='reminders'?'calendar':requested==='reports'?'home':requested):'home';
+    const requested=location.hash.slice(1) || initialPaths[path];
+    const investmentTab=requested==='goals'?'goals':requested==='investments/planning'?'planning':requested==='investments/goals'?'goals':'overview';
+    const route=requested.startsWith('investments/')?'investments':requested;
+    state.page=names[route]?(route==='reminders'?'calendar':route==='reports'?'home':route==='goals'?'investments':route):'home';
+    state.investTab=investmentTab;
     if (path==='/app/analises') state.cocoView='analysis';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     if(!demo) refreshCoco().catch((error)=>console.error('V3/Coco configuração:',error));

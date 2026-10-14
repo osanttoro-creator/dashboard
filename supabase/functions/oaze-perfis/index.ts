@@ -159,7 +159,7 @@ Deno.serve(async (req: Request) => {
       if (entry.tipo === 'recurso') rights.recursos[entry.chave] = !!entry.ativo;
     }
     const fields = ['id', 'name', 'updatedAt', 'accounts', 'cards', 'categories',
-      'transactions', 'investments', 'invoices', 'automation', 'budgets', 'goals'];
+      'transactions', 'investments', 'invoices', 'automation', 'budgets', 'goals', 'planningSalary'];
     const visible = Object.fromEntries(fields.filter((key) => Object.hasOwn(profile, key))
       .map((key) => [key, profile[key]]));
     return reply(origin, 200, { profile: visible, shareId: share.id,

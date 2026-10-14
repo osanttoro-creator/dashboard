@@ -252,6 +252,7 @@
       accounts: [],
       cards: [],
       budgets: {},        // { categoriaId: limite mensal }
+      planningSalary: 0,  // referência manual; não cria receita no extrato
       goals: [],          // { id, name, target, saved, deadline, color, icon }
       categories: makeCategories(),
       transactions: [],
@@ -523,6 +524,8 @@
       const v = U.round2(+orc[k] || 0);
       if (v > 0) prof.budgets[k] = v;      // limite zero é o mesmo que não ter limite
     });
+    prof.planningSalary = Number.isFinite(+prof.planningSalary) && +prof.planningSalary >= 0
+      ? U.round2(+prof.planningSalary) : 0;
 
     prof.goals = (Array.isArray(prof.goals) ? prof.goals : []).map((g) => ({
       id: g.id || U.uid('goal'),
