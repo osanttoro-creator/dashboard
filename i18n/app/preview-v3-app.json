@@ -7,18 +7,16 @@
   "es": "movimientos"
  },
  {
-  "pt": "metas e orçamentos",
-  "tipo": "exato",
-  "en": "goals and budgets",
-  "fr": "objectifs et budgets",
-  "es": "metas y presupuestos"
- },
- {
   "pt": "configurações",
   "tipo": "exato",
   "en": "settings",
   "fr": "réglages",
   "es": "ajustes"
+ },
+ {
+  "pt": "investments/planning",
+  "tipo": "exato",
+  "ignorar": true
  },
  {
   "pt": "Pago",
@@ -1193,6 +1191,27 @@
   "ignorar": true
  },
  {
+  "pt": "Todos os lançamentos",
+  "tipo": "exato",
+  "en": "All transactions",
+  "fr": "Toutes les opérations",
+  "es": "Todos los movimientos"
+ },
+ {
+  "pt": "Somente cartões",
+  "tipo": "exato",
+  "en": "Cards only",
+  "fr": "Cartes uniquement",
+  "es": "Solo tarjetas"
+ },
+ {
+  "pt": "Somente pendentes",
+  "tipo": "exato",
+  "en": "Pending only",
+  "fr": "En attente uniquement",
+  "es": "Solo pendientes"
+ },
+ {
   "pt": "Todas",
   "tipo": "exato",
   "en": "All",
@@ -1312,27 +1331,6 @@
   "es": "{0} previsto{1}"
  },
  {
-  "pt": "Tudo",
-  "tipo": "exato",
-  "en": "All",
-  "fr": "Tout",
-  "es": "Todo"
- },
- {
-  "pt": "Na demonstração, os controles não alteram sua conta.",
-  "tipo": "exato",
-  "en": "In the demo, the controls don’t change your account.",
-  "fr": "Dans la démo, les commandes ne modifient pas votre compte.",
-  "es": "En la demostración, los controles no cambian tu cuenta."
- },
- {
-  "pt": "Toque no círculo para escolher pago, não pago ou cancelado.",
-  "tipo": "exato",
-  "en": "Tap the circle to choose paid, unpaid, or canceled.",
-  "fr": "Touchez le cercle pour choisir payé, impayé ou annulé.",
-  "es": "Toca el círculo para elegir pagado, pendiente o cancelado."
- },
- {
   "pt": "Abrir filtros",
   "tipo": "exato",
   "en": "Open filters",
@@ -1345,13 +1343,6 @@
   "en": "Filters{0}",
   "fr": "Filtres{0}",
   "es": "Filtros{0}"
- },
- {
-  "pt": "Só o que está confirmado entra nos totais. {0}",
-  "tipo": "padrao",
-  "en": "Only what’s confirmed counts in the totals. {0}",
-  "fr": "Seul ce qui est confirmé compte dans les totaux. {0}",
-  "es": "Solo lo confirmado entra en los totales. {0}"
  },
  {
   "pt": "em aberto",
@@ -1788,11 +1779,11 @@
   "es": "definir un tope mensual"
  },
  {
-  "pt": "Nova categoria",
+  "pt": "＋ Nova categoria",
   "tipo": "exato",
-  "en": "New category",
-  "fr": "Nouvelle catégorie",
-  "es": "Nueva categoría"
+  "en": "＋ New category",
+  "fr": "＋ Nouvelle catégorie",
+  "es": "＋ Nueva categoría"
  },
  {
   "pt": "{0} é {1}% do total em {2}.",
@@ -1921,39 +1912,126 @@
   "es": "Aún no has definido metas."
  },
  {
-  "pt": "Passou {0} do planejado.",
-  "tipo": "padrao",
-  "en": "{0} over what was planned.",
-  "fr": "{0} de plus que prévu.",
-  "es": "{0} por encima de lo previsto."
- },
- {
-  "pt": "Restam {0} neste mês.",
-  "tipo": "padrao",
-  "en": "{0} left this month.",
-  "fr": "Il reste {0} ce mois-ci.",
-  "es": "Quedan {0} este mes."
- },
- {
-  "pt": "Editar orçamento de {0}",
-  "tipo": "padrao",
-  "en": "Edit {0} budget",
-  "fr": "Modifier le budget de {0}",
-  "es": "Editar presupuesto de {0}"
- },
- {
-  "pt": "Nenhum orçamento definido para categorias.",
-  "tipo": "exato",
-  "en": "No budget set for any category.",
-  "fr": "Aucun budget défini par catégorie.",
-  "es": "Ningún presupuesto definido por categoría."
- },
- {
   "pt": "Nova meta",
   "tipo": "exato",
   "en": "New goal",
   "fr": "Nouvel objectif",
   "es": "Nueva meta"
+ },
+ {
+  "pt": "Planejamento",
+  "tipo": "exato",
+  "en": "Planning",
+  "fr": "Planification",
+  "es": "Planificación"
+ },
+ {
+  "pt": "Metas",
+  "tipo": "exato",
+  "en": "Goals",
+  "fr": "Objectifs",
+  "es": "Metas"
+ },
+ {
+  "pt": "Áreas de investimentos",
+  "tipo": "exato",
+  "en": "Investment sections",
+  "fr": "Sections des investissements",
+  "es": "Secciones de inversiones"
+ },
+ {
+  "pt": "data-budget=\"{0}\"",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "data-budget-novo=\"{0}\"",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Gasto {0} de {1}",
+  "tipo": "padrao",
+  "en": "Spent {0} of {1}",
+  "fr": "Dépensé {0} sur {1}",
+  "es": "Gastado {0} de {1}"
+ },
+ {
+  "pt": "Sem teto definido",
+  "tipo": "exato",
+  "en": "No spending cap",
+  "fr": "Aucun plafond défini",
+  "es": "Sin tope definido"
+ },
+ {
+  "pt": "Editar teto",
+  "tipo": "exato",
+  "en": "Edit cap",
+  "fr": "Modifier le plafond",
+  "es": "Editar tope"
+ },
+ {
+  "pt": "Definir teto",
+  "tipo": "exato",
+  "en": "Set cap",
+  "fr": "Définir un plafond",
+  "es": "Definir tope"
+ },
+ {
+  "pt": "SALÁRIO MENSAL PLANEJADO",
+  "tipo": "exato",
+  "en": "PLANNED MONTHLY SALARY",
+  "fr": "SALAIRE MENSUEL PRÉVU",
+  "es": "SALARIO MENSUAL PREVISTO"
+ },
+ {
+  "pt": "Referência manual para os tetos. Não vira lançamento.",
+  "tipo": "exato",
+  "en": "Manual reference for spending caps. This does not create a transaction.",
+  "fr": "Référence manuelle pour les plafonds. Cela ne crée pas d'opération.",
+  "es": "Referencia manual para los topes. No crea un movimiento."
+ },
+ {
+  "pt": "VALOR POR MÊS (R$)",
+  "tipo": "exato",
+  "en": "AMOUNT PER MONTH (BRL)",
+  "fr": "MONTANT PAR MOIS (BRL)",
+  "es": "IMPORTE POR MES (BRL)"
+ },
+ {
+  "pt": "Salvar salário",
+  "tipo": "exato",
+  "en": "Save salary",
+  "fr": "Enregistrer le salaire",
+  "es": "Guardar salario"
+ },
+ {
+  "pt": "tetos por categoria",
+  "tipo": "exato",
+  "en": "spending caps by category",
+  "fr": "plafonds par catégorie",
+  "es": "topes por categoría"
+ },
+ {
+  "pt": "Você define cada valor; nenhum teto é criado automaticamente.",
+  "tipo": "exato",
+  "en": "You set each amount; no cap is created automatically.",
+  "fr": "Vous définissez chaque montant ; aucun plafond n'est créé automatiquement.",
+  "es": "Tú defines cada importe; ningún tope se crea automáticamente."
+ },
+ {
+  "pt": "Tetos definidos",
+  "tipo": "exato",
+  "en": "Caps set",
+  "fr": "Plafonds définis",
+  "es": "Topes definidos"
+ },
+ {
+  "pt": "Salário menos tetos",
+  "tipo": "exato",
+  "en": "Salary minus caps",
+  "fr": "Salaire moins plafonds",
+  "es": "Salario menos topes"
  },
  {
   "pt": "oaze-v3-notificacoes:{0}:{1}",
@@ -2859,13 +2937,6 @@
   "en": "Budgets",
   "fr": "Budgets",
   "es": "Presupuestos"
- },
- {
-  "pt": "Metas",
-  "tipo": "exato",
-  "en": "Goals",
-  "fr": "Objectifs",
-  "es": "Metas"
  },
  {
   "pt": "sem limite",
@@ -3857,6 +3928,11 @@
  {
   "pt": "Uicons by Flaticon",
   "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "investments/{0}",
+  "tipo": "padrao",
   "ignorar": true
  },
  {
@@ -6765,6 +6841,27 @@
   "es": "No se pudo guardar el presupuesto."
  },
  {
+  "pt": "Confira o salário mensal.",
+  "tipo": "exato",
+  "en": "Check the monthly salary.",
+  "fr": "Vérifiez le salaire mensuel.",
+  "es": "Revisa el salario mensual."
+ },
+ {
+  "pt": "Salário do planejamento salvo.",
+  "tipo": "exato",
+  "en": "Planned salary saved.",
+  "fr": "Salaire prévu enregistré.",
+  "es": "Salario previsto guardado."
+ },
+ {
+  "pt": "Não foi possível salvar o planejamento.",
+  "tipo": "exato",
+  "en": "Could not save the plan.",
+  "fr": "Impossible d'enregistrer le plan.",
+  "es": "No se pudo guardar el plan."
+ },
+ {
   "pt": "Conexão indisponível.",
   "tipo": "exato",
   "en": "Connection unavailable.",
@@ -8220,6 +8317,16 @@
  },
  {
   "pt": "V3/limites:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "investments/goals",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "investments/",
   "tipo": "exato",
   "ignorar": true
  },

@@ -426,6 +426,6 @@
 
   if (lang !== 'pt') {
     /* mesma origem, síncrono: o dicionário roda antes de utils.js */
-    document.write('<script src="/assets/js/i18n/app-' + lang + '.js"><\/script>');
+    document.write('<script src="/assets/js/i18n/app-' + lang + '.js?v=20261014b"><\/script>');
   }
 })(window);
