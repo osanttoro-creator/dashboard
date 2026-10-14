@@ -7,9 +7,30 @@
 .v3-home .v3-wave .v3-money{font-size:clamp(30px,3.7vw,45px)}
 .v3-trans-head .v3-totals{gap:16px}
 .v3-trans-head .v3-totals strong{font-size:clamp(22px,2.6vw,34px);line-height:1.08}
-#v3-form-tx #v3-tx-amount-label{display:block;margin:12px 0 19px}
-#v3-form-tx #v3-tx-amount-label input{height:auto;min-height:85px;padding:9px 0 14px;border:0;border-bottom:1px solid rgba(240,229,207,.28);border-radius:0;background:transparent;color:#f0e5cf;font:500 clamp(40px,5vw,62px)/1.05 var(--display);letter-spacing:-.065em;font-variant-numeric:tabular-nums}
-#v3-form-tx #v3-tx-amount-label input:focus-visible{outline:2px solid #5fa99b;outline-offset:3px}
-#v3-form-tx #v3-tx-amount-label input::placeholder{color:#f0e5cf70}
+.v3-sheet:has(#v3-form-tx){width:min(540px,100%);padding:25px;background:#132633}
+.v3-sheet:has(#v3-form-tx)>.v3-segment{margin:17px 0 8px;gap:8px;background:transparent;padding:0}
+.v3-sheet:has(#v3-form-tx)>.v3-segment button{min-height:40px;border:1px solid rgba(240,229,207,.13);border-radius:12px;background:#0c1e28}
+.v3-sheet:has(#v3-form-tx)>.v3-segment button.is-active{background:var(--milk);color:var(--night);border-color:var(--milk)}
+#v3-form-tx{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:10px}
+#v3-form-tx>*{grid-column:1/-1;min-width:0}
+#v3-form-tx>.v3-form-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+#v3-form-tx>.v3-form-row:has(#v3-tx-fatura:not([hidden])){grid-template-columns:1fr}
+#v3-form-tx label{font-size:12px}
+#v3-form-tx input:not([type="checkbox"]),#v3-form-tx select{border-radius:10px;background:#0c1d27}
+#v3-form-tx #v3-tx-amount-label{display:block;margin:4px 0 5px;padding:6px 0 22px;border-bottom:1px solid var(--line)}
+#v3-form-tx #v3-tx-amount-label input{height:auto;min-height:73px;padding:5px 0;border:0;border-radius:0;background:transparent;color:var(--milk);font:400 clamp(44px,5vw,68px)/1.1 var(--mono);letter-spacing:-.075em;font-variant-numeric:tabular-nums}
+#v3-form-tx #v3-tx-amount-label input:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+#v3-form-tx #v3-tx-amount-label input::placeholder{color:#f0e5cf80}
+#v3-form-tx .v3-payment-kind{padding:12px;border:1px solid var(--line);border-radius:15px;background:#0c1e28}
+#v3-form-tx .v3-payment-kind legend{padding:0 5px;color:var(--milk);font-weight:600}
+#v3-form-tx .v3-payment-kind .v3-segment{gap:8px;background:transparent;padding:0}
+#v3-form-tx .v3-payment-kind button{min-height:49px;border:1px solid rgba(240,229,207,.16);border-radius:11px;background:#132633;color:var(--milk)}
+#v3-form-tx .v3-payment-kind button.is-active{border-color:var(--teal);background:var(--teal);color:var(--night)}
+#v3-form-tx .v3-payment-kind button:focus-visible{outline:2px solid var(--milk);outline-offset:2px}
+#v3-form-tx #v3-tx-source-label{margin-top:-3px}
+#v3-form-tx .v3-mais{margin-top:5px}
+#v3-form-tx>p.v3-muted{display:none}
+#v3-form-tx>.v3-primary{justify-self:end;width:auto;min-width:160px;margin-top:6px}
 @media(max-width:900px){.v3-home .v3-wave{min-height:245px}.v3-home-metrics{margin-top:12px}}
-@media(max-width:540px){.v3-home-metric{min-height:94px;padding:12px}.v3-trans-head .v3-totals strong{font-size:clamp(17px,5vw,23px)}#v3-form-tx #v3-tx-amount-label input{min-height:77px;font-size:clamp(39px,12vw,51px)}}
+@media(max-width:900px){.v3-sheet:has(#v3-form-tx){width:100%;height:min(92dvh,850px);padding:19px 19px calc(19px + env(safe-area-inset-bottom,0px));border-radius:28px 28px 0 0}}
+@media(max-width:540px){.v3-home-metric{min-height:94px;padding:12px}.v3-trans-head .v3-totals strong{font-size:clamp(17px,5vw,23px)}#v3-form-tx #v3-tx-amount-label input{min-height:70px;font-size:clamp(43px,11vw,54px)}#v3-form-tx>.v3-primary{width:100%}}
