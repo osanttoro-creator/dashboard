@@ -698,3 +698,66 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-skeleton-line.short{width:35%}.v3-skeleton-line.medium{width:64%}.v3-skeleton-line.value{width:52%;height:34px;margin-top:26px}
 @media(prefers-reduced-motion:no-preference){.v3-skeleton-line{background:linear-gradient(90deg,rgba(240,229,207,.08),rgba(240,229,207,.17),rgba(240,229,207,.08));background-size:200% 100%;animation:v3-skeleton-move 1.8s linear infinite}@keyframes v3-skeleton-move{to{background-position:-200% 0}}}
 @media(max-width:900px){.v3-skeleton{grid-template-columns:1fr}.v3-skeleton-column:first-child{order:0}.v3-skeleton-column:last-child{order:1}}
+
+/* =============================================================
+   O AVISO DE IMPACTO NA FATURA
+   -------------------------------------------------------------
+   Âmbar, e não vermelho: não é erro, é consequência — a pessoa
+   pode querer exatamente isso. Vermelho treinaria a ignorar.
+   ============================================================= */
+.v3-impacto{margin-bottom:18px;padding:15px 16px;border:1px solid rgba(217,178,106,.42);border-radius:18px;background:rgba(217,178,106,.08)}
+.v3-impacto>strong{display:block;font:600 14px var(--body);color:#d9b26a;margin-bottom:10px}
+.v3-impacto-linha{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0;font-size:13.5px;border-top:1px solid rgba(217,178,106,.18)}
+.v3-impacto-linha:first-of-type{border-top:0}
+.v3-impacto-linha b{font:400 13px var(--mono);font-weight:400;text-align:right}
+.v3-antes{color:var(--muted);text-decoration:line-through;margin-right:7px}
+.v3-impacto p{margin-top:11px;font-size:12.5px;color:#d8d2c4;line-height:1.5}
+.v3-impacto-ok{background:#d9b26a;color:#241a05}
+
+/* A régua da fatura: total, abatido e falta são partes do mesmo
+   valor — como três caixas soltas obrigavam a subtração de cabeça. */
+.v3-invoice-regua{display:flex;height:8px;border-radius:8px;overflow:hidden;margin:4px 0 14px;background:rgba(240,229,207,.09)}
+.v3-invoice-regua i{display:block;height:100%}
+.v3-regua-pago{background:var(--teal)}
+.v3-regua-falta{background:#d98078}
+.v3-limite-livre{color:var(--teal);font-weight:600}
+/* O bloco do que vence ganha a borda quente: é o único da Início
+   com prazo, e prazo é o que distingue urgência de informação. */
+.v3-proximos{border-color:rgba(217,128,120,.34)}
+
+/* =============================================================
+   CATEGORIAS: O NOME PRECISA CABER
+   -------------------------------------------------------------
+   O ladrilho era uma linha só — ícone, nome, porcentagem, valor e
+   teto disputando a mesma largura numa grade de duas colunas.
+   "Transporte e combustível" era cortado ou quebrava em pedaços
+   sem sentido. Agora o nome pode quebrar inteiro e o valor desce
+   para a própria linha quando o espaço aperta; o teto ocupa a
+   largura toda do ladrilho, porque é uma régua, não uma etiqueta.
+   ============================================================= */
+.v3-cat-tile{flex-wrap:wrap;align-items:flex-start;row-gap:9px;padding:16px}
+.v3-cat-tile>span:nth-child(2){min-width:0;flex:1 1 55%}
+.v3-cat-tile .v3-cat-id strong{white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+.v3-cat-tile>strong.v3-mono{margin-left:auto;align-self:center;white-space:nowrap}
+.v3-cat-tile .v3-cat-teto{flex:1 1 100%;margin-top:2px}
+.v3-cat-tile .v3-cat-icon{align-self:center}
+/* "Nova categoria" é a ação da tela, e numa linha com dois
+   segmentos ela encolhia até virar detalhe. No celular ela ocupa a
+   largura inteira. */
+@media(max-width:620px){
+  .v3-category-create{width:100%;margin-top:10px}
+  .v3-categories .v3-row{flex-wrap:wrap}
+}
+
+/* =============================================================
+   DE ONDE VEIO O NÚMERO
+   -------------------------------------------------------------
+   Cotação, estimativa e valor digitado à mão têm confiabilidades
+   diferentes e tinham a mesma aparência. A etiqueta não decora:
+   ela diz o que dá para levar a sério.
+   ============================================================= */
+.v3-etiqueta{display:inline-block;font-style:normal;padding:2px 8px;margin-left:2px;border-radius:11px;font:400 11.5px var(--mono);letter-spacing:.02em;white-space:nowrap}
+.v3-et-cotacao{background:rgba(95,169,155,.17);color:#7fc0b2}
+.v3-et-estimativa{background:rgba(143,176,192,.17);color:#a8c3d1}
+.v3-et-manual{background:rgba(240,229,207,.1);color:var(--muted)}
+.v3-invest-row small{line-height:1.7}

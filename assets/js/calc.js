@@ -133,6 +133,7 @@
       cardId: tx.cardId,
       method: tx.method,
       recurring: tx.recurring,
+      faturaRef: tx.faturaRef || null,
       installment: tx.installment,
       source: tx.source,
       confirmed
@@ -770,6 +771,24 @@
    * fatura?", e essa pergunta não tem resposta óbvia quando o
    * fechamento é dia 25 e o vencimento é dia 5 do mês seguinte.
    */
+  /**
+   * EM QUAL FATURA ESTE LANÇAMENTO ESTÁ.
+   *
+   * Uma pergunta só, com duas respostas possíveis: a fatura que a
+   * pessoa escolheu, quando escolheu; o ciclo da data, quando não.
+   * Tudo que monta fatura passa por aqui — se cada lugar decidisse
+   * por conta própria, a compra apareceria numa fatura e sumiria do
+   * total da outra, que é a forma mais cara de errar aqui.
+   *
+   * Recorrência nunca usa a escolha manual: cada ocorrência tem data
+   * própria, e uma referência única jogaria o ano inteiro na mesma
+   * fatura.
+   */
+  Calc.faturaDoLancamento = function (card, e) {
+    if (e && !e.recurring && /^\d{4}-\d{2}$/.test(e.faturaRef || '')) return e.faturaRef;
+    return Calc.invoiceRefOfDate(card, e.date);
+  };
+
   Calc.invoiceRefOfDate = function (card, dateISO) {
     const base = U.ymOf(dateISO);
     for (let k = -1; k <= 3; k++) {
@@ -789,7 +808,7 @@
   Calc.dataDeExibicao = function (e, completa, profile) {
     if (e.kind === 'expense' && e.method === 'card' && e.cardId) {
       const card = (profile || P()).cards.find((c) => c.id === e.cardId);
-      if (card) return 'fatura ' + U.monthLabel(Calc.invoiceRefOfDate(card, e.date), true);
+      if (card) return 'fatura ' + U.monthLabel(Calc.faturaDoLancamento(card, e), true);
     }
     return completa ? U.fmtDateBR(e.date) : U.fmtDayMonth(e.date);
   };
@@ -818,8 +837,21 @@
     const card = prof.cards.find((c) => c.id === cardId);
     if (!card) return null;
     const dates = Calc.invoiceDates(card, ref);
-    const items = Calc.entries(dates.openDate, dates.closeDate, prof)
-      .filter((e) => e.kind === 'expense' && e.cardId === cardId);
+    /* A JANELA NÃO PODE SER O CICLO
+       Enquanto a fatura era só um intervalo de datas, bastava varrer
+       o ciclo. Com fatura escolhida à mão, uma compra de março pode
+       pertencer à fatura de janeiro — e ela estaria fora de qualquer
+       janela estreita. Por isso a varredura cobre a vida do perfil e
+       quem decide o pertencimento é faturaDoLancamento.
+
+       A janela é a MESMA para todas as faturas de propósito: assim
+       as doze faturas de uma tela compartilham um resultado em cache
+       em vez de varrerem os lançamentos doze vezes. */
+    const horizonte = U.monthEnd(U.addMonths(U.todayYM(), 24));
+    const items = Calc.entries(Calc.earliestDate(prof),
+      dates.closeDate > horizonte ? dates.closeDate : horizonte, prof)
+      .filter((e) => e.kind === 'expense' && e.cardId === cardId
+        && Calc.faturaDoLancamento(card, e) === ref);
 
     const total = U.round2(U.sum(items.filter((i) => i.confirmed), (i) => i.amount));
     const planned = U.round2(U.sum(items, (i) => i.amount));
@@ -945,6 +977,39 @@
     }
     return days ? U.round2(value) : null;
   };
+  /**
+   * DE ONDE VEIO O NÚMERO.
+   *
+   * O mesmo valor na tela pode ser três coisas com confiabilidades
+   * bem diferentes: o preço de mercado de hoje, uma projeção a juros
+   * compostos, ou um número que a própria pessoa digitou semana
+   * passada. Mostrados iguais, o OAZE parece saber a cotação quando
+   * está exibindo um palpite.
+   *
+   * Esta função ESPELHA os desvios de investmentValueAt, na mesma
+   * ordem. Se um dos dois mudar sem o outro, a etiqueta passa a
+   * mentir sobre o número ao lado — por isso elas vivem juntas.
+   */
+  Calc.investmentValueSource = function (inv, atISO) {
+    const at = atISO || U.todayISO();
+    if (inv.date > at) return { origem: 'futuro', em: null };
+    if (inv.currentValue != null && at >= U.todayISO()) return { origem: 'manual', em: inv.currentValueAt || null };
+    if (inv.type === 'CDB' && inv.indexer === 'cdi') {
+      return Calc.cdiValueAt(inv, at) == null
+        ? { origem: 'aporte', em: null }
+        : { origem: 'indexador', em: (market.cdi && market.cdi.length ? market.cdi[market.cdi.length - 1].date : null) };
+    }
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0 && at.slice(0, 7) === U.todayYM()) {
+      const quote = market.quotes[inv.ticker];
+      const age = Date.now() - Date.parse(quote?.marketTime || '');
+      if (quote?.currency === 'BRL' && Number.isFinite(+quote.price) && Number.isFinite(age) && age >= 0 && age <= 7 * 86400000)
+        return { origem: 'cotacao', em: quote.marketTime };
+    }
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0)
+      return { origem: 'aporte', em: null };
+    return { origem: 'estimativa', em: null };
+  };
+
   Calc.investmentValueAt = function (inv, atISO, profile) {
     const at = atISO || U.todayISO();
     if (inv.date > at) return 0;

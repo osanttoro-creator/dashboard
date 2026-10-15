@@ -1190,18 +1190,25 @@
   "es": "buenas noches"
  },
  {
-  "pt": "onde foi o mês",
-  "tipo": "exato",
-  "en": "where the month went",
-  "fr": "où est passé le mois",
-  "es": "a dónde fue el mes"
- },
- {
   "pt": "até o fim do mês",
   "tipo": "exato",
   "en": "until the end of the month",
   "fr": "jusqu’à la fin du mois",
   "es": "hasta fin de mes"
+ },
+ {
+  "pt": "ver agenda",
+  "tipo": "exato",
+  "en": "see calendar",
+  "fr": "voir l’agenda",
+  "es": "ver agenda"
+ },
+ {
+  "pt": "onde foi o mês",
+  "tipo": "exato",
+  "en": "where the month went",
+  "fr": "où est passé le mois",
+  "es": "a dónde fue el mes"
  },
  {
   "pt": "SALDO TOTAL",
@@ -1464,6 +1471,13 @@
   "es": "TRANSFERENCIA"
  },
  {
+  "pt": "· fatura {0}",
+  "tipo": "padrao",
+  "en": "· {0} statement",
+  "fr": "· facture {0}",
+  "es": "· factura {0}"
+ },
+ {
   "pt": "Editar {0}",
   "tipo": "padrao",
   "en": "Edit {0}",
@@ -1702,6 +1716,27 @@
   "es": "＋ &nbsp; Añadir cuenta o tarjeta"
  },
  {
+  "pt": "Limite ·",
+  "tipo": "exato",
+  "en": "Limit ·",
+  "fr": "Plafond ·",
+  "es": "Límite ·"
+ },
+ {
+  "pt": "de {0} · usado {1}",
+  "tipo": "padrao",
+  "en": "of {0} · used {1}",
+  "fr": "sur {0} · utilisé {1}",
+  "es": "de {0} · usado {1}"
+ },
+ {
+  "pt": "Limite usado · {0}",
+  "tipo": "padrao",
+  "en": "Limit used · {0}",
+  "fr": "Plafond utilisé · {0}",
+  "es": "Límite usado · {0}"
+ },
+ {
   "pt": "Corrigir encerramento",
   "tipo": "exato",
   "en": "Correct closing",
@@ -1910,6 +1945,41 @@
   "en": "Source: Central Bank of Brazil (SGS). Reference dates are shown above; rates are not your investment balance. CDI-linked CDBs use daily history for a gross estimate, excluding taxes and bank fees.",
   "fr": "Source : Banque centrale du Brésil (SGS). Les dates de référence sont ci-dessus ; les taux ne sont pas le solde de votre placement. Les CDB liés au CDI utilisent l'historique quotidien pour une estimation brute, hors impôts et frais bancaires.",
   "es": "Fuente: Banco Central de Brasil (SGS). Las fechas de referencia figuran arriba; las tasas no son el saldo de tu inversión. Los CDB ligados al CDI usan el historial diario para una estimación bruta, sin impuestos ni comisiones bancarias."
+ },
+ {
+  "pt": "cotação {0}",
+  "tipo": "padrao",
+  "en": "quote {0}",
+  "fr": "cours {0}",
+  "es": "cotización {0}"
+ },
+ {
+  "pt": "cotação",
+  "tipo": "exato",
+  "en": "quote",
+  "fr": "cours",
+  "es": "cotización"
+ },
+ {
+  "pt": "informado por você",
+  "tipo": "exato",
+  "en": "entered by you",
+  "fr": "saisi par vous",
+  "es": "informado por ti"
+ },
+ {
+  "pt": "pelo CDI",
+  "tipo": "exato",
+  "en": "by CDI",
+  "fr": "selon le CDI",
+  "es": "por el CDI"
+ },
+ {
+  "pt": "valor aportado",
+  "tipo": "exato",
+  "en": "amount contributed",
+  "fr": "montant versé",
+  "es": "importe aportado"
  },
  {
   "pt": "Aportado: {0}",
@@ -4424,9 +4494,68 @@
   "ignorar": true
  },
  {
+  "pt": "2-digit",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "oaze.v3.naoPerguntar",
   "tipo": "exato",
   "ignorar": true
+ },
+ {
+  "pt": "Escape",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Já pago",
+  "tipo": "exato",
+  "en": "Already paid",
+  "fr": "Déjà payé",
+  "es": "Ya pagado"
+ },
+ {
+  "pt": "Passa a faltar",
+  "tipo": "exato",
+  "en": "Becomes outstanding",
+  "fr": "Reste à payer",
+  "es": "Pasa a faltar"
+ },
+ {
+  "pt": "Situação",
+  "tipo": "exato",
+  "en": "Status",
+  "fr": "Statut",
+  "es": "Situación"
+ },
+ {
+  "pt": "fechada com saldo devedor",
+  "tipo": "exato",
+  "en": "closed with a balance due",
+  "fr": "clôturée avec solde dû",
+  "es": "cerrada con saldo pendiente"
+ },
+ {
+  "pt": "Os pagamentos já registrados ({0}) permanecem intactos. Nada é apagado: a fatura deixa de estar quitada porque ganhou uma compra nova.",
+  "tipo": "padrao",
+  "en": "The payments already recorded ({0}) stay intact. Nothing is erased: the statement stops being settled because it gained a new purchase.",
+  "fr": "Les paiements déjà enregistrés ({0}) restent intacts. Rien n’est effacé : la facture cesse d’être soldée parce qu’elle a reçu un nouvel achat.",
+  "es": "Los pagos ya registrados ({0}) quedan intactos. Nada se borra: la factura deja de estar saldada porque recibió una compra nueva."
+ },
+ {
+  "pt": "Esta fatura já fechou. A compra entra nela mesmo assim, e o valor passa a ser cobrado nessa fatura.",
+  "tipo": "exato",
+  "en": "This statement has already closed. The purchase goes into it anyway, and the amount is charged on that statement.",
+  "fr": "Cette facture est déjà clôturée. L’achat y entre quand même, et le montant est facturé sur cette facture.",
+  "es": "Esta factura ya cerró. La compra entra en ella igual, y el importe pasa a cobrarse en esa factura."
+ },
+ {
+  "pt": "O que muda na fatura de {0}",
+  "tipo": "padrao",
+  "en": "What changes on the {0} statement",
+  "fr": "Ce qui change sur la facture de {0}",
+  "es": "Lo que cambia en la factura de {0}"
  },
  {
   "pt": "Não perguntar novamente neste aparelho",
@@ -4441,11 +4570,6 @@
   "en": "Cancel",
   "fr": "Annuler",
   "es": "Cancelar"
- },
- {
-  "pt": "Escape",
-  "tipo": "exato",
-  "ignorar": true
  },
  {
   "pt": "Painel",
@@ -7343,11 +7467,11 @@
   "es": "Elige una cuenta o tarjeta válida."
  },
  {
-  "pt": "A data da compra não pertence à fatura selecionada. Ajuste a data ou mantenha a fatura calculada.",
+  "pt": "Salvar assim",
   "tipo": "exato",
-  "en": "The purchase date does not belong to the selected bill. Adjust the date or keep the calculated bill.",
-  "fr": "La date d'achat ne correspond pas à la facture sélectionnée. Modifiez la date ou conservez la facture calculée.",
-  "es": "La fecha de compra no corresponde a la factura seleccionada. Ajusta la fecha o conserva la factura calculada."
+  "en": "Save like this",
+  "fr": "Enregistrer ainsi",
+  "es": "Guardar así"
  },
  {
   "pt": "Escolha duas contas diferentes para transferir.",

@@ -558,9 +558,18 @@
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
+    /* O QUE VENCE VEM ANTES DO GRÁFICO
+       A ordem antiga era curva do mês, e só depois os compromissos.
+       Mas "quanto gastei" é pergunta que se faz com calma; "o que
+       vence esta semana" é pergunta que se faz com pressa — e era a
+       que estava mais embaixo. Curva e categorias continuam na tela,
+       logo abaixo: acessíveis, sem disputar a primeira olhada. */
+    const proximos = blocoLigado('proximos')
+      ? `<section class="v3-panel v3-proximos"><div class="v3-row"><h2>até o fim do mês</h2><button type="button" class="v3-link" data-go="calendar">ver agenda</button></div>${upcoming()}</section>`
+      : '';
     const metade = [blocoLigado('categorias') ? `<section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '',
-      blocoLigado('proximos') ? `<section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section>` : ''].filter(Boolean).join('');
-    const direita = [blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : '', blocoLigado('faturas') ? painelFaturasInicio() : '', blocoLigado('fluxo') ? painelFluxoInicio() : '', blocoLigado('metas') ? painelMetasInicio() : '', blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
+      blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
+    const direita = [proximos, blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : ''].filter(Boolean).join('');
     return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${blocoLigado('score') ? painelScore() : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
@@ -702,8 +711,14 @@
     const t = totals();
     const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
-      const method = x.methodLabel || (x.cardId ? 'CARTÃO' : x.kind === 'transfer' ? 'TRANSFERÊNCIA' : 'CONTA');
-      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${esc(shortDate(x.date))} · ${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
+      const cartao = x.cardId ? profile().cards.find((c) => c.id === x.cardId) : null;
+      let method = x.methodLabel || (x.cardId ? 'CARTÃO' : x.kind === 'transfer' ? 'TRANSFERÊNCIA' : 'CONTA');
+      if (cartao) {
+        let ref = null;
+        try { ref = Calc.faturaDoLancamento(cartao, x); } catch (e) { ref = null; }
+        method = `${cartao.name || cartao.bank}${ref ? ' · fatura ' + periodLabel(ref) : ''}`;
+      }
+      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${cartao ? '' : esc(shortDate(x.date)) + ' · '}${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
     };
 
     /* =============================================================
@@ -795,7 +810,12 @@
     if (headingValue) headingValue.textContent = money(invoice.planned);
     const used = demo ? invoice.restante : Calc.cardUsed(card.id, profile());
     const limitLabel = detail.querySelector('.v3-bar')?.previousElementSibling;
-    if (limitLabel) limitLabel.textContent = `Limite usado · ${money(used)} de ${money(card.limit)}`;
+    const disponivel = U.round2(Math.max(0, (+card.limit || 0) - used));
+    if (limitLabel) {
+      limitLabel.innerHTML = (+card.limit > 0)
+        ? `Limite · <strong class="v3-sensitive v3-limite-livre">${money(disponivel)} disponível</strong> <span class="v3-muted">de ${money(card.limit)} · usado ${money(used)}</span>`
+        : `Limite usado · ${money(used)}`;
+    }
     const limitBar = detail.querySelector('.v3-bar > span');
     if (limitBar) limitBar.style.width = `${pct(100 * used / (+card.limit || 1))}%`;
     const actions = detail.querySelector('.v3-detail-actions');
@@ -805,6 +825,7 @@
     const status = invoice.restante <= 0 && invoice.planned > 0 ? 'Paga' : invoice.pago > 0 ? 'Parcial' : invoice.restante > 0 && !demo && U.todayISO() > invoice.dueDate ? 'Em atraso' : 'Em aberto';
     const summary = `<div class="v3-invoice-summary" aria-label="Resumo da fatura de ${esc(periodLabel(ref))}">`
       + `<div class="v3-invoice-summary-head"><span>Fatura de ${esc(periodLabel(ref))}</span><strong>${esc(status)}</strong></div>`
+      + (invoice.planned > 0 ? `<div class="v3-invoice-regua" aria-hidden="true"><i style="width:${pct(100 * Math.min(invoice.pago, invoice.planned) / invoice.planned)}%" class="v3-regua-pago"></i><i style="width:${pct(100 * invoice.restante / invoice.planned)}%" class="v3-regua-falta"></i></div>` : '')
       + `<div class="v3-invoice-values"><div><small>Total da fatura</small><strong class="v3-sensitive">${money(invoice.planned)}</strong></div>`
       + `<div><small>Já abatido</small><strong class="v3-sensitive">${money(invoice.pago)}</strong></div>`
       + `<div><small>Falta pagar</small><strong class="v3-sensitive">${money(invoice.restante)}</strong></div></div>`
@@ -918,7 +939,20 @@
     const chart = linha('value');
     const chartAportes = linha('contributed');
     const rendimento = series.length ? U.round2(series[series.length-1].value - series[series.length-1].contributed) : U.round2(gain);
-    const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
+    /* A etiqueta vem do mesmo cálculo que o valor: dizer 'cotação'
+       ao lado de um número estimado seria pior do que não dizer. */
+    const procedencia = (x) => {
+      if (demo) return { classe: 'v3-et-manual', texto: 'exemplo' };
+      let f = null;
+      try { f = Calc.investmentValueSource(x, at); } catch (e) { return null; }
+      if (!f) return null;
+      if (f.origem === 'cotacao') return { classe: 'v3-et-cotacao', texto: f.em ? 'cotação ' + horaCurta(f.em) : 'cotação' };
+      if (f.origem === 'manual') return { classe: 'v3-et-manual', texto: 'informado por você' };
+      if (f.origem === 'indexador') return { classe: 'v3-et-cotacao', texto: 'pelo CDI' };
+      if (f.origem === 'aporte') return { classe: 'v3-et-manual', texto: 'valor aportado' };
+      return { classe: 'v3-et-estimativa', texto: 'estimativa' };
+    };
+    const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}${(() => { const f = procedencia(x); return f ? ` · <em class="v3-etiqueta ${f.classe}">${esc(f.texto)}</em>` : ''; })()}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
     const reserves=list.filter((x)=>x.type==='Porquinho'), cdbs=list.filter((x)=>x.type==='CDB');
     const collection=(items,empty)=>items.length?items.map((x)=>`<button type="button" class="v3-invest-bucket" data-investment="${esc(x.id)}"><span><strong>${esc(x.name)}</strong><small>${x.type==='CDB'?(x.maturityDate?`Vence em ${esc(shortDate(x.maturityDate))}`:'Sem vencimento informado')+' · '+(x.liquidity==='diaria'?'liquidez diária':x.liquidity==='vencimento'?'resgate no vencimento':'liquidez não informada'):'Dinheiro reservado'}</small></span><strong class="v3-sensitive">${money(valueAt(x))}</strong></button>`).join(''):`<p class="v3-muted">${empty}</p>`;
     return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Vale hoje</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de rendimento</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
@@ -1740,6 +1774,15 @@
   }
   function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
 
+  /* Hora e dia de um carimbo de mercado, curtos: '18:05' quando é
+     de hoje, '13/10 18:05' quando não é. Saber que a cotação é de
+     ontem muda o que se faz com ela. */
+  function horaCurta(iso) {
+    const d = new Date(iso);
+    if (!Number.isFinite(d.getTime())) return '';
+    const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    return U.isoOf ? (d.toISOString().slice(0, 10) === U.todayISO() ? hora : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + hora) : hora;
+  }
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
     clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.hidden=true;},4500);
@@ -1766,6 +1809,43 @@
   function askSilenced(){ try { return JSON.parse(localStorage.getItem(ASK_KEY)||'{}')||{}; } catch (e) { return {}; } }
   function askSilence(key){ try { const s=askSilenced(); s[key]=1; localStorage.setItem(ASK_KEY,JSON.stringify(s)); } catch (e) { /* sem armazenamento: continua perguntando */ } }
   function askReset(){ try { localStorage.removeItem(ASK_KEY); } catch (e) { /* nada a limpar */ } }
+  function avisarImpacto(titulo, linhas, nota, rotulo) {
+    return new Promise((resolve) => {
+      const anterior=document.activeElement;
+      const caixa=document.createElement('div');
+      caixa.className='v3-ask';
+      caixa.innerHTML=`<div class="v3-ask-scrim" data-ask="no"></div><div class="v3-ask-card" role="dialog" aria-modal="true" aria-labelledby="v3-impacto-titulo"><div class="v3-impacto"><strong id="v3-impacto-titulo">${esc(titulo)}</strong>${linhas.map((l)=>`<div class="v3-impacto-linha"><span>${esc(l[0])}</span><b>${l[1]}</b></div>`).join('')}<p>${esc(nota)}</p></div><div class="v3-ask-actions"><button type="button" class="v3-secondary" data-ask="no">Voltar</button><button type="button" class="v3-primary v3-impacto-ok" data-ask="yes">${esc(rotulo)}</button></div></div>`;
+      document.body.appendChild(caixa);
+      const fim=(resposta)=>{ document.removeEventListener('keydown',tecla); caixa.remove(); if(anterior?.isConnected)anterior.focus(); resolve(resposta); };
+      const tecla=(ev)=>{ if(ev.key==='Escape'){ ev.preventDefault(); fim(false); } };
+      caixa.addEventListener('click',(ev)=>{ const alvo=ev.target.closest('[data-ask]'); if(alvo) fim(alvo.dataset.ask==='yes'); });
+      document.addEventListener('keydown',tecla);
+      caixa.querySelector('[data-ask="yes"]').focus();
+    });
+  }
+  /* Quanto a compra muda na fatura escolhida, em números da própria
+     fatura. Devolve null quando não há o que avisar: fatura aberta e
+     sem pagamento nenhum é o caso normal, e avisar nele seria ruído. */
+  function impactoNaFatura(cardId, ref, valor) {
+    let f=null;
+    try { f=Calc.invoice(cardId, ref, profile()); } catch (e) { return null; }
+    if (!f) return null;
+    const temPagamento=f.pago>0;
+    const fechada=!f.isOpen;
+    if (!temPagamento && !fechada) return null;
+    const totalDepois=U.round2(f.planned+valor);
+    const faltaDepois=U.round2(Math.max(0,totalDepois-f.pago));
+    const linhas=[
+      ['Total da fatura', `<span class="v3-antes">${money(f.planned)}</span>${money(totalDepois)}`],
+      ['Já pago', money(f.pago)],
+      ['Passa a faltar', `<span class="${faltaDepois>0?'v3-negative':'v3-positive'}">${money(faltaDepois)}</span>`]
+    ];
+    if (f.paid) linhas.push(['Situação', '<span class="v3-antes">paga</span>fechada com saldo devedor']);
+    const nota=temPagamento
+      ? `Os pagamentos já registrados (${money(f.pago)}) permanecem intactos. Nada é apagado: a fatura deixa de estar quitada porque ganhou uma compra nova.`
+      : 'Esta fatura já fechou. A compra entra nela mesmo assim, e o valor passa a ser cobrado nessa fatura.';
+    return { linhas, nota, titulo: `O que muda na fatura de ${periodLabel(ref)}` };
+  }
   function ask(key, message, confirmLabel) {
     if (key && askSilenced()[key]) return Promise.resolve(true);
     return new Promise((resolve) => {
@@ -2068,11 +2148,20 @@
     if (!campo || !bloco || !data) return;
     const [tipo, id] = String(form.elements.source.value || '').split(':');
     const card = tipo === 'card' ? profile().cards.find((c) => c.id === id) : null;
+    if (campo.dataset.cartao !== String(id || '')) { delete campo.dataset.escolhida; campo.dataset.cartao = String(id || ''); }
     bloco.hidden = !card;
     data.hidden = false;
     if (!card) return;
     const base = form.elements.date.value;
-    let escolhida = U.isValidISO(base) ? Calc.invoiceRefOfDate(card, base) : campo.value;
+    /* A data SUGERE; a escolha MANDA.
+       Antes, cada recálculo jogava fora o que a pessoa tinha
+       acabado de escolher — era por isso que a fatura passada
+       aparecia na lista e não podia ser usada. A marca
+       `dataset.escolhida` guarda que houve escolha humana; só o
+       cartão trocar a apaga, porque a fatura de outro cartão é
+       outra coisa. */
+    const sugerida = U.isValidISO(base) ? Calc.invoiceRefOfDate(card, base) : '';
+    let escolhida = campo.dataset.escolhida === 'true' && campo.value ? campo.value : (sugerida || campo.value);
     try {
       /* Na demonstração não há Store por trás do Calc; a lista sai do
          mês em exibição, que é o bastante para a tela existir. */
@@ -2567,6 +2656,9 @@
     return !global.Limites || !Limites.cabe || Limites.cabe(limit,ym);
   }
   async function limitsReady() { return state.sharedId ? !!state.sharedRights : !!(await limitsPromise); }
+  /* Recorrência não aceita fatura escolhida: cada ocorrência tem data
+     própria, e uma referência só jogaria o ano inteiro numa fatura. */
+  function recurringPrevisto(fd) { return fd.get('recurring')==='on'; }
   async function saveTransaction(form) {
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
@@ -2581,10 +2673,22 @@
     if (!instrument) { toast('Escolha uma conta ou cartão válido.'); return; }
     /* A data da compra é a data real; a fatura decorre do ciclo do cartão. */
     const refEscolhida=String(fd.get('fatura')||'');
-    if (sourceType==='card' && /^\d{4}-\d{2}$/.test(refEscolhida)) {
-      if (Calc.invoiceRefOfDate(instrument,date)!==refEscolhida) {
-        toast('A data da compra não pertence à fatura selecionada. Ajuste a data ou mantenha a fatura calculada.'); return;
-      }
+    /* A fatura escolhida vale mesmo quando difere da data: é o
+       caso de lançar hoje uma compra que pertence à fatura passada.
+       Guarda-se a escolha só quando ela DIFERE do que a data diria —
+       assim o campo não polui todo lançamento normal, e um cartão
+       que mude de dia de fechamento continua recalculando os
+       lançamentos que nunca foram escolhidos à mão. */
+    let faturaManual=null;
+    if (sourceType==='card' && /^\d{4}-\d{2}$/.test(refEscolhida) && !recurringPrevisto(fd)) {
+      if (Calc.invoiceRefOfDate(instrument,date)!==refEscolhida) faturaManual=refEscolhida;
+    }
+    /* Só a escolha manual dispara o aviso: a fatura sugerida pela
+       data é o caminho normal, e pedir confirmação nele treinaria a
+       pessoa a clicar sem ler justamente no aviso que importa. */
+    if (faturaManual && !editing) {
+      const impacto=impactoNaFatura(sourceId, faturaManual, U.round2(amount*rate));
+      if (impacto && !await avisarImpacto(impacto.titulo, impacto.linhas, impacto.nota, 'Salvar assim')) return;
     }
     if (transfer && (!destination || destination===sourceId || sourceType!=='account' || !profile().accounts.some((a)=>a.id===destination && !a.archived))) { toast('Escolha duas contas diferentes para transferir.'); return; }
     const recurring=fd.get('recurring')==='on', recurEnd=String(fd.get('recurEnd')||'');
@@ -2614,7 +2718,7 @@
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
     const sourceTag=String(fd.get('sourceTag')||'manual');
-    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
+    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',faturaRef:faturaManual,description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
       await V3Backend.mutate(() => {
@@ -3537,7 +3641,11 @@
     }
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
     const path=location.pathname.replace(/\/+$/,'') || '/app';
-    const requested=location.hash.slice(1) || initialPaths[path];
+    /* Caminho fora da tabela — a prévia em /preview-v3/index.html, um
+       arquivo aberto direto — deixava  indefinido, e a
+       linha seguinte quebrava no startsWith. A tela ficava em branco
+       sem dizer por quê. Rota desconhecida é a Início, não um erro. */
+    const requested=location.hash.slice(1) || initialPaths[path] || 'home';
     const investmentTab=requested==='goals'?'goals':requested==='investments/planning'?'planning':requested==='investments/goals'?'goals':'overview';
     const route=requested.startsWith('investments/')?'investments':requested;
     state.page=names[route]?(route==='reminders'?'calendar':route==='reports'?'home':route==='goals'?'investments':route):'home';
@@ -3622,7 +3730,7 @@
       }
       if(ev.target.name==='repeatDate' && ev.target.closest('#v3-form-tx')) ev.target.dataset.edited='true';
       if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
-      if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) updateRepeatFields(ev.target.form);
+      if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) { ev.target.dataset.escolhida='true'; updateRepeatFields(ev.target.form); }
       /* "Outro" é a única opção que pede um nome escrito; as outras
          já se nomeiam. O campo aparece com ela e some sem ela. */
       if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom'),cor=document.getElementById('v3-custom-bank-color');if(c)c.hidden=ev.target.value!=='Outro';if(cor)cor.hidden=ev.target.value!=='Outro';}

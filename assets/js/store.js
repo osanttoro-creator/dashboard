@@ -318,6 +318,23 @@
     t.installment = t.installment && t.installment.total > 1
       ? { total: +t.installment.total, index: +t.installment.index || 1, groupId: t.installment.groupId || null }
       : null;
+    /* A FATURA ESCOLHIDA À MÃO
+       Por padrão a fatura de uma compra no crédito sai da DATA: o
+       ciclo do cartão decide sozinho. Mas lançar hoje uma compra que
+       pertence à fatura passada é coisa que se faz — o comprovante
+       aparece depois, a cobrança veio adiantada, a pessoa esqueceu.
+       Sem um campo próprio isso era impossível: a data mandava, e o
+       seletor de fatura existia sem poder ser obedecido.
+
+       Quando `faturaRef` existe, ela vence a data. Ausente, vale a
+       regra de sempre — e é por isso que nenhum lançamento antigo
+       muda de fatura ao atualizar.
+
+       Só faz sentido em despesa no cartão e NÃO recorrente: numa
+       recorrência cada ocorrência tem data própria, e uma referência
+       única empurraria todas para a mesma fatura. */
+    t.faturaRef = (t.method === 'card' && !t.recurring && /^\d{4}-\d{2}$/.test(t.faturaRef || ''))
+      ? t.faturaRef : null;
     t.notes = String(t.notes || '');
     /* Lançamento em outra moeda: `amount` continua em REAIS (é ele
        que todos os totais somam), e o valor original fica ao lado para

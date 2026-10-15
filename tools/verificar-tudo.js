@@ -61,6 +61,7 @@ const VERIFICACOES = [
   ['tools/testes/v3-lancamento-e-categoria.js', 'V3 tem os três estados, o meio de pagamento e os seletores de ícone e cor'],
   ['tools/testes/v3-cofre-e-formularios.js', 'V3 exige e-mail confirmado, PIN e cofre cifrado sem senha bancária'],
   ['tools/testes/v3-score.js', 'o OAZE Score pesa cada pergunta e não julga o que não sabe'],
+  ['tools/testes/fatura-escolhida.js', 'a fatura escolhida à mão manda, sem apagar pagamento anterior'],
   ['tools/testes/coco-extratos.js', 'Coco confere extratos locais antes de propor lançamentos'],
   ['tools/testes/coco-conversa-voz.js', 'Coco separa conversa e análises e protege a resposta falada'],
   ['tools/testes/coco-consulta-mensal.js', 'Coco usa o total exato do mês e deixa a conta ambígua para revisão'],
