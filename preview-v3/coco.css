@@ -23,7 +23,7 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden;background:#0D182
 .v3-coco-message-avatar{position:absolute;left:0;top:6px;width:40px;height:40px;object-fit:contain}
 .v3-coco-message-avatar.is-speaking{animation:coco-talk 1.8s ease-in-out infinite}
 .v3-coco-composer{flex:none;width:100%;padding:0;background:none;border:0}
-.v3-coco-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 12px}
+.v3-coco-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}
 .v3-coco-tool{display:flex;align-items:center;gap:11px;min-height:64px;border:1px solid rgba(240,229,207,.12);border-radius:17px;background:rgba(53,85,101,.2);color:var(--milk);padding:12px 15px;text-align:left;transition:background .2s,border-color .2s}
 .v3-coco-tool:hover,.v3-coco-tool[aria-pressed=true]{background:rgba(95,169,155,.14);border-color:rgba(95,169,155,.6)}
 .v3-coco-tool svg{color:#5FA99B}.v3-coco-tool strong,.v3-coco-tool small{display:block}.v3-coco-tool strong{font-size:14px;font-weight:600}.v3-coco-tool small{font-size:11px;margin-top:2px;color:#a8bbc0}

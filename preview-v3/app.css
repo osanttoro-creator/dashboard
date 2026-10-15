@@ -623,3 +623,78 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
   .v3-planning>section:nth-child(2)>.v3-row{align-items:stretch;flex-direction:column}
   .v3-planning>section:nth-child(2)>.v3-row>.v3-secondary{width:100%}
 }
+
+/* Crédito: a fatura é um conjunto de compras com abatimentos, não uma linha solta. */
+.v3-invoice-summary{margin:20px 0 12px;padding:20px;border:1px solid rgba(95,169,155,.35);border-radius:24px;background:linear-gradient(140deg,rgba(95,169,155,.15),rgba(53,85,101,.10))}
+.v3-invoice-summary-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;color:var(--milk);font-size:14px}
+.v3-invoice-summary-head>strong{padding:6px 11px;border:1px solid rgba(95,169,155,.5);border-radius:999px;color:var(--teal);font-size:12px;white-space:nowrap}
+.v3-invoice-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.v3-invoice-values>div{min-width:0;padding:13px;border-radius:16px;background:rgba(13,24,33,.45)}
+.v3-invoice-values small,.v3-invoice-values strong{display:block}
+.v3-invoice-values small{min-height:32px;color:var(--muted);font-size:11px}
+.v3-invoice-values strong{font:500 clamp(14px,1.4vw,20px) var(--mono);overflow-wrap:anywhere}
+.v3-invoice-values>div:last-child strong{color:var(--milk)}
+.v3-invoice-summary p{margin:12px 0 0;font-size:12px}
+.v3-invoice-warning{padding:10px 12px;border-left:3px solid var(--milk);background:rgba(240,229,207,.07)}
+.v3-invoice-history{padding:15px 0;border-bottom:1px solid var(--line)}
+.v3-invoice-history h3{margin:0 0 8px;font-size:14px;color:var(--milk)}
+.v3-invoice-history>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;color:var(--muted);font-size:12px}
+.v3-invoice-history strong{color:var(--milk);white-space:nowrap}
+.v3-home-bill{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--line);font-size:13px}
+.v3-home-bill:first-of-type{margin-top:10px}
+.v3-home-bill>span{min-width:0;color:var(--muted)}
+.v3-home-bill>span strong,.v3-home-bill>span small{display:block}
+.v3-home-bill>span strong{color:var(--milk)}
+.v3-home-bill>span small{margin-top:3px;font-size:11px}
+.v3-home-bill>strong{color:var(--milk);text-align:right;white-space:nowrap}
+.v3-home-bill.is-total>span,.v3-home-bill.is-total>strong{color:var(--teal);font-weight:700}
+.v3-trans-explain{max-width:72ch;margin:4px 0 18px;font-size:12px}
+.v3-due-invoices{display:grid;gap:12px;margin-top:24px}
+.v3-due-invoices>.v3-row{align-items:end}
+.v3-due-invoices>.v3-row p{margin:5px 0 0;font-size:12px}
+.v3-due-invoice{padding:20px}
+.v3-due-invoice h3{margin:7px 0 4px;font:500 27px var(--display)}
+.v3-due-invoice .v3-row small{color:var(--muted);font-size:12px}
+.v3-due-invoice-items{margin-top:16px;border-top:1px solid var(--line)}
+.v3-due-invoice-item{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:62px;padding:10px 0;border-bottom:1px solid var(--line)}
+.v3-due-invoice-item:last-child{border-bottom:0}
+.v3-due-invoice-item>span{min-width:0}
+.v3-due-invoice-item button{display:block;padding:0;border:0;background:none;color:var(--milk);font-weight:600;text-align:left}
+.v3-due-invoice-item button:hover{text-decoration:underline}
+.v3-due-invoice-item small{display:block;margin-top:3px;color:var(--muted);font-size:11px}
+.v3-due-invoice-item>strong{white-space:nowrap;color:var(--milk)}
+.v3-due-invoice-item.is-cancelada{opacity:.58;text-decoration:line-through}
+.v3-invest-bars{display:flex;align-items:end;justify-content:space-around;gap:10px;height:186px;margin:20px 0 7px;padding:8px 4px 0;border-bottom:1px solid var(--line)}
+.v3-invest-bar-group{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:5px}
+.v3-invest-bar-pair{display:flex;align-items:end;justify-content:center;gap:4px;width:100%;height:calc(100% - 24px)}
+.v3-invest-bar-pair i{display:block;width:min(24px,32%);min-height:2px;border-radius:5px 5px 0 0}
+.v3-invest-bar-pair .is-contributed{background:var(--blue)}
+.v3-invest-bar-pair .is-current{background:var(--teal)}
+.v3-invest-bar-group small{color:var(--muted);font:11px var(--mono)}
+.v3-allocation-ring{display:grid;place-items:center;width:min(200px,70%);aspect-ratio:1;margin:18px auto 24px;border-radius:50%;background:var(--ring)}
+.v3-allocation-ring>span{display:grid;place-content:center;width:70%;aspect-ratio:1;border-radius:50%;background:var(--panel);text-align:center}
+.v3-allocation-ring strong{font:500 29px var(--display)}
+.v3-allocation-ring small{color:var(--muted);font-size:11px}
+@media(max-width:540px){.v3-invoice-summary{padding:16px}.v3-invoice-values{grid-template-columns:1fr}.v3-invoice-values>div{display:flex;align-items:center;justify-content:space-between;gap:12px}.v3-invoice-values small{min-height:0}}
+
+/* Lançamento: valor legível primeiro, campos numa sequência curta. */
+.v3-sheet:has(#v3-form-tx){width:min(540px,100%)}
+#v3-form-tx{gap:17px;padding-bottom:22px}
+#v3-tx-amount-label{padding:18px 18px 14px;border:1px solid rgba(240,229,207,.2);border-radius:23px;background:rgba(240,229,207,.045)}
+#v3-tx-amount-label input{margin-top:8px;padding:0;border:0;border-radius:0;background:transparent;color:var(--milk);font:500 clamp(34px,5vw,52px) var(--display);line-height:1.2;min-width:0}
+#v3-tx-amount-label input:focus{outline:0}
+#v3-tx-amount-label:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(95,169,155,.16)}
+#v3-form-tx .v3-payment-kind{margin:0;padding:0;border:0}
+#v3-form-tx .v3-payment-kind legend{padding:0 0 8px;color:var(--muted);font-size:12px}
+#v3-form-tx .v3-primary[type=submit]{min-height:52px;border-radius:17px}
+@media(max-width:900px){.v3-sheet:has(#v3-form-tx){height:100dvh;max-height:100dvh;border-radius:0}.v3-sheet:has(#v3-form-tx) #v3-form-tx{padding-bottom:calc(86px + env(safe-area-inset-bottom))}.v3-sheet:has(#v3-form-tx) #v3-form-tx .v3-primary[type=submit]{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:2;box-shadow:0 8px 25px rgba(0,0,0,.35)}}
+
+/* Primeiro carregamento: estrutura visível sem piscar valores fictícios. */
+.v3-skeleton{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(300px,1.2fr);gap:16px;margin-top:20px}
+.v3-skeleton-column{display:grid;gap:16px;align-content:start}
+.v3-skeleton-card{min-height:190px;padding:22px;border:1px solid var(--line);border-radius:28px;background:var(--panel)}
+.v3-skeleton-card:first-child{min-height:270px}
+.v3-skeleton-line{display:block;height:16px;max-width:100%;margin:12px 0;border-radius:999px;background:rgba(240,229,207,.10)}
+.v3-skeleton-line.short{width:35%}.v3-skeleton-line.medium{width:64%}.v3-skeleton-line.value{width:52%;height:34px;margin-top:26px}
+@media(prefers-reduced-motion:no-preference){.v3-skeleton-line{background:linear-gradient(90deg,rgba(240,229,207,.08),rgba(240,229,207,.17),rgba(240,229,207,.08));background-size:200% 100%;animation:v3-skeleton-move 1.8s linear infinite}@keyframes v3-skeleton-move{to{background-position:-200% 0}}}
+@media(max-width:900px){.v3-skeleton{grid-template-columns:1fr}.v3-skeleton-column:first-child{order:0}.v3-skeleton-column:last-child{order:1}}

@@ -64,7 +64,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -481,6 +481,9 @@
     { id: 'categorias', nome: 'Onde foi o mês', padrao: true },
     { id: 'proximos', nome: 'Até o fim do mês', padrao: true },
     { id: 'investimentos', nome: 'Investimentos', padrao: true },
+    { id: 'faturas', nome: 'Faturas a pagar', padrao: false },
+    { id: 'fluxo', nome: 'Fluxo de caixa', padrao: false },
+    { id: 'metas', nome: 'Metas em andamento', padrao: false },
     { id: 'indicadores', nome: 'Indicadores do mês', padrao: false },
     { id: 'atalhos', nome: 'Ações rápidas', padrao: false },
     { id: 'score', nome: 'OAZE Score', padrao: false }
@@ -525,13 +528,39 @@
       : '<p class="v3-muted">Nenhum aporte registrado até aqui. Registre o que você já guardou para acompanhar o rendimento.</p>';
     return `<section class="v3-panel"><div class="v3-row"><h2>investimentos</h2><button type="button" class="v3-link" data-go="investments">ver tudo</button></div>${corpo}</section>`;
   }
+  function painelFaturasInicio() {
+    const cards = profile().cards.filter((card) => !card.hidden);
+    const invoices = cards.map((card) => {
+      const ref = demo ? state.ym : Calc.currentInvoiceRef(card, state.ym, profile());
+      const bill = demo ? { restante: Number(sample.cardInvoices[card.id] || 0), dueDate: '' } : Calc.invoice(card.id, ref, profile());
+      return { card, ref, bill };
+    }).filter((item) => item.bill && item.bill.restante > 0).sort((a,b) => (a.bill.dueDate || '').localeCompare(b.bill.dueDate || ''));
+    return `<section class="v3-panel v3-home-bills"><div class="v3-row"><h2>faturas a pagar</h2><button type="button" class="v3-link" data-action="open-bills">ver cartões</button></div>`
+      + (invoices.length ? invoices.slice(0,3).map(({card,ref,bill}) => `<div class="v3-home-bill"><span><strong>${esc(card.name || card.bank)}</strong><small>${esc(periodLabel(ref))}${bill.dueDate ? ` · vence ${esc(shortDate(bill.dueDate))}` : ''}</small></span><strong class="v3-sensitive">${money(bill.restante)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma fatura pendente neste período.</p>')
+      + `</section>`;
+  }
+  function painelFluxoInicio() {
+    const t = totals();
+    const direct = demo ? U.round2(t.expense - 544.17) : t.expenseDebit;
+    const paid = demo ? 0 : t.invoicesPaid;
+    const outgoing = U.round2(direct + paid);
+    return `<section class="v3-panel v3-home-cash"><div class="v3-row"><h2>fluxo de caixa</h2><button type="button" class="v3-link" data-go="transactions">ver lançamentos</button></div>`
+      + `<div class="v3-home-bill"><span>Entrou nas contas</span><strong class="v3-sensitive">${money(t.income)}</strong></div>`
+      + `<div class="v3-home-bill"><span>Débito e faturas pagas</span><strong class="v3-sensitive">${money(outgoing)}</strong></div>`
+      + `<div class="v3-home-bill is-total"><span>Sobra em caixa</span><strong class="v3-sensitive">${money(U.round2(t.income-outgoing))}</strong></div></section>`;
+  }
+  function painelMetasInicio() {
+    const goals = (profile().goals || []).filter((goal) => Number(goal.target) > Number(goal.saved || 0));
+    return `<section class="v3-panel"><div class="v3-row"><h2>metas em andamento</h2><button type="button" class="v3-link" data-go="goals">ver metas</button></div>`
+      + (goals.length ? goals.slice(0,3).map((goal) => `<div class="v3-home-bill"><span><strong>${esc(goal.name)}</strong><small>${pct(100*Number(goal.saved||0)/Number(goal.target))}% concluído</small></span><strong class="v3-sensitive">${money(goal.saved || 0)} / ${money(goal.target)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma meta em andamento.</p>') + '</section>';
+  }
   function renderHome() {
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
     const hour=new Date().getHours(), greeting=hour<12?'bom dia':hour<18?'boa tarde':'boa noite';
     const metade = [blocoLigado('categorias') ? `<section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '',
       blocoLigado('proximos') ? `<section class="v3-panel"><h2>até o fim do mês</h2>${upcoming()}</section>` : ''].filter(Boolean).join('');
-    const direita = [blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : '', blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
+    const direita = [blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : '', blocoLigado('faturas') ? painelFaturasInicio() : '', blocoLigado('fluxo') ? painelFluxoInicio() : '', blocoLigado('metas') ? painelMetasInicio() : '', blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
     return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${blocoLigado('score') ? painelScore() : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
@@ -631,6 +660,27 @@
     }
     return true;
   }
+  function renderDueInvoices() {
+    if (state.filter === 'Entradas') return '';
+    const cards = profile().cards.filter((card) => !card.hidden);
+    const rows = cards.map((card) => {
+      if (demo) {
+        const items = sample.transactions.filter((tx) => tx.cardId === card.id && ymOf(tx.date) === state.ym && passaNoFiltro(tx));
+        return { card, invoice: { planned: Number(sample.cardInvoices[card.id] || 0), pago: 0, restante: Number(sample.cardInvoices[card.id] || 0), dueDate: '' }, items };
+      }
+      const invoice = Calc.invoice(card.id, state.ym, profile());
+      if (!invoice) return null;
+      const items = Calc.entries(invoice.openDate, invoice.closeDate, profile(), { incluirCancelados: true })
+        .filter((entry) => entry.kind === 'expense' && entry.cardId === card.id)
+        .map((entry) => ({ ...entry, id: entry.txId }))
+        .filter(passaNoFiltro);
+      return { card, invoice, items };
+    }).filter((row) => row && (row.items.length || row.invoice.planned > 0));
+    if (!rows.length) return '';
+    return `<section class="v3-due-invoices" aria-label="Faturas que vencem em ${esc(periodLabel(state.ym))}"><div class="v3-row"><div><h2>faturas de ${esc(periodLabel(state.ym))}</h2><p class="v3-muted">Compras agrupadas pelo mês do vencimento. A data original continua no histórico de cada compra.</p></div></div>`
+      + rows.map(({card,invoice,items}) => `<article class="v3-panel v3-due-invoice"><div class="v3-row"><div><span class="v3-label">${esc(card.name || card.bank)}</span><h3>${money(invoice.planned)}</h3><small>${invoice.dueDate ? `Vence ${esc(shortDate(invoice.dueDate))}` : 'Fatura do mês'} · abatido ${money(invoice.pago)} · falta ${money(invoice.restante)}</small></div><button type="button" class="v3-secondary" data-focus-invoice="${esc(card.id)}" data-invoice-ref="${esc(state.ym)}">Abrir fatura</button></div>`
+      + (items.length ? `<div class="v3-due-invoice-items">${items.map((item) => `<div class="v3-due-invoice-item${item.cancelado?' is-cancelada':''}"><span><button type="button" data-transaction="${esc(item.id)}">${esc(item.description)}</button><small>Compra ${esc(shortDate(item.date))} · ${esc(categoryName(item.categoryId))}${item.cancelado?' · cancelada':item.confirmed?'':' · prevista'}</small></span><strong class="v3-sensitive">${money(item.amount)}</strong></div>`).join('')}</div>` : '') + '</article>').join('') + '</section>';
+  }
   function painelFiltros() {
     const f = state.filtros;
     const contas = profile().accounts.filter((a) => !a.archived).map((a) => `<option value="account:${esc(a.id)}" ${f.fonte === 'account:' + a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('');
@@ -648,7 +698,7 @@
       + `<p class="v3-muted">O período continua sendo o mês escolhido no topo. Os filtros valem só nesta sessão.</p></form>`, 'Filtros');
   }
   function renderTransactions() {
-    const rows = currentTransactions({ comCancelados: true }).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
+    const rows = currentTransactions({ comCancelados: true }).filter((entry) => !entry.cardId).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
     const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
@@ -696,7 +746,7 @@
     });
 
     const ativos = filtrosAtivos();
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Entradas','Saídas'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}" aria-pressed="${state.filter === f}">${f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos || !['Todos','Entradas','Saídas'].includes(state.filter) ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button></div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}</div>`;
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Entradas','Saídas'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}" aria-pressed="${state.filter === f}">${f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos || !['Todos','Entradas','Saídas'].includes(state.filter) ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button></div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted v3-trans-explain">Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.</p><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}${renderDueInvoices()}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -728,6 +778,50 @@
     const itemAmount=walletItemValue(chosen);
     return `<div class="v3-grid v3-account-layout"><div>${wallet('SALDO EM CONTAS',true)}<button class="v3-wallet-add" type="button" data-action="add-account">＋ &nbsp; Adicionar conta ou cartão</button></div><section class="v3-panel v3-detail">${chosen ? `<div class="v3-row"><div><span class="v3-label">${chosen.kind === 'credit' ? `FATURA DE ${esc(niceMonth(refFatura).split(' de ')[0].toUpperCase())}${fatura ? ` · ${fatura.paid ? 'paga' : fatura.parcial ? 'parcial' : 'em aberto'}` : ''}` : 'EXTRATO DA CONTA'}</span><h2>${esc(chosen.data.name || chosen.data.bank)} •• ${esc(state.hideMoney ? ocultarDigitos(chosen.data.last4 || '••••') : (chosen.data.last4 || '••••'))}</h2><small>${chosen.kind === 'credit' ? `fecha dia ${esc(chosen.data.closingDay)} · vence dia ${esc(chosen.data.dueDay)}` : 'Movimentações confirmadas'}</small></div><strong class="v3-money v3-sensitive">${money(itemAmount)}</strong></div>${chosen.kind === 'credit' ? `<div style="margin-top:16px"><small>Limite usado · ${money(itemAmount)} de ${money(chosen.data.limit)}</small><div class="v3-bar"><span style="width:${pct(100 * itemAmount / (+chosen.data.limit || 1))}%"></span></div></div>` : ''}<div class="v3-detail-actions"><button class="v3-primary" type="button" data-action="new">Novo lançamento</button><button class="v3-secondary" type="button" data-action="edit-wallet-item" data-wallet-id="${esc(chosen.data.id)}">Editar ${chosen.kind==='credit'?'cartão':'conta'}</button><button class="v3-secondary" type="button" data-action="vault" data-wallet-id="${esc(chosen.data.id)}">Dados da conta · PIN</button>${chosen.kind==='credit'?`<button class="v3-secondary" type="button" data-action="pay-invoice" data-wallet-id="${esc(chosen.data.id)}">Pagar fatura</button>${fatura?`<button class="v3-secondary" type="button" data-action="fatura-quitar">${fatura.quitada||fatura.paid?'Reabrir fatura':'Encerrar fatura'}</button>${fatura.pago>0?`<button class="v3-secondary" type="button" data-action="fatura-desfazer">Desfazer pagamentos</button>`:''}`:''}`:''}</div>${fatura ? `<div class="v3-row v3-fatura-nav"><button type="button" class="v3-link" data-fatura-passo="-1" data-fatura-de="${esc(refFatura)}" aria-label="Fatura anterior">&lsaquo; anterior</button><small class="v3-mono">${esc(periodLabel(refFatura))} · fecha ${esc(shortDate(fatura.closeDate))} · vence ${esc(shortDate(fatura.dueDate))}</small><button type="button" class="v3-link" data-fatura-passo="1" data-fatura-de="${esc(refFatura)}" aria-label="Próxima fatura">próxima &rsaquo;</button></div>` : ''}${fatura && fatura.items.length ? fatura.items.map((it) => { const falta=U.round2(Math.max(0,it.amount-(it.adiantado||0))); return `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(it.date))}</span><strong>${esc(it.description)}</strong><span class="v3-mono">${it.adiantado?'ADIANTADO':'NA FATURA'}</span><span class="v3-mono v3-negative v3-sensitive">− ${money(it.amount)}</span>${falta>0?`<button type="button" class="v3-link" data-adiantar="${esc(it.key)}" data-adiantar-cartao="${esc(chosen.data.id)}">adiantar</button>`:'<span class="v3-mono v3-muted">pago</span>'}</div>`; }).join('') : related.length ? related.map((x) => `<div class="v3-detail-row"><span class="v3-mono v3-muted">${esc(shortDate(x.date))}</span><strong>${esc(x.description)}</strong><span class="v3-mono">${esc(x.methodLabel || (x.cardId ? 'CARTÃO' : 'CONTA'))}</span><span class="v3-mono ${x.kind==='income'?'v3-positive':'v3-negative'} v3-sensitive">${x.kind==='income'?'+':'−'} ${money(x.amount)}</span></div>`).join('') : '<p class="v3-muted">Nenhum movimento deste item no período.</p>'}` : (items().length ? `<h2>escolha uma conta ou cartão</h2><p class="v3-muted">${state.walletOpen?'Toque no item que quer acompanhar.':'Abra a carteira e toque no item que quer acompanhar.'}</p>` : '<h2>adicione uma conta ou cartão</h2><p class="v3-muted">A carteira mostrará faturas e extratos reais aqui.</p>')}</section></div>`;
   }
+  function enrichInvoiceDetail() {
+    const selected = selectedItem();
+    const detail = $('#v3-view .v3-detail');
+    if (!detail || !selected || selected.kind !== 'credit') return;
+    const card = selected.data;
+    const ref = state.invoiceRef || (demo ? state.ym : Calc.currentInvoiceRef(card, state.ym, profile()));
+    const invoice = demo ? {
+      planned: Number(sample.cardInvoices[card.id] || 0), pago: 0,
+      pagoFatura: 0, pagoAdiantado: 0,
+      restante: Number(sample.cardInvoices[card.id] || 0), pagamentos: [],
+      closeDate: '', dueDate: '', quitada: false
+    } : Calc.invoice(card.id, ref, profile());
+    if (!invoice) return;
+    const headingValue = detail.querySelector('.v3-row .v3-money');
+    if (headingValue) headingValue.textContent = money(invoice.planned);
+    const used = demo ? invoice.restante : Calc.cardUsed(card.id, profile());
+    const limitLabel = detail.querySelector('.v3-bar')?.previousElementSibling;
+    if (limitLabel) limitLabel.textContent = `Limite usado · ${money(used)} de ${money(card.limit)}`;
+    const limitBar = detail.querySelector('.v3-bar > span');
+    if (limitBar) limitBar.style.width = `${pct(100 * used / (+card.limit || 1))}%`;
+    const actions = detail.querySelector('.v3-detail-actions');
+    const closeButton = actions?.querySelector('[data-action="fatura-quitar"]');
+    if (closeButton && !(invoice.quitada && invoice.restante > 0)) closeButton.remove();
+    else if (closeButton) closeButton.textContent = 'Corrigir encerramento';
+    const status = invoice.restante <= 0 && invoice.planned > 0 ? 'Paga' : invoice.pago > 0 ? 'Parcial' : invoice.restante > 0 && !demo && U.todayISO() > invoice.dueDate ? 'Em atraso' : 'Em aberto';
+    const summary = `<div class="v3-invoice-summary" aria-label="Resumo da fatura de ${esc(periodLabel(ref))}">`
+      + `<div class="v3-invoice-summary-head"><span>Fatura de ${esc(periodLabel(ref))}</span><strong>${esc(status)}</strong></div>`
+      + `<div class="v3-invoice-values"><div><small>Total da fatura</small><strong class="v3-sensitive">${money(invoice.planned)}</strong></div>`
+      + `<div><small>Já abatido</small><strong class="v3-sensitive">${money(invoice.pago)}</strong></div>`
+      + `<div><small>Falta pagar</small><strong class="v3-sensitive">${money(invoice.restante)}</strong></div></div>`
+      + (demo ? '<p class="v3-muted">Prévia: a lista abaixo mostra só parte das compras desta fatura de exemplo.</p>' : '')
+      + (invoice.pagoAdiantado ? `<p class="v3-muted">${money(invoice.pagoAdiantado)} adiantado em compras · ${money(invoice.pagoFatura)} pago na fatura.</p>` : '')
+      + (invoice.quitada && invoice.restante > 0 ? `<p class="v3-invoice-warning">Esta fatura foi marcada como encerrada sem registrar todo o pagamento. O saldo continua pendente até ser abatido.</p>` : '')
+      + `</div>`;
+    actions?.insertAdjacentHTML('beforebegin', summary);
+    const navigation = detail.querySelector('.v3-fatura-nav');
+    if (navigation && invoice.pagamentos.length) {
+      const payments = `<div class="v3-invoice-history"><h3>Pagamentos registrados</h3>${invoice.pagamentos.map((payment) => {
+        const account = profile().accounts.find((item) => item.id === payment.accountId);
+        return `<div><span>${esc(shortDate(payment.at))} · ${esc(account?.name || 'Sem conta vinculada')}</span><strong class="v3-sensitive">${money(payment.amount)}</strong></div>`;
+      }).join('')}</div>`;
+      navigation.insertAdjacentHTML('afterend', payments);
+    }
+  }
   /* A demonstração não tem Calc com Store por trás, mas tem aportes
      com data e valor — o bastante para desenhar a mesma história:
      quanto foi posto até cada mês, e quanto aquilo vale. O valor
@@ -748,6 +842,57 @@
     });
   }
 
+  let investmentMarketRequest = null;
+  let investmentMarketData = { cdi: [], quotes: {} };
+  async function refreshInvestmentMarket(force) {
+    if (demo || state.sharedId || !global.V3Backend?.investmentMarket) return;
+    const list = profile().investments || [];
+    const floor = new Date(); floor.setUTCFullYear(floor.getUTCFullYear() - 9);
+    const floorISO = floor.toISOString().slice(0, 10);
+    const cdiDates = list.filter((x) => x.type === 'CDB' && x.indexer === 'cdi' && x.currentValue == null && x.date >= floorISO).map((x) => x.date);
+    const cdiStart = cdiDates.length ? cdiDates.sort()[0] : '';
+    const symbols = [...new Set(list.filter((x) => ['Ações', 'FIIs', 'ETF'].includes(x.type) && x.ticker && +x.quantity > 0 && x.currentValue == null).map((x) => x.ticker))].sort().slice(0, 10);
+    const quoteKey = symbols.join(',');
+    if (investmentMarketRequest) return investmentMarketRequest;
+    if (!force && Date.now() - state.market.loadedAt < 15 * 60 * 1000 && cdiStart === state.market.cdiStart && quoteKey === state.market.quoteKey) return;
+    state.market.loading = true; state.market.error = ''; state.market.historyError = ''; state.market.quoteError = '';
+    if (state.page === 'investments') render();
+    investmentMarketRequest = (async () => {
+      const jobs = [V3Backend.investmentMarket({ action: 'indices' }),
+        cdiStart ? V3Backend.investmentMarket({ action: 'cdi_history', start: cdiStart, end: U.todayISO() }) : Promise.resolve(null),
+        symbols.length ? V3Backend.investmentMarket({ action: 'quotes', symbols }) : Promise.resolve(null)];
+      const results = await Promise.allSettled(jobs);
+      if (results[0].status === 'fulfilled') state.market.indices = results[0].value;
+      else state.market.error = results[0].reason?.message || 'Índices indisponíveis.';
+      if (results[1].status === 'fulfilled') {
+        investmentMarketData.cdi = results[1].value?.observations || [];
+        state.market.cdiStart = cdiStart;
+      } else {
+        investmentMarketData.cdi = [];
+        state.market.historyError = results[1].reason?.message || 'Histórico CDI indisponível.';
+      }
+      if (results[2].status === 'fulfilled') {
+        investmentMarketData.quotes = Object.fromEntries((results[2].value?.quotes || []).map((x) => [x.requestedSymbol, x]));
+        state.market.quoteKey = quoteKey;
+      } else {
+        investmentMarketData.quotes = {};
+        state.market.quoteError = results[2].reason?.message || 'Cotações indisponíveis.';
+      }
+      state.market.cdiStart = cdiStart; state.market.quoteKey = quoteKey;
+      Calc.setInvestmentMarket({ cdiStart: state.market.cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
+      state.market.loadedAt = Date.now(); state.market.loading = false;
+      if (state.page === 'investments' || state.page === 'home') render();
+    })().finally(() => { investmentMarketRequest = null; });
+    return investmentMarketRequest;
+  }
+  function investmentMarketPanel() {
+    if (demo) return '<section class="v3-panel v3-market-panel"><h2>dados de mercado</h2><p class="v3-muted">Na demonstração, os valores são apenas exemplos. Na conta real, CDI e Selic vêm do Banco Central.</p></section>';
+    const m = state.market, i = m.indices;
+    const datum = (entry, digits) => entry && Number.isFinite(entry.value)
+      ? `<strong>${Number(entry.value).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits })}%</strong><small>${esc(shortDate(entry.date))}</small>`
+      : '<strong>—</strong><small>sem dado</small>';
+    return `<section class="v3-panel v3-market-panel" aria-live="polite"><div class="v3-row"><h2>referências de mercado</h2><button type="button" class="v3-link" data-action="refresh-invest-market" ${m.loading?'disabled':''}>${m.loading?'Atualizando…':'Atualizar'}</button></div><div class="v3-market-grid"><div><span>CDI · ao ano</span>${datum(i?.cdiAnnual, 2)}</div><div><span>CDI · ao dia</span>${datum(i?.cdiDaily, 6)}</div><div><span>Meta Selic · ao ano</span>${datum(i?.selicTarget, 2)}</div></div><p class="v3-muted">Fonte: Banco Central (SGS). Datas de referência acima; taxas não são o saldo da sua aplicação. CDB % do CDI usa o histórico diário para estimativa bruta, sem IR, IOF ou taxas do banco.</p>${m.error?`<p class="v3-market-warning">${esc(m.error)}</p>`:''}${m.historyError?`<p class="v3-market-warning">CDI: ${esc(m.historyError)}</p>`:''}${m.quoteError?`<p class="v3-market-warning">Cotações: ${esc(m.quoteError)}</p>`:''}</section>`;
+  }
   function renderInvestments() {
     if (state.investTab === 'planning') return renderPlanning();
     if (state.investTab === 'goals') return renderGoals();
@@ -763,19 +908,8 @@
     const colors = ['#5fa99b', '#8fb0c0', '#f0e5cf', '#729cab'];
     const distribution = [...byType].map(([name, value], i) => ({ name, value, color: colors[i % colors.length] })).filter((x) => x.value > 0);
     const first = list.length ? list.reduce((min, x) => x.date < min ? x.date : min, list[0].date) : null;
-    /* =============================================================
-       DUAS LINHAS, PORQUE O RENDIMENTO É O VÃO ENTRE ELAS
-       -------------------------------------------------------------
-       A curva de uma linha só respondia "quanto eu tenho" — mas quem
-       olha investimento quer saber quanto daquilo foi guardado e
-       quanto o dinheiro rendeu sozinho. Com as duas linhas, a
-       resposta é a distância entre elas, sem conta nenhuma.
-
-       A série também passa a existir na demonstração: ela era
-       desligada ali, e a tela dizia "a evolução aparece depois de
-       dois meses de aportes" mesmo havendo aportes desde março —
-       uma explicação que não era verdade.
-       ============================================================= */
+    /* A mesma série alimenta o gráfico comparativo de aportes e valor atual.
+       Na demonstração ela também parte dos aportes reais da prévia. */
     const series = first ? (demo ? serieDemo(list) : Calc.investmentSeries(ymOf(first), state.ym, profile()).slice(-12)) : [];
     const max = Math.max(1, ...series.map((x) => Math.max(x.value, x.contributed)));
     const linha = (campo) => series.length > 1
@@ -788,6 +922,50 @@
     const reserves=list.filter((x)=>x.type==='Porquinho'), cdbs=list.filter((x)=>x.type==='CDB');
     const collection=(items,empty)=>items.length?items.map((x)=>`<button type="button" class="v3-invest-bucket" data-investment="${esc(x.id)}"><span><strong>${esc(x.name)}</strong><small>${x.type==='CDB'?(x.maturityDate?`Vence em ${esc(shortDate(x.maturityDate))}`:'Sem vencimento informado')+' · '+(x.liquidity==='diaria'?'liquidez diária':x.liquidity==='vencimento'?'resgate no vencimento':'liquidez não informada'):'Dinheiro reservado'}</small></span><strong class="v3-sensitive">${money(valueAt(x))}</strong></button>`).join(''):`<p class="v3-muted">${empty}</p>`;
     return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Vale hoje</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de rendimento</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
+  }
+  function enrichInvestmentCharts() {
+    if (state.investTab !== 'overview') return;
+    const page = $('#v3-view .v3-invest-page');
+    if (page) page.insertAdjacentHTML('afterbegin', investmentMarketPanel());
+    const displayed = (profile().investments || []).filter((x) => x.date <= U.monthEnd(state.ym))
+      .slice().sort((a, b) => b.date.localeCompare(a.date));
+    document.querySelectorAll('#v3-view .v3-invest-row').forEach((row, index) => {
+      const item = displayed[index]; if (!item) return;
+      const quote = investmentMarketData.quotes[item.ticker];
+      const quoteAge = Date.now() - Date.parse(quote?.marketTime || '');
+      const validQuote = quote && state.ym === U.todayYM() && quoteAge >= 0 && quoteAge <= 7 * 86400000;
+      const note = item.currentValue != null ? 'Valor informado por você' : item.type === 'CDB' && item.indexer === 'cdi'
+        ? Calc.cdiValueAt(item, U.monthEnd(state.ym)) == null ? 'CDI não sincronizado; exibindo apenas o aporte' : `${item.rate}% do CDI · estimativa bruta até ${shortDate(investmentMarketData.cdi.at(-1)?.date || U.todayISO())}`
+        : ['Ações','FIIs','ETF'].includes(item.type) && item.ticker
+          ? validQuote ? `${item.ticker} · ${item.quantity} cotas · cotação de ${shortDate(quote.marketTime.slice(0, 10))}` : 'Sem cotação atual; exibindo apenas o aporte'
+          : '';
+      if (note) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small>${esc(note)}</small>`);
+    });
+    const list = (profile().investments || []).filter((item) => item.date <= U.monthEnd(state.ym));
+    if (!list.length) return;
+    const first = list.reduce((earliest, item) => item.date < earliest ? item.date : earliest, list[0].date);
+    const series = (demo ? serieDemo(list) : Calc.investmentSeries(ymOf(first), state.ym, profile())).slice(-6);
+    const svg = $('#v3-view .v3-invest .v3-wave svg');
+    if (svg && series.length > 1) {
+      const max = Math.max(1, ...series.map((point) => Math.max(point.value, point.contributed)));
+      const bars = `<div class="v3-invest-bars" role="img" aria-label="Barras mensais de valor aportado e valor atual">${series.map((point) => `<div class="v3-invest-bar-group" title="${esc(periodLabel(point.ym))}: aportado ${money(point.contributed)}, valor ${money(point.value)}"><div class="v3-invest-bar-pair"><i class="is-contributed" style="height:${pct(100*point.contributed/max)}%"></i><i class="is-current" style="height:${pct(100*point.value/max)}%"></i></div><small>${esc(point.ym.slice(5))}</small></div>`).join('')}</div>`;
+      const firstLabel = svg.parentElement.querySelector('.v3-axis span:first-child');
+      if (firstLabel) firstLabel.textContent = periodLabel(series[0].ym);
+      svg.insertAdjacentHTML('beforebegin', bars);
+      svg.remove();
+    }
+    const distribution = $('#v3-view .v3-invest .v3-distribution');
+    const mix = resumoInvestimentos().mix;
+    if (distribution && mix.length) {
+      const total = mix.reduce((sum, part) => sum + part.value, 0);
+      let progress = 0;
+      const stops = mix.map((part) => {
+        const from = progress;
+        progress += 100 * part.value / total;
+        return `${safeColor(part.color)} ${from}% ${progress}%`;
+      }).join(',');
+      distribution.outerHTML = `<div class="v3-allocation-ring" role="img" aria-label="Distribuição dos investimentos em ${mix.length} tipos" style="--ring:conic-gradient(${stops})"><span><strong>${mix.length}</strong><small>${mix.length===1?'tipo':'tipos'}</small></span></div>`;
+    }
   }
   /* =============================================================
      O ORÇAMENTO MORA NA CATEGORIA
@@ -1519,7 +1697,7 @@
   }
   function cocoTools() {
     const tools=[['debts','wallet','Dívidas','organizar a quitação'],['planning','calendar','Planejar','próximos meses'],['goals','goals','Metas','chegar com calma'],['analysis','reports','Análises','entender os números']];
-    return `<nav class="v3-coco-tools" aria-label="Atalhos financeiros da Coco">${tools.map(([id,glyph,title,sub])=>`<button type="button" class="v3-coco-tool" data-action="coco-topic" data-topic="${id}" aria-pressed="${cocoTopic===id}">${icon(glyph)}<span><strong>${title}</strong><small>${sub}</small></span></button>`).join('')}</nav>`;
+    return `<nav class="v3-coco-tools" aria-label="Atalhos financeiros da Coco">${tools.map(([id,glyph,title,sub])=>`<button type="button" class="v3-coco-tool" data-action="coco-topic" data-topic="${id}" aria-pressed="${cocoTopic===id}">${icon(glyph)}<span><strong>${title}</strong><small>${sub}</small></span></button>`).join('')}<button type="button" class="v3-coco-tool" data-coco-tab="Extratos">${icon('receipt')}<span><strong>Extratos</strong><small>importar com revisão</small></span></button><button type="button" class="v3-coco-tool" data-coco-tab="Memória">${icon('categories')}<span><strong>Memória</strong><small>regras e análises</small></span></button></nav>`;
   }
   function renderCocoAnalysis() {
     const months=Array.from({length:6},(_,i)=>U.addMonths(state.ym,i-5));
@@ -1546,6 +1724,9 @@
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (state.sharedId ? `<div class="v3-shared-banner" role="status">Perfil compartilhado · ${sharedCanEdit()?'pode editar os dados financeiros':'somente leitura'} · cofre e Coco indisponíveis</div>` : '') + (state.page==='investments'?investmentTabs():'') + (screens[state.page]||renderHome)();
+    if (state.page === 'wallet') enrichInvoiceDetail();
+    if (state.page === 'investments') enrichInvestmentCharts();
+    if (state.page === 'investments' && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
@@ -1668,7 +1849,8 @@
     finally {
       state.cocoLoading = false;
       if (cocoRefreshPending) { cocoRefreshPending = false; refreshCoco(); return; }
-      if (!$('#v3-overlay').hidden) openCoco();
+      const activeSheet = $('#v3-sheet');
+      if (!$('#v3-overlay').hidden && /coco|extrato|memória/i.test(activeSheet?.getAttribute('aria-label') || '')) openCoco();
       else if (state.page==='coco') render();
       scheduleAnalysisSync();
     }
@@ -1691,7 +1873,7 @@
   }
   function renderCocoImport() {
     const report = state.importPreview;
-    const picker='<input id="v3-coco-file" type="file" accept="application/pdf,text/csv,.pdf,.csv" hidden>';
+    const picker='<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv" hidden>';
     if (!report) return `<div class="v3-import-empty"><h2>seus extratos, sem adivinhação</h2><p>Escolha um CSV ou PDF de extrato. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.</p><button type="button" class="v3-secondary" data-action="choose-coco-file">Escolher arquivo</button><small>Layouts ainda desconhecidos e PDFs digitalizados não são importados.</small>${picker}</div>`;
     const accounts = profile().accounts.filter((account) => !account.archived && (!account.moeda || account.moeda === 'BRL'));
     const visible = report.rows.slice(0, state.importLimit);
@@ -1752,6 +1934,8 @@
     const meioInicial = editing ? (editing.meio || '') : '';
     openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><details class="v3-mais" ${editing?.recurring || Number(editing?.installments) > 1 ? 'open' : ''}><summary>Mais detalhes</summary><div class="v3-mais-corpo"><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label></div></details><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     const txForm=document.getElementById('v3-form-tx');
+    const invoiceHint=txForm.querySelector('#v3-tx-fatura small');
+    if(invoiceHint) invoiceHint.textContent='Calculada pela data real da compra, fechamento e vencimento do cartão.';
     const destination=txForm.elements.destination;
     if(destination) destination.innerHTML='<option value="">Selecione</option>'+profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${editing?.toAccountId===a.id?'selected':''}>${esc(a.name||a.bank)} •• ${esc(a.last4||'')} · ${esc(a.moeda||'BRL')}</option>`).join('');
     const installmentsField=txForm.elements.installments?.closest('label');
@@ -1885,9 +2069,10 @@
     const [tipo, id] = String(form.elements.source.value || '').split(':');
     const card = tipo === 'card' ? profile().cards.find((c) => c.id === id) : null;
     bloco.hidden = !card;
-    data.hidden = !!card;
+    data.hidden = false;
     if (!card) return;
-    let escolhida = campo.value;
+    const base = form.elements.date.value;
+    let escolhida = U.isValidISO(base) ? Calc.invoiceRefOfDate(card, base) : campo.value;
     try {
       /* Na demonstração não há Store por trás do Calc; a lista sai do
          mês em exibição, que é o bastante para a tela existir. */
@@ -1898,10 +2083,7 @@
         campo.innerHTML = opcoesDemo.map((ref) => `<option value="${esc(ref)}" ${ref === escolhida ? 'selected' : ''}>fatura de ${esc(periodLabel(ref))}</option>`).join('');
         return;
       }
-      if (!escolhida) {
-        const base = form.elements.date.value;
-        escolhida = (U.isValidISO(base) && Calc.invoiceRefOfDate(card, base)) || Calc.currentInvoiceRef(card, state.ym, profile());
-      }
+      if (!escolhida) escolhida = Calc.currentInvoiceRef(card, state.ym, profile());
       const hoje = Calc.currentInvoiceRef(card, U.todayYM(), profile());
       const opcoes = [];
       for (let k = -12; k <= 24; k++) opcoes.push(U.addMonths(hoje, k));
@@ -1947,11 +2129,13 @@
   }
   function invoicePaymentForm(cardId) {
     const card=profile().cards.find((c)=>c.id===cardId);
-    const invoice=card?(demo?{planned:sample.cardInvoices[cardId]||0,pago:0,restante:sample.cardInvoices[cardId]||0,paidAccountId:null}:Calc.invoice(cardId,state.ym,profile())):null;
+    const focus=faturaEmFoco();
+    const ref=focus && focus.card.id===cardId ? focus.ref : state.ym;
+    const invoice=card?(demo?{planned:sample.cardInvoices[cardId]||0,pago:0,restante:sample.cardInvoices[cardId]||0,paidAccountId:null}:Calc.invoice(cardId,ref,profile())):null;
     if (!invoice || !(invoice.restante>0)) { toast('Não há valor pendente nesta fatura.'); return; }
     const accounts=profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${invoice.paidAccountId===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
     const fmt=(n)=>Number(n).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-    openSheet(`${sheetTop('pagar fatura',`${card.name} · ${niceMonth(state.ym)}`)}<form class="v3-form" id="v3-form-invoice"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(state.ym)}"><p>Fatura: <strong>${money(invoice.planned)}</strong> · já pago: <strong>${money(invoice.pago)}</strong> · falta: <strong>${money(invoice.restante)}</strong></p><label>VALOR PAGO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(fmt(invoice.restante))}" required></label><label>DATA DO PAGAMENTO<input type="date" name="date" value="${U.todayISO()}" required></label><label>SAIU DA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${accounts}</select></label><label>COMO<select name="meio"><option value="">Não informado</option>${(Store.MEIOS||[]).map((m)=>`<option value="${esc(m.id)}">${esc(m.nome)}</option>`).join('')}</select></label><p class="v3-muted">É um pagamento da fatura, não uma nova despesa. Se escolher uma conta, o valor sai do saldo dela.</p><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Registrar pagamento'}</button></form>`,'Pagamento de fatura');
+    openSheet(`${sheetTop('pagar fatura',`${card.name} · ${niceMonth(ref)}`)}<form class="v3-form" id="v3-form-invoice"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(ref)}"><p>Fatura: <strong>${money(invoice.planned)}</strong> · já pago: <strong>${money(invoice.pago)}</strong> · falta: <strong>${money(invoice.restante)}</strong></p><label>VALOR PAGO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(fmt(invoice.restante))}" required></label><label>DATA DO PAGAMENTO<input type="date" name="date" value="${U.todayISO()}" required></label><label>SAIU DA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${accounts}</select></label><label>COMO<select name="meio"><option value="">Não informado</option>${(Store.MEIOS||[]).map((m)=>`<option value="${esc(m.id)}">${esc(m.nome)}</option>`).join('')}</select></label><p class="v3-muted">É um pagamento da fatura, não uma nova despesa. Se escolher uma conta, o valor sai do saldo dela.</p><button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Registrar pagamento'}</button></form>`,'Pagamento de fatura');
   }
   /* =============================================================
      ADIANTAR UMA COMPRA
@@ -1965,7 +2149,9 @@
      ============================================================= */
   function advanceForm(cardId, chave) {
     const card = profile().cards.find((c) => c.id === cardId);
-    const inv = card ? Calc.invoice(cardId, state.ym, profile()) : null;
+    const focus = faturaEmFoco();
+    const ref = focus && focus.card.id === cardId ? focus.ref : state.ym;
+    const inv = card ? Calc.invoice(cardId, ref, profile()) : null;
     const item = inv && inv.items.find((i) => i.key === chave);
     if (!item) { toast('Esta compra não está mais nesta fatura.'); return; }
     const falta = U.round2(Math.max(0, item.amount - (item.adiantado || 0)));
@@ -1974,8 +2160,8 @@
       .map((a) => `<option value="${esc(a.id)}">${esc(a.bank || a.name)}</option>`).join('');
     const fmt = (n) => Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop('adiantar compra', `${item.description} · ${card.name}`)}`
-      + `<form class="v3-form" id="v3-form-advance"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(state.ym)}"><input type="hidden" name="chave" value="${esc(chave)}">`
-      + `<p>Compra de <strong>${money(item.amount)}</strong> em ${esc(shortDate(item.date))}, cobrada na fatura de ${esc(niceMonth(state.ym))}.${item.adiantado ? ` Já adiantado: <strong>${money(item.adiantado)}</strong>.` : ''}</p>`
+      + `<form class="v3-form" id="v3-form-advance"><input type="hidden" name="cardId" value="${esc(cardId)}"><input type="hidden" name="ref" value="${esc(ref)}"><input type="hidden" name="chave" value="${esc(chave)}">`
+      + `<p>Compra de <strong>${money(item.amount)}</strong> em ${esc(shortDate(item.date))}, cobrada na fatura de ${esc(niceMonth(ref))}.${item.adiantado ? ` Já adiantado: <strong>${money(item.adiantado)}</strong>.` : ''}</p>`
       + `<label>VALOR ADIANTADO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(fmt(falta))}" required></label>`
       + `<label>DATA DO PAGAMENTO<input type="date" name="date" value="${U.todayISO()}" required></label>`
       + `<label>SAIU DA CONTA<select name="accountId"><option value="">Não descontar de conta</option>${contas}</select></label>`
@@ -1987,7 +2173,7 @@
      abaixo agem sobre ELA, e não sobre a do mês do app — que podem
      ser faturas diferentes. */
   function faturaEmFoco() {
-    const item = state.selected ? itemById(state.selected) : null;
+    const item = selectedItem();
     if (!item || item.kind !== 'credit') return null;
     try {
       const ref = state.invoiceRef || Calc.currentInvoiceRef(item.data, state.ym, profile());
@@ -2056,8 +2242,158 @@
     const accounts = availableAccounts.map((a) => `<option value="${esc(a.id)}" ${selectedAccount === a.id ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
     const amount = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop(item ? 'editar investimento' : chosenType==='Porquinho'?'novo porquinho':'novo investimento', demo ? 'demonstração sem gravação' : 'carteira de investimentos')}<form class="v3-form" id="v3-form-investment"><input type="hidden" name="id" value="${esc(item?.id || '')}"><label>NOME<input name="name" maxlength="60" value="${esc(item?.name || '')}" placeholder="Ex.: reserva de emergência" required></label><label>TIPO<select name="type">${options}</select></label><div class="v3-form-row"><label>VALOR APORTADO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(amount(item?.amount))}" placeholder="0,00" required></label><label>DATA DO APORTE<input type="date" name="date" value="${esc(item?.date || U.todayISO())}" required></label></div><div id="v3-invest-yield" ${chosenType==='Porquinho'?'hidden':''}><div class="v3-form-row"><label>TAXA ESTIMADA (% A.A.)<input name="rate" inputmode="decimal" value="${esc(item?.rate == null ? '' : String(item.rate).replace('.', ','))}" placeholder="Opcional"></label><label>VALOR ATUAL INFORMADO (R$)<input name="currentValue" data-money="true" inputmode="decimal" value="${esc(amount(item?.currentValue))}" placeholder="Opcional"></label></div><div id="v3-invest-cdb" ${chosenType==='CDB'?'':'hidden'}><div class="v3-form-row"><label>VENCIMENTO<input type="date" name="maturityDate" value="${esc(item?.maturityDate||'')}"></label><label>LIQUIDEZ<select name="liquidity"><option value="" ${!item?.liquidity?'selected':''}>Não informada</option><option value="diaria" ${item?.liquidity==='diaria'?'selected':''}>Diária</option><option value="vencimento" ${item?.liquidity==='vencimento'?'selected':''}>No vencimento</option></select></label></div><small>Taxa prefixada estimada. Para CDB atrelado ao CDI, informe o valor atual do banco; o OAZE não consulta CDI automaticamente.</small></div></div><label>DEBITAR DE UMA CONTA<select name="accountId"><option value="">Não debitar</option>${accounts}</select></label><label>OBSERVAÇÕES<input name="notes" maxlength="240" value="${esc(item?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted" id="v3-invest-help" ${chosenType==='Porquinho'?'':'hidden'}>Porquinhos não rendem automaticamente aqui. Ao vinculá-los a uma conta, o valor sai do saldo disponível e continua no patrimônio, sem contagem dupla.</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : item ? 'Salvar alterações' : 'Registrar aporte'}</button>${item ? `<button type="button" class="v3-secondary" data-action="delete-investment" data-investment="${esc(item.id)}">Excluir aporte</button>` : ''}</form>`,'Investimento');
+    const cdbFields=document.getElementById('v3-invest-cdb');
+    cdbFields?.insertAdjacentHTML('afterbegin', `<label>RENDIMENTO DO CDB<select name="indexer"><option value="cdi" ${item?.indexer==='fixed'?'':'selected'}>Percentual do CDI · automático</option><option value="fixed" ${item?.indexer==='fixed'?'selected':''}>Prefixado · taxa anual informada</option></select></label>`);
+    cdbFields?.querySelector('small')?.replaceChildren(document.createTextNode('Estimativa bruta pelo CDI oficial. O saldo do banco continua sendo a referência; informe-o acima se quiser prevalecer.'));
+    document.getElementById('v3-invest-yield')?.insertAdjacentHTML('beforeend', `<div id="v3-invest-market-fields"><div class="v3-form-row"><label>TICKER<input name="ticker" maxlength="8" autocomplete="off" value="${esc(item?.ticker||'')}" placeholder="Ex.: PETR4"></label><label>QUANTIDADE<input name="quantity" type="number" min="0" step="any" value="${esc(item?.quantity||'')}" placeholder="Ex.: 10"></label></div><small>Para ações, FIIs e ETFs. Cotação brapi em reais; sem cotação, o OAZE mantém o valor informado ou o aporte.</small></div>`);
+    if (!item && chosenType === 'CDB') document.querySelector('#v3-form-investment [name="rate"]').value = '100';
+    updateInvestmentFormFields(document.getElementById('v3-form-investment'));
     const accountField=document.querySelector('#v3-form-investment [name="accountId"]');
     if(accountField)accountField.required=chosenType==='Porquinho';
+    setupInvestmentAssistant(document.getElementById('v3-form-investment'));
+  }
+  function updateInvestmentFormFields(form) {
+    if (!form) return;
+    const type=form.elements.type.value, cdb=type==='CDB', indexer=form.elements.indexer?.value;
+    const marketFields=document.getElementById('v3-invest-market-fields');
+    if (marketFields) marketFields.hidden=!['Ações','FIIs','ETF'].includes(type);
+    const rateField=form.elements.rate;
+    if (rateField) {
+      rateField.parentElement.firstChild.textContent=cdb && indexer==='cdi'?'PERCENTUAL DO CDI (%)':'TAXA ESTIMADA (% A.A.)';
+      rateField.placeholder=cdb && indexer==='cdi'?'Ex.: 110':'Opcional';
+    }
+  }
+  function setupInvestmentAssistant(form) {
+    if (!form) return;
+    form.querySelector('button[type="submit"]').insertAdjacentHTML('beforebegin',
+      '<section class="v3-invest-assist" aria-live="polite"><div class="v3-invest-assist-head"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><strong>Coco acompanha este aporte</strong></div><p class="v3-invest-assist-status">Informe o nome e o valor para receber uma sugestão. Nada será alterado sem você confirmar.</p><div class="v3-invest-assist-suggestion" hidden></div><div class="v3-invest-assist-valuation"></div></section>');
+    const status = form.querySelector('.v3-invest-assist-status');
+    const suggestionBox = form.querySelector('.v3-invest-assist-suggestion');
+    const valuation = form.querySelector('.v3-invest-assist-valuation');
+    let timer, marketTimer, suggestion = null, lastName = '', marketKey = '', serial = 0;
+    const live = () => form.isConnected && document.getElementById('v3-form-investment') === form;
+    const amountNow = () => parseMoney(form.elements.amount.value);
+    const showValuation = (title, detail) => {
+      valuation.innerHTML = `<strong>${esc(title)}</strong><small>${esc(detail)}</small>`;
+    };
+    function renderValuation() {
+      if (!live()) return;
+      const type = form.elements.type.value, amount = amountNow(), date = form.elements.date.value;
+      const manual = form.elements.currentValue.value.trim();
+      if (!(amount > 0) || !U.isValidISO(date)) { showValuation('Prévia do valor', 'Informe valor aportado e data.'); return; }
+      if (manual) {
+        const typedValue = parseMoney(manual);
+        if (!Number.isFinite(typedValue) || typedValue < 0) { showValuation('Confira o valor atual informado', 'Use um valor em reais válido.'); return; }
+        showValuation(`${money(typedValue)} · valor informado`, 'Valor digitado por você; prevalece sobre cotações e estimativas.'); return;
+      }
+      if (type === 'Porquinho') { showValuation(`${money(amount)} · reservado`, 'Sem rendimento automático; não é cotação.'); return; }
+      if (['Ações', 'FIIs', 'ETF'].includes(type)) {
+        const ticker = String(form.elements.ticker.value || '').trim().toUpperCase();
+        const quantity = Number(String(form.elements.quantity.value || '').replace(',', '.'));
+        if (!/^[A-Z0-9]{4,8}$/.test(ticker) || !(quantity > 0)) {
+          showValuation('Faltam ticker e quantidade', 'O valor aportado sozinho não revela quantas cotas você possui.'); return;
+        }
+        const quote = investmentMarketData.quotes[ticker];
+        const age = Date.now() - Date.parse(quote?.marketTime || '');
+        if (quote?.currency === 'BRL' && Number.isFinite(+quote.price) && age >= 0 && age <= 7 * 86400000) {
+          showValuation(`${money(+quote.price * quantity)} · cotação × quantidade`, `${ticker} · ${money(quote.price)} por cota · brapi, ${new Date(quote.marketTime).toLocaleString('pt-BR')}. Cotação pode ter atraso; não comprova posição.`);
+        } else showValuation('Cotação não disponível', `${ticker} · ${quantity} cotas. O aporte de ${money(amount)} não é apresentado como valor atual.`);
+        return;
+      }
+      if (date > U.todayISO()) { showValuation(`${money(amount)} · aporte planejado`, 'Ainda não há rendimento realizado.'); return; }
+      const indexer = type === 'CDB' && form.elements.indexer.value === 'cdi' ? 'cdi' : 'fixed';
+      const rate = Number(String(form.elements.rate.value || '').replace(',', '.'));
+      if (type === 'CDB' && indexer === 'cdi' && (!Number.isFinite(rate) || rate <= 0)) {
+        showValuation('Informe o percentual do CDI', 'Ex.: 110% do CDI.'); return;
+      }
+      if (type === 'CDB' && indexer === 'cdi' && (!investmentMarketData.cdi.length || !state.market.cdiStart || date < state.market.cdiStart)) {
+        showValuation('Aguardando CDI histórico', 'Sem a série do Banco Central, não há estimativa atual confiável.'); return;
+      }
+      if (!Number.isFinite(rate) || rate < -100 || rate > 100 && indexer !== 'cdi') { showValuation('Confira a taxa', 'Não foi possível calcular a estimativa.'); return; }
+      const hypothetical = { type, amount, date, rate, indexer,
+        maturityDate: form.elements.maturityDate?.value || null, currentValue: null };
+      const value = Calc.investmentValueAt(hypothetical, U.todayISO());
+      const detail = type === 'CDB' && indexer === 'cdi'
+        ? `${rate}% do CDI histórico até ${shortDate(investmentMarketData.cdi.at(-1)?.date || U.todayISO())} · bruto, sem impostos, taxas ou regras do banco.`
+        : rate ? `${rate}% ao ano informado por você · projeção matemática, não saldo do banco.`
+          : 'Sem taxa informada, só mostramos o valor aportado.';
+      showValuation(`${money(value)} · ${rate ? 'estimativa bruta' : 'aportado'}`, detail);
+    }
+    async function loadMarket() {
+      if (demo || state.sharedId || !global.V3Backend?.investmentMarket || !live()) return;
+      const type = form.elements.type.value, ticker = String(form.elements.ticker.value || '').trim().toUpperCase();
+      const date = form.elements.date.value;
+      const equities = ['Ações', 'FIIs', 'ETF'].includes(type);
+      const cdi = type === 'CDB' && form.elements.indexer.value === 'cdi';
+      const key = equities && /^[A-Z0-9]{4,8}$/.test(ticker) ? `quote:${ticker}` : cdi && U.isValidISO(date) && date <= U.todayISO() ? `cdi:${date}` : '';
+      if (!key || key === marketKey) return;
+      marketKey = key;
+      try {
+        if (key.startsWith('quote:')) {
+          const data = await V3Backend.investmentMarket({ action: 'quotes', symbols: [ticker] });
+          const quote = (data.quotes || []).find((entry) => entry.requestedSymbol === ticker);
+          if (quote) investmentMarketData.quotes[ticker] = quote;
+        } else {
+          const floor = new Date(); floor.setUTCFullYear(floor.getUTCFullYear() - 9);
+          if (date < floor.toISOString().slice(0, 10)) { showValuation('Histórico indisponível', 'O cálculo automático cobre até nove anos.'); return; }
+          const data = await V3Backend.investmentMarket({ action: 'cdi_history', start: date, end: U.todayISO() });
+          if (!live() || marketKey !== key) return;
+          investmentMarketData.cdi = data.observations || [];
+          state.market.cdiStart = date;
+        }
+        Calc.setInvestmentMarket({ cdiStart: state.market.cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
+        renderValuation();
+      } catch (error) {
+        if (live() && key === marketKey) {
+          marketKey = '';
+          showValuation('Fonte de mercado indisponível', `${error.message || 'Tente novamente mais tarde.'} Seus dados não foram alterados.`);
+        }
+      }
+    }
+    async function askCoco() {
+      const name = form.elements.name.value.trim(), amount = amountNow();
+      if (!live() || demo || state.sharedId || name.length < 4 || !(amount > 0) || name === lastName) return;
+      lastName = name;
+      const request = ++serial;
+      status.textContent = 'Coco está identificando o investimento…';
+      suggestionBox.hidden = true;
+      try {
+        const data = await V3Backend.investmentMarket({ action: 'interpret', name });
+        if (!live() || request !== serial || form.elements.name.value.trim() !== name) return;
+        suggestion = data.suggestion;
+        if (!suggestion?.type) { status.textContent = 'Coco não identificou o tipo com segurança. Escolha os campos manualmente.'; return; }
+        const parts = [suggestion.type, suggestion.ticker, suggestion.rate && suggestion.indexer === 'cdi' ? `${suggestion.rate}% do CDI` : null].filter(Boolean);
+        status.textContent = 'Sugestão da Coco · confira antes de aplicar';
+        suggestionBox.hidden = false;
+        suggestionBox.innerHTML = `<span>${esc(parts.join(' · '))}</span><button type="button">Usar sugestão</button>`;
+      } catch (error) {
+        if (live() && request === serial) status.textContent = `${error.message || 'Coco indisponível.'} Você pode preencher manualmente.`;
+      }
+    }
+    suggestionBox.addEventListener('click', (event) => {
+      if (!event.target.closest('button') || !suggestion?.type) return;
+      form.elements.type.value = suggestion.type;
+      form.elements.type.dispatchEvent(new Event('change', { bubbles: true }));
+      if (suggestion.ticker) form.elements.ticker.value = suggestion.ticker;
+      if (suggestion.indexer) form.elements.indexer.value = suggestion.indexer;
+      if (suggestion.rate != null) form.elements.rate.value = String(suggestion.rate).replace('.', ',');
+      updateInvestmentFormFields(form);
+      suggestionBox.hidden = true;
+      status.textContent = 'Sugestão aplicada. Confira ticker, quantidade e taxa antes de salvar.';
+      renderValuation(); loadMarket();
+    });
+    const changed = (event) => {
+      if (!event.target.matches('input,select')) return;
+      renderValuation();
+      clearTimeout(marketTimer); marketTimer = setTimeout(loadMarket, 500);
+      if (event.target.name === 'name' || event.target.name === 'amount') {
+        clearTimeout(timer); timer = setTimeout(askCoco, 1800);
+      }
+    };
+    form.addEventListener('input', changed);
+    form.addEventListener('change', changed);
+    renderValuation();
+    if (form.elements.name.value.trim()) { loadMarket(); }
   }
   function goalForm(id) {
     const goal = id ? profile().goals.find((g) => g.id === id) : null;
@@ -2243,12 +2579,12 @@
     const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived && (transfer || !a.hidden))
       : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId && !c.hidden) : null;
     if (!instrument) { toast('Escolha uma conta ou cartão válido.'); return; }
-    /* A data real da compra sai da FATURA escolhida: é por ela que
-       a pessoa pensa, e o dia é detalhe do ciclo. Editar mantém o dia
-       original quando ele já cabe na fatura pedida. */
+    /* A data da compra é a data real; a fatura decorre do ciclo do cartão. */
     const refEscolhida=String(fd.get('fatura')||'');
     if (sourceType==='card' && /^\d{4}-\d{2}$/.test(refEscolhida)) {
-      try { date=Calc.dateForInvoice(instrument, refEscolhida, editing?editing.date:null); } catch (e) { /* segue com a data do campo */ }
+      if (Calc.invoiceRefOfDate(instrument,date)!==refEscolhida) {
+        toast('A data da compra não pertence à fatura selecionada. Ajuste a data ou mantenha a fatura calculada.'); return;
+      }
     }
     if (transfer && (!destination || destination===sourceId || sourceType!=='account' || !profile().accounts.some((a)=>a.id===destination && !a.archived))) { toast('Escolha duas contas diferentes para transferir.'); return; }
     const recurring=fd.get('recurring')==='on', recurEnd=String(fd.get('recurEnd')||'');
@@ -2381,14 +2717,20 @@
     const currentValue = rawCurrent ? parseMoney(rawCurrent) : null;
     const rawRate = String(fd.get('rate') || '').trim().replace(',', '.');
     const rate = rawRate ? Number(rawRate) : 0;
+    const indexer = type==='CDB' && fd.get('indexer')==='cdi' ? 'cdi' : 'fixed';
+    const marketType = ['Ações','FIIs','ETF'].includes(type);
+    const ticker = marketType ? String(fd.get('ticker') || '').trim().toUpperCase() : '';
+    const rawQuantity = marketType ? String(fd.get('quantity') || '').trim().replace(',', '.') : '';
+    const quantity = rawQuantity ? Number(rawQuantity) : null;
     const accountId = String(fd.get('accountId') || '') || null;
     const maturityDate=type==='CDB'?String(fd.get('maturityDate')||''):'';
     const liquidity=type==='CDB'?String(fd.get('liquidity')||''):'';
-    if (!name || !Store.INVESTMENT_TYPES.includes(type) || !(amount > 0) || !U.isValidISO(date) || !Number.isFinite(rate) || rate < -100 || rate > 100 || (currentValue != null && (!Number.isFinite(currentValue) || currentValue < 0)) || (accountId && !profile().accounts.some((a) => a.id === accountId && !a.archived)) || (type==='Porquinho'&&!accountId) || (maturityDate&&(!U.isValidISO(maturityDate)||maturityDate<date)) || !['','diaria','vencimento'].includes(liquidity)) {
+    if (!name || !Store.INVESTMENT_TYPES.includes(type) || !(amount > 0) || !U.isValidISO(date) || !Number.isFinite(rate) || (indexer==='cdi' ? rate<=0 || rate>300 : rate < -100 || rate > 100) || (currentValue != null && (!Number.isFinite(currentValue) || currentValue < 0)) || (accountId && !profile().accounts.some((a) => a.id === accountId && !a.archived)) || (type==='Porquinho'&&!accountId) || (maturityDate&&(!U.isValidISO(maturityDate)||maturityDate<date)) || !['','diaria','vencimento'].includes(liquidity) || ((ticker || quantity != null) && (!/^[A-Z0-9]{4,8}$/.test(ticker) || !(quantity > 0) || quantity > 1e12))) {
       toast('Confira nome, tipo, valor, data, taxa e conta.'); return;
     }
     if (id && !profile().investments.some((x) => x.id === id)) { toast('Este aporte não existe mais. Atualize a página.'); return; }
-    const data = { name, type, amount, date, rate:type==='Porquinho'?0:rate, currentValue:type==='Porquinho'?null:currentValue, accountId, maturityDate:maturityDate||null, liquidity:liquidity||null, notes: String(fd.get('notes') || '').trim().slice(0, 240) };
+    const data = { name, type, amount, date, rate:type==='Porquinho'?0:rate, indexer, ticker:ticker||null, quantity,
+      currentValue:type==='Porquinho'?null:currentValue, accountId, maturityDate:maturityDate||null, liquidity:liquidity||null, notes: String(fd.get('notes') || '').trim().slice(0, 240) };
     try {
       await V3Backend.mutate(() => id ? Store.investments.update(id, data) : Store.investments.add(data));
       closeSheet(); render(); toast('Aporte salvo na sua conta.');
@@ -2783,7 +3125,7 @@
     } catch (error) { toast(error.message || 'Não consegui atualizar a recorrência.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-focus-invoice],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (state.sharedId && !sharedCanEdit() && !target.dataset.go && !target.dataset.profile &&
       !['profiles','close','back','privacy','notifications','period','shared-open','shared-revoke','sign-out','switch-account'].includes(target.dataset.action) &&
@@ -2804,6 +3146,7 @@
        cartão do meio: ele já está escolhido, e clicar de novo não
        deve desescolhê-lo — a carteira ficaria sem cartão aberto. */
     if (target.dataset.select) { state.selected=target.dataset.select; state.invoiceRef=null; render(); return; }
+    if (target.dataset.focusInvoice) { state.walletKind='credit';state.walletOpen=true;state.selected=target.dataset.focusInvoice;state.invoiceRef=target.dataset.invoiceRef||state.ym;go('wallet');return; }
     if (target.dataset.walletKind) { state.walletKind=target.dataset.walletKind; state.selected=null; render(); return; }
     if (target.dataset.filter) { state.filter=state.filter===target.dataset.filter?'Todos':target.dataset.filter; render(); return; }
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
@@ -2843,6 +3186,7 @@
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
+    if (action==='refresh-invest-market') { refreshInvestmentMarket(true); return; }
     if (action==='shared-open') {openShared(target.dataset.shareId);return;}
     if (action==='shared-revoke') {
       if(!confirm('Encerrar este compartilhamento agora? O acesso será perdido imediatamente.'))return;
@@ -2970,7 +3314,7 @@
         .catch((e)=>toast(e.message||'Não consegui revogar o acesso.'));
       return;
     }
-    if (action==='choose-coco-file') { if (!$('#v3-coco-file')) { state.cocoTab='Conversa';openCoco(); } $('#v3-coco-file')?.click();return; }
+    if (action==='choose-coco-file') { const picker=target.closest('#v3-sheet')?.querySelector('#v3-coco-import-file') || $('#v3-coco-file'); picker?.click();return; }
     if (action==='import-more') { state.importLimit=Math.min(state.importLimit+30,state.importPreview?.rows.length||30);openCoco();return; }
     if (action==='review-import-row') {
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
@@ -3038,6 +3382,7 @@
     if (action==='fatura-quitar') { quitarFatura(); return; }
     if (action==='fatura-desfazer') { desfazerPagamentos(); return; }
     if (action==='confirm-fatura-desfazer') { confirmarDesfazerPagamentos(); return; }
+    if (action==='open-bills'){state.walletKind='credit';state.selected=null;state.invoiceRef=null;go('wallet');return;}
     if (action==='pay-invoice'){invoicePaymentForm(target.dataset.walletId);return;}
     if (action==='delete-wallet-item') {
       const id=target.dataset.walletId,isCard=target.dataset.walletType==='card';
@@ -3250,7 +3595,7 @@
     document.addEventListener('scroll',()=>closeStatusMenu(false),true);
     document.addEventListener('change',(event)=>{
       if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
-      if (event.target?.id!=='v3-coco-file') return;
+      if (!['v3-coco-file','v3-coco-import-file'].includes(event.target?.id)) return;
       const file=event.target.files?.[0];
       event.target.value='';
       if (file) readCocoMedia(file);
@@ -3261,17 +3606,20 @@
       const text=String(ev.data??''),replace=input.selectionStart===0&&input.selectionEnd===input.value.length;
       if(ev.inputType==='insertText'||ev.inputType==='insertCompositionText'){
         if(text===','||text==='.') {ev.preventDefault();return;}
-        if(/^\d$/.test(text)){ev.preventDefault();input.value=U.moneyGrow(input.value,text,replace);input.setSelectionRange(input.value.length,input.value.length);}
+        if(/^\d$/.test(text)){ev.preventDefault();input.value=U.moneyGrow(input.value,text,replace);input.setSelectionRange(input.value.length,input.value.length);input.dispatchEvent(new Event('input',{bubbles:true}));}
       } else if(ev.inputType==='deleteContentBackward'){
-        ev.preventDefault();input.value=replace?U.fmtNum(0):U.moneyShrink(input.value);input.setSelectionRange(input.value.length,input.value.length);
+        ev.preventDefault();input.value=replace?U.fmtNum(0):U.moneyShrink(input.value);input.setSelectionRange(input.value.length,input.value.length);input.dispatchEvent(new Event('input',{bubbles:true}));
       }
     });
-    document.addEventListener('paste',(ev)=>{const input=ev.target;if(!(input instanceof HTMLInputElement)||input.dataset.money!=='true')return;ev.preventDefault();const n=U.parseMoney(ev.clipboardData?.getData('text')||'');if(n!=null&&n>=0)input.value=U.fmtNum(n);});
+    document.addEventListener('paste',(ev)=>{const input=ev.target;if(!(input instanceof HTMLInputElement)||input.dataset.money!=='true')return;ev.preventDefault();const n=U.parseMoney(ev.clipboardData?.getData('text')||'');if(n!=null&&n>=0){input.value=U.fmtNum(n);input.dispatchEvent(new Event('input',{bubbles:true}));}});
     document.addEventListener('change',(ev)=>{
       if(ev.target.dataset.sim){state.sim[ev.target.dataset.sim]=+ev.target.value;render();}
       if(ev.target.name==='source' && ev.target.closest('#v3-form-tx')) { updateComposerCurrency(ev.target.form); updateRepeatFields(ev.target.form); }
       if(ev.target.name==='recurring' && ev.target.closest('#v3-form-tx')) updateRepeatFields(ev.target.form);
-      if(ev.target.name==='date' && ev.target.closest('#v3-form-tx') && !ev.target.form.elements.repeatDate.dataset.edited) ev.target.form.elements.repeatDate.value=ev.target.value;
+      if(ev.target.name==='date' && ev.target.closest('#v3-form-tx')) {
+        if (!ev.target.form.elements.repeatDate.dataset.edited) ev.target.form.elements.repeatDate.value=ev.target.value;
+        updateComposerFatura(ev.target.form);
+      }
       if(ev.target.name==='repeatDate' && ev.target.closest('#v3-form-tx')) ev.target.dataset.edited='true';
       if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
       if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) updateRepeatFields(ev.target.form);
@@ -3286,6 +3634,7 @@
         const yieldFields=document.getElementById('v3-invest-yield'),cdbFields=document.getElementById('v3-invest-cdb');
         if(yieldFields)yieldFields.hidden=reserve;
         if(cdbFields)cdbFields.hidden=!cdb;
+        if(cdb && !ev.target.form?.elements.rate.value.trim()) ev.target.form.elements.rate.value='100';
         const help=document.getElementById('v3-invest-help');
         if(help)help.hidden=!reserve;
         const accountField=ev.target.form?.elements.accountId;
@@ -3293,7 +3642,9 @@
           accountField.required=reserve;
           if(reserve&&!accountField.value&&accountField.options.length>1)accountField.selectedIndex=1;
         }
+        updateInvestmentFormFields(ev.target.form);
       }
+      if(ev.target.name==='indexer' && ev.target.closest('#v3-form-investment')) updateInvestmentFormFields(ev.target.form);
     });
     /* A busca filtra sem acento e por qualquer pedaço do nome:
        "brasil" acha "Banco do Brasil", que a lista nativa não achava. */

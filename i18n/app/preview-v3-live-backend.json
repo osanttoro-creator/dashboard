@@ -7,6 +7,34 @@
   "es": "Tiempo agotado al conectar tu cuenta."
  },
  {
+  "pt": "Entre na conta para consultar dados de mercado.",
+  "tipo": "exato",
+  "en": "Sign in to view market data.",
+  "fr": "Connectez-vous pour consulter les données de marché.",
+  "es": "Inicia sesión para consultar los datos de mercado."
+ },
+ {
+  "pt": "Dados de mercado indisponíveis.",
+  "tipo": "exato",
+  "en": "Market data unavailable.",
+  "fr": "Données de marché indisponibles.",
+  "es": "Datos de mercado no disponibles."
+ },
+ {
+  "pt": "Sua sessão expirou. Entre novamente.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again.",
+  "fr": "Votre session a expiré. Reconnectez-vous.",
+  "es": "Tu sesión expiró. Entra de nuevo."
+ },
+ {
+  "pt": "Consulta de mercado indisponível.",
+  "tipo": "exato",
+  "en": "Market lookup unavailable.",
+  "fr": "Consultation du marché indisponible.",
+  "es": "Consulta de mercado no disponible."
+ },
+ {
   "pt": "Entre na conta para compartilhar um perfil.",
   "tipo": "exato",
   "en": "Sign in to share a profile.",
@@ -19,13 +47,6 @@
   "en": "Sharing is unavailable.",
   "fr": "Le partage est indisponible.",
   "es": "El uso compartido no está disponible."
- },
- {
-  "pt": "Sua sessão expirou. Entre novamente.",
-  "tipo": "exato",
-  "en": "Your session expired. Sign in again.",
-  "fr": "Votre session a expiré. Reconnectez-vous.",
-  "es": "Tu sesión expiró. Entra de nuevo."
  },
  {
   "pt": "Entre na sua conta para consultar a assinatura.",

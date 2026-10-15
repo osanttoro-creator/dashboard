@@ -973,6 +973,27 @@
   "es": "Inversiones"
  },
  {
+  "pt": "Faturas a pagar",
+  "tipo": "exato",
+  "en": "Bills to pay",
+  "fr": "Factures à payer",
+  "es": "Facturas por pagar"
+ },
+ {
+  "pt": "Fluxo de caixa",
+  "tipo": "exato",
+  "en": "Cash flow",
+  "fr": "Flux de trésorerie",
+  "es": "Flujo de caja"
+ },
+ {
+  "pt": "Metas em andamento",
+  "tipo": "exato",
+  "en": "Goals in progress",
+  "fr": "Objectifs en cours",
+  "es": "Metas en curso"
+ },
+ {
   "pt": "Ações rápidas",
   "tipo": "exato",
   "en": "Quick actions",
@@ -1034,6 +1055,90 @@
   "en": "see all",
   "fr": "tout voir",
   "es": "ver todo"
+ },
+ {
+  "pt": "faturas a pagar",
+  "tipo": "exato",
+  "en": "bills to pay",
+  "fr": "factures à payer",
+  "es": "facturas por pagar"
+ },
+ {
+  "pt": "ver cartões",
+  "tipo": "exato",
+  "en": "view cards",
+  "fr": "voir les cartes",
+  "es": "ver tarjetas"
+ },
+ {
+  "pt": "· vence {0}",
+  "tipo": "padrao",
+  "en": "· due {0}",
+  "fr": "· échéance le {0}",
+  "es": "· vence el {0}"
+ },
+ {
+  "pt": "Nenhuma fatura pendente neste período.",
+  "tipo": "exato",
+  "en": "No outstanding bills in this period.",
+  "fr": "Aucune facture en attente sur cette période.",
+  "es": "No hay facturas pendientes en este período."
+ },
+ {
+  "pt": "fluxo de caixa",
+  "tipo": "exato",
+  "en": "cash flow",
+  "fr": "flux de trésorerie",
+  "es": "flujo de caja"
+ },
+ {
+  "pt": "ver lançamentos",
+  "tipo": "exato",
+  "en": "view transactions",
+  "fr": "voir les opérations",
+  "es": "ver movimientos"
+ },
+ {
+  "pt": "Entrou nas contas",
+  "tipo": "exato",
+  "en": "Money in",
+  "fr": "Entrées sur les comptes",
+  "es": "Entradas en las cuentas"
+ },
+ {
+  "pt": "Débito e faturas pagas",
+  "tipo": "exato",
+  "en": "Debit and paid bills",
+  "fr": "Débit et factures payées",
+  "es": "Débito y facturas pagadas"
+ },
+ {
+  "pt": "metas em andamento",
+  "tipo": "exato",
+  "en": "goals in progress",
+  "fr": "objectifs en cours",
+  "es": "metas en curso"
+ },
+ {
+  "pt": "ver metas",
+  "tipo": "exato",
+  "en": "view goals",
+  "fr": "voir les objectifs",
+  "es": "ver metas"
+ },
+ {
+  "pt": "{0}% concluído",
+  "tipo": "padrao",
+  "en": "{0}% complete",
+  "fr": "{0} % terminé",
+  "es": "{0} % completado"
+ },
+ {
+  "pt": "Nenhuma meta em andamento.",
+  "tipo": "exato",
+  "en": "No goals in progress.",
+  "fr": "Aucun objectif en cours.",
+  "es": "No hay metas en curso."
  },
  {
   "pt": "seu painel começa aqui",
@@ -1191,6 +1296,76 @@
   "ignorar": true
  },
  {
+  "pt": "Faturas que vencem em {0}",
+  "tipo": "padrao",
+  "en": "Bills due in {0}",
+  "fr": "Factures à payer en {0}",
+  "es": "Facturas que vencen en {0}"
+ },
+ {
+  "pt": "faturas de {0}",
+  "tipo": "padrao",
+  "en": "bills for {0}",
+  "fr": "factures de {0}",
+  "es": "facturas de {0}"
+ },
+ {
+  "pt": "Compras agrupadas pelo mês do vencimento. A data original continua no histórico de cada compra.",
+  "tipo": "exato",
+  "en": "Purchases are grouped by the month their bill is due. Each purchase keeps its original date in its history.",
+  "fr": "Les achats sont regroupés selon le mois d'échéance de la facture. La date d'origine reste dans l'historique de chaque achat.",
+  "es": "Las compras se agrupan por el mes de vencimiento de la factura. La fecha original permanece en el historial de cada compra."
+ },
+ {
+  "pt": "Vence {0}",
+  "tipo": "padrao",
+  "en": "Due {0}",
+  "fr": "Échéance le {0}",
+  "es": "Vence el {0}"
+ },
+ {
+  "pt": "Fatura do mês",
+  "tipo": "exato",
+  "en": "Monthly bill",
+  "fr": "Facture du mois",
+  "es": "Factura del mes"
+ },
+ {
+  "pt": "{0} · abatido {1} · falta {2}",
+  "tipo": "padrao",
+  "en": "{0} · paid {1} · remaining {2}",
+  "fr": "{0} · payé {1} · reste {2}",
+  "es": "{0} · abonado {1} · falta {2}"
+ },
+ {
+  "pt": "Abrir fatura",
+  "tipo": "exato",
+  "en": "Open bill",
+  "fr": "Ouvrir la facture",
+  "es": "Abrir factura"
+ },
+ {
+  "pt": "· cancelada",
+  "tipo": "exato",
+  "en": "· cancelled",
+  "fr": "· annulée",
+  "es": "· cancelada"
+ },
+ {
+  "pt": "· prevista",
+  "tipo": "exato",
+  "en": "· planned",
+  "fr": "· prévue",
+  "es": "· prevista"
+ },
+ {
+  "pt": "Compra {0} · {1}{2}",
+  "tipo": "padrao",
+  "en": "Purchase {0} · {1}{2}",
+  "fr": "Achat du {0} · {1}{2}",
+  "es": "Compra del {0} · {1}{2}"
+ },
+ {
   "pt": "Todos os lançamentos",
   "tipo": "exato",
   "en": "All transactions",
@@ -1343,6 +1518,20 @@
   "en": "Filters{0}",
   "fr": "Filtres{0}",
   "es": "Filtros{0}"
+ },
+ {
+  "pt": "GASTOS FEITOS",
+  "tipo": "exato",
+  "en": "SPENDING",
+  "fr": "DÉPENSES",
+  "es": "GASTOS REALIZADOS"
+ },
+ {
+  "pt": "Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.",
+  "tipo": "exato",
+  "en": "Spending follows the purchase date. Credit purchases appear below in the bill for their due month; paying the bill does not count the expense twice.",
+  "fr": "Les dépenses suivent la date d'achat. Les achats à crédit figurent ci-dessous sur la facture de leur mois d'échéance ; son paiement ne double pas la dépense.",
+  "es": "Los gastos siguen la fecha de compra. Las compras a crédito aparecen abajo en la factura del mes en que vencen; pagarla no duplica el gasto."
  },
  {
   "pt": "em aberto",
@@ -1511,6 +1700,216 @@
   "en": "＋ &nbsp; Add account or card",
   "fr": "＋ &nbsp; Ajouter un compte ou une carte",
   "es": "＋ &nbsp; Añadir cuenta o tarjeta"
+ },
+ {
+  "pt": "Corrigir encerramento",
+  "tipo": "exato",
+  "en": "Correct closing",
+  "fr": "Corriger la clôture",
+  "es": "Corregir cierre"
+ },
+ {
+  "pt": "Paga",
+  "tipo": "exato",
+  "en": "Paid",
+  "fr": "Payée",
+  "es": "Pagada"
+ },
+ {
+  "pt": "Parcial",
+  "tipo": "exato",
+  "en": "Partial",
+  "fr": "Partielle",
+  "es": "Parcial"
+ },
+ {
+  "pt": "Em atraso",
+  "tipo": "exato",
+  "en": "Overdue",
+  "fr": "En retard",
+  "es": "Atrasada"
+ },
+ {
+  "pt": "Em aberto",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "En cours",
+  "es": "Pendiente"
+ },
+ {
+  "pt": "Resumo da fatura de {0}",
+  "tipo": "padrao",
+  "en": "Bill summary for {0}",
+  "fr": "Résumé de la facture de {0}",
+  "es": "Resumen de la factura de {0}"
+ },
+ {
+  "pt": "Fatura de {0}",
+  "tipo": "padrao",
+  "en": "Bill for {0}",
+  "fr": "Facture de {0}",
+  "es": "Factura de {0}"
+ },
+ {
+  "pt": "Total da fatura",
+  "tipo": "exato",
+  "en": "Bill total",
+  "fr": "Total de la facture",
+  "es": "Total de la factura"
+ },
+ {
+  "pt": "Já abatido",
+  "tipo": "exato",
+  "en": "Already paid",
+  "fr": "Déjà payé",
+  "es": "Ya abonado"
+ },
+ {
+  "pt": "Falta pagar",
+  "tipo": "exato",
+  "en": "Remaining to pay",
+  "fr": "Reste à payer",
+  "es": "Falta pagar"
+ },
+ {
+  "pt": "Prévia: a lista abaixo mostra só parte das compras desta fatura de exemplo.",
+  "tipo": "exato",
+  "en": "Preview: the list below shows only some purchases from this example bill.",
+  "fr": "Aperçu : la liste ci-dessous ne montre qu'une partie des achats de cet exemple de facture.",
+  "es": "Vista previa: la lista de abajo muestra solo algunas compras de esta factura de ejemplo."
+ },
+ {
+  "pt": "{0} adiantado em compras · {1} pago na fatura.",
+  "tipo": "padrao",
+  "en": "{0} paid early on purchases · {1} paid on the bill.",
+  "fr": "{0} payé d'avance sur les achats · {1} payé sur la facture.",
+  "es": "{0} adelantado en compras · {1} pagado en la factura."
+ },
+ {
+  "pt": "Esta fatura foi marcada como encerrada sem registrar todo o pagamento. O saldo continua pendente até ser abatido.",
+  "tipo": "exato",
+  "en": "This bill was marked closed without recording full payment. The balance remains due until it is paid.",
+  "fr": "Cette facture a été clôturée sans enregistrer le paiement intégral. Le solde reste dû jusqu'à son règlement.",
+  "es": "Esta factura se marcó como cerrada sin registrar el pago total. El saldo sigue pendiente hasta abonarlo."
+ },
+ {
+  "pt": "Sem conta vinculada",
+  "tipo": "exato",
+  "en": "No linked account",
+  "fr": "Aucun compte associé",
+  "es": "Sin cuenta vinculada"
+ },
+ {
+  "pt": "Pagamentos registrados",
+  "tipo": "exato",
+  "en": "Recorded payments",
+  "fr": "Paiements enregistrés",
+  "es": "Pagos registrados"
+ },
+ {
+  "pt": "Índices indisponíveis.",
+  "tipo": "exato",
+  "en": "Indexes unavailable.",
+  "fr": "Indices indisponibles.",
+  "es": "Índices no disponibles."
+ },
+ {
+  "pt": "Histórico CDI indisponível.",
+  "tipo": "exato",
+  "en": "CDI history unavailable.",
+  "fr": "Historique du CDI indisponible.",
+  "es": "Historial del CDI no disponible."
+ },
+ {
+  "pt": "Cotações indisponíveis.",
+  "tipo": "exato",
+  "en": "Quotes unavailable.",
+  "fr": "Cours indisponibles.",
+  "es": "Cotizaciones no disponibles."
+ },
+ {
+  "pt": "dados de mercado",
+  "tipo": "exato",
+  "en": "market data",
+  "fr": "données de marché",
+  "es": "datos de mercado"
+ },
+ {
+  "pt": "Na demonstração, os valores são apenas exemplos. Na conta real, CDI e Selic vêm do Banco Central.",
+  "tipo": "exato",
+  "en": "In the demo, values are examples only. In a real account, CDI and Selic come from Brazil's Central Bank.",
+  "fr": "Dans la démo, les valeurs sont des exemples. Dans un vrai compte, le CDI et le Selic viennent de la Banque centrale du Brésil.",
+  "es": "En la demostración, los valores son solo ejemplos. En una cuenta real, el CDI y la Selic provienen del Banco Central de Brasil."
+ },
+ {
+  "pt": "sem dado",
+  "tipo": "exato",
+  "en": "no data",
+  "fr": "aucune donnée",
+  "es": "sin datos"
+ },
+ {
+  "pt": "Atualizando…",
+  "tipo": "exato",
+  "en": "Updating…",
+  "fr": "Mise à jour…",
+  "es": "Actualizando…"
+ },
+ {
+  "pt": "Atualizar",
+  "tipo": "exato",
+  "en": "Refresh",
+  "fr": "Actualiser",
+  "es": "Actualizar"
+ },
+ {
+  "pt": "CDI: {0}",
+  "tipo": "padrao",
+  "en": "CDI: {0}",
+  "fr": "CDI : {0}",
+  "es": "CDI: {0}"
+ },
+ {
+  "pt": "Cotações: {0}",
+  "tipo": "padrao",
+  "en": "Quotes: {0}",
+  "fr": "Cours : {0}",
+  "es": "Cotizaciones: {0}"
+ },
+ {
+  "pt": "referências de mercado",
+  "tipo": "exato",
+  "en": "market references",
+  "fr": "références de marché",
+  "es": "referencias de mercado"
+ },
+ {
+  "pt": "CDI · ao ano",
+  "tipo": "exato",
+  "en": "CDI · yearly",
+  "fr": "CDI · annuel",
+  "es": "CDI · anual"
+ },
+ {
+  "pt": "CDI · ao dia",
+  "tipo": "exato",
+  "en": "CDI · daily",
+  "fr": "CDI · quotidien",
+  "es": "CDI · diario"
+ },
+ {
+  "pt": "Meta Selic · ao ano",
+  "tipo": "exato",
+  "en": "Selic target · yearly",
+  "fr": "Objectif Selic · annuel",
+  "es": "Meta Selic · anual"
+ },
+ {
+  "pt": "Fonte: Banco Central (SGS). Datas de referência acima; taxas não são o saldo da sua aplicação. CDB % do CDI usa o histórico diário para estimativa bruta, sem IR, IOF ou taxas do banco.",
+  "tipo": "exato",
+  "en": "Source: Central Bank of Brazil (SGS). Reference dates are shown above; rates are not your investment balance. CDI-linked CDBs use daily history for a gross estimate, excluding taxes and bank fees.",
+  "fr": "Source : Banque centrale du Brésil (SGS). Les dates de référence sont ci-dessus ; les taux ne sont pas le solde de votre placement. Les CDB liés au CDI utilisent l'historique quotidien pour une estimation brute, hors impôts et frais bancaires.",
+  "es": "Fuente: Banco Central de Brasil (SGS). Las fechas de referencia figuran arriba; las tasas no son el saldo de tu inversión. Los CDB ligados al CDI usan el historial diario para una estimación bruta, sin impuestos ni comisiones bancarias."
  },
  {
   "pt": "Aportado: {0}",
@@ -1749,6 +2148,67 @@
   "en": "{0} in estimated interest. Not a promise of returns.",
   "fr": "{0} d’intérêts estimés. Ce n’est pas une promesse de rendement.",
   "es": "{0} de interés estimado. No es una promesa de rentabilidad."
+ },
+ {
+  "pt": "Valor informado por você",
+  "tipo": "exato",
+  "en": "Value entered by you",
+  "fr": "Valeur saisie par vous",
+  "es": "Valor indicado por ti"
+ },
+ {
+  "pt": "CDI não sincronizado; exibindo apenas o aporte",
+  "tipo": "exato",
+  "en": "CDI not synced; showing contribution only",
+  "fr": "CDI non synchronisé ; seul l'apport est affiché",
+  "es": "CDI no sincronizado; solo se muestra el aporte"
+ },
+ {
+  "pt": "{0}% do CDI · estimativa bruta até {1}",
+  "tipo": "padrao",
+  "en": "{0}% of CDI · gross estimate through {1}",
+  "fr": "{0} % du CDI · estimation brute jusqu'au {1}",
+  "es": "{0} % del CDI · estimación bruta hasta el {1}"
+ },
+ {
+  "pt": "{0} · {1} cotas · cotação de {2}",
+  "tipo": "padrao",
+  "en": "{0} · {1} units · quote from {2}",
+  "fr": "{0} · {1} parts · cours du {2}",
+  "es": "{0} · {1} participaciones · cotización del {2}"
+ },
+ {
+  "pt": "Sem cotação atual; exibindo apenas o aporte",
+  "tipo": "exato",
+  "en": "No current quote; showing contribution only",
+  "fr": "Pas de cours actuel ; seul l'apport est affiché",
+  "es": "Sin cotización actual; solo se muestra el aporte"
+ },
+ {
+  "pt": "span:first-child",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "{0}: aportado {1}, valor {2}",
+  "tipo": "padrao",
+  "en": "{0}: contributed {1}, value {2}",
+  "fr": "{0} : apporté {1}, valeur {2}",
+  "es": "{0}: aportado {1}, valor {2}"
+ },
+ {
+  "pt": "Barras mensais de valor aportado e valor atual",
+  "tipo": "exato",
+  "en": "Monthly bars of contributions and current value",
+  "fr": "Barres mensuelles des apports et de la valeur actuelle",
+  "es": "Barras mensuales de aportes y valor actual"
+ },
+ {
+  "pt": "Distribuição dos investimentos em {0} tipos",
+  "tipo": "padrao",
+  "en": "Investment allocation across {0} types",
+  "fr": "Répartition des placements entre {0} types",
+  "es": "Distribución de inversiones en {0} tipos"
  },
  {
   "pt": "{0}% do total",
@@ -3723,6 +4183,34 @@
   "es": "Atajos financieros de Coco"
  },
  {
+  "pt": "Extratos",
+  "tipo": "exato",
+  "en": "Statements",
+  "fr": "Relevés",
+  "es": "Extractos"
+ },
+ {
+  "pt": "importar com revisão",
+  "tipo": "exato",
+  "en": "import for review",
+  "fr": "importer pour vérifier",
+  "es": "importar para revisar"
+ },
+ {
+  "pt": "Memória",
+  "tipo": "exato",
+  "en": "Memory",
+  "fr": "Mémoire",
+  "es": "Memoria"
+ },
+ {
+  "pt": "regras e análises",
+  "tipo": "exato",
+  "en": "rules and analyses",
+  "fr": "règles et analyses",
+  "es": "reglas y análisis"
+ },
+ {
   "pt": "{0}: entradas {1}",
   "tipo": "padrao",
   "en": "{0}: income {1}",
@@ -4014,13 +4502,6 @@
   "ignorar": true
  },
  {
-  "pt": "Memória",
-  "tipo": "exato",
-  "en": "Memory",
-  "fr": "Mémoire",
-  "es": "Memoria"
- },
- {
   "pt": "V3/Coco análise:",
   "tipo": "exato",
   "ignorar": true
@@ -4304,13 +4785,6 @@
   "en": "Now",
   "fr": "Maintenant",
   "es": "Ahora"
- },
- {
-  "pt": "Extratos",
-  "tipo": "exato",
-  "en": "Statements",
-  "fr": "Relevés",
-  "es": "Extractos"
  },
  {
   "pt": "preparando sua assistente",
@@ -4992,6 +5466,13 @@
   "es": "Editar movimiento"
  },
  {
+  "pt": "Calculada pela data real da compra, fechamento e vencimento do cartão.",
+  "tipo": "exato",
+  "en": "Calculated from the actual purchase, closing and card due dates.",
+  "fr": "Calculée à partir des dates réelles d'achat, de clôture et d'échéance de la carte.",
+  "es": "Calculada según las fechas reales de compra, cierre y vencimiento de la tarjeta."
+ },
+ {
   "pt": "PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)",
   "tipo": "exato",
   "en": "INSTALLMENTS (NON-RECURRING CREDIT ONLY)",
@@ -5585,6 +6066,371 @@
   "en": "Savings pots do not earn interest automatically here. When linked to an account, the amount leaves the available balance but remains in net worth, without double counting.",
   "fr": "Les cagnottes ne génèrent pas automatiquement des intérêts ici. Reliée à un compte, la somme quitte le solde disponible mais reste dans le patrimoine, sans double comptage.",
   "es": "Las alcancías no generan intereses automáticamente aquí. Al vincularlas a una cuenta, el importe sale del saldo disponible y permanece en el patrimonio, sin duplicarse."
+ },
+ {
+  "pt": "RENDIMENTO DO CDB",
+  "tipo": "exato",
+  "en": "CDB YIELD",
+  "fr": "RENDEMENT DU CDB",
+  "es": "RENDIMIENTO DEL CDB"
+ },
+ {
+  "pt": "Percentual do CDI · automático",
+  "tipo": "exato",
+  "en": "Percentage of CDI · automatic",
+  "fr": "Pourcentage du CDI · automatique",
+  "es": "Porcentaje del CDI · automático"
+ },
+ {
+  "pt": "Prefixado · taxa anual informada",
+  "tipo": "exato",
+  "en": "Fixed rate · annual rate entered",
+  "fr": "Taux fixe · taux annuel saisi",
+  "es": "Tasa fija · tasa anual indicada"
+ },
+ {
+  "pt": "Estimativa bruta pelo CDI oficial. O saldo do banco continua sendo a referência; informe-o acima se quiser prevalecer.",
+  "tipo": "exato",
+  "en": "Gross estimate using official CDI. The bank balance remains authoritative; enter it above to override.",
+  "fr": "Estimation brute avec le CDI officiel. Le solde bancaire reste la référence ; saisissez-le ci-dessus pour le faire prévaloir.",
+  "es": "Estimación bruta con el CDI oficial. El saldo del banco sigue siendo la referencia; indícalo arriba para que prevalezca."
+ },
+ {
+  "pt": "Ex.: PETR4",
+  "tipo": "exato",
+  "en": "E.g.: PETR4",
+  "fr": "Ex. : PETR4",
+  "es": "Ej.: PETR4"
+ },
+ {
+  "pt": "Ex.: 10",
+  "tipo": "exato",
+  "en": "E.g.: 10",
+  "fr": "Ex. : 10",
+  "es": "Ej.: 10"
+ },
+ {
+  "pt": "Para ações, FIIs e ETFs. Cotação brapi em reais; sem cotação, o OAZE mantém o valor informado ou o aporte.",
+  "tipo": "exato",
+  "en": "For stocks, FIIs and ETFs. brapi quotes in reais; without a quote, OAZE keeps the entered value or contribution.",
+  "fr": "Pour les actions, FII et ETF. Cours brapi en réaux ; sans cours, OAZE conserve la valeur saisie ou l'apport.",
+  "es": "Para acciones, FII y ETF. Cotización brapi en reales; sin cotización, OAZE conserva el valor indicado o el aporte."
+ },
+ {
+  "pt": "PERCENTUAL DO CDI (%)",
+  "tipo": "exato",
+  "en": "PERCENTAGE OF CDI (%)",
+  "fr": "POURCENTAGE DU CDI (%)",
+  "es": "PORCENTAJE DEL CDI (%)"
+ },
+ {
+  "pt": "Ex.: 110",
+  "tipo": "exato",
+  "en": "E.g.: 110",
+  "fr": "Ex. : 110",
+  "es": "Ej.: 110"
+ },
+ {
+  "pt": "Coco acompanha este aporte",
+  "tipo": "exato",
+  "en": "Coco follows this contribution",
+  "fr": "Coco suit cet apport",
+  "es": "Coco acompaña este aporte"
+ },
+ {
+  "pt": "Informe o nome e o valor para receber uma sugestão. Nada será alterado sem você confirmar.",
+  "tipo": "exato",
+  "en": "Enter the name and amount to get a suggestion. Nothing changes without your confirmation.",
+  "fr": "Saisissez le nom et le montant pour recevoir une suggestion. Rien ne change sans votre confirmation.",
+  "es": "Indica el nombre y el importe para recibir una sugerencia. Nada cambiará sin tu confirmación."
+ },
+ {
+  "pt": "Prévia do valor",
+  "tipo": "exato",
+  "en": "Value preview",
+  "fr": "Aperçu de la valeur",
+  "es": "Vista previa del valor"
+ },
+ {
+  "pt": "Informe valor aportado e data.",
+  "tipo": "exato",
+  "en": "Enter the contribution amount and date.",
+  "fr": "Saisissez le montant apporté et la date.",
+  "es": "Indica el importe aportado y la fecha."
+ },
+ {
+  "pt": "Confira o valor atual informado",
+  "tipo": "exato",
+  "en": "Check the current value entered",
+  "fr": "Vérifiez la valeur actuelle saisie",
+  "es": "Revisa el valor actual indicado"
+ },
+ {
+  "pt": "Use um valor em reais válido.",
+  "tipo": "exato",
+  "en": "Enter a valid amount in reais.",
+  "fr": "Saisissez un montant valide en réaux.",
+  "es": "Indica un importe válido en reales."
+ },
+ {
+  "pt": "{0} · valor informado",
+  "tipo": "padrao",
+  "en": "{0} · entered value",
+  "fr": "{0} · valeur saisie",
+  "es": "{0} · valor indicado"
+ },
+ {
+  "pt": "Valor digitado por você; prevalece sobre cotações e estimativas.",
+  "tipo": "exato",
+  "en": "Value entered by you; takes precedence over quotes and estimates.",
+  "fr": "Valeur saisie par vous ; elle prévaut sur les cours et les estimations.",
+  "es": "Valor indicado por ti; prevalece sobre las cotizaciones y estimaciones."
+ },
+ {
+  "pt": "{0} · reservado",
+  "tipo": "padrao",
+  "en": "{0} · reserved",
+  "fr": "{0} · réservé",
+  "es": "{0} · reservado"
+ },
+ {
+  "pt": "Sem rendimento automático; não é cotação.",
+  "tipo": "exato",
+  "en": "No automatic yield; this is not a quote.",
+  "fr": "Aucun rendement automatique ; ce n'est pas un cours.",
+  "es": "Sin rendimiento automático; no es una cotización."
+ },
+ {
+  "pt": "Faltam ticker e quantidade",
+  "tipo": "exato",
+  "en": "Ticker and quantity missing",
+  "fr": "Code et quantité manquants",
+  "es": "Faltan ticker y cantidad"
+ },
+ {
+  "pt": "O valor aportado sozinho não revela quantas cotas você possui.",
+  "tipo": "exato",
+  "en": "The contribution alone does not show how many units you own.",
+  "fr": "L'apport seul ne révèle pas le nombre de parts détenues.",
+  "es": "El aporte por sí solo no indica cuántas participaciones tienes."
+ },
+ {
+  "pt": "{0} · cotação × quantidade",
+  "tipo": "padrao",
+  "en": "{0} · quote × quantity",
+  "fr": "{0} · cours × quantité",
+  "es": "{0} · cotización × cantidad"
+ },
+ {
+  "pt": "{0} · {1} por cota · brapi, {2}. Cotação pode ter atraso; não comprova posição.",
+  "tipo": "padrao",
+  "en": "{0} · {1} per unit · brapi, {2}. Quotes may be delayed and do not prove holdings.",
+  "fr": "{0} · {1} par part · brapi, {2}. Le cours peut être différé et ne prouve pas la détention.",
+  "es": "{0} · {1} por participación · brapi, {2}. La cotización puede tener retraso y no prueba la tenencia."
+ },
+ {
+  "pt": "Cotação não disponível",
+  "tipo": "exato",
+  "en": "Quote unavailable",
+  "fr": "Cours indisponible",
+  "es": "Cotización no disponible"
+ },
+ {
+  "pt": "{0} · {1} cotas. O aporte de {2} não é apresentado como valor atual.",
+  "tipo": "padrao",
+  "en": "{0} · {1} units. The {2} contribution is not shown as current value.",
+  "fr": "{0} · {1} parts. L'apport de {2} n'est pas présenté comme valeur actuelle.",
+  "es": "{0} · {1} participaciones. El aporte de {2} no se presenta como valor actual."
+ },
+ {
+  "pt": "{0} · aporte planejado",
+  "tipo": "padrao",
+  "en": "{0} · planned contribution",
+  "fr": "{0} · apport prévu",
+  "es": "{0} · aporte planificado"
+ },
+ {
+  "pt": "Ainda não há rendimento realizado.",
+  "tipo": "exato",
+  "en": "No yield has accrued yet.",
+  "fr": "Aucun rendement n'a encore été réalisé.",
+  "es": "Todavía no hay rendimiento realizado."
+ },
+ {
+  "pt": "Informe o percentual do CDI",
+  "tipo": "exato",
+  "en": "Enter the percentage of CDI",
+  "fr": "Saisissez le pourcentage du CDI",
+  "es": "Indica el porcentaje del CDI"
+ },
+ {
+  "pt": "Ex.: 110% do CDI.",
+  "tipo": "exato",
+  "en": "E.g.: 110% of CDI.",
+  "fr": "Ex. : 110 % du CDI.",
+  "es": "Ej.: 110 % del CDI."
+ },
+ {
+  "pt": "Aguardando CDI histórico",
+  "tipo": "exato",
+  "en": "Waiting for CDI history",
+  "fr": "En attente de l'historique du CDI",
+  "es": "Esperando el historial del CDI"
+ },
+ {
+  "pt": "Sem a série do Banco Central, não há estimativa atual confiável.",
+  "tipo": "exato",
+  "en": "Without the Central Bank series, there is no reliable current estimate.",
+  "fr": "Sans la série de la Banque centrale, aucune estimation actuelle fiable n'est possible.",
+  "es": "Sin la serie del Banco Central no hay una estimación actual fiable."
+ },
+ {
+  "pt": "Confira a taxa",
+  "tipo": "exato",
+  "en": "Check the rate",
+  "fr": "Vérifiez le taux",
+  "es": "Revisa la tasa"
+ },
+ {
+  "pt": "Não foi possível calcular a estimativa.",
+  "tipo": "exato",
+  "en": "The estimate could not be calculated.",
+  "fr": "L'estimation n'a pas pu être calculée.",
+  "es": "No se pudo calcular la estimación."
+ },
+ {
+  "pt": "{0}% do CDI histórico até {1} · bruto, sem impostos, taxas ou regras do banco.",
+  "tipo": "padrao",
+  "en": "{0}% of historical CDI through {1} · gross, excluding taxes, fees and bank rules.",
+  "fr": "{0} % du CDI historique jusqu'au {1} · brut, hors impôts, frais et règles bancaires.",
+  "es": "{0} % del CDI histórico hasta el {1} · bruto, sin impuestos, comisiones ni reglas bancarias."
+ },
+ {
+  "pt": "{0}% ao ano informado por você · projeção matemática, não saldo do banco.",
+  "tipo": "padrao",
+  "en": "{0}% a year entered by you · mathematical projection, not your bank balance.",
+  "fr": "{0} % par an saisi par vous · projection mathématique, pas le solde bancaire.",
+  "es": "{0} % anual indicado por ti · proyección matemática, no saldo bancario."
+ },
+ {
+  "pt": "Sem taxa informada, só mostramos o valor aportado.",
+  "tipo": "exato",
+  "en": "Without a rate, we show only the contribution.",
+  "fr": "Sans taux indiqué, seul l'apport est affiché.",
+  "es": "Sin tasa indicada, solo mostramos el aporte."
+ },
+ {
+  "pt": "estimativa bruta",
+  "tipo": "exato",
+  "en": "gross estimate",
+  "fr": "estimation brute",
+  "es": "estimación bruta"
+ },
+ {
+  "pt": "quote:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "cdi:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "quote:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Histórico indisponível",
+  "tipo": "exato",
+  "en": "History unavailable",
+  "fr": "Historique indisponible",
+  "es": "Historial no disponible"
+ },
+ {
+  "pt": "O cálculo automático cobre até nove anos.",
+  "tipo": "exato",
+  "en": "The automatic calculation covers up to nine years.",
+  "fr": "Le calcul automatique couvre jusqu'à neuf ans.",
+  "es": "El cálculo automático cubre hasta nueve años."
+ },
+ {
+  "pt": "Fonte de mercado indisponível",
+  "tipo": "exato",
+  "en": "Market source unavailable",
+  "fr": "Source de marché indisponible",
+  "es": "Fuente de mercado no disponible"
+ },
+ {
+  "pt": "Tente novamente mais tarde.",
+  "tipo": "exato",
+  "en": "Try again later.",
+  "fr": "Réessayez plus tard.",
+  "es": "Inténtalo de nuevo más tarde."
+ },
+ {
+  "pt": "{0} Seus dados não foram alterados.",
+  "tipo": "padrao",
+  "en": "{0} Your data was not changed.",
+  "fr": "{0} Vos données n'ont pas été modifiées.",
+  "es": "{0} Tus datos no se modificaron."
+ },
+ {
+  "pt": "Coco está identificando o investimento…",
+  "tipo": "exato",
+  "en": "Coco is identifying the investment…",
+  "fr": "Coco identifie le placement…",
+  "es": "Coco está identificando la inversión…"
+ },
+ {
+  "pt": "Coco não identificou o tipo com segurança. Escolha os campos manualmente.",
+  "tipo": "exato",
+  "en": "Coco could not identify the type confidently. Choose the fields manually.",
+  "fr": "Coco n'a pas pu identifier le type avec certitude. Choisissez les champs manuellement.",
+  "es": "Coco no pudo identificar el tipo con seguridad. Elige los campos manualmente."
+ },
+ {
+  "pt": "{0}% do CDI",
+  "tipo": "padrao",
+  "en": "{0}% of CDI",
+  "fr": "{0} % du CDI",
+  "es": "{0} % del CDI"
+ },
+ {
+  "pt": "Sugestão da Coco · confira antes de aplicar",
+  "tipo": "exato",
+  "en": "Coco's suggestion · review before applying",
+  "fr": "Suggestion de Coco · vérifiez avant d'appliquer",
+  "es": "Sugerencia de Coco · revísala antes de aplicarla"
+ },
+ {
+  "pt": "Usar sugestão",
+  "tipo": "exato",
+  "en": "Use suggestion",
+  "fr": "Utiliser la suggestion",
+  "es": "Usar sugerencia"
+ },
+ {
+  "pt": "Coco indisponível.",
+  "tipo": "exato",
+  "en": "Coco unavailable.",
+  "fr": "Coco indisponible.",
+  "es": "Coco no disponible."
+ },
+ {
+  "pt": "{0} Você pode preencher manualmente.",
+  "tipo": "padrao",
+  "en": "{0} You can fill this in manually.",
+  "fr": "{0} Vous pouvez remplir les champs manuellement.",
+  "es": "{0} Puedes completarlo manualmente."
+ },
+ {
+  "pt": "Sugestão aplicada. Confira ticker, quantidade e taxa antes de salvar.",
+  "tipo": "exato",
+  "en": "Suggestion applied. Check ticker, quantity and rate before saving.",
+  "fr": "Suggestion appliquée. Vérifiez le code, la quantité et le taux avant d'enregistrer.",
+  "es": "Sugerencia aplicada. Revisa el ticker, la cantidad y la tasa antes de guardar."
  },
  {
   "pt": "editar meta",
@@ -6495,6 +7341,13 @@
   "en": "Choose a valid account or card.",
   "fr": "Choisissez un compte ou une carte valide.",
   "es": "Elige una cuenta o tarjeta válida."
+ },
+ {
+  "pt": "A data da compra não pertence à fatura selecionada. Ajuste a data ou mantenha a fatura calculada.",
+  "tipo": "exato",
+  "en": "The purchase date does not belong to the selected bill. Adjust the date or keep the calculated bill.",
+  "fr": "La date d'achat ne correspond pas à la facture sélectionnée. Modifiez la date ou conservez la facture calculée.",
+  "es": "La fecha de compra no corresponde a la factura seleccionada. Ajusta la fecha o conserva la factura calculada."
  },
  {
   "pt": "Escolha duas contas diferentes para transferir.",

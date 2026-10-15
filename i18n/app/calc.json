@@ -98,6 +98,20 @@
   "es": "factura {0}"
  },
  {
+  "pt": "Ações",
+  "tipo": "exato",
+  "en": "Stocks",
+  "fr": "Actions",
+  "es": "Acciones"
+ },
+ {
+  "pt": "FIIs",
+  "tipo": "exato",
+  "en": "REITs",
+  "fr": "SCPI",
+  "es": "FIBRAs"
+ },
+ {
   "pt": "Sobra no fim do mês",
   "tipo": "exato",
   "en": "Left over at month's end",

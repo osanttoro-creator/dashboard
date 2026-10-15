@@ -34,6 +34,24 @@
   V3Backend.activeSharePermission = () => activeSharePermission;
   V3Backend.accountProfile = () => accountProfile;
   V3Backend.withTimeout = bounded;
+  V3Backend.investmentMarket = async function (body) {
+    if (!client || !user) throw new Error('Entre na conta para consultar dados de mercado.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    if (!/^https:\/\//.test(base) || !publicKey) throw new Error('Dados de mercado indisponíveis.');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token) throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-invest-data', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify(body)
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.erro) throw new Error(result.erro || 'Consulta de mercado indisponível.');
+    return result;
+  };
   V3Backend.setActiveShare = (id, profile, permission) => {
     activeShareId = id || null;
     activeSharePermission = activeShareId && permission === 'edit' ? 'edit' : 'read';

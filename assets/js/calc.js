@@ -843,10 +843,9 @@
     pagoAdiantado = U.round2(pagoAdiantado);
     const pago = U.round2(pagoFatura + pagoAdiantado);
     const restante = U.round2(Math.max(0, planned - pago));
-    /* Quitada por decisão da pessoa, ou porque o que saiu já cobre
-       o que entrou. O centavo de folga existe porque arredondamento
-       não pode transformar fatura paga em fatura em aberto. */
-    const paid = !!(rec && rec.quitada) || (planned > 0 && pago >= U.round2(planned - 0.005));
+    /* Encerrar manualmente não é pagamento: só dinheiro registrado
+       abate a fatura. Isso mantém saldo e limite coerentes. */
+    const paid = planned > 0 && pago >= U.round2(planned - 0.005);
     const ultimo = (rec && rec.pagamentos && rec.pagamentos.length)
       ? rec.pagamentos[rec.pagamentos.length - 1] : null;
 
@@ -874,7 +873,7 @@
       adiantamentos,
       pagoFatura, pagoAdiantado, pago, restante,
       parcial: !paid && pago > 0,
-      paid,
+      paid, quitada: !!(rec && rec.quitada),
       paidAt: ultimo ? ultimo.at : null,
       paidAmount: pago,
       paidAccountId: ultimo ? ultimo.accountId : (card.accountId || null),
@@ -927,10 +926,40 @@
      ============================================================ */
 
   /** Valor estimado do aporte numa data (juros compostos sobre a taxa a.a.). */
+  let market = { cdiStart: '', cdi: [], quotes: {} };
+  Calc.setInvestmentMarket = function (input) {
+    market = {
+      cdiStart: String(input?.cdiStart || ''),
+      cdi: Array.isArray(input?.cdi) ? input.cdi.filter((x) => /^\d{4}-\d{2}-\d{2}$/.test(x.date) && Number.isFinite(+x.value)) : [],
+      quotes: input?.quotes && typeof input.quotes === 'object' ? input.quotes : {}
+    };
+  };
+  Calc.cdiValueAt = function (inv, atISO) {
+    if (!market.cdi.length || !market.cdiStart || inv.date < market.cdiStart) return null;
+    const end = inv.maturityDate && inv.maturityDate < atISO ? inv.maturityDate : atISO;
+    let value = +inv.amount || 0, days = 0;
+    for (const observation of market.cdi) {
+      if (observation.date <= inv.date || observation.date > end) continue;
+      value *= 1 + (+observation.value / 100) * ((+inv.rate || 0) / 100);
+      days++;
+    }
+    return days ? U.round2(value) : null;
+  };
   Calc.investmentValueAt = function (inv, atISO, profile) {
     const at = atISO || U.todayISO();
     if (inv.date > at) return 0;
     if (inv.currentValue != null && at >= U.todayISO()) return U.round2(inv.currentValue);
+    if (inv.type === 'CDB' && inv.indexer === 'cdi') {
+      return Calc.cdiValueAt(inv, at) ?? U.round2(+inv.amount || 0);
+    }
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0 && at.slice(0, 7) === U.todayYM()) {
+      const quote = market.quotes[inv.ticker];
+      const age = Date.now() - Date.parse(quote?.marketTime || '');
+      if (quote?.currency === 'BRL' && Number.isFinite(+quote.price) && Number.isFinite(age) && age >= 0 && age <= 7 * 86400000)
+        return U.round2(+quote.price * +inv.quantity);
+    }
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0)
+      return U.round2(+inv.amount || 0);
     const valuedAt = inv.maturityDate && at > inv.maturityDate ? inv.maturityDate : at;
     const years = Math.max(0, U.yearsBetween(inv.date, valuedAt));
     const rate = (+inv.rate || 0) / 100;

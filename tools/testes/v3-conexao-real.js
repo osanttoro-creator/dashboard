@@ -75,6 +75,10 @@ assert.match(migration, /grant execute on function public\.v3_salvar_perfil\(jso
         select: () => ({ eq: () => ({ eq: () => ({ maybeSingle: async () => ({ data: accepted ? { policy_version: '2026-10-01' } : null }) }) }) }),
         insert: async (row) => { assert.equal(row.source, 'app_bloqueio'); accepted = true; return { error: null }; }
       };
+      if (name === 'coco_settings') return {
+        select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { consented_at: '2026-10-01', analysis_consented_at: '2026-10-01', revoked_at: null, learning_paused: false }, error: null }) }) }),
+        upsert: async () => ({ error: null })
+      };
       if (name === 'profiles') return {
         select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { nome: 'Usuário', moeda: 'BRL', pais: 'BR', fuso: 'America/Sao_Paulo' }, error: null }) }) })
       };

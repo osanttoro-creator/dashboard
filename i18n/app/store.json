@@ -849,20 +849,6 @@
   "es": "Fondo de inversión"
  },
  {
-  "pt": "Ações",
-  "tipo": "exato",
-  "en": "Stocks",
-  "fr": "Actions",
-  "es": "Acciones"
- },
- {
-  "pt": "FIIs",
-  "tipo": "exato",
-  "en": "REITs",
-  "fr": "SCPI",
-  "es": "FIBRAs"
- },
- {
   "pt": "Criptomoeda",
   "tipo": "exato",
   "en": "Crypto",

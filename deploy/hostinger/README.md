@@ -11,9 +11,7 @@ fontes de desenvolvimento não entram em `public_html`.
 
 `preview-v3/` também entra no pacote como prévia visual pública, sem dados
 reais e sem gravação. `/app` entrega a V3 autenticada; `/app-v3.html` permanece
-como acesso direto ao mesmo HTML. O painel anterior segue disponível em
-`/app?classic=1` e conserva o parâmetro ao navegar. Não remova esse caminho
-antes de validar todos os fluxos de edição da V3 com contas reais.
+como acesso direto ao mesmo HTML. O painel anterior já foi removido.
 
 ```powershell
 .\deploy\hostinger\montar-pacote.ps1
@@ -31,7 +29,7 @@ and variables → Actions. Nenhum segredo de Supabase ou IA vai para a Hostinger
 ## Verificação depois do deploy
 
 - `/`, `/precos`, `/recursos`, `/suporte`, `/app` e `/app/carteira` abrem.
-- `/app` entrega o HTML V3; `/app?classic=1` entrega o HTML anterior.
+- `/app` entrega o HTML V3 e exige sessão.
 - `/preview-v3/index.html` abre como demonstração, com CSS e JS próprios.
 - `/app-v3.html` exige sessão; sem login, encaminha para `/entrar`.
 - `/assets/css/style.css` devolve CSS, não HTML.
@@ -51,8 +49,7 @@ Ao trocar o subdomínio temporário:
 
 ## Rollback
 
-Para retorno imediato ao painel anterior, use `/app?classic=1`. Para restaurar
-o padrão anterior para todos, use `git revert <commit-do-corte>` e envie a
+Para restaurar a versão anterior, reverta o commit publicado e envie a
 `main`. O workflow publica o estado revertido sem reescrever o histórico.
 Migrações do banco não voltam com o deploy do site e precisam de uma migração
 compensatória.

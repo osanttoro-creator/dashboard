@@ -496,6 +496,9 @@
       date: U.isValidISO(i.date) ? i.date : U.todayISO(),
       rate: +i.rate || 0,
       currentValue: i.currentValue === '' || i.currentValue == null ? null : U.round2(+i.currentValue),
+      indexer: i.type === 'CDB' && i.indexer === 'cdi' ? 'cdi' : 'fixed',
+      ticker: /^(Ações|FIIs|ETF)$/.test(i.type) && /^[A-Z0-9]{4,8}$/.test(String(i.ticker || '').toUpperCase()) ? String(i.ticker).toUpperCase() : null,
+      quantity: Number.isFinite(+i.quantity) && +i.quantity > 0 ? +i.quantity : null,
       accountId: i.accountId || null,
       maturityDate: U.isValidISO(i.maturityDate) ? i.maturityDate : null,
       liquidity: ['diaria','vencimento'].includes(i.liquidity) ? i.liquidity : null,
@@ -1002,9 +1005,13 @@
     Store.commit('invoices');
   };
 
-  /** Apaga TODOS os movimentos da fatura — o "desfazer" da tela. */
+  /** Desfaz os pagamentos da fatura sem apagar adiantamentos de compras. */
   Store.clearInvoicePayments = function (cardId, ref) {
-    delete Store.profile().invoices[Store.invoiceKey(cardId, ref)];
+    const record = Store.profile().invoices[Store.invoiceKey(cardId, ref)];
+    if (!record) return;
+    record.pagamentos = [];
+    record.quitada = false;
+    limpaSeVazio(cardId, ref);
     Store.commit('invoices');
   };
 
