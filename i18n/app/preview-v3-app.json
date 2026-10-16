@@ -3495,6 +3495,13 @@
   "es": "Esta pantalla muestra compromisos guardados. Los avisos del navegador dependen del permiso y aún requieren validación en este dispositivo."
  },
  {
+  "pt": "sem carimbo",
+  "tipo": "exato",
+  "en": "no stamp",
+  "fr": "sans horodatage",
+  "es": "sin sello"
+ },
+ {
   "pt": "abrir ›",
   "tipo": "exato",
   "en": "open ›",
@@ -3678,6 +3685,13 @@
   "en": "reactivate ›",
   "fr": "réactiver ›",
   "es": "reactivar ›"
+ },
+ {
+  "pt": "Versão desta tela",
+  "tipo": "exato",
+  "en": "This screen’s version",
+  "fr": "Version de cet écran",
+  "es": "Versión de esta pantalla"
  },
  {
   "pt": "Perfis financeiros",
