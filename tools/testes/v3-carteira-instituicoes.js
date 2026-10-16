@@ -31,7 +31,7 @@ assert.match(app, /const list = walletItems\(\)/);
 assert.match(app, /function walletItemValue\(item\)/);
 assert.match(app, /const total=chosen \? walletItemValue\(chosen\)/);
 assert.match(app, /Calc\.accountBalance\(item\.data\.id/);
-assert.match(app, /Calc\.invoice\(item\.data\.id, state\.ym\)/);
+assert.match(app, /Calc\.invoice\(item\.data\.id,.*Calc\.currentInvoiceRef\(item\.data, state\.ym, profile\(\)\).*\?\.restante/, 'a carteira mostra o saldo pendente da fatura atual');
 assert.match(app, /data-select="\$\{esc\(d\.id\)\}"/);
 assert.match(app, /aria-pressed="\$\{selected\}"/);
 assert.match(app, /--card-plastic:\$\{plastic\}/);

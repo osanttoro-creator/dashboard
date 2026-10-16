@@ -13,6 +13,9 @@ catch { ({ chromium } = require(process.env.OAZE_PLAYWRIGHT_MODULE || 'C:/Users/
     await page.locator('.v3-market-panel').waitFor();
     assert.match(await page.locator('.v3-market-panel').innerText(), /demonstração/i);
     await page.locator('[data-action="add-investment"][data-type="CDB"]').click();
+    assert.equal(await page.locator('#v3-invest-amount-label').isVisible(), true);
+    assert.equal(await page.locator('#v3-form-investment .v3-mais').evaluate((el) => el.open), false);
+    await page.locator('#v3-form-investment .v3-mais summary').click();
     assert.equal(await page.locator('#v3-form-investment [name="indexer"]').inputValue(), 'cdi');
     assert.equal(await page.locator('#v3-form-investment [name="rate"]').inputValue(), '100');
     assert.equal(await page.locator('#v3-invest-market-fields').isVisible(), false);

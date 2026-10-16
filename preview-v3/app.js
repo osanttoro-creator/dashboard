@@ -252,7 +252,7 @@
       ? Number(sample.cardInvoices[item.data.id] || 0)
       : Number(item.data.openingBalance || 0);
     try { return item.kind === 'credit'
-      ? Number(Calc.invoice(item.data.id, state.ym)?.planned || 0)
+      ? Number(Calc.invoice(item.data.id, item.data.id === state.selected && state.invoiceRef ? state.invoiceRef : Calc.currentInvoiceRef(item.data, state.ym, profile()), profile())?.restante || 0)
       : Number(Calc.accountBalance(item.data.id, U.monthEnd(state.ym)) || 0); }
     catch (e) { return 0; }
   }
@@ -804,13 +804,14 @@
     /* Cada corte ligado ganha saída própria: tirar um filtro não
        pode obrigar a abrir o painel e caçar qual era. */
     const chips = [
-      state.filter !== 'Todos' ? { rotulo: state.filter, acao: 'tirar-rapido' } : null,
+      !['Todos','Entradas','Saídas'].includes(state.filter) ? { rotulo: state.filter, acao: 'tirar-rapido' } : null,
       state.filtros.situacao !== 'todas' ? { rotulo: ({ pago: 'Pago', previsto: 'Previsto', cancelado: 'Cancelado' })[state.filtros.situacao] || state.filtros.situacao, acao: 'tirar-situacao' } : null,
       state.filtros.fonte !== 'todas' ? { rotulo: nomeFonte(state.filtros.fonte) || 'Conta', acao: 'tirar-fonte' } : null,
       state.filtros.categoria !== 'todas' ? { rotulo: categoryName(state.filtros.categoria), acao: 'tirar-categoria' } : null,
       state.filtros.busca.trim() ? { rotulo: '“' + state.filtros.busca.trim() + '”', acao: 'tirar-busca' } : null
     ].filter(Boolean);
-    const chipsHtml = `<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>`
+    const chipsHtml = ['Entradas','Saídas'].map((name) => `<button type="button" class="v3-pill v3-pill-rapido${state.filter===name?' is-active':''}" data-filter="${name}" aria-pressed="${state.filter===name}">${name}</button>`).join('')
+      + `<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>`
       + chips.map((c) => `<button type="button" class="v3-pill v3-chip" data-action="${c.acao}" aria-label="Tirar o filtro ${esc(c.rotulo)}">${esc(c.rotulo)}<span aria-hidden="true">✕</span></button>`).join('')
       + (ativos > 1 ? '<button type="button" class="v3-link v3-limpar-tudo" data-action="limpar-filtros">limpar tudo</button>' : '');
     return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted v3-trans-explain">Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.</p><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}${renderDueInvoices()}</div>`;
@@ -859,7 +860,7 @@
     } : Calc.invoice(card.id, ref, profile());
     if (!invoice) return;
     const headingValue = detail.querySelector('.v3-row .v3-money');
-    if (headingValue) headingValue.textContent = money(invoice.planned);
+    if (headingValue) headingValue.textContent = money(invoice.restante);
     const used = demo ? invoice.restante : Calc.cardUsed(card.id, profile());
     const limitLabel = detail.querySelector('.v3-bar')?.previousElementSibling;
     const disponivel = U.round2(Math.max(0, (+card.limit || 0) - used));
@@ -2406,6 +2407,24 @@
     cdbFields?.querySelector('small')?.replaceChildren(document.createTextNode('Estimativa bruta pelo CDI oficial. O saldo do banco continua sendo a referência; informe-o acima se quiser prevalecer.'));
     document.getElementById('v3-invest-yield')?.insertAdjacentHTML('beforeend', `<div id="v3-invest-market-fields"><div class="v3-form-row"><label>TICKER<input name="ticker" maxlength="8" autocomplete="off" value="${esc(item?.ticker||'')}" placeholder="Ex.: PETR4"></label><label>QUANTIDADE<input name="quantity" type="number" min="0" step="any" value="${esc(item?.quantity||'')}" placeholder="Ex.: 10"></label></div><small>Para ações, FIIs e ETFs. Cotação brapi em reais; sem cotação, o OAZE mantém o valor informado ou o aporte.</small></div>`);
     if (!item && chosenType === 'CDB') document.querySelector('#v3-form-investment [name="rate"]').value = '100';
+    const form = document.getElementById('v3-form-investment');
+    if (!item) {
+      form.insertAdjacentHTML('beforebegin', `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((kind) => `<button type="button" data-compose-kind="${kind}" class="${kind==='Aporte'?'is-active':''}">${kind}</button>`).join('')}</div>`);
+    }
+    const nameLabel = form.elements.name.closest('label');
+    const amountLabel = form.elements.amount.closest('label');
+    amountLabel.id = 'v3-invest-amount-label';
+    amountLabel.firstChild.textContent = 'VALOR APORTADO (R$)';
+    form.insertBefore(amountLabel, nameLabel);
+    const accountLabel = form.elements.accountId.closest('label');
+    const yieldFields = form.querySelector('#v3-invest-yield');
+    form.insertBefore(accountLabel, yieldFields);
+    const more = document.createElement('details');
+    more.className = 'v3-mais';
+    if (item) more.open = true;
+    more.innerHTML = '<summary>Mais detalhes</summary><div class="v3-mais-corpo"></div>';
+    form.insertBefore(more, yieldFields);
+    more.querySelector('.v3-mais-corpo').append(yieldFields, form.elements.notes.closest('label'));
     updateInvestmentFormFields(document.getElementById('v3-form-investment'));
     const accountField=document.querySelector('#v3-form-investment [name="accountId"]');
     if(accountField)accountField.required=chosenType==='Porquinho';
@@ -2741,6 +2760,9 @@
     const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived && (transfer || !a.hidden))
       : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId && !c.hidden) : null;
     if (!instrument) { toast('Escolha uma conta ou cartão válido.'); return; }
+    const currency=instrument.moeda && instrument.moeda!=='BRL' ? instrument.moeda : null;
+    const rate=currency ? Number(instrument.cotacao) : 1;
+    if (!(rate>0) || !Number.isFinite(rate)) { toast(`Cadastre a cotação de ${instrument.name} antes de lançar em ${currency}.`); return; }
     /* A data da compra é a data real; a fatura decorre do ciclo do cartão. */
     const refEscolhida=String(fd.get('fatura')||'');
     /* A fatura escolhida vale mesmo quando difere da data: é o
@@ -2782,9 +2804,6 @@
       const months=Array.from({length:installments},(_,i)=>U.addMonths(ymOf(date),i));
       if (months.some((month)=>!canAdd('transactions_per_month',month))) { toast('Uma das parcelas ultrapassa o limite mensal do seu plano.'); return; }
     }
-    const currency=instrument.moeda && instrument.moeda!=='BRL' ? instrument.moeda : null;
-    const rate=currency ? Number(instrument.cotacao) : 1;
-    if (!(rate>0) || !Number.isFinite(rate)) { toast(`Cadastre a cotação de ${instrument.name} antes de lançar em ${currency}.`); return; }
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
     const sourceTag=String(fd.get('sourceTag')||'manual');
@@ -2879,6 +2898,7 @@
     }
     try {
       await V3Backend.mutate(()=>Store.payInvoice(cardId,ref,{amount,paidAt,accountId,meio}));
+      if (state.invoiceRef === ref && Calc.invoice(cardId, ref, profile())?.restante <= 0) state.invoiceRef = null;
       closeSheet();render();toast('Pagamento registrado na sua conta.');
     } catch(error) { toast(error.message||'Não foi possível registrar o pagamento.'); }
   }

@@ -15,6 +15,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
   try {
     for (const width of [1440, 390]) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
+      page.setDefaultTimeout(10000);
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
       page.on('dialog', (dialog) => dialog.accept());
@@ -158,6 +159,8 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       await page.locator('#v3-form-invoice [type="submit"]').click();
       assert.equal(await page.evaluate(() => Object.values(Store.profile().invoices).flatMap((x) => x.pagamentos).length), 1);
       assert.equal(await page.evaluate((id) => Calc.invoice(id,'2026-10').restante, cardId), 30);
+      assert.match(await page.locator('.v3-detail > .v3-row .v3-money').innerText(), /30,00/);
+      assert.match(await page.locator('.v3-wallet-pocket .v3-money').innerText(), /30,00/);
       await page.locator('[data-action="pay-invoice"]').click();
       assert.match(await page.locator('#v3-form-invoice').innerText(), /30,00/);
       await page.locator('#v3-form-invoice [name="accountId"]').selectOption({ index: 1 });
