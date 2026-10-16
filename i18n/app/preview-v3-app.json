@@ -1141,6 +1141,48 @@
   "es": "No hay metas en curso."
  },
  {
+  "pt": "próximos 7 dias",
+  "tipo": "exato",
+  "en": "next 7 days",
+  "fr": "7 prochains jours",
+  "es": "próximos 7 días"
+ },
+ {
+  "pt": "ver agenda",
+  "tipo": "exato",
+  "en": "see calendar",
+  "fr": "voir l’agenda",
+  "es": "ver agenda"
+ },
+ {
+  "pt": "Nada vence nesta semana. O mês inteiro está na agenda.",
+  "tipo": "exato",
+  "en": "Nothing is due this week. The whole month is in the calendar.",
+  "fr": "Rien n’arrive à échéance cette semaine. Le mois entier est dans l’agenda.",
+  "es": "Nada vence esta semana. El mes entero está en la agenda."
+ },
+ {
+  "pt": "cabe no disponível",
+  "tipo": "exato",
+  "en": "fits in what you have available",
+  "fr": "tient dans le disponible",
+  "es": "cabe en lo disponible"
+ },
+ {
+  "pt": "passa do disponível (",
+  "tipo": "exato",
+  "en": "more than you have available (",
+  "fr": "dépasse le disponible (",
+  "es": "pasa de lo disponible ("
+ },
+ {
+  "pt": "Soma",
+  "tipo": "exato",
+  "en": "Totals",
+  "fr": "Total",
+  "es": "Suma"
+ },
+ {
   "pt": "seu painel começa aqui",
   "tipo": "exato",
   "en": "your panel starts here",
@@ -1188,20 +1230,6 @@
   "en": "good evening",
   "fr": "bonsoir",
   "es": "buenas noches"
- },
- {
-  "pt": "até o fim do mês",
-  "tipo": "exato",
-  "en": "until the end of the month",
-  "fr": "jusqu’à la fin du mois",
-  "es": "hasta fin de mes"
- },
- {
-  "pt": "ver agenda",
-  "tipo": "exato",
-  "en": "see calendar",
-  "fr": "voir l’agenda",
-  "es": "ver agenda"
  },
  {
   "pt": "onde foi o mês",
@@ -1532,6 +1560,20 @@
   "en": "Filters{0}",
   "fr": "Filtres{0}",
   "es": "Filtros{0}"
+ },
+ {
+  "pt": "Tirar o filtro {0}",
+  "tipo": "padrao",
+  "en": "Remove the {0} filter",
+  "fr": "Retirer le filtre {0}",
+  "es": "Quitar el filtro {0}"
+ },
+ {
+  "pt": "limpar tudo",
+  "tipo": "exato",
+  "en": "clear all",
+  "fr": "tout effacer",
+  "es": "borrar todo"
  },
  {
   "pt": "GASTOS FEITOS",
@@ -1947,41 +1989,6 @@
   "es": "Fuente: Banco Central de Brasil (SGS). Las fechas de referencia figuran arriba; las tasas no son el saldo de tu inversión. Los CDB ligados al CDI usan el historial diario para una estimación bruta, sin impuestos ni comisiones bancarias."
  },
  {
-  "pt": "cotação {0}",
-  "tipo": "padrao",
-  "en": "quote {0}",
-  "fr": "cours {0}",
-  "es": "cotización {0}"
- },
- {
-  "pt": "cotação",
-  "tipo": "exato",
-  "en": "quote",
-  "fr": "cours",
-  "es": "cotización"
- },
- {
-  "pt": "informado por você",
-  "tipo": "exato",
-  "en": "entered by you",
-  "fr": "saisi par vous",
-  "es": "informado por ti"
- },
- {
-  "pt": "pelo CDI",
-  "tipo": "exato",
-  "en": "by CDI",
-  "fr": "selon le CDI",
-  "es": "por el CDI"
- },
- {
-  "pt": "valor aportado",
-  "tipo": "exato",
-  "en": "amount contributed",
-  "fr": "montant versé",
-  "es": "importe aportado"
- },
- {
   "pt": "Aportado: {0}",
   "tipo": "padrao",
   "en": "Contributed: {0}",
@@ -2227,13 +2234,6 @@
   "es": "Valor indicado por ti"
  },
  {
-  "pt": "CDI não sincronizado; exibindo apenas o aporte",
-  "tipo": "exato",
-  "en": "CDI not synced; showing contribution only",
-  "fr": "CDI non synchronisé ; seul l'apport est affiché",
-  "es": "CDI no sincronizado; solo se muestra el aporte"
- },
- {
   "pt": "{0}% do CDI · estimativa bruta até {1}",
   "tipo": "padrao",
   "en": "{0}% of CDI · gross estimate through {1}",
@@ -2253,6 +2253,13 @@
   "en": "No current quote; showing contribution only",
   "fr": "Pas de cours actuel ; seul l'apport est affiché",
   "es": "Sin cotización actual; solo se muestra el aporte"
+ },
+ {
+  "pt": "CDI não sincronizado; exibindo apenas o aporte",
+  "tipo": "exato",
+  "en": "CDI not synced; showing contribution only",
+  "fr": "CDI non synchronisé ; seul l'apport est affiché",
+  "es": "CDI no sincronizado; solo se muestra el aporte"
  },
  {
   "pt": "span:first-child",
@@ -2931,6 +2938,13 @@
   "en": "UPCOMING",
   "fr": "À VENIR",
   "es": "PRÓXIMOS EVENTOS"
+ },
+ {
+  "pt": "até o fim do mês",
+  "tipo": "exato",
+  "en": "until the end of the month",
+  "fr": "jusqu’à la fin du mois",
+  "es": "hasta fin de mes"
  },
  {
   "pt": "RECORRÊNCIAS",
@@ -4491,11 +4505,6 @@
  {
   "pt": "investments/{0}",
   "tipo": "padrao",
-  "ignorar": true
- },
- {
-  "pt": "2-digit",
-  "tipo": "exato",
   "ignorar": true
  },
  {

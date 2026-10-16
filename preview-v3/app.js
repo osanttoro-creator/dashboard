@@ -554,6 +554,42 @@
     return `<section class="v3-panel"><div class="v3-row"><h2>metas em andamento</h2><button type="button" class="v3-link" data-go="goals">ver metas</button></div>`
       + (goals.length ? goals.slice(0,3).map((goal) => `<div class="v3-home-bill"><span><strong>${esc(goal.name)}</strong><small>${pct(100*Number(goal.saved||0)/Number(goal.target))}% concluído</small></span><strong class="v3-sensitive">${money(goal.saved || 0)} / ${money(goal.target)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma meta em andamento.</p>') + '</section>';
   }
+  /* =============================================================
+     O QUE VENCE, E SE CABE
+     -------------------------------------------------------------
+     "Até o fim do mês" misturava o que vence amanhã com o que vence
+     daqui a três semanas, na mesma lista e no mesmo tom. Quem abre o
+     app com pressa está perguntando outra coisa: o que me pega esta
+     semana, e eu tenho com quê.
+
+     Por isso sete dias, e por isso a soma comparada com o
+     disponível. O disponível não é número novo: é Calc.available,
+     o mesmo que já alimentava o indicador de patrimônio — saldo das
+     contas menos o que já está comprometido em fatura. Nenhuma conta
+     mudou; o que mudou foi onde ela aparece.
+
+     O mês inteiro não some: continua a um toque, em "ver agenda".
+     ============================================================= */
+  function painelVence7() {
+    const hoje = demo ? `${state.ym}-28` : U.todayISO();
+    const limite = U.addDaysISO(hoje, 7);
+    const lista = reminders(hoje, limite).slice(0, 4);
+    const dia = (iso) => iso.slice(8, 10);
+    const mes = (iso) => U.monthLabel(iso.slice(0, 7), true).slice(0, 3);
+    if (!lista.length) {
+      return `<section class="v3-panel v3-vence"><div class="v3-row"><h2>próximos 7 dias</h2><button type="button" class="v3-link" data-go="calendar">ver agenda</button></div>`
+        + `<p class="v3-muted">Nada vence nesta semana. O mês inteiro está na agenda.</p></section>`;
+    }
+    const soma = U.round2(lista.reduce((n, r) => n + Number(r.amount || 0), 0));
+    const disponivel = demo ? sample.accountsBalance : Calc.available(U.monthEnd(state.ym), profile());
+    const cabe = soma <= disponivel;
+    return `<section class="v3-panel v3-vence"><div class="v3-row"><h2>próximos 7 dias</h2><button type="button" class="v3-link" data-go="calendar">ver agenda</button></div>`
+      + lista.map((r) => `<div class="v3-vence-linha"><span class="v3-vence-dia">${esc(dia(r.date))}<small>${esc(mes(r.date))}</small></span>`
+        + `<span><strong>${esc(r.title)}</strong><small>${esc(r.sub || 'previsto')}</small></span>`
+        + `<strong class="v3-mono v3-negative v3-sensitive">− ${money(r.amount)}</strong></div>`).join('')
+      + `<p class="v3-vence-soma ${cabe ? '' : 'v3-vence-aperta'}">Soma <strong class="v3-sensitive">${money(soma)}</strong> — ${cabe ? 'cabe no disponível' : `passa do disponível (<span class="v3-sensitive">${money(disponivel)}</span>)`}.</p>`
+      + `</section>`;
+  }
   function renderHome() {
     if (!demo && !items().length && !currentTransactions().length) return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>seu painel começa aqui</h2><p>Cadastre onde seu dinheiro está. Depois, o OAZE mostra a carteira, a sobra do mês e o que precisa da sua atenção.</p>${quickActions()}<button type="button" data-action="add-account" class="v3-primary" style="margin-top:15px">Cadastrar primeira conta</button></div>`;
     const owner=demo?sample.owner:Store.ownerName()||'seu espaço';
@@ -564,9 +600,7 @@
        vence esta semana" é pergunta que se faz com pressa — e era a
        que estava mais embaixo. Curva e categorias continuam na tela,
        logo abaixo: acessíveis, sem disputar a primeira olhada. */
-    const proximos = blocoLigado('proximos')
-      ? `<section class="v3-panel v3-proximos"><div class="v3-row"><h2>até o fim do mês</h2><button type="button" class="v3-link" data-go="calendar">ver agenda</button></div>${upcoming()}</section>`
-      : '';
+    const proximos = blocoLigado('proximos') ? painelVence7() : '';
     const metade = [blocoLigado('categorias') ? `<section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '',
       blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
     const direita = [proximos, blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : ''].filter(Boolean).join('');
@@ -760,8 +794,26 @@
         + `</section>`;
     });
 
-    const ativos = filtrosAtivos();
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${['Entradas','Saídas'].map((f) => `<button type="button" data-filter="${f}" class="v3-pill${state.filter === f ? ' is-active' : ''}" aria-pressed="${state.filter === f}">${f}</button>`).join('')}<button type="button" class="v3-pill v3-pill-filtros${ativos || !['Todos','Entradas','Saídas'].includes(state.filter) ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button></div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted v3-trans-explain">Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.</p><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}${renderDueInvoices()}</div>`;
+    const ativos = filtrosAtivos() + (state.filter !== 'Todos' ? 1 : 0);
+    const nomeFonte = (v) => {
+      if (!v || v === 'todas') return '';
+      const [tipo, id] = String(v).split(':');
+      const alvo = tipo === 'card' ? profile().cards.find((c) => c.id === id) : profile().accounts.find((a) => a.id === id);
+      return alvo ? (alvo.name || alvo.bank) : '';
+    };
+    /* Cada corte ligado ganha saída própria: tirar um filtro não
+       pode obrigar a abrir o painel e caçar qual era. */
+    const chips = [
+      state.filter !== 'Todos' ? { rotulo: state.filter, acao: 'tirar-rapido' } : null,
+      state.filtros.situacao !== 'todas' ? { rotulo: ({ pago: 'Pago', previsto: 'Previsto', cancelado: 'Cancelado' })[state.filtros.situacao] || state.filtros.situacao, acao: 'tirar-situacao' } : null,
+      state.filtros.fonte !== 'todas' ? { rotulo: nomeFonte(state.filtros.fonte) || 'Conta', acao: 'tirar-fonte' } : null,
+      state.filtros.categoria !== 'todas' ? { rotulo: categoryName(state.filtros.categoria), acao: 'tirar-categoria' } : null,
+      state.filtros.busca.trim() ? { rotulo: '“' + state.filtros.busca.trim() + '”', acao: 'tirar-busca' } : null
+    ].filter(Boolean);
+    const chipsHtml = `<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>`
+      + chips.map((c) => `<button type="button" class="v3-pill v3-chip" data-action="${c.acao}" aria-label="Tirar o filtro ${esc(c.rotulo)}">${esc(c.rotulo)}<span aria-hidden="true">✕</span></button>`).join('')
+      + (ativos > 1 ? '<button type="button" class="v3-link v3-limpar-tudo" data-action="limpar-filtros">limpar tudo</button>' : '');
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted v3-trans-explain">Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.</p><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}${renderDueInvoices()}</div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -939,20 +991,7 @@
     const chart = linha('value');
     const chartAportes = linha('contributed');
     const rendimento = series.length ? U.round2(series[series.length-1].value - series[series.length-1].contributed) : U.round2(gain);
-    /* A etiqueta vem do mesmo cálculo que o valor: dizer 'cotação'
-       ao lado de um número estimado seria pior do que não dizer. */
-    const procedencia = (x) => {
-      if (demo) return { classe: 'v3-et-manual', texto: 'exemplo' };
-      let f = null;
-      try { f = Calc.investmentValueSource(x, at); } catch (e) { return null; }
-      if (!f) return null;
-      if (f.origem === 'cotacao') return { classe: 'v3-et-cotacao', texto: f.em ? 'cotação ' + horaCurta(f.em) : 'cotação' };
-      if (f.origem === 'manual') return { classe: 'v3-et-manual', texto: 'informado por você' };
-      if (f.origem === 'indexador') return { classe: 'v3-et-cotacao', texto: 'pelo CDI' };
-      if (f.origem === 'aporte') return { classe: 'v3-et-manual', texto: 'valor aportado' };
-      return { classe: 'v3-et-estimativa', texto: 'estimativa' };
-    };
-    const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}${(() => { const f = procedencia(x); return f ? ` · <em class="v3-etiqueta ${f.classe}">${esc(f.texto)}</em>` : ''; })()}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
+    const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
     const reserves=list.filter((x)=>x.type==='Porquinho'), cdbs=list.filter((x)=>x.type==='CDB');
     const collection=(items,empty)=>items.length?items.map((x)=>`<button type="button" class="v3-invest-bucket" data-investment="${esc(x.id)}"><span><strong>${esc(x.name)}</strong><small>${x.type==='CDB'?(x.maturityDate?`Vence em ${esc(shortDate(x.maturityDate))}`:'Sem vencimento informado')+' · '+(x.liquidity==='diaria'?'liquidez diária':x.liquidity==='vencimento'?'resgate no vencimento':'liquidez não informada'):'Dinheiro reservado'}</small></span><strong class="v3-sensitive">${money(valueAt(x))}</strong></button>`).join(''):`<p class="v3-muted">${empty}</p>`;
     return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Vale hoje</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de rendimento</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
@@ -965,14 +1004,23 @@
       .slice().sort((a, b) => b.date.localeCompare(a.date));
     document.querySelectorAll('#v3-view .v3-invest-row').forEach((row, index) => {
       const item = displayed[index]; if (!item) return;
-      const quote = investmentMarketData.quotes[item.ticker];
-      const quoteAge = Date.now() - Date.parse(quote?.marketTime || '');
-      const validQuote = quote && state.ym === U.todayYM() && quoteAge >= 0 && quoteAge <= 7 * 86400000;
-      const note = item.currentValue != null ? 'Valor informado por você' : item.type === 'CDB' && item.indexer === 'cdi'
-        ? Calc.cdiValueAt(item, U.monthEnd(state.ym)) == null ? 'CDI não sincronizado; exibindo apenas o aporte' : `${item.rate}% do CDI · estimativa bruta até ${shortDate(investmentMarketData.cdi.at(-1)?.date || U.todayISO())}`
-        : ['Ações','FIIs','ETF'].includes(item.type) && item.ticker
-          ? validQuote ? `${item.ticker} · ${item.quantity} cotas · cotação de ${shortDate(quote.marketTime.slice(0, 10))}` : 'Sem cotação atual; exibindo apenas o aporte'
-          : '';
+      let fonte = { origem: '', em: null };
+      /* A demonstração avalia pela própria regra (valor informado,
+         senão o aporte), sem passar pelo Calc. A nota tem de seguir
+         a mesma regra que produziu o número ao lado — senão ela
+         descreve um cálculo que não aconteceu ali. */
+      if (demo) {
+        fonte = { origem: item.currentValue != null ? 'manual' : 'estimativa', em: null };
+      } else {
+        try { fonte = Calc.investmentValueSource(item, U.monthEnd(state.ym)); }
+        catch (e) { fonte = { origem: '', em: null }; }
+      }
+      const papel = ['Ações','FIIs','ETF'].includes(item.type) && item.ticker;
+      const note = fonte.origem === 'manual' ? 'Valor informado por você'
+        : fonte.origem === 'indexador' ? `${item.rate}% do CDI · estimativa bruta até ${shortDate(fonte.em || U.todayISO())}`
+        : fonte.origem === 'cotacao' ? `${item.ticker} · ${item.quantity} cotas · cotação de ${shortDate(String(fonte.em).slice(0, 10))}`
+        : fonte.origem === 'aporte' ? (papel ? 'Sem cotação atual; exibindo apenas o aporte' : 'CDI não sincronizado; exibindo apenas o aporte')
+        : '';
       if (note) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small>${esc(note)}</small>`);
     });
     const list = (profile().investments || []).filter((item) => item.date <= U.monthEnd(state.ym));
@@ -1774,15 +1822,6 @@
   }
   function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
 
-  /* Hora e dia de um carimbo de mercado, curtos: '18:05' quando é
-     de hoje, '13/10 18:05' quando não é. Saber que a cotação é de
-     ontem muda o que se faz com ela. */
-  function horaCurta(iso) {
-    const d = new Date(iso);
-    if (!Number.isFinite(d.getTime())) return '';
-    const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    return U.isoOf ? (d.toISOString().slice(0, 10) === U.todayISO() ? hora : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + hora) : hora;
-  }
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
     clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.hidden=true;},4500);
@@ -3571,6 +3610,11 @@
     if (action==='home-blocks'){painelBlocosInicio();return;}
     if (action==='filtros'){painelFiltros();return;}
     if (action==='limpar-filtros'){limparFiltros();state.filter='Todos';closeSheet();render();toast('Filtros limpos.');return;}
+    if (action==='tirar-rapido'){state.filter='Todos';render();return;}
+    if (action==='tirar-situacao'){state.filtros.situacao='todas';render();return;}
+    if (action==='tirar-fonte'){state.filtros.fonte='todas';render();return;}
+    if (action==='tirar-categoria'){state.filtros.categoria='todas';render();return;}
+    if (action==='tirar-busca'){state.filtros.busca='';render();return;}
     if (action==='plan-info'){go('plan');return;}
     if (action==='demo-only'){toast('Esta é uma proposta visual; não houve nenhuma ação na sua conta.');return;}
   }
@@ -3653,6 +3697,23 @@
     if (path==='/app/analises') state.cocoView='analysis';
     if(!demo && global.OazeCookies) OazeCookies.mostrar();
     if(!demo) refreshCoco().catch((error)=>console.error('V3/Coco configuração:',error));
+    (function cocoSaiDaFrente() {
+      const fab = document.querySelector('.v3-coco-fab');
+      if (!fab) return;
+      let anterior = window.scrollY;
+      let parar = null;
+      const mostrar = () => fab.classList.remove('esta-recolhida');
+      window.addEventListener('scroll', () => {
+        const agora = window.scrollY;
+        /* Descer é ler; subir é procurar. Dois pixels de folga para
+           o tremor do dedo não ficar ligando e desligando o botão. */
+        if (agora > anterior + 2 && agora > 120) fab.classList.add('esta-recolhida');
+        else if (agora < anterior - 2) mostrar();
+        anterior = agora;
+        clearTimeout(parar);
+        parar = setTimeout(mostrar, 700);
+      }, { passive: true });
+    })();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
     document.addEventListener('pointerdown',(event)=>{
       if(event.target.closest?.('[data-voice-push]')){event.preventDefault();voiceSession?.beginPush();}
