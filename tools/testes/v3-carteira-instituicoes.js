@@ -35,6 +35,8 @@ assert.match(app, /Calc\.invoice\(item\.data\.id,.*Calc\.currentInvoiceRef\(item
 assert.match(app, /data-select="\$\{esc\(d\.id\)\}"/);
 assert.match(app, /aria-pressed="\$\{selected\}"/);
 assert.match(app, /--card-plastic:\$\{plastic\}/);
+assert.match(app, /<small>ÚLTIMOS 4 DÍGITOS<\/small><span>\$\{esc\(visibleLast\|\|'—'\)\}<\/span>/, 'débito e crédito mostram somente o final cadastrado');
+assert.doesNotMatch(app, /item\.kind==='credit'\?'••••/, 'o cartão não simula os demais dígitos');
 assert.match(app, /itau:'#F3BC45'/);
 assert.match(app, /type="radio" name="bank"/);
 assert.doesNotMatch(app, /<input[^>]*name="bank"[^>]*type="text"/);

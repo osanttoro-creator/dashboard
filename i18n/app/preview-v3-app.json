@@ -555,20 +555,6 @@
   "es": "Ocultar este elemento"
  },
  {
-  "pt": "NÚMERO DO CARTÃO",
-  "tipo": "exato",
-  "en": "CARD NUMBER",
-  "fr": "NUMÉRO DE CARTE",
-  "es": "NÚMERO DE TARJETA"
- },
- {
-  "pt": "NÚMERO DA CONTA",
-  "tipo": "exato",
-  "en": "ACCOUNT NUMBER",
-  "fr": "NUMÉRO DE COMPTE",
-  "es": "NÚMERO DE CUENTA"
- },
- {
   "pt": "ANA SOUZA",
   "tipo": "exato",
   "en": "ANA SOUZA",
@@ -588,6 +574,13 @@
   "en": "DEBIT",
   "fr": "DÉBIT",
   "es": "DÉBITO"
+ },
+ {
+  "pt": "ÚLTIMOS 4 DÍGITOS",
+  "tipo": "exato",
+  "en": "LAST 4 DIGITS",
+  "fr": "4 DERNIERS CHIFFRES",
+  "es": "ÚLTIMOS 4 DÍGITOS"
  },
  {
   "pt": "Mostrar carteira principal",
