@@ -167,7 +167,9 @@
      redirecionamento aberto -- e é assim que se rouba sessão. */
   A.destino = function () {
     var p = new URLSearchParams(global.location.search).get('destino') || '';
-    if (!p || p.charAt(0) !== '/' || p.charAt(1) === '/' || p.indexOf('\\') >= 0) return '/app';
+    /* Só a área privada é destino de entrada. Um link antigo com
+       ?destino=/ não deve mandar a pessoa para a apresentação. */
+    if (!/^\/app(?:\/|$|[?#])/.test(p) || p.indexOf('\\') >= 0) return '/app';
     return p;
   };
 

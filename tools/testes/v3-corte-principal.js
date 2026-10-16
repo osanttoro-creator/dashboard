@@ -22,6 +22,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const root = path.join(__dirname, '..', '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
@@ -31,6 +32,8 @@ const workflow = read('.github/workflows/deploy-hostinger.yml');
 const app = read('preview-v3/app.js');
 const backend = read('preview-v3/live-backend.js');
 const css = read('preview-v3/app.css');
+const landing = read('index.html');
+const siteAuth = read('assets/js/site-auth.js');
 
 /* A rota: /app e /onboarding entregam a V3, e só ela. */
 assert.ok(htaccess.includes('RewriteRule ^app(/.*)?$         /app-v3.html [L]'),
@@ -51,6 +54,35 @@ assert.doesNotMatch(app, /classic/, 'nenhuma saída para o painel anterior na in
 assert.match(v3, /data-oaze-mode="live" data-cookies-no-aceite/);
 assert.match(workflow, /checar \/app\s+200/);
 assert.match(v3, /class="v3-logo" href="\/app"/);
+
+/* O provedor pode usar a Site URL padrão / como fallback. Só callbacks
+   autenticados seguem para /app; uma visita comum continua na apresentação. */
+const callbackScript = landing.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+assert.ok(callbackScript, 'a landing precisa entregar callbacks de autenticação ao app');
+function callback(search = '', hash = '') {
+  let target = null;
+  const location = { search, hash, replace(url) { target = url; } };
+  vm.runInNewContext(callbackScript, { location, URLSearchParams });
+  return target;
+}
+assert.equal(callback(), null, 'a landing normal continua pública');
+assert.equal(callback('?code=exemplo'), '/app?code=exemplo');
+assert.equal(callback('', '#access_token=a&refresh_token=b'), '/app#access_token=a&refresh_token=b');
+assert.equal(callback('?error=access_denied&error_description=cancelado'),
+  '/app?error=access_denied&error_description=cancelado');
+
+function loginDestination(search) {
+  const window = { location: { search }, localStorage: { setItem() {} } };
+  vm.runInNewContext(siteAuth, {
+    window, document: { documentElement: { lang: 'pt-BR' } }, URLSearchParams,
+    localStorage: window.localStorage,
+  });
+  return window.SiteAuth.destino();
+}
+assert.equal(loginDestination(''), '/app');
+assert.equal(loginDestination('?destino=/'), '/app', 'entrar não pode voltar à landing');
+assert.equal(loginDestination('?destino=/app/carteira'), '/app/carteira');
+assert.equal(loginDestination('?destino=https%3A%2F%2Foutro.site'), '/app');
 
 /* Privacidade antes de dado, sempre. */
 assert.match(backend, /\.from\('privacy_acceptances'\)/);

@@ -3,6 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* Se o provedor de login voltar à Site URL padrão, entregar o callback ao
+   aplicativo antes de mostrar a apresentação. Uma visita normal a / continua
+   sendo a página pública, inclusive para quem já tem conta. */
+(function () {
+  var query = new URLSearchParams(location.search);
+  var fragment = new URLSearchParams(location.hash.slice(1));
+  var retorno = query.has('code') || query.has('token_hash') ||
+    (fragment.has('access_token') && fragment.has('refresh_token')) ||
+    (query.has('error') && query.has('error_description')) ||
+    (fragment.has('error') && fragment.has('error_description'));
+  if (retorno) location.replace('/app' + location.search + location.hash);
+})();
+</script>
 
 <!-- =============================================================
      ATENÇÃO AO TROCAR DE DOMÍNIO
