@@ -417,9 +417,23 @@
     return `<section class="v3-panel v3-wave"><div class="v3-row"><div><span class="v3-label">SOBRA DE ${esc(niceMonth(state.ym).split(' de ')[0].toUpperCase())}</span><strong class="v3-money v3-sensitive">${money(t.balance)}</strong>${demo?'':`<small class="v3-abertura">vem de ${esc(mesAnterior)}: <span class="v3-sensitive">${money(abertura)}</span> · fecha em <span class="v3-sensitive">${money(U.round2(abertura + t.balance))}</span></small>`}</div><div class="v3-meta"><div><span class="v3-label">ENTROU</span><strong class="v3-mono v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">SAIU</span><strong class="v3-mono v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div>${periodControl('v3-wave-period')}${(demo || currentTransactions().length) ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="${demo?'Curva de exemplo':'Fluxo acumulado dos lançamentos confirmados no mês'}"><path d="${path} L720 150 H0 Z" fill="rgba(95,169,155,.16)"/><path d="${path}" fill="none" stroke="#5fa99b" stroke-width="3"/>${demo?'<line x1="550" y1="38" x2="550" y2="150"/><circle cx="550" cy="38" r="5" fill="#0d1821" stroke="#5fa99b" stroke-width="2"/>':''}</svg><div class="v3-axis"><span>01</span><span>08</span><span>15</span><span>22</span><span>30</span></div>` : '<p class="v3-muted" style="margin:auto 0">A curva aparece quando houver movimentações no mês.</p>'}</section>`;
   }
   function categoryBars(max) {
-    const rows = categoryTotals('expense').slice(0, max || 5), total = rows.reduce((n, x) => n + x.value, 0);
+    const all = categoryTotals('expense'), rows = all.slice(0, max || 5), total = all.reduce((n, x) => n + x.value, 0);
     if (!rows.length) return '<p class="v3-muted">Suas categorias aparecem depois da primeira despesa confirmada.</p>';
-    return rows.map((r) => `<div class="v3-cat-row" style="--swatch:${safeColor(r.color)}"><span class="v3-cat-icon">${icon(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span><strong>${esc(r.name)}</strong><div class="v3-bar"><span style="width:${pct(100 * r.value / total)}%"></span></div></span><span class="v3-mono v3-sensitive">${money(r.value)}</span></div>`).join('');
+    const circumference = 2 * Math.PI * 76;
+    let offset = 0;
+    const arcs = all.map((r, i) => { const length = circumference * r.value / total; const arc = `<circle class="v3-spend-arc" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" cx="100" cy="100" r="76" fill="none" stroke="${safeColor(r.color)}" stroke-width="24" style="--segment-length:${Math.max(0, length - 4)};--segment-offset:${-offset};--segment-order:${i}"/>`; offset += length; return arc; }).join('');
+    const list = rows.map((r, i) => `<button type="button" class="v3-spend-row" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" style="--swatch:${safeColor(r.color)}"><span class="v3-cat-icon">${icon(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span class="v3-spend-label"><strong>${esc(r.name)}</strong><small>${Math.round(100 * r.value / total)}% do mês</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></button>`).join('');
+    const remainder = all.length > rows.length ? `<p class="v3-spend-more">Mais ${all.length - rows.length} ${all.length - rows.length === 1 ? 'categoria' : 'categorias'} em “ver tudo”</p>` : '';
+    return `<div class="v3-spend-overview"><div class="v3-spend-ring" data-spend-total="${esc(money(total))}" data-spend-count="${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}"><svg viewBox="0 0 200 200" role="img" aria-label="Distribuição dos gastos por categoria"><circle class="v3-spend-track" cx="100" cy="100" r="76" fill="none" stroke-width="24"/>${arcs}</svg><div class="v3-spend-ring-center"><small id="v3-spend-caption">gastos feitos</small><strong class="v3-sensitive" id="v3-spend-value">${money(total)}</strong><span id="v3-spend-detail">${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}</span></div></div><div class="v3-spend-breakdown"><p class="v3-spend-lead">${esc(rows[0].name)} concentra <strong>${Math.round(100 * rows[0].value / total)}%</strong> dos gastos deste mês.</p>${list}${remainder}</div></div>`;
+  }
+  function focusSpending(hit) {
+    const overview = hit?.closest('.v3-spend-overview'), ring = overview?.querySelector('.v3-spend-ring');
+    if (!ring) return;
+    const index = hit?.dataset.spendIndex;
+    overview.querySelectorAll('[data-spend-index]').forEach((node) => node.classList.toggle('is-active', index != null && node.dataset.spendIndex === index));
+    ring.querySelector('#v3-spend-caption').textContent = index == null ? 'gastos feitos' : hit.dataset.spendName;
+    ring.querySelector('#v3-spend-value').textContent = index == null ? ring.dataset.spendTotal : hit.dataset.spendValue;
+    ring.querySelector('#v3-spend-detail').textContent = index == null ? ring.dataset.spendCount : `${hit.dataset.spendShare}% do mês`;
   }
   function upcoming() {
     const rs = monthUpcoming().slice(0, 3);
@@ -3766,6 +3780,11 @@
       }, { passive: true });
     })();
     document.addEventListener('click',handleClick);document.addEventListener('submit',handleSubmit);
+    document.addEventListener('pointerover',(event)=>{const hit=event.target.closest?.('[data-spend-index]');if(hit)focusSpending(hit);});
+    document.addEventListener('focusin',(event)=>{const hit=event.target.closest?.('[data-spend-index]');if(hit)focusSpending(hit);});
+    document.addEventListener('click',(event)=>{const hit=event.target.closest?.('[data-spend-index]');if(hit)focusSpending(hit);});
+    document.addEventListener('pointerout',(event)=>{const overview=event.target.closest?.('.v3-spend-overview');if(overview&&!overview.contains(event.relatedTarget))focusSpending(overview);});
+    document.addEventListener('focusout',(event)=>{const overview=event.target.closest?.('.v3-spend-overview');if(overview&&!overview.contains(event.relatedTarget))focusSpending(overview);});
     document.addEventListener('pointerdown',(event)=>{
       if(event.target.closest?.('[data-voice-push]')){event.preventDefault();voiceSession?.beginPush();}
     });

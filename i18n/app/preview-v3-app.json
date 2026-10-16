@@ -807,6 +807,48 @@
   "es": "Tus categorías aparecen tras el primer gasto confirmado."
  },
  {
+  "pt": "{0}% do mês",
+  "tipo": "padrao",
+  "en": "{0}% of the month",
+  "fr": "{0} % du mois",
+  "es": "{0} % del mes"
+ },
+ {
+  "pt": "Mais {0} {1} em “ver tudo”",
+  "tipo": "padrao",
+  "en": "{0} more {1} in “view all”",
+  "fr": "Encore {0} {1} dans « tout voir »",
+  "es": "{0} {1} más en « ver todo »"
+ },
+ {
+  "pt": "Distribuição dos gastos por categoria",
+  "tipo": "exato",
+  "en": "Spending by category",
+  "fr": "Dépenses par catégorie",
+  "es": "Gastos por categoría"
+ },
+ {
+  "pt": "gastos feitos",
+  "tipo": "exato",
+  "en": "spent",
+  "fr": "dépensé",
+  "es": "gastado"
+ },
+ {
+  "pt": "{0} concentra",
+  "tipo": "padrao",
+  "en": "{0} accounts for",
+  "fr": "{0} représente",
+  "es": "{0} concentra"
+ },
+ {
+  "pt": "dos gastos deste mês.",
+  "tipo": "exato",
+  "en": "of this month's spending.",
+  "fr": "des dépenses de ce mois.",
+  "es": "de los gastos de este mes."
+ },
+ {
   "pt": "Nenhum vencimento próximo registrado.",
   "tipo": "exato",
   "en": "No upcoming due dates recorded.",
@@ -7523,6 +7565,13 @@
   "es": "Elige una cuenta o tarjeta válida."
  },
  {
+  "pt": "Cadastre a cotação de {0} antes de lançar em {1}.",
+  "tipo": "padrao",
+  "en": "Add the exchange rate for {0} before recording in {1}.",
+  "fr": "Ajoutez le taux de change de {0} avant de saisir en {1}.",
+  "es": "Agrega la cotización de {0} antes de registrar en {1}."
+ },
+ {
   "pt": "Salvar assim",
   "tipo": "exato",
   "en": "Save like this",
@@ -7570,13 +7619,6 @@
   "en": "One of the instalments goes beyond your plan’s monthly limit.",
   "fr": "Une des échéances dépasse la limite mensuelle de votre forfait.",
   "es": "Una de las cuotas supera el límite mensual de tu plan."
- },
- {
-  "pt": "Cadastre a cotação de {0} antes de lançar em {1}.",
-  "tipo": "padrao",
-  "en": "Add the exchange rate for {0} before recording in {1}.",
-  "fr": "Ajoutez le taux de change de {0} avant de saisir en {1}.",
-  "es": "Agrega la cotización de {0} antes de registrar en {1}."
  },
  {
   "pt": "Escolha uma categoria válida.",

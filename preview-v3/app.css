@@ -797,3 +797,24 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 #v3-form-investment .v3-mais{min-width:0}
 #v3-form-investment .v3-mais-corpo{display:grid;gap:14px;padding-top:14px}
 @media(max-width:900px){.v3-sheet:has(#v3-form-investment){width:100%;height:100dvh;max-height:100dvh;border-radius:0}#v3-form-investment{padding-bottom:calc(86px + env(safe-area-inset-bottom))}#v3-form-investment .v3-primary[type=submit]{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:2}}
+
+/* O gráfico resume o mês inteiro; a lista mostra apenas as maiores categorias. */
+.v3-spend-overview{display:grid;grid-template-columns:minmax(138px,42%) minmax(0,1fr);align-items:center;gap:clamp(16px,2vw,28px);margin-top:20px}
+.v3-spend-ring{position:relative;display:grid;place-items:center;width:min(100%,230px);aspect-ratio:1;margin-inline:auto;border-radius:50%;background:radial-gradient(circle,var(--panel) 48%,rgba(240,229,207,.035) 49%,transparent 72%)}
+.v3-spend-ring svg{display:block;width:100%;height:100%;overflow:visible;transform:rotate(-90deg);filter:drop-shadow(0 10px 14px rgba(0,7,11,.22))}
+.v3-spend-track{stroke:rgba(240,229,207,.07)}
+.v3-spend-arc{stroke-dasharray:var(--segment-length) 478;stroke-dashoffset:var(--segment-offset);stroke-linecap:round;cursor:pointer;transition:stroke-width .25s ease,opacity .25s ease,filter .25s ease;animation:v3-spend-draw .75s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--segment-order)*55ms)}
+.v3-spend-ring:has(.v3-spend-arc.is-active) .v3-spend-arc:not(.is-active){opacity:.42}
+.v3-spend-arc.is-active{stroke-width:31;filter:drop-shadow(0 0 5px currentColor)}
+@keyframes v3-spend-draw{from{stroke-dasharray:0 478;opacity:0}to{stroke-dasharray:var(--segment-length) 478;opacity:1}}
+.v3-spend-ring-center{position:relative;z-index:1;display:grid;justify-items:center;gap:3px;width:64%;text-align:center}
+.v3-spend-ring-center small,.v3-spend-ring-center span{color:var(--muted);font:500 10px var(--mono)}
+.v3-spend-ring-center strong{max-width:100%;font:600 clamp(15px,2.2vw,23px)/1.1 var(--display);letter-spacing:-.045em;white-space:nowrap}
+.v3-spend-breakdown{min-width:0}.v3-spend-lead{margin:0 0 9px;color:var(--muted);font-size:12px;line-height:1.35}.v3-spend-lead strong{color:var(--milk)}
+.v3-spend-row{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:9px;width:100%;min-width:0;padding:7px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--milk);text-align:left;transition:background .2s ease,transform .2s ease}
+.v3-spend-row:hover,.v3-spend-row.is-active{background:rgba(240,229,207,.045);transform:translateX(2px)}
+.v3-spend-row:last-of-type{border-bottom:0}.v3-spend-row .v3-cat-icon{width:31px;height:31px;border-radius:9px}.v3-spend-row .v3-cat-icon svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.9;fill:none}
+.v3-spend-label{display:grid;gap:1px;min-width:0}.v3-spend-label strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.v3-spend-label small{color:var(--muted);font:400 10px var(--mono)}
+.v3-spend-row>.v3-mono{font-size:11px;white-space:nowrap}.v3-spend-more{margin:8px 0 0;color:var(--muted);font-size:10px}
+@media(max-width:560px){.v3-spend-overview{grid-template-columns:1fr;gap:16px}.v3-spend-ring{width:min(65%,220px)}.v3-spend-lead{font-size:13px}.v3-spend-row>.v3-mono{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.v3-spend-arc{animation:none;transition:none}.v3-spend-row{transition:none}}
