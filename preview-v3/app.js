@@ -958,13 +958,34 @@
     })().finally(() => { investmentMarketRequest = null; });
     return investmentMarketRequest;
   }
+  /* Data e hora de um carimbo de mercado: só a hora quando é de
+     hoje, dia e hora quando não é. O dia importa justamente quando
+     não é hoje. */
+  function carimboMercado(iso) {
+    const d = new Date(iso);
+    if (!Number.isFinite(d.getTime())) return '';
+    const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const dia = String(d.getFullYear()) + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    return dia === U.todayISO() ? `hoje às ${hora}` : `${d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} às ${hora}`;
+  }
   function investmentMarketPanel() {
     if (demo) return '<section class="v3-panel v3-market-panel"><h2>dados de mercado</h2><p class="v3-muted">Na demonstração, os valores são apenas exemplos. Na conta real, CDI e Selic vêm do Banco Central.</p></section>';
     const m = state.market, i = m.indices;
     const datum = (entry, digits) => entry && Number.isFinite(entry.value)
       ? `<strong>${Number(entry.value).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits })}%</strong><small>${esc(shortDate(entry.date))}</small>`
       : '<strong>—</strong><small>sem dado</small>';
-    return `<section class="v3-panel v3-market-panel" aria-live="polite"><div class="v3-row"><h2>referências de mercado</h2><button type="button" class="v3-link" data-action="refresh-invest-market" ${m.loading?'disabled':''}>${m.loading?'Atualizando…':'Atualizar'}</button></div><div class="v3-market-grid"><div><span>CDI · ao ano</span>${datum(i?.cdiAnnual, 2)}</div><div><span>CDI · ao dia</span>${datum(i?.cdiDaily, 6)}</div><div><span>Meta Selic · ao ano</span>${datum(i?.selicTarget, 2)}</div></div><p class="v3-muted">Fonte: Banco Central (SGS). Datas de referência acima; taxas não são o saldo da sua aplicação. CDB % do CDI usa o histórico diário para estimativa bruta, sem IR, IOF ou taxas do banco.</p>${m.error?`<p class="v3-market-warning">${esc(m.error)}</p>`:''}${m.historyError?`<p class="v3-market-warning">CDI: ${esc(m.historyError)}</p>`:''}${m.quoteError?`<p class="v3-market-warning">Cotações: ${esc(m.quoteError)}</p>`:''}</section>`;
+    return `<section class="v3-panel v3-market-panel" aria-live="polite"><div class="v3-row"><h2>referências de mercado</h2><button type="button" class="v3-link" data-action="refresh-invest-market" ${m.loading?'disabled':''}>${m.loading?'Atualizando…':'Atualizar'}</button></div><div class="v3-market-grid"><div><span>CDI · ao ano</span>${datum(i?.cdiAnnual, 2)}</div><div><span>CDI · ao dia</span>${datum(i?.cdiDaily, 6)}</div><div><span>Meta Selic · ao ano</span>${datum(i?.selicTarget, 2)}</div></div><p class="v3-muted">Fonte: Banco Central (SGS). Datas de referência acima; taxas não são o saldo da sua aplicação. CDB % do CDI usa o histórico diário para estimativa bruta, sem IR, IOF ou taxas do banco.</p>${linhaCotacoes()}${m.error?`<p class="v3-market-warning">${esc(m.error)}</p>`:''}${m.historyError?`<p class="v3-market-warning">CDI: ${esc(m.historyError)}</p>`:''}${m.quoteError?`<p class="v3-market-warning">Cotações: ${esc(m.quoteError)}</p>`:''}</section>`;
+  }
+  /* Quantas cotações estão carregadas e a mais recente delas. Sem
+     cotação nenhuma a linha some: dizer 'nenhuma cotação' numa conta
+     que não tem ação seria avisar sobre algo que não se pediu. */
+  function linhaCotacoes() {
+    const papeis = Object.values(investmentMarketData.quotes || {})
+      .filter((q) => q && q.marketTime && Number.isFinite(Date.parse(q.marketTime)));
+    if (!papeis.length) return '';
+    const recente = papeis.reduce((a, b) => Date.parse(a.marketTime) >= Date.parse(b.marketTime) ? a : b);
+    const carimbo = carimboMercado(recente.marketTime);
+    return `<p class="v3-muted">Cotações: brapi · ${esc(String(papeis.length))} ${papeis.length === 1 ? 'papel' : 'papéis'} · mais recente ${esc(carimbo)}. A cotação pode ter atraso e não comprova posição.</p>`;
   }
   function renderInvestments() {
     if (state.investTab === 'planning') return renderPlanning();
@@ -1018,7 +1039,7 @@
       const papel = ['Ações','FIIs','ETF'].includes(item.type) && item.ticker;
       const note = fonte.origem === 'manual' ? 'Valor informado por você'
         : fonte.origem === 'indexador' ? `${item.rate}% do CDI · estimativa bruta até ${shortDate(fonte.em || U.todayISO())}`
-        : fonte.origem === 'cotacao' ? `${item.ticker} · ${item.quantity} cotas · cotação de ${shortDate(String(fonte.em).slice(0, 10))}`
+        : fonte.origem === 'cotacao' ? `${item.ticker} · ${item.quantity} cotas · cotação de ${carimboMercado(fonte.em) || shortDate(String(fonte.em).slice(0, 10))}`
         : fonte.origem === 'aporte' ? (papel ? 'Sem cotação atual; exibindo apenas o aporte' : 'CDI não sincronizado; exibindo apenas o aporte')
         : '';
       if (note) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small>${esc(note)}</small>`);

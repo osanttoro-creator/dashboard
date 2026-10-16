@@ -1905,6 +1905,25 @@
   "es": "Cotizaciones no disponibles."
  },
  {
+  "pt": "2-digit",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "hoje às {0}",
+  "tipo": "padrao",
+  "en": "today at {0}",
+  "fr": "aujourd’hui à {0}",
+  "es": "hoy a las {0}"
+ },
+ {
+  "pt": "{0} às {1}",
+  "tipo": "padrao",
+  "en": "{0} at {1}",
+  "fr": "{0} à {1}",
+  "es": "{0} a las {1}"
+ },
+ {
   "pt": "dados de mercado",
   "tipo": "exato",
   "en": "market data",
@@ -1987,6 +2006,20 @@
   "en": "Source: Central Bank of Brazil (SGS). Reference dates are shown above; rates are not your investment balance. CDI-linked CDBs use daily history for a gross estimate, excluding taxes and bank fees.",
   "fr": "Source : Banque centrale du Brésil (SGS). Les dates de référence sont ci-dessus ; les taux ne sont pas le solde de votre placement. Les CDB liés au CDI utilisent l'historique quotidien pour une estimation brute, hors impôts et frais bancaires.",
   "es": "Fuente: Banco Central de Brasil (SGS). Las fechas de referencia figuran arriba; las tasas no son el saldo de tu inversión. Los CDB ligados al CDI usan el historial diario para una estimación bruta, sin impuestos ni comisiones bancarias."
+ },
+ {
+  "pt": "papéis",
+  "tipo": "exato",
+  "en": "holdings",
+  "fr": "titres",
+  "es": "papeles"
+ },
+ {
+  "pt": "Cotações: brapi · {0} {1} · mais recente {2}. A cotação pode ter atraso e não comprova posição.",
+  "tipo": "padrao",
+  "en": "Quotes: brapi · {0} {1} · most recent {2}. The quote may be delayed and does not prove a holding.",
+  "fr": "Cours : brapi · {0} {1} · le plus récent {2}. Le cours peut être différé et ne prouve pas une position.",
+  "es": "Cotizaciones: brapi · {0} {1} · la más reciente {2}. La cotización puede tener retraso y no comprueba posición."
  },
  {
   "pt": "Aportado: {0}",
