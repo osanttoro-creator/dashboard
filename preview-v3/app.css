@@ -818,3 +818,29 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-spend-row>.v3-mono{font-size:12px;white-space:nowrap}.v3-spend-more{margin:8px 0 0;color:var(--muted);font-size:10px}
 @media(max-width:560px){.v3-spend-overview{gap:15px}.v3-spend-ring{width:min(68%,230px)}.v3-spend-lead{font-size:13px}.v3-spend-row>.v3-mono{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.v3-spend-arc{animation:none;transition:none}.v3-spend-row{transition:none}}
+
+/* A carteira segue intacta; o gráfico ganha uma linha inteira do painel. */
+.v3-home>.v3-widget-spending,.v3-home>.v3-home-extras{grid-column:1/-1;min-width:0}
+.v3-widget-spending{container-type:inline-size}
+.v3-widget-spending .v3-spend-overview{align-items:center}
+@container (min-width:650px){.v3-widget-spending .v3-spend-overview{grid-template-columns:minmax(225px,.75fr) minmax(0,1.25fr);gap:clamp(22px,4vw,60px)}.v3-widget-spending .v3-spend-ring{width:min(100%,300px)}}
+.v3-home-extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:18px}
+.v3-home-extras>.v3-panel{min-width:0}
+.v3-home-widget{display:grid;align-content:start;gap:13px}
+.v3-home-widget .v3-row{margin-bottom:2px}
+.v3-home-widget .v3-home-bill{min-width:0;gap:14px}
+.v3-home-widget .v3-home-bill>span{min-width:0}
+.v3-home-widget .v3-home-bill strong{overflow-wrap:anywhere}
+.v3-home-widget .v3-home-bill>strong{white-space:nowrap}
+.v3-widget-limit{display:grid;gap:4px}
+.v3-widget-track{height:7px;border-radius:9px;background:rgba(240,229,207,.09);overflow:hidden}
+.v3-widget-track>i{display:block;height:100%;border-radius:inherit;background:var(--teal)}
+.v3-widget-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v3-widget-compare>div{display:grid;gap:5px;padding:16px;border-radius:19px;background:rgba(240,229,207,.045)}
+.v3-widget-compare small,.v3-widget-compare span{color:var(--muted)}
+.v3-widget-compare strong{font:500 clamp(18px,2.1vw,28px) var(--display);letter-spacing:-.05em;overflow-wrap:anywhere}
+.v3-widget-big{display:block;font-size:clamp(25px,3vw,40px);overflow-wrap:anywhere}
+.v3-widget-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+@media(max-width:1100px){.v3-home-extras{grid-template-columns:1fr}}
+@media(max-width:900px){.v3-home>.v3-widget-spending{order:3}.v3-home>.v3-home-extras{order:4}}
+@media(max-width:650px){.v3-widget-picker{grid-template-columns:1fr}.v3-widget-spending .v3-spend-ring{width:min(75%,250px)}}

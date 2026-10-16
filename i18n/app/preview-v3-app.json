@@ -1043,6 +1043,97 @@
   "es": "OAZE Score"
  },
  {
+  "pt": "Saldo por conta",
+  "tipo": "exato",
+  "en": "Balance by account",
+  "fr": "Solde par compte",
+  "es": "Saldo por cuenta"
+ },
+ {
+  "pt": "Fatura × limite por cartão",
+  "tipo": "exato",
+  "en": "Bill × card limit",
+  "fr": "Facture × plafond de la carte",
+  "es": "Factura × límite de tarjeta"
+ },
+ {
+  "pt": "Débito × crédito",
+  "tipo": "exato",
+  "en": "Debit × credit",
+  "fr": "Débit × crédit",
+  "es": "Débito × crédito"
+ },
+ {
+  "pt": "Tetos por categoria",
+  "tipo": "exato",
+  "en": "Spending caps by category",
+  "fr": "Plafonds par catégorie",
+  "es": "Topes por categoría"
+ },
+ {
+  "pt": "Últimos lançamentos",
+  "tipo": "exato",
+  "en": "Recent transactions",
+  "fr": "Dernières opérations",
+  "es": "Últimos movimientos"
+ },
+ {
+  "pt": "Parcelas em andamento",
+  "tipo": "exato",
+  "en": "Active installments",
+  "fr": "Paiements échelonnés en cours",
+  "es": "Cuotas en curso"
+ },
+ {
+  "pt": "Despesas fixas",
+  "tipo": "exato",
+  "en": "Recurring expenses",
+  "fr": "Dépenses récurrentes",
+  "es": "Gastos recurrentes"
+ },
+ {
+  "pt": "Receitas fixas",
+  "tipo": "exato",
+  "en": "Recurring income",
+  "fr": "Revenus récurrents",
+  "es": "Ingresos recurrentes"
+ },
+ {
+  "pt": "Comparação com mês anterior",
+  "tipo": "exato",
+  "en": "Compared with previous month",
+  "fr": "Comparaison avec le mois précédent",
+  "es": "Comparación con el mes anterior"
+ },
+ {
+  "pt": "Patrimônio",
+  "tipo": "exato",
+  "en": "Net worth",
+  "fr": "Patrimoine net",
+  "es": "Patrimonio neto"
+ },
+ {
+  "pt": "Aportes registrados",
+  "tipo": "exato",
+  "en": "Recorded contributions",
+  "fr": "Versements enregistrés",
+  "es": "Aportes registrados"
+ },
+ {
+  "pt": "Previsto no mês",
+  "tipo": "exato",
+  "en": "Expected this month",
+  "fr": "Prévisions du mois",
+  "es": "Previsto este mes"
+ },
+ {
+  "pt": "Assinaturas recorrentes",
+  "tipo": "exato",
+  "en": "Recurring subscriptions",
+  "fr": "Abonnements récurrents",
+  "es": "Suscripciones recurrentes"
+ },
+ {
   "pt": "gerenciar tela inicial",
   "tipo": "exato",
   "en": "manage home screen",
@@ -1057,11 +1148,11 @@
   "es": "lo que aparece en Inicio"
  },
  {
-  "pt": "A carteira e a saudação ficam sempre. O resto é escolha sua, e vale neste aparelho.",
+  "pt": "A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.",
   "tipo": "exato",
-  "en": "The wallet and the greeting always stay. The rest is your choice, and it applies to this device.",
-  "fr": "Le portefeuille et le message d’accueil restent toujours. Le reste est votre choix, et vaut pour cet appareil.",
-  "es": "La cartera y el saludo siempre se quedan. El resto es tu elección, y vale en este dispositivo."
+  "en": "The wallet and greeting always stay. Turn on only what you use. This choice applies on this device.",
+  "fr": "Le portefeuille et le message d’accueil restent toujours visibles. Activez uniquement ce que vous consultez. Ce choix s’applique à cet appareil.",
+  "es": "La cartera y el saludo siempre permanecen. Activa solo lo que consultas. Esta elección se aplica en este dispositivo."
  },
  {
   "pt": "Gerenciar tela inicial",
@@ -1174,6 +1265,237 @@
   "en": "No goals in progress.",
   "fr": "Aucun objectif en cours.",
   "es": "No hay metas en curso."
+ },
+ {
+  "pt": "saldo por conta",
+  "tipo": "exato",
+  "en": "balance by account",
+  "fr": "solde par compte",
+  "es": "saldo por cuenta"
+ },
+ {
+  "pt": "Nenhuma conta visível.",
+  "tipo": "exato",
+  "en": "No visible accounts.",
+  "fr": "Aucun compte visible.",
+  "es": "No hay cuentas visibles."
+ },
+ {
+  "pt": "fatura × limite por cartão",
+  "tipo": "exato",
+  "en": "bill × card limit",
+  "fr": "facture × plafond de la carte",
+  "es": "factura × límite de tarjeta"
+ },
+ {
+  "pt": "fatura em aberto {0}",
+  "tipo": "padrao",
+  "en": "outstanding bill {0}",
+  "fr": "facture impayée {0}",
+  "es": "factura pendiente {0}"
+ },
+ {
+  "pt": "Nenhum cartão visível.",
+  "tipo": "exato",
+  "en": "No visible cards.",
+  "fr": "Aucune carte visible.",
+  "es": "No hay tarjetas visibles."
+ },
+ {
+  "pt": "débito × crédito",
+  "tipo": "exato",
+  "en": "debit × credit",
+  "fr": "débit × crédit",
+  "es": "débito × crédito"
+ },
+ {
+  "pt": "teto {0}",
+  "tipo": "padrao",
+  "en": "cap {0}",
+  "fr": "plafond {0}",
+  "es": "tope {0}"
+ },
+ {
+  "pt": "tetos por categoria",
+  "tipo": "exato",
+  "en": "spending caps by category",
+  "fr": "plafonds par catégorie",
+  "es": "topes por categoría"
+ },
+ {
+  "pt": "Defina um teto em Planejamento.",
+  "tipo": "exato",
+  "en": "Set a cap in Planning.",
+  "fr": "Définissez un plafond dans Planification.",
+  "es": "Define un tope en Planificación."
+ },
+ {
+  "pt": "últimos lançamentos",
+  "tipo": "exato",
+  "en": "recent transactions",
+  "fr": "dernières opérations",
+  "es": "últimos movimientos"
+ },
+ {
+  "pt": "Nenhum lançamento confirmado.",
+  "tipo": "exato",
+  "en": "No confirmed transactions.",
+  "fr": "Aucune opération confirmée.",
+  "es": "No hay movimientos confirmados."
+ },
+ {
+  "pt": "parcela {0}/{1}",
+  "tipo": "padrao",
+  "en": "installment {0}/{1}",
+  "fr": "échéance {0}/{1}",
+  "es": "cuota {0}/{1}"
+ },
+ {
+  "pt": "parcelas em andamento",
+  "tipo": "exato",
+  "en": "active installments",
+  "fr": "paiements échelonnés en cours",
+  "es": "cuotas en curso"
+ },
+ {
+  "pt": "Nenhuma parcela neste mês.",
+  "tipo": "exato",
+  "en": "No installments this month.",
+  "fr": "Aucune échéance ce mois-ci.",
+  "es": "No hay cuotas este mes."
+ },
+ {
+  "pt": "despesas fixas",
+  "tipo": "exato",
+  "en": "recurring expenses",
+  "fr": "dépenses récurrentes",
+  "es": "gastos recurrentes"
+ },
+ {
+  "pt": "receitas fixas",
+  "tipo": "exato",
+  "en": "recurring income",
+  "fr": "revenus récurrents",
+  "es": "ingresos recurrentes"
+ },
+ {
+  "pt": "Nenhuma recorrência registrada neste mês.",
+  "tipo": "exato",
+  "en": "No recurring transactions recorded this month.",
+  "fr": "Aucune opération récurrente enregistrée ce mois-ci.",
+  "es": "No hay movimientos recurrentes registrados este mes."
+ },
+ {
+  "pt": "este mês × anterior",
+  "tipo": "exato",
+  "en": "this month × previous",
+  "fr": "ce mois-ci × précédent",
+  "es": "este mes × anterior"
+ },
+ {
+  "pt": "Entradas",
+  "tipo": "exato",
+  "en": "Incoming",
+  "fr": "Entrées",
+  "es": "Entradas"
+ },
+ {
+  "pt": "antes {0}",
+  "tipo": "padrao",
+  "en": "previously {0}",
+  "fr": "avant {0}",
+  "es": "antes {0}"
+ },
+ {
+  "pt": "Gastos",
+  "tipo": "exato",
+  "en": "Spending",
+  "fr": "Dépenses",
+  "es": "Gastos"
+ },
+ {
+  "pt": "patrimônio",
+  "tipo": "exato",
+  "en": "net worth",
+  "fr": "patrimoine net",
+  "es": "patrimonio neto"
+ },
+ {
+  "pt": "Contas consideradas + investimentos − faturas abertas.",
+  "tipo": "exato",
+  "en": "Included accounts + investments − outstanding card bills.",
+  "fr": "Comptes pris en compte + investissements − factures de carte impayées.",
+  "es": "Cuentas incluidas + inversiones − facturas de tarjeta pendientes."
+ },
+ {
+  "pt": "aportes registrados",
+  "tipo": "exato",
+  "en": "recorded contributions",
+  "fr": "versements enregistrés",
+  "es": "aportes registrados"
+ },
+ {
+  "pt": "Nenhum aporte registrado.",
+  "tipo": "exato",
+  "en": "No contributions recorded.",
+  "fr": "Aucun versement enregistré.",
+  "es": "No hay aportes registrados."
+ },
+ {
+  "pt": "reserva de emergência",
+  "tipo": "exato",
+  "en": "emergency fund",
+  "fr": "fonds d’urgence",
+  "es": "fondo de emergencia"
+ },
+ {
+  "pt": "meta {0}",
+  "tipo": "padrao",
+  "en": "goal {0}",
+  "fr": "objectif {0}",
+  "es": "meta {0}"
+ },
+ {
+  "pt": "Crie uma meta de reserva para acompanhar aqui.",
+  "tipo": "exato",
+  "en": "Create an emergency fund goal to track it here.",
+  "fr": "Créez un objectif de fonds d’urgence pour le suivre ici.",
+  "es": "Crea una meta de fondo de emergencia para seguirla aquí."
+ },
+ {
+  "pt": "previsto no mês",
+  "tipo": "exato",
+  "en": "expected this month",
+  "fr": "prévisions du mois",
+  "es": "previsto este mes"
+ },
+ {
+  "pt": "Entradas pendentes",
+  "tipo": "exato",
+  "en": "Pending income",
+  "fr": "Revenus en attente",
+  "es": "Ingresos pendientes"
+ },
+ {
+  "pt": "Saídas pendentes",
+  "tipo": "exato",
+  "en": "Pending expenses",
+  "fr": "Dépenses en attente",
+  "es": "Gastos pendientes"
+ },
+ {
+  "pt": "assinaturas recorrentes",
+  "tipo": "exato",
+  "en": "recurring subscriptions",
+  "fr": "abonnements récurrents",
+  "es": "suscripciones recurrentes"
+ },
+ {
+  "pt": "Nenhuma assinatura registrada neste mês.",
+  "tipo": "exato",
+  "en": "No subscriptions recorded this month.",
+  "fr": "Aucun abonnement enregistré ce mois-ci.",
+  "es": "No hay suscripciones registradas este mes."
  },
  {
   "pt": "próximos 7 dias",
@@ -1326,13 +1648,6 @@
   "en": "Could not save the status.",
   "fr": "Impossible d’enregistrer le statut.",
   "es": "No se pudo guardar el estado."
- },
- {
-  "pt": "Entradas",
-  "tipo": "exato",
-  "en": "Incoming",
-  "fr": "Entrées",
-  "es": "Entradas"
  },
  {
   "pt": "Saídas",
@@ -2609,13 +2924,6 @@
   "en": "Save salary",
   "fr": "Enregistrer le salaire",
   "es": "Guardar salario"
- },
- {
-  "pt": "tetos por categoria",
-  "tipo": "exato",
-  "en": "spending caps by category",
-  "fr": "plafonds par catégorie",
-  "es": "topes por categoría"
  },
  {
   "pt": "Você define cada valor; nenhum teto é criado automaticamente.",

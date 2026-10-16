@@ -500,7 +500,21 @@
     { id: 'metas', nome: 'Metas em andamento', padrao: false },
     { id: 'indicadores', nome: 'Indicadores do mês', padrao: false },
     { id: 'atalhos', nome: 'Ações rápidas', padrao: false },
-    { id: 'score', nome: 'OAZE Score', padrao: false }
+    { id: 'score', nome: 'OAZE Score', padrao: false },
+    { id: 'contas', nome: 'Saldo por conta', padrao: false },
+    { id: 'cartoes', nome: 'Fatura × limite por cartão', padrao: false },
+    { id: 'debitocredito', nome: 'Débito × crédito', padrao: false },
+    { id: 'tetos', nome: 'Tetos por categoria', padrao: false },
+    { id: 'ultimos', nome: 'Últimos lançamentos', padrao: false },
+    { id: 'parcelas', nome: 'Parcelas em andamento', padrao: false },
+    { id: 'fixas', nome: 'Despesas fixas', padrao: false },
+    { id: 'receitasfixas', nome: 'Receitas fixas', padrao: false },
+    { id: 'comparativo', nome: 'Comparação com mês anterior', padrao: false },
+    { id: 'patrimonio', nome: 'Patrimônio', padrao: false },
+    { id: 'aportes', nome: 'Aportes registrados', padrao: false },
+    { id: 'reserva', nome: 'Reserva de emergência', padrao: false },
+    { id: 'planejado', nome: 'Previsto no mês', padrao: false },
+    { id: 'assinaturas', nome: 'Assinaturas recorrentes', padrao: false }
   ];
   function blocosEscolhidos() {
     try { return JSON.parse(localStorage.getItem(CHAVE_INICIO) || '{}') || {}; }
@@ -518,7 +532,7 @@
   }
   function painelBlocosInicio() {
     const linhas = BLOCOS_INICIO.map((b) => `<label class="v3-setting-row v3-bloco-linha"><span>${esc(b.nome)}</span><input type="checkbox" data-bloco="${esc(b.id)}" ${blocoLigado(b.id) ? 'checked' : ''}></label>`).join('');
-    openSheet(`${sheetTop('gerenciar tela inicial', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. O resto é escolha sua, e vale neste aparelho.</p><section class="v3-panel" style="margin-top:16px">${linhas}</section>`, 'Gerenciar tela inicial');
+    openSheet(`${sheetTop('gerenciar tela inicial', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.</p><section class="v3-panel v3-widget-picker" style="margin-top:16px">${linhas}</section>`, 'Gerenciar tela inicial');
   }
   /* O bloco de investimentos na Início usa a mesma conta da tela de
      investimentos: valor hoje, quanto foi aportado e a diferença. */
@@ -568,6 +582,36 @@
     return `<section class="v3-panel"><div class="v3-row"><h2>metas em andamento</h2><button type="button" class="v3-link" data-go="goals">ver metas</button></div>`
       + (goals.length ? goals.slice(0,3).map((goal) => `<div class="v3-home-bill"><span><strong>${esc(goal.name)}</strong><small>${pct(100*Number(goal.saved||0)/Number(goal.target))}% concluído</small></span><strong class="v3-sensitive">${money(goal.saved || 0)} / ${money(goal.target)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma meta em andamento.</p>') + '</section>';
   }
+  function widgetPanel(title, body, page, label) {
+    return `<section class="v3-panel v3-home-widget"><div class="v3-row"><h2>${esc(title)}</h2>${page ? `<button type="button" class="v3-link" data-go="${esc(page)}">${esc(label || 'ver tudo')}</button>` : ''}</div>${body}</section>`;
+  }
+  function widgetRows(rows, empty) {
+    return rows.length ? rows.map((r) => `<div class="v3-home-bill"><span><strong>${esc(r.name)}</strong>${r.sub ? `<small>${esc(r.sub)}</small>` : ''}</span><strong class="v3-sensitive">${money(r.value)}</strong></div>`).join('') : `<p class="v3-muted">${esc(empty)}</p>`;
+  }
+  function cardInvoiceRows() {
+    return profile().cards.filter((c) => !c.hidden).map((card) => {
+      const ref = demo ? state.ym : Calc.currentInvoiceRef(card, state.ym, profile());
+      const bill = demo ? { restante: Number(sample.cardInvoices[card.id] || 0), planejado: Number(sample.cardInvoices[card.id] || 0), pago: 0, dueDate: '' } : Calc.invoice(card.id, ref, profile());
+      return { card, bill, ref };
+    }).filter((x) => x.bill);
+  }
+  function extraHomeWidget(id, context) {
+    const { p, ts, t } = context;
+    if (id === 'contas') return widgetPanel('saldo por conta', widgetRows(p.accounts.filter((a) => !a.archived && !a.hidden).map((a) => ({ name: a.name || a.bank || 'Conta', sub: a.last4 ? `final ${a.last4}` : '', value: demo ? Number(a.openingBalance || 0) : Calc.accountBalance(a.id, U.monthEnd(state.ym), p) })), 'Nenhuma conta visível.'), 'wallet');
+    if (id === 'cartoes') return widgetPanel('fatura × limite por cartão', cardInvoiceRows().map(({card,bill}) => { const due = Number(bill.restante || 0), limit = Number(card.limit || 0); return `<div class="v3-widget-limit"><div class="v3-home-bill"><span><strong>${esc(card.name || card.bank)}</strong><small>fatura em aberto ${money(due)}</small></span><strong class="v3-sensitive">${money(limit)}</strong></div><div class="v3-widget-track"><i style="width:${limit ? pct(Math.min(100, 100*due/limit)) : 0}%"></i></div></div>`; }).join('') || '<p class="v3-muted">Nenhum cartão visível.</p>', 'wallet');
+    if (id === 'debitocredito') return widgetPanel('débito × crédito', widgetRows([{ name: 'Débito', value: demo ? U.round2(t.expense-544.17) : t.expenseDebit || 0 }, { name: 'Crédito', value: demo ? 544.17 : t.expenseCredit || 0 }], ''), 'transactions');
+    if (id === 'tetos') { const used = categoryTotals('expense'); const rows = Object.entries(p.budgets || {}).filter(([,v]) => Number(v)>0).slice(0,4).map(([key,limit]) => ({ name: categoryName(key), sub: `teto ${money(limit)}`, value: used.find((x) => x.id===key)?.value || 0 })); return widgetPanel('tetos por categoria', widgetRows(rows, 'Defina um teto em Planejamento.'), 'categories'); }
+    if (id === 'ultimos') return widgetPanel('últimos lançamentos', widgetRows(ts.filter((x) => x.confirmed && (x.kind==='income'||x.kind==='expense')).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map((x)=>({name:x.description,sub:shortDate(x.date),value:Number(x.amount||0)})), 'Nenhum lançamento confirmado.'), 'transactions');
+    if (id === 'parcelas') { const rows = ts.filter((x)=>x.installment && x.kind==='expense').slice(0,4).map((x)=>({name:x.description,sub:`parcela ${x.installment.index || 1}/${x.installment.total || 1}`,value:Number(x.amount||0)})); return widgetPanel('parcelas em andamento', widgetRows(rows,'Nenhuma parcela neste mês.'),'transactions'); }
+    if (id === 'fixas' || id === 'receitasfixas') { const kind = id==='fixas'?'expense':'income'; const rows = ts.filter((x)=>x.kind===kind && x.recurring).slice(0,4).map((x)=>({name:x.description,sub:shortDate(x.date),value:Number(x.amount||0)})); return widgetPanel(kind==='expense'?'despesas fixas':'receitas fixas',widgetRows(rows,'Nenhuma recorrência registrada neste mês.'),'transactions'); }
+    if (id === 'comparativo') { const prev = demo ? { income: 0, expense: 0 } : Calc.monthTotals(U.addMonths(state.ym,-1)); return widgetPanel('este mês × anterior',`<div class="v3-widget-compare"><div><small>Entradas</small><strong class="v3-sensitive">${money(t.income)}</strong><span>antes ${money(prev.income||0)}</span></div><div><small>Gastos</small><strong class="v3-sensitive">${money(t.expense)}</strong><span>antes ${money(prev.expense||0)}</span></div></div>`,'transactions'); }
+    if (id === 'patrimonio') return widgetPanel('patrimônio',`<strong class="v3-money v3-sensitive v3-widget-big">${money(balance())}</strong><p class="v3-muted">Contas consideradas + investimentos − faturas abertas.</p>`,'wallet');
+    if (id === 'aportes') return widgetPanel('aportes registrados',widgetRows((p.investments||[]).filter((x)=>x.date<=U.monthEnd(state.ym)).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map((x)=>({name:x.name,sub:shortDate(x.date),value:Number(x.amount||0)})),'Nenhum aporte registrado.'),'investments');
+    if (id === 'reserva') { const reserve = (p.goals||[]).find((x)=>/reserva/i.test(x.name||'')); return widgetPanel('reserva de emergência',reserve ? `<strong class="v3-money v3-sensitive v3-widget-big">${money(reserve.saved||0)}</strong><div class="v3-widget-track"><i style="width:${pct(Math.min(100,100*Number(reserve.saved||0)/Math.max(1,Number(reserve.target||0))))}%"></i></div><small class="v3-muted">meta ${money(reserve.target||0)}</small>` : '<p class="v3-muted">Crie uma meta de reserva para acompanhar aqui.</p>','goals'); }
+    if (id === 'planejado') return widgetPanel('previsto no mês',widgetRows([{name:'Entradas pendentes',value:demo?0:t.pendingIncome||0},{name:'Saídas pendentes',value:demo?119.9:t.pendingExpense||0}],''),'transactions');
+    if (id === 'assinaturas') return widgetPanel('assinaturas recorrentes',widgetRows(ts.filter((x)=>x.kind==='expense' && (x.recurring || /assinatur/i.test(categoryName(x.categoryId)))).slice(0,4).map((x)=>({name:x.description,sub:shortDate(x.date),value:Number(x.amount||0)})),'Nenhuma assinatura registrada neste mês.'),'transactions');
+    return '';
+  }
   /* =============================================================
      O QUE VENCE, E SE CABE
      -------------------------------------------------------------
@@ -614,11 +658,12 @@
        vence esta semana" é pergunta que se faz com pressa — e era a
        que estava mais embaixo. Curva e categorias continuam na tela,
        logo abaixo: acessíveis, sem disputar a primeira olhada. */
-    const proximos = blocoLigado('proximos') ? painelVence7() : '';
-    const metade = [blocoLigado('categorias') ? `<section class="v3-panel"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '',
-      blocoLigado('investimentos') ? painelInvestimentos() : ''].filter(Boolean).join('');
-    const direita = [proximos, blocoLigado('sobra') ? wave() : '', metade ? `<div class="v3-grid v3-half">${metade}</div>` : ''].filter(Boolean).join('');
-    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${blocoLigado('score') ? painelScore() : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
+    const direita = [blocoLigado('proximos') ? painelVence7() : '', blocoLigado('sobra') ? wave() : ''].filter(Boolean).join('');
+    const gastos = blocoLigado('categorias') ? `<section class="v3-panel v3-widget-spending"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '';
+    const extraIds = BLOCOS_INICIO.slice(10).filter((b)=>blocoLigado(b.id));
+    const extraContext = extraIds.length ? { p: profile(), ts: currentTransactions().filter((t)=>!t.cancelado && t.contaNosTotais !== false), t: totals() } : null;
+    const extras = [blocoLigado('investimentos') ? painelInvestimentos() : '', blocoLigado('faturas') ? painelFaturasInicio() : '', blocoLigado('fluxo') ? painelFluxoInicio() : '', blocoLigado('metas') ? painelMetasInicio() : '', ...extraIds.map((b)=>extraHomeWidget(b.id, extraContext)), blocoLigado('score') ? painelScore() : ''].filter(Boolean).join('');
+    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${gastos}${extras ? `<div class="v3-home-extras">${extras}</div>` : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;

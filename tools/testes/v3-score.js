@@ -81,8 +81,8 @@ assert.match(app, /function historicoDoScore\(\)/);
    por padrão não pode virar apagado, e por isso a porta de volta é
    exigida aqui junto. */
 assert.match(app, /blocoLigado\('atalhos'\) \? quickActions\(\) : ''\}<\/div>/);
-assert.ok(/blocoLigado\('score'\) \? painelScore\(\) : ''\}<\/div>/.test(app),
-  'o painel fecha a grade do início, abaixo das duas colunas');
+assert.ok(/blocoLigado\('score'\) \? painelScore\(\) : ''/.test(app),
+  'o painel continua disponível na grade de widgets da Início');
 assert.match(app, /id: 'score'/, 'o score precisa estar na lista de blocos da Início');
 assert.match(app, /id: 'atalhos'/, 'as ações rápidas precisam estar na lista de blocos da Início');
 assert.match(app, /data-action="home-blocks"/, 'sem o botão de gerenciar, bloco desligado vira bloco perdido');
