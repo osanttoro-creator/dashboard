@@ -4,7 +4,7 @@
    Existem duas fontes de plano no OAZE, e isso é deliberado: o
    banco decide (o navegador não alcança) e o JS orienta (o banco
    não desenha tela). O risco dessa escolha é a divergência: um
-   dia a página mostra R$ 14,90 e a cobrança usa outro valor.
+   dia a página mostra R$ 29,90 e a cobrança usa outro valor.
 
    Este teste é o preço de admitir duas fontes. Ele compara as
    duas e falha se discordarem em um centavo ou um limite.
@@ -43,23 +43,8 @@ const ESPERADO = {
       relatorios_custom: false, acesso_antecipado: false, suporte_prioritario: false
     }
   },
-  basic: {
-    nome: 'Coqueiro', mensal: 1490, anual: 14990,
-    limites: {
-      workspaces: 1, accounts: 10, credit_cards: 10, transactions_per_month: 1000,
-      custom_categories: 50, budgets: 20, goals: 10, recurring_items: 30,
-      ai_queries_per_month: 60, history_months: 24, comparison_months: 24, collaborators: 0
-    },
-    recursos: {
-      export_csv: true, export_pdf: true, cartoes_internacionais: true,
-      calendario: true, uglez_assistente_flutuante: true,
-      comparacao_mensal: true, comparacao_anual: false,
-      analises_avancadas: false, ia_simulacoes: false, colaboracao: false,
-      relatorios_custom: false, acesso_antecipado: false, suporte_prioritario: false
-    }
-  },
   pro: {
-    nome: 'Oásis', mensal: 2990, anual: 29990,
+    nome: 'Oásis', mensal: 2990, anual: 29900,
     limites: {
       workspaces: 5, accounts: 50, credit_cards: null, transactions_per_month: null,
       custom_categories: 200, budgets: 100, goals: 50, recurring_items: 150,
@@ -87,8 +72,7 @@ const ESPERADO = {
    páginas em inglês, francês e espanhol anunciam. */
 const INTERNACIONAL = {
   free:  { USD: { mensal: 0, anual: 0 },      EUR: { mensal: 0, anual: 0 } },
-  basic: { USD: { mensal: 399, anual: 3499 }, EUR: { mensal: 399, anual: 3499 } },
-  pro:   { USD: { mensal: 799, anual: 6999 }, EUR: { mensal: 799, anual: 6999 } }
+  pro:   { USD: { mensal: 799, anual: 7990 }, EUR: { mensal: 799, anual: 7990 } }
 };
 
 /* ---- carrega o config do navegador ---- */

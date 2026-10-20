@@ -6,10 +6,10 @@
   "es": "Planes de control financiero personal | OAZE"
  },
  {
-  "pt": "Semente grátis para começar, Coqueiro por R$ 14,90 e Oásis por R$ 29,90 ao mês. Compare os limites de cada plano e veja o desconto anual.",
-  "en": "Semente is free to start, Coqueiro is R$ 14,90 and Oásis is R$ 29,90 per month. Compare the limits of each plan and see the annual discount.",
-  "fr": "Semente gratuit pour commencer, Coqueiro à R$ 14,90 et Oásis à R$ 29,90 par mois. Comparez les limites de chaque formule et découvrez la remise annuelle.",
-  "es": "Semente gratis para empezar, Coqueiro por R$ 14,90 y Oásis por R$ 29,90 al mes. Compara los límites de cada plan y mira el descuento anual."
+  "pt": "Semente grátis para começar e Oásis por R$ 29,90 ao mês, ou R$ 299,00 ao ano com dois meses grátis. Compare os limites dos dois planos.",
+  "en": "Semente free to get started and Oásis for R$ 29,90 a month, or R$ 299,00 a year with two months free. Compare the limits of both plans.",
+  "fr": "Semente gratuit pour commencer et Oásis à R$ 29,90 par mois, ou R$ 299,00 par an avec deux mois offerts. Comparez les limites des deux formules.",
+  "es": "Semente gratis para empezar y Oásis por R$ 29,90 al mes, o R$ 299,00 al año con dos meses gratis. Compara los límites de los dos planes."
  },
  {
   "pt": "Preços e planos — OAZE",
@@ -18,10 +18,10 @@
   "es": "Precios y planes — OAZE"
  },
  {
-  "pt": "Semente grátis para começar, Coqueiro por R$ 14,90 e Oásis por R$ 29,90 ao mês.",
-  "en": "Semente is free to start, Coqueiro is R$ 14,90 and Oásis is R$ 29,90 per month.",
-  "fr": "Semente gratuit pour commencer, Coqueiro à R$ 14,90 et Oásis à R$ 29,90 par mois.",
-  "es": "Semente gratis para empezar, Coqueiro por R$ 14,90 y Oásis por R$ 29,90 al mes."
+  "pt": "Semente grátis para começar e Oásis por R$ 29,90 ao mês, ou R$ 299,00 ao ano.",
+  "en": "Semente free to get started and Oásis for R$ 29,90 a month, or R$ 299,00 a year.",
+  "fr": "Semente gratuit pour commencer et Oásis à R$ 29,90 par mois, ou R$ 299,00 par an.",
+  "es": "Semente gratis para empezar y Oásis por R$ 29,90 al mes, o R$ 299,00 al año."
  },
  {
   "pt": "OAZE — controle financeiro pessoal",
@@ -30,10 +30,10 @@
   "es": "OAZE — control financiero personal"
  },
  {
-  "pt": "Compare os planos Semente, Coqueiro e Oásis.",
-  "en": "Compare the Semente, Coqueiro and Oásis plans.",
-  "fr": "Comparez les formules Semente, Coqueiro et Oásis.",
-  "es": "Compara los planes Semente, Coqueiro y Oásis."
+  "pt": "Compare os planos Semente e Oásis.",
+  "en": "Compare the Semente and Oásis plans.",
+  "fr": "Comparez les formules Semente et Oásis.",
+  "es": "Compara los planes Semente y Oásis."
  },
  {
   "pt": "Pular para o conteúdo",
@@ -46,12 +46,6 @@
   "en": "OAZE, home page",
   "fr": "OAZE, page d'accueil",
   "es": "OAZE, página de inicio"
- },
- {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
  },
  {
   "pt": "Abrir menu",
@@ -132,10 +126,10 @@
   "es": "Mensual"
  },
  {
-  "pt": "Anual <span class=\"economia\">−16%</span>",
-  "en": "Annual <span class=\"economia\">−16%</span>",
-  "fr": "Annuel <span class=\"economia\">−16%</span>",
-  "es": "Anual <span class=\"economia\">−16%</span>"
+  "pt": "Anual <span class=\"economia\">2 meses grátis</span>",
+  "en": "Yearly <span class=\"economia\">2 months free</span>",
+  "fr": "Annuel <span class=\"economia\">2 mois offerts</span>",
+  "es": "Anual <span class=\"economia\">2 meses gratis</span>"
  },
  {
   "pt": "Planos e preços",
@@ -210,84 +204,6 @@
   "es": "⟦s0⟧ 10 consultas a Coco por mes"
  },
  {
-  "pt": "Mais escolhido",
-  "en": "Most popular",
-  "fr": "Le plus choisi",
-  "es": "El más elegido"
- },
- {
-  "pt": "Coqueiro",
-  "en": "Coqueiro",
-  "fr": "Coqueiro",
-  "es": "Coqueiro"
- },
- {
-  "pt": "Raiz firme: contas, cartões e histórico",
-  "en": "Solid roots: accounts, cards and history",
-  "fr": "Des racines solides : comptes, cartes et historique",
-  "es": "Raíz firme: cuentas, tarjetas e historial"
- },
- {
-  "pt": "R$ 14,90",
-  "en": "R$ 14,90",
-  "fr": "R$ 14,90",
-  "es": "R$ 14,90"
- },
- {
-  "pt": "por mês",
-  "en": "per month",
-  "fr": "par mois",
-  "es": "por mes"
- },
- {
-  "pt": "R$ 149,90 por ano · economia de R$ 28,90",
-  "en": "R$ 149,90 per year · save R$ 28,90",
-  "fr": "R$ 149,90 par an · économie de R$ 28,90",
-  "es": "R$ 149,90 por año · ahorro de R$ 28,90"
- },
- {
-  "pt": "Assinar o Coqueiro",
-  "en": "Subscribe to Coqueiro",
-  "fr": "S'abonner à Coqueiro",
-  "es": "Suscribirse a Coqueiro"
- },
- {
-  "pt": "⟦s0⟧ 10 contas e 10 cartões",
-  "en": "⟦s0⟧ 10 accounts and 10 cards",
-  "fr": "⟦s0⟧ 10 comptes et 10 cartes",
-  "es": "⟦s0⟧ 10 cuentas y 10 tarjetas"
- },
- {
-  "pt": "⟦s0⟧ Até 1.000 movimentações por mês",
-  "en": "⟦s0⟧ Up to 1,000 transactions per month",
-  "fr": "⟦s0⟧ Jusqu'à 1 000 opérations par mois",
-  "es": "⟦s0⟧ Hasta 1.000 movimientos por mes"
- },
- {
-  "pt": "⟦s0⟧ 20 orçamentos, 10 metas e 30 recorrências",
-  "en": "⟦s0⟧ 20 budgets, 10 goals and 30 recurring items",
-  "fr": "⟦s0⟧ 20 budgets, 10 objectifs et 30 récurrences",
-  "es": "⟦s0⟧ 20 presupuestos, 10 metas y 30 recurrencias"
- },
- {
-  "pt": "⟦s0⟧ Histórico de 24 meses e comparação entre meses",
-  "en": "⟦s0⟧ 24 months of history and month-to-month comparison",
-  "fr": "⟦s0⟧ 24 mois d'historique et comparaison entre les mois",
-  "es": "⟦s0⟧ Historial de 24 meses y comparación entre meses"
- },
- {
-  "pt": "⟦s0⟧ Exportar em CSV e PDF, calendário financeiro",
-  "en": "⟦s0⟧ Export to CSV and PDF, financial calendar",
-  "fr": "⟦s0⟧ Export en CSV et PDF, calendrier financier",
-  "es": "⟦s0⟧ Exportar en CSV y PDF, calendario financiero"
- },
- {
-  "pt": "⟦s0⟧ 60 consultas ao Coco por mês, com assistente flutuante",
-  "en": "⟦s0⟧ 60 Coco queries per month, with the floating assistant",
-  "fr": "⟦s0⟧ 60 requêtes Coco par mois, avec l'assistant flottant",
-  "es": "⟦s0⟧ 60 consultas a Coco por mes, con asistente flotante"
- },
- {
   "pt": "Oásis",
   "en": "Oásis",
   "fr": "Oásis",
@@ -306,10 +222,16 @@
   "es": "R$ 29,90"
  },
  {
-  "pt": "R$ 299,90 por ano · economia de R$ 58,90",
-  "en": "R$ 299,90 per year · save R$ 58,90",
-  "fr": "R$ 299,90 par an · économie de R$ 58,90",
-  "es": "R$ 299,90 por año · ahorro de R$ 58,90"
+  "pt": "por mês",
+  "en": "per month",
+  "fr": "par mois",
+  "es": "por mes"
+ },
+ {
+  "pt": "R$ 299,00 por ano · economia de R$ 59,80",
+  "en": "R$ 299,00 per year · save R$ 59,80",
+  "fr": "R$ 299,00 par an · économie de R$ 59,80",
+  "es": "R$ 299,00 por año · ahorro de R$ 59,80"
  },
  {
   "pt": "Assinar o Oásis",
@@ -330,22 +252,34 @@
   "es": "⟦s0⟧ Tarjetas y movimientos sin límite"
  },
  {
+  "pt": "⟦s0⟧ 100 orçamentos, 50 metas e 150 recorrências",
+  "en": "⟦s0⟧ 100 budgets, 50 goals and 150 recurring items",
+  "fr": "⟦s0⟧ 100 budgets, 50 objectifs et 150 récurrences",
+  "es": "⟦s0⟧ 100 presupuestos, 50 metas y 150 recurrencias"
+ },
+ {
   "pt": "⟦s0⟧ Histórico completo e comparação anual",
   "en": "⟦s0⟧ Full history and year-over-year comparison",
   "fr": "⟦s0⟧ Historique complet et comparaison annuelle",
   "es": "⟦s0⟧ Historial completo y comparación anual"
  },
  {
-  "pt": "⟦s0⟧ Tendências, simulações e projeções do Coco",
-  "en": "⟦s0⟧ Coco trends, simulations and projections",
-  "fr": "⟦s0⟧ Tendances, simulations et projections Coco",
+  "pt": "⟦s0⟧ Tendências, simulações e projeções da Coco",
+  "en": "⟦s0⟧ Coco's trends, simulations and projections",
+  "fr": "⟦s0⟧ Tendances, simulations et projections de Coco",
   "es": "⟦s0⟧ Tendencias, simulaciones y proyecciones de Coco"
  },
  {
-  "pt": "⟦s0⟧ 200 consultas ao Coco por mês, com assistente flutuante",
-  "en": "⟦s0⟧ 200 Coco queries per month, with the floating assistant",
-  "fr": "⟦s0⟧ 200 requêtes Coco par mois, avec l'assistant flottant",
-  "es": "⟦s0⟧ 200 consultas a Coco por mes, con asistente flotante"
+  "pt": "⟦s0⟧ 200 pedidos à Coco por mês, com assistente flutuante",
+  "en": "⟦s0⟧ 200 requests to Coco per month, with the floating assistant",
+  "fr": "⟦s0⟧ 200 demandes à Coco par mois, avec l'assistante flottante",
+  "es": "⟦s0⟧ 200 consultas a Coco por mes, con la asistente flotante"
+ },
+ {
+  "pt": "⟦s0⟧ Exportar em CSV e PDF, calendário financeiro",
+  "en": "⟦s0⟧ Export to CSV and PDF, financial calendar",
+  "fr": "⟦s0⟧ Export en CSV et PDF, calendrier financier",
+  "es": "⟦s0⟧ Exportar en CSV y PDF, calendario financiero"
  },
  {
   "pt": "⟦s0⟧ Acesso antecipado e atendimento prioritário",
@@ -414,16 +348,10 @@
   "es": "Precio anual"
  },
  {
-  "pt": "R$ 149,90",
-  "en": "R$ 149,90",
-  "fr": "R$ 149,90",
-  "es": "R$ 149,90"
- },
- {
-  "pt": "R$ 299,90",
-  "en": "R$ 299,90",
-  "fr": "R$ 299,90",
-  "es": "R$ 299,90"
+  "pt": "R$ 299,00",
+  "en": "R$ 299,00",
+  "fr": "R$ 299,00",
+  "es": "R$ 299,00"
  },
  {
   "pt": "Equivalente mensal no anual",
@@ -432,16 +360,10 @@
   "es": "Equivalente mensual en el anual"
  },
  {
-  "pt": "R$ 12,49",
-  "en": "R$ 12,49",
-  "fr": "R$ 12,49",
-  "es": "R$ 12,49"
- },
- {
-  "pt": "R$ 24,99",
-  "en": "R$ 24,99",
-  "fr": "R$ 24,99",
-  "es": "R$ 24,99"
+  "pt": "R$ 24,91",
+  "en": "R$ 24,91",
+  "fr": "R$ 24,91",
+  "es": "R$ 24,91"
  },
  {
   "pt": "Economia no anual",
@@ -450,16 +372,10 @@
   "es": "Ahorro en el anual"
  },
  {
-  "pt": "R$ 28,90",
-  "en": "R$ 28,90",
-  "fr": "R$ 28,90",
-  "es": "R$ 28,90"
- },
- {
-  "pt": "R$ 58,90",
-  "en": "R$ 58,90",
-  "fr": "R$ 58,90",
-  "es": "R$ 58,90"
+  "pt": "R$ 59,80 (2 meses)",
+  "en": "R$ 59,80 (2 months)",
+  "fr": "R$ 59,80 (2 mois)",
+  "es": "R$ 59,80 (2 meses)"
  },
  {
   "pt": "Espaços financeiros",
@@ -532,12 +448,6 @@
   "en": "3 months",
   "fr": "3 mois",
   "es": "3 meses"
- },
- {
-  "pt": "24 meses",
-  "en": "24 months",
-  "fr": "24 mois",
-  "es": "24 meses"
  },
  {
   "pt": "Completo",
@@ -648,10 +558,10 @@
   "es": "Con tarjeta de crédito, a través de Stripe. La tarjeta se ingresa en la página segura de Stripe: OAZE no ve ni guarda el número ni el código de seguridad. La suscripción se renueva sola, y la cancelas cuando quieras en Configuración: la renovación se detiene al instante y el plan sigue hasta el final del período pagado."
  },
  {
-  "pt": "Existe período de teste do Coqueiro ou do Oásis?",
-  "en": "Is there a trial for Coqueiro or Oásis?",
-  "fr": "Existe-t-il une période d'essai pour Coqueiro ou Oásis ?",
-  "es": "¿Hay período de prueba de Coqueiro u Oásis?"
+  "pt": "Existe período de teste do Oásis?",
+  "en": "Is there a trial period for Oásis?",
+  "fr": "Existe-t-il une période d'essai pour Oásis ?",
+  "es": "¿Existe un período de prueba de Oásis?"
  },
  {
   "pt": "Não. Em vez de teste com prazo, o Semente é grátis e permanente — você usa o produto de verdade, sem contagem regressiva, e assina quando os limites apertarem.",

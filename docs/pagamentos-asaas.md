@@ -4,8 +4,12 @@
 > documento permanece apenas para encerrar ou migrar assinaturas antigas sem
 > deixar cobrança órfã. Para o fluxo atual, veja `STRIPE-CONFIGURACAO.md`.
 
-Planos v3 (13/09/2026): **Semente** grátis · **Coqueiro** R$ 14,90/mês ou R$ 149,90/ano ·
-**Oásis** R$ 29,90/mês ou R$ 299,90/ano. Só cartão de crédito, recorrente.
+Planos v3 (13/09/2026), 🕒 **HISTÓRICO**: **Semente** grátis · **Coqueiro** R$ 14,90/mês ou
+R$ 149,90/ano · **Oásis** R$ 29,90/mês ou R$ 299,90/ano. Só cartão de crédito, recorrente.
+Estes são os valores que uma cobrança antiga do Asaas pode conter — é por isso que
+ficam registrados aqui. O preço vigente desde 19/10/2026 é plano único: **Semente**
+grátis e **Oásis** R$ 29,90/mês ou R$ 299,00/ano, e o Coqueiro saiu de venda
+(ver `PRECIFICACAO-2026-10-18.md`).
 
 Os ids internos continuam `free`, `basic` e `pro`.
 

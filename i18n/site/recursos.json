@@ -48,12 +48,6 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
- },
- {
   "pt": "Abrir menu",
   "en": "Open menu",
   "fr": "Ouvrir le menu",
@@ -270,10 +264,10 @@
   "es": "Espacios financieros"
  },
  {
-  "pt": "Pessoal e trabalho separados de verdade, cada um com suas contas, categorias e orçamento. 1 espaço no Semente e no Coqueiro, até 5 no Oásis.",
-  "en": "Personal and work truly separate, each with its own accounts, categories and budget. 1 space on Semente and Coqueiro, up to 5 on Oásis.",
-  "fr": "Personnel et professionnel vraiment séparés, chacun avec ses comptes, catégories et budget. 1 espace avec Semente et Coqueiro, jusqu'à 5 avec Oásis.",
-  "es": "Lo personal y el trabajo separados de verdad, cada uno con sus cuentas, categorías y presupuesto. 1 espacio en Semente y Coqueiro, hasta 5 en Oásis."
+  "pt": "Pessoal e trabalho separados de verdade, cada um com suas contas, categorias e orçamento. 1 espaço no Semente, até 5 no Oásis.",
+  "en": "Personal and work genuinely separate, each with its own accounts, categories and budget. 1 space on Semente, up to 5 on Oásis.",
+  "fr": "Vie personnelle et travail vraiment séparés, chacun avec ses comptes, ses catégories et son budget. 1 espace sur Semente, jusqu’à 5 sur Oásis.",
+  "es": "Personal y trabajo de verdad separados, cada uno con sus cuentas, categorías y presupuesto. 1 espacio en Semente, hasta 5 en Oásis."
  },
  {
   "pt": "Coco",

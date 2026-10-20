@@ -52,7 +52,7 @@ function conferir(arquivo, esperado, rotulo) {
 }
 
 /* ---- 1 · os preços aparecem, com o valor certo ---- */
-for (const id of ['basic', 'pro']) {
+for (const id of ['pro']) {
   const p = Planos.get(id);
   const mensal = brl(p.mensalCentavos);
   const anual = brl(p.anualCentavos);
@@ -75,7 +75,7 @@ for (const id of ['basic', 'pro']) {
 const MOEDA_DO_IDIOMA = { en: 'USD', fr: 'EUR', es: 'USD' };
 
 for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
-  for (const id of ['basic', 'pro']) {
+  for (const id of ['pro']) {
     const p = Planos.get(id);
     const esperados = [
       [Planos.moeda(Planos.preco(p, 'monthly', moeda), moeda), 'mensal'],
@@ -130,7 +130,7 @@ for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
    com o cartão do plano já correto logo acima. */
 const PRECOS_APOSENTADOS = [
   'R$ 14,90', 'R$ 149,90', 'R$ 12,49', 'R$ 28,90',
-  'R$ 29,90', 'R$ 299,90', 'R$ 24,99',
+  'R$ 29,90', 'R$ 299,90', 'R$ 24,99', 'R$ 58,90',
   'R$ 178,80', 'R$ 358,80',
   // v2 (24,90 e 49,90), aposentada em 13/09/2026
   'R$ 24,90', 'R$ 239,90', 'R$ 19,99', 'R$ 49,90', 'R$ 479,90', 'R$ 39,99', 'R$ 118,90'
@@ -183,31 +183,54 @@ for (const { chave, rotulo } of LIMITES_NA_TABELA) {
    o outro. 19,7% vira "19%": entregar um pouco mais do que o
    anunciado é o único lado seguro de errar num número de venda. */
 {
-  const descontos = Planos.LISTA
-    .filter((p) => p.mensalCentavos > 0)
-    .map((p) => Planos.economiaAnual(p) / (p.mensalCentavos * 12));
-  const menor = Math.floor(Math.min.apply(null, descontos) * 100);
-  for (const arquivo of ['index.html', 'precos.html']) {
-    const html = fs.readFileSync(path.join(RAIZ, arquivo), 'utf8');
-    const achado = (html.match(/class="economia">[^\d]*(\d+)%/) || [])[1];
-    if (achado !== String(menor)) {
-      problemas.push(arquivo + ': o selo do anual diz ' + achado + '% e o desconto real é ' + menor + '%');
+  /* O selo aceita duas formas de dizer a MESMA coisa: "−16%" ou
+     "2 meses grátis". A segunda só é verdade quando o anual custa
+     exatamente doze menos N mensalidades — se o anual mudar de
+     R$ 299,00 para R$ 310,00, "2 meses grátis" passa a ser mentira
+     sem que nenhum preço da página fique errado. Por isso as duas
+     formas são conferidas contra a conta, não contra o texto. */
+  const MESES_GRATIS = /(\d+)\s*(?:meses|months|mois)/i;
+
+  function conferirSelo(arquivo, planos, preco, economia, moeda) {
+    const caminho = path.join(RAIZ, arquivo);
+    if (!fs.existsSync(caminho)) return;            // já reclamado acima
+    const html = fs.readFileSync(caminho, 'utf8');
+    const selo = (html.match(/class="economia">([^<]*)</) || [])[1];
+    if (selo === undefined) {
+      problemas.push(arquivo + ': não encontrei o selo do desconto anual');
+      return;
+    }
+    const pagos = planos.filter((x) => preco(x) > 0);
+    const emMeses = selo.match(MESES_GRATIS);
+    if (emMeses) {
+      /* "N meses grátis" é uma promessa por plano, não um
+         arredondamento: ou bate em todos, ou o selo está errado. */
+      const n = Number(emMeses[1]);
+      const erra = pagos.filter((x) => economia(x) !== preco(x) * n);
+      if (erra.length) {
+        problemas.push(arquivo + ': o selo promete ' + n + ' meses grátis, e isso não bate em: '
+          + erra.map((x) => x.nome).join(', ') + (moeda ? ' (' + moeda + ')' : ''));
+      }
+      return;
+    }
+    const pct = selo.match(/(\d+)\s*%/);
+    const menor = Math.floor(Math.min.apply(null, pagos.map((x) => economia(x) / (preco(x) * 12))) * 100);
+    if (!pct || Number(pct[1]) !== menor) {
+      problemas.push(arquivo + ': o selo do anual diz ' + selo.trim() + ' e o desconto real é '
+        + menor + '%' + (moeda ? ' em ' + moeda : ''));
     }
   }
 
-  /* O mesmo selo, nas páginas de fora, onde o desconto anual é outro. */
+  for (const arquivo of ['index.html', 'precos.html']) {
+    conferirSelo(arquivo, Planos.LISTA, (x) => x.mensalCentavos, (x) => Planos.economiaAnual(x), null);
+  }
+
+  /* O mesmo selo, nas páginas de fora, onde o preço é outro. */
   for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
-    const fora = Planos.LISTA
-      .filter((p) => Planos.preco(p, 'monthly', moeda) > 0)
-      .map((p) => Planos.economiaAnual(p, moeda) / (Planos.preco(p, 'monthly', moeda) * 12));
-    const menorFora = Math.floor(Math.min.apply(null, fora) * 100);
     for (const arquivo of [lang + '/index.html', lang + '/precos.html']) {
-      const caminho = path.join(RAIZ, arquivo);
-      if (!fs.existsSync(caminho)) continue;        // já reclamado acima
-      const achado = (fs.readFileSync(caminho, 'utf8').match(/class="economia">[^\d]*(\d+)%/) || [])[1];
-      if (achado !== String(menorFora)) {
-        problemas.push(arquivo + ': o selo do anual diz ' + achado + '% e o desconto em ' + moeda + ' é ' + menorFora + '%');
-      }
+      conferirSelo(arquivo, Planos.LISTA,
+        (x) => Planos.preco(x, 'monthly', moeda),
+        (x) => Planos.economiaAnual(x, moeda), moeda);
     }
   }
 }

@@ -42,12 +42,6 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
- },
- {
   "pt": "Abrir menu",
   "en": "Open menu",
   "fr": "Ouvrir le menu",
@@ -186,10 +180,10 @@
   "es": "4. Planes y límites"
  },
  {
-  "pt": "O plano <strong>Semente</strong> é gratuito, permanente e não exige cartão. Os planos <strong>Coqueiro</strong> e <strong>Oásis</strong> são assinaturas pagas. Preços e limites de cada plano estão publicados em <a href=\"/precos\">Preços</a>.",
-  "en": "The <strong>Semente</strong> plan is free, permanent and requires no card. The <strong>Coqueiro</strong> and <strong>Oásis</strong> plans are paid subscriptions. Prices and limits for each plan are published on <a href=\"/precos\">Pricing</a>.",
-  "fr": "La formule <strong>Semente</strong> est gratuite, permanente et ne demande pas de carte. Les formules <strong>Coqueiro</strong> et <strong>Oásis</strong> sont des abonnements payants. Les prix et limites de chaque formule sont publiés sur <a href=\"/precos\">Tarifs</a>.",
-  "es": "El plan <strong>Semente</strong> es gratuito, permanente y no exige tarjeta. Los planes <strong>Coqueiro</strong> y <strong>Oásis</strong> son suscripciones pagas. Los precios y límites de cada plan están publicados en <a href=\"/precos\">Precios</a>."
+  "pt": "O plano <strong>Semente</strong> é gratuito, permanente e não exige cartão. O <strong>Oásis</strong> é a assinatura paga. Preços e limites de cada plano estão publicados em <a href=\"/precos\">Preços</a>.",
+  "en": "The <strong>Semente</strong> plan is free, permanent and requires no card. <strong>Oásis</strong> is the paid subscription. Prices and limits for each plan are published on <a href=\"/precos\">Pricing</a>.",
+  "fr": "La formule <strong>Semente</strong> est gratuite, permanente et ne demande aucune carte. <strong>Oásis</strong> est l’abonnement payant. Les prix et les limites de chaque formule sont publiés sur <a href=\"/precos\">Tarifs</a>.",
+  "es": "El plan <strong>Semente</strong> es gratuito, permanente y no exige tarjeta. <strong>Oásis</strong> es la suscripción de pago. Los precios y límites de cada plan están publicados en <a href=\"/precos\">Precios</a>."
  },
  {
   "pt": "<strong>Cobrança.</strong> As assinaturas são cobradas no cartão de crédito, de forma recorrente (mensal ou anual, conforme a escolha), por meio da <strong>Stripe</strong>, que processa o pagamento. O plano é liberado quando o pagamento é confirmado. O valor de uma assinatura em curso não muda sem aviso prévio.",

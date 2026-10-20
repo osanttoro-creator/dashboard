@@ -21,7 +21,11 @@ import { asaas, AsaasErro } from '../_shared/asaas.ts';
 import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
 import { stripe, stripeConfigurada, StripeErro } from '../_shared/stripe.ts';
 
-const NOMES: Record<string, string> = { basic: 'Coqueiro', pro: 'Oásis' };
+/* 19/10/2026: o Coqueiro saiu de venda. Fora deste mapa, um POST com
+   plano=basic é recusado aqui mesmo, com "Plano inválido", em vez de
+   seguir até a consulta de preço. Quem já fosse assinante do plano antigo
+   continua intacto: isto é o caminho de COMPRA, não o de leitura. */
+const NOMES: Record<string, string> = { pro: 'Oásis' };
 
 /* As três moedas da tabela plan_prices. Quem pedir qualquer outra
    coisa — ou nada — paga em real, como sempre foi. */

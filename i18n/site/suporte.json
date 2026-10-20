@@ -42,12 +42,6 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "OAZE",
-  "en": "OAZE",
-  "fr": "OAZE",
-  "es": "OAZE"
- },
- {
   "pt": "Abrir menu",
   "en": "Open menu",
   "fr": "Ouvrir le menu",
@@ -204,10 +198,10 @@
   "es": "Exportar todos mis datos"
  },
  {
-  "pt": "No app: <strong>Relatórios → Exportar CSV</strong> ou <strong>Exportar PDF</strong>, a partir do plano Coqueiro. Sai em formato aberto, na hora, sem precisar pedir nem esperar.",
-  "en": "In the app: <strong>Reports → Export CSV</strong> or <strong>Export PDF</strong>, from the Coqueiro plan up. It comes out in an open format, right away, with nothing to request and nothing to wait for.",
-  "fr": "Dans l'app : <strong>Rapports → Exporter en CSV</strong> ou <strong>Exporter en PDF</strong>, à partir du forfait Coqueiro. Cela sort dans un format ouvert, sur-le-champ, sans rien demander ni attendre.",
-  "es": "En la app: <strong>Informes → Exportar CSV</strong> o <strong>Exportar PDF</strong>, desde el plan Coqueiro. Sale en formato abierto, al instante, sin tener que pedir ni esperar."
+  "pt": "No app: <strong>Relatórios → Exportar CSV</strong> ou <strong>Exportar PDF</strong>, no plano Oásis. Sai em formato aberto, na hora, sem precisar pedir nem esperar.",
+  "en": "In the app: <strong>Reports → Export CSV</strong> or <strong>Export PDF</strong>, on the Oásis plan. It comes out in an open format, right away, with nothing to request and nothing to wait for.",
+  "fr": "Dans l’application : <strong>Rapports → Exporter en CSV</strong> ou <strong>Exporter en PDF</strong>, avec la formule Oásis. Le fichier sort dans un format ouvert, immédiatement, sans rien demander ni attendre.",
+  "es": "En la app: <strong>Informes → Exportar CSV</strong> o <strong>Exportar PDF</strong>, en el plan Oásis. Sale en formato abierto, al instante, sin pedir nada ni esperar."
  },
  {
   "pt": "É também assim que se exerce o direito de portabilidade da LGPD.",
@@ -276,10 +270,10 @@
   "es": "Coco dejó de responder"
  },
  {
-  "pt": "Cada plano tem um limite de consultas por mês: 10 no Semente, 60 no Coqueiro, 200 no Oásis. Atingido o limite, ela volta no mês seguinte.",
-  "en": "Each plan has a monthly query limit: 10 on Semente, 60 on Coqueiro, 200 on Oásis. Once you reach it, Coco comes back the following month.",
-  "fr": "Chaque formule a une limite mensuelle de requêtes : 10 avec Semente, 60 avec Coqueiro, 200 avec Oásis. Une fois la limite atteinte, Coco revient le mois suivant.",
-  "es": "Cada plan tiene un límite mensual de consultas: 10 en Semente, 60 en Coqueiro, 200 en Oásis. Al alcanzarlo, Coco vuelve el mes siguiente."
+  "pt": "Cada plano tem um limite de consultas por mês: 10 no Semente e 200 no Oásis. Atingido o limite, ela volta no mês seguinte.",
+  "en": "Each plan has a monthly limit of requests: 10 on Semente and 200 on Oásis. Once the limit is reached, she comes back the following month.",
+  "fr": "Chaque formule a une limite mensuelle de demandes : 10 sur Semente et 200 sur Oásis. Une fois la limite atteinte, elle revient le mois suivant.",
+  "es": "Cada plan tiene un límite de consultas por mes: 10 en Semente y 200 en Oásis. Alcanzado el límite, ella vuelve al mes siguiente."
  },
  {
   "pt": "Erro nosso ou indisponibilidade do provedor <strong>não</strong> consomem consulta — se você viu um erro, aquela consulta não foi cobrada.",

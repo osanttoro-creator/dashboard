@@ -398,7 +398,10 @@ p.leve { color: var(--bruma); }
 }
 .alternador button[aria-pressed="true"] .economia { background: rgba(13, 24, 33, .16); color: var(--acento-tinta); }
 
-.planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; max-width: 1200px; margin-inline: auto; }
+/* Dois planos desde 19/10/2026: Semente e Oásis. A largura cai de
+   1200px para 840px porque dois cartões esticados num monitor largo
+   viram duas faixas, não dois cartões. */
+.planos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; max-width: 840px; margin-inline: auto; }
 .plano {
   position: relative; display: flex; flex-direction: column;
   padding: clamp(24px, 2.8vw, 32px);
@@ -1222,11 +1225,9 @@ p.leve { color: var(--bruma); }
 }
 
 @media (max-width: 980px) {
-  .grade-3, .planos { grid-template-columns: repeat(2, 1fr); }
+  .grade-3 { grid-template-columns: repeat(2, 1fr); }
   .grade-editorial.grade-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rodape-grade { grid-template-columns: 1fr 1fr; gap: 28px; }
-  /* Numa grade de 2, o terceiro plano ficaria órfão embaixo. */
-  .planos > :last-child { grid-column: 1 / -1; }
   .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bento-alto { grid-row: span 1; grid-column: span 2; }
   .motivos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1277,7 +1278,6 @@ p.leve { color: var(--bruma); }
 
 @media (max-width: 720px) {
   .grade-3, .grade-2, .planos { grid-template-columns: 1fr; }
-  .planos > :last-child { grid-column: auto; }
   .grade-editorial, .grade-editorial.grade-3 { grid-template-columns: 1fr; }
   .grade-editorial > .carta { min-height: auto; }
   .demo-cartoes { grid-template-columns: 1fr; }

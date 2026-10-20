@@ -18,7 +18,7 @@
    falha se os dois discordarem.
 
    DINHEIRO É INTEIRO, EM CENTAVOS
-   14,90 em ponto flutuante é 14.900000000000000355271367880050.
+   29,90 em ponto flutuante é 29.899999999999998578914528479799.
    Some doze vezes e a economia do plano anual sai errada por
    centavos — que é exatamente o tipo de erro que ninguém perdoa
    num produto financeiro. Centavo é int; a divisão só acontece na
@@ -57,6 +57,16 @@
        comparo anos") respondidas pelo mesmo número.
      · analises_avancadas continua, e agora é anunciada: o Oásis faz
        tendências, simulações e projeções, e isso está na tela.
+
+     19/10/2026 — PLANO ÚNICO
+     O Coqueiro saiu. Sobraram Semente (grátis) e Oásis (R$ 29,90/mês
+     ou R$ 299,00/ano), com o mesmo preço na web, no iOS e no Android:
+     o número tem de sobreviver à comissão da App Store, e com preço
+     único não existe upsell para compensar uma porta de entrada
+     barata. O raciocínio inteiro está em docs/PRECIFICACAO-2026-10-18.md.
+     `basic` continua existindo no banco (inativo) porque
+     subscriptions.plan_id referencia plans.id — mas não aparece aqui,
+     e por isso não aparece em lugar nenhum do site.
      ============================================================ */
 
   Planos.LISTA = [
@@ -99,48 +109,14 @@
       }
     },
     {
-      id: 'basic',
-      nome: 'Coqueiro',
-      descricao: 'Raiz firme: contas, cartões e histórico.',
-      moeda: 'BRL',
-      mensalCentavos: 1490,
-      anualCentavos: 14990,
-      internacional: { USD: { mensal: 399, anual: 3499 }, EUR: { mensal: 399, anual: 3499 } },
-      destaque: true,
-      limites: {
-        workspaces: 1,
-        accounts: 10,
-        credit_cards: 10,
-        transactions_per_month: 1000,
-        custom_categories: 50,
-        budgets: 20,
-        goals: 10,
-        recurring_items: 30,
-        ai_queries_per_month: 60,
-        history_months: 24,
-        comparison_months: 24,
-        collaborators: 0
-      },
-      recursos: {
-        export_csv: true, export_pdf: true,
-        cartoes_internacionais: true,
-        calendario: true,
-        uglez_assistente_flutuante: true,
-        comparacao_mensal: true, comparacao_anual: false,
-        analises_avancadas: false, ia_simulacoes: false,
-        colaboracao: false, relatorios_custom: false,
-        acesso_antecipado: false, suporte_prioritario: false
-      }
-    },
-    {
       id: 'pro',
       nome: 'Oásis',
       descricao: 'Tudo o que o OAZE faz, sem teto no dia a dia.',
       moeda: 'BRL',
       mensalCentavos: 2990,
-      anualCentavos: 29990,
-      internacional: { USD: { mensal: 799, anual: 6999 }, EUR: { mensal: 799, anual: 6999 } },
-      destaque: false,
+      anualCentavos: 29900,
+      internacional: { USD: { mensal: 799, anual: 7990 }, EUR: { mensal: 799, anual: 7990 } },
+      destaque: true,
       limites: {
         workspaces: 5,
         accounts: 50,
@@ -224,13 +200,15 @@
      R$ 29,90 de quem chegou pelo /en é vender por US$ 5,50 um
      produto que os concorrentes de lá cobram a US$ 8 e US$ 15. O
      preço internacional NÃO é conversão do real: é tabela própria,
-     escrita à mão, com o desconto anual maior que o daqui porque é
-     assim que o mercado de fora compra.
+     escrita à mão, porque é assim que o mercado de fora compra. O
+     desconto anual é o mesmo dos dois lados — dez vezes a
+     mensalidade, "2 meses grátis" —, e isso é proposital: um preço
+     único por moeda é mais fácil de defender que dois descontos.
 
      Três regras que não podem ser quebradas:
 
      1. Todo preço internacional é MAIOR que o brasileiro no câmbio
-        do dia (US$ 3,99 ≈ R$ 21, contra R$ 14,90). Isso não é
+        do dia (US$ 7,99 ≈ R$ 41, contra R$ 29,90). Isso não é
         detalhe de marketing: é o que torna seguro deixar qualquer
         pessoa escolher a moeda sem prova de país nenhuma. Não há
         arbitragem a fazer — quem escolher dólar paga mais.
@@ -285,7 +263,7 @@
 
   /**
    * A única função que transforma centavo em texto.
-   * R$ 14,90 · US$ 3.99 · 3,99 € — cada moeda com a pontuação e a
+   * R$ 29,90 · US$ 7.99 · 7,99 € — cada moeda com a pontuação e a
    * posição de símbolo que o leitor daquele preço espera ver.
    */
   Planos.moeda = function (centavos, moeda) {
@@ -387,14 +365,6 @@
       'Histórico dos últimos 3 meses',
       'Contas e cartões em dólar, euro e outras moedas',
       '10 consultas à Coco por mês, na página da Coco'
-    ],
-    basic: [
-      '10 contas e 10 cartões',
-      'Até 1.000 movimentações por mês',
-      '20 orçamentos, 10 metas e 30 recorrências',
-      'Histórico de 24 meses e comparação entre meses',
-      'Exportar em CSV e PDF, calendário financeiro',
-      '60 consultas à Coco por mês, com assistente flutuante'
     ],
     pro: [
       'Até 5 espaços financeiros e 50 contas',
