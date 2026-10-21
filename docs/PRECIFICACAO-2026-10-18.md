@@ -311,3 +311,71 @@ conferidos no banco real, um a um, contra o catálogo do JS.
    cai no primeiro plano da lista (Semente). Com zero assinantes no plano e a
    compra recusada na entrada, não há caminho até esse estado — mas se um dia
    houver, o certo é um registro de planos aposentados, não o fallback silencioso.
+
+---
+
+# 20/10/2026 — R$ 35,90, e o que cada plano REALMENTE entrega
+
+Preço novo aplicado: **R$ 35,90/mês · R$ 279,90/ano (−35%)**, igual na web, no
+iOS e no Android. Internacional: US$ 7,99 e € 7,99 no mês, 62,30 no ano.
+
+## A auditoria: o que está declarado × o que o código faz
+
+Levantado no código em 20/10/2026, chave por chave. ✅ = o produto confere o
+plano antes de entregar. ❌ = a diferença existe só na tabela.
+
+| Recurso declarado | Semente | Oásis | Cobrado de verdade? |
+|---|---|---|---|
+| Limites numéricos (contas, cartões, lançamentos, categorias, orçamentos, metas, recorrências, espaços) | 2/3/100/10/1/1/3/1 | 50/∞/∞/200/100/50/150/5 | ✅ `Limites.cabe` + `limitsReady()` antes de cada criação |
+| Pedidos à Coco por mês | 10 | 200 | ✅ `reservar_ia` reserva no banco, atômico, antes de chamar a OpenAI |
+| Profundidade da Coco | 3 meses, 6 categorias, 3 metas, 120 palavras, sem comparar, sem simular | 60 meses, 40 categorias, 20 metas, 350 palavras, compara e simula | ✅ `PERFIS` na `oaze-assistant`, no servidor |
+| Ritmo da Coco | 3/min, 20/dia | 10/min, 200/dia | ✅ servidor |
+| Exportar CSV / PDF | não | sim | ✅ `Limites.exigirRecurso` |
+| Contas e cartões em outras moedas | sim | sim | ✅ gated — mas igual nos dois, então não diferencia |
+| **Coco flutuante no app** | declarado "não" | declarado "sim" | ❌ **o FAB é renderizado para todos**; `uglezFloatingAssistant` não é consultado em lugar nenhum |
+| **Calendário financeiro** | declarado "não" | declarado "sim" | ❌ a rota `/app/calendario` abre para qualquer conta |
+| **Comparação entre meses / anual** | declarado "não" | declarado "sim" | ❌ como flag de interface, nunca conferido (a Coco respeita no servidor; o painel não) |
+| **Tendências, simulações e projeções** | declarado "não" | declarado "sim" | ❌ idem: a Coco respeita, a interface não |
+| **Colaboradores** | 0 | 3 | ❌ criar convite tem **teto fixo de 20 para todos**, sem olhar o plano |
+| **Histórico disponível** | 3 meses | completo | ❌ só a Coco respeita; o painel não corta histórico |
+| Acesso antecipado, atendimento prioritário | não | sim | ❌ (promessa operacional, não código — isso é legítimo) |
+| **Relatórios personalizados** | — | declarado `true` no catálogo | ❌ **não existe**, e a própria página de preços avisa que não existe |
+| **Coco por voz** | sem distinção | sem distinção | ❌ **sem cota e sem plano**: 6 sessões/hora, 20/dia, para qualquer conta, inclusive grátis |
+
+## O que isso significa para o preço
+
+A parte que diferencia de verdade é boa e está no lugar certo: **a Coco** (cota,
+profundidade, ritmo, simulações) e os **limites de volume**. Tudo isso é conferido
+no servidor ou antes da gravação. É defensável cobrar R$ 35,90 por isso.
+
+O problema é o outro lado: hoje uma conta **grátis** tem calendário, Coco
+flutuante, comparação entre meses no painel, histórico sem corte, convite para
+colaborador e **voz sem teto**. Sete linhas da tabela de comparação dizem "Não"
+na coluna Semente e entregam "Sim". Isso é duas coisas ao mesmo tempo: propaganda
+incorreta e motivo para não assinar.
+
+Margem a R$ 35,90, com os 200 pedidos de texto queimados:
+
+| | Web | iOS com IAP |
+|---|---|---|
+| Mensal | R$ 25,58 (71%) | R$ 19,51 (54%) |
+| Anual (por mês) | R$ 15,81 (44%) | R$ 11,65 (32%) |
+
+Confortável — até a voz entrar. Trinta minutos de voz custam R$ 7,80 e derrubam a
+pior célula (anual no iOS) para **R$ 3,85/mês (11%)**. Duas horas por mês custam
+R$ 31,20: nesse canal, **prejuízo de R$ 19,55/mês** com um único usuário. E não
+existe nada hoje que impeça isso, nem no plano grátis.
+
+## A escolha que sobra
+
+Cada linha ❌ tem duas saídas honestas, e a decisão é de produto, não minha:
+
+1. **Cobrar o que está escrito** — implementar o gate (voz com cota por plano,
+   calendário, Coco flutuante, comparações, histórico, colaboradores). O Semente
+   fica menor do que é hoje, e a assinatura passa a valer o que custa.
+2. **Escrever o que se cobra** — mover essas linhas para "incluído nos dois" e
+   assumir que a diferença é Coco + volume. Tabela mais curta, mais verdadeira,
+   e o Semente fica generoso de propósito.
+
+Para a voz não há essa escolha: ela precisa de cota medida nos dois planos, porque
+é o único item cujo custo não tem teto. Isso vem antes de qualquer das duas.
