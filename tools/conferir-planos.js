@@ -131,6 +131,8 @@ for (const [lang, moeda] of Object.entries(MOEDA_DO_IDIOMA)) {
 const PRECOS_APOSENTADOS = [
   'R$ 14,90', 'R$ 149,90', 'R$ 12,49', 'R$ 28,90',
   'R$ 29,90', 'R$ 299,90', 'R$ 24,99', 'R$ 58,90',
+  // plano único a 29,90, aposentado em 20/10/2026
+  'R$ 299,00', 'R$ 24,91', 'R$ 59,80',
   'R$ 178,80', 'R$ 358,80',
   // v2 (24,90 e 49,90), aposentada em 13/09/2026
   'R$ 24,90', 'R$ 239,90', 'R$ 19,99', 'R$ 49,90', 'R$ 479,90', 'R$ 39,99', 'R$ 118,90'

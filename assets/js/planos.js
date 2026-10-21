@@ -18,7 +18,7 @@
    falha se os dois discordarem.
 
    DINHEIRO É INTEIRO, EM CENTAVOS
-   29,90 em ponto flutuante é 29.899999999999998578914528479799.
+   35,90 em ponto flutuante é 35.899999999999998578914528479799.
    Some doze vezes e a economia do plano anual sai errada por
    centavos — que é exatamente o tipo de erro que ninguém perdoa
    num produto financeiro. Centavo é int; a divisão só acontece na
@@ -59,8 +59,9 @@
        tendências, simulações e projeções, e isso está na tela.
 
      19/10/2026 — PLANO ÚNICO
-     O Coqueiro saiu. Sobraram Semente (grátis) e Oásis (R$ 29,90/mês
-     ou R$ 299,00/ano), com o mesmo preço na web, no iOS e no Android:
+     O Coqueiro saiu. Sobraram Semente (grátis) e Oásis (R$ 35,90/mês
+     ou R$ 279,90/ano — doze mensalidades menos 35%), com o mesmo preço
+     na web, no iOS e no Android:
      o número tem de sobreviver à comissão da App Store, e com preço
      único não existe upsell para compensar uma porta de entrada
      barata. O raciocínio inteiro está em docs/PRECIFICACAO-2026-10-18.md.
@@ -113,9 +114,9 @@
       nome: 'Oásis',
       descricao: 'Tudo o que o OAZE faz, sem teto no dia a dia.',
       moeda: 'BRL',
-      mensalCentavos: 2990,
-      anualCentavos: 29900,
-      internacional: { USD: { mensal: 799, anual: 7990 }, EUR: { mensal: 799, anual: 7990 } },
+      mensalCentavos: 3590,
+      anualCentavos: 27990,
+      internacional: { USD: { mensal: 799, anual: 6230 }, EUR: { mensal: 799, anual: 6230 } },
       destaque: true,
       limites: {
         workspaces: 5,
@@ -201,14 +202,14 @@
      produto que os concorrentes de lá cobram a US$ 8 e US$ 15. O
      preço internacional NÃO é conversão do real: é tabela própria,
      escrita à mão, porque é assim que o mercado de fora compra. O
-     desconto anual é o mesmo dos dois lados — dez vezes a
-     mensalidade, "2 meses grátis" —, e isso é proposital: um preço
-     único por moeda é mais fácil de defender que dois descontos.
+     desconto anual é o mesmo dos dois lados — 35% sobre doze
+     mensalidades —, e isso é proposital: um desconto único é mais
+     fácil de defender que dois.
 
      Três regras que não podem ser quebradas:
 
      1. Todo preço internacional é MAIOR que o brasileiro no câmbio
-        do dia (US$ 7,99 ≈ R$ 41, contra R$ 29,90). Isso não é
+        do dia (US$ 7,99 ≈ R$ 41, contra R$ 35,90). Isso não é
         detalhe de marketing: é o que torna seguro deixar qualquer
         pessoa escolher a moeda sem prova de país nenhuma. Não há
         arbitragem a fazer — quem escolher dólar paga mais.
@@ -263,7 +264,7 @@
 
   /**
    * A única função que transforma centavo em texto.
-   * R$ 29,90 · US$ 7.99 · 7,99 € — cada moeda com a pontuação e a
+   * R$ 35,90 · US$ 7.99 · 7,99 € — cada moeda com a pontuação e a
    * posição de símbolo que o leitor daquele preço espera ver.
    */
   Planos.moeda = function (centavos, moeda) {

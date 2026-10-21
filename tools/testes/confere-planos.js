@@ -4,7 +4,7 @@
    Existem duas fontes de plano no OAZE, e isso é deliberado: o
    banco decide (o navegador não alcança) e o JS orienta (o banco
    não desenha tela). O risco dessa escolha é a divergência: um
-   dia a página mostra R$ 29,90 e a cobrança usa outro valor.
+   dia a página mostra R$ 35,90 e a cobrança usa outro valor.
 
    Este teste é o preço de admitir duas fontes. Ele compara as
    duas e falha se discordarem em um centavo ou um limite.
@@ -44,7 +44,7 @@ const ESPERADO = {
     }
   },
   pro: {
-    nome: 'Oásis', mensal: 2990, anual: 29900,
+    nome: 'Oásis', mensal: 3590, anual: 27990,
     limites: {
       workspaces: 5, accounts: 50, credit_cards: null, transactions_per_month: null,
       custom_categories: 200, budgets: 100, goals: 50, recurring_items: 150,
@@ -72,7 +72,7 @@ const ESPERADO = {
    páginas em inglês, francês e espanhol anunciam. */
 const INTERNACIONAL = {
   free:  { USD: { mensal: 0, anual: 0 },      EUR: { mensal: 0, anual: 0 } },
-  pro:   { USD: { mensal: 799, anual: 7990 }, EUR: { mensal: 799, anual: 7990 } }
+  pro:   { USD: { mensal: 799, anual: 6230 }, EUR: { mensal: 799, anual: 6230 } }
 };
 
 /* ---- carrega o config do navegador ---- */

@@ -534,10 +534,10 @@
     "es": "Mensual"
   },
   {
-    "pt": "Anual <span class=\"economia\">2 meses grátis</span>",
-    "en": "Yearly <span class=\"economia\">2 months free</span>",
-    "fr": "Annuel <span class=\"economia\">2 mois offerts</span>",
-    "es": "Anual <span class=\"economia\">2 meses gratis</span>"
+    "pt": "Anual <span class=\"economia\">−35%</span>",
+    "en": "Yearly <span class=\"economia\">−35%</span>",
+    "fr": "Annuel <span class=\"economia\">−35%</span>",
+    "es": "Anual <span class=\"economia\">−35%</span>"
   },
   {
     "pt": "Semente",
@@ -600,10 +600,10 @@
     "es": "Oásis"
   },
   {
-    "pt": "R$ 29,90",
-    "en": "R$ 29,90",
-    "fr": "R$ 29,90",
-    "es": "R$ 29,90"
+    "pt": "R$ 35,90",
+    "en": "R$ 35,90",
+    "fr": "R$ 35,90",
+    "es": "R$ 35,90"
   },
   {
     "pt": "por mês, cobrado mensalmente",
