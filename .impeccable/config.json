@@ -309,6 +309,12 @@
         ],
         "createdAt": "2026-10-15T20:32:09.197Z",
         "reason": "Mesma razao registrada para proposta-v4.html: tracking e o valor do DESIGN.md; o contraste do vermelho e falso positivo (fundo resolvido como #35353f, cor inexistente na pagina); cartao-dentro-de-cartao e padding apertado vem de o detector contar a moldura do aparelho como cartao."
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-10-21T02:25:15.846Z",
+        "reason": "DESIGN.md define Instrument Sans como a fonte de corpo do OAZE (linhas 30, 94, 151 e 175); escolha tipografica registrada do produto, nao deriva de geracao"
       }
     ]
   }
