@@ -11,11 +11,13 @@
    fica no ambiente do servidor.
 
    O QUE A EXCLUSÃO APAGA
-   Tudo. Cada tabela referencia auth.users com ON DELETE CASCADE,
+   Os comprovantes privados são removidos pelo Storage antes do usuário.
+   Cada tabela financeira referencia auth.users com ON DELETE CASCADE,
    então remover o usuário leva junto espaços, contas, cartões,
    categorias, lançamentos, investimentos, faturas, orçamentos,
    metas, assinatura, consumo de IA e progresso de configuração.
-   Não é uma promessa: é a chave estrangeira fazendo o trabalho.
+   Uma trava técnica com o UUID fica no banco para impedir que JWTs
+   antigos recriem comprovantes depois da exclusão.
 
    O QUE ELA NÃO APAGA
    O localStorage do aparelho. Isso é do lado do cliente, e o
@@ -34,6 +36,71 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { asaas, AsaasErro } from '../_shared/asaas.ts';
 import { stripe, StripeErro } from '../_shared/stripe.ts';
 import { reservarRateLimit, corpoCabeNoLimite } from '../_shared/security.ts';
+
+// Início das rotinas de comprovantes testadas isoladamente.
+const RECEIPT_BUCKET = 'oaze-receipts';
+const RECEIPT_PAGE_SIZE = 100;
+const RECEIPT_BATCH_SIZE = 1000;
+const RECEIPT_CLEANUP_MS = 60_000;
+
+async function listarLoteComprovantes(
+  storage: any, userId: string, deadline = Date.now() + RECEIPT_CLEANUP_MS
+): Promise<string[]> {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId))
+    throw new Error('Identificador de usuário inválido.');
+  const pending = [userId];
+  const seenFolders = new Set<string>();
+  const paths: string[] = [];
+  while (pending.length) {
+    if (Date.now() >= deadline) throw new Error('Tempo de limpeza de comprovantes excedido.');
+    const folder = pending.pop()!;
+    if (seenFolders.has(folder)) continue;
+    seenFolders.add(folder);
+    for (let offset = 0;; offset += RECEIPT_PAGE_SIZE) {
+      if (Date.now() >= deadline) throw new Error('Tempo de limpeza de comprovantes excedido.');
+      const { data, error } = await storage.from(RECEIPT_BUCKET).list(folder, {
+        limit: RECEIPT_PAGE_SIZE, offset,
+        sortBy: { column: 'name', order: 'asc' }
+      });
+      if (error || !Array.isArray(data)) throw error || new Error('Listagem de comprovantes inválida.');
+      for (const item of data) {
+        const name = String(item?.name || '');
+        if (!name || name === '.' || name === '..' || /[/\\]/.test(name))
+          throw new Error('Caminho de comprovante inválido.');
+        const path = folder + '/' + name;
+        if (!path.startsWith(userId + '/')) throw new Error('Comprovante fora da conta.');
+        if (item.id === null) pending.push(path);
+        else if (item.id) {
+          paths.push(path);
+          if (paths.length >= RECEIPT_BATCH_SIZE) return paths;
+        } else throw new Error('Item de comprovante sem tipo confirmado.');
+      }
+      if (data.length < RECEIPT_PAGE_SIZE) break;
+    }
+  }
+  return paths;
+}
+
+async function apagarComprovantes(storage: any, userId: string): Promise<number> {
+  const removed = new Set<string>();
+  const batches = new Set<string>();
+  const deadline = Date.now() + RECEIPT_CLEANUP_MS;
+  for (;;) {
+    if (Date.now() >= deadline) throw new Error('Tempo de limpeza de comprovantes excedido.');
+    const paths = await listarLoteComprovantes(storage, userId, deadline);
+    if (!paths.length) return removed.size;
+    const signature = paths.slice().sort().join('\n');
+    if (batches.has(signature)) throw new Error('A remoção de comprovantes não avançou.');
+    batches.add(signature);
+    if (Date.now() >= deadline) throw new Error('Tempo de limpeza de comprovantes excedido.');
+    const { error } = await storage.from(RECEIPT_BUCKET).remove(paths);
+    if (error) throw error;
+    paths.forEach((path) => removed.add(path));
+    // A próxima listagem começa do primeiro item: offsets anteriores deixam
+    // de ser válidos depois que os objetos são removidos.
+  }
+}
+// Fim das rotinas de comprovantes testadas isoladamente.
 
 function origensPermitidas(): string[] {
   return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
@@ -218,19 +285,63 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  /* ---- a exclusão ----
-     Uma linha. O ON DELETE CASCADE de cada tabela faz o resto —
-     e é por isso que o esquema foi escrito assim: a garantia de
-     que nada fica para trás é do banco, não de uma sequência de
-     DELETEs que alguém pode esquecer de atualizar. */
-  const { error } = await admin.auth.admin.deleteUser(usuario.id);
+  /* O lock precisa entrar ANTES da limpeza. JWTs de sessões antigas
+     continuam válidos depois de deleteUser; a policy do bucket consulta
+     este tombstone e bloqueia novos uploads mesmo após apagar auth.users. */
+  const { error: lockError } = await admin.from('account_deletion_locks')
+    .upsert({ user_id: usuario.id }, { onConflict: 'user_id' });
+  if (lockError) {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'trava_comprovantes_falhou' }));
+    return json({
+      erro: 'indisponivel',
+      mensagem: 'Não foi possível proteger os comprovantes agora. Sua conta não foi excluída.',
+      request_id: requestId
+    }, 503, origem);
+  }
+
+  try {
+    resumo.comprovantes = await apagarComprovantes(admin.storage, usuario.id);
+  } catch (e) {
+    console.error(JSON.stringify({ request_id: requestId, evento: 'comprovantes_falhou' }));
+    return json({
+      erro: 'comprovantes',
+      mensagem: 'A conta não foi excluída. Alguns comprovantes podem já ter sido removidos; novos anexos ficam bloqueados até a exclusão ser retomada. Tente novamente ou fale com o suporte.',
+      request_id: requestId
+    }, 502, origem);
+  }
+
+  /* Depois de confirmar que o bucket ficou vazio, o ON DELETE CASCADE
+     remove os dados relacionais. A trava fica para neutralizar JWTs antigos. */
+  let error: any = null;
+  try {
+    ({ error } = await admin.auth.admin.deleteUser(usuario.id));
+  } catch (e) {
+    error = e;
+  }
   if (error) {
     console.error(JSON.stringify({
       request_id: requestId, evento: 'exclusao_falhou', status: (error as any).status ?? null
     }));
+    /* Um timeout da API de Auth pode esconder uma exclusão concluída.
+       Só declarar sucesso se a consulta administrativa confirmar 404.
+       Em qualquer estado incerto, manter a trava de uploads. */
+    try {
+      const { data: after, error: verifyError } = await admin.auth.admin.getUserById(usuario.id);
+      if (verifyError && ((verifyError as any).status === 404 || (verifyError as any).code === 'user_not_found')) {
+        console.error(JSON.stringify({ request_id: requestId, evento: 'conta_excluida_confirmada' }));
+        return json({ ok: true, resumo, request_id: requestId }, 200, origem);
+      }
+      if (after?.user && !verifyError) {
+        return json({
+          erro: 'falhou',
+          mensagem: 'A conta não foi excluída. A limpeza dos comprovantes foi concluída, mas novos anexos estão bloqueados até você tentar a exclusão novamente.',
+          request_id: requestId
+        }, 502, origem);
+      }
+    } catch { /* confirmação indisponível; não libera a trava */ }
     return json({
-      erro: 'falhou',
-      mensagem: 'Não foi possível excluir a conta agora. Nada foi apagado.',
+      erro: 'estado_incerto',
+      mensagem: 'A limpeza dos comprovantes foi concluída, mas não foi possível confirmar a exclusão da conta. Novos anexos estão bloqueados. Fale com o suporte e informe o código da solicitação.',
       request_id: requestId
     }, 502, origem);
   }

@@ -6,10 +6,11 @@ const path = require('node:path');
 const root = path.join(__dirname, '..', '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
-const html = read('preview-v3/index.html');
-const app = read('preview-v3/app.js');
+const html = read('tools/fixtures/app-demo.html');
+const app = read('assets/app/app.js');
 const packageScript = read('deploy/hostinger/montar-pacote.ps1');
 const workflow = read('.github/workflows/deploy-hostinger.yml');
+const routes = read('deploy/hostinger/.htaccess');
 
 assert.match(html, /name="robots" content="noindex, nofollow"/);
 assert.match(html, /Prévia · dados de exemplo · nenhuma gravação/);
@@ -17,9 +18,10 @@ assert.doesNotMatch(html, /<script[^>]+(?:supabase-config|sync\.js|supabase-auth
 assert.doesNotMatch(html, /data-oaze-mode="live"/);
 assert.match(app, /const demo = document\.documentElement\.dataset\.oazeMode !== 'live';/);
 assert.match(app, /if\(!demo\)\{try \{ if\(!global\.V3Backend \|\| !await V3Backend\.start\(\)\) return;/);
-assert.match(packageScript, /\$pastas\s*=\s*@\([^\n]*'preview-v3'/);
-assert.match(workflow, /- 'preview-v3\/\*\*'/);
-assert.match(read('robots.txt'), /Disallow: \/preview-v3/);
-for (const file of ['index.html', 'app.css', 'app.js']) {
-  assert.ok(fs.existsSync(path.join(root, 'preview-v3', file)), `${file} ausente da prévia`);
+assert.doesNotMatch(packageScript, /'preview-v3'/);
+assert.doesNotMatch(workflow, /- 'preview-v3\/\*\*'/);
+assert.match(routes, /RewriteRule \^preview-v3\(\/\.\*\)\?\$ - \[G,L\]/);
+assert.ok(!fs.existsSync(path.join(root, 'preview-v3')), 'prévia pública ainda existe');
+for (const file of ['app.css', 'app.js']) {
+  assert.ok(fs.existsSync(path.join(root, 'assets/app', file)), `${file} ausente do app`);
 }

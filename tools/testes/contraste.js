@@ -124,8 +124,8 @@ function razao(a, b) {
 
 const SUPERFICIES = [
   {
-    nome: 'aplicativo (preview-v3/app.css)',
-    css: ler('preview-v3/app.css'),
+    nome: 'aplicativo (assets/app/app.css)',
+    css: ler('assets/app/app.css'),
     base: '--night',
     fundos: ['--night', '--dark', '--panel', '--panel2'],
     tintas: [

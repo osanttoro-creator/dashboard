@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const { parseCsv, parsePdfItems } = require('../../preview-v3/coco-import.js');
+const { parseCsv, parsePdfItems } = require('../../assets/app/coco-import.js');
 
 const csv = [
   'Data;Lançamento;Crédito (R$);Débito (R$);Saldo (R$)',

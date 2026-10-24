@@ -9,9 +9,10 @@ O site é estático. A `main` é validada, empacotada e enviada pelo workflow
 SEO e `.htaccess`. Código do Supabase, ferramentas, documentação, `.env` e
 fontes de desenvolvimento não entram em `public_html`.
 
-`preview-v3/` também entra no pacote como prévia visual pública, sem dados
-reais e sem gravação. `/app` entrega a V3 autenticada; `/app-v3.html` permanece
-como acesso direto ao mesmo HTML. O painel anterior já foi removido.
+`assets/app/` contém os arquivos ativos do aplicativo. A demonstração usada
+nos testes fica em `tools/fixtures/` e não entra no pacote. A antiga rota
+`/preview-v3/` responde 410. `/app` entrega a V3 autenticada;
+`/app-v3.html` é acesso direto ao mesmo HTML. O painel anterior foi removido.
 
 ```powershell
 .\deploy\hostinger\montar-pacote.ps1
@@ -30,7 +31,7 @@ and variables → Actions. Nenhum segredo de Supabase ou IA vai para a Hostinger
 
 - `/`, `/precos`, `/recursos`, `/suporte`, `/app` e `/app/carteira` abrem.
 - `/app` entrega o HTML V3 e exige sessão.
-- `/preview-v3/index.html` abre como demonstração, com CSS e JS próprios.
+- `/preview-v3/` e `/preview-v3/index.html` devolvem 410.
 - `/app-v3.html` exige sessão; sem login, encaminha para `/entrar`.
 - `/assets/css/style.css` devolve CSS, não HTML.
 - uma rota inventada devolve 404.

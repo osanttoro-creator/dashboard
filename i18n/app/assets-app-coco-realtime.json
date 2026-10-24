@@ -1,0 +1,145 @@
+[
+ {
+  "pt": "Conexão cancelada.",
+  "tipo": "exato",
+  "en": "Connection cancelled.",
+  "fr": "Connexion annulée.",
+  "es": "Conexión cancelada."
+ },
+ {
+  "pt": "A conexão por voz demorou demais.",
+  "tipo": "exato",
+  "en": "The voice connection took too long.",
+  "fr": "La connexion vocale a pris trop de temps.",
+  "es": "La conexión de voz tardó demasiado."
+ },
+ {
+  "pt": "Este navegador não oferece voz em tempo real.",
+  "tipo": "exato",
+  "en": "This browser does not support real-time voice.",
+  "fr": "Ce navigateur ne prend pas en charge la voix en temps réel.",
+  "es": "Este navegador no admite voz en tiempo real."
+ },
+ {
+  "pt": "Servidor de voz indisponível.",
+  "tipo": "exato",
+  "en": "Voice server unavailable.",
+  "fr": "Serveur vocal indisponible.",
+  "es": "Servidor de voz no disponible."
+ },
+ {
+  "pt": "Não foi possível conectar a voz em tempo real.",
+  "tipo": "exato",
+  "en": "Could not connect real-time voice.",
+  "fr": "Impossible de connecter la voix en temps réel.",
+  "es": "No se pudo conectar la voz en tiempo real."
+ },
+ {
+  "pt": "A sessão de voz não iniciou. Tente novamente.",
+  "tipo": "exato",
+  "en": "The voice session didn't start. Try again.",
+  "fr": "La session vocale n'a pas démarré. Réessayez.",
+  "es": "La sesión de voz no inició. Inténtalo de nuevo."
+ },
+ {
+  "pt": "session.input_audio.unmute",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "session.input_audio.mute",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Microfone indisponível.",
+  "tipo": "exato",
+  "en": "Microphone unavailable.",
+  "fr": "Microphone indisponible.",
+  "es": "Micrófono no disponible."
+ },
+ {
+  "pt": "Ação indisponível.",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "{\"erro\":\"Resposta inválida.\"}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "{\"erro\":\"A consulta excedeu o limite. Solicite um período menor.\"}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "session.input_transcript.delta",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "session.output_transcript.delta",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "response.output_item.done",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Não consegui concluir a consulta. Tente novamente.",
+  "tipo": "exato",
+  "en": "I couldn't complete the query. Try again.",
+  "fr": "Impossible de terminer la consultation. Réessayez.",
+  "es": "No pude completar la consulta. Inténtalo de nuevo."
+ },
+ {
+  "pt": "input_audio_buffer.speech_started",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "input_audio_buffer.speech_stopped",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "conversation.item.input_audio_transcription.delta",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "conversation.item.input_audio_transcription.completed",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "response.output_audio_transcript.delta",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "response.output_text.delta",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "response.output_audio_transcript.done",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "response.output_text.done",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A Coco não conseguiu continuar a conversa por voz.",
+  "tipo": "exato",
+  "en": "Coco couldn't continue the voice conversation.",
+  "fr": "Coco n'a pas pu poursuivre la conversation vocale.",
+  "es": "Coco no pudo continuar la conversación de voz."
+ }
+]

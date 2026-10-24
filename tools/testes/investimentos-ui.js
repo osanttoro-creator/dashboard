@@ -9,7 +9,7 @@ catch { ({ chromium } = require(process.env.OAZE_PLAYWRIGHT_MODULE || 'C:/Users/
     const page = await browser.newPage({ viewport: { width: 390, height: 850 } });
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto((process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173') + '/preview-v3/index.html?demo=1#investments');
+    await page.goto((process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173') + '/tools/fixtures/app-demo.html?demo=1#investments');
     await page.locator('.v3-market-panel').waitFor();
     assert.match(await page.locator('.v3-market-panel').innerText(), /demonstração/i);
     await page.locator('[data-action="add-investment"][data-type="CDB"]').click();

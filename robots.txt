@@ -7,7 +7,6 @@
 User-agent: *
 Allow: /
 Disallow: /app
-Disallow: /preview-v3
 Disallow: /onboarding
 Disallow: /entrar
 Disallow: /cadastro

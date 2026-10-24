@@ -1,0 +1,112 @@
+[
+ {
+  "pt": "attribute vec2 a_position;void main(){gl_Position=vec4(a_position,0.0,1.0);}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "precision highp float;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "uniform vec2 u_resolution;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "uniform vec2 u_pointer;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "uniform vec2 u_velocity;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "uniform float u_time;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "uniform float u_interaction;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float fbm(vec2 p){float v=0.0,a=.5;mat2 r=mat2(.80,.60,-.60,.80);for(int i=0;i<5;i++){v+=a*noise(p);p=r*p*2.03+3.1;a*=.5;}return v;}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "vec3 aura(vec2 uv,vec2 center,vec3 color,float phase,float polarity){vec2 p=uv-center;float d=length(p*vec2(.78,1.18));float angle=atan(p.y,p.x);float n=fbm(p*2.15+vec2(phase*.13,-phase*.09));float edge=.40+.12*sin(angle*3.0+phase*1.15)+.16*(n-.5);float body=smoothstep(edge+.33,edge-.18,d);float vein=.5+.5*sin((d*10.0-angle*2.0)*polarity-phase*1.4+n*4.0);body*=.80+.20*vein;return color*body;}",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "void main(){",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "vec2 frag=gl_FragCoord.xy/u_resolution;vec2 uv=frag-.5;uv.x*=u_resolution.x/u_resolution.y;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "vec2 pointer=u_pointer-.5;pointer.x*=u_resolution.x/u_resolution.y;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float t=u_time*.22;float swap=.5+.5*sin(t*.72);float spread=min(.74,(u_resolution.x/u_resolution.y)*.38);",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "vec2 left=vec2(mix(-spread,spread,swap),.10*sin(t*.9));vec2 right=vec2(mix(spread,-spread,swap),-.10*sin(t*.9));",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float pd=length(uv-pointer);vec2 bend=normalize(u_velocity+vec2(.0001))*.12*exp(-pd*4.5)*u_interaction;uv+=bend*sin(pd*18.0-t*4.0);",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "vec3 blue=vec3(.208,.333,.396),teal=vec3(.373,.663,.608),orange=vec3(.914,.529,.369),col=vec3(0.0);",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "col+=aura(uv,left,mix(blue,teal,.54),t,1.0);col+=aura(uv,right,orange,t+2.7,-1.0);",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "float touch=exp(-pd*5.5)*u_interaction;col+=mix(teal,orange,.5+.5*sin(t*1.6))*touch*(.28+.18*sin(pd*28.0-t*6.0));",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "col*=.94+.06*noise(gl_FragCoord.xy*.22+u_time);float vignette=smoothstep(1.18,.12,length(uv*vec2(.72,1.0)));col*=vignette;",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "gl_FragColor=vec4(pow(max(col,0.0),vec3(.92)),1.0);}",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

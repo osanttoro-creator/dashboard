@@ -17,8 +17,8 @@ const vm = require('node:vm');
 const raiz = path.join(__dirname, '..', '..');
 const ler = (f) => fs.readFileSync(path.join(raiz, f), 'utf8');
 const calc = ler('assets/js/calc.js');
-const app = ler('preview-v3/app.js');
-const css = ler('preview-v3/app.css');
+const app = ler('assets/app/app.js');
+const css = ler('assets/app/app.css');
 
 /* ---- o motor ---- */
 

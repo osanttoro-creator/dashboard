@@ -221,7 +221,7 @@
   Store.bankPreset = bankPreset;
   Store.accountColor = (account) => {
     const preset = bankPreset(account && account.bank);
-    return preset ? preset.color : migrateColor(account && account.color ? account.color : '#8A7A62');
+    return account && account.customColor ? migrateColor(account.color) : preset ? preset.color : migrateColor(account && account.color ? account.color : '#8A7A62');
   };
 
   /** Nome da cor para rótulo e dica; o hex é o fallback honesto. */
@@ -305,6 +305,11 @@
        de significar "não cancelado" — nunca o contrário, senão uma
        migração mal lida sumiria com o mês inteiro de alguém. */
     t.cancelado = t.cancelado === true;
+    t.ignored = t.kind === 'expense' && t.ignored === true;
+    /* Lembrete visível no app; não implica notificação do sistema. */
+    t.remindDaysBefore = [0, 1, 3, 7].includes(Number(t.remindDaysBefore))
+      && t.remindDaysBefore !== null && t.remindDaysBefore !== ''
+      ? Number(t.remindDaysBefore) : null;
     /* MEIO DE PAGAMENTO
        `method` continua dizendo de ONDE saiu (conta ou cartão de
        crédito), que é o que muda a contabilidade. `meio` diz COMO —
@@ -336,6 +341,10 @@
     t.faturaRef = (t.method === 'card' && !t.recurring && /^\d{4}-\d{2}$/.test(t.faturaRef || ''))
       ? t.faturaRef : null;
     t.notes = String(t.notes || '');
+    /* Só o caminho privado fica no perfil; bytes do comprovante não entram no JSON. */
+    t.receiptPath = typeof t.receiptPath === 'string' && t.receiptPath.length <= 260
+      && /^[\w/-]+\.(?:jpg|png|webp|pdf)$/.test(t.receiptPath) && !t.receiptPath.includes('..')
+      ? t.receiptPath : null;
     /* Lançamento em outra moeda: `amount` continua em REAIS (é ele
        que todos os totais somam), e o valor original fica ao lado para
        a fatura e o extrato mostrarem o que foi cobrado de verdade.
@@ -448,7 +457,9 @@
         type: String(a.type || 'Conta corrente'),
         /* Dados antigos também obedecem à regra: banco conhecido usa
            o preset; só uma conta personalizada conserva sua escolha. */
-        color: preset ? preset.color : migrateColor(a.color || '#8A7A62'),
+        color: a.customColor ? migrateColor(a.color || '#8A7A62') : preset ? preset.color : migrateColor(a.color || '#8A7A62'),
+        customColor: !!a.customColor,
+        customIcon: ['wallet', 'piggy-bank', 'landmark', 'banknote'].includes(a.customIcon) ? a.customIcon : null,
         gradient: preset ? null : (a.gradient ? String(a.gradient) : null),
         last4: String(a.last4 || '').replace(/\D/g, '').slice(-4), // identificação na tela, nada além disso
         openingBalance: U.round2(+a.openingBalance || 0),
@@ -478,6 +489,8 @@
       name: String(c.name || 'Cartão'),
       bank: String(c.bank || ''),
       color: migrateColor(c.color || '#7C6CF0'),
+      customColor: !!c.customColor,
+      customIcon: ['wallet', 'piggy-bank', 'landmark', 'banknote'].includes(c.customIcon) ? c.customIcon : null,
       gradient: c.gradient ? String(c.gradient) : null,          // null = deduzido
       last4: String(c.last4 || '').replace(/\D/g, '').slice(-4), // só os 4 últimos
       limit: U.round2(+c.limit || 0),
@@ -552,6 +565,7 @@
       name: String(g.name || 'Meta').slice(0, 60),
       target: U.round2(+g.target || 0),
       saved: U.round2(+g.saved || 0),
+      annualRate: Number.isFinite(+g.annualRate) && +g.annualRate >= 0 && +g.annualRate <= 100 ? +g.annualRate : null,
       deadline: U.isValidISO(g.deadline) ? g.deadline : null,
       color: migrateColor(g.color || '#2E6E7E'),
       icon: g.icon ? String(g.icon) : 'target',
@@ -810,6 +824,17 @@
 
   Store.accounts = collection('accounts');
   Store.cards = collection('cards');
+  Store.removeCardWithHistory = function (id) {
+    const p = Store.profile();
+    if (!p.cards.some((card) => card.id === id)) return false;
+    p.cards = p.cards.filter((card) => card.id !== id);
+    p.transactions = p.transactions.filter((tx) => tx.cardId !== id);
+    Object.keys(p.invoices || {}).forEach((key) => {
+      if (key.startsWith(id + '|')) delete p.invoices[key];
+    });
+    Store.commit('card-delete-with-history');
+    return true;
+  };
   Store.categories = collection('categories');
   Store.investments = collection('investments');
 

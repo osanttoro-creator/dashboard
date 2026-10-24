@@ -16,6 +16,22 @@
     : icon(name);
   const statusLabels = { pago: 'Pago', pendente: 'Não pago', cancelado: 'Cancelado' };
   const statusDescriptions = { pago: 'Entra nos totais', pendente: 'Fica no previsto', cancelado: 'Não entra em nenhum total' };
+  const NAV_PAGES = ['home','transactions','wallet','investments','categories','calendar','coco','settings'];
+  const NAV_KEY = 'oaze.v3.sidebar';
+  function loadNavPrefs() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(NAV_KEY) || '{}');
+      const order = Array.isArray(saved.order) ? [...new Set(saved.order.filter((page) => NAV_PAGES.includes(page)))] : [];
+      const hidden = Array.isArray(saved.hidden) ? saved.hidden.filter((page) => NAV_PAGES.includes(page) && page !== 'home') : [];
+      return { order: [...order, ...NAV_PAGES.filter((page) => !order.includes(page))], hidden, collapsed: !!saved.collapsed };
+    } catch { return { order: [...NAV_PAGES], hidden: [], collapsed: false }; }
+  }
+  let navPrefs = loadNavPrefs();
+  let navEditorOpen = false;
+  document.body?.classList.toggle('v3-sidebar-collapsed', navPrefs.collapsed);
+  function saveNavPrefs() {
+    try { localStorage.setItem(NAV_KEY, JSON.stringify(navPrefs)); } catch { /* preferências seguem nesta sessão */ }
+  }
   function statusGlyph(value) {
     if (value === 'cancelado') return '<span class="v3-status-emoji" aria-hidden="true">⛔</span>';
     const svg = global.Icons?.lucide(value === 'pago' ? 'check' : 'x', 18);
@@ -131,7 +147,7 @@
     budgets: { alimentacao: 1000, transporte: 600, lazer: 500, assinaturas: 200 }, planningSalary: 6500,
     categoryAmounts: { moradia: 1850, alimentacao: 1120.4, outros: 533.8, transporte: 486, lazer: 412.3, compras: 315.7, assinaturas: 120, saude: 74.2 },
     reminders: [
-      { title: 'Internet', date: '2026-09-30', amount: 119.9, sub: 'débito automático · no dia, às 9h' },
+      { id: 't6', title: 'Internet', date: '2026-09-30', amount: 119.9, sub: 'débito automático · no dia, às 9h' },
       { title: 'Fatura Nubank', date: '2026-10-05', amount: 1982.3, sub: 'avisos em 02/out e 05/out, às 9h' },
       { title: 'Aluguel', date: '2026-10-05', amount: 1850, sub: 'pix · no dia, às 9h' },
       { title: 'Fatura Inter', date: '2026-10-10', amount: 640, sub: 'avisos em 07/out e 10/out, às 9h' }
@@ -188,10 +204,33 @@
   function walletItems() { return items().filter((x) => x.kind === state.walletKind && !!x.data.hidden === !!state.walletHidden); }
   function itemById(id) { return items().find((x) => x.data.id === id); }
   function selectedItem() { const saved=global.V3Carteira?.ultimo('v3-'+state.walletKind+(state.walletHidden?'-hidden':''));return walletItems().find((x) => x.data.id === state.selected) || walletItems().find((x)=>x.data.id===saved) || walletItems()[0] || null; }
-  function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}">${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
+  function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}" aria-label="${esc(names[page])}" title="${esc(names[page])}" ${state.page === page ? 'aria-current="page"' : ''}>${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
+  function navEditorMarkup() {
+    return `<div class="v3-nav-editor-head"><strong>Editar menu</strong><button type="button" data-action="sidebar-edit" aria-label="Fechar edição do menu">×</button></div><p>Escolha a ordem e o que aparece neste aparelho.</p><div class="v3-nav-editor-list">${navPrefs.order.map((page, index) => `<div class="v3-nav-editor-row"><span>${page === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}${esc(names[page])}</span><button type="button" data-nav-visibility="${page}" aria-label="${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Ocultar'} ${esc(names[page])}" aria-pressed="${!navPrefs.hidden.includes(page)}" ${page === 'home' ? 'disabled title="Início sempre visível"' : ''}>${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Visível'}</button><button type="button" data-nav-move="up" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para cima" ${index === 0 ? 'disabled' : ''}>↑</button><button type="button" data-nav-move="down" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para baixo" ${index === navPrefs.order.length - 1 ? 'disabled' : ''}>↓</button></div>`).join('')}</div><button class="v3-nav-reset" type="button" data-action="sidebar-reset">Restaurar menu padrão</button>`;
+  }
   function renderNav() {
-    $('#v3-desktop-nav').innerHTML = ['home','transactions','wallet'].map(navButton).join('') + '<span class="v3-nav-label">MAIS</span>' + ['investments','categories','calendar','coco','settings'].map(navButton).join('');
-    $('#v3-mobile-nav').innerHTML = ['home','transactions'].map((p) => `<button type="button" data-go="${p}" class="${state.page === p ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('') + '<button type="button" data-action="new" class="v3-bottom-plus" aria-label="Novo lançamento">+</button>' + ['wallet','more'].map((p) => `<button type="button" data-go="${p}" class="${(p === 'more' ? !['home','transactions','wallet'].includes(state.page) : state.page === p) ? 'is-active' : ''}">${icon(p)}${esc(names[p])}</button>`).join('');
+    const sidebar = $('.v3-sidebar');
+    if (sidebar && !sidebar.querySelector('.v3-sidebar-controls')) sidebar.querySelector('.v3-logo')?.insertAdjacentHTML('afterend', '<div class="v3-sidebar-controls"><button class="v3-sidebar-toggle" type="button" data-action="sidebar-toggle" aria-controls="v3-desktop-nav"></button><button class="v3-sidebar-edit" type="button" data-action="sidebar-edit" aria-controls="v3-nav-editor">Editar menu</button></div>');
+    if (sidebar && !sidebar.querySelector('#v3-nav-editor')) $('#v3-desktop-nav')?.insertAdjacentHTML('afterend', '<section class="v3-nav-editor" id="v3-nav-editor" aria-label="Editar navegação" hidden></section>');
+    sidebar?.classList.toggle('is-collapsed', navPrefs.collapsed);
+    document.body.classList.toggle('v3-sidebar-collapsed', navPrefs.collapsed);
+    const toggle = sidebar?.querySelector('.v3-sidebar-toggle');
+    if (toggle) { toggle.innerHTML = `<span aria-hidden="true">${navPrefs.collapsed ? '›' : '‹'}</span><span class="v3-sidebar-toggle-text">${navPrefs.collapsed ? 'Expandir' : 'Recolher'}</span>`; toggle.setAttribute('aria-label', navPrefs.collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'); toggle.setAttribute('aria-expanded', String(!navPrefs.collapsed)); }
+    const edit = sidebar?.querySelector('.v3-sidebar-edit');
+    if (edit) edit.setAttribute('aria-expanded', String(navEditorOpen && !navPrefs.collapsed));
+    const editor = $('#v3-nav-editor');
+    if (editor) {
+      editor.hidden = !navEditorOpen || navPrefs.collapsed;
+      const signature = JSON.stringify({ order: navPrefs.order, hidden: navPrefs.hidden });
+      if (!editor.hidden && editor.dataset.signature !== signature) { editor.innerHTML = navEditorMarkup(); editor.dataset.signature = signature; }
+    }
+    const desktopNav = $('#v3-desktop-nav');
+    desktopNav.innerHTML = navPrefs.order.filter((page) => !navPrefs.hidden.includes(page)).map(navButton).join('');
+    desktopNav.inert = navEditorOpen && !navPrefs.collapsed;
+    const newButton = sidebar?.querySelector('.v3-new');
+    if (newButton) newButton.inert = navEditorOpen && !navPrefs.collapsed;
+    const mobileButton = (page) => { const active = page === 'more' ? !['home','transactions','wallet'].includes(state.page) : state.page === page; return `<button type="button" data-go="${page}" class="${active ? 'is-active' : ''}" aria-label="${esc(names[page])}" ${state.page === page ? 'aria-current="page"' : ''}><span class="v3-dock-icon">${icon(page)}</span><span class="v3-dock-label">${esc(names[page])}</span></button>`; };
+    $('#v3-mobile-nav').innerHTML = ['home','transactions'].map(mobileButton).join('') + '<button type="button" data-action="new" class="v3-bottom-plus" aria-label="Novo lançamento"><span aria-hidden="true">+</span></button>' + ['wallet','more'].map(mobileButton).join('');
   }
   function renderHead() {
     $('#v3-title').textContent = names[state.page] || 'início';
@@ -246,6 +285,11 @@
     return .2126*l[0]+.7152*l[1]+.0722*l[2]>.38?'#14212A':'#F8F4E9';
   }
   function bankLogo(name, color) { return global.Icons?.bank(name, 26, color).outerHTML || icon('wallet'); }
+  const customBankIcons = { wallet: 'Carteira', 'piggy-bank': 'Porquinho', landmark: 'Banco físico', banknote: 'Nota de dinheiro' };
+  function walletLogo(data, color) {
+    const chosen = !bankKey(data.bank) && customBankIcons[data.customIcon] ? data.customIcon : null;
+    return chosen ? (global.Icons?.lucide(chosen, 26)?.outerHTML || icon('wallet')) : bankLogo(data.bank || data.name, color);
+  }
   function walletItemValue(item) {
     if (!item) return 0;
     if (demo) return item.kind === 'credit'
@@ -294,12 +338,12 @@
   }
   function cardButton(item, selected, i) {
     const d = item.data, name = d.name || d.bank || 'Sem nome', institution = d.bank || d.name || '';
-    const plastic=bankBrand(institution,d.color), ink=cardInk(plastic);
+    const plastic=d.customColor?safeColor(d.color):bankBrand(institution,d.color), ink=cardInk(plastic);
     const brand=global.Icons?.bankBrand(institution);
     const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
     const visibleLast=state.hideMoney ? ocultarDigitos(last) : last;
-    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${bankLogo(institution,brandInk)}</span><strong>${esc(name)}</strong><button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>ÚLTIMOS 4 DÍGITOS</small><span>${esc(visibleLast||'—')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></div>`;
+    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong><button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>ÚLTIMOS 4 DÍGITOS</small><span>${esc(visibleLast||'—')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></div>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -697,7 +741,7 @@
     trigger.setAttribute('aria-expanded', 'true');
     trigger.setAttribute('aria-controls', element.id);
     statusMenu = { element, trigger, id, ym };
-    element.querySelector('.is-current')?.focus();
+    element.querySelector('.is-current')?.focus({ preventScroll: true });
   }
   async function chooseTransactionStatus(value) {
     if (!statusMenu || statusBusy || !Object.hasOwn(statusLabels, value)) return;
@@ -800,7 +844,7 @@
       + `<p class="v3-muted">O período continua sendo o mês escolhido no topo. Os filtros valem só nesta sessão.</p></form>`, 'Filtros');
   }
   function renderTransactions() {
-    const rows = currentTransactions({ comCancelados: true }).filter((entry) => !entry.cardId).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
+    const rows = currentTransactions({ comCancelados: true }).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
     const linha = (x) => {
       const card = profile().cards.find((c) => c.id === x.cardId) || profile().accounts.find((a) => a.id === x.accountId);
@@ -811,47 +855,10 @@
         try { ref = Calc.faturaDoLancamento(cartao, x); } catch (e) { ref = null; }
         method = `${cartao.name || cartao.bank}${ref ? ' · fatura ' + periodLabel(ref) : ''}`;
       }
-      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${cartao ? '' : esc(shortDate(x.date)) + ' · '}${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${x.kind === 'income' ? 'v3-positive' : 'v3-negative'} v3-sensitive">${x.kind === 'income' ? '+' : '−'} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
+      const tone=x.kind==='income'?'v3-positive':x.kind==='transfer'?'v3-transfer':'v3-negative';
+      const sign=x.kind==='income'?'+':x.kind==='transfer'?'↔':'−';
+      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${esc(shortDate(x.date))} · ${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${tone} v3-sensitive">${sign} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
     };
-
-    /* =============================================================
-       ENTRADA E SAÍDA NÃO SE MISTURAM
-       -------------------------------------------------------------
-       Era uma tabela só, ordenada por data, com o que entrou e o que
-       saiu intercalados — e a única pista de qual era qual era o
-       sinal antes do valor, do lado direito. Para saber onde o
-       dinheiro foi, a pessoa tinha de ler linha por linha filtrando
-       com o olho.
-
-       São duas listas lado a lado no desktop, cada uma com subtotal.
-       Transferência ganha a terceira lista, e
-       só aparece quando existe: ela não é gasto nem ganho — é o mesmo
-       dinheiro mudando de lugar.
-
-       O cancelado continua visível, riscado, dentro da lista a que
-       pertence: some de todo total, não some de vista.
-       ============================================================= */
-    const grupos = [
-      { chave: 'income', titulo: 'entrou', vazio: 'Nenhuma receita neste filtro.', classe: 'v3-positive', sinal: '▲' },
-      { chave: 'expense', titulo: 'saiu', vazio: 'Nenhuma despesa neste filtro.', classe: 'v3-negative', sinal: '▼' },
-      { chave: 'transfer', titulo: 'transferências', vazio: '', classe: '', sinal: '' }
-    ];
-    const listas = grupos.map((g) => {
-      if ((state.filter === 'Entradas' && g.chave !== 'income') || (state.filter === 'Saídas' && g.chave !== 'expense')) return '';
-      const doGrupo = rows.filter((x) => x.kind === g.chave);
-      /* Transferência só existe na tela quando existe no mês. */
-      if (g.chave === 'transfer' && !doGrupo.length) return '';
-      /* O subtotal conta só o que vale: cancelado fora, previsto fora. */
-      const soma = doGrupo.filter((x) => x.confirmed && !x.cancelado).reduce((n, x) => n + Number(x.amount || 0), 0);
-      const previsto = doGrupo.filter((x) => !x.confirmed && !x.cancelado).length;
-      return `<section class="v3-panel v3-table v3-tx-grupo v3-tx-grupo--${g.chave}" aria-label="${esc(g.titulo)}">`
-        + `<div class="v3-row v3-tx-grupo-head"><h2>${esc(g.titulo)}</h2><span>`
-        + (g.sinal ? `<strong class="v3-mono ${g.classe} v3-sensitive">${g.sinal} ${money(soma)}</strong>` : `<strong class="v3-mono v3-sensitive">${money(soma)}</strong>`)
-        + (previsto ? `<small>${previsto} previsto${previsto > 1 ? 's' : ''}</small>` : '')
-        + `</span></div>`
-        + (doGrupo.length ? doGrupo.map(linha).join('') : `<p class="v3-muted" style="padding:16px 0">${esc(g.vazio)}</p>`)
-        + `</section>`;
-    });
 
     const ativos = filtrosAtivos() + (state.filter !== 'Todos' ? 1 : 0);
     const nomeFonte = (v) => {
@@ -869,11 +876,11 @@
       state.filtros.categoria !== 'todas' ? { rotulo: categoryName(state.filtros.categoria), acao: 'tirar-categoria' } : null,
       state.filtros.busca.trim() ? { rotulo: '“' + state.filtros.busca.trim() + '”', acao: 'tirar-busca' } : null
     ].filter(Boolean);
-    const chipsHtml = ['Entradas','Saídas'].map((name) => `<button type="button" class="v3-pill v3-pill-rapido${state.filter===name?' is-active':''}" data-filter="${name}" aria-pressed="${state.filter===name}">${name}</button>`).join('')
+    const chipsHtml = [['Entradas','Entradas'],['Saídas','Saídas'],['Cartões','Crédito'],['Todos','Transações']].map(([name,label]) => `<button type="button" class="v3-pill v3-pill-rapido${state.filter===name?' is-active':''}" data-filter="${name}" aria-pressed="${state.filter===name}">${label}</button>`).join('')
       + `<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>`
       + chips.map((c) => `<button type="button" class="v3-pill v3-chip" data-action="${c.acao}" aria-label="Tirar o filtro ${esc(c.rotulo)}">${esc(c.rotulo)}<span aria-hidden="true">✕</span></button>`).join('')
       + (ativos > 1 ? '<button type="button" class="v3-link v3-limpar-tudo" data-action="limpar-filtros">limpar tudo</button>' : '');
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><p class="v3-muted v3-trans-explain">Gastos feitos seguem a data da compra. Compras no crédito aparecem abaixo na fatura do mês em que vencem; o pagamento não duplica a despesa.</p><div class="v3-tx-pares${state.filter==='Entradas'||state.filter==='Saídas'?' is-single':''}">${listas[0]}${listas[1]}</div>${listas[2]}${renderDueInvoices()}</div>`;
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><section class="v3-panel v3-table v3-trans-feed" aria-label="Lançamentos por data"><div class="v3-row"><h2>movimentações</h2><small>${rows.length} registro${rows.length===1?'':'s'}</small></div>${rows.length?rows.map(linha).join(''):'<p class="v3-muted">Nenhum lançamento neste filtro.</p>'}</section></div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -941,11 +948,19 @@
       + `<div class="v3-invoice-values"><div><small>Total da fatura</small><strong class="v3-sensitive">${money(invoice.planned)}</strong></div>`
       + `<div><small>Já abatido</small><strong class="v3-sensitive">${money(invoice.pago)}</strong></div>`
       + `<div><small>Falta pagar</small><strong class="v3-sensitive">${money(invoice.restante)}</strong></div></div>`
-      + (demo ? '<p class="v3-muted">Prévia: a lista abaixo mostra só parte das compras desta fatura de exemplo.</p>' : '')
       + (invoice.pagoAdiantado ? `<p class="v3-muted">${money(invoice.pagoAdiantado)} adiantado em compras · ${money(invoice.pagoFatura)} pago na fatura.</p>` : '')
       + (invoice.quitada && invoice.restante > 0 ? `<p class="v3-invoice-warning">Esta fatura foi marcada como encerrada sem registrar todo o pagamento. O saldo continua pendente até ser abatido.</p>` : '')
       + `</div>`;
     actions?.insertAdjacentHTML('beforebegin', summary);
+    const limitSection=detail.querySelector('.v3-bar')?.parentElement;
+    const summarySection=actions?.previousElementSibling;
+    if(limitSection && summarySection?.classList.contains('v3-invoice-summary')){
+      const overview=document.createElement('div');
+      overview.className='v3-invoice-overview';
+      limitSection.before(overview);
+      limitSection.classList.add('v3-limit-summary');
+      overview.append(limitSection,summarySection);
+    }
     const navigation = detail.querySelector('.v3-fatura-nav');
     if (navigation && invoice.pagamentos.length) {
       const payments = `<div class="v3-invoice-history"><h3>Pagamentos registrados</h3>${invoice.pagamentos.map((payment) => {
@@ -1255,10 +1270,33 @@
     const remain = U.round2(salary - planned);
     return `<div class="v3-planning"><section class="v3-panel v3-planning-income"><div><span class="v3-label">SALÁRIO MENSAL PLANEJADO</span><strong class="v3-money v3-sensitive">${money(salary)}</strong><small>Referência manual para os tetos. Não vira lançamento.</small></div><form id="v3-form-planning-salary" class="v3-form"><label>VALOR POR MÊS (R$)<input name="salary" data-money="true" inputmode="decimal" value="${esc(salary ? salary.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '')}" placeholder="0,00" required></label><button type="submit" class="v3-primary">Salvar salário</button></form></section><section class="v3-panel"><div class="v3-row"><div><h2>tetos por categoria</h2><small>Você define cada valor; nenhum teto é criado automaticamente.</small></div><button type="button" class="v3-secondary" data-action="add-budget">Definir teto</button></div><div class="v3-planning-summary"><span>Tetos definidos <strong class="v3-sensitive">${money(planned)}</strong></span><span>Salário menos tetos <strong class="v3-sensitive ${remain<0?'v3-negative':''}">${salary ? money(remain) : '—'}</strong></span></div><div class="v3-planning-list">${categories.map((c)=>{const limit=Number(budgets[c.id]||0);const spent=Number(used.find((r)=>r.id===c.id)?.value||0);return `<button type="button" class="v3-planning-row" ${limit?`data-budget="${esc(c.id)}"`:`data-budget-novo="${esc(c.id)}"`}><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)};--swatch-ink:${U.inkFor(safeColor(c.color))}">${categoryIconMarkup(categoryIcon(c.icon))}</span><span><strong>${esc(c.name)}</strong><small>${limit?`Gasto ${money(spent)} de ${money(limit)}`:'Sem teto definido'}</small></span><span>${limit?'Editar teto':'Definir teto'} ›</span></button>`}).join('')}</div></section></div>`;
   }
+  function renderPlanningGuide() {
+    const income=Number(profile().planningSalary||0);
+    const categories=profile().categories.filter((c)=>c.kind==='expense');
+    const proposed=state.planningSuggestions;
+    return `<section class="v3-panel v3-planning-coco"><div class="v3-planning-coco-head"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="Coco"><div><span class="v3-label">PLANEJAMENTO COM A COCO</span><h2>um teto que parte dos seus números</h2><p>Responda três perguntas. A proposta usa seus gastos registrados e só vira teto depois que você revisar e salvar cada valor.</p></div></div><form id="v3-form-planning-guide" class="v3-form"><label>Quanto entra por mês?<input name="income" data-money="true" inputmode="decimal" value="${esc(income?income.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'')}" placeholder="0,00" required></label><label>Quanto quer separar antes de gastar?<input name="reserve" data-money="true" inputmode="decimal" value="${esc(proposed?.reserve?.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})||'')}" placeholder="0,00" required></label><label>Qual categoria precisa de mais folga?<select name="priority"><option value="">Distribuir pelo histórico</option>${categories.map((c)=>`<option value="${esc(c.id)}" ${proposed?.priority===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label><button type="submit" class="v3-secondary">Montar proposta</button></form>${proposed?`<div class="v3-planning-proposal"><div class="v3-row"><strong>Proposta para ${money(proposed.available)} de gastos</strong><small>Reserva de ${money(proposed.reserve)} fora dos tetos</small></div>${proposed.items.map((item)=>`<div class="v3-planning-proposal-row"><span>${esc(item.name)}</span><strong>${money(item.limit)}</strong><button type="button" data-planning-budget="${esc(item.id)}" data-suggested-limit="${esc(item.limit)}">Revisar teto</button></div>`).join('')}<small>Estimativa, não recomendação financeira. Você decide o valor de cada teto.</small></div>`:''}</section>`;
+  }
+  function planWithCoco(form) {
+    const fd=new FormData(form),income=parseMoney(fd.get('income')),reserve=parseMoney(fd.get('reserve')),priority=String(fd.get('priority')||'');
+    if(!(income>0)||!Number.isFinite(reserve)||reserve<0||reserve>=income){toast('Confira a entrada mensal e a reserva.');return;}
+    const used=categoryTotals('expense').filter((row)=>Number(row.value)>0);
+    const categories=profile().categories.filter((c)=>c.kind==='expense'&&used.some((row)=>row.id===c.id));
+    if(!categories.length){toast('Registre gastos por categoria antes de montar tetos personalizados.');return;}
+    const weighted=categories.map((c)=>({id:c.id,name:c.name,weight:Number(used.find((row)=>row.id===c.id).value)*(c.id===priority?1.15:1)}));
+    const total=weighted.reduce((sum,item)=>sum+item.weight,0),available=U.round2(income-reserve);
+    const items=weighted.map((item)=>({id:item.id,name:item.name,limit:Math.max(1,U.round2(available*item.weight/total))}));
+    state.planningSuggestions={reserve,available,priority,items};render();
+  }
   function reminders(from, to) {
     const today = from || U.todayISO(), until = new Date(); until.setDate(until.getDate()+30); const max = to || until.toISOString().slice(0,10);
     if (demo) return sample.reminders.filter((item) => item.date >= today && item.date <= max);
-    const entries=Calc.entries(today,max,profile()).filter((entry)=>!entry.confirmed && entry.contaNosTotais !== false).map((entry)=>({id:entry.txId,title:entry.description,date:entry.date,amount:entry.amount,sub:categoryName(entry.categoryId)}));
+    const entries=Calc.entries(today,max,profile()).filter((entry)=>!entry.confirmed && entry.contaNosTotais !== false).map((entry)=>{
+      const tx=profile().transactions.find((item)=>item.id===entry.txId);
+      const lead=tx?.remindDaysBefore;
+      const alertAt=lead==null?null:new Date(Date.parse(`${entry.date}T00:00:00Z`)-lead*86400000).toISOString().slice(0,10);
+      const highlighted=alertAt!=null && today>=alertAt;
+      return {id:entry.txId,title:entry.description,date:entry.date,amount:entry.amount,sub:`${highlighted?'Lembrete · ':''}${categoryName(entry.categoryId)}`};
+    });
     const bills=profile().cards.filter((card) => card.considerado !== false).flatMap((card)=>[U.addMonths(ymOf(today),-1),ymOf(today),ymOf(max),U.addMonths(ymOf(max),1)].map((ym)=>Calc.invoice(card.id,ym,profile()))
       .filter((invoice)=>invoice&&invoice.restante>0&&invoice.dueDate>=today&&invoice.dueDate<=max)
       .map((invoice)=>({title:`Fatura ${invoice.card.name}`,date:invoice.dueDate,amount:invoice.restante,sub:'Cartão de crédito'})));
@@ -1291,7 +1329,7 @@
     const grouped = {};
     sample.transactions.filter((t) => ymOf(t.date) === alvo).forEach((t) => {
       const day = Number(t.date.slice(8));
-      (grouped[day] ||= []).push({ tipo: t.kind === 'income' ? 'in' : 'out', titulo: t.description, valor: t.amount, confirmado: t.confirmed, categoria: categoryName(t.categoryId), txId: t.id });
+      (grouped[day] ||= []).push({ tipo: t.kind === 'income' ? 'in' : t.kind === 'transfer' ? 'tr' : 'out', titulo: t.description, valor: t.amount, confirmado: t.confirmed, categoria: categoryName(t.categoryId), txId: t.id });
     });
     sample.reminders.filter((r) => ymOf(r.date) === alvo && r.title.startsWith('Fatura')).forEach((r) => {
       const day = Number(r.date.slice(8));
@@ -1336,10 +1374,12 @@
   function calIso(ym, dia) { return `${ym}-${String(dia).padStart(2, '0')}`; }
 
   function calEventoLinha(e) {
-    return `<div class="v3-cal-event"><span class="v3-cal-event-kind ${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></span>`
-      + `<span><strong>${esc(e.titulo)}</strong><small>${esc(e.categoria || (e.tipo === 'due' ? 'Vencimento' : 'Lançamento'))} · ${e.confirmado ? 'confirmado' : 'previsto'}</small></span>`
-      + `<strong class="v3-mono v3-sensitive">${e.tipo === 'in' ? '+' : '−'} ${money(e.valor)}</strong>`
-      + `${e.txId ? `<button type="button" class="v3-link" data-transaction="${esc(e.txId)}" aria-label="Editar ${esc(e.titulo)}">Editar</button>` : ''}</div>`;
+    const tipo = e.tipo === 'in' ? 'in' : e.tipo === 'tr' ? 'tr' : e.tipo === 'due' ? 'due' : 'out';
+    const sinal = tipo === 'in' ? '+' : tipo === 'tr' ? '↔' : '−';
+    const situacao = tipo === 'due' ? (e.confirmado ? 'fatura paga' : 'vencimento') : e.confirmado ? 'confirmado' : 'previsto';
+    return `<div class="v3-cal-event"><span class="v3-cal-event-kind ${tipo}"></span>`
+      + `<span>${e.txId ? `<button type="button" class="v3-cal-event-title" data-transaction="${esc(e.txId)}" aria-label="Editar ${esc(e.titulo)}">${esc(e.titulo)}</button>` : `<strong>${esc(e.titulo)}</strong>`}<small>${esc(e.categoria || (tipo === 'due' ? 'Cartão de crédito' : 'Lançamento'))} · ${situacao}</small></span>`
+      + `<strong class="v3-mono v3-sensitive v3-cal-amount is-${tipo}">${sinal} ${money(e.valor)}</strong></div>`;
   }
 
   /* ---------------- ano ---------------- */
@@ -1357,10 +1397,12 @@
       } else {
         try { t = Calc.monthTotals(ym); } catch (e) { /* mês sem dados */ }
       }
-      const events = Object.values(eventosDoMes(ym)).flat()
-        .filter((e) => e.tipo === 'in' || e.tipo === 'out');
-      const lancado = U.round2(events.filter((e) => e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0));
-      const previsto = U.round2(events.filter((e) => !e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0));
+      const events = Object.entries(eventosDoMes(ym)).flatMap(([day, rows]) => rows
+        .filter((e) => e.tipo === 'in' || e.tipo === 'out' || e.tipo === 'tr')
+        .map((e) => ({ ...e, day: Number(day) })));
+      const counted = events.filter((e) => e.tipo !== 'tr');
+      const lancado = U.round2(counted.filter((e) => e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0));
+      const previsto = U.round2(counted.filter((e) => !e.confirmado).reduce((n, e) => n + Number(e.valor || 0), 0));
       return { ym, ...t, lancado, previsto, events };
     });
     /* A barra é comparável entre meses: a escala é o maior movimento
@@ -1370,14 +1412,14 @@
     const hoje = U.todayYM();
     const corpo = linhas.map((l) => {
       const nome = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'][+l.ym.slice(5) - 1];
-      const vazio = !l.income && !l.expense && !l.previsto;
-      const editable = l.events.filter((e) => e.txId).slice(0, 3);
+      const vazio = !l.income && !l.expense && !l.previsto && !l.events.length;
+      const editable = l.events.filter((e) => e.txId).sort((a, b) => b.day - a.day);
       return `<article class="v3-cal-mes${l.ym === state.ym ? ' is-active' : ''}${l.ym === hoje ? ' is-today' : ''}">`
         + `<button type="button" class="v3-cal-mes-main" data-cal-goto="${l.ym}" aria-label="Abrir ${esc(niceMonth(l.ym))}"><span class="v3-cal-mes-nome">${nome}</span>`
         + `<span class="v3-cal-mes-barras" aria-hidden="true"><i class="in" style="width:${pct(100 * l.income / teto)}%"></i><i class="out" style="width:${pct(100 * l.expense / teto)}%"></i></span>`
         + `<strong class="v3-mono v3-sensitive ${l.balance < 0 ? 'v3-negative' : 'v3-positive'}">${vazio ? '—' : money(l.balance)}</strong></button>`
         + `<div class="v3-cal-mes-numeros"><span>Lançados <strong class="v3-sensitive">${money(l.lancado)}</strong></span><span>Previstos <strong class="v3-sensitive">${money(l.previsto)}</strong></span></div>`
-        + `${editable.length ? `<div class="v3-cal-mes-edicoes">${editable.map((e) => `<button type="button" data-transaction="${esc(e.txId)}" aria-label="Editar ${esc(e.titulo)} em ${esc(nome)}"><span>${esc(e.titulo)}</span><small>Editar ›</small></button>`).join('')}</div>` : ''}</article>`;
+        + `${editable.length ? `<div class="v3-cal-mes-edicoes" aria-label="Lançamentos de ${esc(niceMonth(l.ym))}">${editable.map((e) => { const tipo = e.tipo === 'in' ? 'in' : e.tipo === 'tr' ? 'tr' : 'out'; const sinal = tipo === 'in' ? '+' : tipo === 'tr' ? '↔' : '−'; return `<button type="button" data-transaction="${esc(e.txId)}" aria-label="Editar ${esc(e.titulo)}, dia ${e.day}, ${sinal} ${esc(money(e.valor))}"><span class="v3-cal-mes-entry-name"><time datetime="${esc(calIso(l.ym, e.day))}">${String(e.day).padStart(2, '0')}</time><span>${esc(e.titulo)}</span></span><strong class="v3-mono v3-sensitive v3-cal-amount is-${tipo}">${sinal} ${money(e.valor)}</strong></button>`; }).join('')}</div>` : ''}</article>`;
     }).join('');
     const totalAno = linhas.reduce((n, l) => n + l.balance, 0);
     return `<section class="v3-panel v3-cal-ano" aria-label="Meses de ${esc(ano)}">`
@@ -1434,7 +1476,7 @@
       const iso = calIso(state.ym, n);
       const rows = events[n] || [];
       const divida = U.round2(rows.filter((e) => e.tipo === 'out' || e.tipo === 'due').reduce((sum, e) => sum + Number(e.valor || 0), 0));
-      return `<button type="button" class="v3-cal-day${n === day ? ' is-active' : ''}${iso === today ? ' is-today' : ''}" data-cal-day="${n}" aria-label="${n} de ${esc(niceMonth(state.ym))}, ${rows.length} evento(s)${divida ? `, dívidas ${money(divida)}` : ''}" aria-pressed="${n === day}"><span>${n}</span>${divida ? `<small class="v3-cal-debt v3-sensitive">${money(divida)}</small>` : ''}<span class="v3-cal-marks" aria-hidden="true">${rows.slice(0, 3).map((e) => `<i class="${e.tipo === 'in' ? 'in' : e.tipo === 'due' ? 'due' : 'out'}"></i>`).join('')}</span></button>`;
+      return `<button type="button" class="v3-cal-day${n === day ? ' is-active' : ''}${iso === today ? ' is-today' : ''}" data-cal-day="${n}" aria-label="${n} de ${esc(niceMonth(state.ym))}, ${rows.length} evento(s)${divida ? `, saídas e faturas ${money(divida)}` : ''}" aria-pressed="${n === day}"><span>${n}</span>${divida ? `<small class="v3-cal-debt v3-sensitive">${money(divida)}</small>` : ''}<span class="v3-cal-marks" aria-hidden="true">${rows.slice(0, 3).map((e) => `<i class="${e.tipo === 'in' ? 'in' : e.tipo === 'tr' ? 'tr' : e.tipo === 'due' ? 'due' : 'out'}"></i>`).join('')}</span></button>`;
     }).join('');
     return `<div class="v3-grid v3-cal-layout"><section class="v3-panel v3-cal-grid" aria-label="Dias de ${esc(niceMonth(state.ym))}"><div class="v3-cal-weekdays">${['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((d) => `<span>${d}</span>`).join('')}</div><div class="v3-cal-days">${cells}</div></section>`
       + `<section class="v3-panel v3-cal-detail"><span class="v3-label">DIA ${String(day).padStart(2, '0')}</span><h2>${esc(shortDate(calIso(state.ym, day)))}</h2>`
@@ -1456,10 +1498,58 @@
     const corpo = vista === 'year' ? calendarioAno() : vista === 'week' ? calendarioSemana() : calendarioMes();
     return `<div class="v3-calendar">${cabeca}${calSeletor()}${resumo}${corpo}${agendaRecorrencias()}</div>`;
   }
+  function agendaProximos() {
+    const first = U.monthStart(state.ym);
+    const today = demo ? '2026-09-28' : U.todayISO();
+    const from = today > first ? today : first;
+    const seen = new Set();
+    const events = Object.entries(eventosDoMes(state.ym)).flatMap(([day, events]) => events.map((event) => ({
+      ...event, date: calIso(state.ym, Number(day))
+    })));
+    if (demo) sample.reminders.filter((item) => ymOf(item.date) === state.ym).forEach((item) => {
+      if (!events.some((event) => event.date === item.date && event.titulo === item.title)) {
+        events.push({ date: item.date, tipo: item.title.startsWith('Fatura') ? 'due' : 'out', titulo: item.title, valor: item.amount, confirmado: false, categoria: 'Lembrete' });
+      }
+    });
+    return events.filter((event) => {
+      if (event.date < from) return false;
+      const key = event.txId ? `tx:${event.txId}:${event.date}` : `due:${event.cardId || event.titulo}:${event.ref || event.date}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).sort((a, b) => a.date.localeCompare(b.date) || Number(a.valor || 0) - Number(b.valor || 0));
+  }
+  async function toggleAgendaPaid(target) {
+    if (statusBusy) return;
+    const id = target.dataset.calConfirm, ym = target.dataset.calConfirmMonth;
+    const entry = currentTransactions({ comCancelados: true }).find((item) => item.id === id && (item.ym || ymOf(item.date)) === ym);
+    const source = demo ? sample.transactions.find((item) => item.id === id) : Store.transactions.get(id);
+    if (!entry || !source || entry.kind !== 'expense' || entry.cardId || source.cardId || entry.cancelado) {
+      toast('Não foi possível alterar este lançamento pela agenda. Abra-o para revisar.');
+      return;
+    }
+    if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
+    const next = !entry.confirmed;
+    statusBusy = true;
+    target.disabled = true;
+    try {
+      await V3Backend.mutate(() => Store.transactions.setConfirmed(id, ym, next));
+      render();
+      [...document.querySelectorAll('[data-cal-confirm]')].find((button) => button.dataset.calConfirm === id && button.dataset.calConfirmMonth === ym)?.focus();
+      toast(next ? 'Despesa marcada como paga.' : 'Despesa marcada como não paga.');
+    } catch (error) { render(); toast(error.message || 'Não foi possível salvar a situação.'); }
+    finally { statusBusy = false; }
+  }
   function agendaRecorrencias() {
     const rows = demo ? [] : profile().transactions.filter((t) => t.recurring).sort((a,b) => a.description.localeCompare(b.description,'pt-BR'));
-    const upcomingRows = monthUpcoming();
-    return `<div class="v3-agenda-extra"><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">PRÓXIMOS EVENTOS</span><h2>até o fim do mês</h2></div></div>${upcomingRows.length ? `<div class="v3-timeline">${upcomingRows.map((r) => `<div><span><small>${esc(shortDate(r.date))} · ${esc(r.sub)}</small><strong>${esc(r.title)}</strong></span><strong class="v3-mono v3-sensitive">${money(r.amount)}</strong></div>`).join('')}</div>` : '<p class="v3-muted">Nenhum compromisso entre hoje e o fim deste mês.</p>'}</section><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">RECORRÊNCIAS</span><h2>o que se repete</h2></div><button type="button" class="v3-link" data-action="new-recurring">+ criar</button></div>${rows.length ? rows.map((t) => `<div class="v3-recurring-row"><span><strong>${esc(t.description)}</strong><small>Todo dia ${esc(t.date.slice(8))}${t.recurPausedFrom ? ' · pausada' : t.recurEnd ? ' · até '+esc(periodLabel(t.recurEnd)) : ''}</small></span><strong class="v3-mono v3-sensitive">${money(t.amount)}</strong><span class="v3-recurring-actions"><button type="button" class="v3-link" data-transaction="${esc(t.id)}">Editar</button>${!t.recurEnd ? `<button type="button" class="v3-link" data-action="${t.recurPausedFrom ? 'resume-recurring' : 'pause-recurring'}" data-recurring-id="${esc(t.id)}">${t.recurPausedFrom ? 'Retomar' : 'Pausar'}</button><button type="button" class="v3-link" data-action="end-recurring" data-recurring-id="${esc(t.id)}">Encerrar</button>` : ''}</span></div>`).join('') : '<p class="v3-muted">Nenhuma recorrência. Crie um lançamento e marque “Repetir mensalmente”.</p>'}</section></div>${painelRecorrencias()}`;
+    const upcomingRows = agendaProximos();
+    return `<div class="v3-agenda-extra"><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">PRÓXIMOS EVENTOS</span><h2>até o fim do mês</h2></div></div>${upcomingRows.length ? `<div class="v3-timeline">${upcomingRows.map((r) => {
+      const source = r.txId ? (demo ? sample.transactions.find((item) => item.id === r.txId) : profile().transactions.find((item) => item.id === r.txId)) : null;
+      const canToggle = r.tipo === 'out' && r.txId && source && !source.cardId;
+      const tipo = r.tipo === 'in' ? 'in' : r.tipo === 'tr' ? 'tr' : r.tipo === 'due' ? 'due' : 'out';
+      const situacao = tipo === 'out' && canToggle ? (r.confirmado ? 'pago' : 'não pago') : tipo === 'in' ? (r.confirmado ? 'recebido' : 'previsto') : tipo === 'tr' ? (r.confirmado ? 'transferido' : 'previsto') : tipo === 'due' ? (r.confirmado ? 'fatura paga' : 'fatura a pagar') : (r.confirmado ? 'lançado' : 'previsto');
+      return `<div class="v3-agenda-entry">${canToggle ? `<button type="button" class="v3-agenda-check${r.confirmado ? ' is-paid' : ''}" role="checkbox" aria-checked="${!!r.confirmado}" aria-label="${esc(r.titulo)}: ${r.confirmado ? 'pago. Marcar como não pago' : 'não pago. Marcar como pago'}" data-cal-confirm="${esc(r.txId)}" data-cal-confirm-month="${esc(ymOf(r.date))}" title="${r.confirmado ? 'Marcar como não pago' : 'Marcar como pago'}"><span aria-hidden="true">${r.confirmado ? '✓' : ''}</span></button>` : `<span class="v3-agenda-marker is-${tipo}" aria-hidden="true"></span>`}<span class="v3-agenda-entry-copy"><small>${esc(shortDate(r.date))} · ${esc(r.categoria || 'Lançamento')} · ${situacao}</small>${r.txId ? `<button type="button" data-transaction="${esc(r.txId)}" aria-label="Editar ${esc(r.titulo)}">${esc(r.titulo)}</button>` : `<strong>${esc(r.titulo)}</strong>`}</span><strong class="v3-mono v3-sensitive v3-cal-amount is-${tipo}">${tipo === 'in' ? '+' : tipo === 'tr' ? '↔' : '−'} ${money(r.valor)}</strong></div>`;
+    }).join('')}</div>` : '<p class="v3-muted">Nenhum evento entre hoje e o fim deste mês.</p>'}</section><section class="v3-panel"><div class="v3-row"><div><span class="v3-label">RECORRÊNCIAS</span><h2>o que se repete</h2></div><button type="button" class="v3-link" data-action="new-recurring">+ criar</button></div>${rows.length ? rows.map((t) => `<div class="v3-recurring-row"><span><strong>${esc(t.description)}</strong><small>Todo dia ${esc(t.date.slice(8))}${t.recurPausedFrom ? ' · pausada' : t.recurEnd ? ' · até '+esc(periodLabel(t.recurEnd)) : ''}</small></span><strong class="v3-mono v3-sensitive">${money(t.amount)}</strong><span class="v3-recurring-actions"><button type="button" class="v3-link" data-transaction="${esc(t.id)}">Editar</button>${!t.recurEnd ? `<button type="button" class="v3-link" data-action="${t.recurPausedFrom ? 'resume-recurring' : 'pause-recurring'}" data-recurring-id="${esc(t.id)}">${t.recurPausedFrom ? 'Retomar' : 'Pausar'}</button><button type="button" class="v3-link" data-action="end-recurring" data-recurring-id="${esc(t.id)}">Encerrar</button>` : ''}</span></div>`).join('') : '<p class="v3-muted">Nenhuma recorrência. Crie um lançamento e marque “Repetir mensalmente”.</p>'}</section></div>${painelRecorrencias()}`;
   }
   /* =============================================================
      O QUE SE REPETE — REESCRITO
@@ -1800,7 +1890,7 @@
      ter. É justamente essa diferença que interessa. */
   function versaoCarregada() {
     try {
-      const tag = [...document.querySelectorAll('script[src]')].find((x) => /preview-v3\/app\.js/.test(x.src));
+      const tag = [...document.querySelectorAll('script[src]')].find((x) => /assets\/app\/app\.js/.test(x.src));
       const marca = tag && (tag.src.match(/[?&]v=([\w.-]+)/) || [])[1];
       return marca || 'sem carimbo';
     } catch (e) { return 'desconhecida'; }
@@ -1814,7 +1904,7 @@
       ['Recorrências', 'recurring_items']
     ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
     const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Avisos que você escondeu', '', 'data-action="reset-asks"', Object.keys(askSilenced()).length?'reativar ›':'nenhum')}${row('Versão desta tela', '', '', versaoCarregada())}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Avisos que você escondeu', '', 'data-action="reset-asks"', Object.keys(askSilenced()).length?'reativar ›':'nenhum')}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
   }
   function accountProfileSheet() {
     const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
@@ -1834,7 +1924,7 @@
   }
   function deleteAccountSheet() {
     const email = V3Backend.user()?.email || '';
-    openSheet(`${sheetTop('excluir conta', 'ação definitiva')}<p>Todos os perfis financeiros e dados associados serão excluídos. Baixe uma cópia antes; esta ação não tem desfazer.</p><button type="button" class="v3-secondary" data-action="download-backup">Baixar backup JSON</button><form id="v3-form-delete-account" class="v3-form"><label>CONFIRME SEU E-MAIL<input name="email" type="email" autocomplete="off" placeholder="${esc(email)}" required></label><button type="submit" class="v3-primary">Excluir minha conta definitivamente</button></form>`, 'Excluir conta');
+    openSheet(`${sheetTop('excluir conta', 'ação definitiva')}<p>Seus perfis financeiros, lançamentos e comprovantes serão excluídos permanentemente. Só um identificador técnico será mantido para bloquear sessões antigas. Baixe uma cópia antes; esta ação não tem desfazer.</p><button type="button" class="v3-secondary" data-action="download-backup">Baixar backup JSON</button><form id="v3-form-delete-account" class="v3-form"><label>CONFIRME SEU E-MAIL<input name="email" type="email" autocomplete="off" placeholder="${esc(email)}" required></label><button type="submit" class="v3-primary">Excluir minha conta definitivamente</button></form>`, 'Excluir conta');
   }
   async function confirmDeleteAccount(form) {
     if (demo) return;
@@ -1897,6 +1987,8 @@
     renderHead(); renderNav();
     const screens = { home:renderHome, transactions:renderTransactions, wallet:renderWallet, investments:renderInvestments, categories:renderCategories, goals:renderGoals, calendar:renderCalendar, coco:renderCoco, reminders:renderReminders, reports:renderReports, settings:renderSettings, plan:renderPlan, more:renderMore };
     $('#v3-view').innerHTML = (state.sharedId ? `<div class="v3-shared-banner" role="status">Perfil compartilhado · ${sharedCanEdit()?'pode editar os dados financeiros':'somente leitura'} · cofre e Coco indisponíveis</div>` : '') + (state.page==='investments'?investmentTabs():'') + (screens[state.page]||renderHome)();
+    if(state.page==='investments'&&state.investTab==='planning')$('#v3-view .v3-planning-income')?.insertAdjacentHTML('afterend',renderPlanningGuide());
+    if(state.page==='investments'&&state.investTab==='goals')profile().goals.forEach((goal,index)=>{const rate=Number(goal.annualRate);if(!Number.isFinite(rate)||rate<=0)return;const months=goal.deadline?Math.max(0,(new Date(`${goal.deadline}T12:00:00`)-new Date(`${U.todayISO()}T12:00:00`))/(86400000*30.44)):12;const estimate=U.round2(Number(goal.saved||0)*Math.pow(1+rate/100,months/12));document.querySelectorAll('.v3-goal')[index]?.insertAdjacentHTML('beforeend',`<p class="v3-goal-yield">Com ${esc(String(rate).replace('.',','))}% ao ano: cerca de <strong>${money(estimate)}</strong> ${goal.deadline?'no prazo da meta':'em 12 meses'}. Projeção, não saldo.</p>`);});
     if (state.page === 'wallet') enrichInvoiceDetail();
     if (state.page === 'investments') enrichInvestmentCharts();
     if (state.page === 'investments' && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
@@ -1910,12 +2002,18 @@
       updateVoiceVisual();
     }
     montarCarteira();
+    document.querySelectorAll('.v3-contactless').forEach((mark)=>{mark.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><path d="M8.5 8.5a5 5 0 0 1 0 7M12 5a10 10 0 0 1 0 14M15.5 2a15 15 0 0 1 0 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';});
   }
-  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
+  function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; navEditorOpen=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
 
   function toast(message) {
     const el=$('#v3-toast'); el.textContent=message; el.hidden=false;
     clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.hidden=true;},4500);
+  }
+  function showReceiptCleanupResult(result, successMessage) {
+    const pending=Number(result?.receiptCleanupPending)||0;
+    if(!pending){toast(successMessage);return;}
+    openSheet(`${sheetTop('comprovante pendente','a alteração foi salva')}<p>${pending===1?'Um comprovante ainda não foi removido':'Alguns comprovantes ainda não foram removidos'} do armazenamento privado. Tente novamente antes de considerar a exclusão dos anexos completa.</p><button type="button" class="v3-primary" data-action="retry-receipt-cleanup">Tentar remover comprovantes</button><button type="button" class="v3-secondary" data-action="close">Fechar</button>`,'Limpeza de comprovantes pendente');
   }
 
   /* =============================================================
@@ -2118,11 +2216,87 @@
     }
     openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<button type="button" class="v3-link" data-coco-tab="Conversa">← Voltar para conversa</button>${body}`,'Coco');
   }
-  function composer(kind, selectedDate, editId, proposal) {
+  function installComposerPickers(form) {
+    const labelNames={category:'Categoria',source:'Conta ou cartão',destination:'Conta de destino',situacao:'Situação'};
+    const refreshes=[];
+    const optionArtwork=(name,value)=>{
+      if(name==='category'){
+        const item=profile().categories.find((category)=>category.id===value);
+        return item ? `<span class="v3-picker-icon" style="--picker-accent:${safeColor(item.color)}">${categoryIconMarkup(item.icon||'categories')}</span>` : `<span class="v3-picker-icon">${icon('categories')}</span>`;
+      }
+      if(name==='source'||name==='destination'){
+        const [type,id]=name==='source'?String(value).split(':'):['account',value];
+        const item=(type==='card'?profile().cards:profile().accounts).find((entry)=>entry.id===id);
+        return item ? `<span class="v3-picker-icon" style="--picker-accent:${safeColor(item.color||bankBrand(item.bank))}">${walletLogo(item,'#f0e5cf')}</span>` : `<span class="v3-picker-icon">${icon('wallet')}</span>`;
+      }
+      return `<span class="v3-picker-icon ${value==='pago'?'is-paid':value==='pendente'?'is-pending':'is-cancelled'}" aria-hidden="true">${value==='pago'?'✓':value==='pendente'?'○':'×'}</span>`;
+    };
+    const shortStatus=(value,text)=>name=>name==='situacao'?({pago:'Pago',pendente:'Não pago · agendado',cancelado:'Cancelado'}[value]||text):text;
+    ['situacao','category','source','destination'].forEach((name)=>{
+      const select=form.elements[name];
+      if(!(select instanceof HTMLSelectElement))return;
+      const label=select.closest('label');
+      if(!label)return;
+      select.hidden=true;
+      select.required=false;
+      select.setAttribute('aria-hidden','true');
+      select.tabIndex=-1;
+      const details=document.createElement('details');
+      details.className='v3-picker';
+      details.dataset.picker=name;
+      details.innerHTML='<summary></summary><div class="v3-picker-options" role="listbox"></div>';
+      const field=document.createElement('div');
+      field.className='v3-picker-field';
+      label.before(field);
+      field.append(label,details);
+      const paint=()=>{
+        const choices=Array.from(select.options);
+        const chosen=choices.find((option)=>option.value===select.value)||choices[0];
+        const title=chosen?.textContent?.trim()||'Selecione';
+        const display=shortStatus(chosen?.value,title)(name);
+        details.querySelector('summary').innerHTML=`${optionArtwork(name,chosen?.value||'')}<span>${esc(display)}</span><span class="v3-picker-caret" aria-hidden="true">⌄</span>`;
+        details.querySelector('summary').setAttribute('aria-label',`${labelNames[name]}: ${display}. Abrir opções`);
+        details.querySelector('.v3-picker-options').innerHTML=choices.map((option)=>{
+          const value=option.value, active=value===select.value;
+          const labelText=option.textContent.trim();
+          return `<button type="button" role="option" aria-selected="${active}" class="${active?'is-selected':''}" data-picker-value="${esc(value)}">${optionArtwork(name,value)}<span>${esc(shortStatus(value,labelText)(name))}${name==='situacao'?`<small>${esc(labelText.replace(/^[^\s]+\s*/,''))}</small>`:''}</span>${active?'<b aria-hidden="true">✓</b>':''}</button>`;
+        }).join('');
+      };
+      details.addEventListener('click',(event)=>{
+        const option=event.target.closest('[data-picker-value]');
+        if(!option)return;
+        select.value=option.dataset.pickerValue;
+        select.dispatchEvent(new Event('change',{bubbles:true}));
+        details.open=false;
+        paint();
+        details.querySelector('summary').focus();
+      });
+      details.addEventListener('keydown',(event)=>{
+        if(event.key==='Escape'&&details.open){event.preventDefault();event.stopPropagation();details.open=false;details.querySelector('summary').focus();}
+        if(['ArrowDown','ArrowUp'].includes(event.key)&&details.open){
+          const buttons=Array.from(details.querySelectorAll('[data-picker-value]'));
+          const index=buttons.indexOf(document.activeElement);
+          event.preventDefault();
+          buttons[(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus();
+        }
+      });
+      details.addEventListener('toggle',()=>{
+        if(details.open){form.querySelectorAll('.v3-picker[open]').forEach((other)=>{if(other!==details)other.open=false;});paint();}
+      });
+      select.addEventListener('change',paint);
+      new MutationObserver(paint).observe(select,{childList:true,subtree:true});
+      refreshes.push(paint);
+      paint();
+    });
+    const refresh=()=>queueMicrotask(()=>refreshes.forEach((paint)=>paint()));
+    form.addEventListener('change',refresh);
+    form.addEventListener('click',refresh);
+  }
+  function composer(kind, selectedDate, editId, proposal, draftAmount) {
     const editing = editId ? profile().transactions.find((t) => t.id === editId) : null;
     if (editId && !editing) { toast('Lançamento não encontrado. Atualize a página.'); return; }
     const current = editing ? ({ expense:'Despesa', income:'Receita', transfer:'Transferir' }[editing.kind]) : (kind || 'Despesa');
-    if (current === 'Aporte') { investmentForm(); return; }
+    if (current === 'Aporte') { investmentForm(null, null, draftAmount); return; }
     const accounts = profile().accounts.filter((a) => !a.archived && (current==='Transferir' || !a.hidden)), cards = profile().cards.filter((c)=>!c.hidden);
     const sourceValue = editing ? (editing.cardId ? `card:${editing.cardId}` : `account:${editing.accountId || ''}`) : proposal?.source || '';
     const paymentKind = current === 'Despesa' && sourceValue.startsWith('card:') ? 'credit' : 'debit';
@@ -2131,8 +2305,8 @@
     const targets = paymentKind === 'credit' ? cardOptions() : accountOptions();
     const categoryOptions = profile().categories.filter((c) => c.kind === (current === 'Receita' ? 'income' : 'expense'))
       .map((c) => `<option value="${esc(c.id)}" ${(editing?.categoryId || proposal?.categoryId) === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
-    const amount = editing ? (editing.moeda && editing.valorMoeda ? editing.valorMoeda : editing.amount) : proposal?.valor;
-    const fmt = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const amount = editing ? (editing.moeda && editing.valorMoeda ? editing.valorMoeda : editing.amount) : draftAmount == null ? proposal?.valor : parseMoney(draftAmount);
+    const fmt = (n) => n == null || !Number.isFinite(Number(n)) ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     /* TRÊS ESTADOS, E NÃO UMA MARCA
        "Previsto" cobria duas coisas que não são a mesma: a conta que
        ainda vai ser paga — uma promessa que vale, e entra no previsto
@@ -2144,6 +2318,70 @@
     const meioInicial = editing ? (editing.meio || '') : '';
     openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><details class="v3-mais" ${editing?.recurring || Number(editing?.installments) > 1 ? 'open' : ''}><summary>Mais detalhes</summary><div class="v3-mais-corpo"><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label></div></details><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     const txForm=document.getElementById('v3-form-tx');
+    const transfer=current==='Transferir';
+    txForm.classList.add('v3-compose-ordered');
+    installComposerCalculator(txForm);
+    if(!editing)txForm.elements.situacao.querySelector('option[value="cancelado"]')?.remove();
+    const statusLabel=txForm.elements.situacao.closest('label');
+    const dateLabel=txForm.elements.date.closest('label');
+    const dateRow=dateLabel?.parentElement;
+    const categoryLabel=txForm.elements.category?.closest('label');
+    const sourceLabel=txForm.elements.source.closest('label');
+    const destinationLabel=txForm.elements.destination?.closest('label');
+    const descriptionLabel=txForm.elements.description.closest('label');
+    const more=txForm.querySelector('.v3-mais');
+    const moreBody=more.querySelector('.v3-mais-corpo');
+    const recurringLabel=txForm.elements.recurring.closest('label');
+    const notesLabel=txForm.elements.notes.closest('label');
+    more.querySelector('summary').textContent='Mais opções';
+    if(transfer){
+      moreBody.prepend(statusLabel);
+      txForm.insertBefore(dateRow,sourceLabel);
+      txForm.insertBefore(recurringLabel,descriptionLabel);
+      txForm.insertBefore(txForm.querySelector('#v3-repeat-fields'),descriptionLabel);
+      txForm.insertBefore(notesLabel,descriptionLabel);
+      txForm.elements.description.value=editing?.description||'Transferência entre contas';
+      descriptionLabel.hidden=true;
+    } else {
+      dateRow.insertBefore(statusLabel,dateLabel);
+      txForm.insertBefore(dateRow,categoryLabel);
+      sourceLabel.after(descriptionLabel);
+      recurringLabel.firstChild.textContent=current==='Despesa'?'Despesa fixa? Repetir mensalmente':'Receita fixa? Repetir mensalmente';
+    }
+    const reminderField=document.createElement('label');
+    reminderField.className='v3-reminder-field';
+    reminderField.innerHTML=`LEMBRE-ME NA AGENDA<select name="remindDaysBefore"><option value="">Sem destaque antecipado</option>${[[0,'No dia'],[1,'1 dia antes'],[3,'3 dias antes'],[7,'7 dias antes']].map(([days,label])=>`<option value="${days}" ${editing?.remindDaysBefore===days?'selected':''}>${label}</option>`).join('')}</select><small>O aviso aparece dentro do OAZE quando você abrir o app; não é uma notificação em segundo plano.</small>`;
+    moreBody.insertAdjacentHTML('beforeend',`${current==='Despesa'?`<label class="v3-check"><input type="checkbox" name="ignored" ${editing?.ignored?'checked':''}> Ignorar nos totais de gastos</label><small class="v3-muted">Ainda altera o saldo da conta ou a fatura do cartão.</small>`:''}`);
+    if(transfer)moreBody.insertBefore(reminderField,moreBody.firstChild);
+    else {
+      moreBody.prepend(recurringLabel);
+      recurringLabel.after(txForm.querySelector('#v3-repeat-fields'));
+      txForm.querySelector('#v3-repeat-fields').after(notesLabel);
+      notesLabel.after(reminderField);
+      const ignoredLabel=txForm.elements.ignored?.closest('label');
+      if(ignoredLabel){const ignoredHint=ignoredLabel.nextElementSibling;reminderField.after(ignoredLabel);if(ignoredHint)ignoredLabel.after(ignoredHint);}
+    }
+    const receiptField=document.createElement('div');
+    receiptField.className='v3-receipt-field';
+    const canAttach=!demo&&!state.sharedId;
+    receiptField.innerHTML=`<span class="v3-receipt-title">Comprovante ou foto</span>${editing?.receiptPath&&canAttach?'<button type="button" class="v3-receipt-open">Ver anexo atual</button><label class="v3-check"><input type="checkbox" name="removeReceipt"> Remover anexo atual</label>':''}<label class="v3-receipt-upload"><span>＋ ${editing?.receiptPath?'Substituir anexo':'Adicionar anexo'}</span><input type="file" name="receipt" accept="image/jpeg,image/png,image/webp,application/pdf" ${canAttach?'':'disabled'}></label><small>${canAttach?'JPG, PNG, WebP ou PDF até 5 MB. Arquivo privado, associado a este lançamento.':demo?'A demonstração não salva anexos.':'Anexos existentes e novos estão indisponíveis neste perfil compartilhado.'}</small><span class="v3-receipt-name" aria-live="polite"></span>`;
+    txForm.insertBefore(receiptField,more);
+    receiptField.querySelector('[name="receipt"]')?.addEventListener('change',(event)=>{
+      const file=event.target.files?.[0];
+      receiptField.querySelector('.v3-receipt-name').textContent=file?file.name:'';
+      if(file&&receiptField.querySelector('[name="removeReceipt"]'))receiptField.querySelector('[name="removeReceipt"]').checked=false;
+    });
+    receiptField.querySelector('.v3-receipt-open')?.addEventListener('click',async()=>{
+      const tab=window.open('','_blank');
+      if(tab)tab.opener=null;
+      try{const url=await V3Backend.receiptUrl(editing.receiptPath);if(tab)tab.location.href=url;else toast('Permita pop-ups para abrir o comprovante.');}
+      catch(error){tab?.close();toast(error.message||'Não consegui abrir o anexo.');}
+    });
+    txForm.dataset.paymentKind=paymentKind;
+    const dateInput=txForm.elements.date;
+    dateInput.insertAdjacentHTML('beforebegin', `<span class="v3-date-choice" role="group" aria-label="Data do lançamento"><button type="button" data-date-choice="today">Hoje</button><button type="button" data-date-choice="other">Outro dia</button></span>`);
+    syncComposerDate(txForm);
+    syncComposerStatus(txForm);
     const invoiceHint=txForm.querySelector('#v3-tx-fatura small');
     if(invoiceHint) invoiceHint.textContent='Calculada pela data real da compra, fechamento e vencimento do cartão.';
     const destination=txForm.elements.destination;
@@ -2151,6 +2389,7 @@
     const installmentsField=txForm.elements.installments?.closest('label');
     if(installmentsField){installmentsField.hidden=!(current==='Despesa' && paymentKind==='credit' && !txForm.elements.recurring.checked);installmentsField.firstChild.textContent='PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)';}
     updateComposerCurrency(txForm, meioInicial);
+    installComposerPickers(txForm);
     atualizarSugestao(document.getElementById('v3-form-tx'));
   }
 
@@ -2165,6 +2404,7 @@
     }).join('');
     if (Array.from(source.options).some((option) => option.value === previous)) source.value = previous;
     form.dataset.paymentKind = kind;
+    syncComposerStatus(form);
     const installmentsField=form.elements.installments?.closest('label');
     if(installmentsField){installmentsField.hidden=kind!=='credit'||form.elements.recurring.checked;form.elements.installments.value='1';}
     const label = form.querySelector('#v3-tx-source-label');
@@ -2176,6 +2416,56 @@
     });
     updateComposerCurrency(form);
     updateRepeatFields(form);
+  }
+
+  function syncComposerDate(form) {
+    const input=form?.elements.date;
+    if(!input)return;
+    const today=input.value===U.todayISO();
+    form.querySelectorAll('[data-date-choice]').forEach((button)=>{
+      const active=button.dataset.dateChoice===(today?'today':'other');
+      button.classList.toggle('is-active',active);
+      button.setAttribute('aria-pressed',String(active));
+    });
+    input.hidden=today;
+  }
+  function syncComposerStatus(form) {
+    const status=form?.elements.situacao;
+    if(!status)return;
+    const credit=form.elements.kind.value==='Despesa' && form.dataset.paymentKind==='credit';
+    const label=status.closest('label');
+    label.hidden=false;
+    let hint=label.querySelector('.v3-credit-status-hint');
+    if(credit&&!hint){
+      hint=document.createElement('small');
+      hint.className='v3-credit-status-hint';
+      hint.textContent='Situação da compra; o pagamento da fatura é separado.';
+      label.append(hint);
+    }
+    if(hint)hint.hidden=!credit;
+  }
+  let calculatorHistory=[];
+  function installComposerCalculator(form) {
+    const segment=form?.previousElementSibling;
+    if(!segment?.classList.contains('v3-segment'))return;
+    const head=document.createElement('div');
+    head.className='v3-compose-head';
+    segment.before(head);
+    head.append(segment);
+    head.insertAdjacentHTML('beforeend','<button type="button" class="v3-calc-launch" data-action="calculator" aria-label="Abrir calculadora" aria-expanded="false" title="Calculadora"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M7.5 7h9M8 11h1m3 0h1m3 0h1M8 15h1m3 0h1m3 0h1M8 19h1m3 0h5"/></svg></button>');
+    head.insertAdjacentHTML('afterend','<section class="v3-calculator" role="dialog" aria-label="Calculadora" hidden><div class="v3-calc-head"><h2>calculadora</h2><button type="button" data-action="calc-close" aria-label="Fechar calculadora">×</button></div><label>CONTA<input inputmode="decimal" autocomplete="off" placeholder="0,00" maxlength="80"></label><strong class="v3-calc-display" data-calc-result>0,00</strong><div class="v3-calc-keys">'+['7','8','9','÷','4','5','6','×','1','2','3','−','C','0',',','+','⌫','='].map((key)=>`<button type="button" data-action="${key==='='?'calc-run':'calc-key'}" data-calc-key="${key}">${key}</button>`).join('')+'</div><div class="v3-calc-controls"><button type="button" data-action="calc-copy" disabled>Copiar resultado</button><button type="button" data-action="calc-use" disabled>Usar valor</button></div><div class="v3-calc-history"><small>HISTÓRICO</small><div data-calc-history></div></div></section>');
+  }
+  function calculateExpression(value) {
+    const source=String(value||'').replace(/\s/g,'').replace(/,/g,'.').replace(/[×x]/gi,'*').replace(/÷/g,'/').replace(/−/g,'-');
+    if(!/^\d+(?:\.\d+)?(?:[+*/-]\d+(?:\.\d+)?)*$/.test(source))return null;
+    const parts=source.match(/\d+(?:\.\d+)?|[+*/-]/g);
+    const stack=[Number(parts[0])];
+    for(let i=1;i<parts.length;i+=2){const op=parts[i],next=Number(parts[i+1]);if(op==='*'||op==='/'){const previous=stack.pop();if(op==='/'&&next===0)return null;stack.push(op==='*'?previous*next:previous/next);}else stack.push(op,next);}
+    let total=stack[0];for(let i=1;i<stack.length;i+=2)total=stack[i]==='+'?total+stack[i+1]:total-stack[i+1];
+    return Number.isFinite(total)?U.round2(total):null;
+  }
+  function updateCalculator(panel) {
+    panel.querySelector('[data-calc-history]').innerHTML=calculatorHistory.map((entry)=>`<button type="button" data-action="calc-history" data-calc-value="${esc(entry.value)}">${esc(entry.expression)} = ${esc(entry.value)}</button>`).join('');
   }
 
   function updateRepeatFields(form) {
@@ -2340,10 +2630,13 @@
     const oferecidos=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
     openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
     const form=document.getElementById('v3-form-account');
-    form?.querySelector('.v3-bank-picker')?.insertAdjacentHTML('afterend',`<div id="v3-custom-bank-color" ${existing?.bank&&!bankKey(existing.bank)?'':'hidden'}>${colorPicker(safeColor(existing?.color||Store.PALETTE?.[0]||'#E8BE35'),'customColor',false)}</div>`);
+    form?.querySelector('.v3-bank-picker')?.insertAdjacentHTML('afterend',`<details id="v3-custom-bank-color" class="v3-bank-color-custom" ${existing?.customColor||existing?.bank&&!bankKey(existing.bank)?'open':''}><summary>Personalizar cor do cartão ou conta</summary><label>COR<input type="color" name="customColor" value="${esc(safeColor(existing?.color||bankBrand(existing?.bank||'Itaú')))}"></label><label class="v3-check"><input type="checkbox" name="useCustomColor" ${existing?.customColor?'checked':''}> Usar esta cor em vez da cor do banco</label></details>`);
+    const selectedIcon=customBankIcons[existing?.customIcon] ? existing.customIcon : 'wallet';
+    form?.querySelector('#v3-custom-bank-color')?.insertAdjacentHTML('afterend',`<fieldset class="v3-bank-icon-picker" id="v3-bank-icon-picker" ${existing?.bank&&!bankKey(existing.bank)?'':'hidden'}><legend>ÍCONE DA CARTEIRA</legend><div>${Object.entries(customBankIcons).map(([name,label])=>`<label><input type="radio" name="customIcon" value="${name}" ${selectedIcon===name?'checked':''}><span>${global.Icons?.lucide(name,22)?.outerHTML||icon('wallet')}<small>${label}</small></span></label>`).join('')}</div></fieldset>`);
     form?.querySelectorAll('.v3-meios input').forEach((input)=>{input.checked=true;input.disabled=true;});
     const meiosHint=form?.querySelector('.v3-meios small');
     if(meiosHint)meiosHint.textContent='Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.';
+    form?.querySelector('.v3-meios')?.remove();
     form?.querySelector('[name="considerado"]')?.closest('label')?.insertAdjacentHTML('beforebegin',`<label class="v3-check"><input type="checkbox" name="hidden" ${existing?.hidden?'checked':''}> Ocultar da carteira principal</label>`);
   }
   function invoicePaymentForm(cardId) {
@@ -2452,14 +2745,14 @@
     } catch (e) { toast(e.message || 'Não foi possível registrar o adiantamento.'); }
   }
 
-  function investmentForm(id, presetType) {
+  function investmentForm(id, presetType, draftAmount) {
     const item = id ? profile().investments.find((x) => x.id === id) : null;
     const chosenType=item?.type||presetType||'Renda fixa';
     const options = Store.INVESTMENT_TYPES.map((type) => `<option value="${esc(type)}" ${chosenType === type ? 'selected' : ''}>${esc(type)}</option>`).join('');
     const availableAccounts = profile().accounts.filter((a) => !a.archived);
     const selectedAccount = item?.accountId || (chosenType === 'Porquinho' ? availableAccounts[0]?.id : null);
     const accounts = availableAccounts.map((a) => `<option value="${esc(a.id)}" ${selectedAccount === a.id ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
-    const amount = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+     const amount = (n) => n == null || !Number.isFinite(Number(n)) ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop(item ? 'editar investimento' : chosenType==='Porquinho'?'novo porquinho':'novo investimento', demo ? 'demonstração sem gravação' : 'carteira de investimentos')}<form class="v3-form" id="v3-form-investment"><input type="hidden" name="id" value="${esc(item?.id || '')}"><label>NOME<input name="name" maxlength="60" value="${esc(item?.name || '')}" placeholder="Ex.: reserva de emergência" required></label><label>TIPO<select name="type">${options}</select></label><div class="v3-form-row"><label>VALOR APORTADO (R$)<input name="amount" data-money="true" inputmode="decimal" value="${esc(amount(item?.amount))}" placeholder="0,00" required></label><label>DATA DO APORTE<input type="date" name="date" value="${esc(item?.date || U.todayISO())}" required></label></div><div id="v3-invest-yield" ${chosenType==='Porquinho'?'hidden':''}><div class="v3-form-row"><label>TAXA ESTIMADA (% A.A.)<input name="rate" inputmode="decimal" value="${esc(item?.rate == null ? '' : String(item.rate).replace('.', ','))}" placeholder="Opcional"></label><label>VALOR ATUAL INFORMADO (R$)<input name="currentValue" data-money="true" inputmode="decimal" value="${esc(amount(item?.currentValue))}" placeholder="Opcional"></label></div><div id="v3-invest-cdb" ${chosenType==='CDB'?'':'hidden'}><div class="v3-form-row"><label>VENCIMENTO<input type="date" name="maturityDate" value="${esc(item?.maturityDate||'')}"></label><label>LIQUIDEZ<select name="liquidity"><option value="" ${!item?.liquidity?'selected':''}>Não informada</option><option value="diaria" ${item?.liquidity==='diaria'?'selected':''}>Diária</option><option value="vencimento" ${item?.liquidity==='vencimento'?'selected':''}>No vencimento</option></select></label></div><small>Taxa prefixada estimada. Para CDB atrelado ao CDI, informe o valor atual do banco; o OAZE não consulta CDI automaticamente.</small></div></div><label>DEBITAR DE UMA CONTA<select name="accountId"><option value="">Não debitar</option>${accounts}</select></label><label>OBSERVAÇÕES<input name="notes" maxlength="240" value="${esc(item?.notes || '')}" placeholder="Opcional"></label><p class="v3-muted" id="v3-invest-help" ${chosenType==='Porquinho'?'':'hidden'}>Porquinhos não rendem automaticamente aqui. Ao vinculá-los a uma conta, o valor sai do saldo disponível e continua no patrimônio, sem contagem dupla.</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : item ? 'Salvar alterações' : 'Registrar aporte'}</button>${item ? `<button type="button" class="v3-secondary" data-action="delete-investment" data-investment="${esc(item.id)}">Excluir aporte</button>` : ''}</form>`,'Investimento');
     const cdbFields=document.getElementById('v3-invest-cdb');
     cdbFields?.insertAdjacentHTML('afterbegin', `<label>RENDIMENTO DO CDB<select name="indexer"><option value="cdi" ${item?.indexer==='fixed'?'':'selected'}>Percentual do CDI · automático</option><option value="fixed" ${item?.indexer==='fixed'?'selected':''}>Prefixado · taxa anual informada</option></select></label>`);
@@ -2467,8 +2760,11 @@
     document.getElementById('v3-invest-yield')?.insertAdjacentHTML('beforeend', `<div id="v3-invest-market-fields"><div class="v3-form-row"><label>TICKER<input name="ticker" maxlength="8" autocomplete="off" value="${esc(item?.ticker||'')}" placeholder="Ex.: PETR4"></label><label>QUANTIDADE<input name="quantity" type="number" min="0" step="any" value="${esc(item?.quantity||'')}" placeholder="Ex.: 10"></label></div><small>Para ações, FIIs e ETFs. Cotação brapi em reais; sem cotação, o OAZE mantém o valor informado ou o aporte.</small></div>`);
     if (!item && chosenType === 'CDB') document.querySelector('#v3-form-investment [name="rate"]').value = '100';
     const form = document.getElementById('v3-form-investment');
+    form.classList.add('v3-invest-compose');
+    if (draftAmount != null) form.elements.amount.value = Number.isFinite(U.parseMoney(draftAmount)) ? draftAmount : '';
     if (!item) {
       form.insertAdjacentHTML('beforebegin', `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((kind) => `<button type="button" data-compose-kind="${kind}" class="${kind==='Aporte'?'is-active':''}">${kind}</button>`).join('')}</div>`);
+      installComposerCalculator(form);
     }
     const nameLabel = form.elements.name.closest('label');
     const amountLabel = form.elements.amount.closest('label');
@@ -2636,6 +2932,7 @@
     const goal = id ? profile().goals.find((g) => g.id === id) : null;
     const fmt = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop(goal ? 'editar meta' : 'nova meta', 'planejamento financeiro')}<form class="v3-form" id="v3-form-goal"><input type="hidden" name="id" value="${esc(goal?.id || '')}"><label>NOME DA META<input name="name" maxlength="80" value="${esc(goal?.name || '')}" required></label><div class="v3-form-row"><label>VALOR ALVO (R$)<input name="target" data-money="true" inputmode="decimal" value="${esc(fmt(goal?.target))}" required></label><label>VALOR JÁ GUARDADO (R$)<input name="saved" data-money="true" inputmode="decimal" value="${esc(fmt(goal?.saved || 0))}" required></label></div><label>PRAZO (OPCIONAL)<input name="deadline" type="date" value="${esc(goal?.deadline || '')}"></label><p class="v3-muted">O valor guardado aqui acompanha sua meta. Não movimenta uma conta automaticamente.</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar meta'}</button>${goal ? `<button type="button" class="v3-secondary" data-action="delete-goal" data-goal="${esc(goal.id)}">Excluir meta</button>` : ''}</form>`, 'Meta financeira');
+    document.querySelector('#v3-form-goal [name="deadline"]')?.closest('label')?.insertAdjacentHTML('afterend',`<label>RENDIMENTO ESTIMADO (% AO ANO)<input name="annualRate" inputmode="decimal" value="${esc(goal?.annualRate==null?'':String(goal.annualRate).replace('.',','))}" placeholder="Opcional · ex.: 10"><small>Mostra uma projeção separada; não altera o valor guardado nem o patrimônio.</small></label>`);
     if (goal) {
       const savedInput = document.querySelector('#v3-form-goal [name="saved"]');
       savedInput.readOnly = true;
@@ -2700,11 +2997,11 @@
     const currentIcon=categoryIcon(item?.icon||'more');
     openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label>${iconPicker(currentIcon,choices)}${colorPicker(safeColor(item?.color||corPadraoDeCategoria()))}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
   }
-  function budgetForm(categoryId) {
+  function budgetForm(categoryId, suggestedLimit) {
     const categories = profile().categories.filter((c) => c.kind === 'expense');
     const selected = categoryId || categories.find((c) => !profile().budgets?.[c.id])?.id || categories[0]?.id || '';
     const options = categories.map((c) => `<option value="${esc(c.id)}" ${c.id === selected ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
-    const value = profile().budgets?.[selected];
+    const value = suggestedLimit == null ? profile().budgets?.[selected] : suggestedLimit;
     const amount = value == null ? '' : Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop(categoryId ? 'editar orçamento' : 'novo orçamento', 'limite mensal por categoria')}<form class="v3-form" id="v3-form-budget">${categoryId ? `<input type="hidden" name="category" value="${esc(categoryId)}"><p>Categoria: <strong>${esc(categoryName(categoryId))}</strong></p>` : `<label>CATEGORIA<select name="category" required>${options}</select></label>`}<label>LIMITE POR MÊS (R$)<input name="limit" data-money="true" inputmode="decimal" value="${esc(amount)}" placeholder="0,00" required></label><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar orçamento'}</button>${categoryId ? `<button type="button" class="v3-secondary" data-action="delete-budget" data-budget="${esc(categoryId)}">Excluir orçamento</button>` : ''}</form>`, 'Orçamento mensal');
   }
@@ -2713,14 +3010,14 @@
   }
   function profilesContent() {
     const ps=demo?[{id:'sample',name:'Pessoal'}]:Store.state().profiles;
-    const own=ps.map((p)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${(demo ? p.id==='sample' : !state.sharedId&&p.id===Store.profile().id)?' is-active':''}" data-profile="${esc(p.id)}">${esc(p.name)}</button>${demo?'':`<button type="button" class="v3-link" data-action="profile-edit" data-profile-id="${esc(p.id)}" aria-label="Editar ${esc(p.name)}">Editar</button><button type="button" class="v3-link" data-action="profile-share" data-profile-id="${esc(p.id)}" aria-label="Compartilhar ${esc(p.name)}">Compartilhar</button><button type="button" class="v3-link" data-action="profile-delete" data-profile-id="${esc(p.id)}" aria-label="Excluir ${esc(p.name)}">Excluir</button>`}</div>`).join('');
+    const own=ps.map((p)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${(demo ? p.id==='sample' : !state.sharedId&&p.id===Store.profile().id)?' is-active':''}" data-profile="${esc(p.id)}">${esc(p.name)}</button>${demo?'':`<details class="v3-profile-more"><summary>Opções</summary><div class="v3-profile-actions"><button type="button" class="v3-link" data-action="profile-edit" data-profile-id="${esc(p.id)}">Renomear</button><button type="button" class="v3-link" data-action="profile-share" data-profile-id="${esc(p.id)}">Compartilhar</button><button type="button" class="v3-link" data-action="profile-delete" data-profile-id="${esc(p.id)}">Excluir</button></div></details>`}</div>`).join('');
     const incoming=state.shares.received.map((s)=>`<div class="v3-profile-row"><button type="button" class="v3-pill${state.sharedId===s.id?' is-active':''}" data-action="shared-open" data-share-id="${esc(s.id)}">${esc(s.name||'Perfil compartilhado')}</button><span class="v3-muted">${s.permission==='edit'?'edição':'leitura'}</span><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Sair</button></div>`).join('');
     const outgoing=state.shares.owned.map((s)=>{
       const p=ps.find((item)=>item.id===s.profile_id);
       const status=s.accepted?'aceito':new Date(s.expires_at).getTime()<Date.now()?'expirado':'aguardando';
       return `<div class="v3-profile-row"><span><strong>${esc(s.label||'Convite '+s.id.slice(0,8))}</strong><small class="v3-muted" style="display:block">${esc(p?.name||'Perfil removido')} · ${status} · ${s.permission==='edit'?'pode editar':'somente leitura'}</small></span><button type="button" class="v3-link" data-action="shared-permission" data-share-id="${esc(s.id)}" data-permission="${s.permission==='edit'?'read':'edit'}" aria-label="Mudar acesso de ${esc(s.label||p?.name||'convite')} para ${s.permission==='edit'?'somente leitura':'edição'}">${s.permission==='edit'?'Deixar só leitura':'Permitir edição'}</button><button type="button" class="v3-link" data-action="shared-revoke" data-share-id="${esc(s.id)}">Revogar</button></div>`;
     }).join('');
-    return `<div class="v3-stack" style="margin-top:22px">${own}</div>${demo?'<p class="v3-muted" style="margin-top:20px">O perfil de demonstração é isolado dos seus dados.</p>':`<form class="v3-form" id="v3-form-profile"><label>NOVO PERFIL<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar perfil</button></form><h3 class="v3-profile-heading">Compartilhados comigo</h3>${incoming||'<p class="v3-muted">Nenhum perfil compartilhado com esta conta.</p>'}<h3 class="v3-profile-heading">Meus convites</h3>${outgoing||'<p class="v3-muted">Nenhum convite criado.</p>'}<p class="v3-muted" style="margin-top:18px">Cada link vale para uma conta OAZE e expira em 7 dias. Escolha leitura ou edição para o perfil convidado; o cofre e a Coco nunca são compartilhados. Você pode alterar a permissão ou revogar o acesso.</p>`}`;
+    return `<div class="v3-stack" style="margin-top:16px">${own}</div>${demo?'':`<form class="v3-form" id="v3-form-profile"><label>NOVO PERFIL<input name="name" maxlength="60" placeholder="Ex.: Família ou trabalho" required></label><button type="submit" class="v3-secondary">Criar perfil</button></form><details class="v3-profile-extra"><summary>Perfis recebidos e convites</summary><h3 class="v3-profile-heading">Compartilhados comigo</h3>${incoming||'<p class="v3-muted">Nenhum perfil compartilhado com esta conta.</p>'}<h3 class="v3-profile-heading">Meus convites</h3>${outgoing||'<p class="v3-muted">Nenhum convite criado.</p>'}<p class="v3-muted">Links expiram em 7 dias; cofre e Coco não são compartilhados.</p></details>`}`;
   }
   async function loadShares() {
     if (demo) return;
@@ -2811,10 +3108,19 @@
     if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
     if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), id=String(fd.get('id')||''), kind=fd.get('kind'), amount=parseMoney(fd.get('amount'));
+    const receipt=form.elements.receipt?.files?.[0]||null;
+    if(receipt && (state.sharedId || !['image/jpeg','image/png','image/webp','application/pdf'].includes(receipt.type) || receipt.size<=0 || receipt.size>5*1024*1024)) {
+      toast('O anexo precisa ser JPG, PNG, WebP ou PDF de até 5 MB em um perfil pessoal.'); return;
+    }
     let date=String(fd.get('date')||''), description=String(fd.get('description')||'').trim(), source=String(fd.get('source')||'');
     if (!(amount>0) || !U.isValidISO(date) || !description || !source) { toast('Confira valor, descrição, data e conta/cartão.'); return; }
     const editing=id ? Store.transactions.get(id) : null;
     if (id && !editing) { toast('Este lançamento não existe mais. Atualize a página.'); return; }
+    const status=String(fd.get('situacao')||'pago');
+    const reminder=String(fd.get('remindDaysBefore')||'');
+    if(!['pago','pendente','cancelado'].includes(status) || (!editing&&status==='cancelado') || (reminder!==''&&!['0','1','3','7'].includes(reminder))) {
+      toast('Confira a situação e o lembrete.'); return;
+    }
     const [sourceType,sourceId]=source.split(':'), transfer=kind==='Transferir', destination=String(fd.get('destination')||'');
     const instrument=sourceType==='account' ? profile().accounts.find((a)=>a.id===sourceId && !a.archived && (transfer || !a.hidden))
       : sourceType==='card' && kind==='Despesa' ? profile().cards.find((c)=>c.id===sourceId && !c.hidden) : null;
@@ -2866,23 +3172,43 @@
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
     const sourceTag=String(fd.get('sourceTag')||'manual');
-    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',faturaRef:faturaManual,description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:String(fd.get('situacao')||'pago')==='pago',cancelado:String(fd.get('situacao')||'')==='cancelado',meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
+    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',faturaRef:faturaManual,description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:status==='pago',cancelado:status==='cancelado',ignored:kind==='Despesa'&&fd.get('ignored')==='on',remindDaysBefore:reminder===''?null:Number(reminder),meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
+    if(editing&&fd.get('removeReceipt')==='on'&&!receipt)base.receiptPath=null;
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
-      await V3Backend.mutate(() => {
+      let savedTxId=id;
+      let cleanupPending=0;
+      const firstSave=await V3Backend.mutate(() => {
         if (editing) { Store.transactions.update(id,base); return; }
-        if (installments===1) { Store.transactions.add(base); return; }
+        if (installments===1) { savedTxId=Store.transactions.add(base).id; return; }
         const cents=Math.round(amount*100), each=Math.floor(cents/installments), groupId=U.uid('grp'), day=Number(date.slice(8));
         const list=Array.from({length:installments},(_,index)=>{
           const installmentAmount=(index===installments-1?cents-each*(installments-1):each)/100;
           const partYM=U.addMonths(ymOf(date),index), parts=U.ymParts(partYM);
           return {...base,description:`${description} (${index+1}/${installments})`,amount:U.round2(installmentAmount*rate),valorMoeda:currency?installmentAmount:null,date:U.isoOf(parts.y,parts.m,U.clampDay(parts.y,parts.m,day)),installment:{total:installments,index:index+1,groupId},confirmed:index===0?base.confirmed:false};
         });
-        Store.transactions.addMany(list);
+        savedTxId=Store.transactions.addMany(list)[0]?.id;
       });
+      cleanupPending=Number(firstSave?.receiptCleanupPending)||0;
+      if(receipt){
+        let uploadedPath=null;
+        try{
+          const uploaded=await V3Backend.uploadReceipt(receipt,savedTxId);
+          uploadedPath=uploaded.path;
+          const linked=await V3Backend.mutate(()=>Store.transactions.update(savedTxId,{receiptPath:uploadedPath}));
+          cleanupPending=Number(linked?.receiptCleanupPending)||0;
+        }catch(error){
+          let orphaned=false;
+          if(uploadedPath)await V3Backend.removeReceipt(uploadedPath).catch(()=>{orphaned=true;});
+          closeSheet();render();
+          if(orphaned)openSheet(`${sheetTop('anexo pendente','o lançamento foi salvo')}<p>O arquivo enviado não foi vinculado nem removido do armazenamento privado. Peça ajuda ao suporte antes de considerar este anexo excluído.</p><button type="button" class="v3-secondary" data-action="close">Fechar</button>`,'Anexo não removido');
+          else toast(`Lançamento salvo, mas o anexo falhou: ${error.message||'tente novamente na edição.'}`);
+          return;
+        }
+      }
       closeSheet(); render();
       if (!editing && sourceTag==='import' && state.importPreview) { state.cocoTab='Extratos'; openCoco(); }
-      toast(editing?'Lançamento atualizado.':installments>1?`${installments} parcelas salvas na sua conta.`:'Lançamento salvo na sua conta.');
+      showReceiptCleanupResult({receiptCleanupPending:cleanupPending},editing?'Lançamento atualizado.':installments>1?`${installments} parcelas salvas na sua conta.`:'Lançamento salvo na sua conta.');
     } catch (e) { console.error('V3/lançamento:', e); toast(e.message || 'Não foi possível salvar.'); }
   }
   async function saveAccount(form) {
@@ -2890,13 +3216,13 @@
     if (!await limitsReady()) { toast('Não consegui confirmar os limites da conta. Tente novamente.'); return; }
     const fd=new FormData(form), id=String(fd.get('id')||''), type=String(fd.get('type')||''),name=String(fd.get('name')||'').trim();
     const selectedBank=String(fd.get('bank')||'').trim(),bank=selectedBank==='Outro'?(String(fd.get('customBank')||'').trim()||'Outro'):selectedBank;
-    const customColor=String(fd.get('customColor')||'');
+    const customColor=String(fd.get('customColor')||''),useCustomColor=fd.get('useCustomColor')==='on';
+    const customIcon=String(fd.get('customIcon')||'wallet');
     const last4=String(fd.get('last4')||'').replace(/\D/g,'').slice(-4),amount=parseMoney(fd.get('amount'));
     const existing=id?(type==='card'?Store.cards.get(id):Store.accounts.get(id)):null;
     const moeda=String(fd.get('moeda')||'BRL'),cotacao=moeda==='BRL'?null:parseMoney(fd.get('cotacao'));
     const knownCurrency=moeda==='BRL'||Store.MOEDAS.some((m)=>m.code===moeda);
-    const allowedCustomColor=(Store.ALL_COLORS||[]).some((color)=>color.toLowerCase()===customColor.toLowerCase()) || (existing?.color && safeColor(existing.color).toLowerCase()===customColor.toLowerCase());
-    if (!['card','account'].includes(type) || (id&&!existing) || !name || !selectedBank || (selectedBank!=='Outro'&&!bankKey(bank)) || (selectedBank==='Outro'&&(!/^#[0-9a-f]{6}$/i.test(customColor)||!allowedCustomColor||bankKey(bank))) || !knownCurrency || (moeda!=='BRL'&&!(cotacao>0)) || (!Number.isFinite(amount)&&String(fd.get('amount')||'').trim()) || amount<0) {
+    if (!['card','account'].includes(type) || (id&&!existing) || !name || !selectedBank || (selectedBank!=='Outro'&&!bankKey(bank)) || ((selectedBank==='Outro'||useCustomColor)&&!/^#[0-9a-f]{6}$/i.test(customColor)) || (selectedBank==='Outro'&&bankKey(bank)) || (selectedBank==='Outro'&&!customBankIcons[customIcon]) || !knownCurrency || (moeda!=='BRL'&&!(cotacao>0)) || (!Number.isFinite(amount)&&String(fd.get('amount')||'').trim()) || amount<0) {
       toast('Confira nome, instituição, moeda, cotação e valor.'); return;
     }
     if (!existing&&!canAdd(type==='card'?'credit_cards':'accounts',state.ym)) { toast('Esta inclusão ultrapassa o limite do seu plano.'); return; }
@@ -2907,13 +3233,13 @@
         if (type==='card') {
           const closingDay=Number(fd.get('closing')),dueDay=Number(fd.get('due')),accountId=String(fd.get('billAccount')||'')||null;
           if (![closingDay,dueDay].every((n)=>Number.isInteger(n)&&n>=1&&n<=31)|| (accountId&&!profile().accounts.some((a)=>a.id===accountId&&!a.archived))) throw new Error('Confira fechamento, vencimento e conta da fatura.');
-          const data={name,bank,last4,limit:initial,closingDay,dueDay,accountId,considerado,hidden:fd.get('hidden')==='on',color:selectedBank==='Outro'?customColor:bankBrand(bank,existing?.color),moeda,cotacao};
+          const data={name,bank,last4,limit:initial,closingDay,dueDay,accountId,considerado,hidden:fd.get('hidden')==='on',color:selectedBank==='Outro'||useCustomColor?customColor:bankBrand(bank),customColor:selectedBank==='Outro'||useCustomColor,customIcon:selectedBank==='Outro'?customIcon:null,moeda,cotacao};
           if (existing) Store.cards.update(id,data); else Store.cards.add(data);
         } else {
           const openedAt=String(fd.get('openedAt')||''),accountType=String(fd.get('accountType')||'');
           if (!U.isValidISO(openedAt)||!Store.ACCOUNT_TYPES.includes(accountType)) throw new Error('Confira a data e o tipo de conta.');
           const meios=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
-          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,meios,hidden:fd.get('hidden')==='on',archived:fd.get('archived')==='on',color:selectedBank==='Outro'?customColor:bankBrand(bank,existing?.color),moeda,cotacao};
+          const data={name,bank,last4,openingBalance:initial,openedAt,type:accountType,considerado,meios,hidden:fd.get('hidden')==='on',archived:fd.get('archived')==='on',color:selectedBank==='Outro'||useCustomColor?customColor:bankBrand(bank),customColor:selectedBank==='Outro'||useCustomColor,customIcon:selectedBank==='Outro'?customIcon:null,moeda,cotacao};
           if (existing) Store.accounts.update(id,data); else Store.accounts.add(data);
         }
       });
@@ -2997,10 +3323,11 @@
     const existing = id ? Store.goals.get(id) : null;
     const saved = existing ? Number(existing.saved || 0) : parseMoney(fd.get('saved'));
     const deadline = String(fd.get('deadline') || '');
-    if (!name || !(target > 0) || !Number.isFinite(saved) || saved < 0 || (deadline && !U.isValidISO(deadline)) || (id && !Store.goals.get(id))) { toast('Confira nome, valores e prazo.'); return; }
+    const rawRate=String(fd.get('annualRate')||'').trim(), annualRate=rawRate?Number(rawRate.replace(',','.')):null;
+    if (!name || !(target > 0) || !Number.isFinite(saved) || saved < 0 || (deadline && !U.isValidISO(deadline)) || (rawRate && (!Number.isFinite(annualRate)||annualRate<0||annualRate>100)) || (id && !Store.goals.get(id))) { toast('Confira nome, valores, rendimento e prazo.'); return; }
     if (!id && !canAdd('goals', state.ym)) { toast('Esta meta ultrapassa o limite do seu plano.'); return; }
     try {
-      await V3Backend.mutate(() => id ? Store.goals.update(id, { name, target, saved, deadline: deadline || null }) : Store.goals.add({ name, target, saved, deadline: deadline || null }));
+      await V3Backend.mutate(() => id ? Store.goals.update(id, { name, target, saved, annualRate, deadline: deadline || null }) : Store.goals.add({ name, target, saved, annualRate, deadline: deadline || null }));
       closeSheet(); render(); toast('Meta salva na sua conta.');
     } catch (error) { toast(error.message || 'Não foi possível salvar a meta.'); }
   }
@@ -3378,8 +3705,38 @@
     } catch (error) { toast(error.message || 'Não consegui atualizar a recorrência.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-fatura-passo],[data-focus-invoice],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-payment-kind],[data-account-type],[data-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-nav-visibility],[data-nav-move],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-planning-budget],[data-fatura-passo],[data-focus-invoice],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-date-choice],[data-payment-kind],[data-account-type],[data-confirm],[data-cal-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
+    if (target.dataset.action === 'sidebar-toggle') {
+      navPrefs.collapsed = !navPrefs.collapsed;
+      if (navPrefs.collapsed) navEditorOpen = false;
+      saveNavPrefs(); renderNav(); $('.v3-sidebar-toggle')?.focus(); return;
+    }
+    if (target.dataset.action === 'sidebar-edit') {
+      navEditorOpen = !navEditorOpen;
+      renderNav();
+      (navEditorOpen ? $('#v3-nav-editor [data-nav-visibility]:not(:disabled)') : $('.v3-sidebar-edit'))?.focus(); return;
+    }
+    if (target.dataset.action === 'sidebar-reset') {
+      navPrefs = { order: [...NAV_PAGES], hidden: [], collapsed: false };
+      saveNavPrefs(); renderNav(); $('#v3-nav-editor [data-action="sidebar-reset"]')?.focus(); return;
+    }
+    if (target.dataset.navVisibility) {
+      const page = target.dataset.navVisibility;
+      if (NAV_PAGES.includes(page) && page !== 'home') {
+        navPrefs.hidden = navPrefs.hidden.includes(page) ? navPrefs.hidden.filter((item) => item !== page) : [...navPrefs.hidden, page];
+        saveNavPrefs(); renderNav(); $(`#v3-nav-editor [data-nav-visibility="${page}"]`)?.focus();
+      }
+      return;
+    }
+    if (target.dataset.navMove) {
+      const page = target.dataset.navPage, from = navPrefs.order.indexOf(page), to = from + (target.dataset.navMove === 'up' ? -1 : 1);
+      if (from >= 0 && to >= 0 && to < navPrefs.order.length) {
+        [navPrefs.order[from], navPrefs.order[to]] = [navPrefs.order[to], navPrefs.order[from]];
+        saveNavPrefs(); renderNav(); $(`#v3-nav-editor [data-nav-page="${page}"][data-nav-move="${target.dataset.navMove}"]`)?.focus();
+      }
+      return;
+    }
     if (state.sharedId && !sharedCanEdit() && !target.dataset.go && !target.dataset.profile &&
       !['profiles','close','back','privacy','notifications','period','shared-open','shared-revoke','sign-out','switch-account'].includes(target.dataset.action) &&
       !['metric','select','walletKind','filter','catKind','investTab','calDay','calMonth','calView','scoreMes','calGoto','calDays','periodStep','faturaPasso','billing'].some((key)=>target.dataset[key] != null) &&
@@ -3405,7 +3762,16 @@
     if (target.dataset.catKind) { state.catKind=target.dataset.catKind; render(); return; }
     if (target.dataset.cocoTab) { state.cocoTab=target.dataset.cocoTab; openCoco(); return; }
     if (target.dataset.cocoView) { state.cocoView=target.dataset.cocoView;render();return; }
-    if (target.dataset.composeKind) { composer(target.dataset.composeKind); return; }
+    if (target.dataset.composeKind) { const draft=document.querySelector('#v3-form-tx [name="amount"],#v3-form-investment [name="amount"]')?.value; composer(target.dataset.composeKind,null,null,null,draft); return; }
+    if (target.dataset.dateChoice) {
+      const form=target.closest('#v3-form-tx');
+      if(!form)return;
+      const input=form.elements.date;
+      if(target.dataset.dateChoice==='today'){input.value=U.todayISO();form.elements.situacao.value='pago';syncComposerDate(form);updateComposerFatura(form);}
+      else {input.hidden=false;form.elements.situacao.value='pendente';form.querySelectorAll('[data-date-choice]').forEach((button)=>{const active=button.dataset.dateChoice==='other';button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});if(input.showPicker)input.showPicker();else input.focus();}
+      syncComposerStatus(form);
+      return;
+    }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
     if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
@@ -3429,7 +3795,9 @@
     if (target.dataset.category && !target.dataset.action) { categoryForm(target.dataset.category); return; }
     if (target.dataset.goal && !target.dataset.action) { goalForm(target.dataset.goal); return; }
     if (target.dataset.budgetNovo) { budgetForm(target.dataset.budgetNovo); return; }
+    if (target.dataset.planningBudget) { budgetForm(target.dataset.planningBudget,Number(target.dataset.suggestedLimit)); return; }
     if (target.dataset.budget && !target.dataset.action) { budgetForm(target.dataset.budget); return; }
+    if (target.dataset.calConfirm) { toggleAgendaPaid(target); return; }
     if (target.dataset.confirm) {
       openStatusMenu(target);
       return;
@@ -3439,6 +3807,13 @@
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
+    if(action==='calculator') {const panel=target.closest('.v3-compose-head')?.nextElementSibling;if(panel?.classList.contains('v3-calculator')){panel.hidden=!panel.hidden;target.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden){updateCalculator(panel);panel.querySelector('input')?.focus();}}return;}
+    if(action==='calc-close') {const panel=target.closest('.v3-calculator');if(panel){panel.hidden=true;panel.previousElementSibling?.querySelector('.v3-calc-launch')?.setAttribute('aria-expanded','false');panel.previousElementSibling?.querySelector('.v3-calc-launch')?.focus();}return;}
+    if(action==='calc-key') {const panel=target.closest('.v3-calculator'),input=panel?.querySelector('input'),key=target.dataset.calcKey;if(!input)return;if(key==='C')input.value='';else if(key==='⌫')input.value=input.value.slice(0,-1);else input.value+=key;input.focus();return;}
+    if(action==='calc-run') {const panel=target.closest('.v3-calculator'),expression=panel?.querySelector('input')?.value||'',result=calculateExpression(expression);if(result==null){toast('Use números e +, −, × ou ÷.');return;}const value=result.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});panel.dataset.result=value;panel.querySelector('[data-calc-result]').textContent=value;panel.querySelector('[data-action="calc-copy"]').disabled=false;panel.querySelector('[data-action="calc-use"]').disabled=result<0;calculatorHistory=[{expression,value},...calculatorHistory].slice(0,8);updateCalculator(panel);return;}
+    if(action==='calc-history') {const panel=target.closest('.v3-calculator');panel.querySelector('input').value=target.dataset.calcValue;return;}
+    if(action==='calc-copy') {const value=target.closest('.v3-calculator')?.dataset.result;if(value)navigator.clipboard.writeText(value).then(()=>toast('Valor copiado.')).catch(()=>toast('Não consegui copiar neste navegador.'));return;}
+    if(action==='calc-use') {const panel=target.closest('.v3-calculator'),input=panel?.nextElementSibling?.querySelector('[name="amount"]'),value=panel?.dataset.result;if(input&&value){input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));panel.hidden=true;}return;}
     if (action==='refresh-invest-market') { refreshInvestmentMarket(true); return; }
     if (action==='shared-open') {openShared(target.dataset.shareId);return;}
     if (action==='shared-revoke') {
@@ -3645,15 +4020,19 @@
         : profile().transactions.some((t)=>t.accountId===id||t.toAccountId===id)||profile().cards.some((c)=>c.accountId===id)
           ||profile().investments.some((x)=>x.accountId===id)||profile().goals.some((g)=>(g.deposits||[]).some((d)=>d.accountId===id))
           ||Object.values(profile().invoices||{}).some((record)=>(Calc.invoiceMovements(record)||[]).some((m)=>m.accountId===id));
-      if (used) { toast('Este item tem movimentos vinculados. Arquive a conta ou mantenha o cartão para preservar o histórico.'); return; }
-      openSheet(`${sheetTop(isCard?'excluir cartão':'excluir conta','confirme esta alteração')}<p>Excluir ${esc(item.name)}? Esta ação não pode ser desfeita.</p><div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter</button><button type="button" class="v3-primary" data-action="confirm-delete-wallet-item" data-wallet-id="${esc(id)}" data-wallet-type="${isCard?'card':'account'}">Excluir</button></div>`,'Confirmar exclusão');
+      if (used && !isCard) { toast('Esta conta tem movimentos vinculados. Arquive-a para preservar o histórico.'); return; }
+      const quiet = (()=>{try{return localStorage.getItem('oaze.card-delete-warning')==='quiet';}catch{return false;}})();
+      const cardTransactions = isCard ? profile().transactions.filter((tx)=>tx.cardId===id).length : 0;
+      const cardInvoices = isCard ? Object.keys(profile().invoices||{}).filter((key)=>key.startsWith(id+'|')).length : 0;
+      openSheet(`${sheetTop(isCard?'excluir cartão':'excluir conta','confirme esta alteração')}<p>Excluir <strong>${esc(item.name)}</strong>? Esta ação não pode ser desfeita.</p>${isCard ? quiet ? '<p class="v3-muted">Compras e faturas vinculadas também serão excluídas.</p>' : `<div class="v3-delete-warning"><strong>O cartão e seus dados serão excluídos</strong><p>${cardTransactions} compra(s) e ${cardInvoices} fatura(s) vinculadas também sairão do histórico. Pagamentos dessas faturas deixam de afetar o saldo das contas.</p></div><label class="v3-check"><input type="checkbox" id="v3-card-delete-quiet"> Não mostrar este aviso detalhado nas próximas exclusões</label>` : ''}<div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter</button><button type="button" class="v3-primary" data-action="confirm-delete-wallet-item" data-wallet-id="${esc(id)}" data-wallet-type="${isCard?'card':'account'}">Excluir ${isCard?'cartão e dados':'conta'}</button></div>`,'Confirmar exclusão');
       return;
     }
     if (action==='confirm-delete-wallet-item') {
       if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
       const id=target.dataset.walletId,isCard=target.dataset.walletType==='card';
       if (!(isCard?Store.cards.get(id):Store.accounts.get(id))) { toast('Este item não existe mais.'); return; }
-      V3Backend.mutate(()=>isCard?Store.cards.remove(id):Store.accounts.remove(id)).then(()=>{state.selected=null;closeSheet();render();toast('Item excluído.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
+      const hideWarning=!!document.getElementById('v3-card-delete-quiet')?.checked;
+      V3Backend.mutate(()=>isCard?Store.removeCardWithHistory(id):Store.accounts.remove(id)).then((result)=>{if(isCard&&hideWarning){try{localStorage.setItem('oaze.card-delete-warning','quiet');}catch{}}state.selected=null;closeSheet();render();showReceiptCleanupResult(result,isCard?'Cartão e dados vinculados excluídos.':'Conta excluída.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
       return;
     }
     if (action==='add-investment'){investmentForm(null,target.dataset.type);return;}
@@ -3668,7 +4047,15 @@
       if (demo) { toast('Demonstração: nenhum dado foi alterado.'); return; }
       const id=target.dataset.transaction;
       if (!Store.transactions.get(id)) { toast('Este lançamento não existe mais.'); return; }
-      V3Backend.mutate(()=>Store.transactions.remove(id)).then(()=>{closeSheet();render();toast('Lançamento excluído.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
+      V3Backend.mutate(()=>Store.transactions.remove(id)).then((result)=>{closeSheet();render();showReceiptCleanupResult(result,'Lançamento excluído.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
+      return;
+    }
+    if (action==='retry-receipt-cleanup') {
+      target.disabled=true;
+      V3Backend.retryReceiptCleanup().then((result)=>{
+        if(result.pending)toast('Ainda não consegui remover todos os comprovantes. Tente novamente mais tarde.');
+        else{closeSheet();toast('Comprovantes removidos do armazenamento privado.');}
+      }).catch((error)=>toast(error.message||'Não consegui remover os comprovantes.')).finally(()=>{if(target.isConnected)target.disabled=false;});
       return;
     }
     if (action==='add-goal'){goalForm();return;}
@@ -3730,7 +4117,7 @@
   }
   function handleSubmit(ev) {
     const formId=ev.target.getAttribute('id');
-    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-planning-salary','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save','v3-form-filtros'].includes(formId))return;
+    if(!['v3-form-tx','v3-form-account','v3-form-category','v3-form-profile','v3-form-profile-edit','v3-form-account-profile','v3-form-delete-account','v3-form-invoice','v3-form-advance','v3-form-investment','v3-form-goal','v3-form-goal-deposit','v3-form-budget','v3-form-planning-salary','v3-form-planning-guide','v3-form-period','v3-chat-form','v3-coco-consent-form','v3-memory-form','v3-form-vault-setup','v3-form-vault-unlock','v3-form-vault-save','v3-form-filtros'].includes(formId))return;
     ev.preventDefault();
     /* Filtrar não escreve nada: é mudar o que se vê. Barrar isso
        num perfil compartilhado só deixaria o convidado sem navegar
@@ -3766,6 +4153,7 @@
     if(formId==='v3-form-goal-deposit')saveGoalDeposit(ev.target);
     if(formId==='v3-form-budget')saveBudget(ev.target);
     if(formId==='v3-form-planning-salary')savePlanningSalary(ev.target);
+    if(formId==='v3-form-planning-guide')planWithCoco(ev.target);
     if(formId==='v3-form-period'){state.ym=String(new FormData(ev.target).get('ym'));closeSheet();render();}
     if(formId==='v3-form-vault-setup')vaultSetup(ev.target);
     if(formId==='v3-form-vault-unlock')vaultUnlock(ev.target);
@@ -3795,7 +4183,7 @@
     }
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
     const path=location.pathname.replace(/\/+$/,'') || '/app';
-    /* Caminho fora da tabela — a prévia em /preview-v3/index.html, um
+    /* Caminho fora da tabela — o fixture local de demonstração, um
        arquivo aberto direto — deixava  indefinido, e a
        linha seguinte quebrava no startsWith. A tela ficava em branco
        sem dizer por quê. Rota desconhecida é a Início, não um erro. */
@@ -3876,7 +4264,7 @@
     document.addEventListener('click',(event)=>{
       if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);
     });
-    document.addEventListener('scroll',()=>closeStatusMenu(false),true);
+    document.addEventListener('wheel',()=>closeStatusMenu(false),{passive:true});
     document.addEventListener('change',(event)=>{
       if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
       if (!['v3-coco-file','v3-coco-import-file'].includes(event.target?.id)) return;
@@ -3903,13 +4291,16 @@
       if(ev.target.name==='date' && ev.target.closest('#v3-form-tx')) {
         if (!ev.target.form.elements.repeatDate.dataset.edited) ev.target.form.elements.repeatDate.value=ev.target.value;
         updateComposerFatura(ev.target.form);
+        if(ev.target.value!==U.todayISO())ev.target.form.elements.situacao.value='pendente';
+        syncComposerDate(ev.target.form);
+        syncComposerStatus(ev.target.form);
       }
       if(ev.target.name==='repeatDate' && ev.target.closest('#v3-form-tx')) ev.target.dataset.edited='true';
       if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
       if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) { ev.target.dataset.escolhida='true'; updateRepeatFields(ev.target.form); }
       /* "Outro" é a única opção que pede um nome escrito; as outras
          já se nomeiam. O campo aparece com ela e some sem ela. */
-      if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom'),cor=document.getElementById('v3-custom-bank-color');if(c)c.hidden=ev.target.value!=='Outro';if(cor)cor.hidden=ev.target.value!=='Outro';}
+      if(ev.target.name==='bank'){const c=document.getElementById('v3-bank-custom'),cor=document.getElementById('v3-custom-bank-color'),icons=document.getElementById('v3-bank-icon-picker');if(c)c.hidden=ev.target.value!=='Outro';if(icons)icons.hidden=ev.target.value!=='Outro';if(cor&&ev.target.value==='Outro')cor.open=true;}
       /* Cotação é a conversão para real: numa conta em real ela não
          tem o que converter, e pedir isso era pedir por pedir. */
       if(ev.target.name==='moeda'){const c=document.getElementById('v3-cotacao');if(c)c.hidden=ev.target.value==='BRL';}
@@ -3954,7 +4345,7 @@
       const vazio=document.getElementById('v3-bank-vazio');
       if(vazio)vazio.hidden=achou>0;
     });
-    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key?.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName||'')){ev.preventDefault();composer('Despesa');}});
+    document.addEventListener('keydown',(ev)=>{if(ev.key==='Escape'&&statusMenu){ev.preventDefault();closeStatusMenu();return;}if(ev.key==='Escape'&&!$('#v3-overlay').hidden){closeSheet();return;}if(ev.key==='Escape'&&navEditorOpen){ev.preventDefault();navEditorOpen=false;renderNav();$('.v3-sidebar-edit')?.focus();return;}if(ev.key?.toLowerCase()==='n'&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName||'')){ev.preventDefault();composer('Despesa');}});
     addEventListener('resize',()=>{closeStatusMenu(false);});
     render();
     if(inviteToken){

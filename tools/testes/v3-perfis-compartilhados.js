@@ -8,8 +8,8 @@ const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const sql = read('supabase/migrations/20261007001746_perfis_compartilhados.sql');
 const roles = read('supabase/migrations/20261008003700_perfis_compartilhados_permissoes.sql');
 const edge = read('supabase/functions/oaze-perfis/index.ts');
-const app = read('preview-v3/app.js');
-const backend = read('preview-v3/live-backend.js');
+const app = read('assets/app/app.js');
+const backend = read('assets/app/live-backend.js');
 const store = read('assets/js/store.js');
 
 assert.match(sql, /enable row level security/i);

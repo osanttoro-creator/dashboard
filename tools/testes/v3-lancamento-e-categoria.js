@@ -17,8 +17,8 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..', '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
-const app = read('preview-v3/app.js');
-const css = read('preview-v3/app.css');
+const app = read('assets/app/app.js');
+const css = read('assets/app/app.css');
 const store = read('assets/js/store.js');
 const calc = read('assets/js/calc.js');
 
@@ -26,8 +26,12 @@ const calc = read('assets/js/calc.js');
 assert.match(app, /name="situacao"/, 'o lançamento precisa do seletor de situação');
 assert.match(app, /Cancelado — não entra em total nenhum/);
 assert.match(app, /const situacaoInicial = editing/);
-assert.match(app, /cancelado:String\(fd\.get\('situacao'\)\|\|''\)==='cancelado'/, 'o cancelado precisa ser salvo');
-assert.match(app, /confirmed:String\(fd\.get\('situacao'\)\|\|'pago'\)==='pago'/);
+assert.match(app, /cancelado:status==='cancelado'/, 'o cancelado precisa ser salvo');
+assert.match(app, /confirmed:status==='pago'/);
+assert.match(app, /\(!editing&&status==='cancelado'\)/, 'o novo lançamento não oferece cancelamento antecipado');
+assert.match(app, /function installComposerPickers\(form\)/, 'os seletores rápidos devem ter visual próprio');
+assert.match(app, /receiptPath:uploadedPath/, 'o anexo precisa ser vinculado à transação salva');
+assert.match(app, /ignored:kind==='Despesa'/, 'ignorar despesa precisa persistir');
 assert.doesNotMatch(app, /fd\.get\('confirmed'\)==='true'/, 'o estado binário antigo não deve voltar');
 
 /* O cancelado sai de TODO total — inclusive do previsto — mas não
@@ -82,7 +86,7 @@ for (const color of ['Amarelo Limão', 'Azul Cobalto', 'Rosa Chiclete', 'Verde P
    (ano), em que dias as coisas caem (mês), o que vem pela frente
    (semana). Com só a grade do mês, as outras duas viravam conta de
    cabeça. */
-const calCss = read('preview-v3/calendar.css');
+const calCss = read('assets/app/calendar.css');
 assert.match(app, /const CAL_VISTAS = \[\['year', 'Ano'\], \['month', 'Mês'\], \['week', 'Semana'\]\]/);
 assert.match(app, /function calendarioAno\(\)/);
 assert.match(app, /function calendarioSemana\(\)/);

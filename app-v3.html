@@ -13,14 +13,17 @@
        próprio arquivo ao montar o pacote: endereço só muda quando o
        arquivo muda, e cache de navegador deixa de esconder publicação.
        Não precisa editar à mão. -->
-  <link rel="stylesheet" href="/preview-v3/app.css?v=20261016f">
-  <link rel="stylesheet" href="/preview-v3/icons.css?v=20261014a">
-  <link rel="stylesheet" href="/preview-v3/wallet.css?v=20261016e">
-  <link rel="stylesheet" href="/preview-v3/calendar.css?v=20261014a">
-  <link rel="stylesheet" href="/preview-v3/investments.css?v=20261014a">
-  <link rel="stylesheet" href="/preview-v3/payment.css?v=20261014a">
-  <link rel="stylesheet" href="/preview-v3/consent.css?v=20261014a">
-  <link rel="stylesheet" href="/preview-v3/coco.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/app.css?v=20261023b">
+  <link rel="stylesheet" href="/assets/app/icons.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/wallet.css?v=20261016e">
+  <link rel="stylesheet" href="/assets/app/calendar.css?v=20261023c">
+  <link rel="stylesheet" href="/assets/app/investments.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/payment.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/consent.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/coco.css?v=20261014a">
+  <link rel="stylesheet" href="/assets/app/refinement.css?v=20261021a">
+  <link rel="stylesheet" href="/assets/app/forms-refinement.css?v=20261023a">
+  <link rel="stylesheet" href="/assets/app/navigation-coco-refinement.css?v=20261023a">
 <script>
 /* A língua, também antes da primeira pintura. Nesta ordem:
      1. a escolha feita em Configurações (oaze.idioma);
@@ -61,6 +64,7 @@
 </head>
 <body class="v3">
   <a class="v3-skip" href="#v3-content">Pular para o conteúdo</a>
+  <div class="v3-liquid-ether" id="v3-liquid-ether" aria-hidden="true"></div>
   <div class="v3-shell">
     <aside class="v3-sidebar" aria-label="Navegação principal">
       <a class="v3-logo" href="/app" aria-label="OAZE — início"><img src="/assets/brand/oaze-logo-mono-milk.svg" alt="OAZE"></a>
@@ -94,18 +98,19 @@
   <script src="/assets/js/automacoes/categorizar.js?v=20261014a"></script>
   <script src="/assets/js/automacoes/detectar-recorrencias.js?v=20261014a"></script>
   <script src="/assets/js/automacoes/metas-automaticas.js?v=20261014a"></script>
-  <script src="/assets/js/store.js?v=20261014b"></script>
-  <script src="/assets/js/calc.js?v=20261014a"></script>
+  <script src="/assets/js/store.js?v=20261023c"></script>
+  <script src="/assets/js/calc.js?v=20261023c"></script>
   <script src="/assets/js/planos.js?v=20261014a"></script>
   <script src="/assets/js/limites.js?v=20261014a"></script>
   <script src="/assets/js/ai.js?v=20261014a"></script>
-  <script src="/preview-v3/live-backend.js?v=20261014a"></script>
-  <script src="/preview-v3/carteira.js?v=20261014a"></script>
-  <script src="/preview-v3/coco-import.js?v=20261014a"></script>
-  <script src="/preview-v3/coco-realtime.js?v=20261014a"></script>
-  <script src="/preview-v3/onboarding-ponte.js?v=20261014a"></script>
+  <script src="/assets/app/live-backend.js?v=20261023c"></script>
+  <script src="/assets/app/carteira.js?v=20261014a"></script>
+  <script src="/assets/app/coco-import.js?v=20261014a"></script>
+  <script src="/assets/app/coco-realtime.js?v=20261014a"></script>
+  <script src="/assets/app/onboarding-ponte.js?v=20261014a"></script>
   <script src="/assets/js/onboarding.js?v=20261014a"></script>
-  <script src="/preview-v3/app.js?v=20261016f"></script>
+  <script src="/assets/app/liquid-ether.js?v=20261023b" defer></script>
+  <script src="/assets/app/app.js?v=20261023c"></script>
   <script src="/assets/js/idioma-esfera.js?v=20261014a" defer></script>
   <script src="/assets/js/cookies.js?v=20261014a" defer></script>
 </body>

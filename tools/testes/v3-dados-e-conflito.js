@@ -31,7 +31,7 @@ const path = require('node:path');
 
 const raiz = path.join(__dirname, '..', '..');
 const ler = (f) => fs.readFileSync(path.join(raiz, f), 'utf8');
-const backend = ler('preview-v3/live-backend.js');
+const backend = ler('assets/app/live-backend.js');
 const store = ler('assets/js/store.js');
 
 /* 1 · UMA GRAVAÇÃO POR VEZ, COM A REVISÃO ESPERADA JUNTO.

@@ -37,7 +37,7 @@ const path = require('path');
 const PORTA = 9222;
 const BASE = 'http://localhost:4173';
 const SAIDA = path.join(__dirname, 'telas-novas');
-const PAGINA = '/preview-v3/index.html';
+const PAGINA = '/tools/fixtures/app-demo.html';
 
 /* ---------------- CDP ---------------- */
 

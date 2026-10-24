@@ -4,8 +4,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../..');
-const app = fs.readFileSync(path.join(root, 'preview-v3/app.js'), 'utf8');
-const css = fs.readFileSync(path.join(root, 'preview-v3/app.css'), 'utf8');
+const app = fs.readFileSync(path.join(root, 'assets/app/app.js'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'assets/app/app.css'), 'utf8');
 const registry = app.match(/const BLOCOS_INICIO = \[([\s\S]*?)\n  \];/)?.[1] || '';
 assert.equal((registry.match(/\{ id:/g) || []).length, 24, '24 widgets devem estar disponíveis');
 for (const id of ['faturas', 'fluxo', 'metas', 'categorias']) {

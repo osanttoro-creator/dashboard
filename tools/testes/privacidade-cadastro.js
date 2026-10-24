@@ -25,7 +25,7 @@ const auth = ler('assets', 'js', 'site-auth.js');
    do painel anterior, hoje é a própria tela do aplicativo, que não
    carrega dado nenhum antes do aceite. É uma trava melhor — não há
    modal para fechar por engano. */
-const gate = ler('preview-v3', 'live-backend.js');
+const gate = ler('assets/app', 'live-backend.js');
 const sql = ler('supabase', 'migrations', '20260917211553_exigir_aceite_privacidade.sql');
 const config = ler('supabase', 'config.toml');
 

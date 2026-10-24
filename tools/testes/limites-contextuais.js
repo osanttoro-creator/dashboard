@@ -24,7 +24,7 @@ const path = require('path');
 const RAIZ = path.join(__dirname, '..', '..');
 const ler = (f) => fs.readFileSync(path.join(RAIZ, f), 'utf8');
 const limites = ler('assets/js/limites.js');
-const app = ler('preview-v3/app.js');
+const app = ler('assets/app/app.js');
 
 const falhas = [];
 

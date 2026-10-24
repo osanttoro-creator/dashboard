@@ -10,7 +10,7 @@ fornecedores foram conferidos na data; promoção muda de semana em semana.
 | Conversa por texto sobre o mês exibido | `oaze-assistant`, `gpt-4o-mini` | 10 / 60 / 200 pedidos por mês; entrada 5k / 9k / 14k tokens, saída 500 / 900 / 1.200 |
 | Conversa por voz, WebRTC | `oaze-coco-realtime`, `gpt-live-1` + cérebro `gpt-6-luna` com ferramentas | sessão local de 10 min; **6 por hora, 20 por dia, sem cota mensal e sem gate de plano** |
 | Mídia (foto, comprovante) com consentimento | `oaze-coco-media` | consome a cota mensal |
-| Propostas estruturadas que a pessoa aprova | `preview-v3/app.js` | nunca escreve sozinha |
+| Propostas estruturadas que a pessoa aprova | `assets/app/app.js` | nunca escreve sozinha |
 | Prévia de aporte: classifica só o nome | `oaze-invest-data` | 12 interpretações por dia |
 | CDI/Selic (BCB) e cotação (brapi) | `oaze-invest-data` | sem `BRAPI_API_KEY`, só 4 tickers de teste |
 

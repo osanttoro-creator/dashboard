@@ -34,6 +34,101 @@
   V3Backend.activeSharePermission = () => activeSharePermission;
   V3Backend.accountProfile = () => accountProfile;
   V3Backend.withTimeout = bounded;
+  const receiptBucket = 'oaze-receipts';
+  const receiptTypes = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'application/pdf': 'pdf' };
+  const ownReceipt = (path) => !!user && typeof path === 'string'
+    && path.startsWith(user.id + '/') && !path.includes('..') && !path.includes('\\');
+  V3Backend.uploadReceipt = async function (file, txId) {
+    if (!client || !user) throw new Error('Entre na sua conta antes de anexar um comprovante.');
+    if (activeShareId) throw new Error('Anexos ainda não estão disponíveis em espaços compartilhados.');
+    if (!file || !receiptTypes[file.type] || file.size <= 0 || file.size > 5 * 1024 * 1024)
+      throw new Error('Use JPG, PNG, WebP ou PDF de até 5 MB.');
+    if (!/^tx[_-][\w-]{1,100}$/.test(String(txId || ''))) throw new Error('Lançamento inválido para anexo.');
+    const profileId = String(Store.profile()?.id || '');
+    if (!/^[\w-]{1,100}$/.test(profileId)) throw new Error('Espaço inválido para anexo.');
+    const path = `${user.id}/${profileId}/${txId}/${global.crypto.randomUUID()}.${receiptTypes[file.type]}`;
+    const { error } = await client.storage.from(receiptBucket).upload(path, file,
+      { upsert: false, contentType: file.type, cacheControl: '0' });
+    if (error) throw new Error('Não consegui enviar o comprovante. Confira o lançamento e tente novamente.');
+    return { path };
+  };
+  V3Backend.receiptUrl = async function (path) {
+    if (!client || !ownReceipt(path)) throw new Error('Comprovante indisponível nesta conta.');
+    const { data, error } = await client.storage.from(receiptBucket).createSignedUrl(path, 60);
+    if (error || !data?.signedUrl) throw new Error('Não consegui abrir o comprovante.');
+    return data.signedUrl;
+  };
+  V3Backend.removeReceipt = async function (path) {
+    if (!client || !ownReceipt(path)) throw new Error('Comprovante indisponível nesta conta.');
+    const { error } = await client.storage.from(receiptBucket).remove([path]);
+    if (error) throw new Error('Não consegui excluir o comprovante.');
+  };
+  const receiptQueue = (profile) => [...new Set(
+    (Array.isArray(profile?.pendingReceiptDeletes) ? profile.pendingReceiptDeletes : []).filter(ownReceipt)
+  )];
+  // A fila viaja no mesmo JSONB do perfil e no mesmo RPC que apaga o lançamento.
+  // Um erro de Storage deixa um trabalho recuperável mesmo após fechar a página.
+  V3Backend.receiptCleanupStatus = () => ({ pending: (Store.state()?.profiles || [])
+    .reduce((total, profile) => total + receiptQueue(profile).length, 0) });
+  async function cleanupProfileReceipts(id) {
+    const index = Store.state().profiles.findIndex((profile) => profile.id === id);
+    if (index < 0) return 0;
+    const profile = Store.state().profiles[index];
+    const queue = receiptQueue(profile);
+    if (!queue.length) return 0;
+    const referenced = new Set((Store.state().profiles || []).flatMap((current) =>
+      (current.transactions || []).map((tx) => tx.receiptPath).filter(Boolean)));
+    const cleared = [];
+    let removed = 0;
+    for (const path of queue) {
+      if (referenced.has(path)) { cleared.push(path); continue; }
+      try {
+        await bounded(V3Backend.removeReceipt(path));
+        cleared.push(path);
+        removed++;
+      } catch (error) {
+        console.warn('V3/comprovante pendente de exclusão:', error);
+      }
+    }
+    if (!cleared.length) return 0;
+    const payload = JSON.parse(JSON.stringify(profile));
+    payload.pendingReceiptDeletes = queue.filter((path) => !cleared.includes(path));
+    try {
+      const { data, error } = await bounded(client.rpc('v3_salvar_perfil', {
+        p_profile: payload, p_expected_updated_at: revisions[id] || 0
+      }));
+      if (error) throw error;
+      const saved = Store.normalizeProfile(data);
+      Store.state().profiles[index] = saved;
+      revisions[id] = stamp(saved);
+      Store.commit('sync-apply');
+    } catch (error) {
+      // Storage pode já ter excluído bytes. A fila fica no servidor; remover
+      // novamente é idempotente e a próxima abertura poderá concluir o RPC.
+      if (error.code === '40001') refreshPending = true;
+      console.warn('V3/fila de comprovantes pendente de confirmação:', error);
+    }
+    return removed;
+  }
+  V3Backend.retryReceiptCleanup = async function () {
+    if (saving) throw new Error('Espere a gravação anterior terminar.');
+    if (!client || !user) throw new Error('Entre na conta para excluir comprovantes pendentes.');
+    saving = true;
+    let removed = 0;
+    try {
+      for (const profile of [...(Store.state()?.profiles || [])]) {
+        try { removed += await cleanupProfileReceipts(profile.id); }
+        catch (error) { console.warn('V3/comprovantes pendentes:', error); }
+      }
+    } finally {
+      saving = false;
+      if (refreshPending) {
+        refreshPending = false;
+        await V3Backend.reload().catch((error) => console.error('V3/atualização remota:', error));
+      }
+    }
+    return { removed, pending: V3Backend.receiptCleanupStatus().pending };
+  };
   V3Backend.investmentMarket = async function (body) {
     if (!client || !user) throw new Error('Entre na conta para consultar dados de mercado.');
     const config = global.SupabaseConfig || {};
@@ -457,10 +552,20 @@
     const shareId = activeShareId;
     const expected = shareId ? stamp(profile) : (revisions[id] || 0);
     const before = JSON.parse(JSON.stringify(profile));
+    const oldReceipts = new Set((before.transactions || []).map((tx) => tx.receiptPath).filter(Boolean));
+    const queuedBefore = receiptQueue(before);
     saving = true;
     try {
       change();
       const payload = JSON.parse(JSON.stringify(Store.profile()));
+      const keptReceipts = new Set((payload.transactions || []).map((tx) => tx.receiptPath).filter(Boolean));
+      const removedReceipts = [...oldReceipts].filter((path) => !keptReceipts.has(path));
+      if (shareId && removedReceipts.length)
+        throw new Error('Abra este espaço como titular para excluir comprovantes.');
+      if (removedReceipts.some((path) => !ownReceipt(path)))
+        throw new Error('Este comprovante só pode ser excluído pelo dono da conta.');
+      if (!shareId) payload.pendingReceiptDeletes = [...new Set([...queuedBefore, ...removedReceipts])]
+        .filter((path) => !keptReceipts.has(path));
       const { data, error } = await client.rpc(shareId ? 'v3_salvar_perfil_compartilhado' : 'v3_salvar_perfil',
         shareId ? { p_share_id: shareId, p_profile: payload, p_expected_updated_at: expected }
           : { p_profile: payload, p_expected_updated_at: expected });
@@ -477,7 +582,16 @@
         revisions[id] = stamp(saved);
       }
       Store.commit('sync-apply');
-      return saved;
+      if (!shareId && receiptQueue(saved).length) {
+        try { await cleanupProfileReceipts(id); }
+        catch (error) { console.warn('V3/comprovantes pendentes:', error); }
+      }
+      const result = shareId ? saved : (Store.state().profiles.find((p) => p.id === id) || saved);
+      Object.defineProperty(result, 'receiptCleanupPending', {
+        value: V3Backend.receiptCleanupStatus().pending,
+        enumerable: false, configurable: true, writable: true
+      });
+      return result;
     } catch (error) {
       if (shareId) {
         if (activeShareId === shareId) {
@@ -572,6 +686,8 @@
     if (Store.state().profiles.length <= 1) throw new Error('Mantenha pelo menos um perfil na conta.');
     const found = Store.state().profiles.find((p) => p.id === id);
     if (!found) throw new Error('Perfil não encontrado.');
+    if ((found.transactions || []).some((tx) => tx.receiptPath) || receiptQueue(found).length)
+      throw new Error('Remova os comprovantes deste espaço antes de excluí-lo.');
     saving = true;
     try {
       const { data, error } = await bounded(client.rpc('v3_excluir_perfil', {
@@ -617,6 +733,7 @@
     global.Sync = { currentUser: () => ({ uid: user.id, email: user.email, displayName: ownerName() }) };
     global.SupabaseBackend = { cliente: () => client };
     await V3Backend.reload();
+    if (V3Backend.receiptCleanupStatus().pending) await V3Backend.retryReceiptCleanup();
     channel = client.channel('oaze-v3-dados-' + user.id)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'dados', filter: 'user_id=eq.' + user.id },
         () => V3Backend.reload().catch((e) => console.error('V3/tempo real:', e)))

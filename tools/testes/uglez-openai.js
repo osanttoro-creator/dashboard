@@ -10,7 +10,7 @@ const funcao = ler('supabase', 'functions', 'oaze-assistant', 'index.ts');
 /* O preparo do pedido continua em ai.js; a REVISÃO da proposta é
    da interface, e ela mudou de arquivo com o painel. */
 const cliente = ler('assets', 'js', 'ai.js');
-const tela = ler('preview-v3', 'app.js');
+const tela = ler('assets/app', 'app.js');
 const config = ler('supabase', 'config.toml');
 const falhas = [];
 

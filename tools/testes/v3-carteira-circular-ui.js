@@ -20,7 +20,7 @@ const baseUrl = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       const errors = [];
       page.on('pageerror', (error) => errors.push(error.message));
-      await page.goto(baseUrl + '/preview-v3/index.html?demo=1#home');
+      await page.goto(baseUrl + '/tools/fixtures/app-demo.html?demo=1#home');
       const centerId = () => page.locator('.v3-wallet-item.esta-no-centro').getAttribute('data-select');
       assert.equal(await centerId(), 'a1');
 

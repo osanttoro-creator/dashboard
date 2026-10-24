@@ -51,7 +51,6 @@ on:
       - 'sitemap.xml'
       - 'manifest.webmanifest'
       - 'assets/**'
-      - 'preview-v3/**'
       - 'tools/**'
       - 'deploy/hostinger/**'
       - '.github/workflows/deploy-hostinger.yml'
@@ -121,10 +120,13 @@ jobs:
           # vale conferir aqui.
           unzip -l "$ZIP_NOME" | grep -q '\.htaccess' \
             || { echo "::error::.htaccess ausente do zip"; exit 1; }
-          for file in app-v3.html preview-v3/index.html preview-v3/app.css preview-v3/app.js preview-v3/live-backend.js preview-v3/coco-realtime.js; do
+          for file in app-v3.html assets/app/app.css assets/app/app.js assets/app/live-backend.js assets/app/coco-realtime.js; do
             unzip -p "$ZIP_NOME" "$file" > /dev/null \
-              || { echo "::error::previa V3 ausente do zip: $file"; exit 1; }
+              || { echo "::error::app V3 ausente do zip: $file"; exit 1; }
           done
+          if unzip -Z1 "$ZIP_NOME" | grep -Eq '^(preview-v3/|tools/fixtures/)'; then
+            echo '::error::demonstracao ou proposta antiga entrou no pacote'; exit 1
+          fi
           echo "zip: $(stat -c%s "$ZIP_NOME") bytes, $(unzip -l "$ZIP_NOME" | tail -1)"
 
       # ---- 2 · credenciais de upload ----
@@ -241,10 +243,11 @@ jobs:
           checar /assets/css/v3.css      200
           checar /app-v3.html             200
           checar /app                     200
-          checar /preview-v3/index.html  200
-          checar /preview-v3/app.css     200
-          checar /preview-v3/app.js      200
-          checar /preview-v3/live-backend.js 200
+          checar /preview-v3/           410
+          checar /preview-v3/index.html 410
+          checar /assets/app/app.css     200
+          checar /assets/app/app.js      200
+          checar /assets/app/live-backend.js 200
           checar /naoexiste.css          404
           checar /assets/js/sumiu.js     404
           v3_html=$(curl -fsS -A 'OAZE-Deploy-Check/1.0 (+https://oaze.site)' "https://$SITE_DOMAIN/app")

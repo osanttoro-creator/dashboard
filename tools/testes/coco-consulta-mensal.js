@@ -35,8 +35,8 @@ assert.equal(window.AI.consultaMesPassado('Quero o total do mês passado, e fiz 
 totals.entries = [{ kind: 'expense', confirmed: true, contaNosTotais: false }];
 assert.equal(window.AI.consultaMesPassado('Saldo do mês passado').comDados, false);
 
-const app = fs.readFileSync(path.join(root, 'preview-v3/app.js'), 'utf8');
-const wallet = fs.readFileSync(path.join(root, 'preview-v3/wallet.css'), 'utf8');
+const app = fs.readFileSync(path.join(root, 'assets/app/app.js'), 'utf8');
+const wallet = fs.readFileSync(path.join(root, 'assets/app/wallet.css'), 'utf8');
 assert.match(app, /AI\.corpoDaPergunta\(q,state\.ym\)/);
 assert.match(app, /sourceNeedsReview/);
 assert.match(wallet, /\.v3-card-top\{position:absolute;z-index:3/);

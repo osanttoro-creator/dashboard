@@ -67,8 +67,8 @@ function arquivosDoApp() {
   for (const f of fs.readdirSync(js).sort()) {
     if (f.endsWith('.js') && !FORA.has(f)) lista.push('assets/js/' + f);
   }
-  for (const f of fs.readdirSync(path.join(RAIZ, 'preview-v3')).sort()) {
-    if (f.endsWith('.js')) lista.push('preview-v3/' + f);
+  for (const f of fs.readdirSync(path.join(RAIZ, 'assets', 'app')).sort()) {
+    if (f.endsWith('.js')) lista.push('assets/app/' + f);
   }
   return lista;
 }

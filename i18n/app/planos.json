@@ -12,18 +12,6 @@
   "es": "Planta el hábito de mirar tu mes."
  },
  {
-  "pt": "Coqueiro",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "Raiz firme: contas, cartões e histórico.",
-  "tipo": "exato",
-  "en": "Firm roots: accounts, cards and history.",
-  "fr": "Des racines solides : comptes, cartes et historique.",
-  "es": "Raíz firme: cuentas, tarjetas e historial."
- },
- {
   "pt": "Oásis",
   "tipo": "exato",
   "ignorar": true
@@ -228,48 +216,6 @@
   "en": "10 Coco questions per month, on Coco’s page",
   "fr": "10 questions à Coco par mois, sur sa page",
   "es": "10 consultas a Coco al mes, en su página"
- },
- {
-  "pt": "10 contas e 10 cartões",
-  "tipo": "exato",
-  "en": "10 accounts and 10 cards",
-  "fr": "10 comptes et 10 cartes",
-  "es": "10 cuentas y 10 tarjetas"
- },
- {
-  "pt": "Até 1.000 movimentações por mês",
-  "tipo": "exato",
-  "en": "Up to 1,000 transactions per month",
-  "fr": "Jusqu'à 1 000 mouvements par mois",
-  "es": "Hasta 1.000 movimientos por mes"
- },
- {
-  "pt": "20 orçamentos, 10 metas e 30 recorrências",
-  "tipo": "exato",
-  "en": "20 budgets, 10 goals and 30 recurring items",
-  "fr": "20 budgets, 10 objectifs et 30 récurrences",
-  "es": "20 presupuestos, 10 metas y 30 recurrentes"
- },
- {
-  "pt": "Histórico de 24 meses e comparação entre meses",
-  "tipo": "exato",
-  "en": "24 months of history and month-to-month comparison",
-  "fr": "24 mois d'historique et comparaison entre les mois",
-  "es": "24 meses de historial y comparación entre meses"
- },
- {
-  "pt": "Exportar em CSV e PDF, calendário financeiro",
-  "tipo": "exato",
-  "en": "Export to CSV and PDF, financial calendar",
-  "fr": "Export en CSV et PDF, calendrier financier",
-  "es": "Exportar en CSV y PDF, calendario financiero"
- },
- {
-  "pt": "60 consultas à Coco por mês, com assistente flutuante",
-  "tipo": "exato",
-  "en": "60 Coco questions per month, with the floating assistant",
-  "fr": "60 questions à Coco par mois, avec l’assistante flottante",
-  "es": "60 consultas a Coco al mes, con asistente flotante"
  },
  {
   "pt": "Até 5 espaços financeiros e 50 contas",

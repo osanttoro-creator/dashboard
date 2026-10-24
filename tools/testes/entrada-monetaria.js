@@ -46,7 +46,7 @@ igual(valor, '1.234,56', 'centavos explícitos');
 
 /* A máscara é a mesma; quem a aplica mudou de arquivo. O painel
    anterior foi apagado, e o controlador vive na interface da V3. */
-const app = ler('preview-v3/app.js');
+const app = ler('assets/app/app.js');
 if (!/addEventListener\('beforeinput'/.test(app) || !/U\.moneyGrow/.test(app)) {
   falhas.push('o controlador real não usa a máscara testada');
 }

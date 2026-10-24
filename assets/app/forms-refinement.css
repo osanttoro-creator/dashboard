@@ -1,0 +1,43 @@
+/* O formulário rápido mantém os mesmos campos reais, com hierarquia mais clara. */
+#v3-form-tx.v3-compose-ordered{gap:16px}
+#v3-form-tx.v3-compose-ordered label{min-width:0}
+#v3-form-tx.v3-compose-ordered .v3-picker-field{display:grid;gap:6px;min-width:0}
+#v3-form-tx.v3-compose-ordered .v3-picker-field:has(>label[hidden]){display:none}
+#v3-form-tx.v3-compose-ordered .v3-form-row:has(#v3-tx-data){display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#v3-form-tx.v3-compose-ordered .v3-form-row:has(#v3-tx-data)>label{width:100%}
+#v3-form-tx.v3-compose-ordered #v3-tx-amount-label{padding:17px 18px 15px;border:1px solid rgba(240,229,207,.2);border-radius:22px;background:rgba(240,229,207,.045)}
+#v3-form-tx.v3-compose-ordered #v3-tx-amount-label input{min-height:73px;padding:0;border:0;border-radius:0;background:transparent;color:var(--milk);font:500 clamp(42px,6vw,66px)/1.08 var(--mono);letter-spacing:-.07em;font-variant-numeric:tabular-nums}
+#v3-form-tx.v3-compose-ordered #v3-tx-amount-label input::placeholder{color:rgba(240,229,207,.55)}
+#v3-form-tx.v3-compose-ordered #v3-tx-amount-label input:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+#v3-form-tx.v3-compose-ordered .v3-picker{position:relative;min-width:0}
+#v3-form-tx.v3-compose-ordered .v3-picker summary{display:flex;align-items:center;gap:10px;min-height:52px;padding:7px 12px;border:1px solid rgba(240,229,207,.2);border-radius:15px;background:rgba(240,229,207,.075);color:var(--milk);font-size:14px;font-weight:500;cursor:pointer;list-style:none}
+#v3-form-tx.v3-compose-ordered .v3-picker summary::-webkit-details-marker{display:none}
+#v3-form-tx.v3-compose-ordered .v3-picker summary:focus-visible,#v3-form-tx.v3-compose-ordered .v3-picker-options button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+#v3-form-tx.v3-compose-ordered .v3-picker summary>span:nth-child(2){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#v3-form-tx.v3-compose-ordered .v3-picker-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--picker-accent,var(--teal)) 19%,transparent);color:var(--picker-accent,var(--teal))}
+#v3-form-tx.v3-compose-ordered .v3-picker-icon svg{width:22px;height:22px;object-fit:contain}
+#v3-form-tx.v3-compose-ordered .v3-picker-icon.is-paid{color:#79c7ad;background:rgba(95,169,155,.18)}
+#v3-form-tx.v3-compose-ordered .v3-picker-icon.is-pending{color:#f0cf82;background:rgba(240,207,130,.16)}
+#v3-form-tx.v3-compose-ordered .v3-picker-icon.is-cancelled{color:#ef9696;background:rgba(239,150,150,.15)}
+#v3-form-tx.v3-compose-ordered .v3-picker-caret{color:var(--teal);font-size:19px;transition:transform .18s ease}
+#v3-form-tx.v3-compose-ordered .v3-picker[open] .v3-picker-caret{transform:rotate(180deg)}
+#v3-form-tx.v3-compose-ordered .v3-picker-options{position:relative;z-index:9;max-height:min(240px,38vh);margin-top:6px;overflow:auto;padding:6px;border:1px solid rgba(240,229,207,.26);border-radius:16px;background:#152d38;box-shadow:0 16px 34px rgba(0,7,14,.35);backdrop-filter:blur(20px)}
+#v3-form-tx.v3-compose-ordered .v3-picker-options button{display:flex;align-items:center;gap:11px;width:100%;min-height:45px;padding:6px 9px;border:0;border-radius:10px;background:transparent;color:var(--milk);font:500 13px var(--body,Instrument,sans-serif);text-align:left;cursor:pointer}
+#v3-form-tx.v3-compose-ordered .v3-picker-options button:hover,#v3-form-tx.v3-compose-ordered .v3-picker-options button.is-selected{background:rgba(240,229,207,.09)}
+#v3-form-tx.v3-compose-ordered .v3-picker-options button>span:nth-child(2){flex:1;min-width:0}
+#v3-form-tx.v3-compose-ordered .v3-picker-options button small{display:block;color:var(--muted);font-weight:400;line-height:1.3}
+#v3-form-tx.v3-compose-ordered .v3-picker-options button b{color:var(--teal)}
+#v3-form-tx.v3-compose-ordered .v3-reminder-field small,#v3-form-tx.v3-compose-ordered .v3-receipt-field small{color:var(--muted);font-size:11px;line-height:1.45}
+#v3-form-tx.v3-compose-ordered .v3-receipt-field{display:grid;gap:8px;padding:14px;border:1px dashed rgba(240,229,207,.27);border-radius:17px;background:rgba(240,229,207,.035)}
+#v3-form-tx.v3-compose-ordered .v3-receipt-title{color:var(--milk);font-size:14px;font-weight:600}
+#v3-form-tx.v3-compose-ordered .v3-receipt-upload{display:block;cursor:pointer}
+#v3-form-tx.v3-compose-ordered .v3-receipt-upload>span{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;border:1px solid rgba(95,169,155,.52);border-radius:11px;color:var(--teal);font-weight:600}
+#v3-form-tx.v3-compose-ordered .v3-receipt-upload:has(input:focus-visible)>span{outline:2px solid var(--teal);outline-offset:3px}
+#v3-form-tx.v3-compose-ordered .v3-receipt-upload input{position:absolute;width:1px;height:1px;padding:0;opacity:0;overflow:hidden}
+#v3-form-tx.v3-compose-ordered .v3-receipt-upload:has(input:disabled){opacity:.55;cursor:not-allowed}
+#v3-form-tx.v3-compose-ordered .v3-receipt-open{width:max-content;padding:6px 0;border:0;background:transparent;color:var(--teal);text-decoration:underline;cursor:pointer}
+#v3-form-tx.v3-compose-ordered .v3-receipt-name{max-width:100%;overflow-wrap:anywhere;color:var(--milk);font-size:12px}
+#v3-form-tx.v3-compose-ordered .v3-mais{margin-top:0}
+#v3-form-tx.v3-compose-ordered .v3-mais-corpo{padding-top:12px}
+@media(max-width:540px){#v3-form-tx.v3-compose-ordered #v3-tx-amount-label input{font-size:50px}}
+@media(prefers-reduced-motion:reduce){#v3-form-tx.v3-compose-ordered .v3-picker-caret{transition:none}}

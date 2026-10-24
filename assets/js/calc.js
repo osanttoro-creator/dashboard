@@ -136,6 +136,7 @@
       faturaRef: tx.faturaRef || null,
       installment: tx.installment,
       source: tx.source,
+      ignored: !!tx.ignored,
       confirmed
     };
   }
@@ -207,7 +208,7 @@
 
     out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 :
       a.description.localeCompare(b.description, 'pt-BR')));
-    out.forEach((e) => { e.contaNosTotais = Calc.origemConsiderada(e, prof); });
+    out.forEach((e) => { e.contaNosTotais = !e.ignored && Calc.origemConsiderada(e, prof); });
     return out;
   }
 

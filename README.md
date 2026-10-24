@@ -104,7 +104,8 @@ docs/                     o que não cabe em comentário de código
 assets/vendor/bancos.js   bancos brasileiros, vendorizado (GERADO)
 assets/vendor/icons.js    ícones Lucide, vendorizado (GERADO)
 assets/vendor/fontes/     Newsreader, IBM Plex Sans e Mono (OFL)
-preview-v3/               o aplicativo: tela, carteira, backend e Coco
+assets/app/               código ativo do aplicativo: telas, carteira, backend e Coco
+tools/fixtures/app-demo.html  demonstração local para testes; não é publicada
 assets/css/site.css       o site público
 assets/js/
   utils.js       formatação BRL, datas (sem armadilha de fuso), helpers de DOM
@@ -115,7 +116,7 @@ assets/js/
   ai.js          o que vai à Edge Function — a chave nunca vem ao navegador
   icons.js idioma.js idioma-esfera.js onboarding.js
   automacoes/*.js  categorizar, detectar recorrência, metas automáticas
-preview-v3/
+assets/app/
   app.js         a interface inteira: telas, formulários, Coco
   live-backend.js  a conta real: sessão, gravação com conflito, Coco no banco
   carteira.js    o gesto da carteira (mola quadro a quadro, 1:1 com o dedo)
@@ -525,7 +526,7 @@ Dados salvos com as paletas anteriores são convertidos automaticamente ao abrir
 
 ### Coco por voz em tempo real (em validação local)
 
-O navegador usa `preview-v3/coco-realtime.js` para WebRTC, microfone, transcrição,
+O navegador usa `assets/app/coco-realtime.js` para WebRTC, microfone, transcrição,
 interrupção e reprodução. Uma sessão dura no máximo dez minutos no cliente. A Edge
 Function `oaze-coco-realtime` autentica a conta, verifica o consentimento da Coco,
 limita sessões e pede à OpenAI uma credencial efêmera; a chave principal não vai ao

@@ -9,7 +9,7 @@ const arquivos = [
   '.env.example', 'index.html', 'precos.html', 'termos.html',
   'privacidade.html', 'suporte.html', 'robots.txt',
   'assets/js/site.js', 'assets/js/planos.js',
-  'preview-v3/app.js', 'preview-v3/live-backend.js',
+  'assets/app/app.js', 'assets/app/live-backend.js',
   'deploy/hostinger/.htaccess',
   'supabase/migrations/20260902_ai_limites_e_assinatura.sql',
   'supabase/migrations/20260902_planos.sql',
@@ -27,7 +27,7 @@ const proibidos = [
    nome coincide com o do provedor removido. Dizer "Mercado Pago" ali
    é oferecer um banco, não voltar a cobrar por ele — então o nome do
    provedor não é procurado neste arquivo; o resto é. */
-const catalogoDeBancos = new Set(['preview-v3/app.js']);
+const catalogoDeBancos = new Set(['assets/app/app.js']);
 const nomesDoProvedor = new Set([/mercado\s*pago/i, /mercadopago/i].map((re) => re.source));
 
 const falhas = [];

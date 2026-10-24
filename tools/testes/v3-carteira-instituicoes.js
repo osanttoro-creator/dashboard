@@ -6,9 +6,9 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..', '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
-const app = read('preview-v3/app.js');
-const wallet = read('preview-v3/wallet.css');
-const icons = read('preview-v3/icons.css');
+const app = read('assets/app/app.js');
+const wallet = read('assets/app/wallet.css');
+const icons = read('assets/app/icons.css');
 const catalog = read('assets/vendor/bancos.js');
 
 assert.match(app, /data-wallet-kind="debit"/);
@@ -40,11 +40,13 @@ assert.doesNotMatch(app, /item\.kind==='credit'\?'••••/, 'o cartão não
 assert.match(app, /itau:'#F3BC45'/);
 assert.match(app, /type="radio" name="bank"/);
 assert.doesNotMatch(app, /<input[^>]*name="bank"[^>]*type="text"/);
-assert.match(app, /colorPicker\(safeColor\(existing\?\.color\|\|Store\.PALETTE\?\.\[0\]/, 'Outro reutiliza a paleta das categorias');
-assert.match(app, /'customColor',false\)/, 'cor oculta não bloqueia o formulário dos bancos conhecidos');
-assert.doesNotMatch(app, /<input type="color" name="customColor"/, 'Outro não usa seletor livre de cor');
-assert.match(app, /const allowedCustomColor=/, 'cor customizada precisa pertencer à paleta ou ser legada');
-assert.match(app, /selectedBank==='Outro'\?customColor:bankBrand\(bank,existing\?\.color\)/, 'bancos conhecidos preservam a própria cor');
+assert.match(app, /<input type="color" name="customColor"/, 'a cor do banco pode ser personalizada');
+assert.match(app, /name="useCustomColor"/, 'personalização é opt-in');
+assert.match(app, /selectedBank==='Outro'\|\|useCustomColor\?customColor:bankBrand\(bank\)/, 'bancos conhecidos usam sua cor até a pessoa editar');
+assert.match(app, /customColor:selectedBank==='Outro'\|\|useCustomColor/, 'a escolha personalizada é salva');
+assert.match(app, /name="customIcon"/, 'Outro oferece ícones de carteira, porquinho, banco e dinheiro');
+assert.match(app, /customIcon:selectedBank==='Outro'\?customIcon:null/, 'o ícone personalizado não substitui logotipos de bancos conhecidos');
+assert.match(app, /walletLogo\(d,brandInk\)/, 'o cartão exibe o ícone escolhido');
 assert.match(app, /global\.Icons\?\.bank\(/);
 assert.match(catalog, /itau:/);
 assert.match(wallet, /\.v3-wallet-pocket/);
@@ -58,10 +60,10 @@ assert.match(icons, /\.v3-hide-money \.v3-fi-eye::before/);
 assert.match(app, /Uicons by Flaticon/);
 assert.ok(fs.statSync(path.join(root, 'assets/fonts/uicons-regular-rounded.woff2')).size > 100000);
 assert.ok(fs.existsSync(path.join(root, 'assets/vendor/FLATICON-LICENSE.txt')));
-for (const html of ['app-v3.html', 'preview-v3/index.html']) {
+for (const html of ['app-v3.html', 'tools/fixtures/app-demo.html']) {
   const page = read(html);
-  assert.match(page, /preview-v3\/wallet\.css/);
-  assert.match(page, /preview-v3\/icons\.css/);
+  assert.match(page, /assets\/app\/wallet\.css/);
+  assert.match(page, /assets\/app\/icons\.css/);
   assert.match(page, /v3-fi v3-fi-eye/);
   assert.match(page, /v3-fi v3-fi-reminders/);
   assert.match(page, /v3-notification-count/);
@@ -78,7 +80,7 @@ for (const html of ['app-v3.html', 'preview-v3/index.html']) {
    que não pode ser interrompida sem saltar. Cada peça abaixo já foi
    perdida uma vez ao mexer no arquivo; por isso está aqui.
    ============================================================= */
-const carteira = read('preview-v3/carteira.js');
+const carteira = read('assets/app/carteira.js');
 
 assert.match(carteira, /setPointerCapture/, 'o arrasto precisa capturar o ponteiro');
 assert.match(carteira, /requestAnimationFrame\(passo\)/, 'a mola anima quadro a quadro');
@@ -104,8 +106,8 @@ assert.match(app, /data-carteira-prox/);
 assert.match(app, /data-carteira-ponto/);
 assert.match(app, /function montarCarteira\(\)/);
 assert.match(app, /function atualizarBolso\(id\)/, 'o bolso acompanha o gesto sem redesenhar a tela');
-for (const html of ['app-v3.html', 'preview-v3/index.html']) {
-  assert.match(read(html), /preview-v3\/carteira\.js/, html + ' precisa carregar a carteira');
+for (const html of ['app-v3.html', 'tools/fixtures/app-demo.html']) {
+  assert.match(read(html), /assets\/app\/carteira\.js/, html + ' precisa carregar a carteira');
 }
 
 console.log('Carteira V3, carrossel, instituições e ícones locais protegidos por verificação.');

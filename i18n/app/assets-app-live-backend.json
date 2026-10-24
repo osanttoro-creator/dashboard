@@ -1,0 +1,558 @@
+[
+ {
+  "pt": "Tempo esgotado ao conectar sua conta.",
+  "tipo": "exato",
+  "en": "Timed out connecting your account.",
+  "fr": "Délai dépassé lors de la connexion à votre compte.",
+  "es": "Tiempo agotado al conectar tu cuenta."
+ },
+ {
+  "pt": "Entre na sua conta antes de anexar um comprovante.",
+  "tipo": "exato",
+  "en": "Sign in to your account before attaching a receipt.",
+  "fr": "Connectez-vous à votre compte avant de joindre un justificatif.",
+  "es": "Inicia sesión en tu cuenta antes de adjuntar un comprobante."
+ },
+ {
+  "pt": "Anexos ainda não estão disponíveis em espaços compartilhados.",
+  "tipo": "exato",
+  "en": "Attachments are not yet available in shared spaces.",
+  "fr": "Les pièces jointes ne sont pas encore disponibles dans les espaces partagés.",
+  "es": "Los adjuntos aún no están disponibles en espacios compartidos."
+ },
+ {
+  "pt": "Use JPG, PNG, WebP ou PDF de até 5 MB.",
+  "tipo": "exato",
+  "en": "Use JPG, PNG, WebP or PDF files up to 5 MB.",
+  "fr": "Utilisez des fichiers JPG, PNG, WebP ou PDF de 5 Mo maximum.",
+  "es": "Usa archivos JPG, PNG, WebP o PDF de hasta 5 MB."
+ },
+ {
+  "pt": "Lançamento inválido para anexo.",
+  "tipo": "exato",
+  "en": "Invalid entry for an attachment.",
+  "fr": "Opération non valide pour une pièce jointe.",
+  "es": "Movimiento no válido para un adjunto."
+ },
+ {
+  "pt": "Espaço inválido para anexo.",
+  "tipo": "exato",
+  "en": "Invalid space for an attachment.",
+  "fr": "Espace non valide pour une pièce jointe.",
+  "es": "Espacio no válido para un adjunto."
+ },
+ {
+  "pt": "Não consegui enviar o comprovante. Confira o lançamento e tente novamente.",
+  "tipo": "exato",
+  "en": "Could not upload the receipt. Check the entry and try again.",
+  "fr": "Impossible d’envoyer le justificatif. Vérifiez l’opération et réessayez.",
+  "es": "No se pudo subir el comprobante. Revisa el movimiento e inténtalo de nuevo."
+ },
+ {
+  "pt": "Comprovante indisponível nesta conta.",
+  "tipo": "exato",
+  "en": "Receipt unavailable in this account.",
+  "fr": "Justificatif indisponible sur ce compte.",
+  "es": "El comprobante no está disponible en esta cuenta."
+ },
+ {
+  "pt": "Não consegui abrir o comprovante.",
+  "tipo": "exato",
+  "en": "Could not open the receipt.",
+  "fr": "Impossible d’ouvrir le justificatif.",
+  "es": "No se pudo abrir el comprobante."
+ },
+ {
+  "pt": "Não consegui excluir o comprovante.",
+  "tipo": "exato",
+  "en": "Could not delete the receipt.",
+  "fr": "Impossible de supprimer le justificatif.",
+  "es": "No se pudo eliminar el comprobante."
+ },
+ {
+  "pt": "V3/comprovante pendente de exclusão:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/fila de comprovantes pendente de confirmação:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Espere a gravação anterior terminar.",
+  "tipo": "exato",
+  "en": "Wait for the previous recording to finish.",
+  "fr": "Attendez la fin de l’enregistrement précédent.",
+  "es": "Espera a que termine la grabación anterior."
+ },
+ {
+  "pt": "Entre na conta para excluir comprovantes pendentes.",
+  "tipo": "exato",
+  "en": "Sign in to the account to delete pending receipts.",
+  "fr": "Connectez-vous au compte pour supprimer les justificatifs en attente.",
+  "es": "Inicia sesión en la cuenta para eliminar los comprobantes pendientes."
+ },
+ {
+  "pt": "V3/comprovantes pendentes:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/atualização remota:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Entre na conta para consultar dados de mercado.",
+  "tipo": "exato",
+  "en": "Sign in to view market data.",
+  "fr": "Connectez-vous pour consulter les données de marché.",
+  "es": "Inicia sesión para consultar los datos de mercado."
+ },
+ {
+  "pt": "Dados de mercado indisponíveis.",
+  "tipo": "exato",
+  "en": "Market data unavailable.",
+  "fr": "Données de marché indisponibles.",
+  "es": "Datos de mercado no disponibles."
+ },
+ {
+  "pt": "Sua sessão expirou. Entre novamente.",
+  "tipo": "exato",
+  "en": "Your session expired. Sign in again.",
+  "fr": "Votre session a expiré. Reconnectez-vous.",
+  "es": "Tu sesión expiró. Entra de nuevo."
+ },
+ {
+  "pt": "Consulta de mercado indisponível.",
+  "tipo": "exato",
+  "en": "Market lookup unavailable.",
+  "fr": "Consultation du marché indisponible.",
+  "es": "Consulta de mercado no disponible."
+ },
+ {
+  "pt": "Entre na conta para compartilhar um perfil.",
+  "tipo": "exato",
+  "en": "Sign in to share a profile.",
+  "fr": "Connectez-vous pour partager un profil.",
+  "es": "Inicia sesión para compartir un perfil."
+ },
+ {
+  "pt": "Compartilhamento indisponível.",
+  "tipo": "exato",
+  "en": "Sharing is unavailable.",
+  "fr": "Le partage est indisponible.",
+  "es": "El uso compartido no está disponible."
+ },
+ {
+  "pt": "Entre na sua conta para consultar a assinatura.",
+  "tipo": "exato",
+  "en": "Sign in to see the subscription.",
+  "fr": "Connectez-vous pour consulter l’abonnement.",
+  "es": "Inicia sesión para consultar la suscripción."
+ },
+ {
+  "pt": "Entre na sua conta para gerenciar a assinatura.",
+  "tipo": "exato",
+  "en": "Sign in to manage the subscription.",
+  "fr": "Connectez-vous pour gérer l’abonnement.",
+  "es": "Inicia sesión para gestionar la suscripción."
+ },
+ {
+  "pt": "Pagamento indisponível: conexão não configurada.",
+  "tipo": "exato",
+  "en": "Payment unavailable: connection not configured.",
+  "fr": "Paiement indisponible : connexion non configurée.",
+  "es": "Pago no disponible: conexión no configurada."
+ },
+ {
+  "pt": "Pagamento indisponível agora. Nada foi cobrado.",
+  "tipo": "exato",
+  "en": "Payment unavailable right now. Nothing was charged.",
+  "fr": "Paiement indisponible pour le moment. Rien n’a été débité.",
+  "es": "Pago no disponible ahora. No se cobró nada."
+ },
+ {
+  "pt": "Entre na conta para acessar o cofre.",
+  "tipo": "exato",
+  "en": "Sign in to access the vault.",
+  "fr": "Connectez-vous pour accéder au coffre.",
+  "es": "Entra en tu cuenta para acceder a la bóveda."
+ },
+ {
+  "pt": "Entre na sua conta para editar o perfil.",
+  "tipo": "exato",
+  "en": "Sign in to edit your profile.",
+  "fr": "Connectez-vous pour modifier votre profil.",
+  "es": "Entre en su cuenta para editar el perfil."
+ },
+ {
+  "pt": "Escreva seu nome.",
+  "tipo": "exato",
+  "en": "Write your name.",
+  "fr": "Écrivez votre nom.",
+  "es": "Escriba su nombre."
+ },
+ {
+  "pt": "Sessão indisponível.",
+  "tipo": "exato",
+  "en": "Session unavailable.",
+  "fr": "Session indisponible.",
+  "es": "Sesión no disponible."
+ },
+ {
+  "pt": "Sua sessão expirou. Nada foi apagado.",
+  "tipo": "exato",
+  "en": "Your session expired. Nothing was deleted.",
+  "fr": "Votre session a expiré. Rien n'a été supprimé.",
+  "es": "Su sesión expiró. Nada fue borrado."
+ },
+ {
+  "pt": "O servidor não confirmou a exclusão. Confira sua conta antes de tentar novamente.",
+  "tipo": "exato",
+  "en": "The server did not confirm the deletion. Check your account before trying again.",
+  "fr": "Le serveur n'a pas confirmé la suppression. Vérifiez votre compte avant de réessayer.",
+  "es": "El servidor no confirmó la eliminación. Compruebe su cuenta antes de intentarlo de nuevo."
+ },
+ {
+  "pt": "Entre na sua conta para usar a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to use Coco.",
+  "fr": "Connectez-vous pour utiliser Coco.",
+  "es": "Inicia sesión para usar a Coco."
+ },
+ {
+  "pt": "Entre na sua conta para configurar a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to set Coco up.",
+  "fr": "Connectez-vous pour configurer Coco.",
+  "es": "Inicia sesión para configurar a Coco."
+ },
+ {
+  "pt": "Autorize a Coco antes de configurar a memória.",
+  "tipo": "exato",
+  "en": "Authorise Coco before setting the memory up.",
+  "fr": "Autorisez Coco avant de configurer la mémoire.",
+  "es": "Autoriza a Coco antes de configurar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para consultar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to see the memory.",
+  "fr": "Connectez-vous pour consulter la mémoire.",
+  "es": "Inicia sesión para consultar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para salvar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to save the memory.",
+  "fr": "Connectez-vous pour enregistrer la mémoire.",
+  "es": "Inicia sesión para guardar la memoria."
+ },
+ {
+  "pt": "O aprendizado da Coco está desligado.",
+  "tipo": "exato",
+  "en": "Coco’s learning is switched off.",
+  "fr": "L’apprentissage de Coco est désactivé.",
+  "es": "El aprendizaje de Coco está desactivado."
+ },
+ {
+  "pt": "Entre na sua conta para apagar a memória.",
+  "tipo": "exato",
+  "en": "Sign in to delete the memory.",
+  "fr": "Connectez-vous pour effacer la mémoire.",
+  "es": "Inicia sesión para borrar la memoria."
+ },
+ {
+  "pt": "Entre na sua conta para consultar as análises.",
+  "tipo": "exato",
+  "en": "Sign in to see the analyses.",
+  "fr": "Connectez-vous pour consulter les analyses.",
+  "es": "Entre en su cuenta para consultar los análisis."
+ },
+ {
+  "pt": "Entre na sua conta para guardar a análise.",
+  "tipo": "exato",
+  "en": "Sign in to store the analysis.",
+  "fr": "Connectez-vous pour enregistrer l'analyse.",
+  "es": "Entre en su cuenta para guardar el análisis."
+ },
+ {
+  "pt": "A memória da Coco está desligada.",
+  "tipo": "exato",
+  "en": "Coco's memory is off.",
+  "fr": "La mémoire de Coco est désactivée.",
+  "es": "La memoria de Coco está apagada."
+ },
+ {
+  "pt": "Entre na sua conta para apagar a análise.",
+  "tipo": "exato",
+  "en": "Sign in to delete the analysis.",
+  "fr": "Connectez-vous pour supprimer l'analyse.",
+  "es": "Entre en su cuenta para borrar el análisis."
+ },
+ {
+  "pt": "Entre na sua conta para enviar mídia.",
+  "tipo": "exato",
+  "en": "Sign in to send media.",
+  "fr": "Connectez-vous pour envoyer un média.",
+  "es": "Inicia sesión para enviar archivos."
+ },
+ {
+  "pt": "Sessão ou conexão indisponível.",
+  "tipo": "exato",
+  "en": "Session or connection unavailable.",
+  "fr": "Session ou connexion indisponible.",
+  "es": "Sesión o conexión no disponible."
+ },
+ {
+  "pt": "Entre na sua conta para ouvir a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to listen to Coco.",
+  "fr": "Connectez-vous pour écouter Coco.",
+  "es": "Inicia sesión para escuchar a Coco."
+ },
+ {
+  "pt": "Não consegui reproduzir a resposta.",
+  "tipo": "exato",
+  "en": "I couldn’t play the answer.",
+  "fr": "Impossible de lire la réponse.",
+  "es": "No pude reproducir la respuesta."
+ },
+ {
+  "pt": "Entre na sua conta para falar com a Coco.",
+  "tipo": "exato",
+  "en": "Sign in to talk with Coco.",
+  "fr": "Connectez-vous pour parler à Coco.",
+  "es": "Inicia sesión para hablar con Coco."
+ },
+ {
+  "pt": "Voz em tempo real indisponível.",
+  "tipo": "exato",
+  "en": "Real-time voice unavailable.",
+  "fr": "Voix en temps réel indisponible.",
+  "es": "Voz en tiempo real no disponible."
+ },
+ {
+  "pt": "V3/consentimento Coco:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/aceite pendente:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "ANTES DE ENTRAR",
+  "tipo": "exato",
+  "en": "BEFORE YOU START",
+  "fr": "AVANT DE COMMENCER",
+  "es": "ANTES DE ENTRAR"
+ },
+ {
+  "pt": "Seus dados, suas regras.",
+  "tipo": "exato",
+  "en": "Your data, your rules.",
+  "fr": "Vos données, vos règles.",
+  "es": "Tus datos, tus reglas."
+ },
+ {
+  "pt": "Esta é a única autorização que o OAZE pede. Sem ela, o aplicativo não carrega seus dados financeiros.",
+  "tipo": "exato",
+  "en": "This is the only authorization OAZE asks for. Without it, the app does not load your financial data.",
+  "fr": "C’est la seule autorisation que OAZE demande. Sans elle, l’application ne charge pas vos données financières.",
+  "es": "Esta es la única autorización que OAZE pide. Sin ella, la aplicación no carga tus datos financieros."
+ },
+ {
+  "pt": "Política de privacidade",
+  "tipo": "exato",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "Termos de uso",
+  "tipo": "exato",
+  "en": "Terms of use",
+  "fr": "Conditions d’utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Li e aceito a Política de privacidade (versão 01/10/2026) e os Termos de uso, e autorizo a Coco a usar meus dados financeiros para me responder.",
+  "tipo": "exato",
+  "en": "I have read and accept the Privacy Policy (version 2026-10-01) and the Terms of use, and I authorize Coco to use my financial data to answer me.",
+  "fr": "J’ai lu et j’accepte la Politique de confidentialité (version 01/10/2026) et les Conditions d’utilisation, et j’autorise Coco à utiliser mes données financières pour me répondre.",
+  "es": "He leído y acepto la Política de privacidad (versión 01/10/2026) y los Términos de uso, y autorizo a Coco a usar mis datos financieros para responderme."
+ },
+ {
+  "pt": "Autorizar e entrar",
+  "tipo": "exato",
+  "en": "Authorize and sign in",
+  "fr": "Autoriser et entrer",
+  "es": "Autorizar y entrar"
+ },
+ {
+  "pt": "Não aceitar",
+  "tipo": "exato",
+  "en": "Decline",
+  "fr": "Refuser",
+  "es": "No aceptar"
+ },
+ {
+  "pt": "A Coco pode ser revogada depois em Configurações.",
+  "tipo": "exato",
+  "en": "You can revoke Coco later in Settings.",
+  "fr": "Vous pouvez révoquer Coco plus tard dans les Réglages.",
+  "es": "Puedes revocar a Coco después en Configuración."
+ },
+ {
+  "pt": "Não consegui registrar a autorização. Tente novamente; seus dados não foram carregados.",
+  "tipo": "exato",
+  "en": "I couldn’t record the authorization. Try again; your data was not loaded.",
+  "fr": "Je n’ai pas pu enregistrer l’autorisation. Réessayez ; vos données n’ont pas été chargées.",
+  "es": "No pude registrar la autorización. Inténtalo de nuevo; tus datos no se cargaron."
+ },
+ {
+  "pt": "PROTEÇÃO EXTRA",
+  "tipo": "exato",
+  "en": "EXTRA PROTECTION",
+  "fr": "PROTECTION SUPPLÉMENTAIRE",
+  "es": "PROTECCIÓN ADICIONAL"
+ },
+ {
+  "pt": "Crie seu PIN de seis dígitos.",
+  "tipo": "exato",
+  "en": "Create your six-digit PIN.",
+  "fr": "Créez votre code PIN à six chiffres.",
+  "es": "Crea tu PIN de seis dígitos."
+ },
+ {
+  "pt": "Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.",
+  "tipo": "exato",
+  "en": "You have confirmed your email. Now choose the PIN that unlocks your sensitive account details. Avoid dates, sequences and repeated digits. The PIN alone cannot sign you in to OAZE.",
+  "fr": "Vous avez confirmé votre e-mail. Choisissez maintenant le code PIN qui déverrouille les données sensibles de votre compte. Évitez les dates, les suites et les chiffres répétés. Le code PIN seul ne permet pas d'accéder à OAZE.",
+  "es": "Ya confirmaste tu correo. Ahora elige el PIN que desbloquea los datos sensibles de tu cuenta. Evita fechas, secuencias y números repetidos. El PIN por sí solo no permite acceder a OAZE."
+ },
+ {
+  "pt": "CONFIRME O PIN",
+  "tipo": "exato",
+  "en": "CONFIRM PIN",
+  "fr": "CONFIRMEZ LE CODE PIN",
+  "es": "CONFIRMA EL PIN"
+ },
+ {
+  "pt": "Criar PIN e continuar",
+  "tipo": "exato",
+  "en": "Create PIN and continue",
+  "fr": "Créer le code PIN et continuer",
+  "es": "Crear PIN y continuar"
+ },
+ {
+  "pt": "Os PINs não são iguais.",
+  "tipo": "exato",
+  "en": "The PINs do not match.",
+  "fr": "Les codes PIN ne correspondent pas.",
+  "es": "Los PIN no coinciden."
+ },
+ {
+  "pt": "Este perfil compartilhado é somente leitura.",
+  "tipo": "exato",
+  "en": "This shared profile is read-only.",
+  "fr": "Ce profil partagé est en lecture seule.",
+  "es": "Este perfil compartido es de solo lectura."
+ },
+ {
+  "pt": "Entre na sua conta antes de alterar dados.",
+  "tipo": "exato",
+  "en": "Sign in before changing data.",
+  "fr": "Connectez-vous avant de modifier des données.",
+  "es": "Inicia sesión antes de cambiar datos."
+ },
+ {
+  "pt": "Abra este espaço como titular para excluir comprovantes.",
+  "tipo": "exato",
+  "en": "Open this space as its owner to delete receipts.",
+  "fr": "Ouvrez cet espace en tant que titulaire pour supprimer les justificatifs.",
+  "es": "Abre este espacio como titular para eliminar comprobantes."
+ },
+ {
+  "pt": "Este comprovante só pode ser excluído pelo dono da conta.",
+  "tipo": "exato",
+  "en": "Only the account owner can delete this receipt.",
+  "fr": "Seul le titulaire du compte peut supprimer ce justificatif.",
+  "es": "Solo el titular de la cuenta puede eliminar este comprobante."
+ },
+ {
+  "pt": "Este espaço mudou em outro aparelho. Atualizei a tela; confira e tente novamente.",
+  "tipo": "exato",
+  "en": "This space changed on another device. I’ve refreshed the screen; check it and try again.",
+  "fr": "Cet espace a changé sur un autre appareil. J’ai actualisé l’écran ; vérifiez et réessayez.",
+  "es": "Este espacio cambió en otro dispositivo. Actualicé la pantalla; revísalo e inténtalo de nuevo."
+ },
+ {
+  "pt": "Volte a um perfil seu antes de criar outro.",
+  "tipo": "exato",
+  "en": "Switch to one of your own profiles before creating another.",
+  "fr": "Revenez à l’un de vos profils avant d’en créer un autre.",
+  "es": "Vuelve a uno de tus perfiles antes de crear otro."
+ },
+ {
+  "pt": "Entre na sua conta antes de criar um espaço.",
+  "tipo": "exato",
+  "en": "Sign in before creating a space.",
+  "fr": "Connectez-vous avant de créer un espace.",
+  "es": "Inicia sesión antes de crear un espacio."
+ },
+ {
+  "pt": "Perfil não encontrado.",
+  "tipo": "exato",
+  "en": "Profile not found.",
+  "fr": "Profil introuvable.",
+  "es": "Perfil no encontrado."
+ },
+ {
+  "pt": "Nome inválido.",
+  "tipo": "exato",
+  "en": "Invalid name.",
+  "fr": "Nom invalide.",
+  "es": "Nombre inválido."
+ },
+ {
+  "pt": "Não é possível excluir este perfil agora.",
+  "tipo": "exato",
+  "en": "This profile cannot be deleted right now.",
+  "fr": "Ce profil ne peut pas être supprimé maintenant.",
+  "es": "No se puede eliminar este perfil ahora."
+ },
+ {
+  "pt": "Remova os comprovantes deste espaço antes de excluí-lo.",
+  "tipo": "exato",
+  "en": "Remove the receipts from this space before deleting it.",
+  "fr": "Supprimez les justificatifs de cet espace avant de le supprimer.",
+  "es": "Elimina los comprobantes de este espacio antes de borrarlo."
+ },
+ {
+  "pt": "A conexão com o Supabase não está configurada.",
+  "tipo": "exato",
+  "en": "The Supabase connection isn’t configured.",
+  "fr": "La connexion à Supabase n’est pas configurée.",
+  "es": "La conexión con Supabase no está configurada."
+ },
+ {
+  "pt": "user_id=eq.{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/tempo real:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "V3/retomada:",
+  "tipo": "exato",
+  "ignorar": true
+ }
+]

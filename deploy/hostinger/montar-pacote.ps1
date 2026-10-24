@@ -45,7 +45,7 @@ $arquivos = @(
 # en, fr e es sao geradas por tools/gen-idiomas.js a partir das
 # paginas em portugues. Vao inteiras: cada uma tem os mesmos
 # documentos, com title, description e canonica proprias.
-$pastas   = @('assets', 'en', 'fr', 'es', 'preview-v3')
+$pastas   = @('assets', 'en', 'fr', 'es')
 
 $faltando = @()
 foreach ($f in $arquivos) {
@@ -99,7 +99,7 @@ $carimbados  = 0
 
 foreach ($pagina in (Get-ChildItem $destino -Recurse -File -Filter *.html)) {
   $texto = Get-Content $pagina.FullName -Raw
-  $novo  = [regex]::Replace($texto, '((?:src|href)=")(/(?:preview-v3|assets)/[^"?]+\.(?:js|css))(\?v=[^"]*)?(")', {
+  $novo  = [regex]::Replace($texto, '((?:src|href)=")(/assets/[^"?]+\.(?:js|css))(\?v=[^"]*)?(")', {
     param($m)
     $enderecoWeb = $m.Groups[2].Value
     if (-not $assinaturas.ContainsKey($enderecoWeb)) {

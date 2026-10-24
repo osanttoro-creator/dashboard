@@ -29,9 +29,9 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const htaccess = read('deploy/hostinger/.htaccess');
 const v3 = read('app-v3.html');
 const workflow = read('.github/workflows/deploy-hostinger.yml');
-const app = read('preview-v3/app.js');
-const backend = read('preview-v3/live-backend.js');
-const css = read('preview-v3/app.css');
+const app = read('assets/app/app.js');
+const backend = read('assets/app/live-backend.js');
+const css = read('assets/app/app.css');
 const landing = read('index.html');
 const siteAuth = read('assets/js/site-auth.js');
 

@@ -17,7 +17,7 @@ const config = ler('supabase/config.toml');
    é que ALGUÉM do lado do navegador confira o host antes de
    redirecionar — uma URL de checkout vinda do servidor ainda é uma
    URL que leva a pessoa para fora do site. */
-const precos = ler('preview-v3/app.js');
+const precos = ler('assets/app/app.js');
 
 exige(/from\('plan_prices'\)/.test(pagamento), 'oaze-pagamento não lê o preço de plan_prices');
 exige(!/corpo\.(centavos|valor|preco)\b/.test(pagamento), 'oaze-pagamento aceita valor do navegador');

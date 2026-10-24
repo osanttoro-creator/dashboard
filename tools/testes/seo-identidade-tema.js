@@ -72,8 +72,8 @@ const appV3 = ler('app-v3.html');
 if (/data-theme="light"|oaze.tema/.test(appV3)) {
   falhas.push('app-v3.html: voltou a existir escolha de tema sem a máquina que a sustentava');
 }
-if (!/color-scheme:s*dark/.test(ler('preview-v3/app.css'))) {
-  falhas.push('preview-v3/app.css: o tema único deixou de ser declarado');
+if (!/color-scheme:s*dark/.test(ler('assets/app/app.css'))) {
+  falhas.push('assets/app/app.css: o tema único deixou de ser declarado');
 }
 
 if (falhas.length) {

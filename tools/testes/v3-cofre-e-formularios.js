@@ -6,10 +6,10 @@ const path = require('node:path');
 const root = path.join(__dirname, '..', '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
-const app = read('preview-v3/app.js');
-const css = read('preview-v3/app.css');
-const calendar = read('preview-v3/calendar.css');
-const backend = read('preview-v3/live-backend.js');
+const app = read('assets/app/app.js');
+const css = read('assets/app/app.css');
+const calendar = read('assets/app/calendar.css');
+const backend = read('assets/app/live-backend.js');
 const auth = read('assets/js/site-auth.js');
 const register = read('cadastro.html');
 const login = read('entrar.html');

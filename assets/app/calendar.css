@@ -23,12 +23,21 @@
 .v3-cal-marks i,.v3-cal-event-kind{display:block;width:6px;height:6px;border-radius:50%;background:var(--blue)}
 .v3-cal-marks i.in,.v3-cal-event-kind.in{background:var(--teal)}
 .v3-cal-marks i.due,.v3-cal-event-kind.due{background:var(--milk)}
+.v3-cal-marks i.tr,.v3-cal-event-kind.tr{background:#e9c778}
+.v3-cal-marks i.out,.v3-cal-event-kind.out{background:#f08c8d}
 .v3-cal-detail{display:grid;gap:13px}
 .v3-cal-detail h2{margin:0;text-transform:lowercase}
 .v3-cal-detail>.v3-secondary{margin-top:9px}
 .v3-cal-event{display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 0;border-top:1px solid rgba(240,229,207,.1)}
 .v3-cal-event small{display:block;margin-top:3px;color:var(--muted)}
 .v3-cal-event .v3-mono{font-size:12px}
+.v3-cal-event-title{padding:0;border:0;background:transparent;color:var(--milk);font:600 13px var(--body);text-align:left;cursor:pointer}
+.v3-cal-event-title:hover{text-decoration:underline;text-underline-offset:3px}
+.v3-cal-event-title:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:3px}
+.v3-cal-amount{font-variant-numeric:tabular-nums;white-space:nowrap}
+.v3-cal-amount.is-in{color:var(--teal)}
+.v3-cal-amount.is-out,.v3-cal-amount.is-due{color:#f08c8d}
+.v3-cal-amount.is-tr{color:#e9c778}
 @media(max-width:800px){.v3-cal-layout{grid-template-columns:1fr}.v3-cal-day,.v3-cal-empty{min-height:57px}.v3-cal-summary>span{padding:12px}.v3-cal-summary strong{font-size:13px}}
 @media(max-width:420px){.v3-cal-summary{gap:5px}.v3-cal-summary>span{padding:10px 8px}.v3-cal-day,.v3-cal-empty{min-height:48px;padding:7px}.v3-cal-weekdays,.v3-cal-days{gap:2px}.v3-cal-event{grid-template-columns:8px minmax(0,1fr)}.v3-cal-event .v3-mono{grid-column:2}}
 @media(max-width:420px){.v3-cal-debt{font-size:9px;letter-spacing:-.08em}}
@@ -58,10 +67,13 @@
 .v3-cal-mes-main>strong{font-size:12px;white-space:nowrap}
 .v3-cal-mes-numeros{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:7px;color:var(--muted);font-size:11px}
 .v3-cal-mes-numeros strong{color:var(--milk);font-variant-numeric:tabular-nums}
-.v3-cal-mes-edicoes{display:grid;gap:3px}
-.v3-cal-mes-edicoes button{display:flex;justify-content:space-between;gap:8px;width:100%;padding:5px 0;border:0;background:transparent;color:var(--milk);text-align:left;cursor:pointer;font-size:11px}
-.v3-cal-mes-edicoes button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.v3-cal-mes-edicoes small{color:var(--teal);white-space:nowrap}
+.v3-cal-mes-edicoes{display:grid;max-height:238px;overflow-y:auto;scrollbar-color:rgba(240,229,207,.32) transparent;overscroll-behavior:contain;border-top:1px solid var(--line)}
+.v3-cal-mes-edicoes button{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;min-height:36px;padding:6px 0;border:0;border-bottom:1px solid rgba(240,229,207,.07);background:transparent;color:var(--milk);text-align:left;cursor:pointer;font-size:11px}
+.v3-cal-mes-edicoes button:hover .v3-cal-mes-entry-name>span{text-decoration:underline;text-underline-offset:2px}
+.v3-cal-mes-entry-name{display:flex;align-items:center;gap:8px;min-width:0}
+.v3-cal-mes-entry-name time{flex:none;color:var(--muted);font:500 10px var(--mono)}
+.v3-cal-mes-entry-name>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-cal-mes-edicoes .v3-cal-amount{font-size:10px}
 
 /* ---- semana ---- */
 .v3-cal-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;margin-top:14px;overflow-x:auto}
@@ -76,3 +88,28 @@
 .v3-cal-dia .v3-cal-event .v3-mono,.v3-cal-dia .v3-cal-event .v3-link{grid-column:2}
 @media(max-width:900px){.v3-cal-dias{grid-template-columns:repeat(7,minmax(165px,1fr));padding-bottom:8px;scroll-snap-type:x proximity}.v3-cal-dia{scroll-snap-align:start}}
 @media(max-width:540px){.v3-cal-meses{grid-template-columns:1fr}}
+
+/* Próximos eventos: a caixa é um controle real só para despesas em conta.
+   Compras no cartão e faturas não são "pagas" pela confirmação da compra. */
+.v3-calendar .v3-agenda-extra .v3-timeline{gap:0}
+.v3-calendar .v3-agenda-extra .v3-timeline>.v3-agenda-entry{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:10px;min-width:0;padding:11px 0;border-top:1px solid var(--line)}
+.v3-calendar .v3-agenda-extra .v3-timeline>.v3-agenda-entry:before{display:none}
+.v3-agenda-check,.v3-agenda-marker{grid-column:1;display:grid;place-items:center;width:36px;height:36px;border-radius:11px}
+.v3-calendar .v3-agenda-entry>.v3-agenda-marker{grid-column:1}
+.v3-agenda-check{border:1.5px solid var(--teal);background:rgba(95,169,155,.08);color:var(--night);cursor:pointer}
+.v3-agenda-check span{display:grid;place-items:center;width:18px;height:18px;border:1.5px solid var(--teal);border-radius:5px;color:var(--night);font:700 14px var(--body)}
+.v3-agenda-check.is-paid span{background:var(--teal)}
+.v3-agenda-check:hover{background:rgba(95,169,155,.2)}
+.v3-agenda-check:focus-visible,.v3-agenda-entry-copy button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.v3-agenda-check:disabled{opacity:.5;cursor:wait}
+.v3-agenda-marker{position:relative;background:rgba(240,229,207,.05)}
+.v3-agenda-marker:after{content:'';width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.v3-agenda-marker.is-in:after{background:var(--teal)}
+.v3-agenda-marker.is-out:after,.v3-agenda-marker.is-due:after{background:#f08c8d}
+.v3-agenda-marker.is-tr:after{background:#e9c778}
+.v3-calendar .v3-agenda-entry-copy{grid-column:2;display:grid;gap:3px;min-width:0}
+.v3-agenda-entry-copy small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3-agenda-entry-copy button{justify-self:start;max-width:100%;padding:0;border:0;background:transparent;color:var(--milk);font:600 14px var(--body);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.v3-agenda-entry-copy button:hover{text-decoration:underline;text-underline-offset:3px}
+.v3-calendar .v3-agenda-entry>.v3-cal-amount{grid-column:3;justify-self:end;margin:0;font-size:12px}
+@media(max-width:540px){.v3-calendar .v3-agenda-extra .v3-timeline>.v3-agenda-entry{grid-template-columns:36px minmax(0,1fr);gap:6px 10px}.v3-calendar .v3-agenda-entry>.v3-cal-amount{grid-column:2;justify-self:start}}

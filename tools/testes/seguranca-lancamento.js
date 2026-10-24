@@ -32,9 +32,9 @@ exige(/RewriteRule \^ https:\/\//.test(ht), '.htaccess não força HTTPS');
    campo de arquivo e passou a exigir a presença das duas travas
    que tornam esse campo defensável. */
 exige(!fs.existsSync(caminho('assets/js/importer.js')), 'o importador automático voltou a existir');
-const importador = ler('preview-v3/coco-import.js');
+const importador = ler('assets/app/coco-import.js');
 exige(/FileReader|readAsText|arrayBuffer/.test(importador), 'a leitura do extrato saiu do aparelho');
-exige(/data-action="review-import-row"/.test(ler('preview-v3/app.js')), 'o extrato deixou de passar por revisão');
+exige(/data-action="review-import-row"/.test(ler('assets/app/app.js')), 'o extrato deixou de passar por revisão');
 
 const assistant = ler('supabase/functions/oaze-assistant/index.ts');
 exige(/reservarRateLimit/.test(assistant), 'assistente sem limite por minuto/dia');
