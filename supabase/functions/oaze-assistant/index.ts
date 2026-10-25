@@ -713,6 +713,13 @@ Deno.serve(async (req: Request) => {
   const hojeBrasil = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit'
   }).format(new Date());
+  const pedido = v.dados.pergunta.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const querCriar = /^(?:por favor[,\s]*)?(?:registra|registre|registrar|lanca|lance|lancar|anota|anote|anotar|cria|crie|criar|adicione|adicionar)\b|^quero\s+(?:registrar|lancar|anotar|criar|adicionar)\b/.test(pedido);
+  const temValor = /\br\$\s*\d|\b\d+(?:[,.]\d+)?\s*(?:reais|real)\b|\b(?:de|valor|alvo)\s+\d+(?:[,.]\d+)?\b/.test(pedido);
+  const contextoFinanceiro = /\br\$|\b(?:reais|real|meta|objetivo|receita|despesa|gasto|entrada|saida|rendimento|pagamento|salario)\b/.test(pedido);
+  const ferramentaPedida = querCriar && temValor && contextoFinanceiro
+    ? /\b(?:meta|objetivo)\b/.test(pedido) ? 'propor_meta' : 'propor_lancamento'
+    : null;
   try {
     resposta = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -782,7 +789,7 @@ Deno.serve(async (req: Request) => {
             required: ['kind', 'label', 'value'], additionalProperties: false
           }
         }])],
-        tool_choice: 'auto',
+        tool_choice: ferramentaPedida ? { type: 'function', name: ferramentaPedida } : 'auto',
         parallel_tool_calls: false,
         max_output_tokens: maxTokens,
         /* O contexto é financeiro e a conversa é stateless. A
