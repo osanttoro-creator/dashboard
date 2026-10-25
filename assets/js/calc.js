@@ -1026,10 +1026,31 @@
     }
     if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0)
       return U.round2(+inv.amount || 0);
-    const valuedAt = inv.maturityDate && at > inv.maturityDate ? inv.maturityDate : at;
+    // O valor corrente não pode antecipar juros de dias que ainda não passaram.
+    const end = at > U.todayISO() ? U.todayISO() : at;
+    const valuedAt = inv.maturityDate && end > inv.maturityDate ? inv.maturityDate : end;
     const years = Math.max(0, U.yearsBetween(inv.date, valuedAt));
     const rate = (+inv.rate || 0) / 100;
     return U.round2((+inv.amount || 0) * Math.pow(1 + rate, years));
+  };
+
+  /** Variação bruta do último dia com taxa disponível; null significa sem base verificável. */
+  Calc.investmentDailyChange = function (inv, atISO) {
+    const at = atISO && atISO < U.todayISO() ? atISO : U.todayISO();
+    if (inv.currentValue != null || inv.date >= at || inv.type === 'Porquinho') return null;
+    if (inv.type === 'CDB' && inv.indexer === 'cdi') {
+      const observation = market.cdi.filter((row) => row.date > inv.date && row.date <= at && (!inv.maturityDate || row.date <= inv.maturityDate)).at(-1);
+      if (!observation || inv.date < market.cdiStart || (+inv.rate || 0) <= 0) return null;
+      const previous = new Date(observation.date + 'T00:00:00Z');
+      previous.setUTCDate(previous.getUTCDate() - 1);
+      const base = Calc.investmentValueAt(inv, previous.toISOString().slice(0, 10));
+      return { value: U.round2(base * (+observation.value / 100) * (+inv.rate / 100)), date: observation.date };
+    }
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) || !Number.isFinite(+inv.rate) || +inv.rate === 0) return null;
+    const previous = new Date(at + 'T00:00:00Z');
+    previous.setUTCDate(previous.getUTCDate() - 1);
+    const before = Calc.investmentValueAt(inv, previous.toISOString().slice(0, 10));
+    return { value: U.round2(Calc.investmentValueAt(inv, at) - before), date: at };
   };
 
   Calc.investedTotal = function (atISO, profile) {

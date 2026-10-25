@@ -112,6 +112,13 @@
   "es": "FIBRAs"
  },
  {
+  "pt": "Porquinho",
+  "tipo": "exato",
+  "en": "Savings pot",
+  "fr": "Cagnotte",
+  "es": "Alcancía"
+ },
+ {
   "pt": "Sobra no fim do mês",
   "tipo": "exato",
   "en": "Left over at month's end",

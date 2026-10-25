@@ -1068,7 +1068,8 @@
   function renderInvestments() {
     if (state.investTab === 'planning') return renderPlanning();
     if (state.investTab === 'goals') return renderGoals();
-    const at = U.monthEnd(state.ym), list = (profile().investments || []).filter((x) => x.date <= at).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const monthEnd = U.monthEnd(state.ym), at = monthEnd > U.todayISO() ? U.todayISO() : monthEnd;
+    const list = (profile().investments || []).filter((x) => x.date <= at).slice().sort((a, b) => b.date.localeCompare(a.date));
     const valueAt = (x) => demo ? Number(x.currentValue == null ? x.amount : x.currentValue) || 0 : Calc.investmentValueAt(x, at, profile());
     const total = list.reduce((sum, x) => sum + valueAt(x), 0);
     const contributed = list.reduce((sum, x) => sum + Number(x.amount || 0), 0);
@@ -1128,6 +1129,10 @@
         : fonte.origem === 'aporte' ? (papel ? 'Sem cotação atual; exibindo apenas o aporte' : 'CDI não sincronizado; exibindo apenas o aporte')
         : '';
       if (note) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small>${esc(note)}</small>`);
+      if (!demo && state.ym === U.todayYM()) {
+        const daily = Calc.investmentDailyChange(item, U.todayISO());
+        if (daily) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small class="${daily.value < 0 ? 'v3-negative' : 'v3-positive'}">${daily.value < 0 ? '−' : '+'} ${money(Math.abs(daily.value))} no último dia com taxa · ${esc(shortDate(daily.date))} · bruto</small>`);
+      }
     });
     const list = (profile().investments || []).filter((item) => item.date <= U.monthEnd(state.ym));
     if (!list.length) return;
@@ -1971,7 +1976,7 @@
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><div class="v3-coco-empty-copy"><h2>O que você quer entender sobre seu dinheiro?</h2><p>Escolha uma pergunta ou escreva a sua. A Coco separa o que já aconteceu do que você apenas previu.</p><div class="v3-coco-examples">${['Quanto entrou e saiu neste mês?','Quais despesas previstas vencem primeiro?','Qual categoria mais pesou neste mês?'].map((q)=>`<button type="button" data-coco-example="${esc(q)}">${esc(q)}</button>`).join('')}</div></div></div>`;
-    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/${state.cocoSpeaking===i?'corpo-explicando':'corpo-neutra_acolhedora'}.webp" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
+    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/${state.cocoSpeaking===i?'corpo-explicando':'corpo-neutra_acolhedora'}.webp" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function cocoTools() {
     const tools=[['debts','wallet','Dívidas','organizar a quitação'],['planning','calendar','Planejar','próximos meses'],['goals','goals','Metas','chegar com calma'],['analysis','reports','Análises','entender os números']];
@@ -2009,7 +2014,7 @@
     if(state.page==='investments'&&state.investTab==='goals')profile().goals.forEach((goal,index)=>{const rate=Number(goal.annualRate);if(!Number.isFinite(rate)||rate<=0)return;const months=goal.deadline?Math.max(0,(new Date(`${goal.deadline}T12:00:00`)-new Date(`${U.todayISO()}T12:00:00`))/(86400000*30.44)):12;const estimate=U.round2(Number(goal.saved||0)*Math.pow(1+rate/100,months/12));document.querySelectorAll('.v3-goal')[index]?.insertAdjacentHTML('beforeend',`<p class="v3-goal-yield">Com ${esc(String(rate).replace('.',','))}% ao ano: cerca de <strong>${money(estimate)}</strong> ${goal.deadline?'no prazo da meta':'em 12 meses'}. Projeção, não saldo.</p>`);});
     if (state.page === 'wallet') enrichInvoiceDetail();
     if (state.page === 'investments') enrichInvestmentCharts();
-    if (state.page === 'investments' && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
+    if (['investments','home'].includes(state.page) && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
@@ -2474,7 +2479,7 @@
     segment.before(head);
     head.append(segment);
     head.insertAdjacentHTML('beforeend','<button type="button" class="v3-calc-launch" data-action="calculator" aria-label="Abrir calculadora" aria-expanded="false" title="Calculadora"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M7.5 7h9M8 11h1m3 0h1m3 0h1M8 15h1m3 0h1m3 0h1M8 19h1m3 0h5"/></svg></button>');
-    head.insertAdjacentHTML('afterend','<section class="v3-calculator" role="dialog" aria-label="Calculadora" hidden><div class="v3-calc-head"><h2>calculadora</h2><button type="button" data-action="calc-close" aria-label="Fechar calculadora">×</button></div><label>CONTA<input inputmode="decimal" autocomplete="off" placeholder="0,00" maxlength="80"></label><strong class="v3-calc-display" data-calc-result>0,00</strong><div class="v3-calc-keys">'+['7','8','9','÷','4','5','6','×','1','2','3','−','C','0',',','+','⌫','='].map((key)=>`<button type="button" data-action="${key==='='?'calc-run':'calc-key'}" data-calc-key="${key}">${key}</button>`).join('')+'</div><div class="v3-calc-controls"><button type="button" data-action="calc-copy" disabled>Copiar resultado</button><button type="button" data-action="calc-use" disabled>Usar valor</button></div><div class="v3-calc-history"><small>HISTÓRICO</small><div data-calc-history></div></div></section>');
+    head.insertAdjacentHTML('afterend','<section class="v3-calculator" role="dialog" aria-label="Calculadora" hidden><div class="v3-calc-head"><h2>calculadora</h2><button type="button" data-action="calc-close" aria-label="Fechar calculadora">×</button></div><label>CONTA<input inputmode="none" readonly autocomplete="off" placeholder="0,00" maxlength="80" aria-label="Expressão da calculadora; use os botões abaixo"></label><strong class="v3-calc-display" data-calc-result>0,00</strong><div class="v3-calc-keys">'+['7','8','9','÷','4','5','6','×','1','2','3','−','C','0',',','+','⌫','='].map((key)=>`<button type="button" data-action="${key==='='?'calc-run':'calc-key'}" data-calc-key="${key}">${key}</button>`).join('')+'</div><div class="v3-calc-controls"><button type="button" data-action="calc-copy" disabled>Copiar resultado</button><button type="button" data-action="calc-use" disabled>Usar valor</button></div><div class="v3-calc-history"><small>HISTÓRICO</small><div data-calc-history></div></div></section>');
   }
   function calculateExpression(value) {
     const source=String(value||'').replace(/\s/g,'').replace(/,/g,'.').replace(/[×x]/gi,'*').replace(/÷/g,'/').replace(/−/g,'-');
@@ -3030,7 +3035,7 @@
     renderValuation();
     if (form.elements.name.value.trim()) { loadMarket(); }
   }
-  function goalForm(id) {
+  function goalForm(id, draft) {
     const goal = id ? profile().goals.find((g) => g.id === id) : null;
     const fmt = (n) => n == null ? '' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     openSheet(`${sheetTop(goal ? 'editar meta' : 'nova meta', 'planejamento financeiro')}<form class="v3-form" id="v3-form-goal"><input type="hidden" name="id" value="${esc(goal?.id || '')}"><label>NOME DA META<input name="name" maxlength="80" value="${esc(goal?.name || '')}" required></label><div class="v3-form-row"><label>VALOR ALVO (R$)<input name="target" data-money="true" inputmode="decimal" value="${esc(fmt(goal?.target))}" required></label><label>VALOR JÁ GUARDADO (R$)<input name="saved" data-money="true" inputmode="decimal" value="${esc(fmt(goal?.saved || 0))}" required></label></div><label>PRAZO (OPCIONAL)<input name="deadline" type="date" value="${esc(goal?.deadline || '')}"></label><p class="v3-muted">O valor guardado aqui acompanha sua meta. Não movimenta uma conta automaticamente.</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar meta'}</button>${goal ? `<button type="button" class="v3-secondary" data-action="delete-goal" data-goal="${esc(goal.id)}">Excluir meta</button>` : ''}</form>`, 'Meta financeira');
@@ -3041,6 +3046,13 @@
       savedInput.removeAttribute('data-money');
       savedInput.closest('label').insertAdjacentHTML('afterend', '<small class="v3-muted">Para alterar o valor guardado, use “Guardar valor”.</small>');
       document.querySelector('#v3-form-goal [type="submit"]').insertAdjacentHTML('afterend', `<button type="button" class="v3-secondary" data-action="deposit-goal" data-goal="${esc(goal.id)}">Guardar valor</button>`);
+    }
+    if (draft && !goal) {
+      const form = document.getElementById('v3-form-goal');
+      form.elements.name.value = draft.nome;
+      form.elements.target.value = Number(draft.valor_alvo).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (draft.prazo) form.elements.deadline.value = draft.prazo;
+      form.querySelector('button[type="submit"]')?.insertAdjacentHTML('beforebegin', '<p class="v3-muted">Proposta da Coco: confira nome, valor e prazo antes de salvar.</p>');
     }
   }
   function goalDepositForm(id) {
@@ -3513,6 +3525,13 @@
     const categories=categoryText?profile().categories.filter((item)=>item.kind===raw.tipo&&U.norm(item.name)===categoryText):[];
     return {tipo:raw.tipo,descricao,valor:U.round2(valor),data,confirmado:raw.confirmado===true,source:matches.length===1?`${raw.forma_pagamento}:${matches[0].id}`:'',sourceNeedsReview:!!sourceText&&matches.length!==1,categoryId:categories.length===1?categories[0].id:''};
   }
+  function goalProposalForReview(raw) {
+    const nome = String(raw?.nome || '').trim().slice(0,80);
+    const valor_alvo = Number(raw?.valor_alvo);
+    const prazo = raw?.prazo == null ? '' : String(raw.prazo);
+    return nome && Number.isFinite(valor_alvo) && valor_alvo > 0 && valor_alvo <= 1e12 && (!prazo || U.isValidISO(prazo))
+      ? { nome, valor_alvo: U.round2(valor_alvo), prazo } : null;
+  }
   function preciseMonthlyAnswer(question) {
     const result=AI.consultaMesPassado(question);
     if (!result) return '';
@@ -3557,9 +3576,10 @@
       const r=await AI.chamarFuncao(body);
       if (r.erro) throw new Error(r.mensagem || 'A Coco está indisponível agora.');
       const proposal=proposalForReview(r.acao_proposta);
+      const goalProposal=goalProposalForReview(r.meta_proposta);
       const memory=r.memoria_proposta && ['categoria','conta','recorrencia','preferencia','meta','outro'].includes(r.memoria_proposta.kind)
         ? {kind:r.memoria_proposta.kind,label:String(r.memoria_proposta.label||'').slice(0,100),value:String(r.memoria_proposta.value||'').slice(0,240)} : null;
-      state.chat.push({who:'coco',text:r.texto || (proposal?'Preparei um lançamento para você revisar.':memory?'Posso guardar esta preferência, se você confirmar.':'Não consegui responder agora.'),proposal,memory});
+      state.chat.push({who:'coco',text:r.texto || (proposal?'Preparei um lançamento para você revisar.':goalProposal?'Preparei uma meta para você revisar.':memory?'Posso guardar esta preferência, se você confirmar.':'Não consegui responder agora.'),proposal,goalProposal,memory});
       answered=true;
     } catch (e) { console.error('V3/Coco:',e); state.chat.push({who:'coco',text:e.message || 'A conversa está indisponível agora. Tente de novo.'}); }
     state.cocoAsking=false;render();
@@ -3621,9 +3641,10 @@
       const result=await AI.chamarFuncao(body);
       if(result.erro)return {erro:result.mensagem||'Consulta indisponível.'};
       const proposal=proposalForReview(result.acao_proposta);
-      if(proposal){state.chat.push({who:'coco',text:'Preparei uma proposta para você revisar.',proposal});render();}
+      const goalProposal=goalProposalForReview(result.meta_proposta);
+      if(proposal||goalProposal){state.chat.push({who:'coco',text:'Preparei uma proposta para você revisar.',proposal,goalProposal});render();}
       return {resposta:String(result.texto||'Não encontrei uma resposta.').slice(0,1200),
-        proposta:proposal?'Exibida na tela. Precisa de confirmação humana.':undefined};
+        proposta:proposal||goalProposal?'Exibida na tela. Precisa de confirmação humana.':undefined};
     } catch {return {erro:'Não consegui consultar os dados agora.'};}
   }
   async function startVoice(mode) {
@@ -3909,9 +3930,9 @@
     if (target.dataset.recorrencia) { decidirRecorrencia(target.dataset.recorrencia, target.dataset.recorrenciaAcao); return; }
     if (target.dataset.periodStep) { state.ym=U.addMonths(state.ym, Number(target.dataset.periodStep)); render(); return; }
     const action=target.dataset.action;
-    if(action==='calculator') {const panel=target.closest('.v3-compose-head')?.nextElementSibling;if(panel?.classList.contains('v3-calculator')){panel.hidden=!panel.hidden;target.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden){updateCalculator(panel);panel.querySelector('input')?.focus();}}return;}
+    if(action==='calculator') {const panel=target.closest('.v3-compose-head')?.nextElementSibling;if(panel?.classList.contains('v3-calculator')){panel.hidden=!panel.hidden;target.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden){updateCalculator(panel);panel.querySelector('[data-calc-key="7"]')?.focus();}}return;}
     if(action==='calc-close') {const panel=target.closest('.v3-calculator');if(panel){panel.hidden=true;panel.previousElementSibling?.querySelector('.v3-calc-launch')?.setAttribute('aria-expanded','false');panel.previousElementSibling?.querySelector('.v3-calc-launch')?.focus();}return;}
-    if(action==='calc-key') {const panel=target.closest('.v3-calculator'),input=panel?.querySelector('input'),key=target.dataset.calcKey;if(!input)return;if(key==='C')input.value='';else if(key==='⌫')input.value=input.value.slice(0,-1);else input.value+=key;input.focus();return;}
+    if(action==='calc-key') {const panel=target.closest('.v3-calculator'),input=panel?.querySelector('input'),key=target.dataset.calcKey;if(!input)return;if(key==='C')input.value='';else if(key==='⌫')input.value=input.value.slice(0,-1);else input.value+=key;return;}
     if(action==='calc-run') {const panel=target.closest('.v3-calculator'),expression=panel?.querySelector('input')?.value||'',result=calculateExpression(expression);if(result==null){toast('Use números e +, −, × ou ÷.');return;}const value=result.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});panel.dataset.result=value;panel.querySelector('[data-calc-result]').textContent=value;panel.querySelector('[data-action="calc-copy"]').disabled=false;panel.querySelector('[data-action="calc-use"]').disabled=result<0;calculatorHistory=[{expression,value},...calculatorHistory].slice(0,8);updateCalculator(panel);return;}
     if(action==='calc-history') {const panel=target.closest('.v3-calculator');panel.querySelector('input').value=target.dataset.calcValue;return;}
     if(action==='calc-copy') {const value=target.closest('.v3-calculator')?.dataset.result;if(value)navigator.clipboard.writeText(value).then(()=>toast('Valor copiado.')).catch(()=>toast('Não consegui copiar neste navegador.'));return;}
@@ -4005,6 +4026,12 @@
       const proposal=state.chat[Number(target.dataset.proposalIndex)]?.proposal;
       if (!proposal) { toast('Esta proposta não está mais disponível.'); return; }
       composer(proposal.tipo==='income'?'Receita':'Despesa',proposal.data,null,proposal);
+      return;
+    }
+    if (action==='review-goal-proposal') {
+      const draft=state.chat[Number(target.dataset.proposalIndex)]?.goalProposal;
+      if (!draft) { toast('Esta proposta não está mais disponível.'); return; }
+      goalForm(null,draft);
       return;
     }
     if (action==='remember-proposal') {

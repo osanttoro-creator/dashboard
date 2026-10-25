@@ -2898,6 +2898,13 @@
   "ignorar": true
  },
  {
+  "pt": "{0} {1} no último dia com taxa · {2} · bruto",
+  "tipo": "padrao",
+  "en": "{0} {1} on the last day with a rate · {2} · gross",
+  "fr": "{0} {1} au dernier jour avec un taux · {2} · brut",
+  "es": "{0} {1} en el último día con tasa · {2} · bruto"
+ },
+ {
   "pt": "{0}: aportado {1}, valor {2}",
   "tipo": "padrao",
   "en": "{0}: contributed {1}, value {2}",
@@ -5000,6 +5007,20 @@
   "es": "Revisar antes de guardar"
  },
  {
+  "pt": "META PARA REVISAR",
+  "tipo": "exato",
+  "en": "GOAL TO REVIEW",
+  "fr": "OBJECTIF À VÉRIFIER",
+  "es": "META PARA REVISAR"
+ },
+ {
+  "pt": "Revisar meta",
+  "tipo": "exato",
+  "en": "Review goal",
+  "fr": "Vérifier l'objectif",
+  "es": "Revisar meta"
+ },
+ {
   "pt": "MEMÓRIA PARA APROVAR",
   "tipo": "exato",
   "en": "MEMORY TO APPROVE",
@@ -6781,6 +6802,13 @@
   "es": "Cerrar calculadora"
  },
  {
+  "pt": "Expressão da calculadora; use os botões abaixo",
+  "tipo": "exato",
+  "en": "Calculator expression; use the buttons below",
+  "fr": "Expression de la calculatrice ; utilisez les boutons ci-dessous",
+  "es": "Expresión de la calculadora; usa los botones de abajo"
+ },
+ {
   "pt": "Copiar resultado",
   "tipo": "exato",
   "en": "Copy result",
@@ -7919,6 +7947,13 @@
   "en": "Save amount",
   "fr": "Enregistrer le montant",
   "es": "Guardar importe"
+ },
+ {
+  "pt": "Proposta da Coco: confira nome, valor e prazo antes de salvar.",
+  "tipo": "exato",
+  "en": "Coco's proposal: check the name, amount and deadline before saving.",
+  "fr": "Proposition de Coco : vérifiez le nom, le montant et l'échéance avant d'enregistrer.",
+  "es": "Propuesta de Coco: revisa el nombre, el importe y el plazo antes de guardar."
  },
  {
   "pt": "Esta meta não existe mais.",
@@ -9284,6 +9319,13 @@
   "en": "I’ve prepared an entry for you to review.",
   "fr": "J’ai préparé une écriture à vérifier.",
   "es": "He preparado un movimiento para que lo revises."
+ },
+ {
+  "pt": "Preparei uma meta para você revisar.",
+  "tipo": "exato",
+  "en": "I prepared a goal for you to review.",
+  "fr": "J'ai préparé un objectif à vérifier.",
+  "es": "Preparé una meta para que la revises."
  },
  {
   "pt": "Posso guardar esta preferência, se você confirmar.",

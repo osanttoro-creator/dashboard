@@ -56,7 +56,9 @@ const server = http.createServer((req, res) => {
       await page.locator('[data-compose-kind="Aporte"]').click();
       assert.equal(await page.locator('#v3-form-investment [name="amount"]').inputValue(), '123,45');
       await page.locator('[data-action="calculator"]').click();
-      await page.locator('.v3-calculator input').fill('120+35,50');
+      assert.equal(await page.locator('.v3-calculator input').getAttribute('inputmode'), 'none');
+      assert.equal(await page.locator('.v3-calculator input').getAttribute('readonly'), '');
+      for (const key of ['1','2','0','+','3','5',',','5','0']) await page.locator(`[data-calc-key="${key}"]`).click();
       await page.locator('[data-action="calc-run"]').click();
       assert.equal(await page.locator('[data-calc-result]').textContent(), '155,50');
       await page.goto(`http://127.0.0.1:${server.address().port}/tools/fixtures/app-demo.html?demo=1#investments/planning`);
