@@ -18,6 +18,14 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden;background:#0D182
 .v3-coco-stream{flex:1;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain;padding:20px 10px 24px;scrollbar-width:thin;scrollbar-color:#355565 transparent}
 .v3-coco-empty{height:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:20px}
 .v3-coco-empty img{width:clamp(110px,20vh,190px);height:clamp(110px,20vh,190px);object-fit:contain}.v3-coco-empty h2,.v3-coco-empty p{max-width:440px}
+.v3-coco-empty{gap:12px}
+.v3-coco-empty h2{margin:0;font:500 clamp(20px,3vw,27px)/1.2 var(--display)}
+.v3-coco-empty p{margin:0;color:var(--muted);line-height:1.45}
+.v3-coco-empty-copy{display:flex;flex-direction:column;align-items:center;gap:13px;max-width:min(640px,calc(100% - 24px));padding:25px 30px;border:1px solid rgba(240,229,207,.21);border-radius:26px;background:linear-gradient(150deg,rgba(13,24,33,.88),rgba(13,24,33,.75));backdrop-filter:blur(22px);box-shadow:0 22px 55px rgba(0,0,0,.19)}
+.v3-coco-empty-copy p{color:#c3d3d4}
+.v3-coco-examples{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;max-width:590px;margin-top:7px}
+.v3-coco-examples button{max-width:100%;min-height:39px;padding:8px 12px;border:1px solid rgba(95,169,155,.42);border-radius:13px;background:rgba(53,85,101,.58);color:var(--milk);font:500 12px var(--body);cursor:pointer}
+.v3-coco-examples button:hover,.v3-coco-examples button:focus-visible{border-color:var(--teal);background:rgba(95,169,155,.18)}
 .v3-coco-message{position:relative;max-width:82%;margin:0 0 22px;padding:10px 12px 10px 54px;background:transparent;border:0;border-radius:0}
 .v3-coco-message.is-user{margin-left:auto;max-width:72%;padding:13px 18px;background:rgba(53,85,101,.45);border-radius:22px 22px 6px 22px}
 .v3-coco-message-avatar{position:absolute;left:0;top:6px;width:40px;height:40px;object-fit:contain}
@@ -46,4 +54,14 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden;background:#0D182
 @keyframes coco-breathe{50%{transform:translateY(-5px)}}@keyframes coco-talk{50%{transform:translateY(-5px) rotate(-2deg)}}@keyframes coco-echo{0%{opacity:.18;transform:scale(.9)}100%{opacity:0;transform:scale(1.32)}}
 @media(max-width:600px){.v3-coco-page{padding:12px 14px max(12px,env(safe-area-inset-bottom));gap:10px}.v3-coco-header{gap:10px}.v3-coco-brand img{width:54px}.v3-coco-title h1{font-size:19px}.v3-coco-switch{padding:3px;gap:0}.v3-coco-switch button{padding:7px 10px;font-size:12px}.v3-coco-home{width:38px;min-height:44px}.v3-coco-tool{min-height:53px;padding:8px;gap:6px;border-radius:13px}.v3-coco-tool strong{font-size:11px}.v3-coco-tool small{display:none}.v3-coco-tool svg{width:16px;height:16px}.v3-coco-tools{gap:5px;margin-bottom:9px}.v3-coco-stream{padding:12px 0}.v3-coco-message{max-width:96%;padding-left:43px}.v3-coco-message.user{max-width:88%}.v3-coco-message-avatar{width:33px;height:33px}.v3-coco-conversation{gap:8px}.v3-coco-voice-stage{gap:12px}.v3-voice-caption{font-size:13px}.v3-voice-actions{gap:12px}}
 @media(max-height:660px){.v3-coco-page{gap:8px;padding-top:8px}.v3-coco-actor{width:120px;height:120px}.v3-coco-voice-stage{gap:7px}.v3-voice-caption{-webkit-line-clamp:2}.v3-coco-empty img{width:90px;height:90px}.v3-coco-tool{min-height:48px}.v3-coco-tool small{display:none}}
+@media(max-width:620px){.v3-coco-empty-copy{padding:20px 17px}.v3-coco-examples{display:grid;width:100%}.v3-coco-examples button{width:100%}}
+@media(prefers-reduced-transparency:reduce){.v3-coco-empty-copy{background:#10232e;backdrop-filter:none}}
 @media(prefers-reduced-motion:reduce){.v3-coco-page *, .v3-coco-page *:before,.v3-coco-page *:after{animation:none!important;transition:none!important}}
+
+.v3-coco-insight{display:grid;gap:9px;padding:20px;border:1px solid rgba(95,169,155,.42);border-radius:22px;background:linear-gradient(120deg,rgba(95,169,155,.15),rgba(13,24,33,.58))}
+.v3-coco-insight strong{font:500 clamp(17px,2vw,22px)/1.35 var(--display);color:var(--milk)}
+.v3-coco-insight p,.v3-coco-insight small{margin:0;color:var(--muted);line-height:1.4}
+.v3-coco-insight small{font-size:12px}
+
+.v3-coco-insight{background:linear-gradient(120deg,rgba(23,49,55,.97),rgba(13,24,33,.95));box-shadow:0 16px 34px rgba(0,8,12,.25)}
+.v3-coco-insight p,.v3-coco-insight small{color:#c8d3d0}

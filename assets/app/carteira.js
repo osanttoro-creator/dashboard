@@ -157,6 +157,8 @@
         }
         const ocultar = n.querySelector('.v3-card-hide');
         if (ocultar) ocultar.tabIndex = k === centro ? 0 : -1;
+        const body = n.querySelector('.v3-card-body');
+        if (body) body.setAttribute('aria-hidden', k === centro ? 'false' : 'true');
       });
       pontos.forEach((n, k) => n.classList.toggle('e-agora', k === centro));
       if (o.aoTrocar) o.aoTrocar(nos[centro].dataset.select);

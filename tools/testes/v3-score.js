@@ -73,6 +73,15 @@ assert.match(calc, /try \{ ativo = P\(\); \} catch \(e\) \{ ativo = null; \}/);
 /* ---- a tela ---- */
 
 assert.match(app, /function painelScore\(\)/);
+const faceSource = app.slice(app.indexOf('  function rostoDoScore(nota) {'), app.indexOf('  function painelScore() {')).trim();
+const face = vm.runInNewContext(`(${faceSource})`);
+const faces = [20, 55, 75, 95].map(face);
+assert.equal(new Set(faces).size, 4, 'o rosto precisa mudar nos quatro estados da nota');
+for (const faceMarkup of faces) {
+  assert.match(faceMarkup, /<img[^>]+alt="" aria-hidden="true"/, 'o rostinho decorativo não repete a nota para leitores de tela');
+  const asset = faceMarkup.match(/src="(\/assets\/coco\/rostinhos\/[^"]+)"/)?.[1];
+  assert.ok(asset && fs.existsSync(path.join(raiz, asset.slice(1))), 'o rostinho oficial precisa existir no site');
+}
 assert.match(app, /function historicoDoScore\(\)/);
 /* O painel mora no INÍCIO, abaixo da carteira, e não mais dentro de
    Análises: foi onde ele foi pedido. Desde a reorganização da Início

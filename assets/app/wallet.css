@@ -157,3 +157,66 @@
 .v3-wallet-item .v3-bankmark{background:color-mix(in srgb,var(--bank-bg,var(--card-plastic)) 82%,transparent);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px rgba(255,255,255,.2)}
 .v3-wallet-item .v3-chip{box-shadow:inset 0 0 0 3px rgba(255,255,255,.13),0 2px 5px rgba(0,0,0,.15)}
 .v3-wallet-item .v3-card-number{letter-spacing:.16em;text-shadow:0 1px 2px rgba(255,255,255,.2),0 -1px 2px rgba(0,0,0,.16)}
+
+/* Night Ocean is the shared material. --card-plastic supplies only the light. */
+.v3-wallet-item,.v3-wallet-item:not(.is-selected){
+  color:#f0e5cf;
+  border:1px solid color-mix(in srgb,var(--card-plastic) 38%,#f0e5cf 16%);
+  background:
+    radial-gradient(ellipse 78% 68% at 87% 8%,color-mix(in srgb,var(--card-plastic) 74%,transparent),transparent 80%),
+    radial-gradient(ellipse 70% 80% at 101% 63%,color-mix(in srgb,var(--card-plastic) 26%,transparent),transparent 82%),
+    linear-gradient(145deg,#0d1821 8%,#0a121a 60%,#060d13);
+  box-shadow:0 20px 34px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.19);
+}
+.v3-wallet-item:before{background:linear-gradient(120deg,transparent 37%,rgba(255,255,255,.04) 48%,transparent 59%),repeating-linear-gradient(140deg,rgba(255,255,255,.015) 0 1px,transparent 1px 4px);opacity:1}
+.v3-wallet-item:after{box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),inset 0 0 35px rgba(0,0,0,.35)}
+.v3-wallet-item .v3-bankmark{width:44px;height:44px;border-radius:11px;background:var(--bank-bg);color:var(--bank-ink);border:1px solid rgba(255,255,255,.25)}
+.v3-wallet-item .v3-bankmark svg{width:35px;height:35px;filter:none}
+.v3-card-top{height:44px}
+.v3-card-top strong{font-size:clamp(15px,2vw,19px);letter-spacing:-.03em}
+.v3-wallet-item .v3-chip{top:46%;width:43px;height:32px;border:1px solid #8c7d63;border-radius:6px;background:linear-gradient(110deg,#8b806f,#f9e9c3 31%,#b0a28a 58%,#f4dfb4 80%,#8b806f);box-shadow:inset 0 0 0 2px rgba(73,64,54,.38),0 2px 6px rgba(0,0,0,.38)}
+.v3-wallet-item .v3-chip:before{content:'';position:absolute;inset:3px;border:1px solid rgba(64,54,43,.62);border-radius:4px;background:linear-gradient(90deg,transparent 29%,rgba(63,53,42,.65) 30% 32%,transparent 33% 66%,rgba(63,53,42,.65) 67% 69%,transparent 70%),linear-gradient(0deg,transparent 47%,rgba(63,53,42,.65) 48% 51%,transparent 52%)}
+.v3-wallet-item .v3-chip:after{content:'';position:absolute;top:5px;bottom:5px;left:-1px;right:-1px;border-left:1px solid #5e5344;border-right:1px solid #5e5344}
+.v3-contactless{top:48%;left:70px;transform:rotate(90deg);color:#f0e5cf}
+.v3-card-number{top:53%;left:132px;right:12px;font-size:clamp(13px,1.7vw,17px);letter-spacing:.08em;text-shadow:none}
+.v3-card-number small{font-size:8px;opacity:.7}
+.v3-wallet-item .v3-card-footer{bottom:15px;right:100px;justify-content:flex-start;gap:14px;font-size:9px}
+.v3-wallet-item .v3-card-footer>span{max-width:100%}
+.v3-wallet-item .v3-card-footer em{font:500 10px var(--mono);letter-spacing:.12em;font-style:normal}
+.v3-card-oaze{position:absolute;right:16px;bottom:12px;width:72px;height:auto;max-height:31px;object-fit:contain;object-position:right center;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+.v3-wallet-pocket{background:radial-gradient(ellipse at 45% 0%,#223642 0%,#12232d 56%,#0a141c 100%)}
+.v3-wallet-pocket .v3-pocket-logo{width:55px;height:55px;top:26px;right:26px;opacity:.28;filter:drop-shadow(0 1px 4px rgba(240,229,207,.34))}
+.v3-wallet-pocket .v3-muted{display:none}
+.v3-wallet-pocket .v3-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.v3-wallet-pocket .v3-pocket-hint{font-size:12px;color:#f0e5cf}
+@media(max-width:540px){.v3-wallet-item .v3-card-footer{right:72px;bottom:12px}.v3-card-oaze{width:54px;bottom:10px}.v3-card-top strong{font-size:14px}.v3-wallet-item .v3-bankmark{width:38px;height:38px}.v3-wallet-item .v3-bankmark svg{width:30px;height:30px}.v3-card-number{top:53%;left:130px}}
+
+#v3-form-account .v3-account-value-row{display:grid;grid-template-columns:minmax(0,1fr) 94px;gap:12px;align-items:end;padding:15px 16px 18px;border:1px solid rgba(240,229,207,.23);border-radius:23px;background:linear-gradient(135deg,rgba(53,85,101,.35),rgba(13,24,33,.42))}
+#v3-form-account .v3-account-amount{min-width:0}
+#v3-form-account .v3-account-amount input{min-height:75px;padding:0;border:0;background:transparent;font:500 clamp(35px,6vw,58px)/1.1 var(--mono);letter-spacing:-.07em;font-variant-numeric:tabular-nums}
+#v3-form-account .v3-account-currency{font-size:11px}
+#v3-form-account .v3-account-currency select{min-height:45px;padding:8px 4px;text-align:center;font:600 15px var(--mono)}
+#v3-form-account .v3-account-kind{display:flex;align-items:center;gap:14px;min-height:50px}
+#v3-form-account .v3-account-kind .v3-segment{width:100%}
+#v3-form-account .v3-bank-collapse{border:1px solid rgba(240,229,207,.18);border-radius:17px;background:rgba(240,229,207,.04);overflow:hidden}
+#v3-form-account .v3-bank-collapse>summary{display:flex;justify-content:space-between;gap:12px;align-items:center;min-height:56px;padding:10px 15px;cursor:pointer;list-style:none;color:var(--milk)}
+#v3-form-account .v3-bank-collapse>summary::after{content:'⌄';margin-left:auto;color:var(--teal)}
+#v3-form-account .v3-bank-collapse[open]>summary::after{content:'⌃'}
+#v3-form-account .v3-bank-collapse>summary::-webkit-details-marker{display:none}
+#v3-form-account .v3-bank-collapse>summary strong{font-weight:600;max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#v3-form-account .v3-bank-current{display:flex;align-items:center;gap:8px;min-width:0;margin-left:auto}
+#v3-form-account .v3-bank-current-logo{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:8px;background:var(--bank-bg,#355565);color:var(--bank-ink,#fff)}
+#v3-form-account .v3-bank-current-logo svg{width:25px;height:25px}
+#v3-form-account .v3-bank-current strong{max-width:150px}
+#v3-form-account .v3-bank-collapse .v3-bank-picker{padding:10px 13px 15px;border-top:1px solid var(--line)}
+#v3-form-account .v3-bank-collapse .v3-bank-options{max-height:280px}
+#v3-form-account .v3-bank-color-custom{display:grid;gap:9px}
+#v3-form-account .v3-bank-color-custom>summary{min-height:43px;padding:10px 13px;border:1px solid rgba(240,229,207,.16);border-radius:12px;cursor:pointer;color:var(--milk);font-weight:600}
+#v3-form-account .v3-bank-color-custom:not([open])>:not(summary){display:none!important}
+#v3-form-account .v3-bank-color-custom[open] .v3-color-picker{padding:10px 4px}
+#v3-form-account .v3-bank-color-custom .v3-color-picker{width:100%}
+#v3-form-account .v3-account-more{margin-top:5px;border:1px solid rgba(240,229,207,.2);border-radius:16px;background:rgba(240,229,207,.045)}
+#v3-form-account .v3-account-more>summary{padding:15px 17px;font-size:15px;font-weight:600;color:var(--milk)}
+#v3-form-account .v3-account-more .v3-mais-corpo{display:grid;gap:15px;padding:3px 17px 17px}
+#v3-form-account .v3-account-more [hidden]{display:none!important}
+@media(max-width:540px){#v3-form-account .v3-account-value-row{grid-template-columns:minmax(0,1fr) 80px;gap:5px;padding:12px}#v3-form-account .v3-account-amount input{font-size:39px}}

@@ -41,3 +41,11 @@
 #v3-form-tx.v3-compose-ordered .v3-mais-corpo{padding-top:12px}
 @media(max-width:540px){#v3-form-tx.v3-compose-ordered #v3-tx-amount-label input{font-size:50px}}
 @media(prefers-reduced-motion:reduce){#v3-form-tx.v3-compose-ordered .v3-picker-caret{transition:none}}
+.v3-invoice-choice{display:grid;grid-template-columns:minmax(0,1fr) 108px;gap:9px}
+.v3-invoice-choice select,.v3-invoice-choice input{min-width:0;width:100%}
+.v3-invoice-choice input{text-align:center;font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+#v3-form-investment #v3-invest-amount-label{display:block;margin:4px 0 12px;padding:17px 18px 15px;border:1px solid rgba(240,229,207,.2);border-radius:22px;background:rgba(240,229,207,.045)}
+#v3-form-investment #v3-invest-amount-label:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(95,169,155,.16)}
+#v3-form-investment #v3-invest-amount-label input{margin-top:8px;min-height:73px;padding:0;border:0;border-radius:0;background:transparent;color:var(--milk);font:500 clamp(42px,6vw,66px)/1.08 var(--mono);letter-spacing:-.07em}
+@media(max-width:540px){#v3-form-investment #v3-invest-amount-label input{font-size:50px}}

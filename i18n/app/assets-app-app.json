@@ -642,6 +642,13 @@
   "es": "Sin nombre"
  },
  {
+  "pt": "ANA SOUZA",
+  "tipo": "exato",
+  "en": "ANA SOUZA",
+  "fr": "ANA SOUZA",
+  "es": "ANA SOUZA"
+ },
+ {
   "pt": "crédito",
   "tipo": "exato",
   "en": "credit",
@@ -684,11 +691,11 @@
   "es": "Ocultar este elemento"
  },
  {
-  "pt": "ANA SOUZA",
+  "pt": "INSTITUIÇÃO",
   "tipo": "exato",
-  "en": "ANA SOUZA",
-  "fr": "ANA SOUZA",
-  "es": "ANA SOUZA"
+  "en": "INSTITUTION",
+  "fr": "INSTITUTION",
+  "es": "INSTITUCIÓN"
  },
  {
   "pt": "CRÉDITO",
@@ -705,11 +712,11 @@
   "es": "DÉBITO"
  },
  {
-  "pt": "ÚLTIMOS 4 DÍGITOS",
+  "pt": "FINAL DO CARTÃO",
   "tipo": "exato",
-  "en": "LAST 4 DIGITS",
-  "fr": "4 DERNIERS CHIFFRES",
-  "es": "ÚLTIMOS 4 DÍGITOS"
+  "en": "CARD ENDING",
+  "fr": "FIN DE CARTE",
+  "es": "FINAL DE LA TARJETA"
  },
  {
   "pt": "Mostrar carteira principal",
@@ -1263,11 +1270,11 @@
   "es": "Suscripciones recurrentes"
  },
  {
-  "pt": "gerenciar tela inicial",
+  "pt": "gerenciar widgets",
   "tipo": "exato",
-  "en": "manage home screen",
-  "fr": "gérer l’écran d’accueil",
-  "es": "gestionar la pantalla de inicio"
+  "en": "manage widgets",
+  "fr": "gérer les widgets",
+  "es": "gestionar widgets"
  },
  {
   "pt": "o que aparece na Início",
@@ -1284,11 +1291,11 @@
   "es": "La cartera y el saludo siempre permanecen. Activa solo lo que consultas. Esta elección se aplica en este dispositivo."
  },
  {
-  "pt": "Gerenciar tela inicial",
+  "pt": "Gerenciar widgets",
   "tipo": "exato",
-  "en": "Manage home screen",
-  "fr": "Gérer l’écran d’accueil",
-  "es": "Gestionar la pantalla de inicio"
+  "en": "Manage widgets",
+  "fr": "Gérer les widgets",
+  "es": "Gestionar widgets"
  },
  {
   "pt": "aportado {0} · rendimento",
@@ -1725,11 +1732,46 @@
   "es": "a dónde fue el mes"
  },
  {
+  "pt": "Prévia sem gravação",
+  "tipo": "exato",
+  "en": "Preview, nothing saved",
+  "fr": "Aperçu sans sauvegarde",
+  "es": "Vista previa sin guardar"
+ },
+ {
+  "pt": "Salvando…",
+  "tipo": "exato",
+  "en": "Saving…",
+  "fr": "Enregistrement…",
+  "es": "Guardando…"
+ },
+ {
+  "pt": "Perfil compartilhado",
+  "tipo": "exato",
+  "en": "Shared profile",
+  "fr": "Profil partagé",
+  "es": "Perfil compartido"
+ },
+ {
+  "pt": "Dados da sua conta",
+  "tipo": "exato",
+  "en": "Your account data",
+  "fr": "Données de votre compte",
+  "es": "Datos de tu cuenta"
+ },
+ {
   "pt": "SALDO TOTAL",
   "tipo": "exato",
   "en": "TOTAL BALANCE",
   "fr": "SOLDE TOTAL",
   "es": "SALDO TOTAL"
+ },
+ {
+  "pt": "Trocar perfil financeiro",
+  "tipo": "exato",
+  "en": "Switch financial profile",
+  "fr": "Changer de profil financier",
+  "es": "Cambiar perfil financiero"
  },
  {
   "pt": "Esse lançamento mudou. Atualize a página e tente novamente.",
@@ -1791,6 +1833,20 @@
   "en": "Cards",
   "fr": "Cartes",
   "es": "Tarjetas"
+ },
+ {
+  "pt": "Transferências",
+  "tipo": "exato",
+  "en": "Transfers",
+  "fr": "Virements",
+  "es": "Transferencias"
+ },
+ {
+  "pt": "Recorrentes",
+  "tipo": "exato",
+  "en": "Recurring",
+  "fr": "Récurrents",
+  "es": "Recurrentes"
  },
  {
   "pt": "Pendentes",
@@ -1887,11 +1943,18 @@
   "es": "Todos los movimientos"
  },
  {
-  "pt": "Somente cartões",
+  "pt": "Transferências entre contas",
   "tipo": "exato",
-  "en": "Cards only",
-  "fr": "Cartes uniquement",
-  "es": "Solo tarjetas"
+  "en": "Transfers between accounts",
+  "fr": "Virements entre comptes",
+  "es": "Transferencias entre cuentas"
+ },
+ {
+  "pt": "Crédito e faturas",
+  "tipo": "exato",
+  "en": "Credit and statements",
+  "fr": "Crédit et relevés",
+  "es": "Crédito y facturas"
  },
  {
   "pt": "Somente pendentes",
@@ -1999,11 +2062,11 @@
   "es": "Estado de {0}: {1}. Elegir estado"
  },
  {
-  "pt": "Transações",
+  "pt": "Entre contas",
   "tipo": "exato",
-  "en": "Transactions",
-  "fr": "Transactions",
-  "es": "Movimientos"
+  "en": "Between accounts",
+  "fr": "Entre comptes",
+  "es": "Entre cuentas"
  },
  {
   "pt": "Abrir filtros",
@@ -2571,11 +2634,11 @@
   "es": "Evolución de las inversiones: lo aportado y lo que vale hoy"
  },
  {
-  "pt": "Vale hoje",
+  "pt": "Valor exibido",
   "tipo": "exato",
-  "en": "Worth today",
-  "fr": "Vaut aujourd’hui",
-  "es": "Vale hoy"
+  "en": "Displayed value",
+  "fr": "Valeur affichée",
+  "es": "Valor mostrado"
  },
  {
   "pt": "Só os aportes",
@@ -2585,11 +2648,11 @@
   "es": "Solo las aportaciones"
  },
  {
-  "pt": "{0} {1} de rendimento",
+  "pt": "{0} {1} de diferença",
   "tipo": "padrao",
-  "en": "{0} {1} in return",
-  "fr": "{0} {1} de rendement",
-  "es": "{0} {1} de rendimiento"
+  "en": "{0} {1} difference",
+  "fr": "{0} {1} d’écart",
+  "es": "{0} {1} de diferencia"
  },
  {
   "pt": "A evolução aparece depois do segundo mês com aporte.",
@@ -2683,11 +2746,11 @@
   "es": "PATRIMONIO INVERTIDO"
  },
  {
-  "pt": "{0} {1} sobre o aportado",
+  "pt": "{0} {1} de diferença para o aportado",
   "tipo": "padrao",
-  "en": "{0} {1} on what was contributed",
-  "fr": "{0} {1} sur les apports",
-  "es": "{0} {1} sobre lo aportado"
+  "en": "{0} {1} difference from contributions",
+  "fr": "{0} {1} d’écart par rapport aux versements",
+  "es": "{0} {1} de diferencia frente a lo aportado"
  },
  {
   "pt": "todos os aportes",
@@ -2730,6 +2793,69 @@
   "en": "{0} in estimated interest. Not a promise of returns.",
   "fr": "{0} d’intérêts estimés. Ce n’est pas une promesse de rendement.",
   "es": "{0} de interés estimado. No es una promesa de rentabilidad."
+ },
+ {
+  "pt": "com ticker e quantidade",
+  "tipo": "exato",
+  "en": "with ticker and quantity",
+  "fr": "avec symbole et quantité",
+  "es": "con ticker y cantidad"
+ },
+ {
+  "pt": "sem ativos cotados",
+  "tipo": "exato",
+  "en": "no quoted assets",
+  "fr": "aucun actif coté",
+  "es": "sin activos cotizados"
+ },
+ {
+  "pt": "Completar {0} ›",
+  "tipo": "padrao",
+  "en": "Complete {0} ›",
+  "fr": "Compléter {0} ›",
+  "es": "Completar {0} ›"
+ },
+ {
+  "pt": "Panorama dos investimentos",
+  "tipo": "exato",
+  "en": "Investment overview",
+  "fr": "Vue des investissements",
+  "es": "Resumen de inversiones"
+ },
+ {
+  "pt": "registros até {0}",
+  "tipo": "padrao",
+  "en": "records through {0}",
+  "fr": "opérations jusqu’au {0}",
+  "es": "registros hasta {0}"
+ },
+ {
+  "pt": "VALOR INFORMADO",
+  "tipo": "exato",
+  "en": "REPORTED VALUE",
+  "fr": "VALEUR DÉCLARÉE",
+  "es": "VALOR INFORMADO"
+ },
+ {
+  "pt": "atualizado por você",
+  "tipo": "exato",
+  "en": "updated by you",
+  "fr": "mise à jour par vous",
+  "es": "actualizado por ti"
+ },
+ {
+  "pt": "COTAÇÃO",
+  "tipo": "exato",
+  "en": "MARKET PRICE",
+  "fr": "COTATION",
+  "es": "COTIZACIÓN"
+ },
+ {
+  "pt": "Esta visão registra aportes. Valores sem atualização manual podem ser estimativas; confira a posição na instituição. Vendas e proventos ainda não entram aqui.",
+  "tipo": "exato",
+  "en": "This view records contributions. Values without a manual update may be estimates; check your holdings with the institution. Sales and distributions are not included yet.",
+  "fr": "Cette vue enregistre les versements. Les valeurs sans mise à jour manuelle peuvent être estimées ; vérifiez vos positions auprès de l’établissement. Les ventes et revenus ne sont pas encore inclus.",
+  "es": "Esta vista registra aportes. Los valores sin actualización manual pueden ser estimaciones; consulta tus posiciones en la entidad. Las ventas y rendimientos todavía no se incluyen."
  },
  {
   "pt": "Valor informado por você",
@@ -3205,6 +3331,13 @@
   "en": "No pending notifications.",
   "fr": "Aucune notification en attente.",
   "es": "Ninguna notificación pendiente."
+ },
+ {
+  "pt": "Reativar avisos ocultos",
+  "tipo": "exato",
+  "en": "Restore hidden alerts",
+  "fr": "Réactiver les alertes masquées",
+  "es": "Reactivar avisos ocultos"
  },
  {
   "pt": "Abrir agenda",
@@ -3749,6 +3882,13 @@
   "es": "su salud financiera"
  },
  {
+  "pt": "{0} dos 100 pontos puderam ser avaliados neste mês. Esta nota usa apenas seus registros no OAZE.",
+  "tipo": "padrao",
+  "en": "{0} of 100 points could be assessed this month. This score uses only your OAZE records.",
+  "fr": "{0} points sur 100 ont pu être évalués ce mois-ci. Cette note utilise uniquement vos données OAZE.",
+  "es": "Se pudieron evaluar {0} de 100 puntos este mes. Esta puntuación usa solo tus registros de OAZE."
+ },
+ {
   "pt": "Por que recebi esta nota?",
   "tipo": "exato",
   "en": "Why did I get this score?",
@@ -4289,83 +4429,7 @@
   "es": "Seguir los recursos usados"
  },
  {
-  "pt": "Consentimento da Coco",
-  "tipo": "exato",
-  "en": "Coco’s consent",
-  "fr": "Consentement de Coco",
-  "es": "Consentimiento de Coco"
- },
- {
-  "pt": "data-action=\"coco\"",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "sem sessão",
-  "tipo": "exato",
-  "en": "no session",
-  "fr": "sans session",
-  "es": "sin sesión"
- },
- {
-  "pt": "autorizado ›",
-  "tipo": "exato",
-  "en": "authorised ›",
-  "fr": "autorisé ›",
-  "es": "autorizado ›"
- },
- {
-  "pt": "configurar ›",
-  "tipo": "exato",
-  "en": "set up ›",
-  "fr": "configurer ›",
-  "es": "configurar ›"
- },
- {
-  "pt": "Memória da Coco",
-  "tipo": "exato",
-  "en": "Coco’s memory",
-  "fr": "Mémoire de Coco",
-  "es": "Memoria de Coco"
- },
- {
-  "pt": "data-action=\"coco-memory\"",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
   "pt": "data-action=\"notifications\"",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "Avisos que você escondeu",
-  "tipo": "exato",
-  "en": "Warnings you hid",
-  "fr": "Avertissements que vous avez masqués",
-  "es": "Avisos que ocultaste"
- },
- {
-  "pt": "data-action=\"reset-asks\"",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "reativar ›",
-  "tipo": "exato",
-  "en": "reactivate ›",
-  "fr": "réactiver ›",
-  "es": "reactivar ›"
- },
- {
-  "pt": "Perfis financeiros",
-  "tipo": "exato",
-  "en": "Financial profiles",
-  "fr": "Profils financiers",
-  "es": "Perfiles financieros"
- },
- {
-  "pt": "data-action=\"profiles\"",
   "tipo": "exato",
   "ignorar": true
  },
@@ -4698,6 +4762,34 @@
   "es": "Suscribirse con Stripe"
  },
  {
+  "pt": "{0} sem limite",
+  "tipo": "padrao",
+  "en": "Unlimited {0}",
+  "fr": "{0} illimités",
+  "es": "{0} sin límite"
+ },
+ {
+  "pt": "Até {0} {1}",
+  "tipo": "padrao",
+  "en": "Up to {0} {1}",
+  "fr": "Jusqu’à {0} {1}",
+  "es": "Hasta {0} {1}"
+ },
+ {
+  "pt": "O essencial para começar a organizar seu dinheiro.",
+  "tipo": "exato",
+  "en": "The essentials to start organizing your money.",
+  "fr": "L’essentiel pour commencer à organiser votre argent.",
+  "es": "Lo esencial para empezar a organizar tu dinero."
+ },
+ {
+  "pt": "Mais espaço para contas, cartões e conversas com a Coco.",
+  "tipo": "exato",
+  "en": "More room for accounts, cards and conversations with Coco.",
+  "fr": "Plus de place pour les comptes, les cartes et les conversations avec Coco.",
+  "es": "Más espacio para cuentas, tarjetas y conversaciones con Coco."
+ },
+ {
   "pt": "PLANO PRINCIPAL",
   "tipo": "exato",
   "en": "MAIN PLAN",
@@ -4705,60 +4797,39 @@
   "es": "PLAN PRINCIPAL"
  },
  {
-  "pt": "Espaços sem limite",
+  "pt": "espaço",
   "tipo": "exato",
-  "en": "Unlimited spaces",
-  "fr": "Espaces sans limite",
-  "es": "Espacios sin límite"
+  "en": "space",
+  "fr": "espace",
+  "es": "espacio"
  },
  {
-  "pt": "Até {0} espaços",
-  "tipo": "padrao",
-  "en": "Up to {0} spaces",
-  "fr": "Jusqu’à {0} espaces",
-  "es": "Hasta {0} espacios"
- },
- {
-  "pt": "Contas sem limite",
+  "pt": "espaços",
   "tipo": "exato",
-  "en": "Unlimited accounts",
-  "fr": "Comptes sans limite",
-  "es": "Cuentas sin límite"
+  "en": "spaces",
+  "fr": "espaces",
+  "es": "espacios"
  },
  {
-  "pt": "Até {0} contas",
-  "tipo": "padrao",
-  "en": "Up to {0} accounts",
-  "fr": "Jusqu’à {0} comptes",
-  "es": "Hasta {0} cuentas"
- },
- {
-  "pt": "Cartões sem limite",
+  "pt": "cartões",
   "tipo": "exato",
-  "en": "Unlimited cards",
-  "fr": "Cartes sans limite",
-  "es": "Tarjetas sin límite"
+  "en": "cards",
+  "fr": "cartes",
+  "es": "tarjetas"
  },
  {
-  "pt": "Até {0} cartões",
-  "tipo": "padrao",
-  "en": "Up to {0} cards",
-  "fr": "Jusqu’à {0} cartes",
-  "es": "Hasta {0} tarjetas"
- },
- {
-  "pt": "Coco sem limite",
+  "pt": "Conversas com a Coco sem limite mensal",
   "tipo": "exato",
-  "en": "Coco with no limit",
-  "fr": "Coco sans limite",
-  "es": "Coco sin límite"
+  "en": "Conversations with Coco with no monthly limit",
+  "fr": "Conversations avec Coco sans limite mensuelle",
+  "es": "Conversaciones con Coco sin límite mensual"
  },
  {
-  "pt": "{0} pedidos à Coco por mês",
+  "pt": "{0} {1} à Coco por mês",
   "tipo": "padrao",
-  "en": "{0} requests to Coco per month",
-  "fr": "{0} demandes à Coco par mois",
-  "es": "{0} peticiones a Coco al mes"
+  "en": "{0} {1} to Coco per month",
+  "fr": "{0} {1} à Coco par mois",
+  "es": "{0} {1} a Coco al mes"
  },
  {
   "pt": "por {0}",
@@ -4852,11 +4923,39 @@
   "es": "Perfil {0}"
  },
  {
+  "pt": "Quanto entrou e saiu neste mês?",
+  "tipo": "exato",
+  "en": "How much came in and went out this month?",
+  "fr": "Combien est entré et sorti ce mois-ci ?",
+  "es": "¿Cuánto entró y salió este mes?"
+ },
+ {
+  "pt": "Quais despesas previstas vencem primeiro?",
+  "tipo": "exato",
+  "en": "Which upcoming expenses are due first?",
+  "fr": "Quelles dépenses prévues arrivent à échéance en premier ?",
+  "es": "¿Qué gastos previstos vencen primero?"
+ },
+ {
+  "pt": "Qual categoria mais pesou neste mês?",
+  "tipo": "exato",
+  "en": "Which category cost the most this month?",
+  "fr": "Quelle catégorie a pesé le plus ce mois-ci ?",
+  "es": "¿Qué categoría tuvo más peso este mes?"
+ },
+ {
   "pt": "O que você quer entender sobre seu dinheiro?",
   "tipo": "exato",
   "en": "What would you like to understand about your money?",
   "fr": "Que souhaitez-vous comprendre de votre argent ?",
   "es": "¿Qué quieres entender sobre tu dinero?"
+ },
+ {
+  "pt": "Escolha uma pergunta ou escreva a sua. A Coco separa o que já aconteceu do que você apenas previu.",
+  "tipo": "exato",
+  "en": "Choose a question or write your own. Coco separates completed transactions from forecasts.",
+  "fr": "Choisissez une question ou écrivez la vôtre. Coco distingue les opérations réalisées des prévisions.",
+  "es": "Elige una pregunta o escribe la tuya. Coco distingue lo ocurrido de lo previsto."
  },
  {
   "pt": "Parar áudio",
@@ -4999,6 +5098,34 @@
   "es": "reglas y análisis"
  },
  {
+  "pt": "{0} soma {1}, {2}% das saídas do mês.",
+  "tipo": "padrao",
+  "en": "{0} totals {1}, {2}% of this month’s outflows.",
+  "fr": "{0} totalise {1}, soit {2} % des sorties du mois.",
+  "es": "{0} suma {1}, el {2} % de las salidas del mes."
+ },
+ {
+  "pt": "Ainda não há saídas confirmadas neste mês.",
+  "tipo": "exato",
+  "en": "There are no confirmed expenses this month yet.",
+  "fr": "Aucune dépense confirmée ce mois-ci.",
+  "es": "Aún no hay gastos confirmados este mes."
+ },
+ {
+  "pt": "Previsto para sair: {0} em lançamentos pendentes.",
+  "tipo": "padrao",
+  "en": "Expected outflow: {0} in pending entries.",
+  "fr": "Sorties prévues : {0} dans les opérations en attente.",
+  "es": "Salidas previstas: {0} en movimientos pendientes."
+ },
+ {
+  "pt": "Nenhuma saída pendente registrada neste mês.",
+  "tipo": "exato",
+  "en": "No pending expense recorded this month.",
+  "fr": "Aucune dépense en attente enregistrée ce mois-ci.",
+  "es": "No hay gastos pendientes registrados este mes."
+ },
+ {
   "pt": "{0}: entradas {1}",
   "tipo": "padrao",
   "en": "{0}: income {1}",
@@ -5011,13 +5138,6 @@
   "en": "{0}: expenses {1}",
   "fr": "{0} : sorties {1}",
   "es": "{0}: gastos {1}"
- },
- {
-  "pt": "Ainda não há saídas confirmadas neste mês.",
-  "tipo": "exato",
-  "en": "There are no confirmed expenses this month yet.",
-  "fr": "Aucune dépense confirmée ce mois-ci.",
-  "es": "Aún no hay gastos confirmados este mes."
  },
  {
   "pt": "SEUS DADOS · {0}",
@@ -5039,6 +5159,27 @@
   "en": "Charts based on your OAZE transactions. Ask Coco what changed.",
   "fr": "Graphiques calculés à partir de vos opérations OAZE. Demandez à Coco ce qui a changé.",
   "es": "Gráficos calculados a partir de tus movimientos en OAZE. Pregunta a Coco qué cambió."
+ },
+ {
+  "pt": "Leitura dos lançamentos",
+  "tipo": "exato",
+  "en": "Entry summary",
+  "fr": "Lecture des opérations",
+  "es": "Resumen de movimientos"
+ },
+ {
+  "pt": "LEITURA CALCULADA · {0}",
+  "tipo": "padrao",
+  "en": "CALCULATED SUMMARY · {0}",
+  "fr": "SYNTHÈSE CALCULÉE · {0}",
+  "es": "RESUMEN CALCULADO · {0}"
+ },
+ {
+  "pt": "Base: lançamentos deste perfil no OAZE. Valores previstos não são projeções.",
+  "tipo": "exato",
+  "en": "Based on entries in this OAZE profile. Pending values are not forecasts.",
+  "fr": "Basé sur les opérations de ce profil OAZE. Les montants prévus ne sont pas des projections.",
+  "es": "Basado en los movimientos de este perfil OAZE. Los importes previstos no son proyecciones."
  },
  {
   "pt": "Resultado",
@@ -5750,6 +5891,13 @@
   "es": "Ver o borrar memorias"
  },
  {
+  "pt": "Consentimento da Coco",
+  "tipo": "exato",
+  "en": "Coco’s consent",
+  "fr": "Consentement de Coco",
+  "es": "Consentimiento de Coco"
+ },
+ {
   "pt": "quatro coisas",
   "tipo": "exato",
   "en": "four things",
@@ -6135,6 +6283,13 @@
   "es": "Cuenta de destino"
  },
  {
+  "pt": "Lembre-me na agenda",
+  "tipo": "exato",
+  "en": "Remind me in the calendar",
+  "fr": "Me rappeler dans l’agenda",
+  "es": "Recordarme en la agenda"
+ },
+ {
   "pt": "Não pago · agendado",
   "tipo": "exato",
   "en": "Unpaid · scheduled",
@@ -6297,13 +6452,6 @@
   "en": "Review the amount, date, category and source. Nothing is saved automatically.",
   "fr": "Vérifiez le montant, la date, la catégorie et l’origine. Rien n’est enregistré automatiquement.",
   "es": "Revisa el importe, la fecha, la categoría y el origen. Nada se guarda automáticamente."
- },
- {
-  "pt": "Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.",
-  "tipo": "exato",
-  "en": "Cards go onto the statement according to the purchase date. In a transfer, the money isn’t counted as spending.",
-  "fr": "Les cartes entrent dans le relevé selon la date d’achat. Lors d’un virement, l’argent n’est pas compté comme une dépense.",
-  "es": "Las tarjetas entran en la factura según la fecha de compra. En la transferencia, el dinero no cuenta como gasto."
  },
  {
   "pt": "Ver na demonstração",
@@ -6488,13 +6636,6 @@
   "es": "Sin recordatorio anticipado"
  },
  {
-  "pt": "O aviso aparece dentro do OAZE quando você abrir o app; não é uma notificação em segundo plano.",
-  "tipo": "exato",
-  "en": "The reminder appears in OAZE when you open the app; it is not a background notification.",
-  "fr": "Le rappel apparaît dans OAZE lorsque vous ouvrez l’application ; ce n’est pas une notification en arrière-plan.",
-  "es": "El recordatorio aparece en OAZE cuando abres la aplicación; no es una notificación en segundo plano."
- },
- {
   "pt": "Ignorar nos totais de gastos",
   "tipo": "exato",
   "en": "Exclude from expense totals",
@@ -6598,11 +6739,18 @@
   "es": "Otro día"
  },
  {
-  "pt": "Calculada pela data real da compra, fechamento e vencimento do cartão.",
+  "pt": "Mês da fatura",
   "tipo": "exato",
-  "en": "Calculated from the actual purchase, closing and card due dates.",
-  "fr": "Calculée à partir des dates réelles d'achat, de clôture et d'échéance de la carte.",
-  "es": "Calculada según las fechas reales de compra, cierre y vencimiento de la tarjeta."
+  "en": "Statement month",
+  "fr": "Mois de la facture",
+  "es": "Mes de la factura"
+ },
+ {
+  "pt": "Ano da fatura",
+  "tipo": "exato",
+  "en": "Statement year",
+  "fr": "Année de la facture",
+  "es": "Año de la factura"
  },
  {
   "pt": "PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)",
@@ -6610,13 +6758,6 @@
   "en": "INSTALLMENTS (NON-RECURRING CREDIT ONLY)",
   "fr": "MENSUALITÉS (CRÉDIT NON RÉCURRENT UNIQUEMENT)",
   "es": "CUOTAS (SOLO CRÉDITO NO RECURRENTE)"
- },
- {
-  "pt": "Situação da compra; o pagamento da fatura é separado.",
-  "tipo": "exato",
-  "en": "Purchase status; paying the bill is a separate action.",
-  "fr": "Statut de l’achat ; le paiement de la facture est une action distincte.",
-  "es": "Estado de la compra; el pago de la factura es una acción aparte."
  },
  {
   "pt": "Abrir calculadora",
@@ -6890,6 +7031,46 @@
   "en": "Hide from main wallet",
   "fr": "Masquer du portefeuille principal",
   "es": "Ocultar de la cartera principal"
+ },
+ {
+  "pt": "Escolher",
+  "tipo": "exato",
+  "en": "Choose",
+  "fr": "Choisir",
+  "es": "Elegir"
+ },
+ {
+  "pt": "Banco ou instituição",
+  "tipo": "exato",
+  "en": "Bank or institution",
+  "fr": "Banque ou établissement",
+  "es": "Banco o institución"
+ },
+ {
+  "pt": "SALDO INICIAL",
+  "tipo": "exato",
+  "en": "OPENING BALANCE",
+  "fr": "SOLDE INITIAL",
+  "es": "SALDO INICIAL"
+ },
+ {
+  "pt": "Moeda do valor inicial",
+  "tipo": "exato",
+  "en": "Opening balance currency",
+  "fr": "Devise du solde initial",
+  "es": "Moneda del saldo inicial"
+ },
+ {
+  "pt": "Personalizar cor",
+  "tipo": "exato",
+  "en": "Customize color",
+  "fr": "Personnaliser la couleur",
+  "es": "Personalizar color"
+ },
+ {
+  "pt": "summary strong",
+  "tipo": "exato",
+  "ignorar": true
  },
  {
   "pt": "Não há valor pendente nesta fatura.",
@@ -7326,11 +7507,11 @@
   "es": "Ej.: 110"
  },
  {
-  "pt": "Coco acompanha este aporte",
+  "pt": "Ajuda para identificar o ativo",
   "tipo": "exato",
-  "en": "Coco follows this contribution",
-  "fr": "Coco suit cet apport",
-  "es": "Coco acompaña este aporte"
+  "en": "Help identifying the asset",
+  "fr": "Aide à identifier l’actif",
+  "es": "Ayuda para identificar el activo"
  },
  {
   "pt": "Informe o nome e o valor para receber uma sugestão. Nada será alterado sem você confirmar.",
@@ -8195,13 +8376,6 @@
   "es": "Eliminar"
  },
  {
-  "pt": "Perfil compartilhado",
-  "tipo": "exato",
-  "en": "Shared profile",
-  "fr": "Profil partagé",
-  "es": "Perfil compartido"
- },
- {
   "pt": "Convite {0}",
   "tipo": "padrao",
   "en": "Invitation {0}",
@@ -8333,6 +8507,13 @@
   "en": "select, edit or share",
   "fr": "sélectionner, modifier ou partager",
   "es": "seleccionar, editar o compartir"
+ },
+ {
+  "pt": "Perfis financeiros",
+  "tipo": "exato",
+  "en": "Financial profiles",
+  "fr": "Profils financiers",
+  "es": "Perfiles financieros"
  },
  {
   "pt": "Não consegui atualizar os compartilhamentos.",
@@ -10198,16 +10379,63 @@
   "es": "Este elemento ya no existe."
  },
  {
-  "pt": "Esta conta tem movimentos vinculados. Arquive-a para preservar o histórico.",
+  "pt": "conta com histórico",
   "tipo": "exato",
-  "en": "This account has linked transactions. Archive it to preserve the history.",
-  "fr": "Ce compte comporte des opérations liées. Archivez-le pour conserver l’historique.",
-  "es": "Esta cuenta tiene movimientos vinculados. Archívala para conservar el historial."
+  "en": "account with history",
+  "fr": "compte avec historique",
+  "es": "cuenta con historial"
+ },
+ {
+  "pt": "não é possível excluir",
+  "tipo": "exato",
+  "en": "cannot be deleted",
+  "fr": "ne peut pas être supprimé",
+  "es": "no se puede eliminar"
+ },
+ {
+  "pt": "tem lançamentos ou outros dados vinculados. Excluí-la apagaria o vínculo do histórico. Arquive a conta em Editar conta → Mais opções.",
+  "tipo": "exato",
+  "en": "has transactions or other linked data. Deleting it would break the history link. Archive it under Edit account → More options.",
+  "fr": "contient des opérations ou des données liées. Sa suppression romprait le lien avec l’historique. Archivez-le dans Modifier le compte → Plus d’options.",
+  "es": "tiene movimientos u otros datos vinculados. Eliminarla rompería el vínculo con el historial. Archívala en Editar cuenta → Más opciones."
+ },
+ {
+  "pt": "Editar conta",
+  "tipo": "exato",
+  "en": "Edit account",
+  "fr": "Modifier le compte",
+  "es": "Editar cuenta"
+ },
+ {
+  "pt": "Conta com histórico",
+  "tipo": "exato",
+  "en": "Account with history",
+  "fr": "Compte avec historique",
+  "es": "Cuenta con historial"
+ },
+ {
+  "pt": "oaze.wallet-delete-warning",
+  "tipo": "exato",
+  "ignorar": true
  },
  {
   "pt": "oaze.card-delete-warning",
   "tipo": "exato",
   "ignorar": true
+ },
+ {
+  "pt": "{0} compra(s) e {1} fatura(s) vinculadas também sairão do histórico. Pagamentos dessas faturas deixam de afetar o saldo das contas.",
+  "tipo": "padrao",
+  "en": "{0} linked purchase(s) and {1} bill(s) will also be removed from the history. Payments for those bills will no longer affect account balances.",
+  "fr": "{0} achat(s) et {1} facture(s) liés seront aussi retirés de l’historique. Les paiements de ces factures n’affecteront plus le solde des comptes.",
+  "es": "También se quitarán del historial {0} compra(s) y {1} factura(s) vinculadas. Los pagos de esas facturas dejarán de afectar el saldo de las cuentas."
+ },
+ {
+  "pt": "O saldo inicial, as configurações e os dados desta conta serão excluídos. Não há lançamentos vinculados.",
+  "tipo": "exato",
+  "en": "The opening balance, settings and data for this account will be deleted. There are no linked transactions.",
+  "fr": "Le solde initial, les réglages et les données de ce compte seront supprimés. Aucune opération n’y est liée.",
+  "es": "Se eliminarán el saldo inicial, la configuración y los datos de esta cuenta. No tiene movimientos vinculados."
  },
  {
   "pt": "excluir cartão",
@@ -10217,25 +10445,25 @@
   "es": "eliminar tarjeta"
  },
  {
-  "pt": "Compras e faturas vinculadas também serão excluídas.",
+  "pt": "O cartão",
   "tipo": "exato",
-  "en": "Linked purchases and bills will also be deleted.",
-  "fr": "Les achats et factures liés seront aussi supprimés.",
-  "es": "También se eliminarán las compras y facturas vinculadas."
+  "en": "The card",
+  "fr": "La carte",
+  "es": "La tarjeta"
  },
  {
-  "pt": "O cartão e seus dados serão excluídos",
+  "pt": "A conta",
   "tipo": "exato",
-  "en": "The card and its data will be deleted",
-  "fr": "La carte et ses données seront supprimées",
-  "es": "La tarjeta y sus datos se eliminarán"
+  "en": "The account",
+  "fr": "Le compte",
+  "es": "La cuenta"
  },
  {
-  "pt": "{0} compra(s) e {1} fatura(s) vinculadas também sairão do histórico. Pagamentos dessas faturas deixam de afetar o saldo das contas.",
+  "pt": "{0} e seus dados serão excluídos",
   "tipo": "padrao",
-  "en": "{0} linked purchase(s) and {1} bill(s) will also be removed from the history. Payments for those bills will no longer affect account balances.",
-  "fr": "{0} achat(s) et {1} facture(s) liés seront aussi retirés de l’historique. Les paiements de ces factures n’affecteront plus le solde des comptes.",
-  "es": "También se quitarán del historial {0} compra(s) y {1} factura(s) vinculadas. Los pagos de esas facturas dejarán de afectar el saldo de las cuentas."
+  "en": "{0} and its data will be deleted",
+  "fr": "{0} et ses données seront supprimés",
+  "es": "Se eliminarán {0} y sus datos"
  },
  {
   "pt": "Não mostrar este aviso detalhado nas próximas exclusões",

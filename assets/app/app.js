@@ -241,7 +241,7 @@
     $('#v3-owner').textContent = owner;
     $('#v3-avatar').innerHTML = avatarMarkup(owner);
     $('#v3-profile-name').textContent = demo ? 'OAZE mensal' : profile().name + (state.sharedId ? ' · compartilhado' : '');
-    $('#v3-demo-note').hidden = false;
+    $('#v3-demo-note').hidden = state.page === 'home';
     if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
       ? 'Salvando no perfil…' : state.sharedId ? `Perfil compartilhado · ${sharedCanEdit()?'edição':'leitura'}` : 'Dados carregados da sua conta';
     $('#v3-coco-count').hidden = !demo;
@@ -338,12 +338,13 @@
   }
   function cardButton(item, selected, i) {
     const d = item.data, name = d.name || d.bank || 'Sem nome', institution = d.bank || d.name || '';
-    const plastic=d.customColor?safeColor(d.color):bankBrand(institution,d.color), ink=cardInk(plastic);
+    const plastic=d.customColor?safeColor(d.color):bankBrand(institution,d.color), ink='#F0E5CF';
     const brand=global.Icons?.bankBrand(institution);
     const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
     const visibleLast=state.hideMoney ? ocultarDigitos(last) : last;
-    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong><button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>ÚLTIMOS 4 DÍGITOS</small><span>${esc(visibleLast||'—')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span><small>TITULAR</small>${esc((demo ? 'ANA SOUZA' : Store.ownerName() || 'TITULAR').toUpperCase())}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}<em>${esc(d.network || (item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'))}</em></span></span></div>`;
+    const holder=demo?'ANA SOUZA':Store.ownerName();
+    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong><button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button></span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-card-number"><small>FINAL DO CARTÃO</small><span>${esc(visibleLast||'—')}</span></span><span class="v3-chip" aria-hidden="true"></span><span class="v3-contactless" aria-hidden="true">${icon('contactless')}</span><span class="v3-card-footer"><span>${holder?`<small>TITULAR</small>${esc(holder.toUpperCase())}`:`<small>INSTITUIÇÃO</small>${esc(institution)}`}</span>${d.validThru?`<span><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}<em>${item.kind === 'credit' ? 'CRÉDITO' : 'DÉBITO'}</em></span><img class="v3-card-oaze" src="/assets/brand/oaze-logo-mono-milk.svg" alt=""></span></div>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -576,7 +577,7 @@
   }
   function painelBlocosInicio() {
     const linhas = BLOCOS_INICIO.map((b) => `<label class="v3-setting-row v3-bloco-linha"><span>${esc(b.nome)}</span><input type="checkbox" data-bloco="${esc(b.id)}" ${blocoLigado(b.id) ? 'checked' : ''}></label>`).join('');
-    openSheet(`${sheetTop('gerenciar tela inicial', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.</p><section class="v3-panel v3-widget-picker" style="margin-top:16px">${linhas}</section>`, 'Gerenciar tela inicial');
+    openSheet(`${sheetTop('gerenciar widgets', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.</p><section class="v3-panel v3-widget-picker" style="margin-top:16px">${linhas}</section>`, 'Gerenciar widgets');
   }
   /* O bloco de investimentos na Início usa a mesma conta da tela de
      investimentos: valor hoje, quanto foi aportado e a diferença. */
@@ -707,7 +708,7 @@
     const extraIds = BLOCOS_INICIO.slice(10).filter((b)=>blocoLigado(b.id));
     const extraContext = extraIds.length ? { p: profile(), ts: currentTransactions().filter((t)=>!t.cancelado && t.contaNosTotais !== false), t: totals() } : null;
     const extras = [blocoLigado('investimentos') ? painelInvestimentos() : '', blocoLigado('faturas') ? painelFaturasInicio() : '', blocoLigado('fluxo') ? painelFluxoInicio() : '', blocoLigado('metas') ? painelMetasInicio() : '', ...extraIds.map((b)=>extraHomeWidget(b.id, extraContext)), blocoLigado('score') ? painelScore() : ''].filter(Boolean).join('');
-    return `<div class="v3-greeting"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${gastos}${extras ? `<div class="v3-home-extras">${extras}</div>` : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar tela inicial</button>`;
+    return `<div class="v3-home-identity"><div class="v3-home-identity-title"><span class="v3-label">VISÃO GERAL</span><h1>início</h1></div><button type="button" class="v3-greeting" data-action="profiles" aria-label="Trocar perfil financeiro"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></button><span class="v3-home-data-status">${esc(demo?'Prévia sem gravação':global.V3Backend?.saving()?'Salvando…':state.sharedId?'Perfil compartilhado':'Dados da sua conta')}</span></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${gastos}${extras ? `<div class="v3-home-extras">${extras}</div>` : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar widgets</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -793,6 +794,8 @@
     if (rapido === 'Entradas' && x.kind !== 'income') return false;
     if (rapido === 'Saídas' && x.kind !== 'expense') return false;
     if (rapido === 'Cartões' && !x.cardId) return false;
+    if (rapido === 'Transferências' && x.kind !== 'transfer') return false;
+    if (rapido === 'Recorrentes' && !x.recurring) return false;
     if (rapido === 'Pendentes' && (x.confirmed || x.cancelado)) return false;
     if (f.situacao === 'pago' && !(x.confirmed && !x.cancelado)) return false;
     if (f.situacao === 'previsto' && !(!x.confirmed && !x.cancelado)) return false;
@@ -834,7 +837,7 @@
     const categorias = profile().categories.map((c) => `<option value="${esc(c.id)}" ${f.categoria === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
     const opcao = (v, rot) => `<option value="${v}" ${f.situacao === v ? 'selected' : ''}>${rot}</option>`;
     openSheet(`${sheetTop('filtros', niceMonth(state.ym))}<form class="v3-form" id="v3-form-filtros">`
-      + `<label>MOSTRAR<select name="rapido">${[['Todos','Todos os lançamentos'],['Entradas','Entradas'],['Saídas','Saídas'],['Cartões','Somente cartões'],['Pendentes','Somente pendentes']].map(([v,label])=>`<option value="${v}" ${state.filter===v?'selected':''}>${label}</option>`).join('')}</select></label>`
+      + `<label>MOSTRAR<select name="rapido">${[['Todos','Todos os lançamentos'],['Entradas','Entradas'],['Saídas','Saídas'],['Transferências','Transferências entre contas'],['Recorrentes','Recorrentes'],['Cartões','Crédito e faturas'],['Pendentes','Somente pendentes']].map(([v,label])=>`<option value="${v}" ${state.filter===v?'selected':''}>${label}</option>`).join('')}</select></label>`
       + `<label>SITUAÇÃO<select name="situacao">${opcao('todas', 'Todas')}${opcao('pago', 'Pago')}${opcao('previsto', 'Previsto')}${opcao('cancelado', 'Cancelado')}</select></label>`
       + `<label>ONDE<select name="fonte"><option value="todas" ${f.fonte === 'todas' ? 'selected' : ''}>Todas as contas e cartões</option>${contas}${cartoes}</select></label>`
       + `<label>CATEGORIA<select name="categoria"><option value="todas" ${f.categoria === 'todas' ? 'selected' : ''}>Todas</option>${categorias}</select></label>`
@@ -870,17 +873,17 @@
     /* Cada corte ligado ganha saída própria: tirar um filtro não
        pode obrigar a abrir o painel e caçar qual era. */
     const chips = [
-      !['Todos','Entradas','Saídas'].includes(state.filter) ? { rotulo: state.filter, acao: 'tirar-rapido' } : null,
+      !['Todos','Entradas','Saídas','Transferências','Recorrentes','Cartões'].includes(state.filter) ? { rotulo: state.filter, acao: 'tirar-rapido' } : null,
       state.filtros.situacao !== 'todas' ? { rotulo: ({ pago: 'Pago', previsto: 'Previsto', cancelado: 'Cancelado' })[state.filtros.situacao] || state.filtros.situacao, acao: 'tirar-situacao' } : null,
       state.filtros.fonte !== 'todas' ? { rotulo: nomeFonte(state.filtros.fonte) || 'Conta', acao: 'tirar-fonte' } : null,
       state.filtros.categoria !== 'todas' ? { rotulo: categoryName(state.filtros.categoria), acao: 'tirar-categoria' } : null,
       state.filtros.busca.trim() ? { rotulo: '“' + state.filtros.busca.trim() + '”', acao: 'tirar-busca' } : null
     ].filter(Boolean);
-    const chipsHtml = [['Entradas','Entradas'],['Saídas','Saídas'],['Cartões','Crédito'],['Todos','Transações']].map(([name,label]) => `<button type="button" class="v3-pill v3-pill-rapido${state.filter===name?' is-active':''}" data-filter="${name}" aria-pressed="${state.filter===name}">${label}</button>`).join('')
+    const chipsHtml = [['Todos','Todos'],['Entradas','Entradas'],['Saídas','Saídas'],['Transferências','Entre contas'],['Recorrentes','Recorrentes'],['Cartões','Crédito']].map(([name,label]) => `<button type="button" class="v3-pill v3-pill-rapido${state.filter===name?' is-active':''}" data-filter="${name}" aria-pressed="${state.filter===name}">${label}</button>`).join('')
       + `<button type="button" class="v3-pill v3-pill-filtros${ativos ? ' is-active' : ''}" data-action="filtros" aria-label="Abrir filtros">Filtros${ativos ? ' · ' + ativos : ''}</button>`
       + chips.map((c) => `<button type="button" class="v3-pill v3-chip" data-action="${c.acao}" aria-label="Tirar o filtro ${esc(c.rotulo)}">${esc(c.rotulo)}<span aria-hidden="true">✕</span></button>`).join('')
       + (ativos > 1 ? '<button type="button" class="v3-link v3-limpar-tudo" data-action="limpar-filtros">limpar tudo</button>' : '');
-    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div><section class="v3-panel v3-table v3-trans-feed" aria-label="Lançamentos por data"><div class="v3-row"><h2>movimentações</h2><small>${rows.length} registro${rows.length===1?'':'s'}</small></div>${rows.length?rows.map(linha).join(''):'<p class="v3-muted">Nenhum lançamento neste filtro.</p>'}</section></div>`;
+    return `<div class="v3-transactions"><div class="v3-trans-head"><div class="v3-filter">${chipsHtml}</div><div class="v3-totals"><div><span class="v3-label">ENTROU</span><strong class="v3-positive v3-sensitive">▲ ${money(t.income)}</strong></div><div><span class="v3-label">GASTOS FEITOS</span><strong class="v3-negative v3-sensitive">▼ ${money(t.expense)}</strong></div></div></div>${state.filter==='Cartões'?renderDueInvoices():''}<section class="v3-panel v3-table v3-trans-feed" aria-label="Lançamentos por data"><div class="v3-row"><h2>movimentações</h2><small>${rows.length} registro${rows.length===1?'':'s'}</small></div>${rows.length?rows.map(linha).join(''):'<p class="v3-muted">Nenhum lançamento neste filtro.</p>'}</section></div>`;
   }
   function renderWallet() {
     const chosen = state.walletOpen ? selectedItem() : null;
@@ -1090,12 +1093,19 @@
     const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
     const reserves=list.filter((x)=>x.type==='Porquinho'), cdbs=list.filter((x)=>x.type==='CDB');
     const collection=(items,empty)=>items.length?items.map((x)=>`<button type="button" class="v3-invest-bucket" data-investment="${esc(x.id)}"><span><strong>${esc(x.name)}</strong><small>${x.type==='CDB'?(x.maturityDate?`Vence em ${esc(shortDate(x.maturityDate))}`:'Sem vencimento informado')+' · '+(x.liquidity==='diaria'?'liquidez diária':x.liquidity==='vencimento'?'resgate no vencimento':'liquidez não informada'):'Dinheiro reservado'}</small></span><strong class="v3-sensitive">${money(valueAt(x))}</strong></button>`).join(''):`<p class="v3-muted">${empty}</p>`;
-    return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} sobre o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Vale hoje</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de rendimento</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
+    return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} de diferença para o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Valor exibido</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de diferença</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
+  }
+  function investmentPanorama() {
+    const list=(profile().investments||[]).filter((x)=>x.date<=U.monthEnd(state.ym));
+    const listed=list.filter((x)=>['Ações','FIIs','ETF'].includes(x.type));
+    const missing=listed.filter((x)=>!x.ticker||!(Number(x.quantity)>0));
+    const manual=list.filter((x)=>x.currentValue!=null).length;
+    return `<section class="v3-panel v3-invest-panorama" aria-label="Panorama dos investimentos"><div><span class="v3-label">APORTES</span><strong>${list.length}</strong><small>registros até ${esc(periodLabel(state.ym))}</small></div><div><span class="v3-label">VALOR INFORMADO</span><strong>${manual}</strong><small>atualizado por você</small></div><div><span class="v3-label">COTAÇÃO</span><strong>${listed.length?`${listed.length-missing.length}/${listed.length}`:'—'}</strong><small>${listed.length?'com ticker e quantidade':'sem ativos cotados'}</small></div><p>Esta visão registra aportes. Valores sem atualização manual podem ser estimativas; confira a posição na instituição. Vendas e proventos ainda não entram aqui.</p>${missing.length?`<button type="button" class="v3-link" data-investment="${esc(missing[0].id)}">Completar ${esc(missing[0].name)} ›</button>`:''}</section>`;
   }
   function enrichInvestmentCharts() {
     if (state.investTab !== 'overview') return;
     const page = $('#v3-view .v3-invest-page');
-    if (page) page.insertAdjacentHTML('afterbegin', investmentMarketPanel());
+    if (page) page.insertAdjacentHTML('afterbegin', investmentPanorama()+investmentMarketPanel());
     const displayed = (profile().investments || []).filter((x) => x.date <= U.monthEnd(state.ym))
       .slice().sort((a, b) => b.date.localeCompare(a.date));
     document.querySelectorAll('#v3-view .v3-invest-row').forEach((row, index) => {
@@ -1198,9 +1208,7 @@
       + `<button type="button" data-cat-kind="expense" class="${state.catKind==='expense'?'is-active':''}">Despesas</button>`
       + `<button type="button" data-cat-kind="income" class="${state.catKind==='income'?'is-active':''}">Receitas</button></div>`
       + `<button type="button" class="v3-primary v3-category-create" data-action="add-category">＋ Nova categoria</button></div>`
-      + `<div class="v3-grid v3-categories"><section class="v3-panel">`
-      + `<div class="v3-donut" style="--donut:conic-gradient(${esc(stops)})" data-total="${esc(money(total))}"></div>`
-      + `<p class="v3-muted" style="text-align:center">${rows.length ? `${esc(rows[0].name)} é ${Math.round(rows[0].value/total*100)}% do total em ${esc(niceMonth(state.ym).split(' de ')[0])}.` : 'As categorias aparecem com lançamentos confirmados.'}</p></section>`
+      + `<div class="v3-grid v3-categories"><section class="v3-panel v3-category-overview">${comTeto ? `<div class="v3-row"><h2>onde foi o mês</h2><small>${esc(periodLabel(state.ym))}</small></div>${categoryBars(5)}` : `<div class="v3-donut" style="--donut:conic-gradient(${esc(stops)})" data-total="${esc(money(total))}"></div><p class="v3-muted" style="text-align:center">${rows.length ? `${esc(rows[0].name)} é ${Math.round(rows[0].value/total*100)}% do total em ${esc(niceMonth(state.ym).split(' de ')[0])}.` : 'As categorias aparecem com lançamentos confirmados.'}</p>`}</section>`
       + `<div class="v3-cat-grid">${rows.map(ladrilho).join('') || '<p class="v3-muted">Nenhuma movimentação confirmada neste período.</p>'}`
       + semGasto.map((b) => `<div class="v3-cat-tile esta-vazia"><span class="v3-cat-icon" style="--swatch:#355565">${icon('categories')}</span>`
         + `<span class="v3-cat-id"><strong>${esc(b.nome)}</strong><small>nada gasto neste mês</small></span>`
@@ -1321,7 +1329,7 @@
     const list=reminders();
     try { sessionStorage.setItem(notificationStorageKey(),notificationSignature(list)); } catch { /* navegador sem sessão */ }
     $('#v3-notification-dot').hidden=true;
-    openSheet(`${sheetTop('notificações','próximos 30 dias')}<div class="v3-notification-list">${list.length ? list.map((item) => `<div class="v3-notification-item"><span class="v3-date">${esc(item.date.slice(8,10))}<small>${esc(shortDate(item.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(item.title)}</strong><small>${esc(item.sub || 'previsto')}</small></span><strong class="v3-mono v3-sensitive">${money(item.amount)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma notificação pendente.</p>'}</div><button type="button" class="v3-secondary" data-go="calendar">Abrir agenda</button>`, 'Notificações');
+    openSheet(`${sheetTop('notificações','próximos 30 dias')}<div class="v3-notification-list">${list.length ? list.map((item) => `<div class="v3-notification-item"><span class="v3-date">${esc(item.date.slice(8,10))}<small>${esc(shortDate(item.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(item.title)}</strong><small>${esc(item.sub || 'previsto')}</small></span><strong class="v3-mono v3-sensitive">${money(item.amount)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma notificação pendente.</p>'}</div><div class="v3-notification-actions"><button type="button" class="v3-secondary" data-go="calendar">Abrir agenda</button>${Object.keys(askSilenced()).length ? `<button type="button" class="v3-secondary" data-action="reset-asks">Reativar avisos ocultos</button>` : ''}</div>`, 'Notificações');
   }
   function eventosDoMes(ym) {
     const alvo = ym || state.ym;
@@ -1642,6 +1650,10 @@
     const t = String(texto == null ? '' : texto).trim();
     return esc(state.hideMoney ? t.replace(/R\$\s?[\d.,]+/g, (m) => ocultarDigitos(m)) : t);
   }
+  function rostoDoScore(nota) {
+    const arquivo=nota<40?'16_preocupada.png':nota<65?'12_pensando.png':nota<85?'02_feliz.png':'06_orgulhosa.png';
+    return `<img class="v3-score-face" src="/assets/coco/rostinhos/${arquivo}" width="96" height="96" alt="" aria-hidden="true" loading="lazy" decoding="async">`;
+  }
   function painelScore() {
     const s = scoreDoMes();
     if (!s || !s.partes || !s.partes.length) return '';
@@ -1661,7 +1673,7 @@
     const cheia = fraca.pontos / fraca.peso >= 0.9;
     const chamada = cheia
       ? `As ${validas.length} perguntas que se aplicam a você estão no lugar. Nada pedindo correção neste mês.`
-      : `Onde há mais a ganhar agora: <strong>${esc(String(fraca.nome).toLowerCase())}</strong>. ${fraseDoScore(fraca.detalhe)}.`;
+      : `Onde há mais a ganhar agora: <strong>${esc(String(fraca.nome).toLowerCase())}</strong>. ${fraseDoScore(fraca.detalhe).replace(/[.!?]+$/, '')}.`;
 
     const hist = historicoDoScore();
     const atual = hist.length ? hist[hist.length - 1] : null;
@@ -1689,7 +1701,8 @@
     return `<section class="v3-panel v3-score">`
       + `<div class="v3-row"><div><span class="v3-label">OAZE SCORE</span><h2>sua saúde financeira</h2></div>`
       + `<span class="v3-score-nota" style="--parte:${s.total}%">`
-      + `<span><strong class="v3-mono">${s.total}</strong></span><small>${esc(s.faixa)}</small></span></div>`
+      + `${rostoDoScore(s.total)}<span><strong class="v3-mono">${s.total}</strong></span><small>${esc(s.faixa)}</small></span></div>`
+      + `<p class="v3-score-summary">${chamada} <small>${s.pesoAplicado} dos 100 pontos puderam ser avaliados neste mês. Esta nota usa apenas seus registros no OAZE.</small></p>`
       + `<details class="v3-score-details"><summary>Por que recebi esta nota?</summary><p class="v3-score-chamada">${chamada}</p>`
       + (hist.length > 1
         ? `<div class="v3-score-hist">`
@@ -1904,7 +1917,7 @@
       ['Recorrências', 'recurring_items']
     ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
     const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Consentimento da Coco', '', 'data-action="coco"', !signed?'sem sessão':cocoAllowed()?'autorizado ›':'configurar ›')}${row('Memória da Coco', '', 'data-action="coco-memory"')}${row('Notificações', '', 'data-action="notifications"')}${row('Avisos que você escondeu', '', 'data-action="reset-asks"', Object.keys(askSilenced()).length?'reativar ›':'nenhum')}${row('Perfis financeiros', '', 'data-action="profiles"', esc(profile().name||'Pessoal'))}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai?`<li>Coco neste mês: ${ai.usado} / ${ai.limite ?? 'sem limite'}</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Notificações', '', 'data-action="notifications"')}</section></div></div>`;
   }
   function accountProfileSheet() {
     const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
@@ -1947,7 +1960,9 @@
       const disabled = demo || !sub || !!state.billingError || state.paymentBusy || isCurrent || (paid && !sub.cancel_at_period_end) || p.id === 'free';
       const price = state.billing === 'annual' ? p.anualCentavos : p.mensalCentavos;
       const label = isCurrent ? 'Plano atual' : p.id === 'free' ? 'Plano inicial' : paid && !sub.cancel_at_period_end ? 'Cancele o plano atual antes' : demo ? 'Disponível no app' : 'Assinar com Stripe';
-      return `<section class="v3-panel v3-plan${p.destaque ? ' highlight' : ''}"><div class="v3-row"><h2>${esc(p.nome)}</h2>${p.destaque ? '<span class="v3-label" style="color:inherit">PLANO PRINCIPAL</span>' : ''}</div><p class="v3-money">${money(price / 100)} <span style="font:400 13px var(--body)">por ${period}</span></p><ul><li>${p.limites.workspaces == null ? 'Espaços sem limite' : 'Até ' + p.limites.workspaces + ' espaços'}</li><li>${p.limites.accounts == null ? 'Contas sem limite' : 'Até ' + p.limites.accounts + ' contas'}</li><li>${p.limites.credit_cards == null ? 'Cartões sem limite' : 'Até ' + p.limites.credit_cards + ' cartões'}</li><li>${p.limites.ai_queries_per_month == null ? 'Coco sem limite' : p.limites.ai_queries_per_month + ' pedidos à Coco por mês'}</li></ul><button type="button" class="${p.destaque ? 'v3-secondary' : 'v3-primary'}" data-action="subscribe" data-plan="${esc(p.id)}" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
+      const quantidade=(n,sing,plural)=>n==null?`${plural[0].toUpperCase()+plural.slice(1)} sem limite`:`Até ${n} ${n===1?sing:plural}`;
+      const resumo=p.id==='free'?'O essencial para começar a organizar seu dinheiro.':'Mais espaço para contas, cartões e conversas com a Coco.';
+      return `<section class="v3-panel v3-plan${p.destaque ? ' highlight' : ''}"><div class="v3-row"><h2>${esc(p.nome)}</h2>${p.destaque ? '<span class="v3-label">PLANO PRINCIPAL</span>' : ''}</div><p class="v3-plan-summary">${resumo}</p><p class="v3-money">${money(price / 100)} <span>por ${period}</span></p><ul><li>${quantidade(p.limites.workspaces,'espaço','espaços')}</li><li>${quantidade(p.limites.accounts,'conta','contas')}</li><li>${quantidade(p.limites.credit_cards,'cartão','cartões')}</li><li>${p.limites.ai_queries_per_month == null ? 'Conversas com a Coco sem limite mensal' : `${p.limites.ai_queries_per_month} ${p.limites.ai_queries_per_month===1?'pedido':'pedidos'} à Coco por mês`}</li></ul><button type="button" class="${p.destaque ? 'v3-secondary' : 'v3-primary'}" data-action="subscribe" data-plan="${esc(p.id)}" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
     }).join('')}</div>${!demo && paid && !sub.cancel_at_period_end && linkedSubscription ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
   }
   function renderMore() {
@@ -1955,7 +1970,7 @@
     return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','calendar','coco','settings'].map((p)=>`<button type="button" data-go="${p}">${p === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
   }
   function cocoMessages() {
-    if (!state.chat.length) return '<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><p>O que você quer entender sobre seu dinheiro?</p></div>';
+    if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><div class="v3-coco-empty-copy"><h2>O que você quer entender sobre seu dinheiro?</h2><p>Escolha uma pergunta ou escreva a sua. A Coco separa o que já aconteceu do que você apenas previu.</p><div class="v3-coco-examples">${['Quanto entrou e saiu neste mês?','Quais despesas previstas vencem primeiro?','Qual categoria mais pesou neste mês?'].map((q)=>`<button type="button" data-coco-example="${esc(q)}">${esc(q)}</button>`).join('')}</div></div></div>`;
     return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/${state.cocoSpeaking===i?'corpo-explicando':'corpo-neutra_acolhedora'}.webp" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function cocoTools() {
@@ -1974,7 +1989,10 @@
     const byCategory=new Map();
     for(const tx of expenses) byCategory.set(tx.categoryId,(byCategory.get(tx.categoryId)||0)+Number(tx.amount||0));
     const leaders=[...byCategory].sort((a,b)=>b[1]-a[1]).slice(0,5);
-    return `<div class="v3-coco-analysis"><div class="v3-coco-analysis-intro"><span class="v3-label">SEUS DADOS · ${esc(periodLabel(state.ym))}</span><h2>O que os números mostram.</h2><p>Gráficos calculados a partir dos lançamentos do OAZE. Pergunte à Coco o que mudou.</p></div><div class="v3-coco-kpis"><div><span>Entradas</span><strong class="v3-sensitive">${money(now.income)}</strong></div><div><span>Saídas</span><strong class="v3-sensitive">${money(now.expense)}</strong></div><div><span>Resultado</span><strong class="v3-sensitive">${money(now.balance)}</strong></div><div><span>Despesas pendentes</span><strong class="v3-sensitive">${money(pendingValue)}</strong><small>${pending.length} lançamento(s)</small></div></div><section class="v3-coco-chart"><div class="v3-row"><h3>Últimos seis meses</h3><small>entradas <i class="v3-coco-legend income"></i> · saídas <i class="v3-coco-legend expense"></i></small></div><div class="v3-coco-bars" role="img" aria-label="Comparativo de entradas e saídas dos últimos seis meses">${series.map((x)=>`<div class="v3-coco-month"><div class="v3-coco-bar-pair"><span class="income" style="height:${Math.max(2,x.income/max*100)}%" title="${esc(periodLabel(x.ym))}: entradas ${esc(moneyReal(x.income))}"></span><span class="expense" style="height:${Math.max(2,x.expense/max*100)}%" title="${esc(periodLabel(x.ym))}: saídas ${esc(moneyReal(x.expense))}"></span></div><small>${esc(periodLabel(x.ym).split(' ')[0])}</small></div>`).join('')}</div></section><section class="v3-coco-chart"><h3>Para onde saiu</h3>${leaders.length?leaders.map(([id,value])=>`<div class="v3-coco-category"><span>${esc(categoryName(id))}</span><div><i style="width:${Math.max(2,value/Math.max(now.expense,1)*100)}%"></i></div><strong class="v3-sensitive">${money(value)}</strong></div>`).join(''):'<p class="v3-muted">Ainda não há saídas confirmadas neste mês.</p>'}</section><button type="button" class="v3-secondary" data-action="coco-analyze">Perguntar à Coco sobre estes números</button></div>`;
+    const leader=leaders[0];
+    const insight=leader ? `${categoryName(leader[0])} soma ${money(leader[1])}, ${Math.round(leader[1]/Math.max(now.expense,1)*100)}% das saídas do mês.` : 'Ainda não há saídas confirmadas neste mês.';
+    const pendingInsight=pending.length ? `Previsto para sair: ${money(pendingValue)} em lançamentos pendentes.` : 'Nenhuma saída pendente registrada neste mês.';
+    return `<div class="v3-coco-analysis"><div class="v3-coco-analysis-intro"><span class="v3-label">SEUS DADOS · ${esc(periodLabel(state.ym))}</span><h2>O que os números mostram.</h2><p>Gráficos calculados a partir dos lançamentos do OAZE. Pergunte à Coco o que mudou.</p></div><section class="v3-coco-insight" aria-label="Leitura dos lançamentos"><span class="v3-label">LEITURA CALCULADA · ${esc(periodLabel(state.ym))}</span><strong>${esc(insight)}</strong><p>${esc(pendingInsight)}</p><small>Base: lançamentos deste perfil no OAZE. Valores previstos não são projeções.</small></section><div class="v3-coco-kpis"><div><span>Entradas</span><strong class="v3-sensitive">${money(now.income)}</strong></div><div><span>Saídas</span><strong class="v3-sensitive">${money(now.expense)}</strong></div><div><span>Resultado</span><strong class="v3-sensitive">${money(now.balance)}</strong></div><div><span>Despesas pendentes</span><strong class="v3-sensitive">${money(pendingValue)}</strong><small>${pending.length} lançamento(s)</small></div></div><section class="v3-coco-chart"><div class="v3-row"><h3>Últimos seis meses</h3><small>entradas <i class="v3-coco-legend income"></i> · saídas <i class="v3-coco-legend expense"></i></small></div><div class="v3-coco-bars" role="img" aria-label="Comparativo de entradas e saídas dos últimos seis meses">${series.map((x)=>`<div class="v3-coco-month"><div class="v3-coco-bar-pair"><span class="income" style="height:${Math.max(2,x.income/max*100)}%" title="${esc(periodLabel(x.ym))}: entradas ${esc(moneyReal(x.income))}"></span><span class="expense" style="height:${Math.max(2,x.expense/max*100)}%" title="${esc(periodLabel(x.ym))}: saídas ${esc(moneyReal(x.expense))}"></span></div><small>${esc(periodLabel(x.ym).split(' ')[0])}</small></div>`).join('')}</div></section><section class="v3-coco-chart"><h3>Para onde saiu</h3>${leaders.length?leaders.map(([id,value])=>`<div class="v3-coco-category"><span>${esc(categoryName(id))}</span><div><i style="width:${Math.max(2,value/Math.max(now.expense,1)*100)}%"></i></div><strong class="v3-sensitive">${money(value)}</strong></div>`).join(''):'<p class="v3-muted">Ainda não há saídas confirmadas neste mês.</p>'}</section><button type="button" class="v3-secondary" data-action="coco-analyze">Perguntar à Coco sobre estes números</button></div>`;
   }
   function renderCoco() {
     if (state.sharedId) return `<section class="v3-panel"><h2>Coco indisponível neste perfil</h2><p class="v3-muted">A conta convidada pode consultar os dados, mas não enviá-los à IA. Volte a um perfil seu para conversar com a Coco.</p><button type="button" class="v3-secondary" data-action="profiles">Trocar perfil</button></section>`;
@@ -2217,7 +2235,7 @@
     openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<button type="button" class="v3-link" data-coco-tab="Conversa">← Voltar para conversa</button>${body}`,'Coco');
   }
   function installComposerPickers(form) {
-    const labelNames={category:'Categoria',source:'Conta ou cartão',destination:'Conta de destino',situacao:'Situação'};
+    const labelNames={category:'Categoria',source:'Conta ou cartão',destination:'Conta de destino',situacao:'Situação',remindDaysBefore:'Lembre-me na agenda'};
     const refreshes=[];
     const optionArtwork=(name,value)=>{
       if(name==='category'){
@@ -2229,10 +2247,11 @@
         const item=(type==='card'?profile().cards:profile().accounts).find((entry)=>entry.id===id);
         return item ? `<span class="v3-picker-icon" style="--picker-accent:${safeColor(item.color||bankBrand(item.bank))}">${walletLogo(item,'#f0e5cf')}</span>` : `<span class="v3-picker-icon">${icon('wallet')}</span>`;
       }
+      if(name==='remindDaysBefore')return `<span class="v3-picker-icon" aria-hidden="true">${icon('calendar')}</span>`;
       return `<span class="v3-picker-icon ${value==='pago'?'is-paid':value==='pendente'?'is-pending':'is-cancelled'}" aria-hidden="true">${value==='pago'?'✓':value==='pendente'?'○':'×'}</span>`;
     };
     const shortStatus=(value,text)=>name=>name==='situacao'?({pago:'Pago',pendente:'Não pago · agendado',cancelado:'Cancelado'}[value]||text):text;
-    ['situacao','category','source','destination'].forEach((name)=>{
+    ['situacao','category','source','destination','remindDaysBefore'].forEach((name)=>{
       const select=form.elements[name];
       if(!(select instanceof HTMLSelectElement))return;
       const label=select.closest('label');
@@ -2316,7 +2335,7 @@
       ? (editing.cancelado ? 'cancelado' : (editing.confirmed ? 'pago' : 'pendente'))
       : ((proposal?.confirmado) === false ? 'pendente' : 'pago');
     const meioInicial = editing ? (editing.meio || '') : '';
-    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><details class="v3-mais" ${editing?.recurring || Number(editing?.installments) > 1 ? 'open' : ''}><summary>Mais detalhes</summary><div class="v3-mais-corpo"><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label></div></details><p class="v3-muted">${proposal?'Revise valor, data, categoria e origem. Nada será salvo automaticamente.':'Cartões entram na fatura conforme a data da compra. Na transferência, o dinheiro não é contado como gasto.'}</p><button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
+    openSheet(`${sheetTop(editing ? 'editar lançamento' : proposal ? (proposal.sourceTag==='import'?'revisar extrato':'revisar proposta da Coco') : 'novo lançamento', demo ? 'demonstração sem gravação' : 'seu registro financeiro')}${editing || proposal ? '' : `<div class="v3-segment">${['Despesa','Receita','Transferir','Aporte'].map((x) => `<button type="button" data-compose-kind="${x}" class="${current === x ? 'is-active' : ''}">${x}</button>`).join('')}</div>`}<form class="v3-form" id="v3-form-tx"><input type="hidden" name="id" value="${esc(editing?.id || '')}"><input type="hidden" name="kind" value="${esc(current)}"><input type="hidden" name="sourceTag" value="${proposal?.sourceTag==='import'?'import':proposal?'uglez':'manual'}"><label id="v3-tx-amount-label">VALOR (R$)<input name="amount" inputmode="decimal" data-money="true" autocomplete="off" value="${esc(fmt(amount))}" placeholder="0,00" required></label><small id="v3-tx-currency-hint" class="v3-muted"></small><label>DESCRIÇÃO<input name="description" maxlength="120" value="${esc(editing?.description || proposal?.descricao || '')}" placeholder="Ex.: mercado" required></label>${current === 'Transferir' ? '' : `<label>CATEGORIA<select name="category" required><option value="">Escolha uma categoria</option>${categoryOptions}</select><p class="v3-sugestao" id="v3-sugestao" hidden></p></label>`}${current === 'Despesa' ? `<fieldset class="v3-payment-kind"><legend>PAGAMENTO</legend><div class="v3-segment" role="group" aria-label="Débito ou crédito"><button type="button" data-payment-kind="debit" aria-pressed="${paymentKind==='debit'}" class="${paymentKind==='debit'?'is-active':''}">Débito</button><button type="button" data-payment-kind="credit" aria-pressed="${paymentKind==='credit'}" class="${paymentKind==='credit'?'is-active':''}">Crédito</button></div></fieldset>` : ''}<label id="v3-tx-source-label">${current === 'Transferir' ? 'CONTA DE ORIGEM' : current === 'Despesa' ? (paymentKind === 'credit' ? 'CARTÃO DE CRÉDITO' : 'CONTA DE DÉBITO') : 'ONDE FOI RECEBIDO'}<select name="source" required><option value="">Selecione</option>${targets}</select></label>${current === 'Transferir' ? `<label>CONTA DE DESTINO<select name="destination" required><option value="">Selecione</option>${accounts.map((a) => `<option value="${esc(a.id)}" ${editing?.toAccountId === a.id ? 'selected' : ''}>${esc(a.bank || a.name)}</option>`).join('')}</select></label>` : ''}<div class="v3-form-row"><label id="v3-tx-data">DATA<input type="date" name="date" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" required></label><label id="v3-tx-fatura" hidden>FATURA<select name="fatura"></select><small class="v3-muted">A compra cai nesta fatura; o dia certo o OAZE escolhe dentro do ciclo.</small></label><label>SITUAÇÃO<select name="situacao">${[['pago','✓ Pago — entra nos totais'],['pendente','✗ Não pago — fica previsto'],['cancelado','🚫 Cancelado — não entra em total nenhum']].map(([v,t])=>`<option value="${v}" ${situacaoInicial===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label></div><details class="v3-mais" ${editing?.recurring || Number(editing?.installments) > 1 ? 'open' : ''}><summary>Mais detalhes</summary><div class="v3-mais-corpo"><label id="v3-tx-meio-label">COMO<select name="meio"><option value="">Não informado</option></select><small class="v3-muted">Como o dinheiro entrou ou saiu dessa conta.</small></label><label class="v3-check"><input type="checkbox" name="recurring" ${editing?.recurring ? 'checked' : ''}> Repetir mensalmente</label><div id="v3-repeat-fields" ${editing?.recurring ? '' : 'hidden'}><label>DATA DA REPETIÇÃO<input type="date" name="repeatDate" value="${esc(editing?.date || proposal?.data || (selectedDate && U.isValidISO(selectedDate) ? selectedDate : U.todayISO()))}" ${editing?.recurring ? 'required' : ''}></label><label>TERMINAR RECORRÊNCIA EM (OPCIONAL)<input type="month" name="recurEnd" value="${esc(editing?.recurEnd || '')}"></label></div>${editing ? '' : `<label>PARCELAS (SOMENTE DESPESA NÃO RECORRENTE)<input type="number" name="installments" min="1" max="72" value="1"></label>`}<label>OBSERVAÇÕES<input name="notes" maxlength="500" value="${esc(editing?.notes || '')}" placeholder="Opcional"></label></div></details>${proposal?'<p class="v3-muted">Revise valor, data, categoria e origem. Nada será salvo automaticamente.</p>':''}<button type="submit" class="v3-primary">${demo ? 'Ver na demonstração' : 'Salvar lançamento'}</button>${editing ? `<button type="button" class="v3-secondary" data-action="delete-transaction" data-transaction="${esc(editing.id)}">Excluir lançamento</button>` : ''}</form>`, editing ? 'Editar lançamento' : 'Novo lançamento');
     const txForm=document.getElementById('v3-form-tx');
     const transfer=current==='Transferir';
     txForm.classList.add('v3-compose-ordered');
@@ -2345,12 +2364,13 @@
     } else {
       dateRow.insertBefore(statusLabel,dateLabel);
       txForm.insertBefore(dateRow,categoryLabel);
+      if(current==='Despesa')txForm.insertBefore(txForm.querySelector('.v3-payment-kind'),dateRow);
       sourceLabel.after(descriptionLabel);
       recurringLabel.firstChild.textContent=current==='Despesa'?'Despesa fixa? Repetir mensalmente':'Receita fixa? Repetir mensalmente';
     }
     const reminderField=document.createElement('label');
     reminderField.className='v3-reminder-field';
-    reminderField.innerHTML=`LEMBRE-ME NA AGENDA<select name="remindDaysBefore"><option value="">Sem destaque antecipado</option>${[[0,'No dia'],[1,'1 dia antes'],[3,'3 dias antes'],[7,'7 dias antes']].map(([days,label])=>`<option value="${days}" ${editing?.remindDaysBefore===days?'selected':''}>${label}</option>`).join('')}</select><small>O aviso aparece dentro do OAZE quando você abrir o app; não é uma notificação em segundo plano.</small>`;
+    reminderField.innerHTML=`LEMBRE-ME NA AGENDA<select name="remindDaysBefore"><option value="">Sem destaque antecipado</option>${[[0,'No dia'],[1,'1 dia antes'],[3,'3 dias antes'],[7,'7 dias antes']].map(([days,label])=>`<option value="${days}" ${editing?.remindDaysBefore===days?'selected':''}>${label}</option>`).join('')}</select>`;
     moreBody.insertAdjacentHTML('beforeend',`${current==='Despesa'?`<label class="v3-check"><input type="checkbox" name="ignored" ${editing?.ignored?'checked':''}> Ignorar nos totais de gastos</label><small class="v3-muted">Ainda altera o saldo da conta ou a fatura do cartão.</small>`:''}`);
     if(transfer)moreBody.insertBefore(reminderField,moreBody.firstChild);
     else {
@@ -2383,13 +2403,19 @@
     syncComposerDate(txForm);
     syncComposerStatus(txForm);
     const invoiceHint=txForm.querySelector('#v3-tx-fatura small');
-    if(invoiceHint) invoiceHint.textContent='Calculada pela data real da compra, fechamento e vencimento do cartão.';
+    if(invoiceHint) invoiceHint.hidden=true;
+    const invoiceSelect=txForm.elements.fatura;
+    if(invoiceSelect){
+      invoiceSelect.hidden=true;
+      invoiceSelect.insertAdjacentHTML('afterend',`<span class="v3-invoice-choice"><select data-invoice-month aria-label="Mês da fatura">${Array.from({length:12},(_,i)=>`<option value="${String(i+1).padStart(2,'0')}">${new Intl.DateTimeFormat('pt-BR',{month:'long'}).format(new Date(2026,i,1))}</option>`).join('')}</select><input data-invoice-year type="number" min="1900" max="2200" inputmode="numeric" aria-label="Ano da fatura" placeholder="AAAA"></span>`);
+    }
     const destination=txForm.elements.destination;
     if(destination) destination.innerHTML='<option value="">Selecione</option>'+profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${editing?.toAccountId===a.id?'selected':''}>${esc(a.name||a.bank)} •• ${esc(a.last4||'')} · ${esc(a.moeda||'BRL')}</option>`).join('');
     const installmentsField=txForm.elements.installments?.closest('label');
     if(installmentsField){installmentsField.hidden=!(current==='Despesa' && paymentKind==='credit' && !txForm.elements.recurring.checked);installmentsField.firstChild.textContent='PARCELAS (SOMENTE CRÉDITO NÃO RECORRENTE)';}
     updateComposerCurrency(txForm, meioInicial);
     installComposerPickers(txForm);
+    syncComposerStatus(txForm);
     atualizarSugestao(document.getElementById('v3-form-tx'));
   }
 
@@ -2434,15 +2460,10 @@
     if(!status)return;
     const credit=form.elements.kind.value==='Despesa' && form.dataset.paymentKind==='credit';
     const label=status.closest('label');
-    label.hidden=false;
-    let hint=label.querySelector('.v3-credit-status-hint');
-    if(credit&&!hint){
-      hint=document.createElement('small');
-      hint.className='v3-credit-status-hint';
-      hint.textContent='Situação da compra; o pagamento da fatura é separado.';
-      label.append(hint);
-    }
-    if(hint)hint.hidden=!credit;
+    const field=label.closest('.v3-picker-field');
+    if(field)field.hidden=credit;
+    else label.hidden=credit;
+    label.querySelector('.v3-credit-status-hint')?.remove();
   }
   let calculatorHistory=[];
   function installComposerCalculator(form) {
@@ -2590,6 +2611,7 @@
         for (let k = -3; k <= 6; k++) opcoesDemo.push(U.addMonths(state.ym, k));
         escolhida = escolhida || state.ym;
         campo.innerHTML = opcoesDemo.map((ref) => `<option value="${esc(ref)}" ${ref === escolhida ? 'selected' : ''}>fatura de ${esc(periodLabel(ref))}</option>`).join('');
+        syncInvoicePicker(form);
         return;
       }
       if (!escolhida) escolhida = Calc.currentInvoiceRef(card, state.ym, profile());
@@ -2598,7 +2620,15 @@
       for (let k = -12; k <= 24; k++) opcoes.push(U.addMonths(hoje, k));
       if (escolhida && !opcoes.includes(escolhida)) { opcoes.push(escolhida); opcoes.sort(); }
       campo.innerHTML = opcoes.map((ref) => `<option value="${esc(ref)}" ${ref === escolhida ? 'selected' : ''}>fatura de ${esc(periodLabel(ref))}</option>`).join('');
+      syncInvoicePicker(form);
     } catch (e) { bloco.hidden = true; data.hidden = false; }
+  }
+  function syncInvoicePicker(form) {
+    const ref=String(form.elements.fatura?.value||'');
+    if(!/^\d{4}-\d{2}$/.test(ref))return;
+    const month=form.querySelector('[data-invoice-month]'),year=form.querySelector('[data-invoice-year]');
+    if(month)month.value=ref.slice(5);
+    if(year)year.value=ref.slice(0,4);
   }
 
   function updateComposerCurrency(form, meioEscolhido) {
@@ -2638,6 +2668,78 @@
     if(meiosHint)meiosHint.textContent='Todos disponíveis. Escolha o tipo de pagamento ao lançar a despesa ou receita.';
     form?.querySelector('.v3-meios')?.remove();
     form?.querySelector('[name="considerado"]')?.closest('label')?.insertAdjacentHTML('beforebegin',`<label class="v3-check"><input type="checkbox" name="hidden" ${existing?.hidden?'checked':''}> Ocultar da carteira principal</label>`);
+    if (!form) return;
+    const nameField=form.elements.name.closest('label');
+    const amountField=form.elements.amount.closest('label');
+    const currencyField=form.elements.moeda.closest('label');
+    const bankField=form.querySelector('.v3-bank-picker');
+    const details=document.createElement('details');
+    details.className='v3-account-more v3-mais';
+    details.innerHTML='<summary>Mais opções</summary><div class="v3-mais-corpo"></div>';
+    const extra=details.querySelector('.v3-mais-corpo');
+    const bankDetails=document.createElement('details');
+    bankDetails.className='v3-bank-collapse';
+    const currentBrand=global.Icons?.bankBrand(existing?.bank);
+    const currentBg=safeColor(currentBrand?.bg||bankBrand(existing?.bank||'Itaú'));
+    const currentInk=safeColor(currentBrand?.fg||cardInk(currentBg));
+    bankDetails.innerHTML=`<summary>Banco ou instituição <span class="v3-bank-current"><span class="v3-bank-current-logo" style="--bank-bg:${currentBg};--bank-ink:${currentInk}">${existing?.bank?walletLogo(existing,currentInk):icon('wallet')}</span><strong>${esc(existing?.bank||'Escolher')}</strong></span></summary>`;
+    bankField.before(bankDetails);
+    bankDetails.append(bankField);
+    const kind=document.createElement('div');
+    kind.className='v3-account-kind';
+    if(existing){kind.innerHTML=`<span class="v3-label">TIPO</span><strong>${type==='card'?'Crédito':'Débito'}</strong>`;}
+    else {
+      const switcher=form.previousElementSibling;
+      if(switcher?.classList.contains('v3-segment'))kind.append(switcher);
+    }
+    nameField.after(amountField,kind,bankDetails);
+    amountField.classList.add('v3-account-amount');
+    amountField.firstChild.textContent=type==='card'?'LIMITE':'SALDO INICIAL';
+    currencyField.classList.add('v3-account-currency');
+    currencyField.firstChild.textContent='MOEDA';
+    const valueRow=document.createElement('div');
+    valueRow.className='v3-account-value-row';
+    amountField.before(valueRow);
+    valueRow.append(amountField,currencyField);
+    const currencySelect=amountField.parentElement?.querySelector('[name="moeda"]');
+    if(currencySelect){currencySelect.setAttribute('aria-label','Moeda do valor inicial');Array.from(currencySelect.options).forEach((option)=>{option.textContent=option.value;});}
+    const last4=form.elements.last4.closest('label');
+    const accountType=form.elements.accountType?.closest('label');
+    const openedAt=form.elements.openedAt?.closest('label');
+    if(accountType)accountType.hidden=true;
+    if(openedAt)openedAt.hidden=true;
+    const custom=form.querySelector('#v3-custom-bank-color');
+    if(custom){
+      custom.open=!!existing?.customColor||!!(existing?.bank&&!bankKey(existing.bank));
+      const customSummary=custom.querySelector('summary');
+      if(customSummary)customSummary.textContent='Personalizar cor';
+      const oldColor=custom.querySelector('[name="customColor"]');
+      const oldLabel=oldColor?.closest('label');
+      if(oldLabel){oldLabel.insertAdjacentHTML('afterend',colorPicker(safeColor(existing?.color||bankBrand(existing?.bank||'Itaú')),'customColor',false));oldLabel.remove();}
+      const customToggle=custom.querySelector('[name="useCustomColor"]')?.closest('label');
+      if(customToggle)customToggle.hidden=true;
+      custom.querySelectorAll('[name="customColor"]').forEach((swatch)=>swatch.addEventListener('change',()=>{const box=custom.querySelector('[name="useCustomColor"]');if(box)box.checked=true;}));
+    }
+    const iconField=form.querySelector('#v3-bank-icon-picker');
+    const customName=form.querySelector('#v3-bank-custom');
+    if(custom)bankDetails.after(custom);
+    if(customName)bankDetails.after(customName);
+    if(iconField)custom?.after(iconField);
+    form.append(details);
+    [last4,accountType,openedAt,form.querySelector('#v3-cotacao'),form.querySelector('#v3-account-fields'),form.querySelector('#v3-card-dates'),form.elements.hidden?.closest('label'),form.elements.considerado?.closest('label'),form.elements.archived?.closest('label')].filter(Boolean).forEach((node)=>extra.append(node));
+    const save=form.querySelector('button[type="submit"]');
+    if(save)form.append(save);
+    const remove=form.querySelector('[data-action="delete-wallet-item"]');
+    if(remove)form.append(remove);
+    bankDetails.addEventListener('change',(event)=>{
+      if(event.target.name==='bank'){
+        bankDetails.querySelector('summary strong').textContent=event.target.value;
+        const brand=global.Icons?.bankBrand(event.target.value),bg=safeColor(brand?.bg||bankBrand(event.target.value)),ink=safeColor(brand?.fg||cardInk(bg));
+        const logo=bankDetails.querySelector('.v3-bank-current-logo');
+        logo.style.setProperty('--bank-bg',bg);logo.style.setProperty('--bank-ink',ink);
+        logo.innerHTML=walletLogo({bank:event.target.value},ink);
+      }
+    });
   }
   function invoicePaymentForm(cardId) {
     const card=profile().cards.find((c)=>c.id===cardId);
@@ -2799,7 +2901,7 @@
   function setupInvestmentAssistant(form) {
     if (!form) return;
     form.querySelector('button[type="submit"]').insertAdjacentHTML('beforebegin',
-      '<section class="v3-invest-assist" aria-live="polite"><div class="v3-invest-assist-head"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><strong>Coco acompanha este aporte</strong></div><p class="v3-invest-assist-status">Informe o nome e o valor para receber uma sugestão. Nada será alterado sem você confirmar.</p><div class="v3-invest-assist-suggestion" hidden></div><div class="v3-invest-assist-valuation"></div></section>');
+      '<section class="v3-invest-assist" aria-live="polite"><div class="v3-invest-assist-head"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt=""><strong>Ajuda para identificar o ativo</strong></div><p class="v3-invest-assist-status">Informe o nome e o valor para receber uma sugestão. Nada será alterado sem você confirmar.</p><div class="v3-invest-assist-suggestion" hidden></div><div class="v3-invest-assist-valuation"></div></section>');
     const status = form.querySelector('.v3-invest-assist-status');
     const suggestionBox = form.querySelector('.v3-invest-assist-suggestion');
     const valuation = form.querySelector('.v3-invest-assist-valuation');
@@ -3705,7 +3807,7 @@
     } catch (error) { toast(error.message || 'Não consegui atualizar a recorrência.'); }
   }
   function handleClick(ev) {
-    const target=ev.target.closest('[data-go],[data-action],[data-nav-visibility],[data-nav-move],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-planning-budget],[data-fatura-passo],[data-focus-invoice],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-date-choice],[data-payment-kind],[data-account-type],[data-confirm],[data-cal-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
+    const target=ev.target.closest('[data-go],[data-action],[data-coco-example],[data-nav-visibility],[data-nav-move],[data-metric],[data-period-step],[data-select],[data-recorrencia],[data-adiantar],[data-budget-novo],[data-planning-budget],[data-fatura-passo],[data-focus-invoice],[data-wallet-kind],[data-filter],[data-cat-kind],[data-invest-tab],[data-goal-tab],[data-coco-tab],[data-coco-view],[data-compose-kind],[data-date-choice],[data-payment-kind],[data-account-type],[data-confirm],[data-cal-confirm],[data-profile],[data-cal-day],[data-cal-month],[data-cal-today],[data-cal-view],[data-cal-goto],[data-score-mes],[data-cal-days],[data-investment],[data-transaction],[data-category],[data-goal],[data-budget],[data-billing]');
     if (!target) return;
     if (target.dataset.action === 'sidebar-toggle') {
       navPrefs.collapsed = !navPrefs.collapsed;
@@ -3963,6 +4065,10 @@
       if(mode==='text'){stopVoice();stopCocoAudio();}
       cocoMode=mode;state.cocoView='conversation';render();return;
     }
+    if (target.dataset.cocoExample) {
+      state.mediaDraft=target.dataset.cocoExample;
+      render();$('#v3-chat-form [name="question"]')?.focus();return;
+    }
     if (action==='coco-topic') {
       const topic=target.dataset.topic;
       cocoTopic=topic;
@@ -4020,11 +4126,12 @@
         : profile().transactions.some((t)=>t.accountId===id||t.toAccountId===id)||profile().cards.some((c)=>c.accountId===id)
           ||profile().investments.some((x)=>x.accountId===id)||profile().goals.some((g)=>(g.deposits||[]).some((d)=>d.accountId===id))
           ||Object.values(profile().invoices||{}).some((record)=>(Calc.invoiceMovements(record)||[]).some((m)=>m.accountId===id));
-      if (used && !isCard) { toast('Esta conta tem movimentos vinculados. Arquive-a para preservar o histórico.'); return; }
-      const quiet = (()=>{try{return localStorage.getItem('oaze.card-delete-warning')==='quiet';}catch{return false;}})();
+      if (used && !isCard) { openSheet(`${sheetTop('conta com histórico','não é possível excluir')}<p><strong>${esc(item.name)}</strong> tem lançamentos ou outros dados vinculados. Excluí-la apagaria o vínculo do histórico. Arquive a conta em Editar conta → Mais opções.</p><button type="button" class="v3-primary" data-action="edit-wallet-item" data-wallet-id="${esc(id)}">Editar conta</button>`,'Conta com histórico'); return; }
+      const quiet = (()=>{try{return localStorage.getItem('oaze.wallet-delete-warning')==='quiet'||localStorage.getItem('oaze.card-delete-warning')==='quiet';}catch{return false;}})();
       const cardTransactions = isCard ? profile().transactions.filter((tx)=>tx.cardId===id).length : 0;
       const cardInvoices = isCard ? Object.keys(profile().invoices||{}).filter((key)=>key.startsWith(id+'|')).length : 0;
-      openSheet(`${sheetTop(isCard?'excluir cartão':'excluir conta','confirme esta alteração')}<p>Excluir <strong>${esc(item.name)}</strong>? Esta ação não pode ser desfeita.</p>${isCard ? quiet ? '<p class="v3-muted">Compras e faturas vinculadas também serão excluídas.</p>' : `<div class="v3-delete-warning"><strong>O cartão e seus dados serão excluídos</strong><p>${cardTransactions} compra(s) e ${cardInvoices} fatura(s) vinculadas também sairão do histórico. Pagamentos dessas faturas deixam de afetar o saldo das contas.</p></div><label class="v3-check"><input type="checkbox" id="v3-card-delete-quiet"> Não mostrar este aviso detalhado nas próximas exclusões</label>` : ''}<div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter</button><button type="button" class="v3-primary" data-action="confirm-delete-wallet-item" data-wallet-id="${esc(id)}" data-wallet-type="${isCard?'card':'account'}">Excluir ${isCard?'cartão e dados':'conta'}</button></div>`,'Confirmar exclusão');
+      const detail=isCard?`${cardTransactions} compra(s) e ${cardInvoices} fatura(s) vinculadas também sairão do histórico. Pagamentos dessas faturas deixam de afetar o saldo das contas.`:'O saldo inicial, as configurações e os dados desta conta serão excluídos. Não há lançamentos vinculados.';
+      openSheet(`${sheetTop(isCard?'excluir cartão':'excluir conta','confirme esta alteração')}<p>Excluir <strong>${esc(item.name)}</strong>? Esta ação não pode ser desfeita.</p>${quiet?`<p class="v3-muted">${detail}</p>`:`<div class="v3-delete-warning"><strong>${isCard?'O cartão':'A conta'} e seus dados serão excluídos</strong><p>${detail}</p></div><label class="v3-check"><input type="checkbox" id="v3-card-delete-quiet"> Não mostrar este aviso detalhado nas próximas exclusões</label>`}<div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter</button><button type="button" class="v3-primary" data-action="confirm-delete-wallet-item" data-wallet-id="${esc(id)}" data-wallet-type="${isCard?'card':'account'}">Excluir ${isCard?'cartão e dados':'conta'}</button></div>`,'Confirmar exclusão');
       return;
     }
     if (action==='confirm-delete-wallet-item') {
@@ -4032,7 +4139,7 @@
       const id=target.dataset.walletId,isCard=target.dataset.walletType==='card';
       if (!(isCard?Store.cards.get(id):Store.accounts.get(id))) { toast('Este item não existe mais.'); return; }
       const hideWarning=!!document.getElementById('v3-card-delete-quiet')?.checked;
-      V3Backend.mutate(()=>isCard?Store.removeCardWithHistory(id):Store.accounts.remove(id)).then((result)=>{if(isCard&&hideWarning){try{localStorage.setItem('oaze.card-delete-warning','quiet');}catch{}}state.selected=null;closeSheet();render();showReceiptCleanupResult(result,isCard?'Cartão e dados vinculados excluídos.':'Conta excluída.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
+      V3Backend.mutate(()=>isCard?Store.removeCardWithHistory(id):Store.accounts.remove(id)).then((result)=>{if(hideWarning){try{localStorage.setItem('oaze.wallet-delete-warning','quiet');}catch{}}state.selected=null;closeSheet();render();showReceiptCleanupResult(result,isCard?'Cartão e dados vinculados excluídos.':'Conta excluída.');}).catch((e)=>toast(e.message||'Não foi possível excluir.'));
       return;
     }
     if (action==='add-investment'){investmentForm(null,target.dataset.type);return;}
@@ -4103,7 +4210,7 @@
     if (action==='vault'){openVault(target.dataset.walletId);return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
     if (action==='notifications'){openNotifications();return;}
-    if (action==='reset-asks'){askReset();render();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
+    if (action==='reset-asks'){askReset();render();openNotifications();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
     if (action==='home-blocks'){painelBlocosInicio();return;}
     if (action==='filtros'){painelFiltros();return;}
     if (action==='limpar-filtros'){limparFiltros();state.filter='Todos';closeSheet();render();toast('Filtros limpos.');return;}
@@ -4297,6 +4404,13 @@
       }
       if(ev.target.name==='repeatDate' && ev.target.closest('#v3-form-tx')) ev.target.dataset.edited='true';
       if(ev.target.name==='category' && ev.target.closest('#v3-form-tx')) atualizarSugestao(ev.target.form);
+      if((ev.target.matches('[data-invoice-month]')||ev.target.matches('[data-invoice-year]'))&&ev.target.closest('#v3-form-tx')){
+        const form=ev.target.closest('form'),month=form.querySelector('[data-invoice-month]')?.value,year=Number(form.querySelector('[data-invoice-year]')?.value);
+        if(!/^\d{2}$/.test(month||'')||!Number.isInteger(year)||year<1900||year>2200)return;
+        const ref=`${year}-${month}`,campo=form.elements.fatura;
+        if(!Array.from(campo.options).some((option)=>option.value===ref))campo.add(new Option(`fatura de ${periodLabel(ref)}`,ref));
+        campo.value=ref;campo.dataset.escolhida='true';updateRepeatFields(form);
+      }
       if(ev.target.name==='fatura' && ev.target.closest('#v3-form-tx')) { ev.target.dataset.escolhida='true'; updateRepeatFields(ev.target.form); }
       /* "Outro" é a única opção que pede um nome escrito; as outras
          já se nomeiam. O campo aparece com ela e some sem ela. */
