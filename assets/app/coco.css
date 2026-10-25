@@ -56,6 +56,11 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden;background:#0D182
 @media(max-height:660px){.v3-coco-page{gap:8px;padding-top:8px}.v3-coco-actor{width:120px;height:120px}.v3-coco-voice-stage{gap:7px}.v3-voice-caption{-webkit-line-clamp:2}.v3-coco-empty img{width:90px;height:90px}.v3-coco-tool{min-height:48px}.v3-coco-tool small{display:none}}
 @media(max-width:620px){.v3-coco-empty-copy{padding:20px 17px}.v3-coco-examples{display:grid;width:100%}.v3-coco-examples button{width:100%}}
 @media(prefers-reduced-transparency:reduce){.v3-coco-empty-copy{background:#10232e;backdrop-filter:none}}
+.v3-coco-empty img{width:clamp(165px,31vh,300px);height:clamp(165px,31vh,300px)}
+.v3-coco-message.is-coco{max-width:min(78%,680px);padding:15px 18px 14px 75px;border:1px solid rgba(233,135,94,.53);border-radius:20px 20px 20px 6px;background:linear-gradient(120deg,rgba(233,135,94,.25),rgba(130,67,47,.24));box-shadow:0 9px 28px rgba(45,19,10,.12)}
+.v3-coco-message.is-coco .v3-coco-message-avatar{left:12px;top:13px;width:52px;height:52px}
+.v3-coco-message.is-coco .v3-coco-listen{border-color:rgba(233,135,94,.5);background:rgba(233,135,94,.15)}
+@media(max-width:600px){.v3-coco-message.is-coco{max-width:96%;padding:14px 13px 13px 62px}.v3-coco-message.is-coco .v3-coco-message-avatar{left:8px;top:13px;width:46px;height:46px}}
 @media(prefers-reduced-motion:reduce){.v3-coco-page *, .v3-coco-page *:before,.v3-coco-page *:after{animation:none!important;transition:none!important}}
 
 .v3-coco-insight{display:grid;gap:9px;padding:20px;border:1px solid rgba(95,169,155,.42);border-radius:22px;background:linear-gradient(120deg,rgba(95,169,155,.15),rgba(13,24,33,.58))}

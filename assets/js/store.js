@@ -253,6 +253,7 @@
       cards: [],
       budgets: {},        // { categoriaId: limite mensal }
       planningSalary: 0,  // referência manual; não cria receita no extrato
+      planningReservePercent: 0, // percentual planejado; não movimenta dinheiro
       goals: [],          // { id, name, target, saved, deadline, color, icon }
       categories: makeCategories(),
       transactions: [],
@@ -497,6 +498,8 @@
       closingDay: Math.min(31, Math.max(1, +c.closingDay || 1)),
       dueDay: Math.min(31, Math.max(1, +c.dueDay || 10)),
       accountId: c.accountId || null,
+      visibleInProfiles: [...new Set((Array.isArray(c.visibleInProfiles) ? c.visibleInProfiles : [])
+        .filter((id) => typeof id === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(id)))],
       /* Cartão internacional: limite e fatura na moeda dele, e a
          cotação (reais por 1 unidade) que converte as compras novas
          para os totais. Ausente = real, que é o que todo cartão antigo
@@ -559,13 +562,17 @@
     });
     prof.planningSalary = Number.isFinite(+prof.planningSalary) && +prof.planningSalary >= 0
       ? U.round2(+prof.planningSalary) : 0;
+    prof.planningReservePercent = Number.isFinite(+prof.planningReservePercent)
+      ? Math.min(100, Math.max(0, U.round2(+prof.planningReservePercent))) : 0;
 
     prof.goals = (Array.isArray(prof.goals) ? prof.goals : []).map((g) => ({
       id: g.id || U.uid('goal'),
       name: String(g.name || 'Meta').slice(0, 60),
       target: U.round2(+g.target || 0),
       saved: U.round2(+g.saved || 0),
-      annualRate: Number.isFinite(+g.annualRate) && +g.annualRate >= 0 && +g.annualRate <= 100 ? +g.annualRate : null,
+      annualRate: g.annualRate != null && Number.isFinite(+g.annualRate) && +g.annualRate >= 0 && +g.annualRate <= 100 ? +g.annualRate : null,
+      yieldIndexer: g.yieldIndexer === 'cdi' ? 'cdi' : g.yieldIndexer === 'fixed' || g.annualRate != null ? 'fixed' : 'none',
+      cdiPercent: Number.isFinite(+g.cdiPercent) && +g.cdiPercent > 0 && +g.cdiPercent <= 300 ? +g.cdiPercent : 100,
       deadline: U.isValidISO(g.deadline) ? g.deadline : null,
       color: migrateColor(g.color || '#2E6E7E'),
       icon: g.icon ? String(g.icon) : 'target',
@@ -824,6 +831,27 @@
 
   Store.accounts = collection('accounts');
   Store.cards = collection('cards');
+  Store.removeAccountWithHistory = function (id) {
+    const p = Store.profile();
+    if (!p.accounts.some((account) => account.id === id)) return false;
+    p.accounts = p.accounts.filter((account) => account.id !== id);
+    p.transactions = p.transactions.filter((tx) => tx.accountId !== id && tx.toAccountId !== id);
+    p.cards.forEach((card) => { if (card.accountId === id) card.accountId = null; });
+    p.investments.forEach((investment) => { if (investment.accountId === id) investment.accountId = null; });
+    p.goals.forEach((goal) => (goal.deposits || []).forEach((deposit) => {
+      if (deposit.accountId === id) deposit.accountId = null;
+    }));
+    Object.values(p.invoices || {}).forEach((record) => {
+      const originalPayments = record.pagamentos || [];
+      record.pagamentos = originalPayments.filter((payment) => payment.accountId !== id);
+      if (record.pagamentos.length !== originalPayments.length) record.quitada = false;
+      Object.keys(record.adiantamentos || {}).forEach((key) => {
+        if (record.adiantamentos[key]?.accountId === id) delete record.adiantamentos[key];
+      });
+    });
+    Store.commit('account-delete-with-history');
+    return true;
+  };
   Store.removeCardWithHistory = function (id) {
     const p = Store.profile();
     if (!p.cards.some((card) => card.id === id)) return false;

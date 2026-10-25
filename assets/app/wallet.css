@@ -220,3 +220,15 @@
 #v3-form-account .v3-account-more .v3-mais-corpo{display:grid;gap:15px;padding:3px 17px 17px}
 #v3-form-account .v3-account-more [hidden]{display:none!important}
 @media(max-width:540px){#v3-form-account .v3-account-value-row{grid-template-columns:minmax(0,1fr) 80px;gap:5px;padding:12px}#v3-form-account .v3-account-amount input{font-size:39px}}
+/* O número ocupa o rodapé no lugar do titular; a marca OAZE permanece isolada. */
+.v3-wallet-item .v3-card-footer{right:100px;bottom:17px;justify-content:flex-start;align-items:end}
+.v3-wallet-item .v3-card-footer .v3-card-number{position:static;display:grid;gap:4px;max-width:none;font:600 clamp(15px,2vw,20px)/1 var(--mono);letter-spacing:.11em;text-shadow:none}
+.v3-wallet-item .v3-card-footer .v3-card-number small{font:500 8px var(--mono);letter-spacing:.12em;opacity:.75}
+.v3-wallet-item .v3-card-footer .v3-card-validity{align-self:end;font-size:9px}
+@media(max-width:540px){.v3-wallet-item .v3-card-footer{right:72px;bottom:12px}.v3-wallet-item .v3-card-footer .v3-card-number{font-size:14px}}
+.v3-card-linked{margin-left:auto;padding:7px 9px;border:1px solid rgba(240,229,207,.38);border-radius:10px;background:rgba(13,24,33,.28);font:600 16px var(--mono)}
+.v3-card-profile-links{display:grid;gap:8px;margin:12px 0;padding:17px;border:1px solid rgba(95,169,155,.35);border-radius:18px;background:rgba(95,169,155,.07)}
+.v3-card-profile-links[hidden]{display:none}.v3-card-profile-links legend{padding:0 5px;color:var(--milk);font:600 11px var(--mono);letter-spacing:.08em}
+.v3-card-profile-links .v3-check{min-height:36px}.v3-card-profile-links small{color:var(--muted);line-height:1.4}
+.v3-linked-detail .v3-due-invoice-summary{grid-template-columns:repeat(3,minmax(0,1fr));margin:24px 0}
+.v3-linked-detail>.v3-primary{width:100%;min-height:48px}

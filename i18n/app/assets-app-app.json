@@ -642,13 +642,6 @@
   "es": "Sin nombre"
  },
  {
-  "pt": "ANA SOUZA",
-  "tipo": "exato",
-  "en": "ANA SOUZA",
-  "fr": "ANA SOUZA",
-  "es": "ANA SOUZA"
- },
- {
   "pt": "crédito",
   "tipo": "exato",
   "en": "credit",
@@ -670,6 +663,20 @@
   "es": "terminada en {0}"
  },
  {
+  "pt": "· fatura no perfil {0}",
+  "tipo": "padrao",
+  "en": "· invoice in profile {0}",
+  "fr": "· facture dans le profil {0}",
+  "es": "· factura en el perfil {0}"
+ },
+ {
+  "pt": "Fatura no perfil {0}",
+  "tipo": "padrao",
+  "en": "Invoice in profile {0}",
+  "fr": "Facture dans le profil {0}",
+  "es": "Factura en el perfil {0}"
+ },
+ {
   "pt": "Reexibir",
   "tipo": "exato",
   "en": "Show again",
@@ -689,27 +696,6 @@
   "en": "Hide this item",
   "fr": "Masquer cet élément",
   "es": "Ocultar este elemento"
- },
- {
-  "pt": "INSTITUIÇÃO",
-  "tipo": "exato",
-  "en": "INSTITUTION",
-  "fr": "INSTITUTION",
-  "es": "INSTITUCIÓN"
- },
- {
-  "pt": "CRÉDITO",
-  "tipo": "exato",
-  "en": "CREDIT",
-  "fr": "CRÉDIT",
-  "es": "CRÉDITO"
- },
- {
-  "pt": "DÉBITO",
-  "tipo": "exato",
-  "en": "DEBIT",
-  "fr": "DÉBIT",
-  "es": "DÉBITO"
  },
  {
   "pt": "FINAL DO CARTÃO",
@@ -929,11 +915,11 @@
   "es": "SOBRANTE DE {0}"
  },
  {
-  "pt": "Suas categorias aparecem depois da primeira despesa confirmada.",
-  "tipo": "exato",
-  "en": "Your categories appear after the first confirmed expense.",
-  "fr": "Vos catégories apparaissent après la première dépense confirmée.",
-  "es": "Tus categorías aparecen tras el primer gasto confirmado."
+  "pt": "Suas categorias aparecem depois da primeira {0} confirmada.",
+  "tipo": "padrao",
+  "en": "Your categories appear after the first confirmed {0}.",
+  "fr": "Vos catégories apparaissent après la première {0} confirmée.",
+  "es": "Tus categorías aparecen tras la primera {0} confirmada."
  },
  {
   "pt": "{0}% do mês",
@@ -950,11 +936,11 @@
   "es": "{0} {1} más en « ver todo »"
  },
  {
-  "pt": "Distribuição dos gastos por categoria",
+  "pt": "receitas recebidas",
   "tipo": "exato",
-  "en": "Spending by category",
-  "fr": "Dépenses par catégorie",
-  "es": "Gastos por categoría"
+  "en": "income received",
+  "fr": "revenus reçus",
+  "es": "ingresos recibidos"
  },
  {
   "pt": "gastos feitos",
@@ -964,18 +950,39 @@
   "es": "gastado"
  },
  {
-  "pt": "{0} concentra",
+  "pt": "das receitas",
+  "tipo": "exato",
+  "en": "of income",
+  "fr": "des revenus",
+  "es": "de los ingresos"
+ },
+ {
+  "pt": "dos gastos",
+  "tipo": "exato",
+  "en": "of expenses",
+  "fr": "des dépenses",
+  "es": "de los gastos"
+ },
+ {
+  "pt": "Distribuição das {0} por categoria",
+  "tipo": "padrao",
+  "en": "Breakdown of {0} by category",
+  "fr": "Répartition des {0} par catégorie",
+  "es": "Distribución de {0} por categoría"
+ },
+ {
+  "pt": "{0} representa",
   "tipo": "padrao",
   "en": "{0} accounts for",
   "fr": "{0} représente",
-  "es": "{0} concentra"
+  "es": "{0} representa"
  },
  {
-  "pt": "dos gastos deste mês.",
-  "tipo": "exato",
-  "en": "of this month's spending.",
-  "fr": "des dépenses de ce mois.",
-  "es": "de los gastos de este mes."
+  "pt": "{0} deste mês.",
+  "tipo": "padrao",
+  "en": "{0} this month.",
+  "fr": "{0} ce mois-ci.",
+  "es": "{0} este mes."
  },
  {
   "pt": "Nenhum vencimento próximo registrado.",
@@ -1128,6 +1135,13 @@
   "en": "Where the month went",
   "fr": "Où est passé le mois",
   "es": "A dónde fue el mes"
+ },
+ {
+  "pt": "De onde veio o mês",
+  "tipo": "exato",
+  "en": "Where this month’s income came from",
+  "fr": "Origine des revenus du mois",
+  "es": "De dónde vinieron los ingresos del mes"
  },
  {
   "pt": "Até o fim do mês",
@@ -1732,32 +1746,11 @@
   "es": "a dónde fue el mes"
  },
  {
-  "pt": "Prévia sem gravação",
+  "pt": "de onde veio o mês",
   "tipo": "exato",
-  "en": "Preview, nothing saved",
-  "fr": "Aperçu sans sauvegarde",
-  "es": "Vista previa sin guardar"
- },
- {
-  "pt": "Salvando…",
-  "tipo": "exato",
-  "en": "Saving…",
-  "fr": "Enregistrement…",
-  "es": "Guardando…"
- },
- {
-  "pt": "Perfil compartilhado",
-  "tipo": "exato",
-  "en": "Shared profile",
-  "fr": "Profil partagé",
-  "es": "Perfil compartido"
- },
- {
-  "pt": "Dados da sua conta",
-  "tipo": "exato",
-  "en": "Your account data",
-  "fr": "Données de votre compte",
-  "es": "Datos de tu cuenta"
+  "en": "where this month’s income came from",
+  "fr": "origine des revenus du mois",
+  "es": "de dónde vinieron los ingresos del mes"
  },
  {
   "pt": "SALDO TOTAL",
@@ -1887,25 +1880,53 @@
   "es": "Las compras se agrupan por el mes de vencimiento de la factura. La fecha original permanece en el historial de cada compra."
  },
  {
-  "pt": "Vence {0}",
+  "pt": "Final {0} ·",
   "tipo": "padrao",
-  "en": "Due {0}",
-  "fr": "Échéance le {0}",
-  "es": "Vence el {0}"
+  "en": "Ending {0} ·",
+  "fr": "Fin {0} ·",
+  "es": "Final {0} ·"
  },
  {
-  "pt": "Fatura do mês",
+  "pt": "vence {0}",
+  "tipo": "padrao",
+  "en": "due {0}",
+  "fr": "échéance le {0}",
+  "es": "vence el {0}"
+ },
+ {
+  "pt": "fatura do mês",
   "tipo": "exato",
-  "en": "Monthly bill",
-  "fr": "Facture du mois",
-  "es": "Factura del mes"
+  "en": "monthly invoice",
+  "fr": "facture du mois",
+  "es": "factura del mes"
  },
  {
-  "pt": "{0} · abatido {1} · falta {2}",
-  "tipo": "padrao",
-  "en": "{0} · paid {1} · remaining {2}",
-  "fr": "{0} · payé {1} · reste {2}",
-  "es": "{0} · abonado {1} · falta {2}"
+  "pt": "Paga",
+  "tipo": "exato",
+  "en": "Paid",
+  "fr": "Payée",
+  "es": "Pagada"
+ },
+ {
+  "pt": "Em atraso",
+  "tipo": "exato",
+  "en": "Overdue",
+  "fr": "En retard",
+  "es": "Atrasada"
+ },
+ {
+  "pt": "Parcial",
+  "tipo": "exato",
+  "en": "Partial",
+  "fr": "Partielle",
+  "es": "Parcial"
+ },
+ {
+  "pt": "Em aberto",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "En cours",
+  "es": "Pendiente"
  },
  {
   "pt": "Abrir fatura",
@@ -1913,6 +1934,20 @@
   "en": "Open bill",
   "fr": "Ouvrir la facture",
   "es": "Abrir factura"
+ },
+ {
+  "pt": "Total",
+  "tipo": "exato",
+  "en": "Total",
+  "fr": "Total",
+  "es": "Total"
+ },
+ {
+  "pt": "Falta pagar",
+  "tipo": "exato",
+  "en": "Remaining to pay",
+  "fr": "Reste à payer",
+  "es": "Falta pagar"
  },
  {
   "pt": "· cancelada",
@@ -2132,6 +2167,48 @@
   "es": "{0} registro{1}"
  },
  {
+  "pt": "＋ &nbsp; Adicionar conta ou cartão",
+  "tipo": "exato",
+  "en": "＋ &nbsp; Add account or card",
+  "fr": "＋ &nbsp; Ajouter un compte ou une carte",
+  "es": "＋ &nbsp; Añadir cuenta o tarjeta"
+ },
+ {
+  "pt": "CARTÃO EM MAIS DE UM PERFIL",
+  "tipo": "exato",
+  "en": "CARD IN MULTIPLE PROFILES",
+  "fr": "CARTE DANS PLUSIEURS PROFILS",
+  "es": "TARJETA EN VARIOS PERFILES"
+ },
+ {
+  "pt": "A fatura única fica em",
+  "tipo": "exato",
+  "en": "The single invoice is in",
+  "fr": "La facture unique se trouve dans",
+  "es": "La factura única está en"
+ },
+ {
+  "pt": ". Compras, pagamentos e edições são feitos nesse perfil.",
+  "tipo": "exato",
+  "en": ". Purchases, payments and edits are made in that profile.",
+  "fr": ". Achats, paiements et modifications se font dans ce profil.",
+  "es": ". Las compras, los pagos y los cambios se hacen en ese perfil."
+ },
+ {
+  "pt": "Total da fatura",
+  "tipo": "exato",
+  "en": "Bill total",
+  "fr": "Total de la facture",
+  "es": "Total de la factura"
+ },
+ {
+  "pt": "Abrir fatura no perfil {0}",
+  "tipo": "padrao",
+  "en": "Open invoice in profile {0}",
+  "fr": "Ouvrir la facture dans le profil {0}",
+  "es": "Abrir factura en el perfil {0}"
+ },
+ {
   "pt": "em aberto",
   "tipo": "exato",
   "en": "open",
@@ -2293,13 +2370,6 @@
   "es": "La cartera mostrará aquí facturas y extractos reales."
  },
  {
-  "pt": "＋ &nbsp; Adicionar conta ou cartão",
-  "tipo": "exato",
-  "en": "＋ &nbsp; Add account or card",
-  "fr": "＋ &nbsp; Ajouter un compte ou une carte",
-  "es": "＋ &nbsp; Añadir cuenta o tarjeta"
- },
- {
   "pt": "Limite ·",
   "tipo": "exato",
   "en": "Limit ·",
@@ -2328,34 +2398,6 @@
   "es": "Corregir cierre"
  },
  {
-  "pt": "Paga",
-  "tipo": "exato",
-  "en": "Paid",
-  "fr": "Payée",
-  "es": "Pagada"
- },
- {
-  "pt": "Parcial",
-  "tipo": "exato",
-  "en": "Partial",
-  "fr": "Partielle",
-  "es": "Parcial"
- },
- {
-  "pt": "Em atraso",
-  "tipo": "exato",
-  "en": "Overdue",
-  "fr": "En retard",
-  "es": "Atrasada"
- },
- {
-  "pt": "Em aberto",
-  "tipo": "exato",
-  "en": "Open",
-  "fr": "En cours",
-  "es": "Pendiente"
- },
- {
   "pt": "Resumo da fatura de {0}",
   "tipo": "padrao",
   "en": "Bill summary for {0}",
@@ -2370,25 +2412,11 @@
   "es": "Factura de {0}"
  },
  {
-  "pt": "Total da fatura",
-  "tipo": "exato",
-  "en": "Bill total",
-  "fr": "Total de la facture",
-  "es": "Total de la factura"
- },
- {
   "pt": "Já abatido",
   "tipo": "exato",
   "en": "Already paid",
   "fr": "Déjà payé",
   "es": "Ya abonado"
- },
- {
-  "pt": "Falta pagar",
-  "tipo": "exato",
-  "en": "Remaining to pay",
-  "fr": "Reste à payer",
-  "es": "Falta pagar"
  },
  {
   "pt": "{0} adiantado em compras · {1} pago na fatura.",
@@ -2534,13 +2562,6 @@
   "en": "Selic target · yearly",
   "fr": "Objectif Selic · annuel",
   "es": "Meta Selic · anual"
- },
- {
-  "pt": "Fonte: Banco Central (SGS). Datas de referência acima; taxas não são o saldo da sua aplicação. CDB % do CDI usa o histórico diário para estimativa bruta, sem IR, IOF ou taxas do banco.",
-  "tipo": "exato",
-  "en": "Source: Central Bank of Brazil (SGS). Reference dates are shown above; rates are not your investment balance. CDI-linked CDBs use daily history for a gross estimate, excluding taxes and bank fees.",
-  "fr": "Source : Banque centrale du Brésil (SGS). Les dates de référence sont ci-dessus ; les taux ne sont pas le solde de votre placement. Les CDB liés au CDI utilisent l'historique quotidien pour une estimation brute, hors impôts et frais bancaires.",
-  "es": "Fuente: Banco Central de Brasil (SGS). Las fechas de referencia figuran arriba; las tasas no son el saldo de tu inversión. Los CDB ligados al CDI usan el historial diario para una estimación bruta, sin impuestos ni comisiones bancarias."
  },
  {
   "pt": "papéis",
@@ -2851,13 +2872,6 @@
   "es": "COTIZACIÓN"
  },
  {
-  "pt": "Esta visão registra aportes. Valores sem atualização manual podem ser estimativas; confira a posição na instituição. Vendas e proventos ainda não entram aqui.",
-  "tipo": "exato",
-  "en": "This view records contributions. Values without a manual update may be estimates; check your holdings with the institution. Sales and distributions are not included yet.",
-  "fr": "Cette vue enregistre les versements. Les valeurs sans mise à jour manuelle peuvent être estimées ; vérifiez vos positions auprès de l’établissement. Les ventes et revenus ne sont pas encore inclus.",
-  "es": "Esta vista registra aportes. Los valores sin actualización manual pueden ser estimaciones; consulta tus posiciones en la entidad. Las ventas y rendimientos todavía no se incluyen."
- },
- {
   "pt": "Valor informado por você",
   "tipo": "exato",
   "en": "Value entered by you",
@@ -2959,20 +2973,6 @@
   "en": "＋ New category",
   "fr": "＋ Nouvelle catégorie",
   "es": "＋ Nueva categoría"
- },
- {
-  "pt": "{0} é {1}% do total em {2}.",
-  "tipo": "padrao",
-  "en": "{0} is {1}% of the total in {2}.",
-  "fr": "{0} représente {1} % du total en {2}.",
-  "es": "{0} es el {1}% del total en {2}."
- },
- {
-  "pt": "As categorias aparecem com lançamentos confirmados.",
-  "tipo": "exato",
-  "en": "Categories appear once entries are confirmed.",
-  "fr": "Les catégories apparaissent avec les écritures confirmées.",
-  "es": "Las categorías aparecen con movimientos confirmados."
  },
  {
   "pt": "Nenhuma movimentação confirmada neste período.",
@@ -3209,74 +3209,74 @@
   "es": "Revisar límite"
  },
  {
-  "pt": "Proposta para {0} de gastos",
+  "pt": "{0} para tetos",
   "tipo": "padrao",
-  "en": "Plan for {0} in spending",
-  "fr": "Proposition pour {0} de dépenses",
-  "es": "Propuesta para {0} de gastos"
+  "en": "{0} for budgets",
+  "fr": "{0} pour les plafonds",
+  "es": "{0} para límites"
  },
  {
-  "pt": "Reserva de {0} fora dos tetos",
+  "pt": "{0}% · {1} para guardar",
   "tipo": "padrao",
-  "en": "Reserve of {0} outside the caps",
-  "fr": "Réserve de {0} hors des plafonds",
-  "es": "Reserva de {0} fuera de los límites"
+  "en": "{0}% · {1} to save",
+  "fr": "{0} % · {1} à épargner",
+  "es": "{0}% · {1} para ahorrar"
  },
  {
-  "pt": "Estimativa, não recomendação financeira. Você decide o valor de cada teto.",
+  "pt": "DISTRIBUIÇÃO DO MÊS",
   "tipo": "exato",
-  "en": "Estimate, not financial advice. You decide each cap.",
-  "fr": "Estimation, pas un conseil financier. Vous décidez de chaque plafond.",
-  "es": "Estimación, no asesoramiento financiero. Tú decides cada límite."
+  "en": "MONTHLY ALLOCATION",
+  "fr": "RÉPARTITION DU MOIS",
+  "es": "DISTRIBUCIÓN DEL MES"
  },
  {
-  "pt": "Coco",
+  "pt": "quanto separar da renda?",
   "tipo": "exato",
-  "en": "Coco",
-  "fr": "Coco",
-  "es": "Coco"
+  "en": "how much of your income to save?",
+  "fr": "quelle part du revenu épargner ?",
+  "es": "¿qué porcentaje del ingreso ahorrar?"
  },
  {
-  "pt": "PLANEJAMENTO COM A COCO",
+  "pt": "A porcentagem usa a renda mensal planejada acima. É um plano; não retira dinheiro da conta.",
   "tipo": "exato",
-  "en": "PLANNING WITH COCO",
-  "fr": "PLANIFIER AVEC COCO",
-  "es": "PLANIFICAR CON COCO"
+  "en": "The percentage uses the monthly income planned above. This is a plan and does not withdraw money from an account.",
+  "fr": "Le pourcentage utilise le revenu mensuel prévu ci-dessus. Ce plan ne retire aucun argent du compte.",
+  "es": "El porcentaje usa el ingreso mensual previsto arriba. Es un plan y no retira dinero de la cuenta."
  },
  {
-  "pt": "um teto que parte dos seus números",
+  "pt": "Para guardar",
   "tipo": "exato",
-  "en": "caps based on your numbers",
-  "fr": "des plafonds fondés sur vos chiffres",
-  "es": "límites basados en tus cifras"
+  "en": "To save",
+  "fr": "À épargner",
+  "es": "Para ahorrar"
  },
  {
-  "pt": "Responda três perguntas. A proposta usa seus gastos registrados e só vira teto depois que você revisar e salvar cada valor.",
+  "pt": "Para distribuir",
   "tipo": "exato",
-  "en": "Answer three questions. The plan uses your recorded spending. Each cap is saved only after you review it.",
-  "fr": "Répondez à trois questions. La proposition utilise vos dépenses enregistrées. Chaque plafond est enregistré seulement après votre vérification.",
-  "es": "Responde tres preguntas. La propuesta usa tus gastos registrados. Cada límite se guarda solo después de que lo revises."
+  "en": "To allocate",
+  "fr": "À répartir",
+  "es": "Para distribuir"
  },
  {
-  "pt": "Quanto entra por mês?",
+  "pt": "PORCENTAGEM PARA GUARDAR",
   "tipo": "exato",
-  "en": "How much comes in each month?",
-  "fr": "Combien recevez-vous par mois ?",
-  "es": "¿Cuánto ingresas al mes?"
+  "en": "PERCENTAGE TO SAVE",
+  "fr": "POURCENTAGE À ÉPARGNER",
+  "es": "PORCENTAJE PARA AHORRAR"
  },
  {
-  "pt": "Quanto quer separar antes de gastar?",
-  "tipo": "exato",
-  "en": "How much do you want to set aside first?",
-  "fr": "Combien voulez-vous mettre de côté d'abord ?",
-  "es": "¿Cuánto quieres apartar antes de gastar?"
+  "pt": "Ex.: 10% de {0} = {1} por mês.",
+  "tipo": "padrao",
+  "en": "E.g. 10% of {0} = {1} per month.",
+  "fr": "Ex. : 10 % de {0} = {1} par mois.",
+  "es": "Ej.: 10% de {0} = {1} al mes."
  },
  {
-  "pt": "Qual categoria precisa de mais folga?",
+  "pt": "Categoria com prioridade",
   "tipo": "exato",
-  "en": "Which category needs more room?",
-  "fr": "Quelle catégorie a besoin de plus de marge ?",
-  "es": "¿Qué categoría necesita más margen?"
+  "en": "Priority category",
+  "fr": "Catégorie prioritaire",
+  "es": "Categoría prioritaria"
  },
  {
   "pt": "Distribuir pelo histórico",
@@ -3286,25 +3286,32 @@
   "es": "Distribuir según el historial"
  },
  {
-  "pt": "Montar proposta",
+  "pt": "Salvar porcentagem e montar tetos",
   "tipo": "exato",
-  "en": "Build a plan",
-  "fr": "Créer une proposition",
-  "es": "Crear propuesta"
+  "en": "Save percentage and suggest budgets",
+  "fr": "Enregistrer le pourcentage et proposer des plafonds",
+  "es": "Guardar porcentaje y proponer límites"
  },
  {
-  "pt": "Confira a entrada mensal e a reserva.",
+  "pt": "Defina a renda mensal e uma porcentagem entre 0% e 100%.",
   "tipo": "exato",
-  "en": "Check your monthly income and reserve.",
-  "fr": "Vérifiez vos revenus mensuels et votre réserve.",
-  "es": "Revisa tus ingresos mensuales y la reserva."
+  "en": "Set monthly income and a percentage from 0% to 100%.",
+  "fr": "Définissez le revenu mensuel et un pourcentage entre 0 % et 100 %.",
+  "es": "Define el ingreso mensual y un porcentaje entre 0% y 100%."
  },
  {
-  "pt": "Registre gastos por categoria antes de montar tetos personalizados.",
+  "pt": "Não foi possível salvar a porcentagem.",
   "tipo": "exato",
-  "en": "Record spending by category before creating personalized caps.",
-  "fr": "Enregistrez des dépenses par catégorie avant de créer des plafonds personnalisés.",
-  "es": "Registra gastos por categoría antes de crear límites personalizados."
+  "en": "Could not save the percentage.",
+  "fr": "Impossible d’enregistrer le pourcentage.",
+  "es": "No se pudo guardar el porcentaje."
+ },
+ {
+  "pt": "Porcentagem salva. Registre gastos por categoria para sugerir tetos.",
+  "tipo": "exato",
+  "en": "Percentage saved. Record categorized expenses to suggest budgets.",
+  "fr": "Pourcentage enregistré. Saisissez des dépenses par catégorie pour proposer des plafonds.",
+  "es": "Porcentaje guardado. Registra gastos por categoría para proponer límites."
  },
  {
   "pt": "Lembrete ·",
@@ -3938,46 +3945,11 @@
   "es": "{0}{1} {2} sobre {3}"
  },
  {
-  "pt": "A história refaz só o que o passado responde: sobra, previsibilidade e tetos. Fatura em aberto, saldo, patrimônio e metas são de hoje — o motor não tem como saber se uma fatura estava paga em março, e não vai fingir que sabe. Toque num mês para abri-lo.",
-  "tipo": "exato",
-  "en": "The history only redoes what the past can answer: leftover, predictability and caps. Open bills, balance, net worth and goals are from today — the engine has no way of knowing whether a bill was paid in March, and it will not pretend to. Tap a month to open it.",
-  "fr": "L'historique ne refait que ce à quoi le passé peut répondre : reste, prévisibilité et plafonds. Facture en cours, solde, patrimoine et objectifs datent d'aujourd'hui — le moteur ne peut pas savoir si une facture était payée en mars, et il ne fera pas semblant de le savoir. Touchez un mois pour l'ouvrir.",
-  "es": "La historia rehace solo lo que el pasado responde: sobra, previsibilidad y topes. Factura abierta, saldo, patrimonio y metas son de hoy — el motor no tiene cómo saber si una factura estaba pagada en marzo, y no va a fingir que lo sabe. Toque un mes para abrirlo."
- },
- {
   "pt": "A história mês a mês aparece a partir do segundo mês com lançamentos: é ela que separa um 70 subindo de um 70 caindo.",
   "tipo": "exato",
   "en": "The month-by-month history appears from the second month with entries: it is what separates a 70 going up from a 70 going down.",
   "fr": "L'historique mois par mois apparaît à partir du deuxième mois avec des écritures : c'est lui qui distingue un 70 qui monte d'un 70 qui descend.",
   "es": "La historia mes a mes aparece a partir del segundo mes con movimientos: es ella la que separa un 70 que sube de un 70 que baja."
- },
- {
-  "pt": "Uma pergunta não se aplica a você e fica",
-  "tipo": "exato",
-  "en": "One question does not apply to you and stays",
-  "fr": "Une question ne vous concerne pas et reste",
-  "es": "Una pregunta no se aplica a usted y queda"
- },
- {
-  "pt": "{0} perguntas não se aplicam a você e ficam",
-  "tipo": "padrao",
-  "en": "{0} questions do not apply to you and stay",
-  "fr": "{0} questions ne vous concernent pas et restent",
-  "es": "{0} preguntas no se aplican a usted y quedan"
- },
- {
-  "pt": "{0} fora da conta: a nota é a porcentagem dos {1} pontos que dá para julgar.",
-  "tipo": "padrao",
-  "en": "{0} out of the count: the score is the percentage of the {1} points there is enough to judge.",
-  "fr": "{0} hors du calcul : la note est le pourcentage des {1} points qu'il est possible de juger.",
-  "es": "{0} fuera del cálculo: la nota es el porcentaje de los {1} puntos que se pueden juzgar."
- },
- {
-  "pt": "Sai dos seus próprios lançamentos e não sai daqui: não é consulta a birô, não vira cadastro e ninguém além de você vê.",
-  "tipo": "exato",
-  "en": "It comes from your own entries and goes nowhere else: it isn’t a credit bureau check, it doesn’t become a record, and nobody but you sees it.",
-  "fr": "Il vient de vos propres écritures et ne sort pas d’ici : ce n’est pas une consultation d’organisme de crédit, cela ne crée aucun fichier, et personne d’autre que vous ne le voit.",
-  "es": "Sale de tus propios movimientos y no sale de aquí: no es una consulta a un buró, no se convierte en registro y nadie más que tú lo ve."
  },
  {
   "pt": "V3/análises:",
@@ -4930,39 +4902,21 @@
   "es": "Perfil {0}"
  },
  {
-  "pt": "Quanto entrou e saiu neste mês?",
+  "pt": "Coco",
   "tipo": "exato",
-  "en": "How much came in and went out this month?",
-  "fr": "Combien est entré et sorti ce mois-ci ?",
-  "es": "¿Cuánto entró y salió este mes?"
+  "en": "Coco",
+  "fr": "Coco",
+  "es": "Coco"
  },
  {
-  "pt": "Quais despesas previstas vencem primeiro?",
+  "pt": "06_orgulhosa",
   "tipo": "exato",
-  "en": "Which upcoming expenses are due first?",
-  "fr": "Quelles dépenses prévues arrivent à échéance en premier ?",
-  "es": "¿Qué gastos previstos vencen primero?"
+  "ignorar": true
  },
  {
-  "pt": "Qual categoria mais pesou neste mês?",
+  "pt": "02_feliz",
   "tipo": "exato",
-  "en": "Which category cost the most this month?",
-  "fr": "Quelle catégorie a pesé le plus ce mois-ci ?",
-  "es": "¿Qué categoría tuvo más peso este mes?"
- },
- {
-  "pt": "O que você quer entender sobre seu dinheiro?",
-  "tipo": "exato",
-  "en": "What would you like to understand about your money?",
-  "fr": "Que souhaitez-vous comprendre de votre argent ?",
-  "es": "¿Qué quieres entender sobre tu dinero?"
- },
- {
-  "pt": "Escolha uma pergunta ou escreva a sua. A Coco separa o que já aconteceu do que você apenas previu.",
-  "tipo": "exato",
-  "en": "Choose a question or write your own. Coco separates completed transactions from forecasts.",
-  "fr": "Choisissez une question ou écrivez la vôtre. Coco distingue les opérations réalisées des prévisions.",
-  "es": "Elige una pregunta o escribe la tuya. Coco distingue lo ocurrido de lo previsto."
+  "ignorar": true
  },
  {
   "pt": "Parar áudio",
@@ -5357,32 +5311,53 @@
   "es": "Perfil compartido · {0} · caja fuerte y Coco no disponibles"
  },
  {
-  "pt": "no prazo da meta",
+  "pt": "CDI indisponível agora. A projeção aparece quando a taxa atualizar.",
   "tipo": "exato",
-  "en": "by the goal deadline",
-  "fr": "à la date de l'objectif",
-  "es": "en el plazo de la meta"
+  "en": "CDI is unavailable now. The projection will appear when the rate updates.",
+  "fr": "CDI indisponible pour le moment. La projection apparaîtra après l’actualisation du taux.",
+  "es": "El CDI no está disponible ahora. La proyección aparecerá cuando se actualice la tasa."
  },
  {
-  "pt": "em 12 meses",
+  "pt": "{0}% do CDI de {1}",
+  "tipo": "padrao",
+  "en": "{0}% of the CDI on {1}",
+  "fr": "{0} % du CDI du {1}",
+  "es": "{0}% del CDI del {1}"
+ },
+ {
+  "pt": "{0}% ao ano",
+  "tipo": "padrao",
+  "en": "{0}% per year",
+  "fr": "{0} % par an",
+  "es": "{0}% al año"
+ },
+ {
+  "pt": "No prazo da meta",
   "tipo": "exato",
-  "en": "in 12 months",
-  "fr": "dans 12 mois",
-  "es": "en 12 meses"
+  "en": "By the goal deadline",
+  "fr": "À l’échéance de l’objectif",
+  "es": "Al plazo de la meta"
  },
  {
-  "pt": "Com {0}% ao ano: cerca de",
-  "tipo": "padrao",
-  "en": "At {0}% per year: about",
-  "fr": "À {0} % par an : environ",
-  "es": "Al {0}% anual: cerca de"
+  "pt": "Em 12 meses",
+  "tipo": "exato",
+  "en": "In 12 months",
+  "fr": "Dans 12 mois",
+  "es": "En 12 meses"
  },
  {
-  "pt": "{0}. Projeção, não saldo.",
+  "pt": "Projeção com {0}",
   "tipo": "padrao",
-  "en": "{0}. Projection, not balance.",
-  "fr": "{0}. Projection, pas un solde.",
-  "es": "{0}. Proyección, no saldo."
+  "en": "Projection using {0}",
+  "fr": "Projection avec {0}",
+  "es": "Proyección con {0}"
+ },
+ {
+  "pt": "{0} · saldo guardado continua {1}. Taxa futura e impostos podem mudar o resultado.",
+  "tipo": "padrao",
+  "en": "{0} · saved balance remains {1}. Future rates and taxes may change the result.",
+  "fr": "{0} · le solde épargné reste de {1}. Les taux futurs et les impôts peuvent modifier le résultat.",
+  "es": "{0} · el saldo ahorrado sigue siendo {1}. Las tasas futuras y los impuestos pueden cambiar el resultado."
  },
  {
   "pt": "Ícones de interface:",
@@ -6311,6 +6286,20 @@
   "es": "Recordarme en la agenda"
  },
  {
+  "pt": "Tipo de investimento",
+  "tipo": "exato",
+  "en": "Investment type",
+  "fr": "Type de placement",
+  "es": "Tipo de inversión"
+ },
+ {
+  "pt": "Conta do aporte",
+  "tipo": "exato",
+  "en": "Funding account",
+  "fr": "Compte du versement",
+  "es": "Cuenta del aporte"
+ },
+ {
   "pt": "Não pago · agendado",
   "tipo": "exato",
   "en": "Unpaid · scheduled",
@@ -7024,6 +7013,20 @@
   "en": "Count in the totals",
   "fr": "Compter dans les totaux",
   "es": "Contar en los totales"
+ },
+ {
+  "pt": "MOSTRAR ESTE CARTÃO EM OUTROS PERFIS",
+  "tipo": "exato",
+  "en": "SHOW THIS CARD IN OTHER PROFILES",
+  "fr": "AFFICHER CETTE CARTE DANS D’AUTRES PROFILS",
+  "es": "MOSTRAR ESTA TARJETA EN OTROS PERFILES"
+ },
+ {
+  "pt": "A fatura e as compras continuam em {0}. No outro perfil, o cartão abre esta fatura única.",
+  "tipo": "padrao",
+  "en": "The invoice and purchases remain in {0}. In the other profile, this card opens the same invoice.",
+  "fr": "La facture et les achats restent dans {0}. Dans l’autre profil, cette carte ouvre la même facture.",
+  "es": "La factura y las compras permanecen en {0}. En el otro perfil, esta tarjeta abre la misma factura."
  },
  {
   "pt": "Personalizar cor do cartão ou conta",
@@ -7914,25 +7917,60 @@
   "es": "Meta financiera"
  },
  {
-  "pt": "RENDIMENTO ESTIMADO (% AO ANO)",
+  "pt": "COMO RENDE?",
   "tipo": "exato",
-  "en": "ESTIMATED RETURN (% PER YEAR)",
-  "fr": "RENDEMENT ESTIMÉ (% PAR AN)",
-  "es": "RENDIMIENTO ESTIMADO (% ANUAL)"
+  "en": "HOW DOES IT EARN?",
+  "fr": "COMMENT PRODUIT-IL DES INTÉRÊTS ?",
+  "es": "¿CÓMO GENERA RENDIMIENTO?"
  },
  {
-  "pt": "Opcional · ex.: 10",
+  "pt": "Sem rendimento",
   "tipo": "exato",
-  "en": "Optional · e.g. 10",
-  "fr": "Facultatif · ex. : 10",
-  "es": "Opcional · ej.: 10"
+  "en": "No yield",
+  "fr": "Sans rendement",
+  "es": "Sin rendimiento"
  },
  {
-  "pt": "Mostra uma projeção separada; não altera o valor guardado nem o patrimônio.",
+  "pt": "Percentual do CDI",
   "tipo": "exato",
-  "en": "Shows a separate projection; does not change saved money or net worth.",
-  "fr": "Affiche une projection distincte ; ne change ni l'épargne ni le patrimoine.",
-  "es": "Muestra una proyección aparte; no cambia lo ahorrado ni el patrimonio."
+  "en": "Percentage of CDI",
+  "fr": "Pourcentage du CDI",
+  "es": "Porcentaje del CDI"
+ },
+ {
+  "pt": "Taxa anual fixa",
+  "tipo": "exato",
+  "en": "Fixed annual rate",
+  "fr": "Taux annuel fixe",
+  "es": "Tasa anual fija"
+ },
+ {
+  "pt": "PERCENTUAL DO CDI",
+  "tipo": "exato",
+  "en": "PERCENTAGE OF CDI",
+  "fr": "POURCENTAGE DU CDI",
+  "es": "PORCENTAJE DEL CDI"
+ },
+ {
+  "pt": "Ex.: 100% acompanha o CDI de referência.",
+  "tipo": "exato",
+  "en": "E.g. 100% tracks the reference CDI.",
+  "fr": "Ex. : 100 % suit le CDI de référence.",
+  "es": "Ej.: 100% sigue el CDI de referencia."
+ },
+ {
+  "pt": "TAXA ESTIMADA (% AO ANO)",
+  "tipo": "exato",
+  "en": "ESTIMATED RATE (% PER YEAR)",
+  "fr": "TAUX ESTIMÉ (% PAR AN)",
+  "es": "TASA ESTIMADA (% AL AÑO)"
+ },
+ {
+  "pt": "O rendimento é uma projeção. O saldo da meta muda apenas quando você registra um aporte.",
+  "tipo": "exato",
+  "en": "Yield is a projection. The goal balance changes only when you record a contribution.",
+  "fr": "Le rendement est une projection. Le solde de l’objectif change uniquement lorsque vous enregistrez un versement.",
+  "es": "El rendimiento es una proyección. El saldo de la meta solo cambia cuando registras un aporte."
  },
  {
   "pt": "Para alterar o valor guardado, use “Guardar valor”.",
@@ -8409,6 +8447,13 @@
   "en": "Delete",
   "fr": "Supprimer",
   "es": "Eliminar"
+ },
+ {
+  "pt": "Perfil compartilhado",
+  "tipo": "exato",
+  "en": "Shared profile",
+  "fr": "Profil partagé",
+  "es": "Perfil compartido"
  },
  {
   "pt": "Convite {0}",
@@ -10414,46 +10459,18 @@
   "es": "No se pudo eliminar."
  },
  {
+  "pt": "O cartão não está mais disponível neste perfil.",
+  "tipo": "exato",
+  "en": "The card is no longer available in this profile.",
+  "fr": "La carte n’est plus disponible dans ce profil.",
+  "es": "La tarjeta ya no está disponible en este perfil."
+ },
+ {
   "pt": "Este item não existe mais.",
   "tipo": "exato",
   "en": "This item no longer exists.",
   "fr": "Cet élément n’existe plus.",
   "es": "Este elemento ya no existe."
- },
- {
-  "pt": "conta com histórico",
-  "tipo": "exato",
-  "en": "account with history",
-  "fr": "compte avec historique",
-  "es": "cuenta con historial"
- },
- {
-  "pt": "não é possível excluir",
-  "tipo": "exato",
-  "en": "cannot be deleted",
-  "fr": "ne peut pas être supprimé",
-  "es": "no se puede eliminar"
- },
- {
-  "pt": "tem lançamentos ou outros dados vinculados. Excluí-la apagaria o vínculo do histórico. Arquive a conta em Editar conta → Mais opções.",
-  "tipo": "exato",
-  "en": "has transactions or other linked data. Deleting it would break the history link. Archive it under Edit account → More options.",
-  "fr": "contient des opérations ou des données liées. Sa suppression romprait le lien avec l’historique. Archivez-le dans Modifier le compte → Plus d’options.",
-  "es": "tiene movimientos u otros datos vinculados. Eliminarla rompería el vínculo con el historial. Archívala en Editar cuenta → Más opciones."
- },
- {
-  "pt": "Editar conta",
-  "tipo": "exato",
-  "en": "Edit account",
-  "fr": "Modifier le compte",
-  "es": "Editar cuenta"
- },
- {
-  "pt": "Conta com histórico",
-  "tipo": "exato",
-  "en": "Account with history",
-  "fr": "Compte avec historique",
-  "es": "Cuenta con historial"
  },
  {
   "pt": "oaze.wallet-delete-warning",
@@ -10473,11 +10490,11 @@
   "es": "También se quitarán del historial {0} compra(s) y {1} factura(s) vinculadas. Los pagos de esas facturas dejarán de afectar el saldo de las cuentas."
  },
  {
-  "pt": "O saldo inicial, as configurações e os dados desta conta serão excluídos. Não há lançamentos vinculados.",
-  "tipo": "exato",
-  "en": "The opening balance, settings and data for this account will be deleted. There are no linked transactions.",
-  "fr": "Le solde initial, les réglages et les données de ce compte seront supprimés. Aucune opération n’y est liée.",
-  "es": "Se eliminarán el saldo inicial, la configuración y los datos de esta cuenta. No tiene movimientos vinculados."
+  "pt": "{0} lançamento(s) e {1} pagamento(s) de fatura ligados a esta conta sairão do histórico. Cartões e investimentos vinculados continuarão no perfil, sem esta conta. Esta ação não pode ser desfeita.",
+  "tipo": "padrao",
+  "en": "{0} transaction(s) and {1} invoice payment(s) linked to this account will be removed from the history. Linked cards and investments will remain in the profile without this account. This cannot be undone.",
+  "fr": "{0} opération(s) et {1} paiement(s) de facture liés à ce compte seront supprimés de l’historique. Les cartes et placements liés resteront dans le profil sans ce compte. Cette action est irréversible.",
+  "es": "{0} movimiento(s) y {1} pago(s) de factura vinculados a esta cuenta se eliminarán del historial. Las tarjetas e inversiones vinculadas seguirán en el perfil sin esta cuenta. Esta acción no se puede deshacer."
  },
  {
   "pt": "excluir cartão",
@@ -10536,11 +10553,11 @@
   "es": "Tarjeta y datos vinculados eliminados."
  },
  {
-  "pt": "Conta excluída.",
+  "pt": "Conta e dados vinculados excluídos.",
   "tipo": "exato",
-  "en": "Account deleted.",
-  "fr": "Compte supprimé.",
-  "es": "Cuenta eliminada."
+  "en": "Account and linked data deleted.",
+  "fr": "Compte et données liées supprimés.",
+  "es": "Cuenta y datos vinculados eliminados."
  },
  {
   "pt": "Este lançamento não existe mais.",
