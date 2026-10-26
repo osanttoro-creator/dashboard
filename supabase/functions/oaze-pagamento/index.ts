@@ -47,8 +47,11 @@ function dinheiro(centavos: number, moeda: string): string {
 }
 
 function origensPermitidas(): string[] {
-  return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
+  const configuradas = (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
     .split(',').map((o) => o.trim()).filter(Boolean);
+  // Origens locais exatas dos pacotes Android (Capacitor) e Windows (Tauri).
+  // Mantemos a lista restrita: localhost genérico abriria o checkout a sites locais.
+  return [...new Set([...configuradas, 'https://localhost', 'http://tauri.localhost'])];
 }
 
 function cors(origem: string | null): Record<string, string> {
