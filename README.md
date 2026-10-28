@@ -1,11 +1,13 @@
-# OAZE — dashboard financeiro pessoal
+# OAZE — site público e aplicação financeira
 
-Aplicação de página única, **sem backend**. Todos os dados ficam em `localStorage`,
-no próprio navegador. Nada é enviado para nenhum servidor.
+O domínio público apresenta o produto. O aplicativo mantém dados por conta no
+Supabase; a pasta `assets/app/` contém a interface web usada pelos fluxos de
+autenticação, cobrança e suporte durante a transição para as lojas.
 
 ## Como abrir
 
-Dê duplo clique em `index.html`. É só isso — não precisa instalar nada.
+Dê duplo clique em `index.html` para inspecionar a página pública, ou use
+`node tools/servir-demo-local.js` para ver os recursos com caminhos absolutos.
 
 Os gráficos usam **Chart.js via CDN**, com uma cópia local em `assets/vendor/` como
 reserva — se não houver internet, o app carrega essa cópia e nada deixa de funcionar.
@@ -15,10 +17,13 @@ somem, com um aviso na tela.)
 > Em janela anônima alguns navegadores bloqueiam o `localStorage`. O app avisa quando
 > isso acontece — nesse caso, use **↓ Backup** antes de fechar a aba.
 
-## Abrir no celular
+## Aplicativos nas lojas
 
-O app está publicado. No celular, abra o endereço do site e entre na sua conta — os
-dados chegam sozinhos, porque a sincronização é por conta e não por aparelho.
+As fichas públicas da Google Play e da Microsoft Store ainda estão sendo
+configuradas. Em `assets/js/lojas-oaze.js`, os campos `play` e `windows`
+ficam vazios até os URLs oficiais serem confirmados. A página mostra “Em breve”
+e não oferece um link genérico ou incorreto. Quando as fichas forem liberadas,
+preencha os dois campos com os endereços oficiais e teste os botões.
 
 **Sem conta, cada navegador é uma ilha.** O que você registra fica no `localStorage`
 daquele navegador, e PC e celular são duas bases separadas. Para juntá-las sem criar
@@ -54,8 +59,10 @@ O que ele confere, e o caminho manual para rollback, estão em
 > A Hostinger intercepta o `robots.txt` no subdomínio temporário e serve o dela, que
 > bloqueia só o Googlebot. O nosso passa a valer quando o domínio próprio for apontado.
 
-**Endereços:** `/` abre a landing e `/app` abre o aplicativo. O `.htaccess`
-reescreve as rotas sem extensão, então `/precos` e `/entrar` funcionam como páginas.
+**Endereços:** `/` abre a apresentação e suas chamadas levam a `#baixar`.
+`/app` continua como rota técnica para retornos de autenticação e cobrança
+enquanto esses fluxos dependem da web. O `.htaccess` também mantém páginas
+transacionais como `/entrar` e `/redefinir-senha`.
 
 ### Content-Security-Policy
 

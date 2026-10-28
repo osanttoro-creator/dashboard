@@ -84,16 +84,16 @@
     "es": "Soporte"
   },
   {
-    "pt": "Entrar",
-    "en": "Sign in",
-    "fr": "Se connecter",
-    "es": "Iniciar sesión"
+    "pt": "Aplicativos",
+    "en": "Apps",
+    "fr": "Applications",
+    "es": "Aplicaciones"
   },
   {
-    "pt": "Criar conta grátis",
-    "en": "Create a free account",
-    "fr": "Créer un compte gratuit",
-    "es": "Crear cuenta gratis"
+    "pt": "Ver aplicativos",
+    "en": "See apps",
+    "fr": "Voir les applications",
+    "es": "Ver aplicaciones"
   },
   {
     "pt": "Planos",
@@ -234,10 +234,10 @@
     "es": "R$ 279,90 por año · ahorro de R$ 150,90"
   },
   {
-    "pt": "Assinar o Oásis",
-    "en": "Subscribe to Oásis",
-    "fr": "S'abonner à Oásis",
-    "es": "Suscribirse a Oásis"
+    "pt": "Ver disponibilidade",
+    "en": "Check availability",
+    "fr": "Voir la disponibilité",
+    "es": "Ver disponibilidad"
   },
   {
     "pt": "⟦s0⟧ Até 5 espaços financeiros e 50 contas",
@@ -634,12 +634,6 @@
     "en": "Account",
     "fr": "Compte",
     "es": "Cuenta"
-  },
-  {
-    "pt": "Criar conta",
-    "en": "Create account",
-    "fr": "Créer un compte",
-    "es": "Crear cuenta"
   },
   {
     "pt": "Recuperar senha",

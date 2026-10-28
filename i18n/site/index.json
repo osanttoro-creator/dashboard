@@ -90,76 +90,58 @@
     "es": "Planes"
   },
   {
-    "pt": "Entrar",
-    "en": "Sign in",
-    "fr": "Se connecter",
-    "es": "Iniciar sesión"
+    "pt": "Onde baixar",
+    "en": "Where to download",
+    "fr": "Où télécharger",
+    "es": "Dónde descargar"
   },
   {
-    "pt": "Começar grátis",
-    "en": "Start free",
-    "fr": "Commencer gratuitement",
-    "es": "Empezar gratis"
+    "pt": "OAZE · SEU DINHEIRO EM PERSPECTIVA",
+    "en": "OAZE · YOUR MONEY IN PERSPECTIVE",
+    "fr": "OAZE · VOTRE ARGENT EN PERSPECTIVE",
+    "es": "OAZE · TU DINERO EN PERSPECTIVA"
   },
   {
-    "pt": "Bem-vindo ao OAZE",
-    "en": "Welcome to OAZE",
-    "fr": "Bienvenue chez OAZE",
-    "es": "Bienvenido a OAZE"
+    "pt": "O seu dinheiro, <em>mais claro a cada dia.</em>",
+    "en": "Your money, <em>clearer every day.</em>",
+    "fr": "Votre argent, <em>plus clair chaque jour.</em>",
+    "es": "Tu dinero, <em>más claro cada día.</em>"
   },
   {
-    "pt": "O SEU MÊS, SEM PONTAS SOLTAS",
-    "en": "YOUR MONTH, WITHOUT LOOSE ENDS",
-    "fr": "VOTRE MOIS, SANS ZONE FLOUE",
-    "es": "TU MES, SIN CABOS SUELTOS"
+    "pt": "Contas, cartões, gastos e planos em um só lugar. Veja o que aconteceu, o que vem pela frente e converse com a Coco para decidir seu próximo passo.",
+    "en": "Accounts, cards, spending and plans in one place. See what happened, what is ahead, and talk to Coco to decide your next step.",
+    "fr": "Comptes, cartes, dépenses et projets au même endroit. Voyez ce qui s'est passé, ce qui arrive et échangez avec Coco pour décider de la suite.",
+    "es": "Cuentas, tarjetas, gastos y planes en un solo lugar. Mira lo que pasó, lo que viene y habla con Coco para decidir tu próximo paso."
   },
   {
-    "pt": "O dinheiro fica mais claro quando <em>tudo se encontra.</em>",
-    "en": "Money makes more sense when <em>everything comes together.</em>",
-    "fr": "L’argent devient plus clair quand <em>tout se rejoint.</em>",
-    "es": "El dinero se entiende mejor cuando <em>todo se reúne.</em>"
+    "pt": "Conhecer os aplicativos <span aria-hidden=\"true\">↗</span>",
+    "en": "Explore the apps <span aria-hidden=\"true\">↗</span>",
+    "fr": "Découvrir les applications <span aria-hidden=\"true\">↗</span>",
+    "es": "Conocer las aplicaciones <span aria-hidden=\"true\">↗</span>"
   },
   {
-    "pt": "Contas, cartões e compromissos no mesmo lugar. A Coco ajuda a organizar e mostra o que vem pela frente. Você confirma cada ação.",
-    "en": "Accounts, cards and commitments in one place. Coco helps organise them and shows what comes next. You confirm every action.",
-    "fr": "Comptes, cartes et échéances au même endroit. Coco aide à les organiser et montre ce qui arrive. Vous confirmez chaque action.",
-    "es": "Cuentas, tarjetas y compromisos en un solo lugar. Coco ayuda a organizarlos y muestra lo que viene. Tú confirmas cada acción."
+    "pt": "Ver como funciona",
+    "en": "See how it works",
+    "fr": "Voir comment ça marche",
+    "es": "Ver cómo funciona"
   },
   {
-    "pt": "Conhecer o OAZE <span aria-hidden=\"true\">↗</span>",
-    "en": "Explore OAZE <span aria-hidden=\"true\">↗</span>",
-    "fr": "Découvrir OAZE <span aria-hidden=\"true\">↗</span>",
-    "es": "Conoce OAZE <span aria-hidden=\"true\">↗</span>"
+    "pt": "Disponibilidade nas lojas em preparação · versão grátis para começar",
+    "en": "Store listings are being prepared · a free version to get started",
+    "fr": "Pages des boutiques en préparation · une version gratuite pour commencer",
+    "es": "Páginas en las tiendas en preparación · versión gratuita para empezar"
   },
   {
-    "pt": "Funciona no celular e no computador · Sem cartão para começar",
-    "en": "Works on phone and computer · No card needed to start",
-    "fr": "Sur téléphone et ordinateur · Aucune carte requise pour commencer",
-    "es": "Funciona en móvil y ordenador · Sin tarjeta para empezar"
+    "pt": "Demonstração do OAZE no computador e no celular, com dados de exemplo",
+    "en": "OAZE demonstration on desktop and mobile, with sample data",
+    "fr": "Démonstration d'OAZE sur ordinateur et mobile, avec des données d'exemple",
+    "es": "Demostración de OAZE en ordenador y móvil, con datos de ejemplo"
   },
   {
-    "pt": "Telas reais do OAZE com dados de exemplo: painel financeiro no computador, carteira no celular e Coco, a assistente.",
-    "en": "Real OAZE screens with sample data: a financial dashboard on a computer, a wallet on a phone and Coco, the assistant.",
-    "fr": "Vraies captures d’OAZE avec des données d’exemple : tableau de bord sur ordinateur, portefeuille sur téléphone et Coco, l’assistante.",
-    "es": "Pantallas reales de OAZE con datos de ejemplo: panel financiero en ordenador, cartera en móvil y Coco, la asistente."
-  },
-  {
-    "pt": "Demonstração com dados de exemplo",
-    "en": "Demo with sample data",
-    "fr": "Démo avec des données d’exemple",
-    "es": "Demostración con datos de ejemplo"
-  },
-  {
-    "pt": "bem-vindo ao",
-    "en": "welcome to",
-    "fr": "bienvenue chez",
-    "es": "bienvenido a"
-  },
-  {
-    "pt": "⟦s0⟧ role para abrir",
-    "en": "⟦s0⟧ scroll to open",
-    "fr": "⟦s0⟧ faites défiler pour ouvrir",
-    "es": "⟦s0⟧ desliza para abrir"
+    "pt": "Telas demonstrativas · dados de exemplo",
+    "en": "Demo screens · sample data",
+    "fr": "Écrans de démonstration · données d'exemple",
+    "es": "Pantallas de demostración · datos de ejemplo"
   },
   {
     "pt": "Como o OAZE funciona",
@@ -276,6 +258,12 @@
     "es": "Abre OAZE y encuentra el saldo de cada cuenta, los gastos del mes y lo que aún viene. Sin sumar de cabeza."
   },
   {
+    "pt": "Ver disponibilidade",
+    "en": "Check availability",
+    "fr": "Voir la disponibilité",
+    "es": "Ver disponibilidad"
+  },
+  {
     "pt": "Demonstração da visão geral do OAZE no computador, com dados de exemplo",
     "en": "Demo of the OAZE overview on a computer, with sample data",
     "fr": "Démonstration de la vue d’ensemble d’OAZE sur ordinateur, avec des données d’exemple",
@@ -364,12 +352,6 @@
     "en": "Sample conversation · no action without confirmation",
     "fr": "Conversation d’exemple · aucune action sans confirmation",
     "es": "Conversación de ejemplo · ninguna acción sin confirmación"
-  },
-  {
-    "pt": "Conhecer a Coco",
-    "en": "Meet Coco",
-    "fr": "Découvrir Coco",
-    "es": "Conocer a Coco"
   },
   {
     "pt": "OLHE ADIANTE",
@@ -510,6 +492,66 @@
     "es": "Puedes revisar lo que Coco aprende, pausar el aprendizaje y borrar recuerdos."
   },
   {
+    "pt": "OAZE NO SEU DISPOSITIVO",
+    "en": "OAZE ON YOUR DEVICE",
+    "fr": "OAZE SUR VOTRE APPAREIL",
+    "es": "OAZE EN TU DISPOSITIVO"
+  },
+  {
+    "pt": "Seu espaço financeiro vai com você.",
+    "en": "Your finances go with you.",
+    "fr": "Vos finances vous accompagnent.",
+    "es": "Tus finanzas van contigo."
+  },
+  {
+    "pt": "Estamos concluindo as páginas oficiais nas lojas. Assim que forem liberadas, estes botões levarão diretamente ao OAZE, sem intermediários.",
+    "en": "We are finishing the official store listings. Once published, these buttons will take you directly to OAZE in each store.",
+    "fr": "Nous finalisons les pages officielles dans les boutiques. Dès leur publication, ces boutons vous mèneront directement à OAZE.",
+    "es": "Estamos terminando las páginas oficiales en las tiendas. Cuando se publiquen, estos botones te llevarán directamente a OAZE."
+  },
+  {
+    "pt": "Disponibilidade dos aplicativos",
+    "en": "App availability",
+    "fr": "Disponibilité des applications",
+    "es": "Disponibilidad de las aplicaciones"
+  },
+  {
+    "pt": "ANDROID",
+    "en": "ANDROID",
+    "fr": "ANDROID",
+    "es": "ANDROID"
+  },
+  {
+    "pt": "Google Play",
+    "en": "Google Play",
+    "fr": "Google Play",
+    "es": "Google Play"
+  },
+  {
+    "pt": "Página da loja em preparação",
+    "en": "Store listing in preparation",
+    "fr": "Page de la boutique en préparation",
+    "es": "Página de la tienda en preparación"
+  },
+  {
+    "pt": "Em breve",
+    "en": "Coming soon",
+    "fr": "Bientôt",
+    "es": "Próximamente"
+  },
+  {
+    "pt": "WINDOWS",
+    "en": "WINDOWS",
+    "fr": "WINDOWS",
+    "es": "WINDOWS"
+  },
+  {
+    "pt": "Microsoft Store",
+    "en": "Microsoft Store",
+    "fr": "Microsoft Store",
+    "es": "Microsoft Store"
+  },
+  {
     "pt": "o plano que acompanha você",
     "en": "the plan that grows with you",
     "fr": "l'offre qui évolue avec vous",
@@ -648,10 +690,10 @@
     "es": "Hasta 3 personas en el mismo espacio"
   },
   {
-    "pt": "Assinar o Oásis",
-    "en": "Subscribe to Oásis",
-    "fr": "S'abonner à Oásis",
-    "es": "Suscribirse a Oásis"
+    "pt": "Conhecer disponibilidade",
+    "en": "Check availability",
+    "fr": "Voir la disponibilité",
+    "es": "Ver disponibilidad"
   },
   {
     "pt": "Cancele quando quiser, direto nas configurações.",
@@ -762,10 +804,16 @@
     "es": "Tu dinero puede <em>tener más sentido.</em>"
   },
   {
-    "pt": "Comece no seu ritmo. O plano grátis não expira e você não precisa cadastrar um cartão.",
-    "en": "Start at your own pace. The free plan does not expire and you do not need to add a card.",
-    "fr": "Commencez à votre rythme. L'offre gratuite n'expire pas et aucune carte n'est nécessaire.",
-    "es": "Empieza a tu ritmo. El plan gratis no vence y no necesitas registrar una tarjeta."
+    "pt": "Conheça o OAZE agora e acompanhe a chegada dos aplicativos às lojas.",
+    "en": "Explore OAZE and follow the apps as they arrive in the stores.",
+    "fr": "Découvrez OAZE et suivez l'arrivée des applications dans les boutiques.",
+    "es": "Conoce OAZE y sigue la llegada de las aplicaciones a las tiendas."
+  },
+  {
+    "pt": "Ver aplicativos",
+    "en": "See apps",
+    "fr": "Voir les applications",
+    "es": "Ver aplicaciones"
   },
   {
     "pt": "Sem cartão de crédito · Sem movimentar dinheiro · Tudo com desfazer",
@@ -798,10 +846,10 @@
     "es": "Cuenta"
   },
   {
-    "pt": "Criar conta",
-    "en": "Create account",
-    "fr": "Créer un compte",
-    "es": "Crear cuenta"
+    "pt": "Aplicativos",
+    "en": "Apps",
+    "fr": "Applications",
+    "es": "Aplicaciones"
   },
   {
     "pt": "Suporte",
@@ -856,5 +904,17 @@
     "en": "Made in Brazil",
     "fr": "Fabriqué au Brésil",
     "es": "Hecho en Brasil"
+  },
+  {
+    "pt": "Abrir loja ↗",
+    "en": "Open store ↗",
+    "fr": "Ouvrir la boutique ↗",
+    "es": "Abrir tienda ↗"
+  },
+  {
+    "pt": "Disponível na loja oficial",
+    "en": "Available in the official store",
+    "fr": "Disponible dans la boutique officielle",
+    "es": "Disponible en la tienda oficial"
   }
 ]

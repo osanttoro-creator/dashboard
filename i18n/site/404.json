@@ -24,10 +24,10 @@
   "es": "OAZE, página de inicio"
  },
  {
-  "pt": "Entrar",
-  "en": "Sign in",
-  "fr": "Se connecter",
-  "es": "Iniciar sesión"
+  "pt": "Aplicativos",
+  "en": "Apps",
+  "fr": "Applications",
+  "es": "Aplicaciones"
  },
  {
   "pt": "Este endereço não existe",
@@ -48,10 +48,10 @@
   "es": "Ir a la página de inicio"
  },
  {
-  "pt": "Abrir meu painel",
-  "en": "Open my dashboard",
-  "fr": "Ouvrir mon tableau de bord",
-  "es": "Abrir mi panel"
+  "pt": "Ver aplicativos",
+  "en": "See apps",
+  "fr": "Voir les applications",
+  "es": "Ver aplicaciones"
  },
  {
   "pt": "Procurando alguma coisa específica? <a href=\"/recursos\">Recursos</a> · <a href=\"/precos\">Preços</a> · <a href=\"/suporte\">Suporte</a>",

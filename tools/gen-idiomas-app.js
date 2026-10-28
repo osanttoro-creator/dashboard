@@ -56,7 +56,7 @@ const LINGUAS = ['en', 'fr', 'es'];
 /* v3.js e a folha de rosto do site, nao do app: quem traduz a
    pagina publica e gen-idiomas.js, gerando /en, /fr e /es. */
 const FORA = new Set(['site.js', 'v3.js', 'site-auth.js', 'cookies.js', 'contato.js', 'idioma.js',
-  'idioma-esfera.js', 'supabase-config.js', 'icons.js']);
+  'idioma-esfera.js', 'supabase-config.js', 'icons.js', 'lojas-oaze.js']);
 
 function arquivosDoApp() {
   /* O painel anterior saiu daqui junto com os arquivos dele; o que

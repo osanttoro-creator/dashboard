@@ -84,16 +84,16 @@
   "es": "Soporte"
  },
  {
-  "pt": "Entrar",
-  "en": "Sign in",
-  "fr": "Se connecter",
-  "es": "Iniciar sesión"
+  "pt": "Aplicativos",
+  "en": "Apps",
+  "fr": "Applications",
+  "es": "Aplicaciones"
  },
  {
-  "pt": "Criar conta grátis",
-  "en": "Create a free account",
-  "fr": "Créer un compte gratuit",
-  "es": "Crear cuenta gratis"
+  "pt": "Ver aplicativos",
+  "en": "See apps",
+  "fr": "Voir les applications",
+  "es": "Ver aplicaciones"
  },
  {
   "pt": "Tudo o que o OAZE <em>faz</em>",
@@ -388,12 +388,6 @@
   "en": "Account",
   "fr": "Compte",
   "es": "Cuenta"
- },
- {
-  "pt": "Criar conta",
-  "en": "Create account",
-  "fr": "Créer un compte",
-  "es": "Crear cuenta"
  },
  {
   "pt": "Recuperar senha",

@@ -59,6 +59,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/v3.css">
 <link rel="stylesheet" href="/assets/css/landing-oaze.css">
+<link rel="stylesheet" href="/assets/css/landing-appstores.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -93,7 +94,7 @@
       "url": "https://oaze.site/",
       "image": "https://oaze.site/assets/img/oaze-og.png",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
+      "operatingSystem": "Android, Windows",
       "inLanguage": "en",
       "description": "Personal finance with accounts, cards, spending, budgets, goals and Coco, the OAZE assistant.",
       "publisher": { "@id": "https://oaze.site/#organization" },
@@ -128,88 +129,34 @@
     </nav>
 
     <div class="acoes-topo">
-      <a class="btn btn-linha" href="/en/entrar">Sign in</a>
-      <a class="btn btn-claro" href="/en/cadastro">Start free</a>
+      <a class="btn btn-claro" href="#baixar">Where to download</a>
     </div>
   </div>
 </header>
 
 <main id="conteudo">
 
-  <!-- ══════ O PORTAL ══════
-       A página começa FECHADA: preto, "bem-vindo ao" pequeno e OAZE
-       ocupando a tela. Rolar não empurra nada — abre. Dois painéis
-       sólidos partem para as bordas e, ao mesmo tempo, o letreiro
-       CRESCE enquanto o espaçamento entre as letras APERTA e as duas
-       metades viajam para lados opostos.
-
-       Crescer e apertar ao mesmo tempo é o efeito inteiro: fazer só um
-       dos dois vira zoom, e zoom qualquer página tem. É a diferença
-       entre um título que se abre e uma imagem que aumenta.
-
-       Tudo preso à POSIÇÃO da rolagem, nunca a um relógio: quem sobe
-       de volta vê o portal fechar na ordem inversa. Um relógio faria a
-       abertura acontecer sozinha enquanto a pessoa lê parada.
-
-       SEM JAVASCRIPT, OU COM "MENOS MOVIMENTO", NÃO HÁ PORTAL: a
-       página nasce aberta. Tela preta presa por um script que não
-       carregou deixa o site inacessível, e nenhuma entrada vale isso. -->
-  <section class="portal" data-portal aria-label="Welcome to OAZE">
-   <div class="portal-palco">
-    <div class="portal-mundo">
-  <section class="heroi novo-heroi">
-    <div class="env">
+  <section class="heroi novo-heroi" aria-labelledby="heroi-titulo">
+    <div class="env heroi-grid">
       <div class="novo-heroi-texto">
-        <p class="rotulo">YOUR MONTH, WITHOUT LOOSE ENDS</p>
-        <h1>Money makes more sense when <em>everything comes together.</em></h1>
-        <p class="grande">Accounts, cards and commitments in one place. Coco helps organise them and shows what comes next. You confirm every action.</p>
+        <p class="rotulo">OAZE · YOUR MONEY IN PERSPECTIVE</p>
+        <h1 id="heroi-titulo">Your money, <em>clearer every day.</em></h1>
+        <p class="grande">Accounts, cards, spending and plans in one place. See what happened, what is ahead, and talk to Coco to decide your next step.</p>
         <div class="heroi-acoes">
-          <a class="btn btn-claro" href="/en/cadastro">Start free</a>
-          <a class="btn btn-linha" href="#recursos">Explore OAZE <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-claro" href="#baixar">Explore the apps <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-linha" href="#recursos">See how it works</a>
         </div>
-        <p class="heroi-pequeno">Works on phone and computer · No card needed to start</p>
+        <p class="heroi-pequeno">Store listings are being prepared · a free version to get started</p>
       </div>
-      <div class="novo-heroi-cena" data-nodo role="img" aria-label="Real OAZE screens with sample data: a financial dashboard on a computer, a wallet on a phone and Coco, the assistant.">
+      <div class="novo-heroi-cena" role="img" aria-label="OAZE demonstration on desktop and mobile, with sample data">
         <div class="cena-brilho" aria-hidden="true"></div>
         <div class="cena-computador"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></div>
         <div class="cena-celular"><img src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="eager" decoding="async"></div>
         <div class="cena-coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="" width="600" height="600" loading="eager" decoding="async"></div>
-        <span class="cena-legenda">Demo with sample data</span>
+        <span class="cena-legenda">Demo screens · sample data</span>
       </div>
     </div>
   </section>
-    </div>
-
-    <div class="portal-painel portal-painel-esq" aria-hidden="true"></div>
-    <div class="portal-painel portal-painel-dir" aria-hidden="true"></div>
-
-    <div class="portal-letreiro">
-      <p class="portal-boas">welcome to</p>
-      <!-- A LOGO DE VERDADE, E NÃO A PALAVRA ESCRITA
-           Antes isto era "oaze" em Unbounded. Parecia a marca, mas não
-           era: o logotipo tem desenho próprio, e uma palavra digitada
-           na fonte da marca é uma imitação que diverge do arquivo no
-           dia em que o logotipo for ajustado.
-
-           O mesmo arquivo entra DUAS VEZES, cada cópia recortada numa
-           metade, para as duas viajarem para lados opostos quando o
-           portal abre. É o movimento do letreiro partido, agora feito
-           com a marca de verdade — um SVG não se divide em dois
-           <span>, mas se divide em dois recortes. -->
-      <h1 class="portal-marca">
-        <span class="sr-so">OAZE</span>
-        <img class="portal-logo portal-logo-esq" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" fetchpriority="high" decoding="async">
-        <img class="portal-logo portal-logo-dir" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" decoding="async">
-      </h1>
-    </div>
-
-    <p class="portal-dica" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg> scroll to open
-    </p>
-    <div class="portal-barra" aria-hidden="true"><i></i></div>
-   </div>
-  </section>
-
   <section class="sinais" aria-label="How OAZE works">
     <div class="env">
       <div><strong>01</strong><span>You record things your way</span></div>
@@ -257,7 +204,7 @@
         <p class="rotulo">OVERVIEW</p>
         <h2 id="contas-titulo">Start the day knowing <em>where you stand.</em></h2>
         <p>Open OAZE to see each account balance, this month’s spending and what is still coming. No mental arithmetic.</p>
-        <a class="btn btn-claro" href="/en/cadastro">Start free</a>
+        <a class="btn btn-claro" href="#baixar">Check availability</a>
       </div>
       <figure class="historia-visual visual-desktop revela">
         <img src="/assets/telas/computador-inicio.jpg" alt="Demo of the OAZE overview on a computer, with sample data" width="1440" height="900" loading="lazy" decoding="async">
@@ -291,7 +238,7 @@
         <h2 id="coco-titulo">Ask in your own words. <em>Understand without translating.</em></h2>
         <p>Tell Coco about an expense by text, voice or photo. She prepares the entry, suggests a category and explains what she sees in your figures. Before changing your wallet, she asks for confirmation.</p>
         <div class="coco-conversa"><span>“I spent R$ 45 at the market today.”</span><strong>Got it. Record this under groceries?</strong><small>Sample conversation · no action without confirmation</small></div>
-        <a class="btn btn-claro" href="/en/cadastro">Meet Coco</a>
+        <a class="btn btn-claro" href="#baixar">Check availability</a>
       </div>
     </div>
   </section>
@@ -327,6 +274,32 @@
         <article class="revela"><span>01</span><h3>Nothing moves on its own</h3><p>What Coco prepares only enters your wallet after you confirm it.</p></article>
         <article class="revela"><span>02</span><h3>A forecast is not a balance</h3><p>Future amounts are marked as expected and do not inflate what you have today.</p></article>
         <article class="revela"><span>03</span><h3>Your data, your choices</h3><p>You can review what Coco learns, pause learning, and delete memories.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao lojas-oaze" id="baixar" aria-labelledby="baixar-titulo">
+    <div class="env lojas-grid">
+      <div class="lojas-texto">
+        <p class="rotulo">OAZE ON YOUR DEVICE</p>
+        <h2 id="baixar-titulo">Your finances go with you.</h2>
+        <p>We are finishing the official store listings. Once published, these buttons will take you directly to OAZE in each store.</p>
+      </div>
+      <div class="lojas-opcoes" aria-label="App availability">
+        <article class="loja-cartao">
+          <div class="loja-icone" aria-hidden="true">▶</div>
+          <div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Store listing in preparation</p></div>
+          <span class="loja-botao is-pending" data-loja="play">Coming soon</span>
+          <span class="sr-so loja-link-label">Open store ↗</span>
+          <span class="sr-so loja-ready-copy">Available in the official store</span>
+        </article>
+        <article class="loja-cartao">
+          <div class="loja-icone windows" aria-hidden="true">⊞</div>
+          <div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Store listing in preparation</p></div>
+          <span class="loja-botao is-pending" data-loja="windows">Coming soon</span>
+          <span class="sr-so loja-link-label">Open store ↗</span>
+          <span class="sr-so loja-ready-copy">Available in the official store</span>
+        </article>
       </div>
     </div>
   </section>
@@ -368,7 +341,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 requests to Coco per month</span></li>
           </ul>
           <p class="plano-teto">When you reach a limit nothing is deleted: what stops is creating new items of that kind.</p>
-          <a class="btn btn-linha" href="/en/cadastro">Start free</a>
+          <a class="btn btn-linha" href="#baixar">Check availability</a>
         </article>
 
         <article class="plano e-destaque revela">
@@ -385,7 +358,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 requests to Coco per month</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 3 people in the same space</span></li>
           </ul>
-          <a class="btn btn-claro" href="/en/cadastro">Subscribe to Oásis</a>
+          <a class="btn btn-claro" href="#baixar">Check availability</a>
           <p class="preco-nota">Cancel whenever you like, straight from settings.</p>
         </article>
       </div>
@@ -440,8 +413,8 @@
 <section class="final" aria-labelledby="final-titulo">
   <div class="env">
     <h2 id="final-titulo" class="revela">Your money can <em>make more sense.</em></h2>
-    <p class="revela">Start at your own pace. The free plan does not expire and you do not need to add a card.</p>
-    <a class="btn btn-claro revela" href="/en/cadastro">Start free</a>
+    <p class="revela">Explore OAZE and follow the apps as they arrive in the stores.</p>
+    <a class="btn btn-claro revela" href="#baixar">See apps</a>
     <p class="final-selo revela">No credit card · No money moved · Everything can be undone</p>
   </div>
 </section>
@@ -467,8 +440,8 @@
       <div>
         <h3>Account</h3>
         <ul>
-          <li><a href="/en/entrar">Sign in</a></li>
-          <li><a href="/en/cadastro">Create account</a></li>
+          <li><a href="#baixar">Apps</a></li>
+          <li><a href="#baixar">Apps</a></li>
           <li><a href="/en/suporte">Support</a></li>
         </ul>
       </div>
@@ -496,5 +469,6 @@
 <script src="/assets/js/v3.js" defer></script>
 <script src="/assets/js/cookies.js" defer></script>
 <script src="/assets/js/idioma-esfera.js" defer></script>
+<script src="/assets/js/lojas-oaze.js" defer></script>
 </body>
 </html>

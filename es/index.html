@@ -59,6 +59,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/v3.css">
 <link rel="stylesheet" href="/assets/css/landing-oaze.css">
+<link rel="stylesheet" href="/assets/css/landing-appstores.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -93,7 +94,7 @@
       "url": "https://oaze.site/",
       "image": "https://oaze.site/assets/img/oaze-og.png",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
+      "operatingSystem": "Android, Windows",
       "inLanguage": "es",
       "description": "Finanzas personales con cuentas, tarjetas, gastos, presupuestos, metas y Coco, la asistente de OAZE.",
       "publisher": { "@id": "https://oaze.site/#organization" },
@@ -128,88 +129,34 @@
     </nav>
 
     <div class="acoes-topo">
-      <a class="btn btn-linha" href="/es/entrar">Iniciar sesión</a>
-      <a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a>
+      <a class="btn btn-claro" href="#baixar">Dónde descargar</a>
     </div>
   </div>
 </header>
 
 <main id="conteudo">
 
-  <!-- ══════ O PORTAL ══════
-       A página começa FECHADA: preto, "bem-vindo ao" pequeno e OAZE
-       ocupando a tela. Rolar não empurra nada — abre. Dois painéis
-       sólidos partem para as bordas e, ao mesmo tempo, o letreiro
-       CRESCE enquanto o espaçamento entre as letras APERTA e as duas
-       metades viajam para lados opostos.
-
-       Crescer e apertar ao mesmo tempo é o efeito inteiro: fazer só um
-       dos dois vira zoom, e zoom qualquer página tem. É a diferença
-       entre um título que se abre e uma imagem que aumenta.
-
-       Tudo preso à POSIÇÃO da rolagem, nunca a um relógio: quem sobe
-       de volta vê o portal fechar na ordem inversa. Um relógio faria a
-       abertura acontecer sozinha enquanto a pessoa lê parada.
-
-       SEM JAVASCRIPT, OU COM "MENOS MOVIMENTO", NÃO HÁ PORTAL: a
-       página nasce aberta. Tela preta presa por um script que não
-       carregou deixa o site inacessível, e nenhuma entrada vale isso. -->
-  <section class="portal" data-portal aria-label="Bienvenido a OAZE">
-   <div class="portal-palco">
-    <div class="portal-mundo">
-  <section class="heroi novo-heroi">
-    <div class="env">
+  <section class="heroi novo-heroi" aria-labelledby="heroi-titulo">
+    <div class="env heroi-grid">
       <div class="novo-heroi-texto">
-        <p class="rotulo">TU MES, SIN CABOS SUELTOS</p>
-        <h1>El dinero se entiende mejor cuando <em>todo se reúne.</em></h1>
-        <p class="grande">Cuentas, tarjetas y compromisos en un solo lugar. Coco ayuda a organizarlos y muestra lo que viene. Tú confirmas cada acción.</p>
+        <p class="rotulo">OAZE · TU DINERO EN PERSPECTIVA</p>
+        <h1 id="heroi-titulo">Tu dinero, <em>más claro cada día.</em></h1>
+        <p class="grande">Cuentas, tarjetas, gastos y planes en un solo lugar. Mira lo que pasó, lo que viene y habla con Coco para decidir tu próximo paso.</p>
         <div class="heroi-acoes">
-          <a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a>
-          <a class="btn btn-linha" href="#recursos">Conoce OAZE <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-claro" href="#baixar">Conocer las aplicaciones <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-linha" href="#recursos">Ver cómo funciona</a>
         </div>
-        <p class="heroi-pequeno">Funciona en móvil y ordenador · Sin tarjeta para empezar</p>
+        <p class="heroi-pequeno">Páginas en las tiendas en preparación · versión gratuita para empezar</p>
       </div>
-      <div class="novo-heroi-cena" data-nodo role="img" aria-label="Pantallas reales de OAZE con datos de ejemplo: panel financiero en ordenador, cartera en móvil y Coco, la asistente.">
+      <div class="novo-heroi-cena" role="img" aria-label="Demostración de OAZE en ordenador y móvil, con datos de ejemplo">
         <div class="cena-brilho" aria-hidden="true"></div>
         <div class="cena-computador"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></div>
         <div class="cena-celular"><img src="/assets/telas/celular-carteira.jpg" alt="" width="923" height="1944" loading="eager" decoding="async"></div>
         <div class="cena-coco"><img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="" width="600" height="600" loading="eager" decoding="async"></div>
-        <span class="cena-legenda">Demostración con datos de ejemplo</span>
+        <span class="cena-legenda">Pantallas de demostración · datos de ejemplo</span>
       </div>
     </div>
   </section>
-    </div>
-
-    <div class="portal-painel portal-painel-esq" aria-hidden="true"></div>
-    <div class="portal-painel portal-painel-dir" aria-hidden="true"></div>
-
-    <div class="portal-letreiro">
-      <p class="portal-boas">bienvenido a</p>
-      <!-- A LOGO DE VERDADE, E NÃO A PALAVRA ESCRITA
-           Antes isto era "oaze" em Unbounded. Parecia a marca, mas não
-           era: o logotipo tem desenho próprio, e uma palavra digitada
-           na fonte da marca é uma imitação que diverge do arquivo no
-           dia em que o logotipo for ajustado.
-
-           O mesmo arquivo entra DUAS VEZES, cada cópia recortada numa
-           metade, para as duas viajarem para lados opostos quando o
-           portal abre. É o movimento do letreiro partido, agora feito
-           com a marca de verdade — um SVG não se divide em dois
-           <span>, mas se divide em dois recortes. -->
-      <h1 class="portal-marca">
-        <span class="sr-so">OAZE</span>
-        <img class="portal-logo portal-logo-esq" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" fetchpriority="high" decoding="async">
-        <img class="portal-logo portal-logo-dir" src="/assets/brand/oaze-logo-escuro.svg" alt="" aria-hidden="true" width="1200" height="300" decoding="async">
-      </h1>
-    </div>
-
-    <p class="portal-dica" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg> desliza para abrir
-    </p>
-    <div class="portal-barra" aria-hidden="true"><i></i></div>
-   </div>
-  </section>
-
   <section class="sinais" aria-label="Cómo funciona OAZE">
     <div class="env">
       <div><strong>01</strong><span>Registras a tu manera</span></div>
@@ -257,7 +204,7 @@
         <p class="rotulo">VISIÓN GENERAL</p>
         <h2 id="contas-titulo">Empieza el día sabiendo <em>dónde estás.</em></h2>
         <p>Abre OAZE y encuentra el saldo de cada cuenta, los gastos del mes y lo que aún viene. Sin sumar de cabeza.</p>
-        <a class="btn btn-claro" href="/es/cadastro">Empezar gratis</a>
+        <a class="btn btn-claro" href="#baixar">Ver disponibilidad</a>
       </div>
       <figure class="historia-visual visual-desktop revela">
         <img src="/assets/telas/computador-inicio.jpg" alt="Demostración de la vista general de OAZE en ordenador, con datos de ejemplo" width="1440" height="900" loading="lazy" decoding="async">
@@ -291,7 +238,7 @@
         <h2 id="coco-titulo">Pregunta a tu manera. <em>Entiende sin traducir.</em></h2>
         <p>Cuéntale un gasto a Coco por texto, audio o foto. Prepara el registro, sugiere una categoría y explica lo que ve en tus números. Antes de cambiar la cartera, pide tu confirmación.</p>
         <div class="coco-conversa"><span>« Gasté R$ 45 en el mercado hoy. »</span><strong>Entendido. ¿Lo registro como alimentación?</strong><small>Conversación de ejemplo · ninguna acción sin confirmación</small></div>
-        <a class="btn btn-claro" href="/es/cadastro">Conocer a Coco</a>
+        <a class="btn btn-claro" href="#baixar">Ver disponibilidad</a>
       </div>
     </div>
   </section>
@@ -327,6 +274,32 @@
         <article class="revela"><span>01</span><h3>Nada se mueve solo</h3><p>Lo que Coco prepara solo entra en tu cartera después de tu confirmación.</p></article>
         <article class="revela"><span>02</span><h3>Una previsión no es un saldo</h3><p>Los valores futuros se identifican como previstos, sin inflar lo que tienes hoy.</p></article>
         <article class="revela"><span>03</span><h3>Tus datos, tus decisiones</h3><p>Puedes revisar lo que Coco aprende, pausar el aprendizaje y borrar recuerdos.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao lojas-oaze" id="baixar" aria-labelledby="baixar-titulo">
+    <div class="env lojas-grid">
+      <div class="lojas-texto">
+        <p class="rotulo">OAZE EN TU DISPOSITIVO</p>
+        <h2 id="baixar-titulo">Tus finanzas van contigo.</h2>
+        <p>Estamos terminando las páginas oficiales en las tiendas. Cuando se publiquen, estos botones te llevarán directamente a OAZE.</p>
+      </div>
+      <div class="lojas-opcoes" aria-label="Disponibilidad de las aplicaciones">
+        <article class="loja-cartao">
+          <div class="loja-icone" aria-hidden="true">▶</div>
+          <div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Página de la tienda en preparación</p></div>
+          <span class="loja-botao is-pending" data-loja="play">Próximamente</span>
+          <span class="sr-so loja-link-label">Abrir tienda ↗</span>
+          <span class="sr-so loja-ready-copy">Disponible en la tienda oficial</span>
+        </article>
+        <article class="loja-cartao">
+          <div class="loja-icone windows" aria-hidden="true">⊞</div>
+          <div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Página de la tienda en preparación</p></div>
+          <span class="loja-botao is-pending" data-loja="windows">Próximamente</span>
+          <span class="sr-so loja-link-label">Abrir tienda ↗</span>
+          <span class="sr-so loja-ready-copy">Disponible en la tienda oficial</span>
+        </article>
       </div>
     </div>
   </section>
@@ -368,7 +341,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 solicitudes a Coco al mes</span></li>
           </ul>
           <p class="plano-teto">Al llegar a un límite no se borra nada: lo que se detiene es la creación de elementos nuevos de ese tipo.</p>
-          <a class="btn btn-linha" href="/es/cadastro">Empezar gratis</a>
+          <a class="btn btn-linha" href="#baixar">Ver disponibilidad</a>
         </article>
 
         <article class="plano e-destaque revela">
@@ -385,7 +358,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 solicitudes a Coco al mes</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Hasta 3 personas en el mismo espacio</span></li>
           </ul>
-          <a class="btn btn-claro" href="/es/cadastro">Suscribirse a Oásis</a>
+          <a class="btn btn-claro" href="#baixar">Ver disponibilidad</a>
           <p class="preco-nota">Cancela cuando quieras, directo en los ajustes.</p>
         </article>
       </div>
@@ -440,8 +413,8 @@
 <section class="final" aria-labelledby="final-titulo">
   <div class="env">
     <h2 id="final-titulo" class="revela">Tu dinero puede <em>tener más sentido.</em></h2>
-    <p class="revela">Empieza a tu ritmo. El plan gratis no vence y no necesitas registrar una tarjeta.</p>
-    <a class="btn btn-claro revela" href="/es/cadastro">Empezar gratis</a>
+    <p class="revela">Conoce OAZE y sigue la llegada de las aplicaciones a las tiendas.</p>
+    <a class="btn btn-claro revela" href="#baixar">Ver aplicaciones</a>
     <p class="final-selo revela">Sin tarjeta de crédito · Sin mover dinero · Todo se puede deshacer</p>
   </div>
 </section>
@@ -467,8 +440,8 @@
       <div>
         <h3>Cuenta</h3>
         <ul>
-          <li><a href="/es/entrar">Iniciar sesión</a></li>
-          <li><a href="/es/cadastro">Crear cuenta</a></li>
+          <li><a href="#baixar">Aplicaciones</a></li>
+          <li><a href="#baixar">Aplicaciones</a></li>
           <li><a href="/es/suporte">Soporte</a></li>
         </ul>
       </div>
@@ -496,5 +469,6 @@
 <script src="/assets/js/v3.js" defer></script>
 <script src="/assets/js/cookies.js" defer></script>
 <script src="/assets/js/idioma-esfera.js" defer></script>
+<script src="/assets/js/lojas-oaze.js" defer></script>
 </body>
 </html>

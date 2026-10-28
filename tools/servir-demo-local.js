@@ -9,6 +9,7 @@ http.createServer((request,response)=>{
   let pathname;
   try{pathname=decodeURIComponent(new URL(request.url,'http://127.0.0.1').pathname);}catch{response.writeHead(400).end();return;}
   if(pathname==='/app')pathname='/tools/fixtures/app-demo.html';
+  if(pathname==='/')pathname='/index.html';
   const file=path.resolve(root,'.'+pathname);
   if(file!==root&&!file.startsWith(root+path.sep)){response.writeHead(403).end();return;}
   fs.readFile(file,(error,bytes)=>{
