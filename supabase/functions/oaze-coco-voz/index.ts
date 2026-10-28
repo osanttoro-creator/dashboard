@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       method: 'POST', signal: controller.signal,
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: 'coral', input: text,
-        instructions: 'Fale em português brasileiro, com clareza, naturalidade e calma. Não acrescente nenhuma informação ao texto.', response_format: 'mp3' })
+        instructions: 'Fale no idioma do texto. Use uma cadência natural, acolhedora e levemente curiosa, com clareza financeira. Evite tom infantil ou caricatural. Não acrescente nenhuma informação ao texto.', response_format: 'mp3' })
     });
     if (!response.ok) return fail('Não consegui gerar o áudio agora.', 502, origin);
     const audio = await response.arrayBuffer();

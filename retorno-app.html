@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Voltando ao OAZE</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0d1821;color:#f0e5cf}
+    *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:max(32px,env(safe-area-inset-top,0px)) 24px max(32px,env(safe-area-inset-bottom,0px));text-align:center}
+    main{width:min(420px,100%)}img{width:164px;height:auto}h1{font-size:clamp(22px,5vw,32px);font-weight:500;line-height:1.2;margin:40px 0 12px}p{color:#b8c8ca;line-height:1.55}a{color:#5fa99b}a:focus-visible{outline:2px solid #5fa99b;outline-offset:4px}
+  </style>
+</head>
+<body>
+  <main>
+    <img src="/assets/brand/oaze-logo-mono-milk.svg" alt="OAZE" width="164" height="58">
+    <h1>Voltando ao OAZE</h1>
+    <p>Seu aplicativo será aberto automaticamente. A assinatura é conferida com segurança quando você voltar.</p>
+    <p id="alternativa" hidden>Se o sistema não abriu o aplicativo, <a id="abrir-app" href="/app/planos">abra o OAZE</a> ou volte à janela instalada.</p>
+  </main>
+  <script>
+    (function(){
+      const status=new URLSearchParams(location.search).get('resultado');
+      if(!['sucesso','cancelado','portal'].includes(status)) { location.replace('/app/planos'); return; }
+      const link='oaze://billing?resultado='+encodeURIComponent(status);
+      document.getElementById('abrir-app').href=link;
+      setTimeout(function(){document.getElementById('alternativa').hidden=false;},4500);
+      location.replace(link);
+    })();
+  </script>
+</body>
+</html>

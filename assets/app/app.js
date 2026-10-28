@@ -80,7 +80,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -155,6 +155,7 @@
   };
 
   function profile() { return demo ? sample : (state.sharedProfile || Store.profile()); }
+  global.OAZE_REPORT_CONTEXT = () => ({ profile: profile(), owner: demo ? sample.owner : Store.ownerName(), demo });
   function sharedCanEdit() { return !!state.sharedId && state.sharedPermission === 'edit' && V3Backend.activeSharePermission() === 'edit'; }
   /* O CANCELADO NÃO SOME DA LISTA
      Calc.entries filtra o cancelado de todo total — inclusive do
@@ -475,8 +476,8 @@
     if (!rows.length) return `<p class="v3-muted">Suas categorias aparecem depois da primeira ${income ? 'receita' : 'despesa'} confirmada.</p>`;
     const circumference = 2 * Math.PI * 76;
     let offset = 0;
-    const arcs = all.map((r, i) => { const length = circumference * r.value / total; const arc = `<circle class="v3-spend-arc" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" cx="100" cy="100" r="76" fill="none" stroke="${safeColor(r.color)}" stroke-width="24" style="--segment-length:${Math.max(0, length - 4)};--segment-offset:${-offset};--segment-order:${i}"/>`; offset += length; return arc; }).join('');
-    const list = rows.map((r, i) => `<button type="button" class="v3-spend-row" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" style="--swatch:${safeColor(r.color)}"><span class="v3-cat-icon">${icon(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span class="v3-spend-label"><strong>${esc(r.name)}</strong><small>${Math.round(100 * r.value / total)}% do mês</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></button>`).join('');
+    const arcs = all.map((r, i) => { const length = circumference * r.value / total; const visible = Math.max(0, length - 4); const arc = `<circle class="v3-spend-arc" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" cx="100" cy="100" r="76" fill="none" stroke="${safeColor(r.color)}" stroke-width="24" stroke-dasharray="${visible} 478" stroke-dashoffset="${-offset}" style="--segment-length:${visible};--segment-offset:${-offset};--segment-order:${i}"/>`; offset += length; return arc; }).join('');
+    const list = rows.map((r, i) => `<button type="button" class="v3-spend-row" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" style="--swatch:${safeColor(r.color)};--swatch-ink:${U.inkFor(safeColor(r.color))}"><span class="v3-cat-icon">${categoryIconMarkup(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span class="v3-spend-label"><strong>${esc(r.name)}</strong><small>${Math.round(100 * r.value / total)}% do mês</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></button>`).join('');
     const remainder = all.length > rows.length ? `<p class="v3-spend-more">Mais ${all.length - rows.length} ${all.length - rows.length === 1 ? 'categoria' : 'categorias'} em “ver tudo”</p>` : '';
     return `<div class="v3-spend-overview" data-kind="${income ? 'income' : 'expense'}"><div class="v3-spend-ring" data-spend-total="${esc(money(total))}" data-spend-count="${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}"><svg viewBox="0 0 200 200" role="img" aria-label="Distribuição das ${income ? 'receitas' : 'despesas'} por categoria"><circle class="v3-spend-track" cx="100" cy="100" r="76" fill="none" stroke-width="24"/>${arcs}</svg><div class="v3-spend-ring-center"><small class="v3-spend-caption">${income ? 'receitas recebidas' : 'gastos feitos'}</small><strong class="v3-sensitive v3-spend-value">${money(total)}</strong><span class="v3-spend-detail">${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}</span></div></div><div class="v3-spend-breakdown"><p class="v3-spend-lead">${esc(rows[0].name)} representa <strong>${Math.round(100 * rows[0].value / total)}%</strong> ${income ? 'das receitas' : 'dos gastos'} deste mês.</p>${list}${remainder}</div></div>`;
   }
@@ -1756,7 +1757,8 @@
     const serie = serieDoAno(ano);
     if (!serie.length) {
       return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>o ano aparece aqui</h2>`
-        + `<p>${demo ? 'Na demonstração não há um ano inteiro para consolidar.' : 'Assim que houver lançamentos, esta tela mostra o consolidado de ' + ano + '.'}</p></div>`;
+        + `<p>${demo ? 'Na demonstração não há um ano inteiro para consolidar.' : 'Assim que houver lançamentos, esta tela mostra o consolidado de ' + ano + '.'}</p>`
+        + `<button type="button" class="v3-primary" data-action="estado-oaze">Estado do OAZE</button></div>`;
     }
     const receitas = serie.reduce((n, r) => n + r.income, 0);
     const despesas = serie.reduce((n, r) => n + r.expense, 0);
@@ -1791,7 +1793,7 @@
 
     return `<div class="v3-reports">`
       + `<div class="v3-row v3-rep-head"><div><span class="v3-label">CONSOLIDADO</span><h2>${ano}</h2></div>`
-      + `<div class="v3-rep-acoes"><button type="button" class="v3-secondary" data-action="export-csv">Exportar CSV</button>`
+      + `<div class="v3-rep-acoes"><button type="button" class="v3-primary" data-action="estado-oaze">Estado do OAZE</button><button type="button" class="v3-secondary" data-action="export-csv">Exportar CSV</button>`
       + `<button type="button" class="v3-secondary" data-action="export-pdf">Salvar em PDF</button></div></div>`
       + `<div class="v3-grid v3-rep-kpis">`
       + kpi('RECEITAS EM ' + ano, money(receitas), 'v3-positive')
@@ -1991,7 +1993,7 @@
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/rostinhos/02_feliz.png" alt="Coco"></div>`;
-    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
+    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?(state.cocoAudioLoading?'Preparando áudio…':'Parar áudio'):'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function cocoTools() {
     const tools=[['debts','wallet','Dívidas','organizar a quitação'],['planning','calendar','Planejar','próximos meses'],['goals','goals','Metas','chegar com calma'],['analysis','reports','Análises','entender os números']];
@@ -2047,6 +2049,12 @@
     if (['investments','home'].includes(state.page) && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
     if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
+    if (state.page === 'settings') {
+      $('#v3-view').insertAdjacentHTML('beforeend', '<section class="v3-panel v3-settings-extra" aria-label="Idioma e contato"><h2>idioma e contato</h2><label class="v3-setting-row" for="v3-language"><span>Idioma do aplicativo</span><select id="v3-language" data-oaze-language><option value="pt">Português</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></label><a class="v3-setting-row" href="mailto:info@oaze.site"><span>Informações e contato</span><span>info@oaze.site</span></a></section>');
+      $('#v3-language').value = document.documentElement.getAttribute('data-idioma') || 'pt';
+    }
+    const proShortcut = document.querySelector('.v3-pro-shortcut');
+    if (proShortcut) { const subscribed = state.subscription?.plan_id === 'pro' && state.subscription?.status === 'active'; proShortcut.textContent = subscribed ? 'Seu plano' : 'Seja Pro'; proShortcut.setAttribute('aria-label', subscribed ? 'Consultar seu plano OAZE' : 'Conhecer o OAZE Pro'); }
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
     document.body.classList.toggle('v3-coco-screen',state.page==='coco');
@@ -2249,7 +2257,7 @@
       return;
     }
     if (!cocoAllowed() && !['Memória','Extratos'].includes(state.cocoTab)) {
-      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
+      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. A voz da Coco é gerada por IA. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
       return;
     }
     let body='';
@@ -3627,6 +3635,11 @@
       }
     }
     state.chat.push({who:'user',text:q}); render();
+    const waitingNotice=setTimeout(()=>{
+      if (!state.cocoAsking) return;
+      const status=document.querySelector('.v3-coco-thinking');
+      if (status) status.textContent='A Coco ainda está preparando a resposta…';
+    },8000);
     let answered=false;
     try {
       const body=AI.corpoDaPergunta(q,state.ym);
@@ -3641,7 +3654,7 @@
       state.chat.push({who:'coco',text:r.texto || (proposal?'Preparei um lançamento para você revisar.':goalProposal?'Preparei uma meta para você revisar.':memory?'Posso guardar esta preferência, se você confirmar.':'Não consegui responder agora.'),proposal,goalProposal,memory});
       answered=true;
     } catch (e) { console.error('V3/Coco:',e); state.chat.push({who:'coco',text:e.message || 'A conversa está indisponível agora. Tente de novo.'}); }
-    state.cocoAsking=false;render();
+    clearTimeout(waitingNotice);state.cocoAsking=false;render();
     if (speakAfter && answered) playCocoAnswer(state.chat.length-1);
   }
   function updateVoiceCaption() {
@@ -3781,7 +3794,7 @@
     cocoAudioRequest++;
     cocoPlayer?.pause();cocoPlayer=null;
     if (cocoAudioUrl) URL.revokeObjectURL(cocoAudioUrl);
-    cocoAudioUrl=null;state.cocoSpeaking=false;
+    cocoAudioUrl=null;state.cocoSpeaking=false;state.cocoAudioLoading=false;
     if (state.page==='coco') render();
   }
   async function playCocoAnswer(index) {
@@ -3789,10 +3802,11 @@
     if (state.cocoSpeaking===index) { stopCocoAudio();return; }
     const message=state.chat[index];
     if (demo || !message || message.who!=='coco' || !cocoAllowed()) return;
-    stopCocoAudio();const request=++cocoAudioRequest;state.cocoSpeaking=index;render();
+    stopCocoAudio();const request=++cocoAudioRequest;state.cocoSpeaking=index;state.cocoAudioLoading=true;render();
     try {
       const blob=await V3Backend.cocoSpeak(message.text);
       if (state.cocoSpeaking!==index || request!==cocoAudioRequest) return;
+      state.cocoAudioLoading=false;render();
       cocoAudioUrl=URL.createObjectURL(blob);
       cocoPlayer=new Audio(cocoAudioUrl);
       cocoPlayer.onended=()=>{if(request===cocoAudioRequest)stopCocoAudio();};
@@ -3956,7 +3970,7 @@
     }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';const links=f.querySelector('.v3-card-profile-links');if(links)links.hidden=target.dataset.accountType!=='card';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
+    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que

@@ -51,7 +51,7 @@ function origensPermitidas(): string[] {
     .split(',').map((o) => o.trim()).filter(Boolean);
   // Origens locais exatas dos pacotes Android (Capacitor) e Windows (Tauri).
   // Mantemos a lista restrita: localhost genérico abriria o checkout a sites locais.
-  return [...new Set([...configuradas, 'https://localhost', 'http://tauri.localhost'])];
+  return [...new Set([...configuradas, 'https://localhost', 'http://tauri.localhost', 'tauri://localhost'])];
 }
 
 function cors(origem: string | null): Record<string, string> {
@@ -82,7 +82,7 @@ function siteUrl(): string | null {
 
 function corpoPermitido(corpo: unknown, acao: string): boolean {
   if (!corpo || typeof corpo !== 'object' || Array.isArray(corpo)) return false;
-  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'cupom'])
+  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'cupom', 'canal'])
     : acao === 'cupom' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'codigo'])
       : new Set(['acao']);
   return Object.keys(corpo as Record<string, unknown>).every((k) => permitidos.has(k));
@@ -208,6 +208,10 @@ Deno.serve(async (req: Request) => {
   if (!['assinar', 'cancelar', 'cupom'].includes(acao) || !corpoPermitido(corpo, acao)) {
     return json({ erro: 'acao', mensagem: 'Ação inválida.' }, 400, origem);
   }
+  if (corpo.canal !== undefined && (corpo.canal !== 'windows' || !['http://tauri.localhost', 'tauri://localhost'].includes(origem || ''))) {
+    return json({ erro: 'canal', mensagem: 'Canal de retorno inválido.' }, 400, origem);
+  }
+  const retornoWindows = acao === 'assinar' && corpo.canal === 'windows';
 
   const { data: atual } = await admin.from('subscriptions')
     .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
@@ -307,7 +311,8 @@ Deno.serve(async (req: Request) => {
       const recente = Date.now() - new Date(p.created_at).getTime() < 30 * 60 * 1000;
       if (!cupom && recente && p.price_id === preco.id && p.checkout_session_id) {
         const sessao = await stripe('GET', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id));
-        if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))) {
+        if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))
+            && String(sessao.success_url || '').includes('retorno-app.html') === retornoWindows) {
           return json({ ok: true, url: sessao.url }, 200, origem);
         }
       }
@@ -326,8 +331,12 @@ Deno.serve(async (req: Request) => {
     parametros.set('mode', 'subscription');
     parametros.set('client_reference_id', intencao.id);
     parametros.set('customer_email', usuario.email);
-    parametros.set('success_url', retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}');
-    parametros.set('cancel_url', retorno + '/app/planos?pagamento=cancelado');
+    parametros.set('success_url', retornoWindows
+      ? retorno + '/retorno-app.html?resultado=sucesso'
+      : retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}');
+    parametros.set('cancel_url', retornoWindows
+      ? retorno + '/retorno-app.html?resultado=cancelado'
+      : retorno + '/app/planos?pagamento=cancelado');
     /* A página da Stripe em português para quem paga em real; para as
        outras moedas, 'auto' — ela lê o idioma do navegador, que é
        melhor palpite do que escolher inglês para um francês. */
