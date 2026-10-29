@@ -21,7 +21,16 @@ const base = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.equal(await page.locator('.lojas-opcoes a').count(), 0, 'não criar redirecionamento sem endereço oficial');
       assert.equal(await page.locator('main a[href^="/app"], main a[href^="/cadastro"], main a[href^="/entrar"]').count(), 0);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'sem rolagem horizontal');
-      assert.equal(await page.locator('.cena-computador img').evaluate(img => img.complete && img.naturalWidth > 0), true);
+      assert.equal(await page.locator('.l2-stage-screen img').evaluate(img => img.complete && img.naturalWidth > 0), true);
+      await page.locator('img[loading="lazy"]').evaluateAll(images => images.forEach(img => { img.loading = 'eager'; }));
+      await page.waitForFunction(() => Array.from(document.images).every(img => img.complete && img.naturalWidth > 0));
+      if (width === 390) {
+        await page.locator('.hamburguer').click();
+        assert.equal(await page.locator('.hamburguer').getAttribute('aria-expanded'), 'true');
+        assert.equal(await page.locator('.menu').isVisible(), true);
+        await page.keyboard.press('Escape');
+        assert.equal(await page.locator('.hamburguer').getAttribute('aria-expanded'), 'false');
+      }
       assert.equal(errors.length, 0, errors.join('\n'));
       if (process.env.OAZE_SCREENSHOT_DIR) {
         fs.mkdirSync(process.env.OAZE_SCREENSHOT_DIR, { recursive: true });
