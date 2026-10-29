@@ -792,6 +792,84 @@
     "es": "Sí, directo en Ajustes. La renovación se detiene al instante y sigues con el plan hasta el final del período que ya pagaste. Después la cuenta vuelve al gratis, con todo lo que registraste en su lugar."
   },
   {
+    "pt": "FALE COM O OAZE",
+    "en": "CONTACT OAZE",
+    "fr": "CONTACTER OAZE",
+    "es": "CONTACTA CON OAZE"
+  },
+  {
+    "pt": "Ficou alguma <em>pergunta?</em>",
+    "en": "Have a <em>question?</em>",
+    "fr": "Une <em>question ?</em>",
+    "es": "¿Tienes alguna <em>pregunta?</em>"
+  },
+  {
+    "pt": "Escreva sua dúvida, sugestão ou mensagem. A gente lê e responde pelo e-mail que você informar.",
+    "en": "Send us a question, suggestion or message. We read it and reply to the email you provide.",
+    "fr": "Envoyez-nous une question, une suggestion ou un message. Nous le lirons et répondrons à l’adresse e-mail indiquée.",
+    "es": "Envíanos una pregunta, sugerencia o mensaje. Lo leeremos y responderemos al correo que indiques."
+  },
+  {
+    "pt": "info@oaze.site <span aria-hidden=\"true\">↗</span>",
+    "en": "info@oaze.site <span aria-hidden=\"true\">↗</span>",
+    "fr": "info@oaze.site <span aria-hidden=\"true\">↗</span>",
+    "es": "info@oaze.site <span aria-hidden=\"true\">↗</span>"
+  },
+  {
+    "pt": "Seu nome",
+    "en": "Your name",
+    "fr": "Votre nom",
+    "es": "Tu nombre"
+  },
+  {
+    "pt": "Diga como podemos te chamar.",
+    "en": "Tell us your name.",
+    "fr": "Indiquez-nous votre nom.",
+    "es": "Dinos cómo podemos llamarte."
+  },
+  {
+    "pt": "Seu e-mail",
+    "en": "Your email",
+    "fr": "Votre adresse e-mail",
+    "es": "Tu correo electrónico"
+  },
+  {
+    "pt": "É para ele que respondemos.",
+    "en": "We will reply to this address.",
+    "fr": "Nous répondrons à cette adresse.",
+    "es": "Responderemos a esta dirección."
+  },
+  {
+    "pt": "Confira o e-mail: é por ele que vamos responder.",
+    "en": "Check the email address so we can reply.",
+    "fr": "Vérifiez l’adresse e-mail pour que nous puissions répondre.",
+    "es": "Revisa el correo para que podamos responderte."
+  },
+  {
+    "pt": "Sua mensagem",
+    "en": "Your message",
+    "fr": "Votre message",
+    "es": "Tu mensaje"
+  },
+  {
+    "pt": "Escreva um pouco mais — pelo menos uma frase.",
+    "en": "Write a little more — at least one sentence.",
+    "fr": "Écrivez un peu plus — au moins une phrase.",
+    "es": "Escribe un poco más: al menos una frase."
+  },
+  {
+    "pt": "Deixe em branco",
+    "en": "Leave blank",
+    "fr": "Laisser vide",
+    "es": "Dejar en blanco"
+  },
+  {
+    "pt": "Enviar mensagem",
+    "en": "Send message",
+    "fr": "Envoyer le message",
+    "es": "Enviar mensaje"
+  },
+  {
     "pt": "Seu dinheiro pode fazer <em>mais sentido.</em>",
     "en": "Your money can <em>make more sense.</em>",
     "fr": "Votre argent peut <em>devenir plus clair.</em>",
@@ -882,10 +960,10 @@
     "es": "Respondemos en un plazo de 2 días hábiles."
   },
   {
-    "pt": "suporte@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
-    "en": "suporte@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
-    "fr": "suporte@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
-    "es": "suporte@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>"
+    "pt": "info@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
+    "en": "info@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
+    "fr": "info@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>",
+    "es": "info@oaze.site <span aria-hidden=\"true\">⟦s0⟧</span>"
   },
   {
     "pt": "© 2026 OAZE",

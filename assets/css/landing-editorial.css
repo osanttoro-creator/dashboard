@@ -199,9 +199,28 @@
 .landing-oaze .idiomas a { color: #9dafb5; font-size: 14px; }
 .landing-oaze .idiomas a[aria-current="true"] { color: #f0e5cf; }
 
+.l2-contact { padding: clamp(80px,9vw,140px) 0; scroll-margin-top: 90px; background: #e7efe6; color: #0d1821; }
+.l2-contact-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: start; gap: clamp(35px,7vw,120px); }
+.l2-contact-copy h2 { margin: 20px 0; max-width: 600px; font: 700 clamp(3rem,5.7vw,6.8rem)/.94 var(--fonte-titulo); letter-spacing: -.07em; }
+.l2-contact-copy h2 em { color: #286b61; font-style: normal; }
+.l2-contact-copy > p:not(.l2-eyebrow) { max-width: 450px; font-size: clamp(17px,1.6vw,21px); line-height: 1.5; }
+.l2-contact-copy > a { display: inline-flex; gap: 12px; margin-top: 28px; color: #15574f; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 5px; }
+.l2-contact-form { padding: clamp(23px,3.5vw,48px); background: #f0e5cf; border-radius: 30px; box-shadow: 0 16px 40px #0d182111; }
+.l2-contact-form .campo { margin-bottom: 18px; }
+.l2-contact-form label { display: block; margin-bottom: 7px; font-weight: 700; }
+.l2-contact-form input, .l2-contact-form textarea { width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #8a9d97; border-radius: 13px; background: #fffdf7; color: #0d1821; font: inherit; }
+.l2-contact-form textarea { min-height: 130px; resize: vertical; }
+.l2-contact-form input:focus-visible, .l2-contact-form textarea:focus-visible { outline: 3px solid #5fa99b; outline-offset: 2px; }
+.l2-contact-form .dica, .l2-contact-form .erro { margin: 5px 0 0; font-size: 13px; }
+.l2-contact-form .erro { color: #9b2828; }
+.l2-contact-form .recado { margin-bottom: 18px; padding: 12px 15px; border-radius: 12px; background: #d7e8dc; }
+.l2-contact-form .recado-erro { background: #f8dada; }
+.l2-contact-form .contato-isca { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.l2-contact-form .btn { width: 100%; justify-content: center; }
+
 @media (max-width: 900px) {
   .landing-oaze .topo .menu { gap: 12px; }
-  .l2-story-grid, .l2-coco-grid, .l2-forward-grid, .l2-stores-grid { grid-template-columns: 1fr; }
+  .l2-story-grid, .l2-coco-grid, .l2-forward-grid, .l2-stores-grid, .l2-contact-grid { grid-template-columns: 1fr; }
   .l2-control-head { grid-template-columns: 1fr; gap: 18px; }
   .l2-wallet-scene { min-height: 520px; }
   .l2-forward .l2-story-copy { grid-row: 1; }

@@ -346,6 +346,25 @@
     </div>
   </section>
 
+  <section class="l2-contact" id="contato" aria-labelledby="contato-titulo">
+    <div class="env l2-contact-grid">
+      <div class="l2-contact-copy">
+        <p class="l2-eyebrow">CONTACTA CON OAZE</p>
+        <h2 id="contato-titulo">¿Tienes alguna <em>pregunta?</em></h2>
+        <p>Envíanos una pregunta, sugerencia o mensaje. Lo leeremos y responderemos al correo que indiques.</p>
+        <a href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true">↗</span></a>
+      </div>
+      <form class="contato l2-contact-form" id="formContato" novalidate>
+        <div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div>
+        <div class="campo"><label for="contatoNome">Tu nombre</label><input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required><p class="erro" id="contatoNomeErro" hidden>Dinos cómo podemos llamarte.</p></div>
+        <div class="campo"><label for="contatoEmail">Tu correo electrónico</label><input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica"><p class="dica" id="contatoEmailDica">Responderemos a esta dirección.</p><p class="erro" id="contatoEmailErro" hidden>Revisa el correo para que podamos responderte.</p></div>
+        <div class="campo"><label for="contatoMensagem">Tu mensaje</label><textarea id="contatoMensagem" name="mensagem" rows="5" minlength="10" maxlength="5000" required></textarea><p class="erro" id="contatoMensagemErro" hidden>Escribe un poco más: al menos una frase.</p></div>
+        <div class="contato-isca" aria-hidden="true"><label for="contatoSite">Dejar en blanco</label><input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="btn l2-button-dark" id="contatoEnviar">Enviar mensaje</button>
+      </form>
+    </div>
+  </section>
+
 </main>
 
 <!-- ══════ CHAMADA FINAL ══════ -->
@@ -394,7 +413,7 @@
       <div>
         <h3>Hablemos</h3>
         <p class="rodape-sobre">Respondemos en un plazo de 2 días hábiles.</p>
-        <a class="rodape-fala" href="mailto:suporte@oaze.site">suporte@oaze.site <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <a class="rodape-fala" href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </div>
     </div>
@@ -409,5 +428,6 @@
 <script src="/assets/js/cookies.js" defer></script>
 <script src="/assets/js/idioma-esfera.js" defer></script>
 <script src="/assets/js/lojas-oaze.js" defer></script>
+<script src="/assets/js/contato.js" defer></script>
 </body>
 </html>

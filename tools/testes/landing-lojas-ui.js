@@ -19,6 +19,8 @@ const base = process.env.OAZE_BASE_URL || 'http://127.0.0.1:4173';
       assert.equal(await page.locator('.portal').count(), 0, 'o portal antigo não deve bloquear a entrada');
       assert.equal(await page.locator('.loja-botao.is-pending').count(), 2, 'lojas sem ficha pública ficam indisponíveis');
       assert.equal(await page.locator('.lojas-opcoes a').count(), 0, 'não criar redirecionamento sem endereço oficial');
+      assert.equal(await page.locator('#formContato').count(), 1, 'formulário de contato visível na landing');
+      assert.equal(await page.locator('a[href="mailto:info@oaze.site"]').count(), 2, 'endereço oficial na seção e no rodapé');
       assert.equal(await page.locator('main a[href^="/app"], main a[href^="/cadastro"], main a[href^="/entrar"]').count(), 0);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'sem rolagem horizontal');
       assert.equal(await page.locator('.l2-stage-screen img').evaluate(img => img.complete && img.naturalWidth > 0), true);
