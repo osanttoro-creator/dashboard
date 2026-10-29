@@ -511,18 +511,25 @@
     const sessao = await AI.tokenDaSessao();
     if (!sessao) return { erro: 'sem_sessao' };
 
-    const r = await fetch(base + '/functions/v1/' + FUNCAO, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        apikey: chave,
-        authorization: 'Bearer ' + sessao
-      },
-      body: JSON.stringify(corpo)
-    });
-    const j = await r.json().catch(() => ({}));
-    if (!r.ok && !j.erro) j.erro = r.status === 401 ? 'sem_sessao' : 'indisponivel';
-    return j;
+    const controller = new AbortController();
+    const timer = global.setTimeout(() => controller.abort(), 30000);
+    try {
+      const r = await fetch(base + '/functions/v1/' + FUNCAO, {
+        method: 'POST', signal: controller.signal,
+        headers: {
+          'content-type': 'application/json',
+          apikey: chave,
+          authorization: 'Bearer ' + sessao
+        },
+        body: JSON.stringify(corpo)
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok && !j.erro) j.erro = r.status === 401 ? 'sem_sessao' : 'indisponivel';
+      return j;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return { erro: 'tempo_esgotado', mensagem: 'A Coco demorou para responder. Tente novamente.' };
+      throw error;
+    } finally { global.clearTimeout(timer); }
   };
 
   /** O access token atual, direto do SDK — nunca guardado por nós. */
