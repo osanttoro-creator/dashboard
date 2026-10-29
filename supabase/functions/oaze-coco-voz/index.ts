@@ -33,6 +33,12 @@ async function limitedJson(req: Request): Promise<{ text?: unknown } | null> {
   try { return JSON.parse(new TextDecoder().decode(bytes)); } catch { return null; }
 }
 
+const TTS_VOICES = new Set(['alloy', 'ash', 'ballad', 'coral', 'echo', 'fable', 'nova', 'onyx', 'sage', 'shimmer', 'verse', 'marin', 'cedar']);
+function cocoTtsVoice(): string {
+  const selected = (Deno.env.get('OAZE_COCO_TTS_VOICE') || 'coral').trim().toLowerCase();
+  return TTS_VOICES.has(selected) ? selected : 'coral';
+}
+
 Deno.serve(async (req) => {
   const origin = req.headers.get('Origin');
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(origin) });
@@ -69,7 +75,7 @@ Deno.serve(async (req) => {
     const response = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST', signal: controller.signal,
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: 'coral', input: text,
+      body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: cocoTtsVoice(), input: text,
         instructions: 'Fale no idioma do texto. Use uma cadência natural, acolhedora e levemente curiosa, com clareza financeira. Evite tom infantil ou caricatural. Não acrescente nenhuma informação ao texto.', response_format: 'mp3' })
     });
     if (!response.ok) return fail('Não consegui gerar o áudio agora.', 502, origin);
