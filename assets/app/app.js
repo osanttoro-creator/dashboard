@@ -1993,7 +1993,7 @@
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/rostinhos/02_feliz.png" alt="Coco"></div>`;
-    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?(state.cocoAudioLoading?'Preparando áudio…':'Parar áudio'):'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
+    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?(state.cocoAudioLoading?'Cancelar preparo do áudio':'Parar áudio'):'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?(state.cocoAudioLoading?'Preparando áudio…':'Parar áudio'):'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function cocoTools() {
     const tools=[['debts','wallet','Dívidas','organizar a quitação'],['planning','calendar','Planejar','próximos meses'],['goals','goals','Metas','chegar com calma'],['analysis','reports','Análises','entender os números']];
@@ -3790,19 +3790,19 @@
     }}
     finally{if(version===voiceStartVersion)voiceStarting=false;}
   }
-  function stopCocoAudio() {
+  function stopCocoAudio(renderNow=true) {
     cocoAudioRequest++;
     cocoPlayer?.pause();cocoPlayer=null;
     if (cocoAudioUrl) URL.revokeObjectURL(cocoAudioUrl);
     cocoAudioUrl=null;state.cocoSpeaking=false;state.cocoAudioLoading=false;
-    if (state.page==='coco') render();
+    if (renderNow && state.page==='coco') render();
   }
   async function playCocoAnswer(index) {
     if(voiceSession?.active){toast('Encerre a conversa por voz antes de ouvir esta resposta.');return;}
     if (state.cocoSpeaking===index) { stopCocoAudio();return; }
     const message=state.chat[index];
     if (demo || !message || message.who!=='coco' || !cocoAllowed()) return;
-    stopCocoAudio();const request=++cocoAudioRequest;state.cocoSpeaking=index;state.cocoAudioLoading=true;render();
+    stopCocoAudio(false);const request=++cocoAudioRequest;state.cocoSpeaking=index;state.cocoAudioLoading=true;render();
     try {
       const blob=await V3Backend.cocoSpeak(message.text);
       if (state.cocoSpeaking!==index || request!==cocoAudioRequest) return;
