@@ -84,7 +84,7 @@
         workspaces: 1,
         accounts: 2,
         credit_cards: 3,
-        transactions_per_month: 100,
+        transactions_per_month: 50,
         custom_categories: 10,
         budgets: 1,
         goals: 1,
@@ -92,7 +92,14 @@
         ai_queries_per_month: 10,
         history_months: 3,
         comparison_months: 1,
-        collaborators: 0
+        collaborators: 0,
+        /* 31/10/2026: a Coco passou a ser medida por janela — dia e
+           semana — e o Semente ganhou anúncio premiado no app Android:
+           cada anúncio libera +10 lançamentos no mês, até 5 por dia. */
+        coco_unidades_dia: 3,
+        coco_unidades_semana: 10,
+        anuncios_por_dia: 5,
+        lancamentos_por_anuncio: 10
       },
       recursos: {
         export_csv: false, export_pdf: false,
@@ -130,7 +137,11 @@
         ai_queries_per_month: 200,
         history_months: null,
         comparison_months: null,
-        collaborators: 3
+        collaborators: 3,
+        coco_unidades_dia: 30,
+        coco_unidades_semana: 120,
+        anuncios_por_dia: 0,
+        lancamentos_por_anuncio: 0
       },
       recursos: {
         export_csv: true, export_pdf: true,
@@ -344,7 +355,8 @@
     { chave: 'goals',                  rotulo: 'Metas ativas',                   tipo: 'limite' },
     { chave: 'recurring_items',        rotulo: 'Recorrências',                   tipo: 'limite' },
     { chave: 'history_months',         rotulo: 'Histórico disponível',           tipo: 'meses' },
-    { chave: 'ai_queries_per_month',   rotulo: 'Pedidos à Coco por mês',         tipo: 'limite' },
+    { chave: 'coco_unidades_dia',      rotulo: 'Conversas com a Coco por dia',   tipo: 'limite' },
+    { chave: 'coco_unidades_semana',   rotulo: 'Conversas com a Coco por semana', tipo: 'limite' },
     { chave: 'uglez_assistente_flutuante', rotulo: 'Coco flutuante no app',      tipo: 'recurso' },
     { chave: 'comparacao_mensal',      rotulo: 'Comparação entre meses',         tipo: 'recurso' },
     { chave: 'comparacao_anual',       rotulo: 'Comparação anual',               tipo: 'recurso' },
@@ -361,11 +373,11 @@
   Planos.DESTAQUES = {
     free: [
       '1 espaço financeiro, 2 contas e 3 cartões',
-      'Até 100 movimentações por mês',
+      'Até 50 movimentações por mês, +10 a cada anúncio assistido no app Android',
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
       'Contas e cartões em dólar, euro e outras moedas',
-      '10 consultas à Coco por mês, na página da Coco'
+      'Coco com uso diário e semanal, mostrado em porcentagem'
     ],
     pro: [
       'Até 5 espaços financeiros e 50 contas',
@@ -373,7 +385,8 @@
       '100 orçamentos, 50 metas e 150 recorrências',
       'Histórico completo e comparação anual',
       'Tendências, simulações e projeções da Coco',
-      '200 consultas à Coco por mês, com assistente flutuante',
+      'Coco com 10 vezes mais uso por dia e por semana, com assistente flutuante',
+      'Sem anúncios',
       'Acesso antecipado e atendimento prioritário'
     ]
   };

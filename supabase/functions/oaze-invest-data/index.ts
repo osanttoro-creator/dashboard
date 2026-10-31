@@ -127,10 +127,16 @@ Deno.serve(async (req: Request) => {
       const data = await cached('indices', 60 * 60 * 1000, async () => {
         const today = new Date().toISOString().slice(0, 10);
         const monthAgo = new Date(); monthAgo.setUTCDate(monthAgo.getUTCDate() - 35);
-        const entries = await Promise.allSettled([sgs(12), sgs(4389), sgs(432, monthAgo.toISOString().slice(0, 10), today)]);
-        const names = ['cdiDaily', 'cdiAnnual', 'selicTarget'];
-        const indices = Object.fromEntries(entries.map((entry, i) => [names[i],
+        const tenDaysAgo = new Date(); tenDaysAgo.setUTCDate(tenDaysAgo.getUTCDate() - 10);
+        /* Série 1 do SGS: dólar comercial (venda). Usada pelo aviso
+           "dólar hoje" do app; o dia anterior vai junto para a variação. */
+        const entries = await Promise.allSettled([sgs(12), sgs(4389), sgs(432, monthAgo.toISOString().slice(0, 10), today),
+          sgs(1, tenDaysAgo.toISOString().slice(0, 10), today)]);
+        const names = ['cdiDaily', 'cdiAnnual', 'selicTarget', 'usdBrl'];
+        const indices: Record<string, unknown> = Object.fromEntries(entries.map((entry, i) => [names[i],
           entry.status === 'fulfilled' ? entry.value.filter((row) => row.date <= today).at(-1) || null : null]));
+        const dolar = entries[3];
+        indices.usdBrlAnterior = dolar.status === 'fulfilled' ? dolar.value.filter((row) => row.date <= today).at(-2) || null : null;
         if (!Object.values(indices).some(Boolean)) throw new Error('indices_indisponiveis');
         return indices;
       });

@@ -114,15 +114,20 @@ Deno.serve(async (req) => {
   } catch { return fail('Leitura indisponível agora.', 503, origin); }
   const { data: rights, error: rightsError } = await client.rpc('meus_direitos');
   if (rightsError || !rights) return fail('Leitura indisponível agora.', 503, origin);
-  const monthly = rights.limites?.ai_queries_per_month;
-  const quota = monthly == null ? Number.MAX_SAFE_INTEGER : Number(monthly);
-  const { data: reservation, error: reservationError } = await admin.rpc('reservar_ia', {
-    p_user: userId, p_limite: quota
+  /* Ler imagem ou áudio custa 3 unidades da janela diária/semanal da
+     Coco (uma conversa custa 1). */
+  const cost = 3;
+  const { data: reservation, error: reservationError } = await admin.rpc('reservar_coco', {
+    p_user: userId, p_custo: cost
   });
   const reserved = Array.isArray(reservation) ? reservation[0] : reservation;
   if (reservationError || !reserved) return fail('Leitura indisponível agora.', 503, origin);
-  if (!reserved.out_permitido) return fail('Você atingiu o limite de consultas da Coco neste mês.', 429, origin);
-  const refund = async () => { try { await admin.rpc('estornar_ia', { p_user: userId }); } catch { /* falha registrada pelo banco */ } };
+  if (!reserved.out_permitido) {
+    return fail(reserved.out_janela === 'semana'
+      ? 'Você usou a Coco desta semana. O limite renova na segunda-feira.'
+      : 'Você usou a Coco de hoje. O limite renova à meia-noite.', 429, origin);
+  }
+  const refund = async () => { try { await admin.rpc('estornar_coco', { p_user: userId, p_custo: cost }); } catch { /* falha registrada pelo banco */ } };
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 35000);
@@ -159,7 +164,8 @@ Deno.serve(async (req) => {
     const cleaned = text.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().slice(0, 500);
     if (!cleaned) { await refund(); return fail('Não encontrei informações legíveis. Tente outra captura.', 422, origin); }
     return respond({ texto: cleaned, tipo: isAudio ? 'audio' : 'foto', salvo: false,
-      uso: { usado: reserved.out_usado, limite: reserved.out_teto } }, 200, origin);
+      uso: { pct_dia: reserved.out_pct_dia, pct_semana: reserved.out_pct_semana,
+        renova_dia: reserved.out_renova_dia, renova_semana: reserved.out_renova_semana } }, 200, origin);
   } catch {
     await refund();
     return fail('Não consegui processar o arquivo agora.', 504, origin);

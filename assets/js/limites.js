@@ -47,6 +47,12 @@
 
   let direitos = PADRAO;
   let consumoIA = { usado: 0, limite: PADRAO.limites.ai_queries_per_month };
+  /* 31/10/2026: a Coco é medida em duas janelas, dia e semana, e o
+     servidor devolve só a porcentagem — a pessoa não precisa contar
+     perguntas. */
+  const COCO_VAZIO = { pct_dia: 0, pct_semana: 0, renova_dia: null, renova_semana: null, ilimitado: false, carregado: false };
+  let consumoCoco = COCO_VAZIO;
+  const ANUNCIOS_VAZIO = { hoje: 0, max_dia: 0, por_anuncio: 0, liberados_mes: 0 };
 
   function sb() {
     try {
@@ -57,6 +63,14 @@
   Limites.direitos = () => direitos;
   Limites.plano = () => direitos.plano;
   Limites.consumoIA = () => consumoIA;
+  Limites.consumoCoco = () => consumoCoco;
+  /** Atualiza a barra com o que a própria resposta da Coco trouxe. */
+  Limites.registrarUsoCoco = function (uso) {
+    if (!uso || typeof uso.pct_dia !== 'number') return;
+    consumoCoco = Object.assign({}, consumoCoco, uso, { carregado: true });
+  };
+  /** Anúncios premiados do mês: quantos hoje, teto diário e quanto já liberaram. */
+  Limites.anuncios = () => Object.assign({}, ANUNCIOS_VAZIO, direitos.anuncios || {});
 
   /* ---------------- carga ---------------- */
 
@@ -81,7 +95,8 @@
           fimPeriodo: data.fim_periodo,
           cancelaNoFim: !!data.cancela_no_fim,
           limites: data.limites || PADRAO.limites,
-          recursos: data.recursos || PADRAO.recursos
+          recursos: data.recursos || PADRAO.recursos,
+          anuncios: data.anuncios || ANUNCIOS_VAZIO
         };
       }
       await Limites.carregarConsumo();
@@ -99,14 +114,13 @@
     /* O mês no fuso do OAZE, igual ao que o banco usa. Calcular em
        UTC faria o contador "virar" às 21h do dia 30. */
     const mes = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }).slice(0, 7);
+    void mes;
     try {
-      const { data } = await c.from('usage_counters')
-        .select('usado, limite').eq('user_id', u.uid)
-        .eq('tipo', 'ai_query').eq('periodo', mes).maybeSingle();
-      consumoIA = {
-        usado: (data && data.usado) || 0,
-        limite: direitos.limites.ai_queries_per_month
-      };
+      const { data, error } = await c.rpc('meu_consumo_coco');
+      if (!error && data) consumoCoco = Object.assign({}, COCO_VAZIO, data, { carregado: true });
+      /* Compatibilidade com telas que ainda leem consumoIA: a semana
+         em porcentagem, de 100. */
+      consumoIA = { usado: consumoCoco.pct_semana, limite: consumoCoco.ilimitado ? null : 100, porcentagem: true };
     } catch (e) { /* offline */ }
   };
 
@@ -264,6 +278,7 @@
 
     Limites.avisar({
       titulo: 'Limite do plano ' + planoAtual.nome,
+      tipo: tipo,
       linhas: linhas,
       /* Para onde ir depois de entender. Sem esta porta, fechar o
          aviso era um beco sem saída: a pessoa sabia do teto e não
@@ -314,6 +329,7 @@
   Limites.aoSair = function () {
     direitos = PADRAO;
     consumoIA = { usado: 0, limite: PADRAO.limites.ai_queries_per_month };
+    consumoCoco = COCO_VAZIO;
     if (typeof Limites.aoMudar === 'function') Limites.aoMudar();
   };
 

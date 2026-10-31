@@ -174,10 +174,10 @@
     "es": "⟦s0⟧ 1 espacio financiero, 2 cuentas y 3 tarjetas"
   },
   {
-    "pt": "⟦s0⟧ Até 100 movimentações por mês",
-    "en": "⟦s0⟧ Up to 100 transactions per month",
-    "fr": "⟦s0⟧ Jusqu'à 100 opérations par mois",
-    "es": "⟦s0⟧ Hasta 100 movimientos por mes"
+    "pt": "⟦s0⟧ Até 50 movimentações por mês, +10 por anúncio no app Android",
+    "en": "⟦s0⟧ Up to 50 transactions per month, +10 per ad in the Android app",
+    "fr": "⟦s0⟧ Jusqu'à 50 opérations par mois, +10 par publicité dans l'app Android",
+    "es": "⟦s0⟧ Hasta 50 movimientos por mes, +10 por anuncio en la app Android"
   },
   {
     "pt": "⟦s0⟧ 1 orçamento, 1 meta e 3 recorrências",
@@ -198,10 +198,10 @@
     "es": "⟦s0⟧ Cuentas y tarjetas en dólares, euros y otras monedas"
   },
   {
-    "pt": "⟦s0⟧ 10 consultas ao Coco por mês",
-    "en": "⟦s0⟧ 10 Coco queries per month",
-    "fr": "⟦s0⟧ 10 requêtes Coco par mois",
-    "es": "⟦s0⟧ 10 consultas a Coco por mes"
+    "pt": "⟦s0⟧ Coco com uso diário e semanal, em porcentagem",
+    "en": "⟦s0⟧ Coco with daily and weekly usage, shown as a percentage",
+    "fr": "⟦s0⟧ Coco avec un usage quotidien et hebdomadaire, en pourcentage",
+    "es": "⟦s0⟧ Coco con uso diario y semanal, en porcentaje"
   },
   {
     "pt": "Oásis",

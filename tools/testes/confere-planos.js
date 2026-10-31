@@ -31,9 +31,10 @@ const ESPERADO = {
   free: {
     nome: 'Semente', mensal: 0, anual: 0,
     limites: {
-      workspaces: 1, accounts: 2, credit_cards: 3, transactions_per_month: 100,
+      workspaces: 1, accounts: 2, credit_cards: 3, transactions_per_month: 50,
       custom_categories: 10, budgets: 1, goals: 1, recurring_items: 3,
-      ai_queries_per_month: 10, history_months: 3, comparison_months: 1, collaborators: 0
+      ai_queries_per_month: 10, history_months: 3, comparison_months: 1, collaborators: 0,
+      coco_unidades_dia: 3, coco_unidades_semana: 10, anuncios_por_dia: 5, lancamentos_por_anuncio: 10
     },
     recursos: {
       export_csv: false, export_pdf: false, cartoes_internacionais: true,
@@ -48,7 +49,8 @@ const ESPERADO = {
     limites: {
       workspaces: 5, accounts: 50, credit_cards: null, transactions_per_month: null,
       custom_categories: 200, budgets: 100, goals: 50, recurring_items: 150,
-      ai_queries_per_month: 200, history_months: null, comparison_months: null, collaborators: 3
+      ai_queries_per_month: 200, history_months: null, comparison_months: null, collaborators: 3,
+      coco_unidades_dia: 30, coco_unidades_semana: 120, anuncios_por_dia: 0, lancamentos_por_anuncio: 0
     },
     recursos: {
       export_csv: true, export_pdf: true, cartoes_internacionais: true,

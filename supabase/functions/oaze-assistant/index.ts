@@ -659,8 +659,14 @@ Deno.serve(async (req: Request) => {
 
      Reservar antes garante a primeira; estornar no erro garante a
      segunda. Escolher só uma seria escolher qual falha aceitar. */
+  /* 31/10/2026: a cota deixou de ser "N conversas por mês" e passou a
+     duas janelas em porcentagem — o dia (renova à meia-noite de
+     Brasília) e a semana (renova na segunda). Uma conversa custa 1
+     unidade; os tetos de cada plano ficam em plan_entitlements. */
+  void cota;
+  const custo = 1;
   const { data: reserva, error: erroReserva } = await admin
-    .rpc('reservar_ia', { p_user: userId, p_limite: cota });
+    .rpc('reservar_coco', { p_user: userId, p_custo: custo });
 
   const r0 = Array.isArray(reserva) ? reserva[0] : reserva;
   if (erroReserva || !r0) {
@@ -671,11 +677,14 @@ Deno.serve(async (req: Request) => {
   if (!r0.out_permitido) {
     return json({
       erro: 'limite',
-      mensagem: 'Você usou as ' + r0.out_teto + ' consultas do seu plano neste mês.',
+      mensagem: r0.out_janela === 'semana'
+        ? 'Você usou 100% da Coco nesta semana. O limite renova na segunda-feira.'
+        : 'Você usou 100% da Coco hoje. O limite renova à meia-noite.',
       plano,
-      usado: r0.out_usado,
-      limite: r0.out_teto,
-      periodo: r0.out_mes,
+      uso: {
+        pct_dia: r0.out_pct_dia, pct_semana: r0.out_pct_semana,
+        renova_dia: r0.out_renova_dia, renova_semana: r0.out_renova_semana, janela: r0.out_janela
+      },
       request_id: requestId
     }, 429, origem);
   }
@@ -684,7 +693,7 @@ Deno.serve(async (req: Request) => {
      precisa devolvê-la. */
   const estornar = async () => {
     try {
-      const { error } = await admin.rpc('estornar_ia', { p_user: userId });
+      const { error } = await admin.rpc('estornar_coco', { p_user: userId, p_custo: custo });
       if (error) console.error(JSON.stringify({ request_id: requestId, evento: 'estorno_falhou' }));
     } catch {
       console.error(JSON.stringify({ request_id: requestId, evento: 'estorno_falhou' }));
@@ -848,7 +857,10 @@ Deno.serve(async (req: Request) => {
     request_id: requestId,
     /* Devolvido para a interface avisar antes de bater no teto. */
     plano,
-    uso: { usado: r0.out_usado, limite: r0.out_teto, periodo: r0.out_mes }
+    uso: {
+      pct_dia: r0.out_pct_dia, pct_semana: r0.out_pct_semana,
+      renova_dia: r0.out_renova_dia, renova_semana: r0.out_renova_semana
+    }
   }, 200, origem);
 });
 
