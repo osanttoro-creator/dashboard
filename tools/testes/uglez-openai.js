@@ -32,7 +32,7 @@ exigir(/auth\.getUser\(\)/.test(funcao),
   'a função não confirma o usuário autenticado');
 exigir(/\[functions\.oaze-assistant\][\s\S]*?verify_jwt\s*=\s*true/.test(config),
   'o gateway não exige JWT para o UGLEZ');
-exigir(/reservar_ia/.test(funcao) && /estornar_ia/.test(funcao),
+exigir(/reservar_coco/.test(funcao) && /estornar_coco/.test(funcao),
   'a cota não tem reserva e estorno no servidor');
 exigir(!/resposta\.status\s*===\s*429\s*\?\s*['"]limite['"]/.test(funcao),
   'a cota da OpenAI ainda é confundida com a cota do usuário');

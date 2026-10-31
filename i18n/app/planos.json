@@ -106,11 +106,18 @@
   "es": "Historial disponible"
  },
  {
-  "pt": "Pedidos à Coco por mês",
+  "pt": "Conversas com a Coco por dia",
   "tipo": "exato",
-  "en": "Requests to Coco per month",
-  "fr": "Demandes à Coco par mois",
-  "es": "Solicitudes a Coco al mes"
+  "en": "Coco conversations per day",
+  "fr": "Conversations avec Coco par jour",
+  "es": "Conversaciones con Coco por día"
+ },
+ {
+  "pt": "Conversas com a Coco por semana",
+  "tipo": "exato",
+  "en": "Coco conversations per week",
+  "fr": "Conversations avec Coco par semaine",
+  "es": "Conversaciones con Coco por semana"
  },
  {
   "pt": "Coco flutuante no app",
@@ -190,11 +197,11 @@
   "es": "1 espacio financiero, 2 cuentas y 3 tarjetas"
  },
  {
-  "pt": "Até 100 movimentações por mês",
+  "pt": "Até 50 movimentações por mês, +10 a cada anúncio assistido no app Android",
   "tipo": "exato",
-  "en": "Up to 100 transactions per month",
-  "fr": "Jusqu'à 100 mouvements par mois",
-  "es": "Hasta 100 movimientos por mes"
+  "en": "Up to 50 transactions per month, +10 for each ad watched in the Android app",
+  "fr": "Jusqu’à 50 mouvements par mois, +10 pour chaque publicité regardée dans l’app Android",
+  "es": "Hasta 50 movimientos por mes, +10 por cada anuncio visto en la app Android"
  },
  {
   "pt": "1 orçamento, 1 meta e 3 recorrências",
@@ -211,11 +218,11 @@
   "es": "Historial de los últimos 3 meses"
  },
  {
-  "pt": "10 consultas à Coco por mês, na página da Coco",
+  "pt": "Coco com uso diário e semanal, mostrado em porcentagem",
   "tipo": "exato",
-  "en": "10 Coco questions per month, on Coco’s page",
-  "fr": "10 questions à Coco par mois, sur sa page",
-  "es": "10 consultas a Coco al mes, en su página"
+  "en": "Coco with daily and weekly usage, shown as a percentage",
+  "fr": "Coco avec un usage quotidien et hebdomadaire, affiché en pourcentage",
+  "es": "Coco con uso diario y semanal, mostrado en porcentaje"
  },
  {
   "pt": "Até 5 espaços financeiros e 50 contas",
@@ -253,11 +260,18 @@
   "es": "Tendencias, simulaciones y proyecciones de Coco"
  },
  {
-  "pt": "200 consultas à Coco por mês, com assistente flutuante",
+  "pt": "Coco com 10 vezes mais uso por dia e por semana, com assistente flutuante",
   "tipo": "exato",
-  "en": "200 Coco questions per month, with the floating assistant",
-  "fr": "200 questions à Coco par mois, avec l’assistante flottante",
-  "es": "200 consultas a Coco al mes, con asistente flotante"
+  "en": "Coco with 10 times more usage per day and per week, with floating assistant",
+  "fr": "Coco avec 10 fois plus d’usage par jour et par semaine, avec assistant flottant",
+  "es": "Coco con 10 veces más uso por día y por semana, con asistente flotante"
+ },
+ {
+  "pt": "Sem anúncios",
+  "tipo": "exato",
+  "en": "No ads",
+  "fr": "Sans publicité",
+  "es": "Sin anuncios"
  },
  {
   "pt": "Acesso antecipado e atendimento prioritário",
