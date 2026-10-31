@@ -13,6 +13,9 @@ fontes de desenvolvimento não entram em `public_html`.
 nos testes fica em `tools/fixtures/` e não entra no pacote. A antiga rota
 `/preview-v3/` responde 410. `/app` entrega a V3 autenticada;
 `/app-v3.html` é acesso direto ao mesmo HTML. O painel anterior foi removido.
+`/retorno-app.html` (desde 30/10/2026) é a página de passagem do checkout
+aberto pelo app Windows: repassa o resultado para `oaze://billing` e não guarda
+nada no navegador. Se ela responder 404, o deploy dessa versão não chegou.
 
 ```powershell
 .\deploy\hostinger\montar-pacote.ps1
