@@ -8,10 +8,17 @@ const ler = (a) => fs.readFileSync(caminho(a), 'utf8');
 const falhas = [];
 const exige = (ok, msg) => { if (!ok) falhas.push(msg); };
 
+/* Página de passagem: só repassa o retorno da Stripe ao app instalado
+   (oaze://billing). Não guarda nada no navegador nem é indexada. */
+const passagem = ['retorno-app.html'];
 const htmls = fs.readdirSync(raiz).filter((f) => f.endsWith('.html'));
 for (const arquivo of htmls) {
   const c = ler(arquivo);
   exige(!/hostingersite\.com|@gmail\.com/i.test(c), arquivo + ': domínio ou suporte antigo');
+  if (passagem.includes(arquivo)) {
+    exige(/noindex/.test(c) && !/localStorage|document\.cookie/.test(c), arquivo + ': página de passagem indexável ou guardando dados');
+    continue;
+  }
   exige(/assets\/js\/cookies\.js/.test(c), arquivo + ': aviso de cookies não carregado');
   if (!['app-v3.html', 'confirmar-email.html', 'redefinir-senha.html'].includes(arquivo)) {
     exige(/<meta name="description" content="[^"]+"/.test(c), arquivo + ': sem meta description');

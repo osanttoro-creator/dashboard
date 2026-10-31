@@ -32,7 +32,11 @@ exige(/\.eq\('moeda', moeda\)/.test(pagamento), 'o preço não é buscado pela m
 /* A lista de campos aceitos continua explícita; cupom e moeda
    entraram nela (código e sigla, nunca valor). Qualquer outro campo
    continua recusado. */
-exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?(, 'cupom')?\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
+exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?(, 'cupom')?(, 'canal')?\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
+/* 'canal' só existe para o app Windows voltar por oaze://billing: aceita
+   um único valor e só da origem local do Tauri. */
+exige(/corpo\.canal !== 'windows'/.test(pagamento) && /tauri:\/\/localhost/.test(pagamento),
+  'o canal de retorno aceita valor ou origem arbitrária');
 exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?, 'codigo'\]\)/.test(pagamento), 'a consulta de cupom aceita campos extras');
 exige(/cupom:minuto/.test(pagamento), 'a consulta de cupom não tem limite próprio contra tentativa e erro');
 exige(/mode', 'subscription'/.test(pagamento), 'Checkout não está em modo de assinatura');
