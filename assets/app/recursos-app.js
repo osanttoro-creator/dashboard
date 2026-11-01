@@ -93,7 +93,11 @@
     if (atual && novo) atual.outerHTML = novo;
     else if (!atual && novo) inserirCoco(estadoPagina);
   }
+  /* 01/11/2026: o painel grande de uso só aparece quando a pessoa toca no
+     ícone pequeno da barra de mensagem (abre numa gaveta). Nada é inserido
+     sozinho na tela da Coco nem em Configurações. */
   function inserirCoco(pagina) {
+    if (pagina) return;
     const html = painelCoco();
     if (!html || document.querySelector('[data-oz-coco-uso]')) return;
     const view = document.getElementById('v3-view');
@@ -194,8 +198,23 @@
   /* =============================================================
      AVISOS
      ============================================================= */
-  const PREF_PADRAO = { vencimentos: true, orcamento: true, metas: true, score: true, dolar: false, dicas: true, detalhes: false, hora: 9 };
-  const prefs = () => Object.assign({}, PREF_PADRAO, armazenado.ler('oaze.avisos.prefs', {}));
+  /* AVISOS POR PESSOA (01/11/2026)
+     As preferências moram no perfil da pessoa (profile.avisos, sincroniza
+     entre aparelhos) com cópia local por usuário. Cada tipo tem os próprios
+     ajustes: antecedência, faixas, sensibilidade, contas que avisam. */
+  const PREF_PADRAO = {
+    vencimentos: true, faturas: true, antecedencia: [1, 0], contasExcluidas: [],
+    metas: true, metaDias: 7, receber: true,
+    orcamento: true, faixas: [80, 100], padrao: true, sensibilidade: 'media', duplicada: true,
+    score: true, dolar: false, dicas: true,
+    detalhes: false, hora: 9, maxDia: 3, diasUteis: false
+  };
+  const chaveLocalAvisos = () => 'oaze.avisos.prefs' + (usuarioId() ? ':' + usuarioId() : '');
+  const prefs = () => {
+    const c = contexto();
+    const doPerfil = c && c.profile && c.profile.avisos && typeof c.profile.avisos === 'object' ? c.profile.avisos : null;
+    return Object.assign({}, PREF_PADRAO, armazenado.ler('oaze.avisos.prefs', {}), armazenado.ler(chaveLocalAvisos(), {}), doPerfil || {});
+  };
   const enviados = () => armazenado.ler('oaze.avisos.enviados', {});
   let indicesCache = null;
 
@@ -232,7 +251,7 @@
         const linha = totais.find((t) => t.id === cat);
         if (!linha || !(limite > 0)) return;
         const pct = Math.round(linha.total / limite * 100);
-        const faixa = pct >= 100 ? 100 : pct >= 80 ? 80 : 0;
+        const faixa = (p.faixas || [80, 100]).slice().sort((a, b) => b - a).find((f) => pct >= f) || 0;
         if (!faixa) return;
         lista.push({ chave: 'orc' + faixa + ':' + ym + ':' + cat, canal: 'insights',
           titulo: p.detalhes ? 'Orçamento de ' + linha.name + ' em ' + pct + '%' : 'Um orçamento passou de ' + faixa + '%',
@@ -242,8 +261,8 @@
     }
     /* Detecção no aparelho (sem banco conectado): gasto fora do padrão e
        possível cobrança duplicada. Usa só lançamentos já registrados. */
-    if (p.orcamento && global.Calc && Calc.categoryTotals) {
-      try {
+    if ((p.padrao || p.duplicada) && global.Calc && Calc.categoryTotals) {
+      if (p.padrao) try {
         const dia = Number(hoje.slice(8, 10));
         const fimMes = new Date(+ym.slice(0, 4), +ym.slice(5, 7), 0).getDate();
         const atual = Calc.categoryTotals('expense', ym + '-01', hoje, perfil);
@@ -257,14 +276,15 @@
         atual.forEach((r) => {
           const base = media.get(r.id) || 0;
           const esperadoAteHoje = base * dia / fimMes;
-          if (base < 100 || dia < 7 || r.total < esperadoAteHoje * 1.5 || r.total - esperadoAteHoje < 80) return;
+          const fator = p.sensibilidade === 'alta' ? 1.25 : p.sensibilidade === 'baixa' ? 1.8 : 1.5;
+          if (base < 100 || dia < 7 || r.total < esperadoAteHoje * fator || r.total - esperadoAteHoje < 80) return;
           lista.push({ chave: 'padrao:' + ym + ':' + r.id, canal: 'insights',
             titulo: p.detalhes ? r.name + ' acima do seu padrão' : 'Uma categoria está acima do seu padrão',
             corpo: p.detalhes ? brl(r.total) + ' até hoje; a média dos últimos meses é ' + brl(base) + ' no mês inteiro.' : 'Abra o OAZE para ver qual.',
             texto: r.name + ': ' + brl(r.total) + ' até hoje, contra média de ' + brl(base) + ' por mês nos últimos 3 meses.' });
         });
       } catch { /* sem histórico suficiente */ }
-      try {
+      if (p.duplicada) try {
         const inicio = iso(new Date(Date.now() - 30 * 86400000));
         const gastos = Calc.entries(inicio, hoje, perfil).filter((e) => e.kind === 'expense' && e.amount > 0 && !e.installment);
         const vistos = new Set();
@@ -333,7 +353,9 @@
 
   function proximoHorario(p) {
     const d = new Date(); d.setHours(p.hora, 0, 0, 0);
-    if (d.getTime() <= Date.now() + 60_000) return new Date(Date.now() + 60_000);
+    if (d.getTime() <= Date.now() + 60_000) d.setDate(d.getDate() + (p.diasUteis ? 1 : 0));
+    if (!p.diasUteis && d.getTime() <= Date.now() + 60_000) return new Date(Date.now() + 60_000);
+    while (p.diasUteis && (d.getDay() === 0 || d.getDay() === 6)) d.setDate(d.getDate() + 1);
     return d;
   }
 
@@ -348,8 +370,12 @@
         const data = mes + '-' + String(dia).padStart(2, '0');
         const falta = dias(hoje, data);
         if (falta < 0 || falta > 31) return;
-        porDia[dia].filter((ev) => !ev.confirmado && (ev.tipo === 'due' || ev.tipo === 'out')).forEach((ev, i) => {
-          [[1, 'amanhã'], [0, 'hoje']].forEach(([antes, palavra]) => {
+        porDia[dia].filter((ev) => !ev.confirmado && ((ev.tipo === 'due' && p.faturas) || (ev.tipo === 'out' && p.vencimentos))).filter((ev) => {
+          const tx = ev.txId ? (perfil.transactions || []).find((t) => t.id === ev.txId) : null;
+          const origem = ev.cardId || (tx && (tx.cardId || tx.accountId));
+          return !origem || !(p.contasExcluidas || []).includes(origem);
+        }).forEach((ev, i) => {
+          (p.antecedencia || [1, 0]).map((n) => [n, n === 0 ? 'hoje' : n === 1 ? 'amanhã' : 'em ' + n + ' dias']).forEach(([antes, palavra]) => {
             const quandoD = new Date(data + 'T00:00:00'); quandoD.setDate(quandoD.getDate() - antes); quandoD.setHours(p.hora, 0, 0, 0);
             if (quandoD.getTime() <= Date.now()) return;
             lista.push({ at: quandoD.toISOString(), canal: 'contas',
@@ -363,14 +389,24 @@
     return lista;
   }
 
+  function receber(perfil, p) {
+    const hoje = hojeISO(), lista = [];
+    (perfil.aReceber || []).filter((x) => !x.quitado && x.vence && x.vence < hoje).slice(0, 3).forEach((x) => {
+      lista.push({ chave: 'receber:' + x.id + ':' + hoje.slice(0, 7), canal: 'contas',
+        titulo: p.detalhes ? x.pessoa + ' ainda não te pagou' : 'Alguém ainda não te pagou',
+        corpo: p.detalhes ? brl(x.valor - x.recebido) + ' combinado para ' + x.vence.split('-').reverse().join('/') + '.' : 'Abra "Quem me deve" no OAZE.',
+        texto: x.pessoa + ': ' + brl(x.valor - x.recebido) + ' em atraso.' });
+    });
+    return lista;
+  }
   function metas(perfil, p) {
     const lista = [];
     (perfil.goals || []).forEach((g) => {
       if (!g.deadline || !(g.target > 0) || (g.saved || 0) >= g.target) return;
-      const aviso = new Date(g.deadline + 'T00:00:00'); aviso.setDate(aviso.getDate() - 7); aviso.setHours(p.hora, 0, 0, 0);
+      const aviso = new Date(g.deadline + 'T00:00:00'); aviso.setDate(aviso.getDate() - (p.metaDias || 7)); aviso.setHours(p.hora, 0, 0, 0);
       if (aviso.getTime() <= Date.now() || dias(hojeISO(), g.deadline) > 60) return;
       lista.push({ at: aviso.toISOString(), canal: 'contas',
-        titulo: p.detalhes ? 'Meta ' + g.name + ': faltam 7 dias' : 'Uma meta vence em 7 dias',
+        titulo: p.detalhes ? 'Meta ' + g.name + ': faltam ' + (p.metaDias || 7) + ' dias' : 'Uma meta vence em ' + (p.metaDias || 7) + ' dias',
         corpo: p.detalhes ? 'Guardado ' + brl(g.saved || 0) + ' de ' + brl(g.target) + '.' : 'Abra o OAZE para ver o progresso.' });
     });
     return lista;
@@ -398,9 +434,9 @@
       if (global.OazeTeste) agendados.push(...global.OazeTeste.lembretes());
       if (global.OazeFuncoes) agendados.push(...global.OazeFuncoes.lembretes());
       const ja = enviados();
-      const novos = (await insights(c.profile, p)).filter((x) => !ja[x.chave]);
+      const novos = (await insights(c.profile, p)).concat(p.receber ? receber(c.profile, p) : []).filter((x) => !ja[x.chave]);
       const slot = proximoHorario(p).toISOString();
-      novos.slice(0, 3).forEach((x) => { agendados.push({ at: slot, canal: x.canal, titulo: x.titulo, corpo: x.corpo }); ja[x.chave] = hojeISO(); });
+      novos.slice(0, Math.max(1, Math.min(10, Number(p.maxDia) || 3))).forEach((x) => { agendados.push({ at: slot, canal: x.canal, titulo: x.titulo, corpo: x.corpo }); ja[x.chave] = hojeISO(); });
       agendados.sort((a, b) => a.at.localeCompare(b.at));
       const itens = agendados.slice(0, 60).map((x, i) => ({ id: 3100000 + i, at: x.at, title: x.titulo, body: x.corpo, channel: x.canal }));
       const assinatura = JSON.stringify(itens);
@@ -419,28 +455,61 @@
     },
     preferencias() {
       const p = prefs();
+      const c = contexto();
+      const perfil = c && c.profile ? c.profile : { accounts: [], cards: [] };
       const caixa = (k, rot, sub) => '<label class="oz-pref"><input type="checkbox" name="' + k + '"' + (p[k] ? ' checked' : '') + '><span><strong>' + esc(rot) + '</strong><small>' + esc(sub) + '</small></span></label>';
-      const horas = [7, 8, 9, 10, 12, 18, 20].map((h) => '<option value="' + h + '"' + (p.hora === h ? ' selected' : '') + '>' + String(h).padStart(2, '0') + ':00</option>').join('');
+      const chips = (nome, opcoes, marcados, rotulo) => '<div class="oz-chips-pref" role="group" aria-label="' + esc(rotulo) + '">' + opcoes.map(([v, t]) => '<label class="oz-chip-pref"><input type="checkbox" name="' + nome + '" value="' + v + '"' + ((marcados || []).map(String).includes(String(v)) ? ' checked' : '') + '><span>' + esc(t) + '</span></label>').join('') + '</div>';
+      const sel = (nome, opcoes, atual, rotulo) => '<label class="oz-pref-hora">' + esc(rotulo) + '<select name="' + nome + '">' + opcoes.map(([v, t]) => '<option value="' + v + '"' + (String(atual) === String(v) ? ' selected' : '') + '>' + esc(t) + '</option>').join('') + '</select></label>';
+      const origens = (perfil.accounts || []).filter((a) => !a.archived).map((a) => [a.id, a.name || a.bank]).concat((perfil.cards || []).map((k) => [k.id, (k.name || k.bank) + ' (cartão)']));
+      const horas = Array.from({ length: 17 }, (_, i) => i + 6).map((h) => [h, String(h).padStart(2, '0') + ':00']);
       const d = dialogo('escolher avisos',
-        '<p>Escolha o que o OAZE avisa neste aparelho. Os avisos são criados a partir dos seus dados quando o app é aberto.</p>'
-        + '<fieldset class="oz-prefs"><legend>Contas</legend>'
-        + caixa('vencimentos', 'Vencimentos', 'Na véspera e no dia: "conta X vence amanhã"')
-        + caixa('metas', 'Metas', '7 dias antes do prazo de uma meta')
-        + '</fieldset><fieldset class="oz-prefs"><legend>Complementares</legend>'
-        + caixa('orcamento', 'Orçamento', 'Ao passar de 80% e de 100% de uma categoria')
+        '<p>Escolha o que o OAZE avisa, quando e com que detalhe. Fica salvo na sua conta e vale em todos os seus aparelhos.</p>'
+        + '<fieldset class="oz-prefs"><legend>Contas e faturas</legend>'
+        + caixa('vencimentos', 'Contas a pagar', 'Boletos, aluguel, assinaturas e outras despesas previstas')
+        + caixa('faturas', 'Faturas de cartão', 'No vencimento de cada fatura em aberto')
+        + '<p class="oz-pref-sub">Avisar com antecedência de:</p>' + chips('antecedencia', [[7, '7 dias'], [3, '3 dias'], [1, '1 dia'], [0, 'no dia']], p.antecedencia, 'Antecedência')
+        + (origens.length ? '<details class="oz-pref-contas"><summary>Contas e cartões que avisam</summary>' + origens.map(([id, nome]) => '<label class="oz-pref"><input type="checkbox" name="origem" value="' + esc(id) + '"' + ((p.contasExcluidas || []).includes(id) ? '' : ' checked') + '><span><strong>' + esc(nome) + '</strong></span></label>').join('') + '</details>' : '')
+        + caixa('receber', 'Quem me deve', 'Quando um valor a receber passar da data combinada')
+        + '</fieldset><fieldset class="oz-prefs"><legend>Metas e orçamento</legend>'
+        + caixa('metas', 'Prazo de meta', 'Antes do prazo de uma meta ainda não alcançada')
+        + sel('metaDias', [[3, '3 dias antes'], [7, '7 dias antes'], [15, '15 dias antes'], [30, '30 dias antes']], p.metaDias, 'Quando avisar da meta')
+        + caixa('orcamento', 'Orçamento por categoria', 'Quando uma categoria passar das faixas abaixo')
+        + chips('faixas', [[50, '50%'], [80, '80%'], [100, '100%'], [120, '120%']], p.faixas, 'Faixas do orçamento')
+        + '</fieldset><fieldset class="oz-prefs"><legend>Coco de olho</legend>'
+        + caixa('padrao', 'Gasto fora do padrão', 'Categoria gastando bem mais que a média dos últimos 3 meses')
+        + sel('sensibilidade', [['baixa', 'Só quando for muito acima (80%)'], ['media', 'Acima de 50%'], ['alta', 'Qualquer alta de 25%']], p.sensibilidade, 'Sensibilidade')
+        + caixa('duplicada', 'Cobrança duplicada', 'Dois lançamentos iguais em até 3 dias')
         + caixa('score', 'Score OAZE', 'Quando o seu score subir')
+        + '</fieldset><fieldset class="oz-prefs"><legend>Mercado e dicas</legend>'
         + caixa('dolar', 'Dólar do dia', 'Cotação comercial do Banco Central, uma vez por dia')
         + caixa('dicas', 'Dicas', 'Conteúdo educativo sobre reserva e juros; nunca indicação de produto')
-        + '</fieldset><fieldset class="oz-prefs"><legend>Privacidade</legend>'
+        + '</fieldset><fieldset class="oz-prefs"><legend>Quando e como</legend>'
+        + sel('hora', horas, p.hora, 'Horário dos avisos')
+        + sel('maxDia', [[1, '1 por dia'], [3, 'até 3 por dia'], [5, 'até 5 por dia'], [10, 'sem limite prático']], p.maxDia, 'Quantos avisos da Coco por dia')
+        + caixa('diasUteis', 'Só em dias úteis', 'Avisos da Coco ficam para segunda; vencimentos sempre avisam')
         + caixa('detalhes', 'Mostrar nomes e valores', 'Desligado: o aviso diz só "uma conta vence amanhã"')
-        + '<label class="oz-pref-hora">Horário dos avisos<select name="hora">' + horas + '</select></label></fieldset>'
-        + '<div class="v3-estado-actions"><button type="submit" class="v3-secondary">Cancelar</button><button type="button" class="v3-primary" data-oz-salvar-avisos>Salvar</button></div>',
+        + '</fieldset><div class="v3-estado-actions"><button type="submit" class="v3-secondary">Cancelar</button><button type="button" class="v3-primary" data-oz-salvar-avisos>Salvar</button></div>',
         'Escolher avisos');
       d.querySelector('[data-oz-salvar-avisos]').addEventListener('click', async () => {
         const f = d.querySelector('form');
-        const novo = { hora: Number(f.elements.hora.value) || 9 };
-        Object.keys(PREF_PADRAO).forEach((k) => { if (k !== 'hora') novo[k] = !!(f.elements[k] && f.elements[k].checked); });
-        armazenado.gravar('oaze.avisos.prefs', novo);
+        const marcados = (nome) => [...f.querySelectorAll('input[name="' + nome + '"]:checked')].map((i) => i.value);
+        const novo = {};
+        ['vencimentos', 'faturas', 'receber', 'metas', 'orcamento', 'padrao', 'duplicada', 'score', 'dolar', 'dicas', 'diasUteis', 'detalhes'].forEach((k) => { novo[k] = !!(f.elements[k] && f.elements[k].checked); });
+        novo.antecedencia = marcados('antecedencia').map(Number).filter((n) => [0, 1, 3, 7].includes(n));
+        if (!novo.antecedencia.length) novo.antecedencia = [0];
+        novo.faixas = marcados('faixas').map(Number).filter((n) => [50, 80, 100, 120].includes(n));
+        if (!novo.faixas.length) novo.faixas = [100];
+        novo.contasExcluidas = origens.map(([id]) => id).filter((id) => !marcados('origem').includes(id));
+        novo.metaDias = Number(f.elements.metaDias.value) || 7;
+        novo.sensibilidade = ['baixa', 'media', 'alta'].includes(f.elements.sensibilidade.value) ? f.elements.sensibilidade.value : 'media';
+        novo.hora = Number(f.elements.hora.value) || 9;
+        novo.maxDia = Number(f.elements.maxDia.value) || 3;
+        armazenado.gravar(chaveLocalAvisos(), novo);
+        /* Na conta: vale nos outros aparelhos. Em perfil compartilhado, só aqui. */
+        const cx = contexto();
+        if (cx && !cx.demo && global.V3Backend && V3Backend.mutate) {
+          try { await V3Backend.mutate(() => { const pf = global.Store.profile(); pf.avisos = novo; }); } catch { /* fica só neste aparelho */ }
+        }
         assinaturaAgendada = '';
         d.close();
         try { await OazeAvisos.sincronizar(); avisar('Avisos atualizados.'); }
@@ -749,6 +818,7 @@
     const acao = ev.detail;
     if (acao === 'recibo') { setTimeout(capturarRecibo, 300); return; }
     if (acao === 'novo') { const b = document.querySelector('[data-action="new"]'); if (b) b.click(); return; }
+    if (acao === 'receita') { const b = document.querySelector('[data-action="new"][data-kind="receita"]') || document.querySelector('[data-action="new"]'); if (b) b.click(); setTimeout(() => document.querySelector('[data-compose-kind="Receita"]')?.click(), 250); return; }
     if (acao === 'coco') { const b = document.querySelector('[data-go="coco"]'); if (b) b.click(); }
   });
 
@@ -834,6 +904,7 @@
   setTimeout(aoAbrir, 4000);
 
   global.OazeAnuncios = OazeAnuncios;
+  global.OazeCocoUso = { painel: painelCoco, atualizar: () => atualizarCoco(true) };
   OazeAvisos.atualizarInsights = calcularInsights;
   global.OazeAvisos = OazeAvisos;
   global.OazePermissoes = OazePermissoes;

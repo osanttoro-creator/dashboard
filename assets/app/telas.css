@@ -103,3 +103,18 @@ img, video, svg { max-width: 100%; }
   .v3-wave svg { max-height: 150px; }
   .v3-home-widgets .v3-panel { max-height: 70vh; overflow: auto; }
 }
+
+/* Indicadores fixos da Início: o valor nunca é cortado */
+.v3-home-metric { min-width: 0; overflow: hidden; }
+.v3-home-metric .v3-money { font-size: clamp(20px, 2.1vw, 34px) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; }
+.v3-home-metric small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+@media (max-width: 900px) { .v3-home-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 360px) { .v3-home-metrics { grid-template-columns: minmax(0, 1fr) !important; } }
+.v3-home-carteira .v3-quick { margin-top: 14px; }
+
+/* Logo de banco sempre num ladrilho com a cor da marca */
+.v3-picker-icon.is-marca { background: var(--bank-bg) !important; color: var(--bank-ink) !important; }
+.v3-picker-icon.is-marca svg { width: 20px; height: 20px; }
+.v3-invoice-bank, .v3-bank-current-logo, .v3-bank-option-logo, .v3-tx-banco { background: var(--bank-bg) !important; color: var(--bank-ink) !important; }
+.v3-invoice-bank svg.bank-icon:not(.is-generic), .v3-bank-current-logo svg.bank-icon:not(.is-generic), .v3-bank-option-logo svg.bank-icon:not(.is-generic), .v3-picker-icon svg.bank-icon:not(.is-generic) { fill: currentColor; }
+.bank-icon.is-sigla text { fill: currentColor; }

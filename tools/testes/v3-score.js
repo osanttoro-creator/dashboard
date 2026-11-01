@@ -89,11 +89,13 @@ assert.match(app, /function historicoDoScore\(\)/);
    da grade, atrás de um toque em "gerenciar tela inicial". Desligado
    por padrão não pode virar apagado, e por isso a porta de volta é
    exigida aqui junto. */
-assert.match(app, /if \(id === 'atalhos'\) return quickActions\(\);/);
+/* 01/11/2026: ações rápidas e indicadores voltaram a ser fixos (como na 2.0.0). */
+assert.match(app, /\$\{wallet\('SALDO TOTAL',false\)\}\$\{quickActions\(\)\}/, 'as ações rápidas ficam fixas logo abaixo da carteira');
+assert.match(app, /\$\{renderHomeMetrics\(\)\}<div class="v3-home-layout">/, 'os indicadores ficam fixos no topo da Início');
 assert.ok(/if \(id === 'score'\) return painelScore\(\);/.test(app),
   'o painel continua disponível na grade de widgets da Início');
 assert.match(app, /id: 'score'/, 'o score precisa estar na lista de blocos da Início');
-assert.match(app, /id: 'atalhos'/, 'as ações rápidas precisam estar na lista de blocos da Início');
+
 assert.match(app, /data-action="home-blocks"/, 'sem o botão de gerenciar, bloco desligado vira bloco perdido');
 assert.doesNotMatch(app, /\+ painelScore\(\)\n/, 'o score saiu de Análises quando foi para o início');
 

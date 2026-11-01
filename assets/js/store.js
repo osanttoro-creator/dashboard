@@ -661,6 +661,19 @@
       /* conta dividida: aponta para o lançamento que originou (01/11/2026) */
       txId: typeof x.txId === 'string' && x.txId.length <= 80 ? x.txId : null
     }));
+    /* Preferências de aviso da pessoa (01/11/2026): só campos conhecidos. */
+    if (prof.avisos && typeof prof.avisos === 'object' && !Array.isArray(prof.avisos)) {
+      const a = prof.avisos, b = {};
+      ['vencimentos', 'faturas', 'receber', 'metas', 'orcamento', 'padrao', 'duplicada', 'score', 'dolar', 'dicas', 'diasUteis', 'detalhes'].forEach((k) => { if (typeof a[k] === 'boolean') b[k] = a[k]; });
+      if (Array.isArray(a.antecedencia)) b.antecedencia = a.antecedencia.map(Number).filter((n) => [0, 1, 3, 7].includes(n));
+      if (Array.isArray(a.faixas)) b.faixas = a.faixas.map(Number).filter((n) => [50, 80, 100, 120].includes(n));
+      if (Array.isArray(a.contasExcluidas)) b.contasExcluidas = a.contasExcluidas.filter((x) => typeof x === 'string' && x.length <= 80).slice(0, 100);
+      if ([3, 7, 15, 30].includes(+a.metaDias)) b.metaDias = +a.metaDias;
+      if (['baixa', 'media', 'alta'].includes(a.sensibilidade)) b.sensibilidade = a.sensibilidade;
+      if (+a.hora >= 6 && +a.hora <= 22) b.hora = +a.hora;
+      if ([1, 3, 5, 10].includes(+a.maxDia)) b.maxDia = +a.maxDia;
+      prof.avisos = b;
+    } else delete prof.avisos;
     /* Caixinhas: dinheiro separado dentro de uma conta (01/11/2026). */
     prof.caixinhas = (Array.isArray(prof.caixinhas) ? prof.caixinhas : []).filter((c) => c && txt(c.nome, 40)).slice(0, 60).map((c) => ({
       id: idOk(c.id, 'cx'), nome: txt(c.nome, 40), contaId: typeof c.contaId === 'string' ? c.contaId.slice(0, 80) : '',

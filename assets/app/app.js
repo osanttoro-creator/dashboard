@@ -326,8 +326,19 @@
     iugu:'#202020', ngcash:'#222222', revolut:'#262626', wise:'#9FE870' };
   function bankKey(name) { return global.Icons?.bankKey(name) || null; }
   function bankBrand(name, fallback) {
-    const key=bankKey(name), preset=global.BancosBR?.PRESETS?.[key];
+    const key=bankKey(name), preset=global.BancosBR?.PRESETS?.[key] || global.Icons?.MARCAS_EXTRAS?.[key];
     return safeColor(CARD_PLASTIC[key] || (preset?.fundo === '#FFFFFF' ? preset.cor : preset?.fundo) || fallback || '#355565');
+  }
+  /* Cores da MARCA para o ladrilho do logo (01/11/2026): fundo e traço do
+     pacote de bancos (ou da sigla), em todo lugar que mostra um logo. Antes,
+     fatura e seletor usavam traço fixo (branco ou creme) e o logo sumia em
+     marcas claras ou ficava sem fundo, parecendo transparente. */
+  function marcaCores(item) {
+    const inst = item?.bank || item?.name || '';
+    const marca = global.Icons?.bankBrand(inst);
+    const bg = safeColor(item?.customColor ? item.color : (marca?.bg || bankBrand(inst, item?.color)));
+    const ink = safeColor(item?.customColor ? cardInk(bg) : (marca?.fg || cardInk(bg)));
+    return { bg, ink };
   }
   function cardInk(hex) {
     const rgb=[1,3,5].map((i)=>parseInt(hex.slice(i,i+2),16)/255);
@@ -609,8 +620,6 @@
     { id: 'faturas', nome: 'Faturas a pagar', padrao: false },
     { id: 'fluxo', nome: 'Fluxo de caixa', padrao: false },
     { id: 'metas', nome: 'Metas em andamento', padrao: false },
-    { id: 'indicadores', nome: 'Indicadores do mês', padrao: false, largo: true },
-    { id: 'atalhos', nome: 'Ações rápidas', padrao: false },
     { id: 'score', nome: 'OAZE Score', padrao: false },
     { id: 'contas', nome: 'Saldo por conta', padrao: false },
     { id: 'cartoes', nome: 'Fatura × limite por cartão', padrao: false },
@@ -823,13 +832,11 @@
       if (id === 'faturas') return painelFaturasInicio();
       if (id === 'fluxo') return painelFluxoInicio();
       if (id === 'metas') return painelMetasInicio();
-      if (id === 'indicadores') return renderHomeMetrics();
-      if (id === 'atalhos') return quickActions();
       if (id === 'score') return painelScore();
       return extraHomeWidget(id, extraContext);
     };
     const widgets = ligados.map((id) => { const html = desenhar(id); return html ? `<div class="v3-widget-slot${largos.has(id) ? ' is-largo' : ''}" data-widget="${esc(id)}">${html}</div>` : ''; }).join('');
-    return `<div class="v3-home-identity"><div class="v3-home-identity-title"><span class="v3-label">VISÃO GERAL</span><h1>início</h1></div><button type="button" class="v3-greeting" data-action="profiles" aria-label="Trocar perfil financeiro"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></button></div><div class="v3-home-layout"><div class="v3-stack v3-home-carteira">${wallet('SALDO TOTAL',false)}</div><div class="v3-home-widgets">${widgets}</div></div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar widgets</button>`;
+    return `<div class="v3-home-identity"><div class="v3-home-identity-title"><span class="v3-label">VISÃO GERAL</span><h1>início</h1></div><button type="button" class="v3-greeting" data-action="profiles" aria-label="Trocar perfil financeiro"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></button></div>${renderHomeMetrics()}<div class="v3-home-layout"><div class="v3-stack v3-home-carteira">${wallet('SALDO TOTAL',false)}${quickActions()}</div><div class="v3-home-widgets">${widgets}</div></div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar widgets</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -948,7 +955,7 @@
     }).filter((row) => row && (row.items.length || row.invoice.planned > 0));
     if (!rows.length) return '';
     return `<section class="v3-due-invoices" aria-label="Faturas que vencem em ${esc(periodLabel(state.ym))}"><div class="v3-row"><div><h2>faturas de ${esc(periodLabel(state.ym))}</h2><p class="v3-muted">Compras agrupadas pelo mês do vencimento. A data original continua no histórico de cada compra.</p></div></div>`
-      + rows.map(({card,invoice,items}) => `<article class="v3-panel v3-due-invoice"><div class="v3-row"><div class="v3-invoice-heading"><span class="v3-invoice-bank" style="--bank-bg:${safeColor(bankBrand(card.bank,card.color))};--bank-ink:#fff">${bankLogo(card.bank||card.name,'#fff')}</span><span><strong>${esc(card.name || card.bank)}</strong><small>${card.last4?`Final ${esc(state.hideMoney?ocultarDigitos(card.last4):card.last4)} · `:''}${invoice.dueDate ? `vence ${esc(shortDate(invoice.dueDate))}` : 'fatura do mês'}</small></span></div><button type="button" class="v3-secondary" data-focus-invoice="${esc(card.id)}" data-invoice-ref="${esc(state.ym)}">Abrir fatura</button></div><div class="v3-due-invoice-summary"><span><small>Total</small><strong class="v3-sensitive">${money(invoice.planned)}</strong></span><span><small>Pago</small><strong class="v3-sensitive v3-positive">${money(invoice.pago)}</strong></span><span><small>Falta pagar</small><strong class="v3-sensitive ${invoice.isOverdue?'v3-negative':''}">${money(invoice.restante)}</strong></span><b class="${invoice.isOverdue?'is-overdue':invoice.paid?'is-paid':''}">${invoice.paid?'Paga':invoice.isOverdue?'Em atraso':invoice.parcial?'Parcial':'Em aberto'}</b></div>`
+      + rows.map(({card,invoice,items}) => `<article class="v3-panel v3-due-invoice"><div class="v3-row"><div class="v3-invoice-heading"><span class="v3-invoice-bank" style="--bank-bg:${marcaCores(card).bg};--bank-ink:${marcaCores(card).ink}">${walletLogo(card,marcaCores(card).ink)}</span><span><strong>${esc(card.name || card.bank)}</strong><small>${card.last4?`Final ${esc(state.hideMoney?ocultarDigitos(card.last4):card.last4)} · `:''}${invoice.dueDate ? `vence ${esc(shortDate(invoice.dueDate))}` : 'fatura do mês'}</small></span></div><button type="button" class="v3-secondary" data-focus-invoice="${esc(card.id)}" data-invoice-ref="${esc(state.ym)}">Abrir fatura</button></div><div class="v3-due-invoice-summary"><span><small>Total</small><strong class="v3-sensitive">${money(invoice.planned)}</strong></span><span><small>Pago</small><strong class="v3-sensitive v3-positive">${money(invoice.pago)}</strong></span><span><small>Falta pagar</small><strong class="v3-sensitive ${invoice.isOverdue?'v3-negative':''}">${money(invoice.restante)}</strong></span><b class="${invoice.isOverdue?'is-overdue':invoice.paid?'is-paid':''}">${invoice.paid?'Paga':invoice.isOverdue?'Em atraso':invoice.parcial?'Parcial':'Em aberto'}</b></div>`
       + (items.length ? `<div class="v3-due-invoice-items">${items.map((item) => `<div class="v3-due-invoice-item${item.cancelado?' is-cancelada':''}"><span><button type="button" data-transaction="${esc(item.id)}">${esc(item.description)}</button><small>Compra ${esc(shortDate(item.date))} · ${esc(categoryName(item.categoryId))}${item.cancelado?' · cancelada':item.confirmed?'':' · prevista'}</small></span><strong class="v3-sensitive">${money(item.amount)}</strong></div>`).join('')}</div>` : '') + '</article>').join('') + '</section>';
   }
   function painelFiltros() {
@@ -2488,11 +2495,11 @@
       if(name==='source'||name==='destination'){
         const [type,id]=name==='source'?String(value).split(':'):['account',value];
         const item=(type==='card'?profile().cards:profile().accounts).find((entry)=>entry.id===id);
-        return item ? `<span class="v3-picker-icon" style="--picker-accent:${safeColor(item.color||bankBrand(item.bank))}">${walletLogo(item,'#f0e5cf')}</span>` : `<span class="v3-picker-icon">${icon('wallet')}</span>`;
+        return item ? `<span class="v3-picker-icon is-marca" style="--bank-bg:${marcaCores(item).bg};--bank-ink:${marcaCores(item).ink}">${walletLogo(item,marcaCores(item).ink)}</span>` : `<span class="v3-picker-icon">${icon('wallet')}</span>`;
       }
       if(name==='accountId'){
         const account=profile().accounts.find((entry)=>entry.id===value);
-        return account?`<span class="v3-picker-icon" style="--picker-accent:${safeColor(account.color||bankBrand(account.bank))}">${walletLogo(account,'#f0e5cf')}</span>`:`<span class="v3-picker-icon">${icon('wallet')}</span>`;
+        return account?`<span class="v3-picker-icon is-marca" style="--bank-bg:${marcaCores(account).bg};--bank-ink:${marcaCores(account).ink}">${walletLogo(account,marcaCores(account).ink)}</span>`:`<span class="v3-picker-icon">${icon('wallet')}</span>`;
       }
       if(name==='type'){
         const icons={Porquinho:'piggy-bank',CDB:'landmark','Tesouro Direto':'landmark',Ações:'chart-no-axes-combined',FIIs:'house',ETF:'chart-no-axes-combined'};
@@ -4596,7 +4603,14 @@
     if (action==='toggle-native-notifications'){void toggleNativeNotifications();return;}
     if (action==='reset-asks'){askReset();render();openNotifications();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
     if (action==='home-blocks'){painelBlocosInicio();return;}
-    if (action==='coco-uso'){const c=demo?{pct_dia:18,pct_semana:31}:(global.Limites?.consumoCoco?.()||{});toast(`Coco hoje: ${Math.round(Number(c.pct_dia)||0)}% usado · semana: ${Math.round(Number(c.pct_semana)||0)}%. Detalhes em Configurações › Plano.`);return;}
+    if (action==='coco-uso'){
+      const c=demo?{pct_dia:18,pct_semana:31}:(global.Limites?.consumoCoco?.()||{});
+      const html=!demo&&global.OazeCocoUso?global.OazeCocoUso.painel():'';
+      const barra=(r,p)=>`<div class="oz-uso-linha"><span>${r}</span><strong>${p}%</strong></div><div class="oz-barra"><i style="width:${Math.min(100,p)}%"></i></div>`;
+      openSheet(sheetTop('uso da coco','hoje e nesta semana')+(html||`<section class="v3-panel oz-coco-uso">${barra('Hoje',Math.round(Number(c.pct_dia)||0))}${barra('Esta semana',Math.round(Number(c.pct_semana)||0))}</section>`),'Uso da Coco');
+      if(!demo&&global.OazeCocoUso)void global.OazeCocoUso.atualizar();
+      return;
+    }
     if (action==='filtros'){painelFiltros();return;}
     if (action==='limpar-filtros'){limparFiltros();state.filter='Todos';closeSheet();render();toast('Filtros limpos.');return;}
     if (action==='tirar-rapido'){state.filter='Todos';render();return;}

@@ -197,3 +197,13 @@
 .oz-anuncio-palco{position:relative;width:min(960px,100%);aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden}
 .oz-anuncio-palco video,.oz-anuncio-ads{position:absolute;inset:0;width:100%;height:100%}
 .oz-anuncio-legenda{color:var(--muted,#b8c8ca);font-size:13px;margin:0}
+/* Preferências de aviso completas */
+.oz-pref-sub{margin:10px 0 6px;color:var(--muted);font-size:12px}
+.oz-chips-pref{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.oz-chip-pref{position:relative;display:inline-flex}
+.oz-chip-pref input{position:absolute;opacity:0;inset:0}
+.oz-chip-pref span{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--milk);cursor:pointer}
+.oz-chip-pref input:checked+span{background:var(--teal);color:var(--night);border-color:var(--teal)}
+.oz-chip-pref input:focus-visible+span{outline:2px solid var(--teal);outline-offset:2px}
+.oz-pref-contas{border:1px solid var(--line);border-radius:14px;padding:8px 12px;margin:6px 0 10px}
+.oz-pref-contas summary{cursor:pointer;font-size:13px}
