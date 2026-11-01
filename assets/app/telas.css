@@ -197,3 +197,14 @@ html .v3-wallet-item:not(.is-claro) .v3-card-hide { background: rgba(0,0,0,.22);
 .v3-more-ic.oz-cor-9 { --tom: #FFB74D; --tom-bg: rgba(255,183,77,.18); }
 .v3-more-ic[class*="oz-cor-"] { background: var(--tom-bg) !important; color: var(--tom) !important; }
 .v3-more-ic[class*="oz-cor-"] svg { stroke: currentColor; }
+
+/* MAIS EM BLOCOS (01/11/2026): mesmo padrão de Configurações e dos widgets —
+   título da seção acima, painel separado para cada grupo, ícones coloridos. */
+.v3-more-blocos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 18px 16px; align-items: start; }
+.v3-more-bloco { min-width: 0; }
+.v3-more-bloco > .v3-section-title { display: block; margin: 0 0 10px 4px; }
+.v3-more-blocos .v3-more-secao.v3-panel { padding: 6px 16px; border-radius: 24px; }
+.v3-more-blocos .v3-more-secao > button { min-height: 58px; padding: 10px 2px; border-bottom: 1px solid var(--line, rgba(240,229,207,.08)); }
+.v3-more-blocos .v3-more-secao > button:last-child { border-bottom: 0; }
+.v3-more-blocos .v3-more-secao > button:hover { background: rgba(240,229,207,.04); border-radius: 14px; }
+@media (min-width: 1920px) { .v3-more-blocos { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); } }

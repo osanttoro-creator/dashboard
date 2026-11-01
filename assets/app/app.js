@@ -45,7 +45,10 @@
       const saved = JSON.parse(localStorage.getItem(NAV_KEY) || '{}');
       const order = Array.isArray(saved.order) ? [...new Set(saved.order.filter((page) => NAV_PAGES.includes(page)))] : [];
       const hidden = Array.isArray(saved.hidden) ? saved.hidden.filter((page) => NAV_PAGES.includes(page) && page !== 'home') : [];
-      return { order: [...order, ...NAV_PAGES.filter((page) => !order.includes(page))], hidden, collapsed: !!saved.collapsed };
+      const ordem = [...order, ...NAV_PAGES.filter((page) => !order.includes(page))];
+      /* "mais" entrou depois: quem já tinha a barra salva recebe ele logo acima de Configurações. */
+      if (!order.includes('more') && ordem.includes('settings')) { ordem.splice(ordem.indexOf('more'), 1); ordem.splice(ordem.indexOf('settings'), 0, 'more'); }
+      return { order: ordem, hidden, collapsed: !!saved.collapsed };
     } catch { return { order: [...NAV_PAGES], hidden: [], collapsed: false }; }
   }
   let navPrefs = loadNavPrefs();
@@ -2193,7 +2196,7 @@
     ];
     /* Cada item com a própria cor viva (classe, não style: vale também no Windows). */
     let corItem=0;
-    return `<div class="v3-more-lista">${secoes.map(([titulo,tom,linhas])=>`<section class="v3-more-secao" data-tom="${tom}"><h2>${esc(titulo)}</h2>${linhas.map(([attr,ic,t,s])=>`<button type="button" ${attr}><span class="v3-more-ic oz-cor-${(corItem++)%10}">${ic==='coco'?cocoPetIcon:uiIcons.has(ic)?icon(ic):(global.Icons?.lucide(ic,22)?.outerHTML||icon('more'))}</span><span class="v3-more-txt"><strong>${esc(t)}</strong><small>${esc(s||'')}</small></span><span class="v3-more-seta" aria-hidden="true">›</span></button>`).join('')}</section>`).join('')}</div>`;
+    return `<div class="v3-more-lista v3-more-blocos">${secoes.map(([titulo,tom,linhas])=>`<div class="v3-more-bloco"><span class="v3-label v3-section-title">${esc(titulo.toUpperCase())}</span><section class="v3-panel v3-more-secao" data-tom="${tom}">${linhas.map(([attr,ic,t,s])=>`<button type="button" ${attr}><span class="v3-more-ic oz-cor-${(corItem++)%10}">${ic==='coco'?cocoPetIcon:uiIcons.has(ic)?icon(ic):(global.Icons?.lucide(ic,22)?.outerHTML||icon('more'))}</span><span class="v3-more-txt"><strong>${esc(t)}</strong><small>${esc(s||'')}</small></span><span class="v3-more-seta" aria-hidden="true">›</span></button>`).join('')}</section></div>`).join('')}</div>`;
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/rostinhos/02_feliz.png" alt="Coco"></div>`;
