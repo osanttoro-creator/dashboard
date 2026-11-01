@@ -5,28 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <meta name="referrer" content="no-referrer">
-  <title>Voltando ao OAZE</title>
+  <title>Volte ao OAZE</title>
   <style>
     :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0d1821;color:#f0e5cf}
     *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:max(32px,env(safe-area-inset-top,0px)) 24px max(32px,env(safe-area-inset-bottom,0px));text-align:center}
-    main{width:min(420px,100%)}img{width:164px;height:auto}h1{font-size:clamp(22px,5vw,32px);font-weight:500;line-height:1.2;margin:40px 0 12px}p{color:#b8c8ca;line-height:1.55}a{color:#5fa99b}a:focus-visible{outline:2px solid #5fa99b;outline-offset:4px}
+    main{width:min(420px,100%)}img{width:164px;height:auto}h1{font-size:clamp(22px,5vw,32px);font-weight:500;line-height:1.2;margin:28px 0 12px}p{color:#b8c8ca;line-height:1.55}a{color:#5fa99b}a:focus-visible{outline:2px solid #5fa99b;outline-offset:4px}
+    .ok{width:56px;height:56px;margin:28px auto 0;border-radius:50%;display:grid;place-items:center;background:#173a35;color:#5fa99b}
+    .botao{display:inline-block;margin-top:18px;min-height:48px;padding:13px 26px;border-radius:24px;background:#5fa99b;color:#071822;font-weight:700;text-decoration:none}
   </style>
 </head>
 <body>
   <main>
     <img src="/assets/brand/oaze-logo-mono-milk.svg" alt="OAZE" width="164" height="58">
-    <h1>Voltando ao OAZE</h1>
-    <p>Seu aplicativo será aberto automaticamente. A assinatura é conferida com segurança quando você voltar.</p>
-    <p id="alternativa" hidden>Se o sistema não abriu o aplicativo, <a id="abrir-app" href="/app/planos">abra o OAZE</a> ou volte à janela instalada.</p>
+    <div class="ok" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h1 id="titulo">Pronto. Volte ao OAZE.</h1>
+    <p>Abrimos o aplicativo para você. <strong>Esta aba já pode ser fechada.</strong></p>
+    <a id="abrir-app" class="botao" href="/app/planos">Abrir o OAZE</a>
+    <p>Se o navegador perguntar, escolha <strong>Abrir OAZE</strong>.</p>
   </main>
   <script>
+    /* O navegador não "volta" sozinho para um app instalado: entrega o
+       oaze:// ao sistema e a aba fica parada, parecendo carregar. Esta
+       página diz claramente que acabou e deixa um botão para repetir. */
     (function(){
-      const status=new URLSearchParams(location.search).get('resultado');
-      if(!['sucesso','cancelado','portal'].includes(status)) { location.replace('/app/planos'); return; }
-      const link='oaze://billing?resultado='+encodeURIComponent(status);
+      var q=new URLSearchParams(location.search);
+      var titulo=document.getElementById('titulo');
+      var link='', limpo='';
+      if(q.get('para')==='auth'){
+        var code=q.get('code')||'';
+        if(code && /^[A-Za-z0-9._~-]{8,200}$/.test(code)) link='oaze://auth?code='+encodeURIComponent(code);
+        else if(q.get('error')) link='oaze://auth?error=cancelado';
+        else { location.replace('/entrar'); return; }
+        titulo.textContent='Entrada confirmada. Volte ao OAZE.';
+        limpo='?para=auth';
+      } else {
+        var status=q.get('resultado');
+        if(['sucesso','cancelado','portal'].indexOf(status)<0) { location.replace('/app/planos'); return; }
+        link='oaze://billing?resultado='+encodeURIComponent(status);
+        if(status==='sucesso') titulo.textContent='Pagamento recebido. Volte ao OAZE.';
+        else if(status==='cancelado') titulo.textContent='Pagamento cancelado. Volte ao OAZE.';
+        limpo='?resultado='+status;
+      }
       document.getElementById('abrir-app').href=link;
-      setTimeout(function(){document.getElementById('alternativa').hidden=false;},4500);
-      location.replace(link);
+      /* O código de entrada não fica no histórico do navegador. */
+      try{ history.replaceState(null,'',location.pathname+limpo); }catch(e){}
+      setTimeout(function(){ location.href=link; }, 150);
     })();
   </script>
 </body>
