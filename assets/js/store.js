@@ -49,18 +49,35 @@
      antiga de uma categoria continua disponível como cor herdada.
      O contraste do ícone é escolhido para cada fundo, claro ou escuro.
      ------------------------------------------------------------ */
+  /* PALETA 01/11/2026: 17 cores (primárias, secundárias, terciárias e
+     adicionais) em 6 tons cada — muito claro, claro, pastel, médio, escuro
+     e muito escuro — e Transparente (sem fundo). Vale para categorias,
+     caixinhas e a cor personalizada de contas e cartões. A cor automática
+     de uma categoria sai do tom médio. */
+  const TONS_NOMES = ["muito claro","claro","pastel","médio","escuro","muito escuro"];
   const COLOR_FAMILIES = [
-    { nome: 'Amarelos', tons: ['#E8BE35','#F6D84B','#C7D93A'] },
-    { nome: 'Azuis', tons: ['#3777C7','#79C8E8','#294BA5','#35B4BE'] },
-    { nome: 'Vermelhos e rosas', tons: ['#DB514C','#952C38','#A84583','#BD344D','#823447','#60304B','#EDABBE','#E85C9B'] },
-    { nome: 'Verdes', tons: ['#4E9C60','#95CC82','#285F45','#75C7AD','#5EAD56','#265946','#36A798'] },
-    { nome: 'Laranjas e violetas', tons: ['#E78B45','#F6AE78','#AF572E','#B68FD1','#744BA5'] },
-    { nome: 'Marrons', tons: ['#80533D','#AF8061','#4F342C','#A86B48','#B88939'] },
-    { nome: 'Neutros', tons: ['#F5F2EA','#111820','#DCE4E7','#424D55'] }
+    { nome: 'Vermelho', tons: ['#FADBDB','#F0A8A8','#D69A9A','#D83131','#981F1F','#5A1616'] },
+    { nome: 'Azul', tons: ['#DBE8FA','#A8C6F0','#9AB3D6','#3177D8','#1F5298','#16325A'] },
+    { nome: 'Amarelo', tons: ['#FAF5DB','#F0E4A8','#D6CC9A','#D8BC31','#98841F','#5A4F16'] },
+    { nome: 'Laranja', tons: ['#FAEADB','#F0CAA8','#D6B69A','#D87F31','#98581F','#5A3616'] },
+    { nome: 'Verde', tons: ['#DBFADF','#A8F0B2','#9AD6A2','#31D848','#1F982F','#165A1F'] },
+    { nome: 'Violeta', tons: ['#EDDBFA','#D2A8F0','#BD9AD6','#9231D8','#661F98','#3E165A'] },
+    { nome: 'Vermelho-alaranjado', tons: ['#FAE1DB','#F0B7A8','#D6A69A','#D85331','#98371F','#5A2416'] },
+    { nome: 'Amarelo-alaranjado', tons: ['#FAF0DB','#F0D8A8','#D6C29A','#D8A031','#98701F','#5A4316'] },
+    { nome: 'Amarelo-esverdeado', tons: ['#F4FADB','#E1F0A8','#CAD69A','#B7D831','#80981F','#4C5A16'] },
+    { nome: 'Azul-esverdeado', tons: ['#DBFAF9','#A8F0ED','#9AD6D4','#31D8D2','#1F9894','#165A58'] },
+    { nome: 'Azul-arroxeado', tons: ['#DEDBFA','#AEA8F0','#9F9AD6','#3F31D8','#291F98','#1C165A'] },
+    { nome: 'Vermelho-arroxeado', tons: ['#FADBEF','#F0A8D6','#D69AC0','#D8319B','#981F6C','#5A1641'] },
+    { nome: 'Rosa', tons: ['#FADBE6','#F0A8C0','#D69AAE','#D83169','#981F48','#5A162D'] },
+    { nome: 'Marrom', tons: ['#EDE0D4','#D4BBA5','#BAA08C','#966340','#683F27','#3D261A'] },
+    { nome: 'Cinza', tons: ['#EEF0F1','#CDD1D5','#ACB3B9','#7B858E','#545C63','#34383D'] },
+    { nome: 'Preto', tons: ['#424D57','#353D46','#272E34','#1D2126','#14171A','#0B0D0F'] },
+    { nome: 'Branco', tons: ['#FFFFFF','#FBFAF8','#F8F6F2','#F4F1EB','#EFEAE1','#EAE3D7'] },
+    { nome: 'Transparente', tons: ['#00000000'] }
   ];
-  const PALETTE = COLOR_FAMILIES.map((f) => f.tons[0]);
-  const PALETTE_EXTRA = COLOR_FAMILIES.flatMap((f) => f.tons.slice(1));
-  const ALL_COLORS = COLOR_FAMILIES.flatMap((f) => f.tons);
+  const PALETTE = COLOR_FAMILIES.filter((f) => f.tons.length === 6).map((f) => f.tons[3]);
+  const PALETTE_EXTRA = COLOR_FAMILIES.flatMap((f) => f.tons).filter((c) => !PALETTE.includes(c));
+  const ALL_COLORS = PALETTE.concat(PALETTE_EXTRA.filter((c) => c !== '#00000000'));
 
   /* ------------------------------------------------------------
      MEIOS DE PAGAMENTO
@@ -167,6 +184,16 @@
 
   /** Banco conhecido tem cor estável. "Outro" é a entrada para a
       escolha da pessoa e, por isso, nunca vira preset. */
+  /* Cor da MARCA de cada instituição (01/11/2026): vem do pacote de bancos
+     (e dos selos de sigla) e fica gravada na conta ou no cartão. A tabela
+     antiga deste arquivo tinha tons da paleta, não a cor do banco. */
+  function corDaMarca(nome) {
+    try {
+      const b = global.Icons && global.Icons.bankBrand ? global.Icons.bankBrand(nome) : null;
+      if (b && /^#[0-9a-f]{6}$/i.test(b.bg)) return b.bg.toUpperCase() === '#FFFFFF' && /^#[0-9a-f]{6}$/i.test(b.fg) ? b.fg.toUpperCase() : b.bg.toUpperCase();
+    } catch { /* sem pacote de bancos */ }
+    return null;
+  }
   function bankPreset(name) {
     const chave = U.norm(name || '');
     if (!chave || chave === 'outro') return null;
@@ -225,6 +252,7 @@
   };
 
   /** Nome da cor para rótulo e dica; o hex é o fallback honesto. */
+  COLOR_FAMILIES.forEach((f) => f.tons.forEach((c, i) => { COLOR_NAMES[c.toUpperCase()] = f.tons.length === 6 ? f.nome + ' ' + TONS_NOMES[i] : f.nome; }));
   Store.colorName = (hex) => COLOR_NAMES[String(hex || '').toUpperCase()] || String(hex || '');
 
   let state = null;
@@ -468,7 +496,7 @@
         type: String(a.type || 'Conta corrente'),
         /* Dados antigos também obedecem à regra: banco conhecido usa
            o preset; só uma conta personalizada conserva sua escolha. */
-        color: a.customColor ? migrateColor(a.color || '#8A7A62') : preset ? preset.color : migrateColor(a.color || '#8A7A62'),
+        color: a.customColor ? migrateColor(a.color || '#8A7A62') : corDaMarca(banco || a.name) || (preset ? preset.color : migrateColor(a.color || '#8A7A62')),
         customColor: !!a.customColor,
         customIcon: ['wallet', 'piggy-bank', 'landmark', 'banknote'].includes(a.customIcon) ? a.customIcon : null,
         gradient: preset ? null : (a.gradient ? String(a.gradient) : null),
@@ -499,7 +527,7 @@
       id: c.id || U.uid('card'),
       name: String(c.name || 'Cartão'),
       bank: String(c.bank || ''),
-      color: migrateColor(c.color || '#7C6CF0'),
+      color: c.customColor ? migrateColor(c.color || '#7C6CF0') : corDaMarca(c.bank || c.name) || migrateColor(c.color || '#7C6CF0'),
       customColor: !!c.customColor,
       customIcon: ['wallet', 'piggy-bank', 'landmark', 'banknote'].includes(c.customIcon) ? c.customIcon : null,
       gradient: c.gradient ? String(c.gradient) : null,          // null = deduzido

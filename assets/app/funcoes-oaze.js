@@ -92,7 +92,7 @@
   }
   document.addEventListener('submit', (ev) => {
     const form = ev.target;
-    if (!form || form.id !== 'v3-form-tx' || !form.elements.ozDividir) return;
+    if (!form || form.id !== 'v3-form-tx' || !form.elements.ozDividir) return;   // campo removido em 01/11/2026
     const nomes = String(form.elements.ozDividir.value || '').split(/[,;]| e /).map((s) => s.trim()).filter(Boolean).slice(0, 10);
     if (!nomes.length || form.elements.kind.value !== 'Despesa') return;
     const total = num(form.elements.amount.value), descricao = String(form.elements.description.value || '').trim();
@@ -134,7 +134,7 @@
     return '<form class="v3-form oz-busca" data-oz-f="busca" role="search">'
       + '<label class="oz-sr" for="oz-busca-q">Buscar lançamentos</label><input id="oz-busca-q" name="q" type="search" value="' + esc(busca.q) + '" placeholder="Texto, valor (ex.: 45,90), categoria ou tag" autocomplete="off">'
       + '<div class="v3-form-row"><label>CONTA OU CARTÃO<select name="conta"><option value="">Todas</option>' + todasContas.map((c) => '<option value="' + esc(c.id) + '"' + (busca.conta === c.id ? ' selected' : '') + '>' + esc(c.name || c.bank) + '</option>').join('') + '</select></label>'
-      + '<label>TAG<select name="tag"><option value="">Todas</option>' + (P().tags || []).map((t) => '<option value="' + esc(t.id) + '"' + (busca.tag === t.id ? ' selected' : '') + '>#' + esc(t.nome) + '</option>').join('') + '</select></label></div>'
+      + '</div>'
       + '<div class="v3-form-row"><label>VALOR DE<input name="min" inputmode="decimal" value="' + esc(busca.min) + '" placeholder="0,00"></label><label>ATÉ<input name="max" inputmode="decimal" value="' + esc(busca.max) + '" placeholder="0,00"></label></div></form>'
       + (r == null ? '<p class="oz-vazio">Procura em todos os meses, não só no mês aberto.</p>'
         : '<p class="oz-tela-intro" role="status">' + r.length + (r.length === 200 ? '+' : '') + ' resultado' + (r.length === 1 ? '' : 's') + '</p>'
@@ -483,7 +483,6 @@
 
   /* Formulário de lançamento e carteira: campos que aparecem sozinhos. */
   new MutationObserver(() => {
-    campoDividir(document.getElementById('v3-form-tx'));
     linhaCarteira();
   }).observe(document.body, { childList: true, subtree: true });
   document.addEventListener('oaze:render', () => { try { linhaCarteira(); } catch { /* sem perfil */ } });

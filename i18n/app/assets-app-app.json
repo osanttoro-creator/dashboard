@@ -5432,25 +5432,6 @@
     "ignorar": true
   },
   {
-    "pt": "data-oz-mais=\"tags\"",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "Tags",
-    "tipo": "exato",
-    "en": "Tags",
-    "fr": "Tags",
-    "es": "Etiquetas"
-  },
-  {
-    "pt": "{0} criadas",
-    "tipo": "padrao",
-    "en": "{0} created",
-    "fr": "{0} créés",
-    "es": "{0} creadas"
-  },
-  {
     "pt": "data-oz-mais=\"caixinhas\"",
     "tipo": "exato",
     "ignorar": true
@@ -7278,6 +7259,20 @@
     "en": "Funding account",
     "fr": "Compte du versement",
     "es": "Cuenta del aporte"
+  },
+  {
+    "pt": "Rendimento do CDB",
+    "tipo": "exato",
+    "en": "CDB yield",
+    "fr": "Rendement du CDB",
+    "es": "Rendimiento del CDB"
+  },
+  {
+    "pt": "Liquidez",
+    "tipo": "exato",
+    "en": "Liquidity",
+    "fr": "Liquidité",
+    "es": "Liquidez"
   },
   {
     "pt": "Não pago · agendado",
@@ -9280,6 +9275,412 @@
     "en": "Energy",
     "fr": "Énergie",
     "es": "Energía"
+  },
+  {
+    "pt": "Moedas",
+    "tipo": "exato",
+    "en": "Coins",
+    "fr": "Pièces",
+    "es": "Monedas"
+  },
+  {
+    "pt": "Empréstimo",
+    "tipo": "exato",
+    "en": "Loan",
+    "fr": "Prêt",
+    "es": "Préstamo"
+  },
+  {
+    "pt": "Loja",
+    "tipo": "exato",
+    "en": "Store",
+    "fr": "Magasin",
+    "es": "Tienda"
+  },
+  {
+    "pt": "Pizza",
+    "tipo": "exato",
+    "en": "Pizza",
+    "fr": "Pizza",
+    "es": "Pizza"
+  },
+  {
+    "pt": "Bar",
+    "tipo": "exato",
+    "en": "Bar",
+    "fr": "Bar",
+    "es": "Bar"
+  },
+  {
+    "pt": "Lanche",
+    "tipo": "exato",
+    "en": "Snack",
+    "fr": "Snack",
+    "es": "Merienda"
+  },
+  {
+    "pt": "Sorvete",
+    "tipo": "exato",
+    "en": "Ice cream",
+    "fr": "Glace",
+    "es": "Helado"
+  },
+  {
+    "pt": "Açougue",
+    "tipo": "exato",
+    "en": "Butcher",
+    "fr": "Boucherie",
+    "es": "Carnicería"
+  },
+  {
+    "pt": "Peixaria",
+    "tipo": "exato",
+    "en": "Fishmonger",
+    "fr": "Poissonnerie",
+    "es": "Pescadería"
+  },
+  {
+    "pt": "Bicicleta",
+    "tipo": "exato",
+    "en": "Bicycle",
+    "fr": "Vélo",
+    "es": "Bicicleta"
+  },
+  {
+    "pt": "Metrô",
+    "tipo": "exato",
+    "en": "Subway",
+    "fr": "Métro",
+    "es": "Metro"
+  },
+  {
+    "pt": "Táxi e app",
+    "tipo": "exato",
+    "en": "Taxi and rideshare",
+    "fr": "Taxi et VTC",
+    "es": "Taxi y app"
+  },
+  {
+    "pt": "Barco",
+    "tipo": "exato",
+    "en": "Boat",
+    "fr": "Bateau",
+    "es": "Barco"
+  },
+  {
+    "pt": "Hotel",
+    "tipo": "exato",
+    "en": "Hotel",
+    "fr": "Hôtel",
+    "es": "Hotel"
+  },
+  {
+    "pt": "Camping",
+    "tipo": "exato",
+    "en": "Camping",
+    "fr": "Camping",
+    "es": "Camping"
+  },
+  {
+    "pt": "Casa e decoração",
+    "tipo": "exato",
+    "en": "Home and decor",
+    "fr": "Maison et déco",
+    "es": "Hogar y decoración"
+  },
+  {
+    "pt": "Reforma",
+    "tipo": "exato",
+    "en": "Renovation",
+    "fr": "Travaux",
+    "es": "Reforma"
+  },
+  {
+    "pt": "Banheiro",
+    "tipo": "exato",
+    "en": "Bathroom",
+    "fr": "Salle de bain",
+    "es": "Baño"
+  },
+  {
+    "pt": "Lavanderia",
+    "tipo": "exato",
+    "en": "Laundry",
+    "fr": "Laverie",
+    "es": "Lavandería"
+  },
+  {
+    "pt": "Livros",
+    "tipo": "exato",
+    "en": "Books",
+    "fr": "Livres",
+    "es": "Libros"
+  },
+  {
+    "pt": "Papelaria",
+    "tipo": "exato",
+    "en": "Stationery",
+    "fr": "Papeterie",
+    "es": "Papelería"
+  },
+  {
+    "pt": "Games",
+    "tipo": "exato",
+    "en": "Games",
+    "fr": "Jeux",
+    "es": "Juegos"
+  },
+  {
+    "pt": "Áudio",
+    "tipo": "exato",
+    "en": "Audio",
+    "fr": "Audio",
+    "es": "Audio"
+  },
+  {
+    "pt": "Foto",
+    "tipo": "exato",
+    "en": "Photo",
+    "fr": "Photo",
+    "es": "Foto"
+  },
+  {
+    "pt": "Arte",
+    "tipo": "exato",
+    "en": "Art",
+    "fr": "Art",
+    "es": "Arte"
+  },
+  {
+    "pt": "Gato",
+    "tipo": "exato",
+    "en": "Cat",
+    "fr": "Chat",
+    "es": "Gato"
+  },
+  {
+    "pt": "Veterinário",
+    "tipo": "exato",
+    "en": "Vet",
+    "fr": "Vétérinaire",
+    "es": "Veterinario"
+  },
+  {
+    "pt": "Pet shop",
+    "tipo": "exato",
+    "en": "Pet shop",
+    "fr": "Animalerie",
+    "es": "Tienda de mascotas"
+  },
+  {
+    "pt": "Vacina",
+    "tipo": "exato",
+    "en": "Vaccine",
+    "fr": "Vaccin",
+    "es": "Vacuna"
+  },
+  {
+    "pt": "Hospital",
+    "tipo": "exato",
+    "en": "Hospital",
+    "fr": "Hôpital",
+    "es": "Hospital"
+  },
+  {
+    "pt": "Exames",
+    "tipo": "exato",
+    "en": "Medical tests",
+    "fr": "Examens",
+    "es": "Exámenes"
+  },
+  {
+    "pt": "Terapia",
+    "tipo": "exato",
+    "en": "Therapy",
+    "fr": "Thérapie",
+    "es": "Terapia"
+  },
+  {
+    "pt": "Doações",
+    "tipo": "exato",
+    "en": "Donations",
+    "fr": "Dons",
+    "es": "Donaciones"
+  },
+  {
+    "pt": "Comemoração",
+    "tipo": "exato",
+    "en": "Celebration",
+    "fr": "Fête",
+    "es": "Celebración"
+  },
+  {
+    "pt": "Joias",
+    "tipo": "exato",
+    "en": "Jewelry",
+    "fr": "Bijoux",
+    "es": "Joyas"
+  },
+  {
+    "pt": "Relógio",
+    "tipo": "exato",
+    "en": "Watch",
+    "fr": "Montre",
+    "es": "Reloj"
+  },
+  {
+    "pt": "Calçados",
+    "tipo": "exato",
+    "en": "Shoes",
+    "fr": "Chaussures",
+    "es": "Calzado"
+  },
+  {
+    "pt": "Empresa",
+    "tipo": "exato",
+    "en": "Company",
+    "fr": "Entreprise",
+    "es": "Empresa"
+  },
+  {
+    "pt": "Contador",
+    "tipo": "exato",
+    "en": "Accountant",
+    "fr": "Comptable",
+    "es": "Contador"
+  },
+  {
+    "pt": "Jurídico",
+    "tipo": "exato",
+    "en": "Legal",
+    "fr": "Juridique",
+    "es": "Jurídico"
+  },
+  {
+    "pt": "Documentos",
+    "tipo": "exato",
+    "en": "Documents",
+    "fr": "Documents",
+    "es": "Documentos"
+  },
+  {
+    "pt": "Telefone",
+    "tipo": "exato",
+    "en": "Phone",
+    "fr": "Téléphone",
+    "es": "Teléfono"
+  },
+  {
+    "pt": "Correios",
+    "tipo": "exato",
+    "en": "Post office",
+    "fr": "Poste",
+    "es": "Correo"
+  },
+  {
+    "pt": "Exterior",
+    "tipo": "exato",
+    "en": "Abroad",
+    "fr": "Étranger",
+    "es": "Exterior"
+  },
+  {
+    "pt": "Carro",
+    "tipo": "exato",
+    "en": "Car",
+    "fr": "Voiture",
+    "es": "Auto"
+  },
+  {
+    "pt": "Estacionamento",
+    "tipo": "exato",
+    "en": "Parking",
+    "fr": "Parking",
+    "es": "Estacionamiento"
+  },
+  {
+    "pt": "Pedágio",
+    "tipo": "exato",
+    "en": "Toll",
+    "fr": "Péage",
+    "es": "Peaje"
+  },
+  {
+    "pt": "Jardim",
+    "tipo": "exato",
+    "en": "Garden",
+    "fr": "Jardin",
+    "es": "Jardín"
+  },
+  {
+    "pt": "Verão",
+    "tipo": "exato",
+    "en": "Summer",
+    "fr": "Été",
+    "es": "Verano"
+  },
+  {
+    "pt": "Inverno",
+    "tipo": "exato",
+    "en": "Winter",
+    "fr": "Hiver",
+    "es": "Invierno"
+  },
+  {
+    "pt": "Tabaco",
+    "tipo": "exato",
+    "en": "Tobacco",
+    "fr": "Tabac",
+    "es": "Tabaco"
+  },
+  {
+    "pt": "Apostas",
+    "tipo": "exato",
+    "en": "Betting",
+    "fr": "Paris",
+    "es": "Apuestas"
+  },
+  {
+    "pt": "Esportes",
+    "tipo": "exato",
+    "en": "Sports",
+    "fr": "Sports",
+    "es": "Deportes"
+  },
+  {
+    "pt": "Natal",
+    "tipo": "exato",
+    "en": "Christmas",
+    "fr": "Noël",
+    "es": "Navidad"
+  },
+  {
+    "pt": "Faculdade",
+    "tipo": "exato",
+    "en": "College",
+    "fr": "Université",
+    "es": "Universidad"
+  },
+  {
+    "pt": "Escola",
+    "tipo": "exato",
+    "en": "School",
+    "fr": "École",
+    "es": "Escuela"
+  },
+  {
+    "pt": "Impostos",
+    "tipo": "exato",
+    "en": "Taxes",
+    "fr": "Impôts",
+    "es": "Impuestos"
+  },
+  {
+    "pt": "Renda extra",
+    "tipo": "exato",
+    "en": "Extra income",
+    "fr": "Revenu supplémentaire",
+    "es": "Ingreso extra"
   },
   {
     "pt": "editar categoria",

@@ -442,13 +442,6 @@
   "es": "Ingresos y gastos"
  },
  {
-  "pt": "Tag",
-  "tipo": "exato",
-  "en": "Tag",
-  "fr": "Tag",
-  "es": "Etiqueta"
- },
- {
   "pt": "{0} (crédito)",
   "tipo": "padrao",
   "en": "{0} (credit)",
@@ -482,6 +475,13 @@
   "en": "Nothing found with these filters.",
   "fr": "Rien trouvé avec ces filtres.",
   "es": "No se encontró nada con estos filtros."
+ },
+ {
+  "pt": "Tags",
+  "tipo": "exato",
+  "en": "Tags",
+  "fr": "Tags",
+  "es": "Etiquetas"
  },
  {
   "pt": "oaze-relatorio-{0}-a-{1}.csv",

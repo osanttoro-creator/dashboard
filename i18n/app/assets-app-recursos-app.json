@@ -1,1321 +1,1318 @@
 [
-  {
-    "pt": "renova na segunda",
-    "tipo": "exato",
-    "en": "resets on Monday",
-    "fr": "se renouvelle lundi",
-    "es": "se renueva el lunes"
-  },
-  {
-    "pt": "renova à meia-noite",
-    "tipo": "exato",
-    "en": "resets at midnight",
-    "fr": "se renouvelle à minuit",
-    "es": "se renueva a medianoche"
-  },
-  {
-    "pt": "renova {0}",
-    "tipo": "padrao",
-    "en": "resets {0}",
-    "fr": "se renouvelle {0}",
-    "es": "se renueva {0}"
-  },
-  {
-    "pt": "renova às {0}",
-    "tipo": "padrao",
-    "en": "resets at {0}",
-    "fr": "se renouvelle à {0}",
-    "es": "se renueva a las {0}"
-  },
-  {
-    "pt": "{0} usado",
-    "tipo": "padrao",
-    "en": "{0} used",
-    "fr": "{0} utilisé",
-    "es": "{0} usado"
-  },
-  {
-    "pt": "No Oásis, a Coco tem 10 vezes mais uso por dia e por semana.",
-    "tipo": "exato",
-    "en": "On Oásis, Coco gets 10 times more use per day and per week.",
-    "fr": "Avec Oásis, Coco offre 10 fois plus d'utilisation par jour et par semaine.",
-    "es": "En Oásis, Coco tiene 10 veces más uso por día y por semana."
-  },
-  {
-    "pt": "Assistir anúncio e liberar +{0} lançamentos",
-    "tipo": "padrao",
-    "en": "Watch an ad and unlock +{0} transactions",
-    "fr": "Regarder une publicité et débloquer +{0} opérations",
-    "es": "Ver un anuncio y liberar +{0} movimientos"
-  },
-  {
-    "pt": "Sem limite de lançamentos: a cada {0}, um anúncio. Vale em todos os seus aparelhos até o fim do mês.",
-    "tipo": "padrao",
-    "en": "No transaction limit: every {0}, one ad. Valid on all your devices until the end of the month.",
-    "fr": "Pas de limite d'opérations : tous les {0}, une publicité. Valable sur tous vos appareils jusqu'à la fin du mois.",
-    "es": "Sin límite de movimientos: cada {0}, un anuncio. Vale en todos tus dispositivos hasta fin de mes."
-  },
-  {
-    "pt": "No app OAZE para Android, cada anúncio assistido libera +{0} lançamentos no mês. A liberação vale em todos os seus aparelhos.",
-    "tipo": "padrao",
-    "en": "In the OAZE Android app, each ad watched unlocks +{0} transactions for the month. It applies to all your devices.",
-    "fr": "Dans l'app OAZE pour Android, chaque publicité regardée débloque +{0} opérations dans le mois. Valable sur tous vos appareils.",
-    "es": "En la app OAZE para Android, cada anuncio visto libera +{0} movimientos en el mes. Vale en todos tus dispositivos."
-  },
-  {
-    "pt": "Você já assistiu os {0} anúncios de hoje. Amanhã libera de novo.",
-    "tipo": "padrao",
-    "en": "You've already watched today's {0} ads. It unlocks again tomorrow.",
-    "fr": "Vous avez déjà regardé les {0} publicités du jour. Ça se débloque demain.",
-    "es": "Ya viste los {0} anuncios de hoy. Mañana se libera de nuevo."
-  },
-  {
-    "pt": "No app OAZE para Android, cada anúncio assistido libera +{0} lançamentos no mês, até {1} por dia. A liberação fica na sua conta e vale também aqui.",
-    "tipo": "padrao",
-    "en": "In the OAZE Android app, each ad watched unlocks +{0} transactions for the month, up to {1} per day. The unlock stays on your account and applies here too.",
-    "fr": "Dans l'app OAZE pour Android, chaque publicité regardée débloque +{0} opérations dans le mois, jusqu'à {1} par jour. Le déblocage reste sur votre compte et vaut aussi ici.",
-    "es": "En la app OAZE para Android, cada anuncio visto libera +{0} movimientos en el mes, hasta {1} por día. La liberación queda en tu cuenta y vale también aquí."
-  },
-  {
-    "pt": "Lançamentos do mês",
-    "tipo": "exato",
-    "en": "This month's transactions",
-    "fr": "Opérations du mois",
-    "es": "Movimientos del mes"
-  },
-  {
-    "pt": "lançamentos de {0}",
-    "tipo": "padrao",
-    "en": "transactions in {0}",
-    "fr": "opérations de {0}",
-    "es": "movimientos de {0}"
-  },
-  {
-    "pt": "lançamentos ·",
-    "tipo": "exato",
-    "en": "transactions ·",
-    "fr": "opérations ·",
-    "es": "movimientos ·"
-  },
-  {
-    "pt": "livres antes do próximo anúncio",
-    "tipo": "exato",
-    "en": "free before the next ad",
-    "fr": "libres avant la prochaine publicité",
-    "es": "libres antes del próximo anuncio"
-  },
-  {
-    "pt": "O anúncio foi fechado antes do fim. Nada foi liberado.",
-    "tipo": "exato",
-    "en": "The ad was closed before the end. Nothing was unlocked.",
-    "fr": "La publicité a été fermée avant la fin. Rien n'a été débloqué.",
-    "es": "El anuncio se cerró antes del final. No se liberó nada."
-  },
-  {
-    "pt": "+{0} lançamentos liberados.",
-    "tipo": "padrao",
-    "en": "+{0} transactions unlocked.",
-    "fr": "+{0} opérations débloquées.",
-    "es": "+{0} movimientos liberados."
-  },
-  {
-    "pt": "Conferindo a liberação com o Google…",
-    "tipo": "exato",
-    "en": "Checking the unlock with Google…",
-    "fr": "Vérification du déblocage avec Google…",
-    "es": "Comprobando la liberación con Google…"
-  },
-  {
-    "pt": "+{0} lançamentos liberados neste mês.",
-    "tipo": "padrao",
-    "en": "+{0} transactions unlocked this month.",
-    "fr": "+{0} opérations débloquées ce mois-ci.",
-    "es": "+{0} movimientos liberados este mes."
-  },
-  {
-    "pt": "O anúncio terminou, mas a confirmação do Google ainda não chegou. Pode levar alguns minutos.",
-    "tipo": "exato",
-    "en": "The ad ended, but Google's confirmation hasn't arrived yet. It may take a few minutes.",
-    "fr": "La publicité est terminée, mais la confirmation de Google n'est pas encore arrivée. Cela peut prendre quelques minutes.",
-    "es": "El anuncio terminó, pero la confirmación de Google aún no llegó. Puede tardar unos minutos."
-  },
-  {
-    "pt": "Anúncio indisponível agora. Tente mais tarde.",
-    "tipo": "exato",
-    "en": "Ad unavailable right now. Try later.",
-    "fr": "Publicité indisponible pour l'instant. Réessayez plus tard.",
-    "es": "Anuncio no disponible ahora. Inténtalo más tarde."
-  },
-  {
-    "pt": "orc{0}:{1}:{2}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Orçamento de {0} em {1}%",
-    "tipo": "padrao",
-    "en": "{0} budget at {1}%",
-    "fr": "Budget {0} à {1} %",
-    "es": "Presupuesto de {0} al {1}%"
-  },
-  {
-    "pt": "Um orçamento passou de {0}%",
-    "tipo": "padrao",
-    "en": "A budget went over {0}%",
-    "fr": "Un budget a dépassé {0} %",
-    "es": "Un presupuesto pasó del {0}%"
-  },
-  {
-    "pt": "{0} de {1} neste mês.",
-    "tipo": "padrao",
-    "en": "{0} of {1} this month.",
-    "fr": "{0} sur {1} ce mois-ci.",
-    "es": "{0} de {1} este mes."
-  },
-  {
-    "pt": "Abra o OAZE para ver qual categoria.",
-    "tipo": "exato",
-    "en": "Open OAZE to see which category.",
-    "fr": "Ouvrez OAZE pour voir quelle catégorie.",
-    "es": "Abre OAZE para ver qué categoría."
-  },
-  {
-    "pt": "Orçamento de {0}: {1}% usado ({2} de {3}).",
-    "tipo": "padrao",
-    "en": "{0} budget: {1}% used ({2} of {3}).",
-    "fr": "Budget {0} : {1} % utilisé ({2} sur {3}).",
-    "es": "Presupuesto de {0}: {1}% usado ({2} de {3})."
-  },
-  {
-    "pt": "padrao:{0}:{1}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "{0} acima do seu padrão",
-    "tipo": "padrao",
-    "en": "{0} above your usual",
-    "fr": "{0} au-dessus de votre habitude",
-    "es": "{0} por encima de tu promedio"
-  },
-  {
-    "pt": "Uma categoria está acima do seu padrão",
-    "tipo": "exato",
-    "en": "A category is above your usual",
-    "fr": "Une catégorie est au-dessus de votre habitude",
-    "es": "Una categoría está por encima de tu promedio"
-  },
-  {
-    "pt": "{0} até hoje; a média dos últimos meses é {1} no mês inteiro.",
-    "tipo": "padrao",
-    "en": "{0} so far; the average of recent months is {1} for the whole month.",
-    "fr": "{0} jusqu'ici ; la moyenne des derniers mois est {1} sur le mois entier.",
-    "es": "{0} hasta hoy; el promedio de los últimos meses es {1} en el mes entero."
-  },
-  {
-    "pt": "Abra o OAZE para ver qual.",
-    "tipo": "exato",
-    "en": "Open OAZE to see which one.",
-    "fr": "Ouvrez OAZE pour voir laquelle.",
-    "es": "Abre OAZE para ver cuál."
-  },
-  {
-    "pt": "{0}: {1} até hoje, contra média de {2} por mês nos últimos 3 meses.",
-    "tipo": "padrao",
-    "en": "{0}: {1} so far, against an average of {2} per month over the last 3 months.",
-    "fr": "{0} : {1} jusqu'ici, contre une moyenne de {2} par mois sur les 3 derniers mois.",
-    "es": "{0}: {1} hasta hoy, contra un promedio de {2} por mes en los últimos 3 meses."
-  },
-  {
-    "pt": "duplicada:{0}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Possível cobrança duplicada",
-    "tipo": "exato",
-    "en": "Possible duplicate charge",
-    "fr": "Débit en double possible",
-    "es": "Posible cobro duplicado"
-  },
-  {
-    "pt": "{0}: {1} duas vezes em poucos dias.",
-    "tipo": "padrao",
-    "en": "{0}: {1} twice within a few days.",
-    "fr": "{0} : {1} deux fois en quelques jours.",
-    "es": "{0}: {1} dos veces en pocos días."
-  },
-  {
-    "pt": "Dois lançamentos iguais em poucos dias. Confira no OAZE.",
-    "tipo": "exato",
-    "en": "Two identical transactions within a few days. Check in OAZE.",
-    "fr": "Deux opérations identiques en quelques jours. Vérifiez dans OAZE.",
-    "es": "Dos movimientos iguales en pocos días. Revisa en OAZE."
-  },
-  {
-    "pt": "{0}: {1} em {2} e {3}. Se for repetição, exclua um deles.",
-    "tipo": "padrao",
-    "en": "{0}: {1} on {2} and {3}. If it's a repeat, delete one of them.",
-    "fr": "{0} : {1} le {2} et le {3}. Si c'est une répétition, supprimez-en une.",
-    "es": "{0}: {1} el {2} y el {3}. Si es repetido, elimina uno."
-  },
-  {
-    "pt": "score:{0}:{1}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Seu score OAZE subiu para {0}",
-    "tipo": "padrao",
-    "en": "Your OAZE score went up to {0}",
-    "fr": "Votre score OAZE est monté à {0}",
-    "es": "Tu score OAZE subió a {0}"
-  },
-  {
-    "pt": "Eram {0} pontos. Veja o que melhorou no início.",
-    "tipo": "padrao",
-    "en": "It was {0} points. See what improved on Home.",
-    "fr": "Il était de {0} points. Voyez ce qui s'est amélioré sur l'accueil.",
-    "es": "Eran {0} puntos. Mira qué mejoró en el Inicio."
-  },
-  {
-    "pt": "Score OAZE subiu de {0} para {1}.",
-    "tipo": "padrao",
-    "en": "OAZE score went from {0} to {1}.",
-    "fr": "Le score OAZE est passé de {0} à {1}.",
-    "es": "El score OAZE subió de {0} a {1}."
-  },
-  {
-    "pt": "dolar:{0}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Dólar: R$ {0}{1}",
-    "tipo": "padrao",
-    "en": "Dollar: R$ {0}{1}",
-    "fr": "Dollar : R$ {0}{1}",
-    "es": "Dólar: R$ {0}{1}"
-  },
-  {
-    "pt": "Dólar comercial (venda) de {0}, Banco Central.",
-    "tipo": "padrao",
-    "en": "Commercial dollar (sell) for {0}, Central Bank of Brazil.",
-    "fr": "Dollar commercial (vente) du {0}, Banque centrale du Brésil.",
-    "es": "Dólar comercial (venta) del {0}, Banco Central de Brasil."
-  },
-  {
-    "pt": "Dólar comercial de {0}: R$ {1}{2}.",
-    "tipo": "padrao",
-    "en": "Commercial dollar for {0}: R$ {1}{2}.",
-    "fr": "Dollar commercial du {0} : R$ {1}{2}.",
-    "es": "Dólar comercial del {0}: R$ {1}{2}."
-  },
-  {
-    "pt": ", {0} de {1}% no dia",
-    "tipo": "padrao",
-    "en": ", {0} {1}% on the day",
-    "fr": ", {0} de {1} % sur la journée",
-    "es": ", {0} de {1}% en el día"
-  },
-  {
-    "pt": "dica-reserva:{0}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Dinheiro parado também pode render",
-    "tipo": "exato",
-    "en": "Idle money can earn too",
-    "fr": "L'argent qui dort peut aussi rapporter",
-    "es": "El dinero quieto también puede rendir"
-  },
-  {
-    "pt": "Seu saldo em conta passa de 3 meses de gastos. O CDI está em {0}% ao ano. Entenda as opções em Investimentos.",
-    "tipo": "padrao",
-    "en": "Your account balance exceeds 3 months of spending. The CDI rate is {0}% a year. Learn about the options in Investments.",
-    "fr": "Votre solde dépasse 3 mois de dépenses. Le taux CDI est de {0} % par an. Découvrez les options dans Investissements.",
-    "es": "Tu saldo en cuenta supera 3 meses de gastos. El CDI está en {0}% al año. Conoce las opciones en Inversiones."
-  },
-  {
-    "pt": "Saldo em conta acima de 3 meses de gastos; CDI em {0}% a.a. Conteúdo educativo, não é recomendação de investimento.",
-    "tipo": "padrao",
-    "en": "Account balance above 3 months of spending; CDI at {0}% a year. Educational content, not investment advice.",
-    "fr": "Solde au-dessus de 3 mois de dépenses ; CDI à {0} % par an. Contenu éducatif, pas un conseil d'investissement.",
-    "es": "Saldo en cuenta por encima de 3 meses de gastos; CDI al {0}% anual. Contenido educativo, no es recomendación de inversión."
-  },
-  {
-    "pt": "amanhã",
-    "tipo": "exato",
-    "en": "tomorrow",
-    "fr": "demain",
-    "es": "mañana"
-  },
-  {
-    "pt": "em {0} dias",
-    "tipo": "padrao",
-    "en": "in {0} days",
-    "fr": "dans {0} jours",
-    "es": "en {0} días"
-  },
-  {
-    "pt": "{0} vence {1}",
-    "tipo": "padrao",
-    "en": "{0} due {1}",
-    "fr": "{0} échéance {1}",
-    "es": "{0} vence {1}"
-  },
-  {
-    "pt": "Uma fatura",
-    "tipo": "exato",
-    "en": "A card bill",
-    "fr": "Une facture de carte",
-    "es": "Una factura"
-  },
-  {
-    "pt": "Uma conta",
-    "tipo": "exato",
-    "en": "A bill",
-    "fr": "Une facture",
-    "es": "Una cuenta"
-  },
-  {
-    "pt": "{0} · abra o OAZE para conferir ou marcar como paga.",
-    "tipo": "padrao",
-    "en": "{0} · open OAZE to check or mark it as paid.",
-    "fr": "{0} · ouvrez OAZE pour vérifier ou marquer comme payé.",
-    "es": "{0} · abre OAZE para revisar o marcar como pagada."
-  },
-  {
-    "pt": "Abra o OAZE para ver os detalhes.",
-    "tipo": "exato",
-    "en": "Open OAZE to see the details.",
-    "fr": "Ouvrez OAZE pour voir les détails.",
-    "es": "Abre OAZE para ver los detalles."
-  },
-  {
-    "pt": "receber:{0}:{1}",
-    "tipo": "padrao",
-    "en": "",
-    "fr": "",
-    "es": "",
-    "ignorar": true
-  },
-  {
-    "pt": "{0} ainda não te pagou",
-    "tipo": "padrao",
-    "en": "{0} still hasn't paid you",
-    "fr": "{0} ne vous a toujours pas payé",
-    "es": "{0} aún no te pagó"
-  },
-  {
-    "pt": "Alguém ainda não te pagou",
-    "tipo": "exato",
-    "en": "Someone still hasn't paid you",
-    "fr": "Quelqu'un ne vous a toujours pas payé",
-    "es": "Alguien aún no te pagó"
-  },
-  {
-    "pt": "{0} combinado para {1}.",
-    "tipo": "padrao",
-    "en": "{0} agreed for {1}.",
-    "fr": "{0} prévu pour le {1}.",
-    "es": "{0} acordado para el {1}."
-  },
-  {
-    "pt": "Abra \"Quem me deve\" no OAZE.",
-    "tipo": "exato",
-    "en": "Open \"Who owes me\" in OAZE.",
-    "fr": "Ouvrez « Qui me doit » dans OAZE.",
-    "es": "Abre \"Quién me debe\" en OAZE."
-  },
-  {
-    "pt": "{0}: {1} em atraso.",
-    "tipo": "padrao",
-    "en": "{0}: {1} overdue.",
-    "fr": "{0} : {1} en retard.",
-    "es": "{0}: {1} atrasado."
-  },
-  {
-    "pt": "Meta {0}: faltam {1} dias",
-    "tipo": "padrao",
-    "en": "Goal {0}: {1} days left",
-    "fr": "Objectif {0} : plus que {1} jours",
-    "es": "Meta {0}: faltan {1} días"
-  },
-  {
-    "pt": "Uma meta vence em {0} dias",
-    "tipo": "padrao",
-    "en": "A goal is due in {0} days",
-    "fr": "Un objectif arrive à échéance dans {0} jours",
-    "es": "Una meta vence en {0} días"
-  },
-  {
-    "pt": "Guardado {0} de {1}.",
-    "tipo": "padrao",
-    "en": "Saved {0} of {1}.",
-    "fr": "Épargné {0} sur {1}.",
-    "es": "Ahorrado {0} de {1}."
-  },
-  {
-    "pt": "Abra o OAZE para ver o progresso.",
-    "tipo": "exato",
-    "en": "Open OAZE to see the progress.",
-    "fr": "Ouvrez OAZE pour voir la progression.",
-    "es": "Abre OAZE para ver el progreso."
-  },
-  {
-    "pt": "{0} (cartão)",
-    "tipo": "padrao",
-    "en": "{0} (card)",
-    "fr": "{0} (carte)",
-    "es": "{0} (tarjeta)"
-  },
-  {
-    "pt": "escolher avisos",
-    "tipo": "exato",
-    "en": "choose notifications",
-    "fr": "choisir les notifications",
-    "es": "elegir avisos"
-  },
-  {
-    "pt": "Escolha o que o OAZE avisa, quando e com que detalhe. Fica salvo na sua conta e vale em todos os seus aparelhos.",
-    "tipo": "exato",
-    "en": "Choose what OAZE notifies you about, when and in how much detail. It's saved to your account and applies on all your devices.",
-    "fr": "Choisissez ce qu'OAZE vous signale, quand et avec quel niveau de détail. C'est enregistré sur votre compte et vaut sur tous vos appareils.",
-    "es": "Elige qué te avisa OAZE, cuándo y con qué detalle. Queda guardado en tu cuenta y vale en todos tus dispositivos."
-  },
-  {
-    "pt": "Contas e faturas",
-    "tipo": "exato",
-    "en": "Bills and card statements",
-    "fr": "Factures et relevés de carte",
-    "es": "Cuentas y facturas"
-  },
-  {
-    "pt": "Avisar com antecedência de:",
-    "tipo": "exato",
-    "en": "Notify in advance:",
-    "fr": "Prévenir à l'avance :",
-    "es": "Avisar con anticipación:"
-  },
-  {
-    "pt": "Metas e orçamento",
-    "tipo": "exato",
-    "en": "Goals and budget",
-    "fr": "Objectifs et budget",
-    "es": "Metas y presupuesto"
-  },
-  {
-    "pt": "Coco de olho",
-    "tipo": "exato",
-    "en": "Coco keeping watch",
-    "fr": "Coco veille",
-    "es": "Coco atenta"
-  },
-  {
-    "pt": "Mercado e dicas",
-    "tipo": "exato",
-    "en": "Market and tips",
-    "fr": "Marché et conseils",
-    "es": "Mercado y consejos"
-  },
-  {
-    "pt": "Contas a pagar",
-    "tipo": "exato",
-    "en": "Bills to pay",
-    "fr": "Factures à payer",
-    "es": "Cuentas por pagar"
-  },
-  {
-    "pt": "Boletos, aluguel, assinaturas e outras despesas previstas",
-    "tipo": "exato",
-    "en": "Bank slips, rent, subscriptions and other scheduled expenses",
-    "fr": "Boletos, loyer, abonnements et autres dépenses prévues",
-    "es": "Boletos, alquiler, suscripciones y otros gastos previstos"
-  },
-  {
-    "pt": "Faturas de cartão",
-    "tipo": "exato",
-    "en": "Card statements",
-    "fr": "Relevés de carte",
-    "es": "Facturas de tarjeta"
-  },
-  {
-    "pt": "No vencimento de cada fatura em aberto",
-    "tipo": "exato",
-    "en": "On the due date of each open statement",
-    "fr": "À l'échéance de chaque relevé ouvert",
-    "es": "En el vencimiento de cada factura abierta"
-  },
-  {
-    "pt": "7 dias",
-    "tipo": "exato",
-    "en": "7 days",
-    "fr": "7 jours",
-    "es": "7 días"
-  },
-  {
-    "pt": "3 dias",
-    "tipo": "exato",
-    "en": "3 days",
-    "fr": "3 jours",
-    "es": "3 días"
-  },
-  {
-    "pt": "1 dia",
-    "tipo": "exato",
-    "en": "1 day",
-    "fr": "1 jour",
-    "es": "1 día"
-  },
-  {
-    "pt": "no dia",
-    "tipo": "exato",
-    "en": "on the day",
-    "fr": "le jour même",
-    "es": "el mismo día"
-  },
-  {
-    "pt": "Antecedência",
-    "tipo": "exato",
-    "en": "Advance notice",
-    "fr": "Préavis",
-    "es": "Anticipación"
-  },
-  {
-    "pt": "Contas e cartões que avisam",
-    "tipo": "exato",
-    "en": "Accounts and cards that notify",
-    "fr": "Comptes et cartes qui préviennent",
-    "es": "Cuentas y tarjetas que avisan"
-  },
-  {
-    "pt": "Quando um valor a receber passar da data combinada",
-    "tipo": "exato",
-    "en": "When an amount to receive passes the agreed date",
-    "fr": "Quand un montant à recevoir dépasse la date prévue",
-    "es": "Cuando un monto por cobrar pasa de la fecha acordada"
-  },
-  {
-    "pt": "Prazo de meta",
-    "tipo": "exato",
-    "en": "Goal deadline",
-    "fr": "Échéance d'objectif",
-    "es": "Plazo de meta"
-  },
-  {
-    "pt": "Antes do prazo de uma meta ainda não alcançada",
-    "tipo": "exato",
-    "en": "Before the deadline of a goal not yet reached",
-    "fr": "Avant l'échéance d'un objectif pas encore atteint",
-    "es": "Antes del plazo de una meta aún no alcanzada"
-  },
-  {
-    "pt": "15 dias antes",
-    "tipo": "exato",
-    "en": "15 days before",
-    "fr": "15 jours avant",
-    "es": "15 días antes"
-  },
-  {
-    "pt": "30 dias antes",
-    "tipo": "exato",
-    "en": "30 days before",
-    "fr": "30 jours avant",
-    "es": "30 días antes"
-  },
-  {
-    "pt": "Quando avisar da meta",
-    "tipo": "exato",
-    "en": "When to notify about the goal",
-    "fr": "Quand prévenir pour l'objectif",
-    "es": "Cuándo avisar de la meta"
-  },
-  {
-    "pt": "Orçamento por categoria",
-    "tipo": "exato",
-    "en": "Budget by category",
-    "fr": "Budget par catégorie",
-    "es": "Presupuesto por categoría"
-  },
-  {
-    "pt": "Quando uma categoria passar das faixas abaixo",
-    "tipo": "exato",
-    "en": "When a category passes the thresholds below",
-    "fr": "Quand une catégorie dépasse les seuils ci-dessous",
-    "es": "Cuando una categoría pase los umbrales de abajo"
-  },
-  {
-    "pt": "Faixas do orçamento",
-    "tipo": "exato",
-    "en": "Budget thresholds",
-    "fr": "Seuils du budget",
-    "es": "Umbrales del presupuesto"
-  },
-  {
-    "pt": "Gasto fora do padrão",
-    "tipo": "exato",
-    "en": "Unusual spending",
-    "fr": "Dépense inhabituelle",
-    "es": "Gasto fuera de lo común"
-  },
-  {
-    "pt": "Categoria gastando bem mais que a média dos últimos 3 meses",
-    "tipo": "exato",
-    "en": "A category spending much more than the 3-month average",
-    "fr": "Une catégorie qui dépense bien plus que la moyenne des 3 derniers mois",
-    "es": "Una categoría gastando mucho más que el promedio de los últimos 3 meses"
-  },
-  {
-    "pt": "Só quando for muito acima (80%)",
-    "tipo": "exato",
-    "en": "Only when it's far above (80%)",
-    "fr": "Seulement quand c'est très au-dessus (80 %)",
-    "es": "Solo cuando sea muy superior (80%)"
-  },
-  {
-    "pt": "Acima de 50%",
-    "tipo": "exato",
-    "en": "Above 50%",
-    "fr": "Au-dessus de 50 %",
-    "es": "Por encima del 50%"
-  },
-  {
-    "pt": "Qualquer alta de 25%",
-    "tipo": "exato",
-    "en": "Any rise of 25%",
-    "fr": "Toute hausse de 25 %",
-    "es": "Cualquier alza del 25%"
-  },
-  {
-    "pt": "Sensibilidade",
-    "tipo": "exato",
-    "en": "Sensitivity",
-    "fr": "Sensibilité",
-    "es": "Sensibilidad"
-  },
-  {
-    "pt": "Cobrança duplicada",
-    "tipo": "exato",
-    "en": "Duplicate charge",
-    "fr": "Débit en double",
-    "es": "Cobro duplicado"
-  },
-  {
-    "pt": "Dois lançamentos iguais em até 3 dias",
-    "tipo": "exato",
-    "en": "Two identical transactions within 3 days",
-    "fr": "Deux opérations identiques en 3 jours",
-    "es": "Dos movimientos iguales en hasta 3 días"
-  },
-  {
-    "pt": "Score OAZE",
-    "tipo": "exato",
-    "en": "OAZE score",
-    "fr": "Score OAZE",
-    "es": "Score OAZE"
-  },
-  {
-    "pt": "Quando o seu score subir",
-    "tipo": "exato",
-    "en": "When your score goes up",
-    "fr": "Quand votre score augmente",
-    "es": "Cuando tu score suba"
-  },
-  {
-    "pt": "Dólar do dia",
-    "tipo": "exato",
-    "en": "Today's dollar",
-    "fr": "Dollar du jour",
-    "es": "Dólar del día"
-  },
-  {
-    "pt": "Cotação comercial do Banco Central, uma vez por dia",
-    "tipo": "exato",
-    "en": "Central Bank commercial rate, once a day",
-    "fr": "Cours commercial de la Banque centrale, une fois par jour",
-    "es": "Cotización comercial del Banco Central, una vez al día"
-  },
-  {
-    "pt": "Dicas",
-    "tipo": "exato",
-    "en": "Tips",
-    "fr": "Conseils",
-    "es": "Consejos"
-  },
-  {
-    "pt": "Conteúdo educativo sobre reserva e juros; nunca indicação de produto",
-    "tipo": "exato",
-    "en": "Educational content about savings and interest; never a product recommendation",
-    "fr": "Contenu éducatif sur l'épargne et les intérêts ; jamais de recommandation de produit",
-    "es": "Contenido educativo sobre reserva e intereses; nunca recomendación de producto"
-  },
-  {
-    "pt": "Quando e como",
-    "tipo": "exato",
-    "en": "When and how",
-    "fr": "Quand et comment",
-    "es": "Cuándo y cómo"
-  },
-  {
-    "pt": "Horário dos avisos",
-    "tipo": "exato",
-    "en": "Notification time",
-    "fr": "Heure des notifications",
-    "es": "Horario de los avisos"
-  },
-  {
-    "pt": "1 por dia",
-    "tipo": "exato",
-    "en": "1 per day",
-    "fr": "1 par jour",
-    "es": "1 por día"
-  },
-  {
-    "pt": "até 3 por dia",
-    "tipo": "exato",
-    "en": "up to 3 per day",
-    "fr": "jusqu'à 3 par jour",
-    "es": "hasta 3 por día"
-  },
-  {
-    "pt": "até 5 por dia",
-    "tipo": "exato",
-    "en": "up to 5 per day",
-    "fr": "jusqu'à 5 par jour",
-    "es": "hasta 5 por día"
-  },
-  {
-    "pt": "sem limite prático",
-    "tipo": "exato",
-    "en": "no practical limit",
-    "fr": "sans limite pratique",
-    "es": "sin límite práctico"
-  },
-  {
-    "pt": "Quantos avisos da Coco por dia",
-    "tipo": "exato",
-    "en": "How many Coco notifications per day",
-    "fr": "Combien de notifications de Coco par jour",
-    "es": "Cuántos avisos de Coco por día"
-  },
-  {
-    "pt": "Só em dias úteis",
-    "tipo": "exato",
-    "en": "Weekdays only",
-    "fr": "Jours ouvrés uniquement",
-    "es": "Solo en días hábiles"
-  },
-  {
-    "pt": "Avisos da Coco ficam para segunda; vencimentos sempre avisam",
-    "tipo": "exato",
-    "en": "Coco notifications wait until Monday; due dates always notify",
-    "fr": "Les notifications de Coco attendent lundi ; les échéances préviennent toujours",
-    "es": "Los avisos de Coco esperan al lunes; los vencimientos siempre avisan"
-  },
-  {
-    "pt": "Mostrar nomes e valores",
-    "tipo": "exato",
-    "en": "Show names and amounts",
-    "fr": "Afficher noms et montants",
-    "es": "Mostrar nombres y valores"
-  },
-  {
-    "pt": "Desligado: o aviso diz só \"uma conta vence amanhã\"",
-    "tipo": "exato",
-    "en": "Off: the notification only says \"a bill is due tomorrow\"",
-    "fr": "Désactivé : la notification dit seulement « une facture arrive à échéance demain »",
-    "es": "Desactivado: el aviso dice solo \"una cuenta vence mañana\""
-  },
-  {
-    "pt": "Avisos atualizados.",
-    "tipo": "exato",
-    "en": "Notifications updated.",
-    "fr": "Notifications mises à jour.",
-    "es": "Avisos actualizados."
-  },
-  {
-    "pt": "Preferências salvas. Ative as notificações para recebê-las.",
-    "tipo": "exato",
-    "en": "Preferences saved. Turn on notifications to receive them.",
-    "fr": "Préférences enregistrées. Activez les notifications pour les recevoir.",
-    "es": "Preferencias guardadas. Activa los avisos para recibirlos."
-  },
-  {
-    "pt": "Vencimentos na véspera e no dia, orçamento, metas, score e dólar. Você escolhe quais em \"Escolher avisos\".",
-    "tipo": "exato",
-    "en": "Due dates the day before and on the day, budget, goals, score and dollar. You choose which in \"Choose notifications\".",
-    "fr": "Échéances la veille et le jour, budget, objectifs, score et dollar. Vous choisissez lesquels dans « Choisir les notifications ».",
-    "es": "Vencimientos el día antes y el mismo día, presupuesto, metas, score y dólar. Eliges cuáles en \"Elegir avisos\"."
-  },
-  {
-    "pt": "Notification",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "indisponível",
-    "tipo": "exato",
-    "en": "unavailable",
-    "fr": "indisponible",
-    "es": "no disponible"
-  },
-  {
-    "pt": "Localização",
-    "tipo": "exato",
-    "en": "Location",
-    "fr": "Localisation",
-    "es": "Ubicación"
-  },
-  {
-    "pt": "Opcional. Guarda o local de uma compra quando você toca em \"Usar minha localização\" (arredondado a ~100 m). Nunca em segundo plano.",
-    "tipo": "exato",
-    "en": "Optional. Saves where a purchase happened when you tap \"Use my location\" (rounded to ~100 m). Never in the background.",
-    "fr": "Facultatif. Enregistre le lieu d'un achat quand vous touchez « Utiliser ma position » (arrondi à ~100 m). Jamais en arrière-plan.",
-    "es": "Opcional. Guarda el lugar de una compra cuando tocas \"Usar mi ubicación\" (redondeado a ~100 m). Nunca en segundo plano."
-  },
-  {
-    "pt": "Conversa por voz com a Coco. Fica ligado só durante a conversa.",
-    "tipo": "exato",
-    "en": "Voice chat with Coco. Only on during the conversation.",
-    "fr": "Conversation vocale avec Coco. Activé seulement pendant la conversation.",
-    "es": "Conversación por voz con Coco. Solo activo durante la conversación."
-  },
-  {
-    "pt": "Câmera",
-    "tipo": "exato",
-    "en": "Camera",
-    "fr": "Caméra",
-    "es": "Cámara"
-  },
-  {
-    "pt": "Foto de recibo para a Coco ler. Só quando você escolhe anexar uma foto.",
-    "tipo": "exato",
-    "en": "Receipt photo for Coco to read. Only when you choose to attach a photo.",
-    "fr": "Photo de reçu pour que Coco la lise. Seulement quand vous choisissez de joindre une photo.",
-    "es": "Foto de recibo para que Coco la lea. Solo cuando eliges adjuntar una foto."
-  },
-  {
-    "pt": "Negada. Para liberar: Configurações do aparelho › Apps › OAZE › Permissões.",
-    "tipo": "exato",
-    "en": "Denied. To allow: device Settings › Apps › OAZE › Permissions.",
-    "fr": "Refusé. Pour autoriser : Réglages de l'appareil › Apps › OAZE › Autorisations.",
-    "es": "Denegado. Para permitir: Configuración del dispositivo › Apps › OAZE › Permisos."
-  },
-  {
-    "pt": "Permitir",
-    "tipo": "exato",
-    "en": "Allow",
-    "fr": "Autoriser",
-    "es": "Permitir"
-  },
-  {
-    "pt": "Desbloquear o OAZE com digital, rosto ou o bloqueio do aparelho. O PIN do cofre continua valendo.",
-    "tipo": "exato",
-    "en": "Unlock OAZE with fingerprint, face or your device lock. The vault PIN still applies.",
-    "fr": "Déverrouiller OAZE avec l'empreinte, le visage ou le verrouillage de l'appareil. Le code PIN du coffre reste valable.",
-    "es": "Desbloquear OAZE con huella, rostro o el bloqueo del dispositivo. El PIN de la caja fuerte sigue valiendo."
-  },
-  {
-    "pt": "Anúncios",
-    "tipo": "exato",
-    "en": "Ads",
-    "fr": "Publicités",
-    "es": "Anuncios"
-  },
-  {
-    "pt": "No plano Semente do app Android, o anúncio só aparece quando você escolhe assistir para liberar lançamentos. O Google pode usar o ID de publicidade do aparelho; você pode redefini-lo ou desativar a personalização nas configurações do Android.",
-    "tipo": "exato",
-    "en": "On the Semente plan, an ad only appears when you choose to watch one to unlock transactions. Google may use the device's advertising ID; you can reset it or turn off personalization in Android settings.",
-    "fr": "Avec le forfait Semente, une publicité n'apparaît que si vous choisissez d'en regarder une pour débloquer des opérations. Google peut utiliser l'identifiant publicitaire de l'appareil ; vous pouvez le réinitialiser ou désactiver la personnalisation dans les réglages Android.",
-    "es": "En el plan Semente, el anuncio solo aparece cuando eliges verlo para liberar movimientos. Google puede usar el ID de publicidad del dispositivo; puedes restablecerlo o desactivar la personalización en la configuración de Android."
-  },
-  {
-    "pt": "no app",
-    "tipo": "exato",
-    "en": "in the app",
-    "fr": "dans l'app",
-    "es": "en la app"
-  },
-  {
-    "pt": "Desativar",
-    "tipo": "exato",
-    "en": "Turn off",
-    "fr": "Désactiver",
-    "es": "Desactivar"
-  },
-  {
-    "pt": "plano Semente",
-    "tipo": "exato",
-    "en": "Semente plan",
-    "fr": "forfait Semente",
-    "es": "plan Semente"
-  },
-  {
-    "pt": "sem anúncios",
-    "tipo": "exato",
-    "en": "no ads",
-    "fr": "sans publicité",
-    "es": "sin anuncios"
-  },
-  {
-    "pt": "O OAZE pede cada acesso só no momento de uso. Nada aqui é obrigatório para usar o app.",
-    "tipo": "exato",
-    "en": "OAZE asks for each access only when it's needed. Nothing here is required to use the app.",
-    "fr": "OAZE demande chaque accès seulement au moment de l'utiliser. Rien ici n'est obligatoire pour utiliser l'app.",
-    "es": "OAZE pide cada acceso solo en el momento de uso. Nada aquí es obligatorio para usar la app."
-  },
-  {
-    "pt": "Seu aparelho está no fuso {0}, fora do Brasil. {1}",
-    "tipo": "padrao",
-    "en": "Your device is in the {0} time zone, outside Brazil. {1}",
-    "fr": "Votre appareil est sur le fuseau {0}, hors du Brésil. {1}",
-    "es": "Tu dispositivo está en el huso {0}, fuera de Brasil. {1}"
-  },
-  {
-    "pt": "Para lançar na moeda local, escolha {0} em \"conta/cartão\".",
-    "tipo": "padrao",
-    "en": "To record in the local currency, choose {0} under \"account/card\".",
-    "fr": "Pour saisir dans la devise locale, choisissez {0} dans « compte/carte ».",
-    "es": "Para registrar en la moneda local, elige {0} en \"cuenta/tarjeta\"."
-  },
-  {
-    "pt": "Para lançar em outra moeda, cadastre uma conta ou cartão nessa moeda na carteira.",
-    "tipo": "exato",
-    "en": "To record in another currency, add an account or card in that currency to the wallet.",
-    "fr": "Pour saisir dans une autre devise, ajoutez un compte ou une carte dans cette devise au portefeuille.",
-    "es": "Para registrar en otra moneda, agrega una cuenta o tarjeta en esa moneda a la billetera."
-  },
-  {
-    "pt": "Local da compra",
-    "tipo": "exato",
-    "en": "Purchase location",
-    "fr": "Lieu de l'achat",
-    "es": "Lugar de la compra"
-  },
-  {
-    "pt": "Usar minha localização",
-    "tipo": "exato",
-    "en": "Use my location",
-    "fr": "Utiliser ma position",
-    "es": "Usar mi ubicación"
-  },
-  {
-    "pt": "Remover",
-    "tipo": "exato",
-    "en": "Remove",
-    "fr": "Retirer",
-    "es": "Quitar"
-  },
-  {
-    "pt": "Salvo ·",
-    "tipo": "exato",
-    "en": "Saved ·",
-    "fr": "Enregistré ·",
-    "es": "Guardado ·"
-  },
-  {
-    "pt": "ver no mapa",
-    "tipo": "exato",
-    "en": "view on map",
-    "fr": "voir sur la carte",
-    "es": "ver en el mapa"
-  },
-  {
-    "pt": "Não registrado",
-    "tipo": "exato",
-    "en": "Not recorded",
-    "fr": "Non enregistré",
-    "es": "No registrado"
-  },
-  {
-    "pt": "Localização indisponível neste aparelho.",
-    "tipo": "exato",
-    "en": "Location unavailable on this device.",
-    "fr": "Localisation indisponible sur cet appareil.",
-    "es": "Ubicación no disponible en este dispositivo."
-  },
-  {
-    "pt": "Procurando…",
-    "tipo": "exato",
-    "en": "Searching…",
-    "fr": "Recherche…",
-    "es": "Buscando…"
-  },
-  {
-    "pt": "Registrado ·",
-    "tipo": "exato",
-    "en": "Recorded ·",
-    "fr": "Enregistré ·",
-    "es": "Registrado ·"
-  },
-  {
-    "pt": "Permissão negada. Você pode liberar em Permissões do aparelho.",
-    "tipo": "exato",
-    "en": "Permission denied. You can allow it in Device permissions.",
-    "fr": "Autorisation refusée. Vous pouvez l'accorder dans Autorisations de l'appareil.",
-    "es": "Permiso denegado. Puedes habilitarlo en Permisos del dispositivo."
-  },
-  {
-    "pt": "Não foi possível obter a localização.",
-    "tipo": "exato",
-    "en": "Couldn't get the location.",
-    "fr": "Impossible d'obtenir la position.",
-    "es": "No se pudo obtener la ubicación."
-  },
-  {
-    "pt": "Para onde foi meu dinheiro este mês?",
-    "tipo": "exato",
-    "en": "Where did my money go this month?",
-    "fr": "Où est passé mon argent ce mois-ci ?",
-    "es": "¿A dónde fue mi dinero este mes?"
-  },
-  {
-    "pt": "Quanto gastei no cartão?",
-    "tipo": "exato",
-    "en": "How much did I spend on the card?",
-    "fr": "Combien ai-je dépensé avec la carte ?",
-    "es": "¿Cuánto gasté con la tarjeta?"
-  },
-  {
-    "pt": "Vou fechar o mês no azul?",
-    "tipo": "exato",
-    "en": "Will I end the month in the black?",
-    "fr": "Vais-je finir le mois dans le vert ?",
-    "es": "¿Voy a cerrar el mes en positivo?"
-  },
-  {
-    "pt": "Tenho conta vencendo esta semana?",
-    "tipo": "exato",
-    "en": "Do I have a bill due this week?",
-    "fr": "Ai-je une facture à payer cette semaine ?",
-    "es": "¿Tengo una cuenta que vence esta semana?"
-  },
-  {
-    "pt": "oaze.v3.inicio.coco",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "Widget da Coco",
-    "tipo": "exato",
-    "en": "Coco widget",
-    "fr": "Widget Coco",
-    "es": "Widget de Coco"
-  },
-  {
-    "pt": "A barra de pergunta fica sempre. Escolha o resto.",
-    "tipo": "exato",
-    "en": "The question bar always stays. Choose the rest.",
-    "fr": "La barre de question reste toujours. Choisissez le reste.",
-    "es": "La barra de pregunta queda siempre. Elige el resto."
-  },
-  {
-    "pt": "Remover da Início",
-    "tipo": "exato",
-    "en": "Remove from Home",
-    "fr": "Retirer de l'accueil",
-    "es": "Quitar del Inicio"
-  },
-  {
-    "pt": "Botões \"Foto do recibo\" e \"Lançar à mão\"",
-    "tipo": "exato",
-    "en": "\"Receipt photo\" and \"Log manually\" buttons",
-    "fr": "Boutons « Photo du reçu » et « Saisir à la main »",
-    "es": "Botones \"Foto del recibo\" y \"Registrar a mano\""
-  },
-  {
-    "pt": "Perguntas prontas",
-    "tipo": "exato",
-    "en": "Suggested questions",
-    "fr": "Questions prêtes",
-    "es": "Preguntas listas"
-  },
-  {
-    "pt": "Insights do mês",
-    "tipo": "exato",
-    "en": "Monthly insights",
-    "fr": "Aperçus du mois",
-    "es": "Insights del mes"
-  },
-  {
-    "pt": "Widget da Coco removido. Para trazer de volta: Gerenciar widgets.",
-    "tipo": "exato",
-    "en": "Coco widget removed. To bring it back: Manage widgets.",
-    "fr": "Widget Coco retiré. Pour le remettre : Gérer les widgets.",
-    "es": "Widget de Coco quitado. Para traerlo de vuelta: Gestionar widgets."
-  },
-  {
-    "pt": "Editar widget da Coco",
-    "tipo": "exato",
-    "en": "Edit Coco widget",
-    "fr": "Modifier le widget Coco",
-    "es": "Editar widget de Coco"
-  },
-  {
-    "pt": "Pergunte à Coco",
-    "tipo": "exato",
-    "en": "Ask Coco",
-    "fr": "Demander à Coco",
-    "es": "Pregúntale a Coco"
-  },
-  {
-    "pt": "Enviar pergunta à Coco",
-    "tipo": "exato",
-    "en": "Send question to Coco",
-    "fr": "Envoyer la question à Coco",
-    "es": "Enviar pregunta a Coco"
-  },
-  {
-    "pt": "Foto do recibo",
-    "tipo": "exato",
-    "en": "Receipt photo",
-    "fr": "Photo du reçu",
-    "es": "Foto del recibo"
-  },
-  {
-    "pt": "Lançar à mão",
-    "tipo": "exato",
-    "en": "Log manually",
-    "fr": "Saisir à la main",
-    "es": "Registrar a mano"
-  },
-  {
-    "pt": "Na demonstração a foto não é enviada.",
-    "tipo": "exato",
-    "en": "In the demo the photo isn't sent.",
-    "fr": "Dans la démo, la photo n'est pas envoyée.",
-    "es": "En la demostración la foto no se envía."
-  },
-  {
-    "pt": "Na demonstração nenhum arquivo é enviado.",
-    "tipo": "exato",
-    "en": "In the demo no file is sent.",
-    "fr": "Dans la démo, aucun fichier n'est envoyé.",
-    "es": "En la demostración no se envía ningún archivo."
-  },
-  {
-    "pt": "Galeria",
-    "tipo": "exato",
-    "en": "Gallery",
-    "fr": "Galerie",
-    "es": "Galería"
-  },
-  {
-    "pt": "Print ou foto do comprovante",
-    "tipo": "exato",
-    "en": "Screenshot or photo of the receipt",
-    "fr": "Capture ou photo du justificatif",
-    "es": "Captura o foto del comprobante"
-  },
-  {
-    "pt": "image/jpeg,image/png,image/webp",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "Tirar foto agora",
-    "tipo": "exato",
-    "en": "Take a photo now",
-    "fr": "Prendre une photo maintenant",
-    "es": "Tomar foto ahora"
-  },
-  {
-    "pt": "PDF ou extrato",
-    "tipo": "exato",
-    "en": "PDF or statement",
-    "fr": "PDF ou relevé",
-    "es": "PDF o extracto"
-  },
-  {
-    "pt": "Comprovante ou extrato do banco (PDF, CSV, OFX)",
-    "tipo": "exato",
-    "en": "Bank receipt or statement (PDF, CSV, OFX)",
-    "fr": "Justificatif ou relevé bancaire (PDF, CSV, OFX)",
-    "es": "Comprobante o extracto del banco (PDF, CSV, OFX)"
-  },
-  {
-    "pt": "application/pdf,text/csv,.pdf,.csv,.ofx,.qfx",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "A Coco lê valor, descrição e data e monta o lançamento para você revisar antes de salvar.",
-    "tipo": "exato",
-    "en": "Coco reads amount, description and date and builds the transaction for you to review before saving.",
-    "fr": "Coco lit le montant, la description et la date et prépare l'opération pour que vous la vérifiiez avant d'enregistrer.",
-    "es": "Coco lee valor, descripción y fecha y arma el movimiento para que lo revises antes de guardar."
-  },
-  {
-    "pt": "capture=\"environment\"",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "Ler comprovante (foto ou PDF)",
-    "tipo": "exato",
-    "en": "Read receipt (photo or PDF)",
-    "fr": "Lire un justificatif (photo ou PDF)",
-    "es": "Leer comprobante (foto o PDF)"
-  },
-  {
-    "pt": "oaze:acao",
-    "tipo": "exato",
-    "ignorar": true
-  },
-  {
-    "pt": "conta vence",
-    "tipo": "exato",
-    "en": "bill due",
-    "fr": "facture à payer",
-    "es": "cuenta vence"
-  },
-  {
-    "pt": "contas vencem",
-    "tipo": "exato",
-    "en": "bills due",
-    "fr": "factures à payer",
-    "es": "cuentas vencen"
-  },
-  {
-    "pt": "{0}{1} nos próximos 15 dias",
-    "tipo": "padrao",
-    "en": "{0}{1} in the next 15 days",
-    "fr": "{0}{1} dans les 15 prochains jours",
-    "es": "{0}{1} en los próximos 15 días"
-  },
-  {
-    "pt": "Nenhum vencimento nos próximos 15 dias",
-    "tipo": "exato",
-    "en": "Nothing due in the next 15 days",
-    "fr": "Aucune échéance dans les 15 prochains jours",
-    "es": "Ningún vencimiento en los próximos 15 días"
-  },
-  {
-    "pt": "A próxima vence {0}",
-    "tipo": "padrao",
-    "en": "The next one is due {0}",
-    "fr": "La prochaine arrive à échéance {0}",
-    "es": "La próxima vence {0}"
-  },
-  {
-    "pt": "OAZE · {0}",
-    "tipo": "padrao",
-    "ignorar": true
-  },
-  {
-    "pt": "Saldo oculto",
-    "tipo": "exato",
-    "en": "Balance hidden",
-    "fr": "Solde masqué",
-    "es": "Saldo oculto"
-  },
-  {
-    "pt": "Atualizado às {0}",
-    "tipo": "padrao",
-    "en": "Updated at {0}",
-    "fr": "Mis à jour à {0}",
-    "es": "Actualizado a las {0}"
-  }
+ {
+  "pt": "renova na segunda",
+  "tipo": "exato",
+  "en": "resets on Monday",
+  "fr": "se renouvelle lundi",
+  "es": "se renueva el lunes"
+ },
+ {
+  "pt": "renova à meia-noite",
+  "tipo": "exato",
+  "en": "resets at midnight",
+  "fr": "se renouvelle à minuit",
+  "es": "se renueva a medianoche"
+ },
+ {
+  "pt": "renova {0}",
+  "tipo": "padrao",
+  "en": "resets {0}",
+  "fr": "se renouvelle {0}",
+  "es": "se renueva {0}"
+ },
+ {
+  "pt": "renova às {0}",
+  "tipo": "padrao",
+  "en": "resets at {0}",
+  "fr": "se renouvelle à {0}",
+  "es": "se renueva a las {0}"
+ },
+ {
+  "pt": "{0} usado",
+  "tipo": "padrao",
+  "en": "{0} used",
+  "fr": "{0} utilisé",
+  "es": "{0} usado"
+ },
+ {
+  "pt": "No Oásis, a Coco tem 10 vezes mais uso por dia e por semana.",
+  "tipo": "exato",
+  "en": "On Oásis, Coco gets 10 times more use per day and per week.",
+  "fr": "Avec Oásis, Coco offre 10 fois plus d'utilisation par jour et par semaine.",
+  "es": "En Oásis, Coco tiene 10 veces más uso por día y por semana."
+ },
+ {
+  "pt": "Assistir anúncio e liberar +{0} lançamentos",
+  "tipo": "padrao",
+  "en": "Watch an ad and unlock +{0} transactions",
+  "fr": "Regarder une publicité et débloquer +{0} opérations",
+  "es": "Ver un anuncio y liberar +{0} movimientos"
+ },
+ {
+  "pt": "Sem limite de lançamentos: a cada {0}, um anúncio. Vale em todos os seus aparelhos até o fim do mês.",
+  "tipo": "padrao",
+  "en": "No transaction limit: every {0}, one ad. Valid on all your devices until the end of the month.",
+  "fr": "Pas de limite d'opérations : tous les {0}, une publicité. Valable sur tous vos appareils jusqu'à la fin du mois.",
+  "es": "Sin límite de movimientos: cada {0}, un anuncio. Vale en todos tus dispositivos hasta fin de mes."
+ },
+ {
+  "pt": "No app OAZE para Android, cada anúncio assistido libera +{0} lançamentos no mês. A liberação vale em todos os seus aparelhos.",
+  "tipo": "padrao",
+  "en": "In the OAZE Android app, each ad watched unlocks +{0} transactions for the month. It applies to all your devices.",
+  "fr": "Dans l'app OAZE pour Android, chaque publicité regardée débloque +{0} opérations dans le mois. Valable sur tous vos appareils.",
+  "es": "En la app OAZE para Android, cada anuncio visto libera +{0} movimientos en el mes. Vale en todos tus dispositivos."
+ },
+ {
+  "pt": "Você já assistiu os {0} anúncios de hoje. Amanhã libera de novo.",
+  "tipo": "padrao",
+  "en": "You've already watched today's {0} ads. It unlocks again tomorrow.",
+  "fr": "Vous avez déjà regardé les {0} publicités du jour. Ça se débloque demain.",
+  "es": "Ya viste los {0} anuncios de hoy. Mañana se libera de nuevo."
+ },
+ {
+  "pt": "No app OAZE para Android, cada anúncio assistido libera +{0} lançamentos no mês, até {1} por dia. A liberação fica na sua conta e vale também aqui.",
+  "tipo": "padrao",
+  "en": "In the OAZE Android app, each ad watched unlocks +{0} transactions for the month, up to {1} per day. The unlock stays on your account and applies here too.",
+  "fr": "Dans l'app OAZE pour Android, chaque publicité regardée débloque +{0} opérations dans le mois, jusqu'à {1} par jour. Le déblocage reste sur votre compte et vaut aussi ici.",
+  "es": "En la app OAZE para Android, cada anuncio visto libera +{0} movimientos en el mes, hasta {1} por día. La liberación queda en tu cuenta y vale también aquí."
+ },
+ {
+  "pt": "Lançamentos do mês",
+  "tipo": "exato",
+  "en": "This month's transactions",
+  "fr": "Opérations du mois",
+  "es": "Movimientos del mes"
+ },
+ {
+  "pt": "lançamentos de {0}",
+  "tipo": "padrao",
+  "en": "transactions in {0}",
+  "fr": "opérations de {0}",
+  "es": "movimientos de {0}"
+ },
+ {
+  "pt": "lançamentos ·",
+  "tipo": "exato",
+  "en": "transactions ·",
+  "fr": "opérations ·",
+  "es": "movimientos ·"
+ },
+ {
+  "pt": "livres antes do próximo anúncio",
+  "tipo": "exato",
+  "en": "free before the next ad",
+  "fr": "libres avant la prochaine publicité",
+  "es": "libres antes del próximo anuncio"
+ },
+ {
+  "pt": "O anúncio foi fechado antes do fim. Nada foi liberado.",
+  "tipo": "exato",
+  "en": "The ad was closed before the end. Nothing was unlocked.",
+  "fr": "La publicité a été fermée avant la fin. Rien n'a été débloqué.",
+  "es": "El anuncio se cerró antes del final. No se liberó nada."
+ },
+ {
+  "pt": "+{0} lançamentos liberados.",
+  "tipo": "padrao",
+  "en": "+{0} transactions unlocked.",
+  "fr": "+{0} opérations débloquées.",
+  "es": "+{0} movimientos liberados."
+ },
+ {
+  "pt": "Conferindo a liberação com o Google…",
+  "tipo": "exato",
+  "en": "Checking the unlock with Google…",
+  "fr": "Vérification du déblocage avec Google…",
+  "es": "Comprobando la liberación con Google…"
+ },
+ {
+  "pt": "+{0} lançamentos liberados neste mês.",
+  "tipo": "padrao",
+  "en": "+{0} transactions unlocked this month.",
+  "fr": "+{0} opérations débloquées ce mois-ci.",
+  "es": "+{0} movimientos liberados este mes."
+ },
+ {
+  "pt": "O anúncio terminou, mas a confirmação do Google ainda não chegou. Pode levar alguns minutos.",
+  "tipo": "exato",
+  "en": "The ad ended, but Google's confirmation hasn't arrived yet. It may take a few minutes.",
+  "fr": "La publicité est terminée, mais la confirmation de Google n'est pas encore arrivée. Cela peut prendre quelques minutes.",
+  "es": "El anuncio terminó, pero la confirmación de Google aún no llegó. Puede tardar unos minutos."
+ },
+ {
+  "pt": "Anúncio indisponível agora. Tente mais tarde.",
+  "tipo": "exato",
+  "en": "Ad unavailable right now. Try later.",
+  "fr": "Publicité indisponible pour l'instant. Réessayez plus tard.",
+  "es": "Anuncio no disponible ahora. Inténtalo más tarde."
+ },
+ {
+  "pt": "orc{0}:{1}:{2}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Orçamento de {0} em {1}%",
+  "tipo": "padrao",
+  "en": "{0} budget at {1}%",
+  "fr": "Budget {0} à {1} %",
+  "es": "Presupuesto de {0} al {1}%"
+ },
+ {
+  "pt": "Um orçamento passou de {0}%",
+  "tipo": "padrao",
+  "en": "A budget went over {0}%",
+  "fr": "Un budget a dépassé {0} %",
+  "es": "Un presupuesto pasó del {0}%"
+ },
+ {
+  "pt": "{0} de {1} neste mês.",
+  "tipo": "padrao",
+  "en": "{0} of {1} this month.",
+  "fr": "{0} sur {1} ce mois-ci.",
+  "es": "{0} de {1} este mes."
+ },
+ {
+  "pt": "Abra o OAZE para ver qual categoria.",
+  "tipo": "exato",
+  "en": "Open OAZE to see which category.",
+  "fr": "Ouvrez OAZE pour voir quelle catégorie.",
+  "es": "Abre OAZE para ver qué categoría."
+ },
+ {
+  "pt": "Orçamento de {0}: {1}% usado ({2} de {3}).",
+  "tipo": "padrao",
+  "en": "{0} budget: {1}% used ({2} of {3}).",
+  "fr": "Budget {0} : {1} % utilisé ({2} sur {3}).",
+  "es": "Presupuesto de {0}: {1}% usado ({2} de {3})."
+ },
+ {
+  "pt": "padrao:{0}:{1}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "{0} acima do seu padrão",
+  "tipo": "padrao",
+  "en": "{0} above your usual",
+  "fr": "{0} au-dessus de votre habitude",
+  "es": "{0} por encima de tu promedio"
+ },
+ {
+  "pt": "Uma categoria está acima do seu padrão",
+  "tipo": "exato",
+  "en": "A category is above your usual",
+  "fr": "Une catégorie est au-dessus de votre habitude",
+  "es": "Una categoría está por encima de tu promedio"
+ },
+ {
+  "pt": "{0} até hoje; a média dos últimos meses é {1} no mês inteiro.",
+  "tipo": "padrao",
+  "en": "{0} so far; the average of recent months is {1} for the whole month.",
+  "fr": "{0} jusqu'ici ; la moyenne des derniers mois est {1} sur le mois entier.",
+  "es": "{0} hasta hoy; el promedio de los últimos meses es {1} en el mes entero."
+ },
+ {
+  "pt": "Abra o OAZE para ver qual.",
+  "tipo": "exato",
+  "en": "Open OAZE to see which one.",
+  "fr": "Ouvrez OAZE pour voir laquelle.",
+  "es": "Abre OAZE para ver cuál."
+ },
+ {
+  "pt": "{0}: {1} até hoje, contra média de {2} por mês nos últimos 3 meses.",
+  "tipo": "padrao",
+  "en": "{0}: {1} so far, against an average of {2} per month over the last 3 months.",
+  "fr": "{0} : {1} jusqu'ici, contre une moyenne de {2} par mois sur les 3 derniers mois.",
+  "es": "{0}: {1} hasta hoy, contra un promedio de {2} por mes en los últimos 3 meses."
+ },
+ {
+  "pt": "duplicada:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Possível cobrança duplicada",
+  "tipo": "exato",
+  "en": "Possible duplicate charge",
+  "fr": "Débit en double possible",
+  "es": "Posible cobro duplicado"
+ },
+ {
+  "pt": "{0}: {1} duas vezes em poucos dias.",
+  "tipo": "padrao",
+  "en": "{0}: {1} twice within a few days.",
+  "fr": "{0} : {1} deux fois en quelques jours.",
+  "es": "{0}: {1} dos veces en pocos días."
+ },
+ {
+  "pt": "Dois lançamentos iguais em poucos dias. Confira no OAZE.",
+  "tipo": "exato",
+  "en": "Two identical transactions within a few days. Check in OAZE.",
+  "fr": "Deux opérations identiques en quelques jours. Vérifiez dans OAZE.",
+  "es": "Dos movimientos iguales en pocos días. Revisa en OAZE."
+ },
+ {
+  "pt": "{0}: {1} em {2} e {3}. Se for repetição, exclua um deles.",
+  "tipo": "padrao",
+  "en": "{0}: {1} on {2} and {3}. If it's a repeat, delete one of them.",
+  "fr": "{0} : {1} le {2} et le {3}. Si c'est une répétition, supprimez-en une.",
+  "es": "{0}: {1} el {2} y el {3}. Si es repetido, elimina uno."
+ },
+ {
+  "pt": "score:{0}:{1}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Seu score OAZE subiu para {0}",
+  "tipo": "padrao",
+  "en": "Your OAZE score went up to {0}",
+  "fr": "Votre score OAZE est monté à {0}",
+  "es": "Tu score OAZE subió a {0}"
+ },
+ {
+  "pt": "Eram {0} pontos. Veja o que melhorou no início.",
+  "tipo": "padrao",
+  "en": "It was {0} points. See what improved on Home.",
+  "fr": "Il était de {0} points. Voyez ce qui s'est amélioré sur l'accueil.",
+  "es": "Eran {0} puntos. Mira qué mejoró en el Inicio."
+ },
+ {
+  "pt": "Score OAZE subiu de {0} para {1}.",
+  "tipo": "padrao",
+  "en": "OAZE score went from {0} to {1}.",
+  "fr": "Le score OAZE est passé de {0} à {1}.",
+  "es": "El score OAZE subió de {0} a {1}."
+ },
+ {
+  "pt": "dolar:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Dólar: R$ {0}{1}",
+  "tipo": "padrao",
+  "en": "Dollar: R$ {0}{1}",
+  "fr": "Dollar : R$ {0}{1}",
+  "es": "Dólar: R$ {0}{1}"
+ },
+ {
+  "pt": "Dólar comercial (venda) de {0}, Banco Central.",
+  "tipo": "padrao",
+  "en": "Commercial dollar (sell) for {0}, Central Bank of Brazil.",
+  "fr": "Dollar commercial (vente) du {0}, Banque centrale du Brésil.",
+  "es": "Dólar comercial (venta) del {0}, Banco Central de Brasil."
+ },
+ {
+  "pt": "Dólar comercial de {0}: R$ {1}{2}.",
+  "tipo": "padrao",
+  "en": "Commercial dollar for {0}: R$ {1}{2}.",
+  "fr": "Dollar commercial du {0} : R$ {1}{2}.",
+  "es": "Dólar comercial del {0}: R$ {1}{2}."
+ },
+ {
+  "pt": ", {0} de {1}% no dia",
+  "tipo": "padrao",
+  "en": ", {0} {1}% on the day",
+  "fr": ", {0} de {1} % sur la journée",
+  "es": ", {0} de {1}% en el día"
+ },
+ {
+  "pt": "dica-reserva:{0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Dinheiro parado também pode render",
+  "tipo": "exato",
+  "en": "Idle money can earn too",
+  "fr": "L'argent qui dort peut aussi rapporter",
+  "es": "El dinero quieto también puede rendir"
+ },
+ {
+  "pt": "Seu saldo em conta passa de 3 meses de gastos. O CDI está em {0}% ao ano. Entenda as opções em Investimentos.",
+  "tipo": "padrao",
+  "en": "Your account balance exceeds 3 months of spending. The CDI rate is {0}% a year. Learn about the options in Investments.",
+  "fr": "Votre solde dépasse 3 mois de dépenses. Le taux CDI est de {0} % par an. Découvrez les options dans Investissements.",
+  "es": "Tu saldo en cuenta supera 3 meses de gastos. El CDI está en {0}% al año. Conoce las opciones en Inversiones."
+ },
+ {
+  "pt": "Saldo em conta acima de 3 meses de gastos; CDI em {0}% a.a. Conteúdo educativo, não é recomendação de investimento.",
+  "tipo": "padrao",
+  "en": "Account balance above 3 months of spending; CDI at {0}% a year. Educational content, not investment advice.",
+  "fr": "Solde au-dessus de 3 mois de dépenses ; CDI à {0} % par an. Contenu éducatif, pas un conseil d'investissement.",
+  "es": "Saldo en cuenta por encima de 3 meses de gastos; CDI al {0}% anual. Contenido educativo, no es recomendación de inversión."
+ },
+ {
+  "pt": "amanhã",
+  "tipo": "exato",
+  "en": "tomorrow",
+  "fr": "demain",
+  "es": "mañana"
+ },
+ {
+  "pt": "em {0} dias",
+  "tipo": "padrao",
+  "en": "in {0} days",
+  "fr": "dans {0} jours",
+  "es": "en {0} días"
+ },
+ {
+  "pt": "{0} vence {1}",
+  "tipo": "padrao",
+  "en": "{0} due {1}",
+  "fr": "{0} échéance {1}",
+  "es": "{0} vence {1}"
+ },
+ {
+  "pt": "Uma fatura",
+  "tipo": "exato",
+  "en": "A card bill",
+  "fr": "Une facture de carte",
+  "es": "Una factura"
+ },
+ {
+  "pt": "Uma conta",
+  "tipo": "exato",
+  "en": "A bill",
+  "fr": "Une facture",
+  "es": "Una cuenta"
+ },
+ {
+  "pt": "{0} · abra o OAZE para conferir ou marcar como paga.",
+  "tipo": "padrao",
+  "en": "{0} · open OAZE to check or mark it as paid.",
+  "fr": "{0} · ouvrez OAZE pour vérifier ou marquer comme payé.",
+  "es": "{0} · abre OAZE para revisar o marcar como pagada."
+ },
+ {
+  "pt": "Abra o OAZE para ver os detalhes.",
+  "tipo": "exato",
+  "en": "Open OAZE to see the details.",
+  "fr": "Ouvrez OAZE pour voir les détails.",
+  "es": "Abre OAZE para ver los detalles."
+ },
+ {
+  "pt": "receber:{0}:{1}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "{0} ainda não te pagou",
+  "tipo": "padrao",
+  "en": "{0} still hasn't paid you",
+  "fr": "{0} ne vous a toujours pas payé",
+  "es": "{0} aún no te pagó"
+ },
+ {
+  "pt": "Alguém ainda não te pagou",
+  "tipo": "exato",
+  "en": "Someone still hasn't paid you",
+  "fr": "Quelqu'un ne vous a toujours pas payé",
+  "es": "Alguien aún no te pagó"
+ },
+ {
+  "pt": "{0} combinado para {1}.",
+  "tipo": "padrao",
+  "en": "{0} agreed for {1}.",
+  "fr": "{0} prévu pour le {1}.",
+  "es": "{0} acordado para el {1}."
+ },
+ {
+  "pt": "Abra \"Quem me deve\" no OAZE.",
+  "tipo": "exato",
+  "en": "Open \"Who owes me\" in OAZE.",
+  "fr": "Ouvrez « Qui me doit » dans OAZE.",
+  "es": "Abre \"Quién me debe\" en OAZE."
+ },
+ {
+  "pt": "{0}: {1} em atraso.",
+  "tipo": "padrao",
+  "en": "{0}: {1} overdue.",
+  "fr": "{0} : {1} en retard.",
+  "es": "{0}: {1} atrasado."
+ },
+ {
+  "pt": "Meta {0}: faltam {1} dias",
+  "tipo": "padrao",
+  "en": "Goal {0}: {1} days left",
+  "fr": "Objectif {0} : plus que {1} jours",
+  "es": "Meta {0}: faltan {1} días"
+ },
+ {
+  "pt": "Uma meta vence em {0} dias",
+  "tipo": "padrao",
+  "en": "A goal is due in {0} days",
+  "fr": "Un objectif arrive à échéance dans {0} jours",
+  "es": "Una meta vence en {0} días"
+ },
+ {
+  "pt": "Guardado {0} de {1}.",
+  "tipo": "padrao",
+  "en": "Saved {0} of {1}.",
+  "fr": "Épargné {0} sur {1}.",
+  "es": "Ahorrado {0} de {1}."
+ },
+ {
+  "pt": "Abra o OAZE para ver o progresso.",
+  "tipo": "exato",
+  "en": "Open OAZE to see the progress.",
+  "fr": "Ouvrez OAZE pour voir la progression.",
+  "es": "Abre OAZE para ver el progreso."
+ },
+ {
+  "pt": "{0} (cartão)",
+  "tipo": "padrao",
+  "en": "{0} (card)",
+  "fr": "{0} (carte)",
+  "es": "{0} (tarjeta)"
+ },
+ {
+  "pt": "escolher avisos",
+  "tipo": "exato",
+  "en": "choose notifications",
+  "fr": "choisir les notifications",
+  "es": "elegir avisos"
+ },
+ {
+  "pt": "Escolha o que o OAZE avisa, quando e com que detalhe. Fica salvo na sua conta e vale em todos os seus aparelhos.",
+  "tipo": "exato",
+  "en": "Choose what OAZE notifies you about, when and in how much detail. It's saved to your account and applies on all your devices.",
+  "fr": "Choisissez ce qu'OAZE vous signale, quand et avec quel niveau de détail. C'est enregistré sur votre compte et vaut sur tous vos appareils.",
+  "es": "Elige qué te avisa OAZE, cuándo y con qué detalle. Queda guardado en tu cuenta y vale en todos tus dispositivos."
+ },
+ {
+  "pt": "Contas e faturas",
+  "tipo": "exato",
+  "en": "Bills and card statements",
+  "fr": "Factures et relevés de carte",
+  "es": "Cuentas y facturas"
+ },
+ {
+  "pt": "Avisar com antecedência de:",
+  "tipo": "exato",
+  "en": "Notify in advance:",
+  "fr": "Prévenir à l'avance :",
+  "es": "Avisar con anticipación:"
+ },
+ {
+  "pt": "Metas e orçamento",
+  "tipo": "exato",
+  "en": "Goals and budget",
+  "fr": "Objectifs et budget",
+  "es": "Metas y presupuesto"
+ },
+ {
+  "pt": "Coco de olho",
+  "tipo": "exato",
+  "en": "Coco keeping watch",
+  "fr": "Coco veille",
+  "es": "Coco atenta"
+ },
+ {
+  "pt": "Mercado e dicas",
+  "tipo": "exato",
+  "en": "Market and tips",
+  "fr": "Marché et conseils",
+  "es": "Mercado y consejos"
+ },
+ {
+  "pt": "Contas a pagar",
+  "tipo": "exato",
+  "en": "Bills to pay",
+  "fr": "Factures à payer",
+  "es": "Cuentas por pagar"
+ },
+ {
+  "pt": "Boletos, aluguel, assinaturas e outras despesas previstas",
+  "tipo": "exato",
+  "en": "Bank slips, rent, subscriptions and other scheduled expenses",
+  "fr": "Boletos, loyer, abonnements et autres dépenses prévues",
+  "es": "Boletos, alquiler, suscripciones y otros gastos previstos"
+ },
+ {
+  "pt": "Faturas de cartão",
+  "tipo": "exato",
+  "en": "Card statements",
+  "fr": "Relevés de carte",
+  "es": "Facturas de tarjeta"
+ },
+ {
+  "pt": "No vencimento de cada fatura em aberto",
+  "tipo": "exato",
+  "en": "On the due date of each open statement",
+  "fr": "À l'échéance de chaque relevé ouvert",
+  "es": "En el vencimiento de cada factura abierta"
+ },
+ {
+  "pt": "7 dias",
+  "tipo": "exato",
+  "en": "7 days",
+  "fr": "7 jours",
+  "es": "7 días"
+ },
+ {
+  "pt": "3 dias",
+  "tipo": "exato",
+  "en": "3 days",
+  "fr": "3 jours",
+  "es": "3 días"
+ },
+ {
+  "pt": "1 dia",
+  "tipo": "exato",
+  "en": "1 day",
+  "fr": "1 jour",
+  "es": "1 día"
+ },
+ {
+  "pt": "no dia",
+  "tipo": "exato",
+  "en": "on the day",
+  "fr": "le jour même",
+  "es": "el mismo día"
+ },
+ {
+  "pt": "Antecedência",
+  "tipo": "exato",
+  "en": "Advance notice",
+  "fr": "Préavis",
+  "es": "Anticipación"
+ },
+ {
+  "pt": "Contas e cartões que avisam",
+  "tipo": "exato",
+  "en": "Accounts and cards that notify",
+  "fr": "Comptes et cartes qui préviennent",
+  "es": "Cuentas y tarjetas que avisan"
+ },
+ {
+  "pt": "Quando um valor a receber passar da data combinada",
+  "tipo": "exato",
+  "en": "When an amount to receive passes the agreed date",
+  "fr": "Quand un montant à recevoir dépasse la date prévue",
+  "es": "Cuando un monto por cobrar pasa de la fecha acordada"
+ },
+ {
+  "pt": "Prazo de meta",
+  "tipo": "exato",
+  "en": "Goal deadline",
+  "fr": "Échéance d'objectif",
+  "es": "Plazo de meta"
+ },
+ {
+  "pt": "Antes do prazo de uma meta ainda não alcançada",
+  "tipo": "exato",
+  "en": "Before the deadline of a goal not yet reached",
+  "fr": "Avant l'échéance d'un objectif pas encore atteint",
+  "es": "Antes del plazo de una meta aún no alcanzada"
+ },
+ {
+  "pt": "15 dias antes",
+  "tipo": "exato",
+  "en": "15 days before",
+  "fr": "15 jours avant",
+  "es": "15 días antes"
+ },
+ {
+  "pt": "30 dias antes",
+  "tipo": "exato",
+  "en": "30 days before",
+  "fr": "30 jours avant",
+  "es": "30 días antes"
+ },
+ {
+  "pt": "Quando avisar da meta",
+  "tipo": "exato",
+  "en": "When to notify about the goal",
+  "fr": "Quand prévenir pour l'objectif",
+  "es": "Cuándo avisar de la meta"
+ },
+ {
+  "pt": "Orçamento por categoria",
+  "tipo": "exato",
+  "en": "Budget by category",
+  "fr": "Budget par catégorie",
+  "es": "Presupuesto por categoría"
+ },
+ {
+  "pt": "Quando uma categoria passar das faixas abaixo",
+  "tipo": "exato",
+  "en": "When a category passes the thresholds below",
+  "fr": "Quand une catégorie dépasse les seuils ci-dessous",
+  "es": "Cuando una categoría pase los umbrales de abajo"
+ },
+ {
+  "pt": "Faixas do orçamento",
+  "tipo": "exato",
+  "en": "Budget thresholds",
+  "fr": "Seuils du budget",
+  "es": "Umbrales del presupuesto"
+ },
+ {
+  "pt": "Gasto fora do padrão",
+  "tipo": "exato",
+  "en": "Unusual spending",
+  "fr": "Dépense inhabituelle",
+  "es": "Gasto fuera de lo común"
+ },
+ {
+  "pt": "Categoria gastando bem mais que a média dos últimos 3 meses",
+  "tipo": "exato",
+  "en": "A category spending much more than the 3-month average",
+  "fr": "Une catégorie qui dépense bien plus que la moyenne des 3 derniers mois",
+  "es": "Una categoría gastando mucho más que el promedio de los últimos 3 meses"
+ },
+ {
+  "pt": "Só quando for muito acima (80%)",
+  "tipo": "exato",
+  "en": "Only when it's far above (80%)",
+  "fr": "Seulement quand c'est très au-dessus (80 %)",
+  "es": "Solo cuando sea muy superior (80%)"
+ },
+ {
+  "pt": "Acima de 50%",
+  "tipo": "exato",
+  "en": "Above 50%",
+  "fr": "Au-dessus de 50 %",
+  "es": "Por encima del 50%"
+ },
+ {
+  "pt": "Qualquer alta de 25%",
+  "tipo": "exato",
+  "en": "Any rise of 25%",
+  "fr": "Toute hausse de 25 %",
+  "es": "Cualquier alza del 25%"
+ },
+ {
+  "pt": "Sensibilidade",
+  "tipo": "exato",
+  "en": "Sensitivity",
+  "fr": "Sensibilité",
+  "es": "Sensibilidad"
+ },
+ {
+  "pt": "Cobrança duplicada",
+  "tipo": "exato",
+  "en": "Duplicate charge",
+  "fr": "Débit en double",
+  "es": "Cobro duplicado"
+ },
+ {
+  "pt": "Dois lançamentos iguais em até 3 dias",
+  "tipo": "exato",
+  "en": "Two identical transactions within 3 days",
+  "fr": "Deux opérations identiques en 3 jours",
+  "es": "Dos movimientos iguales en hasta 3 días"
+ },
+ {
+  "pt": "Score OAZE",
+  "tipo": "exato",
+  "en": "OAZE score",
+  "fr": "Score OAZE",
+  "es": "Score OAZE"
+ },
+ {
+  "pt": "Quando o seu score subir",
+  "tipo": "exato",
+  "en": "When your score goes up",
+  "fr": "Quand votre score augmente",
+  "es": "Cuando tu score suba"
+ },
+ {
+  "pt": "Dólar do dia",
+  "tipo": "exato",
+  "en": "Today's dollar",
+  "fr": "Dollar du jour",
+  "es": "Dólar del día"
+ },
+ {
+  "pt": "Cotação comercial do Banco Central, uma vez por dia",
+  "tipo": "exato",
+  "en": "Central Bank commercial rate, once a day",
+  "fr": "Cours commercial de la Banque centrale, une fois par jour",
+  "es": "Cotización comercial del Banco Central, una vez al día"
+ },
+ {
+  "pt": "Dicas",
+  "tipo": "exato",
+  "en": "Tips",
+  "fr": "Conseils",
+  "es": "Consejos"
+ },
+ {
+  "pt": "Conteúdo educativo sobre reserva e juros; nunca indicação de produto",
+  "tipo": "exato",
+  "en": "Educational content about savings and interest; never a product recommendation",
+  "fr": "Contenu éducatif sur l'épargne et les intérêts ; jamais de recommandation de produit",
+  "es": "Contenido educativo sobre reserva e intereses; nunca recomendación de producto"
+ },
+ {
+  "pt": "Quando e como",
+  "tipo": "exato",
+  "en": "When and how",
+  "fr": "Quand et comment",
+  "es": "Cuándo y cómo"
+ },
+ {
+  "pt": "Horário dos avisos",
+  "tipo": "exato",
+  "en": "Notification time",
+  "fr": "Heure des notifications",
+  "es": "Horario de los avisos"
+ },
+ {
+  "pt": "1 por dia",
+  "tipo": "exato",
+  "en": "1 per day",
+  "fr": "1 par jour",
+  "es": "1 por día"
+ },
+ {
+  "pt": "até 3 por dia",
+  "tipo": "exato",
+  "en": "up to 3 per day",
+  "fr": "jusqu'à 3 par jour",
+  "es": "hasta 3 por día"
+ },
+ {
+  "pt": "até 5 por dia",
+  "tipo": "exato",
+  "en": "up to 5 per day",
+  "fr": "jusqu'à 5 par jour",
+  "es": "hasta 5 por día"
+ },
+ {
+  "pt": "sem limite prático",
+  "tipo": "exato",
+  "en": "no practical limit",
+  "fr": "sans limite pratique",
+  "es": "sin límite práctico"
+ },
+ {
+  "pt": "Quantos avisos da Coco por dia",
+  "tipo": "exato",
+  "en": "How many Coco notifications per day",
+  "fr": "Combien de notifications de Coco par jour",
+  "es": "Cuántos avisos de Coco por día"
+ },
+ {
+  "pt": "Só em dias úteis",
+  "tipo": "exato",
+  "en": "Weekdays only",
+  "fr": "Jours ouvrés uniquement",
+  "es": "Solo en días hábiles"
+ },
+ {
+  "pt": "Avisos da Coco ficam para segunda; vencimentos sempre avisam",
+  "tipo": "exato",
+  "en": "Coco notifications wait until Monday; due dates always notify",
+  "fr": "Les notifications de Coco attendent lundi ; les échéances préviennent toujours",
+  "es": "Los avisos de Coco esperan al lunes; los vencimientos siempre avisan"
+ },
+ {
+  "pt": "Mostrar nomes e valores",
+  "tipo": "exato",
+  "en": "Show names and amounts",
+  "fr": "Afficher noms et montants",
+  "es": "Mostrar nombres y valores"
+ },
+ {
+  "pt": "Desligado: o aviso diz só \"uma conta vence amanhã\"",
+  "tipo": "exato",
+  "en": "Off: the notification only says \"a bill is due tomorrow\"",
+  "fr": "Désactivé : la notification dit seulement « une facture arrive à échéance demain »",
+  "es": "Desactivado: el aviso dice solo \"una cuenta vence mañana\""
+ },
+ {
+  "pt": "Avisos atualizados.",
+  "tipo": "exato",
+  "en": "Notifications updated.",
+  "fr": "Notifications mises à jour.",
+  "es": "Avisos actualizados."
+ },
+ {
+  "pt": "Preferências salvas. Ative as notificações para recebê-las.",
+  "tipo": "exato",
+  "en": "Preferences saved. Turn on notifications to receive them.",
+  "fr": "Préférences enregistrées. Activez les notifications pour les recevoir.",
+  "es": "Preferencias guardadas. Activa los avisos para recibirlos."
+ },
+ {
+  "pt": "Vencimentos na véspera e no dia, orçamento, metas, score e dólar. Você escolhe quais em \"Escolher avisos\".",
+  "tipo": "exato",
+  "en": "Due dates the day before and on the day, budget, goals, score and dollar. You choose which in \"Choose notifications\".",
+  "fr": "Échéances la veille et le jour, budget, objectifs, score et dollar. Vous choisissez lesquels dans « Choisir les notifications ».",
+  "es": "Vencimientos el día antes y el mismo día, presupuesto, metas, score y dólar. Eliges cuáles en \"Elegir avisos\"."
+ },
+ {
+  "pt": "Notification",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "indisponível",
+  "tipo": "exato",
+  "en": "unavailable",
+  "fr": "indisponible",
+  "es": "no disponible"
+ },
+ {
+  "pt": "Localização",
+  "tipo": "exato",
+  "en": "Location",
+  "fr": "Localisation",
+  "es": "Ubicación"
+ },
+ {
+  "pt": "Opcional. Guarda o local de uma compra quando você toca em \"Usar minha localização\" (arredondado a ~100 m). Nunca em segundo plano.",
+  "tipo": "exato",
+  "en": "Optional. Saves where a purchase happened when you tap \"Use my location\" (rounded to ~100 m). Never in the background.",
+  "fr": "Facultatif. Enregistre le lieu d'un achat quand vous touchez « Utiliser ma position » (arrondi à ~100 m). Jamais en arrière-plan.",
+  "es": "Opcional. Guarda el lugar de una compra cuando tocas \"Usar mi ubicación\" (redondeado a ~100 m). Nunca en segundo plano."
+ },
+ {
+  "pt": "Conversa por voz com a Coco. Fica ligado só durante a conversa.",
+  "tipo": "exato",
+  "en": "Voice chat with Coco. Only on during the conversation.",
+  "fr": "Conversation vocale avec Coco. Activé seulement pendant la conversation.",
+  "es": "Conversación por voz con Coco. Solo activo durante la conversación."
+ },
+ {
+  "pt": "Câmera",
+  "tipo": "exato",
+  "en": "Camera",
+  "fr": "Caméra",
+  "es": "Cámara"
+ },
+ {
+  "pt": "Foto de recibo para a Coco ler. Só quando você escolhe anexar uma foto.",
+  "tipo": "exato",
+  "en": "Receipt photo for Coco to read. Only when you choose to attach a photo.",
+  "fr": "Photo de reçu pour que Coco la lise. Seulement quand vous choisissez de joindre une photo.",
+  "es": "Foto de recibo para que Coco la lea. Solo cuando eliges adjuntar una foto."
+ },
+ {
+  "pt": "Negada. Para liberar: Configurações do aparelho › Apps › OAZE › Permissões.",
+  "tipo": "exato",
+  "en": "Denied. To allow: device Settings › Apps › OAZE › Permissions.",
+  "fr": "Refusé. Pour autoriser : Réglages de l'appareil › Apps › OAZE › Autorisations.",
+  "es": "Denegado. Para permitir: Configuración del dispositivo › Apps › OAZE › Permisos."
+ },
+ {
+  "pt": "Permitir",
+  "tipo": "exato",
+  "en": "Allow",
+  "fr": "Autoriser",
+  "es": "Permitir"
+ },
+ {
+  "pt": "Desbloquear o OAZE com digital, rosto ou o bloqueio do aparelho. O PIN do cofre continua valendo.",
+  "tipo": "exato",
+  "en": "Unlock OAZE with fingerprint, face or your device lock. The vault PIN still applies.",
+  "fr": "Déverrouiller OAZE avec l'empreinte, le visage ou le verrouillage de l'appareil. Le code PIN du coffre reste valable.",
+  "es": "Desbloquear OAZE con huella, rostro o el bloqueo del dispositivo. El PIN de la caja fuerte sigue valiendo."
+ },
+ {
+  "pt": "Anúncios",
+  "tipo": "exato",
+  "en": "Ads",
+  "fr": "Publicités",
+  "es": "Anuncios"
+ },
+ {
+  "pt": "No plano Semente do app Android, o anúncio só aparece quando você escolhe assistir para liberar lançamentos. O Google pode usar o ID de publicidade do aparelho; você pode redefini-lo ou desativar a personalização nas configurações do Android.",
+  "tipo": "exato",
+  "en": "On the Semente plan, an ad only appears when you choose to watch one to unlock transactions. Google may use the device's advertising ID; you can reset it or turn off personalization in Android settings.",
+  "fr": "Avec le forfait Semente, une publicité n'apparaît que si vous choisissez d'en regarder une pour débloquer des opérations. Google peut utiliser l'identifiant publicitaire de l'appareil ; vous pouvez le réinitialiser ou désactiver la personnalisation dans les réglages Android.",
+  "es": "En el plan Semente, el anuncio solo aparece cuando eliges verlo para liberar movimientos. Google puede usar el ID de publicidad del dispositivo; puedes restablecerlo o desactivar la personalización en la configuración de Android."
+ },
+ {
+  "pt": "no app",
+  "tipo": "exato",
+  "en": "in the app",
+  "fr": "dans l'app",
+  "es": "en la app"
+ },
+ {
+  "pt": "Desativar",
+  "tipo": "exato",
+  "en": "Turn off",
+  "fr": "Désactiver",
+  "es": "Desactivar"
+ },
+ {
+  "pt": "plano Semente",
+  "tipo": "exato",
+  "en": "Semente plan",
+  "fr": "forfait Semente",
+  "es": "plan Semente"
+ },
+ {
+  "pt": "sem anúncios",
+  "tipo": "exato",
+  "en": "no ads",
+  "fr": "sans publicité",
+  "es": "sin anuncios"
+ },
+ {
+  "pt": "O OAZE pede cada acesso só no momento de uso. Nada aqui é obrigatório para usar o app.",
+  "tipo": "exato",
+  "en": "OAZE asks for each access only when it's needed. Nothing here is required to use the app.",
+  "fr": "OAZE demande chaque accès seulement au moment de l'utiliser. Rien ici n'est obligatoire pour utiliser l'app.",
+  "es": "OAZE pide cada acceso solo en el momento de uso. Nada aquí es obligatorio para usar la app."
+ },
+ {
+  "pt": "Seu aparelho está no fuso {0}, fora do Brasil. {1}",
+  "tipo": "padrao",
+  "en": "Your device is in the {0} time zone, outside Brazil. {1}",
+  "fr": "Votre appareil est sur le fuseau {0}, hors du Brésil. {1}",
+  "es": "Tu dispositivo está en el huso {0}, fuera de Brasil. {1}"
+ },
+ {
+  "pt": "Para lançar na moeda local, escolha {0} em \"conta/cartão\".",
+  "tipo": "padrao",
+  "en": "To record in the local currency, choose {0} under \"account/card\".",
+  "fr": "Pour saisir dans la devise locale, choisissez {0} dans « compte/carte ».",
+  "es": "Para registrar en la moneda local, elige {0} en \"cuenta/tarjeta\"."
+ },
+ {
+  "pt": "Para lançar em outra moeda, cadastre uma conta ou cartão nessa moeda na carteira.",
+  "tipo": "exato",
+  "en": "To record in another currency, add an account or card in that currency to the wallet.",
+  "fr": "Pour saisir dans une autre devise, ajoutez un compte ou une carte dans cette devise au portefeuille.",
+  "es": "Para registrar en otra moneda, agrega una cuenta o tarjeta en esa moneda a la billetera."
+ },
+ {
+  "pt": "Local da compra",
+  "tipo": "exato",
+  "en": "Purchase location",
+  "fr": "Lieu de l'achat",
+  "es": "Lugar de la compra"
+ },
+ {
+  "pt": "Usar minha localização",
+  "tipo": "exato",
+  "en": "Use my location",
+  "fr": "Utiliser ma position",
+  "es": "Usar mi ubicación"
+ },
+ {
+  "pt": "Remover",
+  "tipo": "exato",
+  "en": "Remove",
+  "fr": "Retirer",
+  "es": "Quitar"
+ },
+ {
+  "pt": "Salvo ·",
+  "tipo": "exato",
+  "en": "Saved ·",
+  "fr": "Enregistré ·",
+  "es": "Guardado ·"
+ },
+ {
+  "pt": "ver no mapa",
+  "tipo": "exato",
+  "en": "view on map",
+  "fr": "voir sur la carte",
+  "es": "ver en el mapa"
+ },
+ {
+  "pt": "Não registrado",
+  "tipo": "exato",
+  "en": "Not recorded",
+  "fr": "Non enregistré",
+  "es": "No registrado"
+ },
+ {
+  "pt": "Localização indisponível neste aparelho.",
+  "tipo": "exato",
+  "en": "Location unavailable on this device.",
+  "fr": "Localisation indisponible sur cet appareil.",
+  "es": "Ubicación no disponible en este dispositivo."
+ },
+ {
+  "pt": "Procurando…",
+  "tipo": "exato",
+  "en": "Searching…",
+  "fr": "Recherche…",
+  "es": "Buscando…"
+ },
+ {
+  "pt": "Registrado ·",
+  "tipo": "exato",
+  "en": "Recorded ·",
+  "fr": "Enregistré ·",
+  "es": "Registrado ·"
+ },
+ {
+  "pt": "Permissão negada. Você pode liberar em Permissões do aparelho.",
+  "tipo": "exato",
+  "en": "Permission denied. You can allow it in Device permissions.",
+  "fr": "Autorisation refusée. Vous pouvez l'accorder dans Autorisations de l'appareil.",
+  "es": "Permiso denegado. Puedes habilitarlo en Permisos del dispositivo."
+ },
+ {
+  "pt": "Não foi possível obter a localização.",
+  "tipo": "exato",
+  "en": "Couldn't get the location.",
+  "fr": "Impossible d'obtenir la position.",
+  "es": "No se pudo obtener la ubicación."
+ },
+ {
+  "pt": "Para onde foi meu dinheiro este mês?",
+  "tipo": "exato",
+  "en": "Where did my money go this month?",
+  "fr": "Où est passé mon argent ce mois-ci ?",
+  "es": "¿A dónde fue mi dinero este mes?"
+ },
+ {
+  "pt": "Quanto gastei no cartão?",
+  "tipo": "exato",
+  "en": "How much did I spend on the card?",
+  "fr": "Combien ai-je dépensé avec la carte ?",
+  "es": "¿Cuánto gasté con la tarjeta?"
+ },
+ {
+  "pt": "Vou fechar o mês no azul?",
+  "tipo": "exato",
+  "en": "Will I end the month in the black?",
+  "fr": "Vais-je finir le mois dans le vert ?",
+  "es": "¿Voy a cerrar el mes en positivo?"
+ },
+ {
+  "pt": "Tenho conta vencendo esta semana?",
+  "tipo": "exato",
+  "en": "Do I have a bill due this week?",
+  "fr": "Ai-je une facture à payer cette semaine ?",
+  "es": "¿Tengo una cuenta que vence esta semana?"
+ },
+ {
+  "pt": "oaze.v3.inicio.coco",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Widget da Coco",
+  "tipo": "exato",
+  "en": "Coco widget",
+  "fr": "Widget Coco",
+  "es": "Widget de Coco"
+ },
+ {
+  "pt": "A barra de pergunta fica sempre. Escolha o resto.",
+  "tipo": "exato",
+  "en": "The question bar always stays. Choose the rest.",
+  "fr": "La barre de question reste toujours. Choisissez le reste.",
+  "es": "La barra de pregunta queda siempre. Elige el resto."
+ },
+ {
+  "pt": "Remover da Início",
+  "tipo": "exato",
+  "en": "Remove from Home",
+  "fr": "Retirer de l'accueil",
+  "es": "Quitar del Inicio"
+ },
+ {
+  "pt": "Botões \"Foto do recibo\" e \"Lançar à mão\"",
+  "tipo": "exato",
+  "en": "\"Receipt photo\" and \"Log manually\" buttons",
+  "fr": "Boutons « Photo du reçu » et « Saisir à la main »",
+  "es": "Botones \"Foto del recibo\" y \"Registrar a mano\""
+ },
+ {
+  "pt": "Perguntas prontas",
+  "tipo": "exato",
+  "en": "Suggested questions",
+  "fr": "Questions prêtes",
+  "es": "Preguntas listas"
+ },
+ {
+  "pt": "Insights do mês",
+  "tipo": "exato",
+  "en": "Monthly insights",
+  "fr": "Aperçus du mois",
+  "es": "Insights del mes"
+ },
+ {
+  "pt": "Widget da Coco removido. Para trazer de volta: Gerenciar widgets.",
+  "tipo": "exato",
+  "en": "Coco widget removed. To bring it back: Manage widgets.",
+  "fr": "Widget Coco retiré. Pour le remettre : Gérer les widgets.",
+  "es": "Widget de Coco quitado. Para traerlo de vuelta: Gestionar widgets."
+ },
+ {
+  "pt": "Editar widget da Coco",
+  "tipo": "exato",
+  "en": "Edit Coco widget",
+  "fr": "Modifier le widget Coco",
+  "es": "Editar widget de Coco"
+ },
+ {
+  "pt": "Pergunte à Coco",
+  "tipo": "exato",
+  "en": "Ask Coco",
+  "fr": "Demander à Coco",
+  "es": "Pregúntale a Coco"
+ },
+ {
+  "pt": "Enviar pergunta à Coco",
+  "tipo": "exato",
+  "en": "Send question to Coco",
+  "fr": "Envoyer la question à Coco",
+  "es": "Enviar pregunta a Coco"
+ },
+ {
+  "pt": "Foto do recibo",
+  "tipo": "exato",
+  "en": "Receipt photo",
+  "fr": "Photo du reçu",
+  "es": "Foto del recibo"
+ },
+ {
+  "pt": "Lançar à mão",
+  "tipo": "exato",
+  "en": "Log manually",
+  "fr": "Saisir à la main",
+  "es": "Registrar a mano"
+ },
+ {
+  "pt": "Na demonstração a foto não é enviada.",
+  "tipo": "exato",
+  "en": "In the demo the photo isn't sent.",
+  "fr": "Dans la démo, la photo n'est pas envoyée.",
+  "es": "En la demostración la foto no se envía."
+ },
+ {
+  "pt": "Na demonstração nenhum arquivo é enviado.",
+  "tipo": "exato",
+  "en": "In the demo no file is sent.",
+  "fr": "Dans la démo, aucun fichier n'est envoyé.",
+  "es": "En la demostración no se envía ningún archivo."
+ },
+ {
+  "pt": "Galeria",
+  "tipo": "exato",
+  "en": "Gallery",
+  "fr": "Galerie",
+  "es": "Galería"
+ },
+ {
+  "pt": "Print ou foto do comprovante",
+  "tipo": "exato",
+  "en": "Screenshot or photo of the receipt",
+  "fr": "Capture ou photo du justificatif",
+  "es": "Captura o foto del comprobante"
+ },
+ {
+  "pt": "image/jpeg,image/png,image/webp",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Tirar foto agora",
+  "tipo": "exato",
+  "en": "Take a photo now",
+  "fr": "Prendre une photo maintenant",
+  "es": "Tomar foto ahora"
+ },
+ {
+  "pt": "PDF ou extrato",
+  "tipo": "exato",
+  "en": "PDF or statement",
+  "fr": "PDF ou relevé",
+  "es": "PDF o extracto"
+ },
+ {
+  "pt": "Comprovante ou extrato do banco (PDF, CSV, OFX)",
+  "tipo": "exato",
+  "en": "Bank receipt or statement (PDF, CSV, OFX)",
+  "fr": "Justificatif ou relevé bancaire (PDF, CSV, OFX)",
+  "es": "Comprobante o extracto del banco (PDF, CSV, OFX)"
+ },
+ {
+  "pt": "application/pdf,text/csv,.pdf,.csv,.ofx,.qfx",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A Coco lê valor, descrição e data e monta o lançamento para você revisar antes de salvar.",
+  "tipo": "exato",
+  "en": "Coco reads amount, description and date and builds the transaction for you to review before saving.",
+  "fr": "Coco lit le montant, la description et la date et prépare l'opération pour que vous la vérifiiez avant d'enregistrer.",
+  "es": "Coco lee valor, descripción y fecha y arma el movimiento para que lo revises antes de guardar."
+ },
+ {
+  "pt": "capture=\"environment\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Ler comprovante (foto ou PDF)",
+  "tipo": "exato",
+  "en": "Read receipt (photo or PDF)",
+  "fr": "Lire un justificatif (photo ou PDF)",
+  "es": "Leer comprobante (foto o PDF)"
+ },
+ {
+  "pt": "oaze:acao",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "conta vence",
+  "tipo": "exato",
+  "en": "bill due",
+  "fr": "facture à payer",
+  "es": "cuenta vence"
+ },
+ {
+  "pt": "contas vencem",
+  "tipo": "exato",
+  "en": "bills due",
+  "fr": "factures à payer",
+  "es": "cuentas vencen"
+ },
+ {
+  "pt": "{0}{1} nos próximos 15 dias",
+  "tipo": "padrao",
+  "en": "{0}{1} in the next 15 days",
+  "fr": "{0}{1} dans les 15 prochains jours",
+  "es": "{0}{1} en los próximos 15 días"
+ },
+ {
+  "pt": "Nenhum vencimento nos próximos 15 dias",
+  "tipo": "exato",
+  "en": "Nothing due in the next 15 days",
+  "fr": "Aucune échéance dans les 15 prochains jours",
+  "es": "Ningún vencimiento en los próximos 15 días"
+ },
+ {
+  "pt": "A próxima vence {0}",
+  "tipo": "padrao",
+  "en": "The next one is due {0}",
+  "fr": "La prochaine arrive à échéance {0}",
+  "es": "La próxima vence {0}"
+ },
+ {
+  "pt": "OAZE · {0}",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Saldo oculto",
+  "tipo": "exato",
+  "en": "Balance hidden",
+  "fr": "Solde masqué",
+  "es": "Saldo oculto"
+ },
+ {
+  "pt": "Atualizado às {0}",
+  "tipo": "padrao",
+  "en": "Updated at {0}",
+  "fr": "Mis à jour à {0}",
+  "es": "Actualizado a las {0}"
+ }
 ]

@@ -542,13 +542,6 @@
   "es": "Leer otro"
  },
  {
-  "pt": "Loja",
-  "tipo": "exato",
-  "en": "Store",
-  "fr": "Magasin",
-  "es": "Tienda"
- },
- {
   "pt": "A Sefaz deste estado não mostrou os itens; o total foi lido.",
   "tipo": "exato",
   "en": "This state's tax authority didn't show the items; the total was read.",

@@ -118,3 +118,30 @@ img, video, svg { max-width: 100%; }
 .v3-invoice-bank, .v3-bank-current-logo, .v3-bank-option-logo, .v3-tx-banco { background: var(--bank-bg) !important; color: var(--bank-ink) !important; }
 .v3-invoice-bank svg.bank-icon:not(.is-generic), .v3-bank-current-logo svg.bank-icon:not(.is-generic), .v3-bank-option-logo svg.bank-icon:not(.is-generic), .v3-picker-icon svg.bank-icon:not(.is-generic) { fill: currentColor; }
 .bank-icon.is-sigla text { fill: currentColor; }
+
+/* Amostra "Transparente" da paleta: quadriculado, para não parecer vazia */
+.v3-color-opt[data-oaze-color="#00000000"] { background: repeating-conic-gradient(#8a949b 0 25%, #e9eef0 0 50%) 50% / 10px 10px !important; }
+.v3-cat-icon[style*="#00000000"], .v3-picker-icon[style*="#00000000"] { outline: 1.5px dashed var(--line); }
+
+/* Aporte com os mesmos seletores de despesa e receita (ícone + cor) */
+#v3-form-investment .v3-picker-field{display:grid;gap:6px;min-width:0}
+#v3-form-investment .v3-picker-field:has(>label[hidden]){display:none}
+#v3-form-investment .v3-picker{position:relative;min-width:0}
+#v3-form-investment .v3-picker summary{display:flex;align-items:center;gap:10px;min-height:52px;padding:7px 12px;border:1px solid rgba(240,229,207,.2);border-radius:15px;background:rgba(240,229,207,.075);color:var(--milk);font-size:14px;font-weight:500;cursor:pointer;list-style:none}
+#v3-form-investment .v3-picker summary::-webkit-details-marker{display:none}
+#v3-form-investment .v3-picker summary:focus-visible,#v3-form-investment .v3-picker-options button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+#v3-form-investment .v3-picker summary>span:nth-child(2){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#v3-form-investment .v3-picker-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--picker-accent,var(--teal)) 19%,transparent);color:var(--picker-accent,var(--teal))}
+#v3-form-investment .v3-picker-icon svg{width:22px;height:22px;object-fit:contain}
+#v3-form-investment .v3-picker-icon.is-paid{color:#79c7ad;background:rgba(95,169,155,.18)}
+#v3-form-investment .v3-picker-icon.is-pending{color:#f0cf82;background:rgba(240,207,130,.16)}
+#v3-form-investment .v3-picker-icon.is-cancelled{color:#ef9696;background:rgba(239,150,150,.15)}
+#v3-form-investment .v3-picker-caret{color:var(--teal);font-size:19px;transition:transform .18s ease}
+#v3-form-investment .v3-picker[open] .v3-picker-caret{transform:rotate(180deg)}
+#v3-form-investment .v3-picker-options{position:relative;z-index:9;max-height:min(240px,38vh);margin-top:6px;overflow:auto;padding:6px;border:1px solid rgba(240,229,207,.26);border-radius:16px;background:#152d38;box-shadow:0 16px 34px rgba(0,7,14,.35);backdrop-filter:blur(20px)}
+#v3-form-investment .v3-picker-options button{display:flex;align-items:center;gap:11px;width:100%;min-height:45px;padding:6px 9px;border:0;border-radius:10px;background:transparent;color:var(--milk);font:500 13px var(--body,Instrument,sans-serif);text-align:left;cursor:pointer}
+#v3-form-investment .v3-picker-options button:hover,#v3-form-investment .v3-picker-options button.is-selected{background:rgba(240,229,207,.09)}
+#v3-form-investment .v3-picker-options button>span:nth-child(2){flex:1;min-width:0}
+#v3-form-investment .v3-picker-options button small{display:block;color:var(--muted);font-weight:400;line-height:1.3}
+#v3-form-investment .v3-picker-options button b{color:var(--teal)}
+#v3-form-investment .v3-picker-caret{transition:none}

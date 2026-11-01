@@ -255,9 +255,8 @@
     return '<form class="v3-form oz-rel-filtros" data-oz-form="relatorio">'
       + '<div class="v3-form-row"><label>DE<input type="date" name="de" value="' + esc(filtro.de) + '"></label><label>ATÉ<input type="date" name="ate" value="' + esc(filtro.ate) + '"></label></div>'
       + '<div class="v3-form-row"><label>MOSTRAR<select name="tipo">' + opc('expense', 'Despesas', filtro.tipo) + opc('income', 'Receitas', filtro.tipo) + opc('ambos', 'Receitas e despesas', filtro.tipo) + '</select></label>'
-      + '<label>AGRUPAR POR<select name="agrupar">' + opc('categoria', 'Categoria', filtro.agrupar) + opc('conta', 'Conta ou cartão', filtro.agrupar) + opc('mes', 'Mês', filtro.agrupar) + opc('tag', 'Tag', filtro.agrupar) + '</select></label></div>'
-      + '<div class="v3-form-row"><label>CONTA OU CARTÃO<select name="contas">' + opc('', 'Todos', filtro.contas) + prof.accounts.filter((a) => !a.archived).map((a) => opc(a.id, a.name, filtro.contas)).join('') + prof.cards.map((c) => opc(c.id, c.name + ' (crédito)', filtro.contas)).join('') + '</select></label>'
-      + '<label>TAG<select name="tag">' + opc('', 'Todas', filtro.tag) + (prof.tags || []).map((t) => opc(t.id, '#' + t.nome, filtro.tag)).join('') + '</select></label></div></form>'
+      + '<label>AGRUPAR POR<select name="agrupar">' + opc('categoria', 'Categoria', filtro.agrupar) + opc('conta', 'Conta ou cartão', filtro.agrupar) + opc('mes', 'Mês', filtro.agrupar) + '</select></label></div>'
+      + '<div class="v3-form-row"><label>CONTA OU CARTÃO<select name="contas">' + opc('', 'Todos', filtro.contas) + prof.accounts.filter((a) => !a.archived).map((a) => opc(a.id, a.name, filtro.contas)).join('') + prof.cards.map((c) => opc(c.id, c.name + ' (crédito)', filtro.contas)).join('') + '</select></label></div>'
       + '<div class="oz-resumo">' + (filtro.tipo !== 'expense' ? '<div><small>Entradas</small><strong>' + reais(totEntra) + '</strong></div>' : '') + (filtro.tipo !== 'income' ? '<div><small>Saídas</small><strong>' + reais(totSai) + '</strong></div>' : '') + '<div><small>Lançamentos</small><strong>' + r.ents.length + '</strong></div></div>'
       + (r.linhas.length ? '<ul class="oz-rel">' + r.linhas.map((l) => { const v = l.entra + l.sai; return '<li><span class="oz-lista-txt"><strong>' + esc(l.nome) + '</strong><small>' + l.qtd + ' lançamento' + (l.qtd === 1 ? '' : 's') + ' · ' + Math.round(v / total * 100) + '%</small></span><strong>' + (filtro.tipo === 'ambos' ? '<span class="oz-pos">+' + reais(l.entra) + '</span> <span class="oz-neg">−' + reais(l.sai) + '</span>' : reais(v)) + '</strong><span class="oz-rel-barra"><i style="width:' + Math.max(2, Math.round(v / total * 100)) + '%"></i></span></li>'; }).join('') + '</ul>'
         + '<div class="oz-rel-acoes"><button type="button" class="v3-secondary" data-oz-rel-csv>Baixar CSV</button><button type="button" class="v3-secondary" data-oz-rel-imprimir>Imprimir ou salvar PDF</button></div>'
@@ -279,7 +278,7 @@
      NAVEGAÇÃO E EVENTOS
      ============================================================= */
   const TELAS = {
-    tags: ['Tags', telaTags], projecoes: ['Projeções', telaProjecoes],
+    projecoes: ['Projeções', telaProjecoes],
     financiamentos: ['Financiamentos', () => telaDividas('financiamento')], emprestimos: ['Empréstimos', () => telaDividas('emprestimo')],
     receber: ['Quem me deve', telaReceber], relatorio: ['Relatório personalizado', telaRelatorio]
   };
@@ -347,8 +346,7 @@
     redesenhar();
   });
   /* tags no formulário de lançamento */
-  new MutationObserver(() => { const f = document.getElementById('v3-form-tx'); if (f && global.Store) campoTags(f); })
-    .observe(document.body, { childList: true, subtree: true });
+  /* 01/11/2026: tags saíram da interface (os dados antigos ficam guardados). */
 
   /* As telas de funcoes-oaze.js (caixinhas, busca, IR...) usam a mesma casca. */
   function registrar(qual, titulo, desenhar) { TELAS[qual] = [titulo, desenhar]; }

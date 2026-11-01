@@ -9,7 +9,7 @@
   const names = { home: 'início', transactions: 'lançamentos', wallet: 'carteira', investments: 'investimentos', categories: 'categorias', goals: 'planejamento', calendar: 'agenda', coco: 'coco', reminders: 'agenda', reports: 'início', settings: 'configurações', plan: 'plano', more: 'mais' };
   const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'investments/planning', '/app/recorrencias': 'calendar', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'coco', '/app/uglez': 'coco' };
   const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
-  const extraCategoryIcons = new Set(['baby','bus','cake','church','coffee','dog','droplet','dumbbell','film','flame','fuel','gift','glasses','hammer','key','laptop','map-pin','music','package','palmtree','percent','piggy-bank','pill','plane','scissors','shield','shirt','shopping-cart','smartphone','sofa','sparkles','star','stethoscope','ticket','truck','tv','umbrella','users','wifi','wrench','zap']);
+  const extraCategoryIcons = new Set(['baby','bus','cake','church','coffee','dog','droplet','dumbbell','film','flame','fuel','gift','glasses','hammer','key','laptop','map-pin','music','package','palmtree','percent','piggy-bank','pill','plane','scissors','shield','shirt','shopping-cart','smartphone','sofa','sparkles','star','stethoscope','ticket','truck','tv','umbrella','users','wifi','wrench','zap','credit-card','wallet','coins','hand-coins','banknote','landmark','store','pizza','beer','wine','apple','sandwich','ice-cream-cone','beef','fish','bike','train-front','car-taxi-front','ship','hotel','tent','lamp','paint-roller','bath','washing-machine','book-open','pencil','gamepad-2','headphones','camera','palette','cat','paw-print','bone','syringe','hospital','activity','brain','heart-handshake','party-popper','gem','watch','footprints','briefcase','building-2','calculator','scale','file-text','phone','mail','globe','car-front','parking-meter','construction','leaf','sun','snowflake','cigarette','dice-5','trophy','tree-pine','graduation-cap','school','receipt-text','trending-up']);
   /* ÍCONES EM LUCIDE (01/11/2026)
      A navegação usava uma fonte de ícones (Flaticon) e as categorias,
      Lucide: dois desenhos diferentes na mesma tela. Agora é tudo Lucide,
@@ -38,7 +38,7 @@
   };
   const statusLabels = { pago: 'Pago', pendente: 'Não pago', cancelado: 'Cancelado' };
   const statusDescriptions = { pago: 'Entra nos totais', pendente: 'Fica no previsto', cancelado: 'Não entra em nenhum total' };
-  const NAV_PAGES = ['home','transactions','wallet','investments','categories','calendar','coco','settings'];
+  const NAV_PAGES = ['home','transactions','wallet','investments','categories','calendar','coco','more','settings'];
   const NAV_KEY = 'oaze.v3.sidebar';
   function loadNavPrefs() {
     try {
@@ -97,7 +97,8 @@
   const ocultarDigitos = (texto) => String(texto).replace(/[\d.,]/g, '*');
   const money = (n) => (state.hideMoney ? ocultarDigitos(moneyReal(n)) : moneyReal(n));
   const pct = (n) => Math.max(0, Math.min(100, Number(n) || 0));
-  const safeColor = (x) => /^#[0-9a-f]{6}$/i.test(String(x || '')) ? x : '#5fa99b';
+  /* #00000000 = Transparente (sem fundo), da paleta nova. */
+  const safeColor = (x) => /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(String(x || '')) ? x : '#5fa99b';
   const shortDate = (s) => s ? `${s.slice(8, 10)} ${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+s.slice(5, 7) - 1]}` : '';
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
@@ -221,7 +222,7 @@
   };
   function categoryColor(category) {
     const raw = String(category?.color || '').trim();
-    if (/^#[0-9a-f]{6}$/i.test(raw) && !['#5FA99B','#9AA0AC'].includes(raw.toUpperCase())) return raw;
+    if (/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(raw) && !['#5FA99B','#9AA0AC'].includes(raw.toUpperCase())) return raw;
     const known = LEGACY_CATEGORY_COLORS[U.norm(category?.name || '')];
     if (known) return known;
     const palette = Store.ALL_COLORS || Store.PALETTE || [];
@@ -2180,7 +2181,7 @@
   function moreSections(desc) {
     const nItems=items().length;
     const secoes=[
-      ['Organizar','org',[['data-go="wallet"','wallet','Contas e cartões',`${nItems} na carteira`],['data-go="categories"','categories','Categorias',desc.categories],['data-oz-mais="tags"','tag','Tags',`${(profile().tags||[]).length} criadas`],['data-oz-mais="caixinhas"','piggy-bank','Caixinhas','dinheiro separado por objetivo'],['data-oz-mais="busca"','search','Buscar lançamentos','em todos os meses']]],
+      ['Organizar','org',[['data-go="wallet"','wallet','Contas e cartões',`${nItems} na carteira`],['data-go="categories"','categories','Categorias',desc.categories],['data-oz-mais="caixinhas"','piggy-bank','Caixinhas','dinheiro separado por objetivo'],['data-oz-mais="busca"','search','Buscar lançamentos','em todos os meses']]],
       ['Planejar','plan',[['data-go="goals"','goals','Orçamento e metas',desc.goals],['data-go="investments"','investments','Investimentos',desc.investments],['data-oz-mais="projecoes"','trending-up','Projeções','saldo dos próximos meses'],['data-oz-mais="desejos"','gift','Lista de desejos','posso comprar?'],['data-oz-mais="simulador"','calculator','Simulador de quitação','bola de neve × avalanche']]],
       ['Acompanhar','track',[['data-go="calendar"','calendar','Agenda e recorrências','vencimentos, fixos e parcelas'],['data-oz-mais="financiamentos"','landmark','Financiamentos',`${(profile().dividas||[]).filter((d)=>d.tipo==='financiamento').length} ativos`],['data-oz-mais="emprestimos"','banknote','Empréstimos',`${(profile().dividas||[]).filter((d)=>d.tipo==='emprestimo').length} ativos`],['data-oz-mais="receber"','hand-coins','Quem me deve',`${(profile().aReceber||[]).filter((x)=>!x.quitado).length} em aberto`],['data-oz-mais="resumo"','bell','Resumo automático','semana e mês em 1 minuto']]],
       ['Analisar','analyze',[['data-oz-mais="relatorio"','chart-line','Relatório personalizado','período, conta, categoria e tag'],['data-action="estado-oaze"','receipt','Estado do OAZE','relatório em PDF'],['data-action="export-csv"','reports','Exportar lançamentos','planilha CSV'],['data-oz-mais="ir"','receipt','Relatório para o IR','rendimentos, dedutíveis, bens']]],
@@ -2485,7 +2486,7 @@
     openSheet(`${sheetTop('coco',demo?'demonstração de interface':'sua assistente','/assets/coco/corpo-neutra_acolhedora.webp')}<button type="button" class="v3-link" data-coco-tab="Conversa">← Voltar para conversa</button>${body}`,'Coco');
   }
   function installComposerPickers(form) {
-    const labelNames={category:'Categoria',source:'Conta ou cartão',destination:'Conta de destino',situacao:'Situação',remindDaysBefore:'Lembre-me na agenda',type:'Tipo de investimento',accountId:'Conta do aporte'};
+    const labelNames={category:'Categoria',source:'Conta ou cartão',destination:'Conta de destino',situacao:'Situação',remindDaysBefore:'Lembre-me na agenda',type:'Tipo de investimento',accountId:'Conta do aporte',indexer:'Rendimento do CDB',liquidity:'Liquidez'};
     const refreshes=[];
     const optionArtwork=(name,value)=>{
       if(name==='category'){
@@ -2501,15 +2502,21 @@
         const account=profile().accounts.find((entry)=>entry.id===value);
         return account?`<span class="v3-picker-icon is-marca" style="--bank-bg:${marcaCores(account).bg};--bank-ink:${marcaCores(account).ink}">${walletLogo(account,marcaCores(account).ink)}</span>`:`<span class="v3-picker-icon">${icon('wallet')}</span>`;
       }
+      /* Aporte com ícone E cor, no mesmo padrão de despesa e receita (01/11/2026). */
       if(name==='type'){
-        const icons={Porquinho:'piggy-bank',CDB:'landmark','Tesouro Direto':'landmark',Ações:'chart-no-axes-combined',FIIs:'house',ETF:'chart-no-axes-combined'};
-        return `<span class="v3-picker-icon">${global.Icons?.lucide(icons[value]||'chart-no-axes-combined',22)?.outerHTML||icon('investments')}</span>`;
+        const icons={Porquinho:'piggy-bank',CDB:'landmark','Tesouro Direto':'landmark',Ações:'trending-up',FIIs:'house',ETF:'chart-column',Poupança:'piggy-bank',Criptomoeda:'banknote',Previdência:'shield','Fundo de investimento':'chart-pie','Renda fixa':'percent',Outro:'circle-ellipsis'};
+        const cores={Porquinho:'#E8789A',CDB:'#3E7CB1','Tesouro Direto':'#2E9E6B',Ações:'#E07A3F',FIIs:'#8E6BBF',ETF:'#2FA3A3',Poupança:'#D9A23A',Criptomoeda:'#F2A900',Previdência:'#5C7A99','Fundo de investimento':'#6C8EBF','Renda fixa':'#4C9A7A',Outro:'#8A8F98'};
+        return `<span class="v3-picker-icon" style="--picker-accent:${cores[value]||'#5FA99B'}">${global.Icons?.lucide(icons[value]||'trending-up',22)?.outerHTML||icon('investments')}</span>`;
       }
+      if(name==='indexer')return `<span class="v3-picker-icon" style="--picker-accent:${value==='fixed'?'#D9A23A':'#3E7CB1'}">${global.Icons?.lucide(value==='fixed'?'lock':'percent',22)?.outerHTML||icon('investments')}</span>`;
+      if(name==='liquidity')return `<span class="v3-picker-icon" style="--picker-accent:${value==='diaria'?'#2E9E6B':value==='vencimento'?'#E07A3F':'#8A8F98'}">${global.Icons?.lucide(value==='diaria'?'zap':value==='vencimento'?'calendar':'circle-ellipsis',22)?.outerHTML||icon('calendar')}</span>`;
       if(name==='remindDaysBefore')return `<span class="v3-picker-icon" aria-hidden="true">${icon('calendar')}</span>`;
       return `<span class="v3-picker-icon ${value==='pago'?'is-paid':value==='pendente'?'is-pending':'is-cancelled'}" aria-hidden="true">${value==='pago'?'✓':value==='pendente'?'○':'×'}</span>`;
     };
     const shortStatus=(value,text)=>name=>name==='situacao'?({pago:'Pago',pendente:'Não pago · agendado',cancelado:'Cancelado'}[value]||text):text;
-    (form.id==='v3-form-investment'?['type','accountId']:['situacao','category','source','destination','remindDaysBefore']).forEach((name)=>{
+    /* form.id não serve: o <input name="id"> do formulário sombreia a propriedade,
+       e o aporte caía nos seletores comuns (sem ícone e sem cor). */
+    (form.getAttribute('id')==='v3-form-investment'?['type','accountId','indexer','liquidity']:['situacao','category','source','destination','remindDaysBefore']).forEach((name)=>{
       const select=form.elements[name];
       if(!(select instanceof HTMLSelectElement))return;
       const label=select.closest('label');
@@ -3390,7 +3397,7 @@
   function categoryForm(id) {
     const item=id?profile().categories.find((c)=>c.id===id):null;
     if (id&&!item) { toast('Esta categoria não existe mais.'); return; }
-    const choices=[['home','Casa'],['utensils','Alimentação'],['car','Transporte'],['heart','Saúde'],['leisure','Lazer'],['subscription','Assinatura'],['shopping','Compras'],['work','Trabalho'],['education','Educação'],['receipt','Conta'],['investments','Investimento'],['more','Outros'],['baby','Bebê'],['bus','Ônibus'],['cake','Festa'],['church','Doação'],['coffee','Café'],['dog','Pet'],['droplet','Água'],['dumbbell','Academia'],['film','Cinema'],['flame','Gás'],['fuel','Combustível'],['gift','Presente'],['glasses','Ótica'],['hammer','Obras'],['key','Aluguel'],['laptop','Tecnologia'],['map-pin','Viagem'],['music','Música'],['package','Encomenda'],['palmtree','Férias'],['percent','Taxas'],['piggy-bank','Reserva'],['pill','Farmácia'],['plane','Avião'],['scissors','Beleza'],['shield','Seguro'],['shirt','Roupas'],['shopping-cart','Mercado'],['smartphone','Celular'],['sofa','Móveis'],['sparkles','Cuidados'],['star','Especial'],['stethoscope','Médico'],['ticket','Ingresso'],['truck','Frete'],['tv','Streaming'],['umbrella','Proteção'],['users','Família'],['wifi','Internet'],['wrench','Conserto'],['zap','Energia']];
+    const choices=[['home','Casa'],['utensils','Alimentação'],['car','Transporte'],['heart','Saúde'],['leisure','Lazer'],['subscription','Assinatura'],['shopping','Compras'],['work','Trabalho'],['education','Educação'],['receipt','Conta'],['investments','Investimento'],['more','Outros'],['baby','Bebê'],['bus','Ônibus'],['cake','Festa'],['church','Doação'],['coffee','Café'],['dog','Pet'],['droplet','Água'],['dumbbell','Academia'],['film','Cinema'],['flame','Gás'],['fuel','Combustível'],['gift','Presente'],['glasses','Ótica'],['hammer','Obras'],['key','Aluguel'],['laptop','Tecnologia'],['map-pin','Viagem'],['music','Música'],['package','Encomenda'],['palmtree','Férias'],['percent','Taxas'],['piggy-bank','Reserva'],['pill','Farmácia'],['plane','Avião'],['scissors','Beleza'],['shield','Seguro'],['shirt','Roupas'],['shopping-cart','Mercado'],['smartphone','Celular'],['sofa','Móveis'],['sparkles','Cuidados'],['star','Especial'],['stethoscope','Médico'],['ticket','Ingresso'],['truck','Frete'],['tv','Streaming'],['umbrella','Proteção'],['users','Família'],['wifi','Internet'],['wrench','Conserto'],['zap','Energia'],['credit-card','Cartão'],['wallet','Carteira'],['coins','Moedas'],['hand-coins','Empréstimo'],['banknote','Dinheiro'],['landmark','Banco'],['store','Loja'],['pizza','Pizza'],['beer','Bar'],['wine','Vinho'],['apple','Feira'],['sandwich','Lanche'],['ice-cream-cone','Sorvete'],['beef','Açougue'],['fish','Peixaria'],['bike','Bicicleta'],['train-front','Metrô'],['car-taxi-front','Táxi e app'],['ship','Barco'],['hotel','Hotel'],['tent','Camping'],['lamp','Casa e decoração'],['paint-roller','Reforma'],['bath','Banheiro'],['washing-machine','Lavanderia'],['book-open','Livros'],['pencil','Papelaria'],['gamepad-2','Games'],['headphones','Áudio'],['camera','Foto'],['palette','Arte'],['cat','Gato'],['paw-print','Veterinário'],['bone','Pet shop'],['syringe','Vacina'],['hospital','Hospital'],['activity','Exames'],['brain','Terapia'],['heart-handshake','Doações'],['party-popper','Comemoração'],['gem','Joias'],['watch','Relógio'],['footprints','Calçados'],['briefcase','Trabalho'],['building-2','Empresa'],['calculator','Contador'],['scale','Jurídico'],['file-text','Documentos'],['phone','Telefone'],['mail','Correios'],['globe','Exterior'],['car-front','Carro'],['parking-meter','Estacionamento'],['construction','Pedágio'],['leaf','Jardim'],['sun','Verão'],['snowflake','Inverno'],['cigarette','Tabaco'],['dice-5','Apostas'],['trophy','Esportes'],['tree-pine','Natal'],['graduation-cap','Faculdade'],['school','Escola'],['receipt-text','Impostos'],['trending-up','Renda extra']];
     const currentIcon=categoryIcon(item?.icon||'more');
     openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label>${iconPicker(currentIcon,choices)}${colorPicker(item?categoryColor(item):corPadraoDeCategoria())}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
   }
