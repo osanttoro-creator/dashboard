@@ -374,13 +374,14 @@
   Planos.DESTAQUES = {
     free: [
       '1 espaço financeiro, 2 contas e 3 cartões',
-      'Movimentações sem limite: a cada 20, um anúncio curto (Android, Windows e site)',
+      'Movimentações sem limite: a cada 20, um anúncio curto (Android e navegador)',
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
       'Contas e cartões em dólar, euro e outras moedas',
       'Coco com uso diário e semanal, mostrado em porcentagem'
     ],
     pro: [
+      'App para Windows incluso (exclusivo de quem assina)',
       'Até 5 espaços financeiros e 50 contas',
       'Cartões e movimentações sem limite',
       '100 orçamentos, 50 metas e 150 recorrências',
@@ -393,6 +394,10 @@
   };
 
   Planos.FAQ = [
+    {
+      p: 'O app para Windows é grátis?',
+      r: 'Não. O app do OAZE para computador (Windows) é um benefício de quem assina o Oásis. No celular (Android) e no navegador, o Semente continua grátis.'
+    },
     {
       p: 'Como funciona a cobrança?',
       r: 'No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova a cada mês ou ano, e o plano é liberado quando o pagamento é confirmado.'

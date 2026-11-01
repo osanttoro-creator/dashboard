@@ -1,353 +1,374 @@
 [
- {
-  "pt": "Semente",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "Plante o hábito de olhar o mês.",
-  "tipo": "exato",
-  "en": "Plant the habit of checking your month.",
-  "fr": "Plantez l'habitude de regarder votre mois.",
-  "es": "Planta el hábito de mirar tu mes."
- },
- {
-  "pt": "Oásis",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "Tudo o que o OAZE faz, sem teto no dia a dia.",
-  "tipo": "exato",
-  "en": "Everything OAZE does, with no ceiling on your day-to-day.",
-  "fr": "Tout ce que fait OAZE, sans plafond au quotidien.",
-  "es": "Todo lo que hace OAZE, sin techo en el día a día."
- },
- {
-  "pt": "US$",
-  "tipo": "exato",
-  "ignorar": true
- },
- {
-  "pt": "Ilimitado",
-  "tipo": "exato",
-  "en": "Unlimited",
-  "fr": "Illimité",
-  "es": "Ilimitado"
- },
- {
-  "pt": "{0}{1} · ilimitado",
-  "tipo": "padrao",
-  "en": "{0}{1} · unlimited",
-  "fr": "{0}{1} · illimité",
-  "es": "{0}{1} · ilimitado"
- },
- {
-  "pt": "Espaços financeiros",
-  "tipo": "exato",
-  "en": "Financial spaces",
-  "fr": "Espaces financiers",
-  "es": "Espacios financieros"
- },
- {
-  "pt": "Contas",
-  "tipo": "exato",
-  "en": "Accounts",
-  "fr": "Comptes",
-  "es": "Cuentas"
- },
- {
-  "pt": "Cartões de crédito",
-  "tipo": "exato",
-  "en": "Credit cards",
-  "fr": "Cartes de crédit",
-  "es": "Tarjetas de crédito"
- },
- {
-  "pt": "Movimentações por mês",
-  "tipo": "exato",
-  "en": "Transactions per month",
-  "fr": "Mouvements par mois",
-  "es": "Movimientos por mes"
- },
- {
-  "pt": "Categorias personalizadas",
-  "tipo": "exato",
-  "en": "Custom categories",
-  "fr": "Catégories personnalisées",
-  "es": "Categorías personalizadas"
- },
- {
-  "pt": "Orçamentos ativos",
-  "tipo": "exato",
-  "en": "Active budgets",
-  "fr": "Budgets actifs",
-  "es": "Presupuestos activos"
- },
- {
-  "pt": "Metas ativas",
-  "tipo": "exato",
-  "en": "Active goals",
-  "fr": "Objectifs actifs",
-  "es": "Metas activas"
- },
- {
-  "pt": "Recorrências",
-  "tipo": "exato",
-  "en": "Recurring",
-  "fr": "Récurrences",
-  "es": "Recurrentes"
- },
- {
-  "pt": "Histórico disponível",
-  "tipo": "exato",
-  "en": "History available",
-  "fr": "Historique disponible",
-  "es": "Historial disponible"
- },
- {
-  "pt": "Conversas com a Coco por dia",
-  "tipo": "exato",
-  "en": "Coco conversations per day",
-  "fr": "Conversations avec Coco par jour",
-  "es": "Conversaciones con Coco por día"
- },
- {
-  "pt": "Conversas com a Coco por semana",
-  "tipo": "exato",
-  "en": "Coco conversations per week",
-  "fr": "Conversations avec Coco par semaine",
-  "es": "Conversaciones con Coco por semana"
- },
- {
-  "pt": "Coco flutuante no app",
-  "tipo": "exato",
-  "en": "Floating Coco assistant in the app",
-  "fr": "Assistante Coco flottante dans l’application",
-  "es": "Asistente Coco flotante en la app"
- },
- {
-  "pt": "Comparação entre meses",
-  "tipo": "exato",
-  "en": "Month-to-month comparison",
-  "fr": "Comparaison entre les mois",
-  "es": "Comparación entre meses"
- },
- {
-  "pt": "Comparação anual",
-  "tipo": "exato",
-  "en": "Yearly comparison",
-  "fr": "Comparaison annuelle",
-  "es": "Comparación anual"
- },
- {
-  "pt": "Tendências, simulações e projeções",
-  "tipo": "exato",
-  "en": "Trends, simulations and projections",
-  "fr": "Tendances, simulations et projections",
-  "es": "Tendencias, simulaciones y proyecciones"
- },
- {
-  "pt": "Calendário financeiro",
-  "tipo": "exato",
-  "en": "Financial calendar",
-  "fr": "Calendrier financier",
-  "es": "Calendario financiero"
- },
- {
-  "pt": "Contas e cartões em dólar, euro e outras moedas",
-  "tipo": "exato",
-  "en": "Accounts and cards in dollars, euros and other currencies",
-  "fr": "Comptes et cartes en dollars, euros et autres devises",
-  "es": "Cuentas y tarjetas en dólares, euros y otras monedas"
- },
- {
-  "pt": "Exportar em CSV",
-  "tipo": "exato",
-  "en": "Export to CSV",
-  "fr": "Exporter en CSV",
-  "es": "Exportar en CSV"
- },
- {
-  "pt": "Exportar em PDF",
-  "tipo": "exato",
-  "en": "Export to PDF",
-  "fr": "Exporter en PDF",
-  "es": "Exportar en PDF"
- },
- {
-  "pt": "Acesso antecipado a novidades",
-  "tipo": "exato",
-  "en": "Early access to new features",
-  "fr": "Accès anticipé aux nouveautés",
-  "es": "Acceso anticipado a novedades"
- },
- {
-  "pt": "Atendimento prioritário",
-  "tipo": "exato",
-  "en": "Priority support",
-  "fr": "Assistance prioritaire",
-  "es": "Atención prioritaria"
- },
- {
-  "pt": "1 espaço financeiro, 2 contas e 3 cartões",
-  "tipo": "exato",
-  "en": "1 financial space, 2 accounts and 3 cards",
-  "fr": "1 espace financier, 2 comptes et 3 cartes",
-  "es": "1 espacio financiero, 2 cuentas y 3 tarjetas"
- },
- {
-  "pt": "Movimentações sem limite: a cada 20, um anúncio curto (Android, Windows e site)",
-  "tipo": "exato",
-  "en": "Unlimited transactions: every 20, one short ad (Android, Windows and web)",
-  "fr": "Mouvements illimités : tous les 20, une courte publicité (Android, Windows et web)",
-  "es": "Movimientos sin límite: cada 20, un anuncio corto (Android, Windows y web)"
- },
- {
-  "pt": "1 orçamento, 1 meta e 3 recorrências",
-  "tipo": "exato",
-  "en": "1 budget, 1 goal and 3 recurring items",
-  "fr": "1 budget, 1 objectif et 3 récurrences",
-  "es": "1 presupuesto, 1 meta y 3 recurrentes"
- },
- {
-  "pt": "Histórico dos últimos 3 meses",
-  "tipo": "exato",
-  "en": "History of the last 3 months",
-  "fr": "Historique des 3 derniers mois",
-  "es": "Historial de los últimos 3 meses"
- },
- {
-  "pt": "Coco com uso diário e semanal, mostrado em porcentagem",
-  "tipo": "exato",
-  "en": "Coco with daily and weekly usage, shown as a percentage",
-  "fr": "Coco avec un usage quotidien et hebdomadaire, affiché en pourcentage",
-  "es": "Coco con uso diario y semanal, mostrado en porcentaje"
- },
- {
-  "pt": "Até 5 espaços financeiros e 50 contas",
-  "tipo": "exato",
-  "en": "Up to 5 financial spaces and 50 accounts",
-  "fr": "Jusqu'à 5 espaces financiers et 50 comptes",
-  "es": "Hasta 5 espacios financieros y 50 cuentas"
- },
- {
-  "pt": "Cartões e movimentações sem limite",
-  "tipo": "exato",
-  "en": "Unlimited cards and transactions",
-  "fr": "Cartes et mouvements illimités",
-  "es": "Tarjetas y movimientos sin límite"
- },
- {
-  "pt": "100 orçamentos, 50 metas e 150 recorrências",
-  "tipo": "exato",
-  "en": "100 budgets, 50 goals and 150 recurring items",
-  "fr": "100 budgets, 50 objectifs et 150 récurrences",
-  "es": "100 presupuestos, 50 metas y 150 recurrentes"
- },
- {
-  "pt": "Histórico completo e comparação anual",
-  "tipo": "exato",
-  "en": "Full history and yearly comparison",
-  "fr": "Historique complet et comparaison annuelle",
-  "es": "Historial completo y comparación anual"
- },
- {
-  "pt": "Tendências, simulações e projeções da Coco",
-  "tipo": "exato",
-  "en": "Trends, simulations and projections from Coco",
-  "fr": "Tendances, simulations et projections de Coco",
-  "es": "Tendencias, simulaciones y proyecciones de Coco"
- },
- {
-  "pt": "Coco com 10 vezes mais uso por dia e por semana, com assistente flutuante",
-  "tipo": "exato",
-  "en": "Coco with 10 times more usage per day and per week, with floating assistant",
-  "fr": "Coco avec 10 fois plus d’usage par jour et par semaine, avec assistant flottant",
-  "es": "Coco con 10 veces más uso por día y por semana, con asistente flotante"
- },
- {
-  "pt": "Sem anúncios",
-  "tipo": "exato",
-  "en": "No ads",
-  "fr": "Sans publicité",
-  "es": "Sin anuncios"
- },
- {
-  "pt": "Acesso antecipado e atendimento prioritário",
-  "tipo": "exato",
-  "en": "Early access and priority support",
-  "fr": "Accès anticipé et assistance prioritaire",
-  "es": "Acceso anticipado y atención prioritaria"
- },
- {
-  "pt": "Como funciona a cobrança?",
-  "tipo": "exato",
-  "en": "How does billing work?",
-  "fr": "Comment fonctionne la facturation ?",
-  "es": "¿Cómo funciona el cobro?"
- },
- {
-  "pt": "No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova a cada mês ou ano, e o plano é liberado quando o pagamento é confirmado.",
-  "tipo": "exato",
-  "en": "By credit card, through Stripe. You type your card on Stripe's secure page — OAZE never sees or stores the number or security code. The subscription renews every month or year, and the plan unlocks once the payment is confirmed.",
-  "fr": "Par carte de crédit, via Stripe. La carte est saisie sur la page sécurisée de Stripe — OAZE ne voit ni ne garde le numéro ou le code de sécurité. L'abonnement se renouvelle chaque mois ou chaque année, et la formule est activée dès que le paiement est confirmé.",
-  "es": "Con tarjeta de crédito, a través de Stripe. La tarjeta se ingresa en la página segura de Stripe — OAZE no ve ni guarda el número ni el código de seguridad. La suscripción se renueva cada mes o año, y el plan se habilita cuando se confirma el pago."
- },
- {
-  "pt": "Posso cancelar quando quiser?",
-  "tipo": "exato",
-  "en": "Can I cancel anytime?",
-  "fr": "Puis-je annuler quand je veux ?",
-  "es": "¿Puedo cancelar cuando quiera?"
- },
- {
-  "pt": "Sim, em Configurações. A renovação para na hora e você continua com o plano até o fim do período que já pagou.",
-  "tipo": "exato",
-  "en": "Yes, in Settings. Renewal stops right away and you keep the plan until the end of the period you already paid for.",
-  "fr": "Oui, dans Paramètres. Le renouvellement s'arrête tout de suite et vous gardez la formule jusqu'à la fin de la période déjà payée.",
-  "es": "Sí, en Configuración. La renovación se detiene al instante y mantienes el plan hasta el fin del período que ya pagaste."
- },
- {
-  "pt": "O que acontece com meus dados se eu voltar para o Semente?",
-  "tipo": "exato",
-  "en": "What happens to my data if I go back to Semente?",
-  "fr": "Que deviennent mes données si je reviens à Semente ?",
-  "es": "¿Qué pasa con mis datos si vuelvo a Semente?"
- },
- {
-  "pt": "Nada é apagado. Se você tiver mais contas ou cartões do que o Semente permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.",
-  "tipo": "exato",
-  "en": "Nothing is deleted. If you have more accounts or cards than Semente allows, they stay visible and usable — what changes is that you can't create new ones until you're within the limit or subscribe again.",
-  "fr": "Rien n'est supprimé. Si vous avez plus de comptes ou de cartes que Semente ne le permet, ils restent visibles et utilisables — ce qui change, c'est que vous ne pouvez pas en créer de nouveaux tant que vous n'êtes pas dans la limite ou réabonné.",
-  "es": "No se borra nada. Si tienes más cuentas o tarjetas de las que permite Semente, siguen visibles y utilizables — lo que cambia es que no creas nuevas hasta quedar dentro del límite o volver a suscribirte."
- },
- {
-  "pt": "Meus dados financeiros são enviados para a inteligência artificial?",
-  "tipo": "exato",
-  "en": "Is my financial data sent to the AI?",
-  "fr": "Mes données financières sont-elles envoyées à l'intelligence artificielle ?",
-  "es": "¿Mis datos financieros se envían a la inteligencia artificial?"
- },
- {
-  "pt": "Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela da Coco mostra o que segue junto antes de você enviar.",
-  "tipo": "exato",
-  "en": "Only an aggregated summary of the month you’re viewing — totals, category summaries and goals. Never your entry list, account names or email. Coco’s screen shows what will be sent before you submit.",
-  "fr": "Seul un résumé agrégé du mois consulté est envoyé : totaux, catégories regroupées et objectifs. Jamais la liste des opérations, les noms de comptes ou votre e-mail. L’écran de Coco vous montre ce qui sera envoyé avant validation.",
-  "es": "Solo se envía un resumen agregado del mes que estás viendo: totales, categorías consolidadas y metas. Nunca la lista de movimientos, nombres de cuentas ni tu correo. La pantalla de Coco muestra qué se enviará antes de confirmar."
- },
- {
-  "pt": "Preciso de conta para usar o OAZE?",
-  "tipo": "exato",
-  "en": "Do I need an account to use OAZE?",
-  "fr": "Ai-je besoin d'un compte pour utiliser OAZE ?",
-  "es": "¿Necesito una cuenta para usar OAZE?"
- },
- {
-  "pt": "Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com a Coco.",
-  "tipo": "exato",
-  "en": "No. The dashboard works on this device without an account. Sign in to see the same data on your computer and phone, and to talk with Coco.",
-  "fr": "Non. Le tableau de bord fonctionne sur cet appareil sans compte. Connectez-vous pour retrouver les mêmes données sur ordinateur et téléphone, et pour parler à Coco.",
-  "es": "No. El panel funciona en este dispositivo sin una cuenta. Inicia sesión para ver los mismos datos en la computadora y el móvil, y para hablar con Coco."
- }
+  {
+    "pt": "Semente",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Plante o hábito de olhar o mês.",
+    "tipo": "exato",
+    "en": "Plant the habit of checking your month.",
+    "fr": "Plantez l'habitude de regarder votre mois.",
+    "es": "Planta el hábito de mirar tu mes."
+  },
+  {
+    "pt": "Oásis",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Tudo o que o OAZE faz, sem teto no dia a dia.",
+    "tipo": "exato",
+    "en": "Everything OAZE does, with no ceiling on your day-to-day.",
+    "fr": "Tout ce que fait OAZE, sans plafond au quotidien.",
+    "es": "Todo lo que hace OAZE, sin techo en el día a día."
+  },
+  {
+    "pt": "US$",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Ilimitado",
+    "tipo": "exato",
+    "en": "Unlimited",
+    "fr": "Illimité",
+    "es": "Ilimitado"
+  },
+  {
+    "pt": "{0}{1} · ilimitado",
+    "tipo": "padrao",
+    "en": "{0}{1} · unlimited",
+    "fr": "{0}{1} · illimité",
+    "es": "{0}{1} · ilimitado"
+  },
+  {
+    "pt": "Espaços financeiros",
+    "tipo": "exato",
+    "en": "Financial spaces",
+    "fr": "Espaces financiers",
+    "es": "Espacios financieros"
+  },
+  {
+    "pt": "Contas",
+    "tipo": "exato",
+    "en": "Accounts",
+    "fr": "Comptes",
+    "es": "Cuentas"
+  },
+  {
+    "pt": "Cartões de crédito",
+    "tipo": "exato",
+    "en": "Credit cards",
+    "fr": "Cartes de crédit",
+    "es": "Tarjetas de crédito"
+  },
+  {
+    "pt": "Movimentações por mês",
+    "tipo": "exato",
+    "en": "Transactions per month",
+    "fr": "Mouvements par mois",
+    "es": "Movimientos por mes"
+  },
+  {
+    "pt": "Categorias personalizadas",
+    "tipo": "exato",
+    "en": "Custom categories",
+    "fr": "Catégories personnalisées",
+    "es": "Categorías personalizadas"
+  },
+  {
+    "pt": "Orçamentos ativos",
+    "tipo": "exato",
+    "en": "Active budgets",
+    "fr": "Budgets actifs",
+    "es": "Presupuestos activos"
+  },
+  {
+    "pt": "Metas ativas",
+    "tipo": "exato",
+    "en": "Active goals",
+    "fr": "Objectifs actifs",
+    "es": "Metas activas"
+  },
+  {
+    "pt": "Recorrências",
+    "tipo": "exato",
+    "en": "Recurring",
+    "fr": "Récurrences",
+    "es": "Recurrentes"
+  },
+  {
+    "pt": "Histórico disponível",
+    "tipo": "exato",
+    "en": "History available",
+    "fr": "Historique disponible",
+    "es": "Historial disponible"
+  },
+  {
+    "pt": "Conversas com a Coco por dia",
+    "tipo": "exato",
+    "en": "Coco conversations per day",
+    "fr": "Conversations avec Coco par jour",
+    "es": "Conversaciones con Coco por día"
+  },
+  {
+    "pt": "Conversas com a Coco por semana",
+    "tipo": "exato",
+    "en": "Coco conversations per week",
+    "fr": "Conversations avec Coco par semaine",
+    "es": "Conversaciones con Coco por semana"
+  },
+  {
+    "pt": "Coco flutuante no app",
+    "tipo": "exato",
+    "en": "Floating Coco assistant in the app",
+    "fr": "Assistante Coco flottante dans l’application",
+    "es": "Asistente Coco flotante en la app"
+  },
+  {
+    "pt": "Comparação entre meses",
+    "tipo": "exato",
+    "en": "Month-to-month comparison",
+    "fr": "Comparaison entre les mois",
+    "es": "Comparación entre meses"
+  },
+  {
+    "pt": "Comparação anual",
+    "tipo": "exato",
+    "en": "Yearly comparison",
+    "fr": "Comparaison annuelle",
+    "es": "Comparación anual"
+  },
+  {
+    "pt": "Tendências, simulações e projeções",
+    "tipo": "exato",
+    "en": "Trends, simulations and projections",
+    "fr": "Tendances, simulations et projections",
+    "es": "Tendencias, simulaciones y proyecciones"
+  },
+  {
+    "pt": "Calendário financeiro",
+    "tipo": "exato",
+    "en": "Financial calendar",
+    "fr": "Calendrier financier",
+    "es": "Calendario financiero"
+  },
+  {
+    "pt": "Contas e cartões em dólar, euro e outras moedas",
+    "tipo": "exato",
+    "en": "Accounts and cards in dollars, euros and other currencies",
+    "fr": "Comptes et cartes en dollars, euros et autres devises",
+    "es": "Cuentas y tarjetas en dólares, euros y otras monedas"
+  },
+  {
+    "pt": "Exportar em CSV",
+    "tipo": "exato",
+    "en": "Export to CSV",
+    "fr": "Exporter en CSV",
+    "es": "Exportar en CSV"
+  },
+  {
+    "pt": "Exportar em PDF",
+    "tipo": "exato",
+    "en": "Export to PDF",
+    "fr": "Exporter en PDF",
+    "es": "Exportar en PDF"
+  },
+  {
+    "pt": "Acesso antecipado a novidades",
+    "tipo": "exato",
+    "en": "Early access to new features",
+    "fr": "Accès anticipé aux nouveautés",
+    "es": "Acceso anticipado a novedades"
+  },
+  {
+    "pt": "Atendimento prioritário",
+    "tipo": "exato",
+    "en": "Priority support",
+    "fr": "Assistance prioritaire",
+    "es": "Atención prioritaria"
+  },
+  {
+    "pt": "1 espaço financeiro, 2 contas e 3 cartões",
+    "tipo": "exato",
+    "en": "1 financial space, 2 accounts and 3 cards",
+    "fr": "1 espace financier, 2 comptes et 3 cartes",
+    "es": "1 espacio financiero, 2 cuentas y 3 tarjetas"
+  },
+  {
+    "pt": "Movimentações sem limite: a cada 20, um anúncio curto (Android e navegador)",
+    "tipo": "exato",
+    "en": "Unlimited transactions: every 20, one short ad (Android and web)",
+    "fr": "Opérations illimitées : tous les 20, une courte publicité (Android et navigateur)",
+    "es": "Movimientos sin límite: cada 20, un anuncio corto (Android y navegador)"
+  },
+  {
+    "pt": "1 orçamento, 1 meta e 3 recorrências",
+    "tipo": "exato",
+    "en": "1 budget, 1 goal and 3 recurring items",
+    "fr": "1 budget, 1 objectif et 3 récurrences",
+    "es": "1 presupuesto, 1 meta y 3 recurrentes"
+  },
+  {
+    "pt": "Histórico dos últimos 3 meses",
+    "tipo": "exato",
+    "en": "History of the last 3 months",
+    "fr": "Historique des 3 derniers mois",
+    "es": "Historial de los últimos 3 meses"
+  },
+  {
+    "pt": "Coco com uso diário e semanal, mostrado em porcentagem",
+    "tipo": "exato",
+    "en": "Coco with daily and weekly usage, shown as a percentage",
+    "fr": "Coco avec un usage quotidien et hebdomadaire, affiché en pourcentage",
+    "es": "Coco con uso diario y semanal, mostrado en porcentaje"
+  },
+  {
+    "pt": "App para Windows incluso (exclusivo de quem assina)",
+    "tipo": "exato",
+    "en": "Windows app included (exclusive to subscribers)",
+    "fr": "App Windows inclus (réservé aux abonnés)",
+    "es": "App para Windows incluido (exclusivo para suscriptores)"
+  },
+  {
+    "pt": "Até 5 espaços financeiros e 50 contas",
+    "tipo": "exato",
+    "en": "Up to 5 financial spaces and 50 accounts",
+    "fr": "Jusqu'à 5 espaces financiers et 50 comptes",
+    "es": "Hasta 5 espacios financieros y 50 cuentas"
+  },
+  {
+    "pt": "Cartões e movimentações sem limite",
+    "tipo": "exato",
+    "en": "Unlimited cards and transactions",
+    "fr": "Cartes et mouvements illimités",
+    "es": "Tarjetas y movimientos sin límite"
+  },
+  {
+    "pt": "100 orçamentos, 50 metas e 150 recorrências",
+    "tipo": "exato",
+    "en": "100 budgets, 50 goals and 150 recurring items",
+    "fr": "100 budgets, 50 objectifs et 150 récurrences",
+    "es": "100 presupuestos, 50 metas y 150 recurrentes"
+  },
+  {
+    "pt": "Histórico completo e comparação anual",
+    "tipo": "exato",
+    "en": "Full history and yearly comparison",
+    "fr": "Historique complet et comparaison annuelle",
+    "es": "Historial completo y comparación anual"
+  },
+  {
+    "pt": "Tendências, simulações e projeções da Coco",
+    "tipo": "exato",
+    "en": "Trends, simulations and projections from Coco",
+    "fr": "Tendances, simulations et projections de Coco",
+    "es": "Tendencias, simulaciones y proyecciones de Coco"
+  },
+  {
+    "pt": "Coco com 10 vezes mais uso por dia e por semana, com assistente flutuante",
+    "tipo": "exato",
+    "en": "Coco with 10 times more usage per day and per week, with floating assistant",
+    "fr": "Coco avec 10 fois plus d’usage par jour et par semaine, avec assistant flottant",
+    "es": "Coco con 10 veces más uso por día y por semana, con asistente flotante"
+  },
+  {
+    "pt": "Sem anúncios",
+    "tipo": "exato",
+    "en": "No ads",
+    "fr": "Sans publicité",
+    "es": "Sin anuncios"
+  },
+  {
+    "pt": "Acesso antecipado e atendimento prioritário",
+    "tipo": "exato",
+    "en": "Early access and priority support",
+    "fr": "Accès anticipé et assistance prioritaire",
+    "es": "Acceso anticipado y atención prioritaria"
+  },
+  {
+    "pt": "O app para Windows é grátis?",
+    "tipo": "exato",
+    "en": "Is the Windows app free?",
+    "fr": "L'app Windows est-elle gratuite ?",
+    "es": "¿La app para Windows es gratis?"
+  },
+  {
+    "pt": "Não. O app do OAZE para computador (Windows) é um benefício de quem assina o Oásis. No celular (Android) e no navegador, o Semente continua grátis.",
+    "tipo": "exato",
+    "en": "No. The OAZE computer app (Windows) is a benefit for Oásis subscribers. On the phone (Android) and in the browser, Semente stays free.",
+    "fr": "Non. L'app OAZE pour ordinateur (Windows) est un avantage des abonnés Oásis. Sur le téléphone (Android) et dans le navigateur, Semente reste gratuit.",
+    "es": "No. La app de OAZE para computadora (Windows) es un beneficio de quienes se suscriben a Oásis. En el celular (Android) y en el navegador, Semente sigue gratis."
+  },
+  {
+    "pt": "Como funciona a cobrança?",
+    "tipo": "exato",
+    "en": "How does billing work?",
+    "fr": "Comment fonctionne la facturation ?",
+    "es": "¿Cómo funciona el cobro?"
+  },
+  {
+    "pt": "No cartão de crédito, pela Stripe. O cartão é digitado na página segura da Stripe — o OAZE não vê nem guarda o número ou o código de segurança. A assinatura renova a cada mês ou ano, e o plano é liberado quando o pagamento é confirmado.",
+    "tipo": "exato",
+    "en": "By credit card, through Stripe. You type your card on Stripe's secure page — OAZE never sees or stores the number or security code. The subscription renews every month or year, and the plan unlocks once the payment is confirmed.",
+    "fr": "Par carte de crédit, via Stripe. La carte est saisie sur la page sécurisée de Stripe — OAZE ne voit ni ne garde le numéro ou le code de sécurité. L'abonnement se renouvelle chaque mois ou chaque année, et la formule est activée dès que le paiement est confirmé.",
+    "es": "Con tarjeta de crédito, a través de Stripe. La tarjeta se ingresa en la página segura de Stripe — OAZE no ve ni guarda el número ni el código de seguridad. La suscripción se renueva cada mes o año, y el plan se habilita cuando se confirma el pago."
+  },
+  {
+    "pt": "Posso cancelar quando quiser?",
+    "tipo": "exato",
+    "en": "Can I cancel anytime?",
+    "fr": "Puis-je annuler quand je veux ?",
+    "es": "¿Puedo cancelar cuando quiera?"
+  },
+  {
+    "pt": "Sim, em Configurações. A renovação para na hora e você continua com o plano até o fim do período que já pagou.",
+    "tipo": "exato",
+    "en": "Yes, in Settings. Renewal stops right away and you keep the plan until the end of the period you already paid for.",
+    "fr": "Oui, dans Paramètres. Le renouvellement s'arrête tout de suite et vous gardez la formule jusqu'à la fin de la période déjà payée.",
+    "es": "Sí, en Configuración. La renovación se detiene al instante y mantienes el plan hasta el fin del período que ya pagaste."
+  },
+  {
+    "pt": "O que acontece com meus dados se eu voltar para o Semente?",
+    "tipo": "exato",
+    "en": "What happens to my data if I go back to Semente?",
+    "fr": "Que deviennent mes données si je reviens à Semente ?",
+    "es": "¿Qué pasa con mis datos si vuelvo a Semente?"
+  },
+  {
+    "pt": "Nada é apagado. Se você tiver mais contas ou cartões do que o Semente permite, eles continuam visíveis e utilizáveis — o que muda é que você não cria novos até ficar dentro do limite ou assinar de novo.",
+    "tipo": "exato",
+    "en": "Nothing is deleted. If you have more accounts or cards than Semente allows, they stay visible and usable — what changes is that you can't create new ones until you're within the limit or subscribe again.",
+    "fr": "Rien n'est supprimé. Si vous avez plus de comptes ou de cartes que Semente ne le permet, ils restent visibles et utilisables — ce qui change, c'est que vous ne pouvez pas en créer de nouveaux tant que vous n'êtes pas dans la limite ou réabonné.",
+    "es": "No se borra nada. Si tienes más cuentas o tarjetas de las que permite Semente, siguen visibles y utilizables — lo que cambia es que no creas nuevas hasta quedar dentro del límite o volver a suscribirte."
+  },
+  {
+    "pt": "Meus dados financeiros são enviados para a inteligência artificial?",
+    "tipo": "exato",
+    "en": "Is my financial data sent to the AI?",
+    "fr": "Mes données financières sont-elles envoyées à l'intelligence artificielle ?",
+    "es": "¿Mis datos financieros se envían a la inteligencia artificial?"
+  },
+  {
+    "pt": "Só um resumo agregado do mês que você está olhando — totais, categorias consolidadas e metas. Nunca a lista de lançamentos, nomes de contas ou seu e-mail. A tela da Coco mostra o que segue junto antes de você enviar.",
+    "tipo": "exato",
+    "en": "Only an aggregated summary of the month you’re viewing — totals, category summaries and goals. Never your entry list, account names or email. Coco’s screen shows what will be sent before you submit.",
+    "fr": "Seul un résumé agrégé du mois consulté est envoyé : totaux, catégories regroupées et objectifs. Jamais la liste des opérations, les noms de comptes ou votre e-mail. L’écran de Coco vous montre ce qui sera envoyé avant validation.",
+    "es": "Solo se envía un resumen agregado del mes que estás viendo: totales, categorías consolidadas y metas. Nunca la lista de movimientos, nombres de cuentas ni tu correo. La pantalla de Coco muestra qué se enviará antes de confirmar."
+  },
+  {
+    "pt": "Preciso de conta para usar o OAZE?",
+    "tipo": "exato",
+    "en": "Do I need an account to use OAZE?",
+    "fr": "Ai-je besoin d'un compte pour utiliser OAZE ?",
+    "es": "¿Necesito una cuenta para usar OAZE?"
+  },
+  {
+    "pt": "Não. O painel funciona neste aparelho sem conta nenhuma. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com a Coco.",
+    "tipo": "exato",
+    "en": "No. The dashboard works on this device without an account. Sign in to see the same data on your computer and phone, and to talk with Coco.",
+    "fr": "Non. Le tableau de bord fonctionne sur cet appareil sans compte. Connectez-vous pour retrouver les mêmes données sur ordinateur et téléphone, et pour parler à Coco.",
+    "es": "No. El panel funciona en este dispositivo sin una cuenta. Inicia sesión para ver los mismos datos en la computadora y el móvil, y para hablar con Coco."
+  }
 ]
