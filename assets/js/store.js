@@ -215,16 +215,32 @@
   const INVESTMENT_TYPES = ['Porquinho', 'Renda fixa', 'Tesouro Direto', 'CDB', 'Fundo de investimento', 'Ações', 'FIIs', 'ETF', 'Criptomoeda', 'Previdência', 'Poupança', 'Outro'];
 
   /* mesmos hexes que a migração produz — perfil novo e migrado ficam iguais */
+  /* 01/11/2026: as categorias padrão nascem com tons médios vivos da paleta
+     nova. Os tons antigos (apagados) ficam em CORES_PADRAO_ANTIGAS só para
+     reconhecer e trocar a cor de quem nunca escolheu outra. */
   const DEFAULT_EXPENSE_CATS = [
-    ['Moradia', '#34557A', 'house'], ['Alimentação', '#B07C3E', 'utensils'], ['Transporte', '#2E6E7E', 'car'],
-    ['Saúde', '#3B6558', 'heart-pulse'], ['Educação', '#7B5A8E', 'graduation-cap'], ['Lazer', '#1F6B4F', 'gamepad-2'],
-    ['Compras', '#9A5F35', 'shopping-bag'], ['Assinaturas', '#A85A32', 'repeat'], ['Impostos e taxas', '#4E3A55', 'receipt'],
-    ['Outros', '#8A7A62', 'circle-ellipsis']
+    ['Moradia', '#3177D8', 'house'], ['Alimentação', '#D87F31', 'utensils'], ['Transporte', '#2AB5B0', 'car'],
+    ['Saúde', '#D83131', 'heart-pulse'], ['Educação', '#9231D8', 'graduation-cap'], ['Lazer', '#2FB344', 'gamepad-2'],
+    ['Compras', '#D83169', 'shopping-bag'], ['Assinaturas', '#D8319B', 'repeat'], ['Impostos e taxas', '#966340', 'receipt'],
+    ['Outros', '#7B858E', 'circle-ellipsis']
   ];
   const DEFAULT_INCOME_CATS = [
-    ['Salário', '#34557A', 'banknote'], ['Freelance / PJ', '#2E6E7E', 'briefcase'], ['Rendimentos', '#1F6B4F', 'trending-up'],
-    ['Reembolso', '#B07C3E', 'arrow-left-right'], ['Vendas', '#7B5A8E', 'tag'], ['Outros', '#8A7A62', 'circle-ellipsis']
+    ['Salário', '#2FB344', 'banknote'], ['Freelance / PJ', '#2AB5B0', 'briefcase'], ['Rendimentos', '#B7D831', 'trending-up'],
+    ['Reembolso', '#D8A031', 'arrow-left-right'], ['Vendas', '#3F31D8', 'tag'], ['Outros', '#7B858E', 'circle-ellipsis']
   ];
+  const CORES_PADRAO_ANTIGAS = {
+    moradia: '#34557A', alimentacao: '#B07C3E', transporte: '#2E6E7E', saude: '#3B6558', educacao: '#7B5A8E', lazer: '#1F6B4F',
+    compras: '#9A5F35', assinaturas: '#A85A32', 'impostos e taxas': '#4E3A55', outros: '#8A7A62',
+    salario: '#34557A', 'freelance / pj': '#2E6E7E', rendimentos: '#1F6B4F', reembolso: '#B07C3E', vendas: '#7B5A8E'
+  };
+  function corPadraoNova(nome, kind, corAtual) {
+    const chave = U.norm(nome || '');
+    const antiga = CORES_PADRAO_ANTIGAS[chave];
+    if (!antiga || String(corAtual || '').toUpperCase() !== antiga) return null;
+    const lista = kind === 'income' ? DEFAULT_INCOME_CATS : DEFAULT_EXPENSE_CATS;
+    const achada = lista.find((c) => U.norm(c[0]) === chave) || DEFAULT_EXPENSE_CATS.concat(DEFAULT_INCOME_CATS).find((c) => U.norm(c[0]) === chave);
+    return achada ? achada[1] : null;
+  }
 
   /* ============================================================ */
 
@@ -555,7 +571,7 @@
         id: c.id || U.uid('cat'),
         name: String(c.name || 'Categoria'),
         kind: c.kind === 'income' ? 'income' : 'expense',
-        color: migrateColor(c.color || '#9AA0AC'),
+        color: corPadraoNova(c.name, c.kind, migrateColor(c.color || '#9AA0AC')) || migrateColor(c.color || '#9AA0AC'),
         icon: c.icon ? String(c.icon) : null   // null = deduzido pelo nome
       }));
     prof.transactions = (Array.isArray(prof.transactions) ? prof.transactions : []).map(Store.normalizeTx);

@@ -216,9 +216,9 @@
   }
   function categoryName(id) { return (profile().categories.find((c) => c.id === id) || {}).name || 'Sem categoria'; }
   const LEGACY_CATEGORY_COLORS = {
-    moradia:'#34557A',alimentacao:'#B07C3E',transporte:'#2E6E7E',saude:'#3B6558',educacao:'#7B5A8E',
-    lazer:'#1F6B4F',compras:'#9A5F35',assinaturas:'#A85A32','impostos e taxas':'#4E3A55',
-    salario:'#34557A','freelance / pj':'#2E6E7E',rendimentos:'#1F6B4F',reembolso:'#B07C3E',vendas:'#7B5A8E',outros:'#8A7A62'
+    moradia:'#3177D8',alimentacao:'#D87F31',transporte:'#2AB5B0',saude:'#D83131',educacao:'#9231D8',
+    lazer:'#2FB344',compras:'#D83169',assinaturas:'#D8319B','impostos e taxas':'#966340',
+    salario:'#2FB344','freelance / pj':'#2AB5B0',rendimentos:'#B7D831',reembolso:'#D8A031',vendas:'#3F31D8',outros:'#7B858E'
   };
   function categoryColor(category) {
     const raw = String(category?.color || '').trim();
@@ -413,12 +413,16 @@
   }
   function cardButton(item, selected, i) {
     const d = item.data, name = d.name || d.bank || 'Sem nome', institution = d.bank || d.name || '';
-    const plastic=d.customColor?safeColor(d.color):bankBrand(institution,d.color), ink='#F0E5CF';
+    /* O cartão é da cor de identidade do banco (01/11/2026): a mesma do logo,
+       gravada no cadastro. Cor personalizada continua mandando. O texto
+       escolhe escuro ou claro conforme o fundo, para ler em qualquer marca. */
+    const corBase=d.customColor?safeColor(d.color):marcaCores(d).bg;
+    const plastic=/^#[0-9a-f]{6}$/i.test(corBase)?corBase:'#1D3442', ink=cardInk(plastic);
     const brand=global.Icons?.bankBrand(institution);
     const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
     const visibleLast=state.hideMoney ? ocultarDigitos(last) : last;
-    return `<div data-select="${esc(d.id)}" data-oaze-color="${plastic}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}${item.originProfileId?' · fatura no perfil '+esc(item.originProfile.name):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong>${item.originProfileId?`<span class="v3-card-linked" title="Fatura no perfil ${esc(item.originProfile.name)}">↗</span>`:`<button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`}</span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-chip" aria-hidden="true"></span><span class="v3-card-footer"><span class="v3-card-number"><small>FINAL DO CARTÃO</small><span>${esc(visibleLast||'—')}</span></span>${d.validThru?`<span class="v3-card-validity"><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}</span><img class="v3-card-oaze" src="/assets/brand/oaze-logo-mono-milk.svg" alt=""></span></div>`;
+    return `<div data-select="${esc(d.id)}" data-oaze-color="${plastic}" class="v3-wallet-item${selected ? ' is-selected' : ''}${ink==='#14212A' ? ' is-claro' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}${item.originProfileId?' · fatura no perfil '+esc(item.originProfile.name):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong>${item.originProfileId?`<span class="v3-card-linked" title="Fatura no perfil ${esc(item.originProfile.name)}">↗</span>`:`<button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`}</span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-chip" aria-hidden="true"></span><span class="v3-card-footer"><span class="v3-card-number"><small>FINAL DO CARTÃO</small><span>${esc(visibleLast||'—')}</span></span>${d.validThru?`<span class="v3-card-validity"><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}</span><img class="v3-card-oaze" src="/assets/brand/oaze-logo-mono-milk.svg" alt=""></span></div>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -2187,7 +2191,9 @@
       ['Analisar','analyze',[['data-oz-mais="relatorio"','chart-line','Relatório personalizado','período, conta, categoria e tag'],['data-action="estado-oaze"','receipt','Estado do OAZE','relatório em PDF'],['data-action="export-csv"','reports','Exportar lançamentos','planilha CSV'],['data-oz-mais="ir"','receipt','Relatório para o IR','rendimentos, dedutíveis, bens']]],
       ['Ferramentas','tools',[['data-go="coco"','coco','Coco','conversa e análises'],['data-oz-comprovante','receipt','Importar comprovante','foto, câmera ou PDF'],['data-oz-mais="nota"','scan-line','Nota fiscal (QR)','loja, total e itens da NFC-e'],['data-oz-mais="banco"','smartphone','Avisos do banco','lançar pela notificação'],['data-go="settings"','settings','Configurações',desc.settings]]]
     ];
-    return `<div class="v3-more-lista">${secoes.map(([titulo,tom,linhas])=>`<section class="v3-more-secao" data-tom="${tom}"><h2>${esc(titulo)}</h2>${linhas.map(([attr,ic,t,s])=>`<button type="button" ${attr}><span class="v3-more-ic">${ic==='coco'?cocoPetIcon:uiIcons.has(ic)?icon(ic):(global.Icons?.lucide(ic,22)?.outerHTML||icon('more'))}</span><span class="v3-more-txt"><strong>${esc(t)}</strong><small>${esc(s||'')}</small></span><span class="v3-more-seta" aria-hidden="true">›</span></button>`).join('')}</section>`).join('')}</div>`;
+    /* Cada item com a própria cor viva (classe, não style: vale também no Windows). */
+    let corItem=0;
+    return `<div class="v3-more-lista">${secoes.map(([titulo,tom,linhas])=>`<section class="v3-more-secao" data-tom="${tom}"><h2>${esc(titulo)}</h2>${linhas.map(([attr,ic,t,s])=>`<button type="button" ${attr}><span class="v3-more-ic oz-cor-${(corItem++)%10}">${ic==='coco'?cocoPetIcon:uiIcons.has(ic)?icon(ic):(global.Icons?.lucide(ic,22)?.outerHTML||icon('more'))}</span><span class="v3-more-txt"><strong>${esc(t)}</strong><small>${esc(s||'')}</small></span><span class="v3-more-seta" aria-hidden="true">›</span></button>`).join('')}</section>`).join('')}</div>`;
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/rostinhos/02_feliz.png" alt="Coco"></div>`;
