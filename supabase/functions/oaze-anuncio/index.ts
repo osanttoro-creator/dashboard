@@ -101,20 +101,25 @@ Deno.serve(async (req: Request) => {
 
     try {
       const chave = (await chavesDoGoogle()).get(keyId);
-      if (!chave) return resposta({ ok: false, motivo: 'chave' }, 400);
+      if (!chave) { console.log(JSON.stringify({ evento: 'anuncio_chave_desconhecida', keyId })); return resposta({ ok: false, motivo: 'chave' }, 400); }
       const valida = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, chave,
         derParaBruto(b64ParaBytes(assinatura)), new TextEncoder().encode(conteudo));
-      if (!valida) return resposta({ ok: false, motivo: 'assinatura' }, 400);
-    } catch {
+      if (!valida) { console.log(JSON.stringify({ evento: 'anuncio_assinatura_invalida', keyId })); return resposta({ ok: false, motivo: 'assinatura' }, 400); }
+    } catch (e) {
+      console.log(JSON.stringify({ evento: 'anuncio_verificacao_falhou', erro: String((e as Error)?.message || e).slice(0, 80) }));
       return resposta({ ok: false, motivo: 'verificacao' }, 400);
     }
 
-    /* A partir daqui a URL veio do Google. Ainda assim: usuário bem
+    /* A partir daqui a URL veio do Google: a resposta é 200 mesmo quando
+       nada é creditado (a verificação da própria AdMob chega sem usuário,
+       e callbacks sem 200 são repetidos). Ainda assim: usuário bem
        formado, chamada recente e bloco de anúncio esperado. */
-    if (!uuid.test(usuario) || !/^[\w.:-]{4,200}$/.test(transacao)) return resposta({ ok: false, motivo: 'dados' }, 400);
-    if (!Number.isFinite(quando) || Math.abs(Date.now() - quando) > 3600_000) return resposta({ ok: false, motivo: 'antigo' }, 400);
+    const recusa = (motivo: string) => { console.log(JSON.stringify({ evento: 'anuncio_recusado', motivo })); return resposta({ ok: false, motivo }); };
+    if (!usuario) return recusa('verificacao_sem_usuario');
+    if (!uuid.test(usuario) || !/^[\w.:-]{4,200}$/.test(transacao)) return recusa('dados');
+    if (!Number.isFinite(quando) || Math.abs(Date.now() - quando) > 3600_000) return recusa('antigo');
     const unidades = (Deno.env.get('OAZE_ADMOB_AD_UNITS') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-    if (unidades.length && !unidades.includes(adUnit)) return resposta({ ok: false, motivo: 'bloco' }, 400);
+    if (unidades.length && !unidades.includes(adUnit)) return recusa('bloco');
 
     const { data, error } = await admin.rpc('creditar_anuncio', { p_user: usuario, p_transacao: 'admob:' + transacao, p_origem: 'admob' });
     const r = Array.isArray(data) ? data[0] : data;

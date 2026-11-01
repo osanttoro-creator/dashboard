@@ -32,10 +32,17 @@ exige(/\.eq\('moeda', moeda\)/.test(pagamento), 'o preço não é buscado pela m
 /* A lista de campos aceitos continua explícita; cupom e moeda
    entraram nela (código e sigla, nunca valor). Qualquer outro campo
    continua recusado. */
-exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?(, 'cupom')?(, 'canal')?\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
-/* 'canal' só existe para o app Windows voltar por oaze://billing: aceita
-   um único valor e só da origem local do Tauri. */
-exige(/corpo\.canal !== 'windows'/.test(pagamento) && /tauri:\/\/localhost/.test(pagamento),
+exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?(, 'cupom')?(, 'canal')?(, 'teste')?\]\)/.test(pagamento), 'oaze-pagamento não bloqueia campos extras');
+/* Teste grátis: só com true literal, só Pro anual, sem cupom, uma vez,
+   e cancela (não cobra) se faltar cartão no fim. */
+exige(/const teste = corpo\.teste === true/.test(pagamento)
+  && /plano !== 'pro' \|\| ciclo !== 'annual' \|\| corpo\.cupom \|\| !\(await elegivelTeste\(\)\)/.test(pagamento)
+  && /trial_period_days\]', '7'/.test(pagamento)
+  && /missing_payment_method\]', 'cancel'/.test(pagamento), 'o teste grátis não está restrito ao Pro anual de quem nunca assinou');
+/* 'canal' só existe para o app instalado (Windows/Android) voltar por oaze://billing: aceita
+   'windows' só da origem do Tauri e 'android' só da origem do Capacitor. */
+exige(/corpo\.canal === 'windows' && \['http:\/\/tauri\.localhost', 'tauri:\/\/localhost'\]/.test(pagamento)
+  && /corpo\.canal === 'android' && origem === 'https:\/\/localhost'/.test(pagamento),
   'o canal de retorno aceita valor ou origem arbitrária');
 exige(/new Set\(\['acao', 'plano', 'ciclo'(, 'moeda')?, 'codigo'\]\)/.test(pagamento), 'a consulta de cupom aceita campos extras');
 exige(/cupom:minuto/.test(pagamento), 'a consulta de cupom não tem limite próprio contra tentativa e erro');

@@ -77,6 +77,16 @@ Deno.serve(async (req: Request) => {
     const day = await reservarRateLimit(admin, 'coco_realtime:dia', data.user.id, 20, 86400);
     if (!hour.permitido || !day.permitido) return reply(origin, 429, { mensagem: 'Limite de sessões de voz atingido. Use a conversa por texto.' });
   } catch { return reply(origin, 503, { mensagem: 'Voz indisponível agora.' }); }
+  /* 31/10/2026: abrir uma sessão de voz custa 2 unidades da janela
+     diária/semanal da Coco (uma conversa por texto custa 1). */
+  const custoVoz = 2;
+  const { data: reserva, error: erroReserva } = await admin.rpc('reservar_coco', { p_user: data.user.id, p_custo: custoVoz });
+  const r0 = Array.isArray(reserva) ? reserva[0] : reserva;
+  if (erroReserva || !r0) return reply(origin, 503, { mensagem: 'Voz indisponível agora.' });
+  if (!r0.out_permitido) return reply(origin, 429, { mensagem: r0.out_janela === 'semana'
+    ? 'Você usou 100% da Coco nesta semana. O limite renova na segunda-feira.'
+    : 'Você usou 100% da Coco hoje. O limite renova à meia-noite.' });
+  const estornar = async () => { try { await admin.rpc('estornar_coco', { p_user: data.user.id, p_custo: custoVoz }); } catch { /* registrado pelo banco */ } };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 12000);
   try {
@@ -126,12 +136,13 @@ Deno.serve(async (req: Request) => {
         && /^[a-zA-Z0-9_.-]{1,100}$/.test(value) ? value : null;
       console.error(JSON.stringify({ evento: 'coco_live_falhou', status: provider.status,
         tipo: safe(detail?.type), codigo: safe(detail?.code), campo: safe(detail?.param) }));
+      await estornar();
       return reply(origin, 502, { mensagem: 'A sessão de voz não pôde ser aberta. Use a conversa por texto.' });
     }
     const live = await provider.json();
     if (typeof live?.transport?.sdp !== 'string' || typeof live?.session?.id !== 'string')
-      return reply(origin, 502, { mensagem: 'A sessão de voz não pôde ser aberta.' });
+    { await estornar(); return reply(origin, 502, { mensagem: 'A sessão de voz não pôde ser aberta.' }); }
     return reply(origin, 200, { sdp: live.transport.sdp, session_id: live.session.id });
-  } catch { return reply(origin, 504, { mensagem: 'A voz demorou a conectar. Tente novamente.' }); }
+  } catch { await estornar(); return reply(origin, 504, { mensagem: 'A voz demorou a conectar. Tente novamente.' }); }
   finally { clearTimeout(timer); }
 });

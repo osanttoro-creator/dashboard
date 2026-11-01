@@ -82,7 +82,7 @@ function siteUrl(): string | null {
 
 function corpoPermitido(corpo: unknown, acao: string): boolean {
   if (!corpo || typeof corpo !== 'object' || Array.isArray(corpo)) return false;
-  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'cupom', 'canal'])
+  const permitidos = acao === 'assinar' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'cupom', 'canal', 'teste'])
     : acao === 'cupom' ? new Set(['acao', 'plano', 'ciclo', 'moeda', 'codigo'])
       : new Set(['acao']);
   return Object.keys(corpo as Record<string, unknown>).every((k) => permitidos.has(k));
@@ -205,19 +205,41 @@ Deno.serve(async (req: Request) => {
   let corpo: Record<string, unknown> = {};
   try { corpo = await req.json(); } catch { /* validado abaixo */ }
   const acao = typeof corpo.acao === 'string' ? corpo.acao : '';
-  if (!['assinar', 'cancelar', 'cupom'].includes(acao) || !corpoPermitido(corpo, acao)) {
+  if (!['assinar', 'cancelar', 'cupom', 'teste'].includes(acao) || !corpoPermitido(corpo, acao)) {
     return json({ erro: 'acao', mensagem: 'Ação inválida.' }, 400, origem);
   }
-  if (corpo.canal !== undefined && (corpo.canal !== 'windows' || !['http://tauri.localhost', 'tauri://localhost'].includes(origem || ''))) {
+  /* canal: o app instalado volta por retorno-app.html → oaze://billing.
+     Windows vem da origem do Tauri; Android, da origem do Capacitor. */
+  const canalOk = corpo.canal === undefined
+    || (corpo.canal === 'windows' && ['http://tauri.localhost', 'tauri://localhost'].includes(origem || ''))
+    || (corpo.canal === 'android' && origem === 'https://localhost');
+  if (!canalOk) {
     return json({ erro: 'canal', mensagem: 'Canal de retorno inválido.' }, 400, origem);
   }
-  const retornoWindows = acao === 'assinar' && corpo.canal === 'windows';
+  /* Nome mantido: vale para qualquer app instalado, não só o Windows. */
+  const retornoWindows = acao === 'assinar' && (corpo.canal === 'windows' || corpo.canal === 'android');
 
   const { data: atual } = await admin.from('subscriptions')
     .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
     .eq('user_id', usuario.id).maybeSingle();
 
+  /* TESTE GRÁTIS DE 7 DIAS (31/10/2026)
+     Só no Pro anual e só para quem nunca teve assinatura paga nem
+     teste: nenhuma intenção que chegou a ativar, cancelar ou estornar,
+     e nenhuma assinatura do Asaas. O cartão é pedido no Checkout; sem
+     cartão válido no fim do teste, a Stripe cancela em vez de cobrar. */
+  async function elegivelTeste(): Promise<boolean> {
+    if (atual?.asaas_subscription_id) return false;
+    if (atual && atual.plan_id !== 'free' && atual.status !== 'free') return false;
+    const { data: antes } = await admin.from('stripe_intencoes').select('id')
+      .eq('user_id', usuario.id).in('status', ['ativa', 'cancelada', 'estornada']).limit(1);
+    return !(antes && antes.length);
+  }
+
   try {
+    if (acao === 'teste') {
+      return json({ ok: true, elegivel: await elegivelTeste(), dias: 7 }, 200, origem);
+    }
     if (acao === 'cancelar') {
       if (atual?.stripe_subscription_id) {
         const p = new URLSearchParams({ cancel_at_period_end: 'true' });
@@ -295,6 +317,11 @@ Deno.serve(async (req: Request) => {
     /* Cupom: validado de novo aqui — o que o navegador mostrou antes
        não vale como prova. Cupom que deixou de valer entre a tela e o
        clique volta como erro, e nada é cobrado. */
+    const teste = corpo.teste === true;
+    if (teste && (plano !== 'pro' || ciclo !== 'annual' || corpo.cupom || !(await elegivelTeste()))) {
+      return json({ erro: 'teste_indisponivel', mensagem: 'O teste grátis vale uma vez, no Pro anual. Nada foi cobrado.' }, 409, origem);
+    }
+
     let cupom: Cupom | null = null;
     if (corpo.cupom !== undefined && corpo.cupom !== null && corpo.cupom !== '') {
       if (!codigoValido(corpo.cupom)) {
@@ -309,7 +336,7 @@ Deno.serve(async (req: Request) => {
       .eq('user_id', usuario.id).eq('status', 'aguardando');
     for (const p of pendentes ?? []) {
       const recente = Date.now() - new Date(p.created_at).getTime() < 30 * 60 * 1000;
-      if (!cupom && recente && p.price_id === preco.id && p.checkout_session_id) {
+      if (!cupom && !teste && recente && p.price_id === preco.id && p.checkout_session_id) {
         const sessao = await stripe('GET', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id));
         if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))
             && String(sessao.success_url || '').includes('retorno-app.html') === retornoWindows) {
@@ -350,7 +377,13 @@ Deno.serve(async (req: Request) => {
     parametros.set('subscription_data[metadata][oaze_intencao_id]', intencao.id);
     parametros.set('subscription_data[metadata][oaze_plan_id]', plano);
     parametros.set('subscription_data[metadata][oaze_price_id]', preco.id);
-    if (cupom) {
+    if (teste) {
+      parametros.set('subscription_data[trial_period_days]', '7');
+      parametros.set('subscription_data[trial_settings][end_behavior][missing_payment_method]', 'cancel');
+      parametros.set('subscription_data[metadata][oaze_teste]', '7d');
+      parametros.set('payment_method_collection', 'always');
+      parametros.set('metadata[oaze_teste]', '7d');
+    } else if (cupom) {
       parametros.set('discounts[0][promotion_code]', cupom.id);
       parametros.set('metadata[oaze_cupom]', cupom.codigo);
     } else {
@@ -360,7 +393,7 @@ Deno.serve(async (req: Request) => {
 
     let sessao: any;
     try {
-      sessao = await stripe('POST', '/checkout/sessions', parametros, 'checkout-' + intencao.id + (cupom ? '-' + cupom.id : ''));
+      sessao = await stripe('POST', '/checkout/sessions', parametros, 'checkout-' + intencao.id + (teste ? '-teste' : cupom ? '-' + cupom.id : ''));
     } catch (e) {
       await admin.from('stripe_intencoes').update({ status: 'falhou', updated_at: new Date().toISOString() })
         .eq('id', intencao.id);
@@ -373,7 +406,7 @@ Deno.serve(async (req: Request) => {
       checkout_session_id: sessao.id, updated_at: new Date().toISOString()
     }).eq('id', intencao.id);
 
-    log('checkout_criado', { plano, ciclo, moeda });
+    log('checkout_criado', { plano, ciclo, moeda, teste });
     return json({ ok: true, url: sessao.url }, 200, origem);
   } catch (e) {
     const codigo = e instanceof StripeErro ? e.codigo : e instanceof AsaasErro ? e.codigo : 'interno';
