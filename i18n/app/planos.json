@@ -197,11 +197,11 @@
   "es": "1 espacio financiero, 2 cuentas y 3 tarjetas"
  },
  {
-  "pt": "Até 50 movimentações por mês, +10 a cada anúncio assistido no app Android",
+  "pt": "Movimentações sem limite: a cada 20, um anúncio curto (Android, Windows e site)",
   "tipo": "exato",
-  "en": "Up to 50 transactions per month, +10 for each ad watched in the Android app",
-  "fr": "Jusqu’à 50 mouvements par mois, +10 pour chaque publicité regardée dans l’app Android",
-  "es": "Hasta 50 movimientos por mes, +10 por cada anuncio visto en la app Android"
+  "en": "Unlimited transactions: every 20, one short ad (Android, Windows and web)",
+  "fr": "Mouvements illimités : tous les 20, une courte publicité (Android, Windows et web)",
+  "es": "Movimientos sin límite: cada 20, un anuncio corto (Android, Windows y web)"
  },
  {
   "pt": "1 orçamento, 1 meta e 3 recorrências",

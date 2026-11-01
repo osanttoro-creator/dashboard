@@ -109,3 +109,101 @@ body.v3{background:#0d1821}
 @media(max-width:900px){.v3-bottom{background:rgba(14,37,51,.76);-webkit-backdrop-filter:blur(22px) saturate(120%);backdrop-filter:blur(22px) saturate(120%);box-shadow:inset 0 1px rgba(255,255,255,.11),0 12px 30px rgba(1,10,15,.3)}}
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.v3-calc-keys button:hover{transform:translateY(-2px);border-color:var(--teal)}.v3-bottom button:hover{transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.v3-calc-keys button,.v3-bottom button{transition:none!important;transform:none!important}}
+
+/* Selo do lançamento: categoria colorida + logo do banco no canto (01/11/2026) */
+.v3-mini-card.v3-tx-selo{width:40px;height:40px;border-radius:13px;background:var(--swatch);color:var(--swatch-ink,#fff);display:grid;place-items:center;position:relative;overflow:visible}
+.v3-mini-card.v3-tx-selo:after{content:none}
+.v3-tx-selo>svg{width:20px;height:20px;stroke:currentColor;fill:none}
+.v3-tx-banco{position:absolute;right:-5px;bottom:-5px;width:20px;height:20px;border-radius:7px;display:grid;place-items:center;background:var(--bank-bg);color:var(--bank-ink);box-shadow:0 0 0 2px var(--panel,#132733)}
+.v3-tx-banco svg{width:13px;height:13px}
+.v3-tx-banco .v3-fi{width:12px;height:12px}
+/* A linha de lançamento tem 4 partes (selo, texto, valor, situação). Uma regra
+   antiga do celular escondia a 2ª, que é a descrição. */
+@media(max-width:900px){
+  .v3-tx:has(>.v3-tx-main){grid-template-columns:42px minmax(0,1fr) auto 32px;grid-template-rows:auto auto;gap:2px 10px;align-items:center}
+  .v3-tx>.v3-mini-card{grid-column:1;grid-row:1/3;align-self:center}
+  .v3-tx>.v3-tx-main{display:grid;grid-column:2/4;grid-row:1;min-width:0}
+  .v3-tx>.v3-tx-main .v3-tx-open{text-align:left;padding:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .v3-tx>.v3-tx-main small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v3-tx>.v3-tx-amount{display:block;grid-column:2/4;grid-row:2}
+  .v3-tx>.v3-status{grid-column:4;grid-row:1/3}
+}
+
+/* Início: carteira + grade de widgets na ordem escolhida (01/11/2026) */
+.v3-home-layout{display:grid;grid-template-columns:minmax(340px,.82fr) minmax(0,2fr);gap:20px;align-items:start}
+.v3-home-carteira{position:sticky;top:16px;min-width:0}
+.v3-home-widgets{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));grid-auto-flow:row dense;gap:16px;align-items:stretch;min-width:0}
+.v3-widget-slot{min-width:0;display:grid}
+.v3-widget-slot>section,.v3-widget-slot>.v3-panel,.v3-widget-slot>div{margin:0;min-width:0}
+.v3-widget-slot.is-largo{grid-column:1/-1}
+@media(max-width:900px){.v3-home-layout{grid-template-columns:1fr;gap:14px}.v3-home-carteira{position:static}.v3-home-widgets{grid-template-columns:1fr;gap:14px}}
+@media(min-width:901px) and (max-width:1180px){.v3-home-layout{grid-template-columns:1fr}.v3-home-carteira{position:static;max-width:560px}}
+/* Gerenciar widgets: marcar, arrastar pela alça ou usar ↑ ↓ */
+.v3-bloco-lista{list-style:none;padding:6px 10px;margin:0;display:grid;gap:2px}
+.v3-bloco-item{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:6px;min-height:54px;border-top:1px solid var(--line);border-radius:12px;background:transparent}
+.v3-bloco-item:first-child{border-top:0}
+.v3-bloco-item.is-off .v3-bloco-nome span{color:var(--muted)}
+.v3-bloco-alca{touch-action:none;cursor:grab;width:36px;height:44px;border:0;background:transparent;color:var(--muted);display:grid;place-items:center}
+.v3-bloco-alca:active{cursor:grabbing}
+.v3-bloco-nome{display:flex!important;align-items:center;gap:10px;color:var(--milk)!important;font-size:14px!important;min-width:0}
+.v3-bloco-nome input{width:20px;height:20px;accent-color:var(--teal);flex:none}
+.v3-bloco-setas{display:flex;gap:4px}
+.v3-bloco-setas button{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:transparent;color:var(--milk);font-size:15px}
+.v3-bloco-setas button:disabled{opacity:.28}
+.v3-bloco-item.is-arrastando{background:rgba(95,169,155,.16);box-shadow:0 8px 24px rgba(0,0,0,.35);position:relative;z-index:2}
+/* Widget da Coco: título e "editar" */
+.oz-coco-topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.oz-coco-editar{border:1px solid var(--line);border-radius:24px;background:#10222d;color:var(--milk);padding:22px;width:min(420px,calc(100vw - 32px))}
+.oz-coco-editar::backdrop{background:rgba(1,10,15,.6)}
+.oz-coco-editar h2{font-size:20px;margin:0}
+
+/* Ícones Lucide da interface + animação curta no estilo lucide-animated (01/11/2026).
+   Dispara ao passar o mouse, ao tocar e quando a aba fica ativa. */
+.v3-li::before{content:none!important}
+.v3-li{display:inline-grid;place-items:center}
+.v3-li svg{width:100%;height:100%;overflow:visible}
+.v3-li svg *{transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:no-preference){
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-home svg,.is-active .v3-li-home svg{animation:li-pulo .5s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-transactions svg path:nth-child(-n+2),.is-active .v3-li-transactions svg path:nth-child(-n+2){animation:li-esq .55s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-transactions svg path:nth-child(n+3),.is-active .v3-li-transactions svg path:nth-child(n+3){animation:li-dir .55s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-wallet svg,.is-active .v3-li-wallet svg{animation:li-balanca .6s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-more svg rect,.is-active .v3-li-more svg rect{animation:li-pop .45s ease both}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-more svg rect:nth-child(2){animation-delay:.05s}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-more svg rect:nth-child(3){animation-delay:.1s}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-more svg rect:nth-child(4){animation-delay:.15s}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-settings svg,.is-active .v3-li-settings svg{animation:li-gira .7s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-plus svg{animation:li-gira90 .35s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-reminders svg{animation:li-sino .7s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-investments svg path,.is-active .v3-li-investments svg path,
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-reports svg path{stroke-dasharray:60;animation:li-traco .7s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-goals svg circle:last-child,.is-active .v3-li-goals svg circle:last-child{animation:li-pop .45s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-calendar svg,.is-active .v3-li-calendar svg{animation:li-pulo .5s ease}
+  :is(button,a):is(:hover,:active,:focus-visible) .v3-li-categories svg *{animation:li-pop .45s ease}
+}
+@keyframes li-pulo{0%,100%{transform:translateY(0)}40%{transform:translateY(-3px)}70%{transform:translateY(1px)}}
+@keyframes li-esq{0%,100%{transform:translateX(0)}45%{transform:translateX(-3px)}}
+@keyframes li-dir{0%,100%{transform:translateX(0)}45%{transform:translateX(3px)}}
+@keyframes li-balanca{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg)}65%{transform:rotate(6deg)}}
+@keyframes li-pop{0%,100%{transform:scale(1)}45%{transform:scale(.72)}}
+@keyframes li-gira{to{transform:rotate(120deg)}}
+@keyframes li-gira90{to{transform:rotate(90deg)}}
+@keyframes li-sino{0%,100%{transform:rotate(0)}20%{transform:rotate(14deg)}40%{transform:rotate(-12deg)}60%{transform:rotate(8deg)}80%{transform:rotate(-4deg)}}
+@keyframes li-traco{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+
+/* Uso da Coco: ícone pequeno dentro da barra de mensagem (bookmark-check animado) */
+.v3-coco-uso-mini{display:inline-flex;align-items:center;gap:4px;flex:none;height:34px;padding:0 9px;border-radius:17px;border:1px solid var(--line);background:rgba(240,229,207,.06);color:var(--muted);font:500 11px var(--mono);cursor:pointer}
+.v3-coco-uso-mini svg{width:16px;height:16px;color:var(--teal)}
+.v3-coco-uso-mini.is-alto svg{color:#e7c36c}
+.v3-coco-uso-mini.is-cheio svg{color:#e07a6a}
+.v3-coco-uso-mini svg path:last-child{stroke-dasharray:12;stroke-dashoffset:0}
+@media (prefers-reduced-motion:no-preference){
+  .v3-coco-uso-mini svg path:last-child{animation:li-check 1s ease .2s both}
+  .v3-coco-uso-mini:is(:hover,:active) svg path:last-child{animation:li-check .6s ease both}
+  .v3-coco-uso-mini:is(:hover,:active) svg path:first-child{animation:li-pulo .5s ease}
+}
+@keyframes li-check{from{stroke-dashoffset:12}to{stroke-dashoffset:0}}
+.v3-chat-form .v3-coco-uso-mini{display:inline-flex;align-items:center;gap:4px;min-width:0;width:auto;height:34px;padding:0 9px 0 7px;border-radius:17px;border:1px solid var(--line);background:rgba(240,229,207,.06);color:var(--muted);align-self:center}
+.v3-chat-form .v3-coco-uso-mini svg{width:16px;height:16px;color:var(--teal);stroke:currentColor}
+.v3-chat-form .v3-coco-uso-mini.is-alto svg{color:#e7c36c}
+.v3-chat-form .v3-coco-uso-mini.is-cheio svg{color:#e07a6a}

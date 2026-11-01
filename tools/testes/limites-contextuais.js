@@ -49,7 +49,11 @@ for (const funcao of ['exigirEspaco', 'exigirRecurso']) {
     falhas.push(funcao + ' deixou de avisar quem tentou passar do teto');
   }
 }
-if (!/Limites\.avisar\s*=\s*\(aviso\)\s*=>\s*openSheet\(/.test(app)) {
+/* 01/11/2026: o gancho virou função (o Semente ganha a gaveta do anúncio);
+   os outros limites seguem para avisoGeral, que abre a mesma gaveta. */
+if (!/Limites\.avisar\s*=\s*\(aviso\)\s*=>/.test(app)
+  || !/const avisoGeral\s*=\s*\(aviso\)\s*=>\s*openSheet\(/.test(app)
+  || !/avisoGeral\(aviso\)/.test(app)) {
   falhas.push('a interface não liga a própria tela ao gancho do aviso');
 }
 

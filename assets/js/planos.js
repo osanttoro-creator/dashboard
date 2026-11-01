@@ -84,7 +84,8 @@
         workspaces: 1,
         accounts: 2,
         credit_cards: 3,
-        transactions_per_month: 50,
+        /* 01/11/2026: sem teto fixo — começa em 0 e cada anúncio soma 20. */
+        transactions_per_month: 0,
         custom_categories: 10,
         budgets: 1,
         goals: 1,
@@ -98,8 +99,8 @@
            cada anúncio libera +10 lançamentos no mês, até 5 por dia. */
         coco_unidades_dia: 3,
         coco_unidades_semana: 10,
-        anuncios_por_dia: 5,
-        lancamentos_por_anuncio: 10
+        anuncios_por_dia: 40,
+        lancamentos_por_anuncio: 20
       },
       recursos: {
         export_csv: false, export_pdf: false,
@@ -373,7 +374,7 @@
   Planos.DESTAQUES = {
     free: [
       '1 espaço financeiro, 2 contas e 3 cartões',
-      'Até 50 movimentações por mês, +10 a cada anúncio assistido no app Android',
+      'Movimentações sem limite: a cada 20, um anúncio curto (Android, Windows e site)',
       '1 orçamento, 1 meta e 3 recorrências',
       'Histórico dos últimos 3 meses',
       'Contas e cartões em dólar, euro e outras moedas',

@@ -1,0 +1,167 @@
+[
+ {
+  "pt": "Gerador PDF indisponível.",
+  "tipo": "exato",
+  "en": "PDF generator unavailable.",
+  "fr": "Générateur PDF indisponible.",
+  "es": "Generador de PDF no disponible."
+ },
+ {
+  "pt": "Não foi possível carregar o gerador PDF.",
+  "tipo": "exato",
+  "en": "Couldn't load the PDF generator.",
+  "fr": "Impossible de charger le générateur PDF.",
+  "es": "No se pudo cargar el generador de PDF."
+ },
+ {
+  "pt": "Fonte indisponível.",
+  "tipo": "exato",
+  "en": "Font unavailable.",
+  "fr": "Police indisponible.",
+  "es": "Fuente no disponible."
+ },
+ {
+  "pt": "Imagem indisponível.",
+  "tipo": "exato",
+  "en": "Image unavailable.",
+  "fr": "Image indisponible.",
+  "es": "Imagen no disponible."
+ },
+ {
+  "pt": "InstrumentSans-Regular.ttf",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Instrument",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Unbounded-Regular.ttf",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Unbounded",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "OAZE / ESTADO DO SEU DINHEIRO",
+  "tipo": "exato",
+  "en": "OAZE / THE STATE OF YOUR MONEY",
+  "fr": "OAZE / L'ÉTAT DE VOTRE ARGENT",
+  "es": "OAZE / EL ESTADO DE TU DINERO"
+ },
+ {
+  "pt": "Titular: {0}",
+  "tipo": "padrao",
+  "en": "Holder: {0}",
+  "fr": "Titulaire : {0}",
+  "es": "Titular: {0}"
+ },
+ {
+  "pt": "Espaço: {0}",
+  "tipo": "padrao",
+  "en": "Space: {0}",
+  "fr": "Espace : {0}",
+  "es": "Espacio: {0}"
+ },
+ {
+  "pt": "Período: {0} a {1}",
+  "tipo": "padrao",
+  "en": "Period: {0} to {1}",
+  "fr": "Période : {0} au {1}",
+  "es": "Período: {0} a {1}"
+ },
+ {
+  "pt": "Gerado em: {0}",
+  "tipo": "padrao",
+  "en": "Generated on: {0}",
+  "fr": "Généré le : {0}",
+  "es": "Generado el: {0}"
+ },
+ {
+  "pt": "RECEITAS CONFIRMADAS",
+  "tipo": "exato",
+  "en": "CONFIRMED INCOME",
+  "fr": "REVENUS CONFIRMÉS",
+  "es": "INGRESOS CONFIRMADOS"
+ },
+ {
+  "pt": "DESPESAS CONFIRMADAS",
+  "tipo": "exato",
+  "en": "CONFIRMED EXPENSES",
+  "fr": "DÉPENSES CONFIRMÉES",
+  "es": "GASTOS CONFIRMADOS"
+ },
+ {
+  "pt": "SALDO DO PERÍODO",
+  "tipo": "exato",
+  "en": "BALANCE FOR THE PERIOD",
+  "fr": "SOLDE DE LA PÉRIODE",
+  "es": "SALDO DEL PERÍODO"
+ },
+ {
+  "pt": "Valores baseados nos lançamentos confirmados deste espaço.",
+  "tipo": "exato",
+  "en": "Values based on the confirmed transactions of this space.",
+  "fr": "Valeurs basées sur les opérations confirmées de cet espace.",
+  "es": "Valores basados en los movimientos confirmados de este espacio."
+ },
+ {
+  "pt": "Como foi o período",
+  "tipo": "exato",
+  "en": "How the period went",
+  "fr": "Comment s'est passée la période",
+  "es": "Cómo fue el período"
+ },
+ {
+  "pt": "DESPESAS POR CATEGORIA",
+  "tipo": "exato",
+  "en": "EXPENSES BY CATEGORY",
+  "fr": "DÉPENSES PAR CATÉGORIE",
+  "es": "GASTOS POR CATEGORÍA"
+ },
+ {
+  "pt": "Sem despesas confirmadas neste período.",
+  "tipo": "exato",
+  "en": "No confirmed expenses in this period.",
+  "fr": "Aucune dépense confirmée sur cette période.",
+  "es": "Sin gastos confirmados en este período."
+ },
+ {
+  "pt": "RECEITAS POR CATEGORIA",
+  "tipo": "exato",
+  "en": "INCOME BY CATEGORY",
+  "fr": "REVENUS PAR CATÉGORIE",
+  "es": "INGRESOS POR CATEGORÍA"
+ },
+ {
+  "pt": "Sem receitas confirmadas neste período.",
+  "tipo": "exato",
+  "en": "No confirmed income in this period.",
+  "fr": "Aucun revenu confirmé sur cette période.",
+  "es": "Sin ingresos confirmados en este período."
+ },
+ {
+  "pt": "Estado do OAZE — {0}",
+  "tipo": "padrao",
+  "en": "OAZE state — {0}",
+  "fr": "État OAZE — {0}",
+  "es": "Estado de OAZE — {0}"
+ },
+ {
+  "pt": "Resumo financeiro pessoal",
+  "tipo": "exato",
+  "en": "Personal financial summary",
+  "fr": "Résumé financier personnel",
+  "es": "Resumen financiero personal"
+ },
+ {
+  "pt": "estado-oaze-{0}-{1}.pdf",
+  "tipo": "padrao",
+  "ignorar": true
+ }
+]

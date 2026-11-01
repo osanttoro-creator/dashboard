@@ -1,0 +1,20 @@
+/* O render oficial transparente permite deixar a Coco fora da moldura. */
+.v3-coco-pet{display:inline-flex;flex:none;align-items:center;justify-content:center;width:26px;height:24px;vertical-align:middle;background:transparent;overflow:visible}
+.v3-coco-pet img{display:block;width:100%;height:auto;max-width:none;object-fit:contain;transform-origin:50% 75%}
+.v3-coco-fab{min-width:80px;min-height:64px;border:0;background:transparent;box-shadow:none;padding:4px;overflow:visible}
+.v3-coco-fab:after{content:none}
+.v3-coco-fab .v3-coco-pet{width:70px;height:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.6))}
+.v3-coco-fab .v3-coco-pet img{animation:oaze-coco-dance 4.4s ease-in-out infinite;will-change:transform}
+.v3-coco-fab:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.v3-more button>.v3-coco-pet{width:38px;height:28px}
+.v3-nav-editor-row>span .v3-coco-pet{width:22px;height:18px}
+@keyframes oaze-coco-dance{0%,100%{transform:translate3d(0,2px,0) rotate(-2deg) scale(1)}16%{transform:translate3d(-3px,-3px,0) rotate(-5deg) scale(1.03)}28%{transform:translate3d(2px,-10px,0) rotate(4deg) scale(1.05)}42%{transform:translate3d(4px,1px,0) rotate(5deg) scale(.98)}58%{transform:translate3d(-3px,-5px,0) rotate(-4deg) scale(1.02)}74%{transform:translate3d(2px,0,0) rotate(3deg) scale(1)}88%{transform:translate3d(0,-3px,0) rotate(-1deg) scale(1.01)}}
+@media(max-width:900px){.v3-coco-fab{width:80px;height:72px;right:12px}.v3-coco-fab .v3-coco-pet{width:72px}}
+@media(max-width:599px) and (orientation:landscape){.v3-coco-fab{width:60px;height:54px}.v3-coco-fab .v3-coco-pet{width:58px}}
+@media(prefers-reduced-motion:reduce){.v3-coco-fab .v3-coco-pet img{animation:none;will-change:auto}}
+/* Coco viva (31/10/2026): estados animados em vez da dança em CSS. */
+.v3-coco-fab.coco-viva{translate:var(--coco-x,0px) 0;transition:translate .7s cubic-bezier(.3,.7,.3,1),transform .22s ease,opacity .22s ease}
+.v3-coco-fab.coco-viva .v3-coco-pet{width:84px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.55))}
+.v3-coco-fab.coco-viva .v3-coco-pet img{animation:none;will-change:auto;transform:none}
+@media(max-width:900px){.v3-coco-fab.coco-viva .v3-coco-pet{width:80px}}
+@media(prefers-reduced-motion:reduce){.v3-coco-fab.coco-viva{transition:opacity .22s ease}}

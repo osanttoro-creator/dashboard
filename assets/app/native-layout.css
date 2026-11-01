@@ -1,0 +1,53 @@
+/* Safe areas and viewport segments for the packaged Android app. */
+@media (max-width: 900px) {
+  .v3-main {
+    /* WebView pode informar inset zero mesmo com câmera recortando a tela. */
+    padding-top: max(56px, calc(24px + env(safe-area-inset-top, 0px)));
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px));
+  }
+  .v3-bottom { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .v3-coco-fab { bottom: calc(101px + env(safe-area-inset-bottom, 0px)); }
+  .v3-sheet {
+    padding-top: max(20px, env(safe-area-inset-top, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .v3-skip:focus { top: max(12px, env(safe-area-inset-top, 0px)); }
+}
+
+/* A fold may switch between phone and tablet widths without reloading. */
+@media (min-width: 760px) and (max-width: 900px) {
+  .v3-main { max-width: 780px; margin-inline: auto; }
+  .v3-home { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v3-home-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Dual-screen devices expose two viewports separated by a physical hinge. */
+@media (horizontal-viewport-segments: 2) {
+  .v3-main {
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+  }
+  .v3-home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .v3-home > * { min-width: 0; }
+  .v3-overlay .v3-sheet { max-width: min(540px, calc(env(viewport-segment-right 0 0) - env(viewport-segment-left 0 0) - 24px)); }
+}
+
+@media (max-width: 599px) and (orientation: landscape) {
+  .v3-main { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)); }
+  .v3-bottom { min-height: 56px; }
+  .v3-coco-fab { width: 48px; height: 48px; bottom: calc(74px + env(safe-area-inset-bottom, 0px)); }
+}
+
+.v3-notification-permission{display:grid;gap:9px;margin:18px 0;padding:18px;border:1px solid rgba(95,169,155,.35);border-radius:20px;background:rgba(95,169,155,.08)}
+.v3-notification-permission p,.v3-notification-permission small{color:var(--muted)}
+.v3-notification-permission .v3-secondary{width:fit-content;min-height:44px}
+.v3-billing-details{display:grid;gap:15px;margin:0 0 20px}
+.v3-billing-details dl{display:grid;gap:12px;margin:0}
+.v3-billing-details dl>div{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.v3-billing-details dt{color:var(--muted)}
+.v3-billing-details dd{margin:0;text-align:right}
+.v3-billing-details .v3-secondary{width:fit-content;min-height:44px}
+@media(max-width:600px){.v3-billing-details dl>div{display:grid;gap:4px}.v3-billing-details dd{text-align:left}.v3-billing-details .v3-secondary{width:100%}}
+.v3-permissions-list{display:grid;gap:15px}.v3-permissions-list>div:not(.v3-notification-permission){padding:14px;border-bottom:1px solid var(--line)}.v3-permissions-list p{margin-top:5px;color:var(--muted)}

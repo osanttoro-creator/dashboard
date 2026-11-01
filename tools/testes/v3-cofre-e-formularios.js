@@ -30,7 +30,9 @@ assert.match(auth, /A\.cadastrar[\s\S]*?auth\.signInWithOtp/, 'cadastro novo dev
 assert.match(auth, /shouldCreateUser:\s*false/, 'login por link não pode criar conta sem aceite');
 assert.doesNotMatch(register, /name="senha"/, 'cadastro novo não deve pedir senha');
 assert.match(login, /id="form-magico"/, 'entrada deve oferecer link por e-mail');
-assert.match(backend, /requirePinSetup\(\)/, 'usuário novo deve configurar o PIN antes do painel');
+/* 01/11/2026: toda conta sem PIN cria o seu na entrada (não só a marcada). */
+assert.match(backend, /await requirePinSetup\(await cofrePromessa\)/, 'usuário novo deve configurar o PIN antes do painel');
+assert.match(backend, /if \(status\.configured\) \{ await oferecerBloqueioDoAparelho\(\); return; \}/, 'conta sem PIN não pode passar direto para o painel');
 
 assert.match(sql, /enable row level security/i, 'cofre precisa de RLS');
 assert.match(sql, /revoke all on public\.oaze_cofre from anon, authenticated/i, 'cliente não acessa tabela');

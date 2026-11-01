@@ -21,8 +21,18 @@
 <link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
 <link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/app/login-experience.css">
+<link rel="stylesheet" href="/assets/app/boas-vindas.css?v=20261031a">
 </head>
 <body>
+<div class="oaze-entrance is-loading" id="oaze-entrance" role="dialog" aria-modal="true" aria-labelledby="oaze-entrance-title">
+  <span class="oaze-entrance-glow" aria-hidden="true"></span>
+  <img src="/assets/brand/oaze-logo-mono-milk.svg" alt="OAZE" width="132" height="52">
+  <span class="oaze-entrance-line" aria-hidden="true"></span>
+  <h1 id="oaze-entrance-title">Tu espacio empieza aquí.</h1>
+  <p id="oaze-entrance-message">Un lugar para cuidar tu dinero con claridad.</p>
+  <button class="oaze-entrance-skip" id="oaze-entrance-skip" type="button" hidden>Empezar</button>
+</div>
 
 <div class="ceu" aria-hidden="true"></div>
 <a class="pular" href="#conteudo">Saltar al contenido</a>
@@ -144,6 +154,8 @@
   </div>
 </main>
 
+<script src="/assets/vendor/bancos.js?v=20261014a"></script>
+<script src="/assets/app/boas-vindas.js?v=20261031a"></script>
 <script src="/assets/vendor/supabase.js"></script>
 <script src="/assets/js/supabase-config.js"></script>
 <script src="/assets/js/site-auth.js"></script>
@@ -158,6 +170,27 @@
   var botao = document.getElementById('botao-entrar');
   var formMagico = document.getElementById('form-magico');
   var botaoMagico = document.getElementById('botao-magico');
+  var entrance = document.getElementById('oaze-entrance');
+  var entranceTitle = document.getElementById('oaze-entrance-title');
+  var entranceMessage = document.getElementById('oaze-entrance-message');
+  function hideEntrance() {
+    entrance.hidden = true;
+  }
+  function showEntrance(title, message, loading) {
+    entranceTitle.textContent = title;
+    entranceMessage.textContent = message;
+    entrance.classList.toggle('is-loading', !!loading);
+    entrance.querySelector('#oaze-entrance-skip').hidden = !!loading;
+    entrance.hidden = false;
+  }
+  document.getElementById('oaze-entrance-skip').addEventListener('click', function () {
+    try { localStorage.setItem('oaze-entrance-seen', '1'); } catch (e) { /* armazenamento indisponível */ }
+    hideEntrance();
+    email.focus();
+  });
+  var hasSeenEntrance = false;
+  try { hasSeenEntrance = localStorage.getItem('oaze-entrance-seen') === '1'; } catch (e) { /* navegação privada */ }
+  showEntrance('Preparando tu OAZE', 'Verificando tu sesión…', true);
 
   if (!A.cliente()) { A.semConfig(recado); form.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; }); botaoMagico.disabled = true; return; }
 
@@ -232,7 +265,15 @@
   if (lembrado) montarSocial(lembrado);
 
   A.quemEsta().then(function (u) {
-    if (u) { location.replace(A.destino()); return; }
+    if (u) {
+      showEntrance('Preparando tu OAZE', 'Cargando tu cuenta y tus datos…', true);
+      location.replace(A.destino()); return;
+    }
+    if (hasSeenEntrance) hideEntrance();
+    else {
+      showEntrance('Tu espacio empieza aquí.', 'Tu dinero, tus planes y Coco en un solo lugar.', false);
+      document.getElementById('oaze-entrance-skip').focus();
+    }
     return perguntou.then(function (p) {
       montarSocial(p);
       /* O toque único só depois de saber que ninguém está logado --
@@ -240,7 +281,7 @@
          redirecionamento. Por isso ele não vem da memória. */
       if (p.google) { toquePronto = true; armarToqueUnico(); }
     });
-  });
+  }).catch(function () { hideEntrance(); });
 
   /* Entrada social: cada botão só aparece se o provedor estiver
      ligado no projeto. Havendo algum, ele vira a porta principal e o
@@ -320,12 +361,14 @@
     if (!autorizado()) return;
 
     A.ocupado(botao, true, 'Entrando…');
+    showEntrance('Preparando tu OAZE', 'Verificando tu cuenta con seguridad…', true);
     try {
       var r = await A.entrar(email.value.trim(), senha.value);
       if (r.error) throw r.error;
       A.diz(recado, 'Todo listo. Abriendo tu panel…', 'ok');
       location.replace(A.destino());
     } catch (err) {
+      hideEntrance();
       A.ocupado(botao, false);
       A.diz(recado, A.frase(err), 'erro');
       senha.focus();

@@ -63,6 +63,34 @@
   "es": "CSV bancario"
  },
  {
+  "pt": "Arquivo OFX sem movimentos. Nenhum lançamento foi importado.",
+  "tipo": "exato",
+  "en": "OFX file with no transactions. Nothing was imported.",
+  "fr": "Fichier OFX sans mouvements. Rien n'a été importé.",
+  "es": "Archivo OFX sin movimientos. No se importó nada."
+ },
+ {
+  "pt": "OFX com data ou valor ilegível. Nenhum lançamento foi importado.",
+  "tipo": "exato",
+  "en": "OFX with unreadable date or amount. Nothing was imported.",
+  "fr": "OFX avec date ou montant illisible. Rien n'a été importé.",
+  "es": "OFX con fecha o importe ilegible. No se importó nada."
+ },
+ {
+  "pt": "Movimento incompleto no OFX.",
+  "tipo": "exato",
+  "en": "Incomplete transaction in the OFX.",
+  "fr": "Mouvement incomplet dans l'OFX.",
+  "es": "Movimiento incompleto en el OFX."
+ },
+ {
+  "pt": "OFX bancário",
+  "tipo": "exato",
+  "en": "Bank OFX",
+  "fr": "OFX bancaire",
+  "es": "OFX bancario"
+ },
+ {
   "pt": "Data ou valor inválido no extrato PDF.",
   "tipo": "exato",
   "en": "Invalid date or amount in the PDF statement.",
@@ -133,11 +161,11 @@
   "es": "Archivo vacío o mayor de 10 MB."
  },
  {
-  "pt": "Use um extrato PDF ou CSV.",
+  "pt": "Use um extrato OFX, CSV ou PDF.",
   "tipo": "exato",
-  "en": "Use a PDF or CSV statement.",
-  "fr": "Utilisez un relevé PDF ou CSV.",
-  "es": "Usa un extracto PDF o CSV."
+  "en": "Use an OFX, CSV or PDF statement.",
+  "fr": "Utilisez un relevé OFX, CSV ou PDF.",
+  "es": "Usa un extracto OFX, CSV o PDF."
  },
  {
   "pt": "%PDF-",

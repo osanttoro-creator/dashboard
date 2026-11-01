@@ -45,3 +45,6 @@ verify_jwt = false
 # origem, o campo-isca e os limites de tamanho — ver o cabeçalho de
 # supabase/functions/oaze-contato/index.ts.
 verify_jwt = false
+
+[functions.oaze-nfce]
+verify_jwt = true

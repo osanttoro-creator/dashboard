@@ -32,18 +32,19 @@
     'uniform float u_interaction;',
     'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}',
     'float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}',
-    'float fbm(vec2 p){float v=0.0,a=.5;mat2 r=mat2(.80,.60,-.60,.80);for(int i=0;i<5;i++){v+=a*noise(p);p=r*p*2.03+3.1;a*=.5;}return v;}',
-    'vec3 aura(vec2 uv,vec2 center,vec3 color,float phase,float polarity){vec2 p=uv-center;float d=length(p*vec2(.78,1.18));float angle=atan(p.y,p.x);float n=fbm(p*2.15+vec2(phase*.13,-phase*.09));float edge=.40+.12*sin(angle*3.0+phase*1.15)+.16*(n-.5);float body=smoothstep(edge+.33,edge-.18,d);float vein=.5+.5*sin((d*10.0-angle*2.0)*polarity-phase*1.4+n*4.0);body*=.80+.20*vein;return color*body;}',
+    'float fbm(vec2 p){float v=0.0,a=.5;mat2 r=mat2(.80,.60,-.60,.80);for(int i=0;i<4;i++){v+=a*noise(p);p=r*p*2.03+3.1;a*=.5;}return v;}',
+    'vec3 current(vec2 uv,vec2 center,vec3 color,float phase,float width){vec2 p=uv-center;float n=fbm(p*2.4+vec2(phase*.14,-phase*.08));float path=.13*sin(p.y*3.1+phase)+.045*sin(p.y*7.7-phase*1.3)+.10*(n-.5);float d=abs(p.x-path);float ribbon=exp(-pow(d/width,2.0));float fade=exp(-pow(abs(p.y)/.57,4.0));float fold=.72+.28*sin(p.y*10.0+phase*1.4+n*4.0);return color*ribbon*fade*fold;}',
     'void main(){',
     'vec2 frag=gl_FragCoord.xy/u_resolution;vec2 uv=frag-.5;uv.x*=u_resolution.x/u_resolution.y;',
     'vec2 pointer=u_pointer-.5;pointer.x*=u_resolution.x/u_resolution.y;',
-    'float t=u_time*.22;float swap=.5+.5*sin(t*.72);float spread=min(.74,(u_resolution.x/u_resolution.y)*.38);',
-    'vec2 left=vec2(mix(-spread,spread,swap),.10*sin(t*.9));vec2 right=vec2(mix(spread,-spread,swap),-.10*sin(t*.9));',
+    'float t=u_time*.31;float spread=min(.63,(u_resolution.x/u_resolution.y)*.33);',
+    'vec2 left=vec2(-spread+.05*sin(t*.43),.12*sin(t*.62));vec2 right=vec2(spread+.06*sin(t*.51+2.0),-.12*sin(t*.57));',
     'float pd=length(uv-pointer);vec2 bend=normalize(u_velocity+vec2(.0001))*.12*exp(-pd*4.5)*u_interaction;uv+=bend*sin(pd*18.0-t*4.0);',
     'vec3 blue=vec3(.208,.333,.396),teal=vec3(.373,.663,.608),orange=vec3(.914,.529,.369),col=vec3(0.0);',
-    'col+=aura(uv,left,mix(blue,teal,.54),t,1.0);col+=aura(uv,right,orange,t+2.7,-1.0);',
-    'float touch=exp(-pd*5.5)*u_interaction;col+=mix(teal,orange,.5+.5*sin(t*1.6))*touch*(.28+.18*sin(pd*28.0-t*6.0));',
-    'col*=.94+.06*noise(gl_FragCoord.xy*.22+u_time);float vignette=smoothstep(1.18,.12,length(uv*vec2(.72,1.0)));col*=vignette;',
+    'col+=current(uv,left,blue,t,.085);col+=current(uv,left+vec2(.085,-.02),teal*.35,t+1.4,.048);',
+    'col+=current(uv,right,teal*.82,t+2.7,.09);col+=current(uv,right-vec2(.075,.02),orange*.12,t+4.1,.045);',
+    'float touch=exp(-pd*7.5)*u_interaction;col+=teal*touch*.08;',
+    'float vignette=smoothstep(1.18,.12,length(uv*vec2(.72,1.0)));col*=vignette;',
     'gl_FragColor=vec4(pow(max(col,0.0),vec3(.92)),1.0);}'
   ].join('\n');
 
@@ -97,7 +98,7 @@
 
   function resize() {
     var mobile = innerWidth < 720;
-    var scale = mobile ? .48 : .68;
+    var scale = mobile ? .62 : .80;
     var maxWidth = mobile ? 720 : 1280;
     var maxHeight = mobile ? 1080 : 800;
     var ratio = Math.min(1, maxWidth / Math.max(1, innerWidth * devicePixelRatio * scale), maxHeight / Math.max(1, innerHeight * devicePixelRatio * scale));
@@ -142,7 +143,7 @@
   function render(now) {
     if (!running) return;
     frame = requestAnimationFrame(render);
-    if (now - lastFrame < 32) return;
+    if (now - lastFrame < 16) return;
     lastFrame = now;
     var elapsed = (now - started) / 1000;
     pointer.tx = .5 + .34 * Math.sin(elapsed * .19);

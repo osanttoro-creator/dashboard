@@ -18,6 +18,19 @@
    ============================================================= */
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { reservarRateLimit } from '../_shared/security.ts';
+
+/* 01/11/2026 — regra nova: no Semente cada anúncio libera +20 lançamentos.
+   Android usa AdMob (SSV acima). Windows, site e o futuro iOS sem SDK nativo
+   usam vídeo premiado do Google Ad Manager (IMA), que não tem verificação no
+   servidor: o app avisa que o vídeo terminou (POST acao:'web'). Por isso
+   sessão obrigatória, 1 liberação a cada 25 s e o teto diário do plano. */
+const origensApp = (Deno.env.get('OAZE_ALLOWED_ORIGINS') || '').split(',').map((x) => x.trim()).filter(Boolean);
+const corsApp = (origin: string | null) => ({
+  'Access-Control-Allow-Origin': origin && origensApp.includes(origin) ? origin : 'null',
+  'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS', Vary: 'Origin'
+});
 
 const CHAVES_URL = 'https://www.gstatic.com/admob/reward/verifier-keys.json';
 let chavesCache: { quando: number; chaves: Map<string, CryptoKey> } | null = null;
@@ -127,6 +140,32 @@ Deno.serve(async (req: Request) => {
     /* 200 mesmo quando o limite do dia já foi atingido: a AdMob repete
        callbacks que não recebem 200, e repetir não muda a resposta. */
     return resposta({ ok: r.out_ok, motivo: r.out_motivo, hoje: r.out_hoje });
+  }
+
+  const origem = req.headers.get('Origin');
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsApp(origem) });
+
+  /* ---- anúncio da web/Windows (IMA): o app avisa que o vídeo terminou ---- */
+  if (req.method === 'POST') {
+    const autorizacaoWeb = req.headers.get('Authorization') ?? '';
+    const corpoTexto = await req.text().catch(() => '');
+    let corpo: Record<string, unknown> = {};
+    try { corpo = corpoTexto.length < 512 ? JSON.parse(corpoTexto || '{}') : {}; } catch { corpo = {}; }
+    if (corpo.acao === 'web') {
+      const com = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...corsApp(origem), 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
+      if (origem && !origensApp.includes(origem)) return com({ ok: false, motivo: 'origem' }, 403);
+      if (!autorizacaoWeb.startsWith('Bearer ')) return com({ ok: false, motivo: 'sessao' }, 401);
+      const cli = createClient(url, Deno.env.get('SUPABASE_ANON_KEY') ?? '', { global: { headers: { Authorization: autorizacaoWeb } }, auth: { persistSession: false, autoRefreshToken: false } });
+      const { data: quem } = await cli.auth.getUser();
+      if (!quem?.user?.id) return com({ ok: false, motivo: 'sessao' }, 401);
+      const lim = await reservarRateLimit(admin, 'anuncio_web', quem.user.id, 1, 25).catch(() => ({ permitido: false }));
+      if (!lim.permitido) return com({ ok: false, motivo: 'rapido' }, 429);
+      const canal = ['windows', 'web', 'ios'].includes(String(corpo.origem)) ? String(corpo.origem) : 'web';
+      const { data, error } = await admin.rpc('creditar_anuncio', { p_user: quem.user.id, p_transacao: 'web:' + crypto.randomUUID(), p_origem: canal + (corpo.ima === true ? '-ima' : '-sem-rede') });
+      const r = Array.isArray(data) ? data[0] : data;
+      if (error || !r) return com({ ok: false, motivo: 'banco' }, 500);
+      return com({ ok: r.out_ok, motivo: r.out_motivo, hoje: r.out_hoje, liberados: r.out_liberados_mes ?? null });
+    }
   }
 
   /* ---- modo de teste (desligado em produção) ---- */

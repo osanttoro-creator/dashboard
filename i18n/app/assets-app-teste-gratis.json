@@ -1,0 +1,149 @@
+[
+ {
+  "pt": "Hoje: tudo liberado",
+  "tipo": "exato",
+  "en": "Today: everything unlocked",
+  "fr": "Aujourd'hui : tout débloqué",
+  "es": "Hoy: todo liberado"
+ },
+ {
+  "pt": "Mais Coco por dia, relatórios em PDF, lançamentos sem limite e sem anúncio. {0}.",
+  "tipo": "padrao",
+  "en": "More Coco per day, PDF reports, unlimited transactions and no ads. {0}.",
+  "fr": "Plus de Coco par jour, rapports PDF, opérations illimitées et sans publicité. {0}.",
+  "es": "Más Coco por día, informes en PDF, movimientos sin límite y sin anuncios. {0}."
+ },
+ {
+  "pt": "Dia 5: a gente te avisa",
+  "tipo": "exato",
+  "en": "Day 5: we remind you",
+  "fr": "Jour 5 : on vous prévient",
+  "es": "Día 5: te avisamos"
+ },
+ {
+  "pt": "Lembrete de que o teste está acabando. Sem surpresa na fatura.",
+  "tipo": "exato",
+  "en": "A reminder that the trial is ending. No surprise on your bill.",
+  "fr": "Un rappel que l'essai se termine. Pas de surprise sur la facture.",
+  "es": "Un recordatorio de que la prueba termina. Sin sorpresas en la factura."
+ },
+ {
+  "pt": "Dia 7: vira Pro anual",
+  "tipo": "exato",
+  "en": "Day 7: becomes Pro annual",
+  "fr": "Jour 7 : passe en Pro annuel",
+  "es": "Día 7: pasa a Pro anual"
+ },
+ {
+  "pt": "Comece com 1 semana grátis.",
+  "tipo": "exato",
+  "en": "Start with 1 free week.",
+  "fr": "Commencez avec 1 semaine gratuite.",
+  "es": "Empieza con 1 semana gratis."
+ },
+ {
+  "pt": "Tudo do Pro liberado hoje por {0}. Veja como funciona:",
+  "tipo": "padrao",
+  "en": "All of Pro unlocked today for {0}. Here's how it works:",
+  "fr": "Tout le Pro débloqué aujourd'hui pour {0}. Voici comment ça marche :",
+  "es": "Todo el Pro liberado hoy por {0}. Así funciona:"
+ },
+ {
+  "pt": "Relatórios + PDF",
+  "tipo": "exato",
+  "en": "Reports + PDF",
+  "fr": "Rapports + PDF",
+  "es": "Informes + PDF"
+ },
+ {
+  "pt": "Lançamentos sem limite",
+  "tipo": "exato",
+  "en": "Unlimited transactions",
+  "fr": "Opérations illimitées",
+  "es": "Movimientos sin límite"
+ },
+ {
+  "pt": "Mais Coco por dia",
+  "tipo": "exato",
+  "en": "More Coco per day",
+  "fr": "Plus de Coco par jour",
+  "es": "Más Coco por día"
+ },
+ {
+  "pt": "Começar teste grátis",
+  "tipo": "exato",
+  "en": "Start free trial",
+  "fr": "Commencer l'essai gratuit",
+  "es": "Empezar prueba gratis"
+ },
+ {
+  "pt": "{0} hoje · avisamos no dia 5 · cancele quando quiser",
+  "tipo": "padrao",
+  "en": "{0} today · we remind you on day 5 · cancel anytime",
+  "fr": "{0} aujourd'hui · rappel au jour 5 · annulez quand vous voulez",
+  "es": "{0} hoy · avisamos el día 5 · cancela cuando quieras"
+ },
+ {
+  "pt": "Ver todos os planos",
+  "tipo": "exato",
+  "en": "See all plans",
+  "fr": "Voir tous les forfaits",
+  "es": "Ver todos los planes"
+ },
+ {
+  "pt": "Precisa de ajuda?",
+  "tipo": "exato",
+  "en": "Need help?",
+  "fr": "Besoin d'aide ?",
+  "es": "¿Necesitas ayuda?"
+ },
+ {
+  "pt": "Abrindo pagamento seguro…",
+  "tipo": "exato",
+  "en": "Opening secure payment…",
+  "fr": "Ouverture du paiement sécurisé…",
+  "es": "Abriendo pago seguro…"
+ },
+ {
+  "pt": "Não foi possível abrir o pagamento. Nada foi cobrado.",
+  "tipo": "exato",
+  "en": "Couldn't open the payment. Nothing was charged.",
+  "fr": "Impossible d'ouvrir le paiement. Rien n'a été débité.",
+  "es": "No se pudo abrir el pago. No se cobró nada."
+ },
+ {
+  "pt": "Seu teste do OAZE Pro acaba em 2 dias",
+  "tipo": "exato",
+  "en": "Your OAZE Pro trial ends in 2 days",
+  "fr": "Votre essai OAZE Pro se termine dans 2 jours",
+  "es": "Tu prueba de OAZE Pro termina en 2 días"
+ },
+ {
+  "pt": "No dia 7 vira Pro anual ({0}). Para não pagar, cancele em Configurações › Plano.",
+  "tipo": "padrao",
+  "en": "On day 7 it becomes Pro annual ({0}). To avoid paying, cancel in Settings › Plan.",
+  "fr": "Au jour 7, il passe en Pro annuel ({0}). Pour ne pas payer, annulez dans Réglages › Forfait.",
+  "es": "El día 7 pasa a Pro anual ({0}). Para no pagar, cancela en Configuración › Plan."
+ },
+ {
+  "pt": "1 semana grátis do Pro",
+  "tipo": "exato",
+  "en": "1 free week of Pro",
+  "fr": "1 semaine gratuite du Pro",
+  "es": "1 semana gratis de Pro"
+ },
+ {
+  "pt": "Depois {0}/mês no anual. Avisamos no dia 5.",
+  "tipo": "padrao",
+  "en": "Then {0}/month on the annual plan. We remind you on day 5.",
+  "fr": "Ensuite {0}/mois en annuel. On vous prévient au jour 5.",
+  "es": "Después {0}/mes en el anual. Avisamos el día 5."
+ },
+ {
+  "pt": "Experimentar",
+  "tipo": "exato",
+  "en": "Try it",
+  "fr": "Essayer",
+  "es": "Probar"
+ }
+]

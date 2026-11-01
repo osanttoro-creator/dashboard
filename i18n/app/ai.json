@@ -160,5 +160,17 @@
   "pt": "Bearer {0}",
   "tipo": "padrao",
   "ignorar": true
+ },
+ {
+  "pt": "AbortError",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "A Coco demorou para responder. Tente novamente.",
+  "tipo": "exato",
+  "en": "Coco took too long to answer. Please try again.",
+  "fr": "Coco a mis trop de temps à répondre. Réessayez.",
+  "es": "Coco tardó en responder. Inténtalo de nuevo."
  }
 ]

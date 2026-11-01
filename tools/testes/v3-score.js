@@ -89,8 +89,8 @@ assert.match(app, /function historicoDoScore\(\)/);
    da grade, atrás de um toque em "gerenciar tela inicial". Desligado
    por padrão não pode virar apagado, e por isso a porta de volta é
    exigida aqui junto. */
-assert.match(app, /blocoLigado\('atalhos'\) \? quickActions\(\) : ''\}<\/div>/);
-assert.ok(/blocoLigado\('score'\) \? painelScore\(\) : ''/.test(app),
+assert.match(app, /if \(id === 'atalhos'\) return quickActions\(\);/);
+assert.ok(/if \(id === 'score'\) return painelScore\(\);/.test(app),
   'o painel continua disponível na grade de widgets da Início');
 assert.match(app, /id: 'score'/, 'o score precisa estar na lista de blocos da Início');
 assert.match(app, /id: 'atalhos'/, 'as ações rápidas precisam estar na lista de blocos da Início');

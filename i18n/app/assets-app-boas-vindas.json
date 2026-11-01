@@ -1,0 +1,192 @@
+[
+  {
+    "pt": "Pra onde vai meu dinheiro",
+    "tipo": "exato",
+    "en": "Where my money goes",
+    "fr": "Où va mon argent",
+    "es": "A dónde va mi dinero"
+  },
+  {
+    "pt": "Não estourar o mês",
+    "tipo": "exato",
+    "en": "Not overspend the month",
+    "fr": "Ne pas dépasser le mois",
+    "es": "No pasarme del mes"
+  },
+  {
+    "pt": "Faturas e contas em dia",
+    "tipo": "exato",
+    "en": "Bills and cards on time",
+    "fr": "Factures et comptes à jour",
+    "es": "Facturas y cuentas al día"
+  },
+  {
+    "pt": "M4 5h16v14l-3-2-3 2-2-2-2 2-3-2-3 2zM8 9h8M8 13h6",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Juntar pra uma meta",
+    "tipo": "exato",
+    "en": "Save for a goal",
+    "fr": "Épargner pour un objectif",
+    "es": "Ahorrar para una meta"
+  },
+  {
+    "pt": "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Ter tudo num relatório",
+    "tipo": "exato",
+    "en": "Everything in one report",
+    "fr": "Tout dans un rapport",
+    "es": "Todo en un informe"
+  },
+  {
+    "pt": "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6",
+    "tipo": "exato",
+    "ignorar": true
+  },
+  {
+    "pt": "Progresso",
+    "tipo": "exato",
+    "en": "Progress",
+    "fr": "Progression",
+    "es": "Progreso"
+  },
+  {
+    "pt": "Seu dinheiro, claro.",
+    "tipo": "exato",
+    "en": "Your money, clear.",
+    "fr": "Votre argent, clair.",
+    "es": "Tu dinero, claro."
+  },
+  {
+    "pt": "Sem planilha.",
+    "tipo": "exato",
+    "en": "No spreadsheet.",
+    "fr": "Sans tableur.",
+    "es": "Sin planilla."
+  },
+  {
+    "pt": "Responda 2 perguntas e o OAZE se monta do seu jeito.",
+    "tipo": "exato",
+    "en": "Answer 2 questions and OAZE sets itself up your way.",
+    "fr": "Répondez à 2 questions et OAZE se configure à votre façon.",
+    "es": "Responde 2 preguntas y OAZE se arma a tu manera."
+  },
+  {
+    "pt": "Montar meu OAZE",
+    "tipo": "exato",
+    "en": "Set up my OAZE",
+    "fr": "Configurer mon OAZE",
+    "es": "Armar mi OAZE"
+  },
+  {
+    "pt": "Leva menos de 1 minuto",
+    "tipo": "exato",
+    "en": "Takes less than 1 minute",
+    "fr": "Moins d'une minute",
+    "es": "Lleva menos de 1 minuto"
+  },
+  {
+    "pt": "Já uso o OAZE · Entrar",
+    "tipo": "exato",
+    "en": "I already use OAZE · Sign in",
+    "fr": "J'utilise déjà OAZE · Se connecter",
+    "es": "Ya uso OAZE · Entrar"
+  },
+  {
+    "pt": "O que você quer resolver primeiro?",
+    "tipo": "exato",
+    "en": "What do you want to solve first?",
+    "fr": "Que voulez-vous régler en premier ?",
+    "es": "¿Qué quieres resolver primero?"
+  },
+  {
+    "pt": "Escolha quantos quiser. O Início do painel começa por isso.",
+    "tipo": "exato",
+    "en": "Pick as many as you want. Your dashboard Home starts with that.",
+    "fr": "Choisissez-en autant que vous voulez. L'accueil du tableau de bord commence par ça.",
+    "es": "Elige cuantos quieras. El Inicio del panel empieza por eso."
+  },
+  {
+    "pt": "De onde sai seu dinheiro?",
+    "tipo": "exato",
+    "en": "Where does your money come from?",
+    "fr": "D'où vient votre argent ?",
+    "es": "¿De dónde sale tu dinero?"
+  },
+  {
+    "pt": "É só para identificar sua primeira conta. Nada é conectado ao banco.",
+    "tipo": "exato",
+    "en": "It's just to identify your first account. Nothing is connected to the bank.",
+    "fr": "C'est seulement pour identifier votre premier compte. Rien n'est connecté à la banque.",
+    "es": "Es solo para identificar tu primera cuenta. Nada se conecta al banco."
+  },
+  {
+    "pt": "Não achou? Pule e escolha \"Outro\" ao cadastrar a conta.",
+    "tipo": "exato",
+    "en": "Can't find it? Skip and choose \"Other\" when adding the account.",
+    "fr": "Introuvable ? Passez et choisissez « Autre » en ajoutant le compte.",
+    "es": "¿No lo encuentras? Salta y elige \"Otro\" al registrar la cuenta."
+  },
+  {
+    "pt": "Pronto. Seu OAZE está montado.",
+    "tipo": "exato",
+    "en": "Done. Your OAZE is set up.",
+    "fr": "C'est prêt. Votre OAZE est configuré.",
+    "es": "Listo. Tu OAZE está armado."
+  },
+  {
+    "pt": "Grátis para começar",
+    "tipo": "exato",
+    "en": "Free to start",
+    "fr": "Gratuit pour commencer",
+    "es": "Gratis para empezar"
+  },
+  {
+    "pt": "Lançamentos sem limite: a cada 20, um anúncio curto. Coco com cota diária. O Pro libera tudo, sem anúncios.",
+    "tipo": "exato",
+    "en": "Unlimited transactions: every 20, one short ad. Coco with a daily quota. Pro unlocks everything, with no ads.",
+    "fr": "Opérations illimitées : tous les 20, une courte publicité. Coco avec quota quotidien. Le Pro débloque tout, sans publicité.",
+    "es": "Movimientos sin límite: cada 20, un anuncio corto. Coco con cuota diaria. Pro libera todo, sin anuncios."
+  },
+  {
+    "pt": "Criar conta grátis",
+    "tipo": "exato",
+    "en": "Create free account",
+    "fr": "Créer un compte gratuit",
+    "es": "Crear cuenta gratis"
+  },
+  {
+    "pt": "Já tenho conta · Entrar",
+    "tipo": "exato",
+    "en": "I have an account · Sign in",
+    "fr": "J'ai déjà un compte · Se connecter",
+    "es": "Ya tengo cuenta · Entrar"
+  },
+  {
+    "pt": "Início pensado para",
+    "tipo": "exato",
+    "en": "Home designed for",
+    "fr": "Accueil pensé pour",
+    "es": "Inicio pensado para"
+  },
+  {
+    "pt": "Primeira conta",
+    "tipo": "exato",
+    "en": "First account",
+    "fr": "Premier compte",
+    "es": "Primera cuenta"
+  },
+  {
+    "pt": "{0}, é só confirmar o saldo",
+    "tipo": "padrao",
+    "en": "{0}, just confirm the balance",
+    "fr": "{0}, il suffit de confirmer le solde",
+    "es": "{0}, solo confirma el saldo"
+  }
+]

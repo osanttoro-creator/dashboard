@@ -232,3 +232,8 @@
 .v3-card-profile-links .v3-check{min-height:36px}.v3-card-profile-links small{color:var(--muted);line-height:1.4}
 .v3-linked-detail .v3-due-invoice-summary{grid-template-columns:repeat(3,minmax(0,1fr));margin:24px 0}
 .v3-linked-detail>.v3-primary{width:100%;min-height:48px}
+/* seções do seletor de banco (31/10/2026) */
+.v3-bank-grupo{grid-column:1/-1;margin:10px 2px 0;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,229,207,.62)}
+.v3-bank-grupo:first-child{margin-top:0}
+.v3-bank-options{max-height:360px}
+.v3-bank-option-logo .is-sigla{overflow:visible}

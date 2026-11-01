@@ -60,7 +60,7 @@ body.v3-home-screen .v3-top{display:none}
    Aqui sobra só impedir a seleção: o texto já não tem o que ler,
    mas copiá-lo não deve render uma linha de bolinhas sem sentido.
    ============================================================= */
-.v3-hide-money .v3-sensitive{user-select:none}}
+.v3-hide-money .v3-sensitive{user-select:none}
 
 /* Mês: a seta anda, o nome abre a escolha. */
 .v3-periodo{display:inline-flex;align-items:center;overflow:hidden}
@@ -861,10 +861,10 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 .v3-spend-ring{position:relative;display:grid;place-items:center;width:min(100%,250px);aspect-ratio:1;margin-inline:auto;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(240,229,207,.065),transparent 68%)}
 .v3-spend-ring svg{display:block;width:100%;height:100%;overflow:visible;transform:rotate(-90deg);filter:drop-shadow(0 10px 14px rgba(0,7,11,.22))}
 .v3-spend-track{stroke:rgba(240,229,207,.07)}
-.v3-spend-arc{stroke-dasharray:var(--segment-length) 478;stroke-dashoffset:var(--segment-offset);stroke-linecap:round;cursor:pointer;transition:stroke-width .28s cubic-bezier(.2,.8,.2,1),opacity .28s ease,filter .28s ease;animation:v3-spend-draw .75s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--segment-order)*55ms)}
+.v3-spend-arc{stroke-linecap:butt;cursor:pointer;transition:stroke-width .28s cubic-bezier(.2,.8,.2,1),opacity .28s ease,filter .28s ease;animation:v3-spend-appear .45s ease both}
 .v3-spend-ring:has(.v3-spend-arc.is-active) .v3-spend-arc:not(.is-active){opacity:.42}
 .v3-spend-arc.is-active{stroke-width:31;filter:drop-shadow(0 0 5px currentColor)}
-@keyframes v3-spend-draw{from{stroke-dasharray:0 478;opacity:0}to{stroke-dasharray:var(--segment-length) 478;opacity:1}}
+@keyframes v3-spend-appear{from{opacity:0}to{opacity:1}}
 .v3-spend-ring-center{position:relative;z-index:1;display:grid;justify-items:center;gap:4px;width:66%;text-align:center;pointer-events:none}
 .v3-spend-ring-center small,.v3-spend-ring-center span{color:var(--muted);font:500 10px var(--mono)}
 .v3-spend-ring-center strong{max-width:100%;font:600 clamp(16px,2.3vw,24px)/1.1 var(--display);letter-spacing:-.045em;white-space:nowrap}
@@ -907,14 +907,14 @@ body.v3-coco-screen{height:100dvh;min-height:0;overflow:hidden}
 html{background:#000}
 body.v3{background:#000}
 .v3-liquid-ether{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
-.v3-liquid-ether canvas{display:block;width:100%;height:100%;opacity:.82}
-.v3-liquid-ether.is-static{background:radial-gradient(70% 52% at 18% 30%,rgba(53,85,101,.52),transparent 72%),radial-gradient(62% 50% at 82% 68%,rgba(233,135,94,.34),transparent 74%),#000}
+.v3-liquid-ether canvas{display:block;width:100%;height:100%;opacity:.72}
+.v3-liquid-ether.is-static{background:radial-gradient(32% 24% at 12% 23%,rgba(53,85,101,.35),transparent 80%),radial-gradient(24% 35% at 89% 76%,rgba(95,169,155,.24),transparent 82%),#000}
 .v3-shell{position:relative;z-index:1}
 .v3-sidebar{background:rgba(10,21,29,.88);-webkit-backdrop-filter:blur(24px) saturate(115%);backdrop-filter:blur(24px) saturate(115%)}
 .v3-main{background:transparent}
 .v3-main:before{display:none}
-@media(max-width:900px){.v3-liquid-ether canvas{opacity:.72}}
-@media(prefers-reduced-motion:reduce){.v3-liquid-ether canvas{display:none}.v3-liquid-ether{background:radial-gradient(70% 52% at 18% 30%,rgba(53,85,101,.52),transparent 72%),radial-gradient(62% 50% at 82% 68%,rgba(233,135,94,.34),transparent 74%),#000}}
+@media(max-width:900px){.v3-liquid-ether canvas{opacity:.62}}
+@media(prefers-reduced-motion:reduce){.v3-liquid-ether canvas{display:none}.v3-liquid-ether{background:radial-gradient(32% 24% at 12% 23%,rgba(53,85,101,.35),transparent 80%),radial-gradient(24% 35% at 89% 76%,rgba(95,169,155,.24),transparent 82%),#000}}
 
 .v3-notification-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .v3-notification-actions .v3-secondary{width:auto;min-width:160px}

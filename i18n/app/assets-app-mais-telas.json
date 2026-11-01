@@ -1,0 +1,575 @@
+[
+ {
+  "pt": "Não consegui salvar. Nada foi alterado.",
+  "tipo": "exato",
+  "en": "Couldn't save. Nothing was changed.",
+  "fr": "Impossible d'enregistrer. Rien n'a été modifié.",
+  "es": "No se pudo guardar. No se cambió nada."
+ },
+ {
+  "pt": "Tags cruzam categorias: \"viagem\", \"casamento\", \"reforma\". Marque nos lançamentos e veja quanto cada uma custou.",
+  "tipo": "exato",
+  "en": "Tags cut across categories: \"trip\", \"wedding\", \"renovation\". Tag your transactions and see what each one cost.",
+  "fr": "Les tags traversent les catégories : « voyage », « mariage », « travaux ». Marquez vos opérations et voyez combien chacun a coûté.",
+  "es": "Las etiquetas cruzan categorías: \"viaje\", \"boda\", \"reforma\". Márcalas en los movimientos y mira cuánto costó cada una."
+ },
+ {
+  "pt": "Nova tag, ex.: viagem",
+  "tipo": "exato",
+  "en": "New tag, e.g. trip",
+  "fr": "Nouveau tag, ex. : voyage",
+  "es": "Nueva etiqueta, ej.: viaje"
+ },
+ {
+  "pt": "Nome da nova tag",
+  "tipo": "exato",
+  "en": "New tag name",
+  "fr": "Nom du nouveau tag",
+  "es": "Nombre de la nueva etiqueta"
+ },
+ {
+  "pt": "Criar",
+  "tipo": "exato",
+  "en": "Create",
+  "fr": "Créer",
+  "es": "Crear"
+ },
+ {
+  "pt": "{0} lançamento{1} em {2}{3}",
+  "tipo": "padrao",
+  "en": "{0} transaction{1} in {2}{3}",
+  "fr": "{0} opération{1} en {2}{3}",
+  "es": "{0} movimiento{1} en {2}{3}"
+ },
+ {
+  "pt": "· {0} gastos",
+  "tipo": "padrao",
+  "en": "· {0} spent",
+  "fr": "· {0} de dépenses",
+  "es": "· {0} gastados"
+ },
+ {
+  "pt": "Nenhuma tag ainda. Crie a primeira acima e escolha no formulário de lançamento.",
+  "tipo": "exato",
+  "en": "No tags yet. Create the first one above and pick it in the transaction form.",
+  "fr": "Aucun tag pour l'instant. Créez le premier ci-dessus et choisissez-le dans le formulaire.",
+  "es": "Aún no hay etiquetas. Crea la primera arriba y elígela en el formulario."
+ },
+ {
+  "pt": "TAGS (OPCIONAL)",
+  "tipo": "exato",
+  "en": "TAGS (OPTIONAL)",
+  "fr": "TAGS (FACULTATIF)",
+  "es": "ETIQUETAS (OPCIONAL)"
+ },
+ {
+  "pt": "+ nova",
+  "tipo": "exato",
+  "en": "+ new",
+  "fr": "+ nouveau",
+  "es": "+ nueva"
+ },
+ {
+  "pt": "Projeção indisponível.",
+  "tipo": "exato",
+  "en": "Projection unavailable.",
+  "fr": "Projection indisponible.",
+  "es": "Proyección no disponible."
+ },
+ {
+  "pt": "Saldo de hoje nas contas, mais o que já está lançado para frente (fixos, parcelas, receitas), mais a renda e menos o gasto variável médios dos últimos 3 meses.",
+  "tipo": "exato",
+  "en": "Today's balance in your accounts, plus what's already scheduled ahead (fixed items, installments, income), plus average income and minus average variable spending from the last 3 months.",
+  "fr": "Solde du jour sur vos comptes, plus ce qui est déjà prévu (fixes, échéances, revenus), plus le revenu et moins la dépense variable moyens des 3 derniers mois.",
+  "es": "Saldo de hoy en tus cuentas, más lo ya registrado hacia adelante (fijos, cuotas, ingresos), más el ingreso y menos el gasto variable promedio de los últimos 3 meses."
+ },
+ {
+  "pt": "Horizonte",
+  "tipo": "exato",
+  "en": "Horizon",
+  "fr": "Horizon",
+  "es": "Horizonte"
+ },
+ {
+  "pt": "Saldo hoje",
+  "tipo": "exato",
+  "en": "Balance today",
+  "fr": "Solde aujourd'hui",
+  "es": "Saldo hoy"
+ },
+ {
+  "pt": "Gasto variável médio",
+  "tipo": "exato",
+  "en": "Average variable spending",
+  "fr": "Dépense variable moyenne",
+  "es": "Gasto variable promedio"
+ },
+ {
+  "pt": "É estimativa, não promessa: compras novas no cartão e receitas não lançadas mudam o resultado.",
+  "tipo": "exato",
+  "en": "It's an estimate, not a promise: new card purchases and unrecorded income change the result.",
+  "fr": "C'est une estimation, pas une promesse : nouveaux achats par carte et revenus non saisis changent le résultat.",
+  "es": "Es una estimación, no una promesa: compras nuevas con tarjeta e ingresos no registrados cambian el resultado."
+ },
+ {
+  "pt": "Renda avulsa média",
+  "tipo": "exato",
+  "en": "Average extra income",
+  "fr": "Revenu ponctuel moyen",
+  "es": "Ingreso extra promedio"
+ },
+ {
+  "pt": "Pelo ritmo atual, o saldo fica negativo em",
+  "tipo": "exato",
+  "en": "At the current pace, the balance goes negative in",
+  "fr": "Au rythme actuel, le solde devient négatif en",
+  "es": "Al ritmo actual, el saldo queda negativo en"
+ },
+ {
+  "pt": ". Veja o que dá para cortar ou adiar.",
+  "tipo": "exato",
+  "en": ". See what you can cut or postpone.",
+  "fr": ". Voyez ce que vous pouvez réduire ou reporter.",
+  "es": ". Mira qué puedes recortar o posponer."
+ },
+ {
+  "pt": "No ritmo atual, o saldo segue positivo nos próximos {0} meses.",
+  "tipo": "padrao",
+  "en": "At the current pace, the balance stays positive for the next {0} months.",
+  "fr": "Au rythme actuel, le solde reste positif les {0} prochains mois.",
+  "es": "Al ritmo actual, el saldo sigue positivo los próximos {0} meses."
+ },
+ {
+  "pt": "entra {0} · sai {1}",
+  "tipo": "padrao",
+  "en": "in {0} · out {1}",
+  "fr": "entrées {0} · sorties {1}",
+  "es": "entra {0} · sale {1}"
+ },
+ {
+  "pt": "empréstimo",
+  "tipo": "exato",
+  "en": "loan",
+  "fr": "prêt",
+  "es": "préstamo"
+ },
+ {
+  "pt": "Carro, imóvel, moto: o que falta pagar e quando termina.",
+  "tipo": "exato",
+  "en": "Car, home, motorbike: what's left to pay and when it ends.",
+  "fr": "Voiture, logement, moto : ce qu'il reste à payer et quand ça se termine.",
+  "es": "Auto, vivienda, moto: lo que falta pagar y cuándo termina."
+ },
+ {
+  "pt": "Empréstimo pessoal, consignado, crédito com amigo: parcelas e saldo devedor.",
+  "tipo": "exato",
+  "en": "Personal loan, payroll loan, money from a friend: installments and outstanding balance.",
+  "fr": "Prêt personnel, prêt sur salaire, argent d'un ami : échéances et capital restant.",
+  "es": "Préstamo personal, de nómina, de un amigo: cuotas y saldo pendiente."
+ },
+ {
+  "pt": "Por mês",
+  "tipo": "exato",
+  "en": "Per month",
+  "fr": "Par mois",
+  "es": "Por mes"
+ },
+ {
+  "pt": "Parcelas pagas",
+  "tipo": "exato",
+  "en": "Installments paid",
+  "fr": "Échéances payées",
+  "es": "Cuotas pagadas"
+ },
+ {
+  "pt": "{0} de {1} parcelas pagas · {2}",
+  "tipo": "padrao",
+  "en": "{0} of {1} installments paid · {2}",
+  "fr": "{0} sur {1} échéances payées · {2}",
+  "es": "{0} de {1} cuotas pagadas · {2}"
+ },
+ {
+  "pt": "falta {0} · termina em {1}",
+  "tipo": "padrao",
+  "en": "{0} left · ends in {1}",
+  "fr": "reste {0} · se termine en {1}",
+  "es": "faltan {0} · termina en {1}"
+ },
+ {
+  "pt": "{0} de {1} parcelas pagas · {2} · vence dia {3}",
+  "tipo": "padrao",
+  "en": "{0} of {1} installments paid · {2} · due on day {3}",
+  "fr": "{0} sur {1} échéances payées · {2} · échéance le {3}",
+  "es": "{0} de {1} cuotas pagadas · {2} · vence el día {3}"
+ },
+ {
+  "pt": "Paguei uma parcela",
+  "tipo": "exato",
+  "en": "I paid an installment",
+  "fr": "J'ai payé une échéance",
+  "es": "Pagué una cuota"
+ },
+ {
+  "pt": "\" aria-valuenow=\"{0}\">",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Nenhum {0} cadastrado.",
+  "tipo": "padrao",
+  "en": "No {0} registered.",
+  "fr": "Aucun {0} enregistré.",
+  "es": "Ningún {0} registrado."
+ },
+ {
+  "pt": "INSTITUIÇÃO (OPCIONAL)",
+  "tipo": "exato",
+  "en": "INSTITUTION (OPTIONAL)",
+  "fr": "ÉTABLISSEMENT (FACULTATIF)",
+  "es": "INSTITUCIÓN (OPCIONAL)"
+ },
+ {
+  "pt": "VALOR DA PARCELA",
+  "tipo": "exato",
+  "en": "INSTALLMENT AMOUNT",
+  "fr": "MONTANT DE L'ÉCHÉANCE",
+  "es": "VALOR DE LA CUOTA"
+ },
+ {
+  "pt": "DIA DO VENCIMENTO<input name=\"dia\" type=\"number\" min=\"1\" max=\"31\" value=\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Adicionar {0}",
+  "tipo": "padrao",
+  "en": "Add {0}",
+  "fr": "Ajouter {0}",
+  "es": "Agregar {0}"
+ },
+ {
+  "pt": "Ex.: Carro",
+  "tipo": "exato",
+  "en": "E.g. Car",
+  "fr": "Ex. : Voiture",
+  "es": "Ej.: Auto"
+ },
+ {
+  "pt": "Ex.: Empréstimo pessoal",
+  "tipo": "exato",
+  "en": "E.g. Personal loan",
+  "fr": "Ex. : Prêt personnel",
+  "es": "Ej.: Préstamo personal"
+ },
+ {
+  "pt": "DIA DO VENCIMENTO",
+  "tipo": "exato",
+  "en": "DUE DAY",
+  "fr": "JOUR D'ÉCHÉANCE",
+  "es": "DÍA DE VENCIMIENTO"
+ },
+ {
+  "pt": "TOTAL DE PARCELAS",
+  "tipo": "exato",
+  "en": "TOTAL INSTALLMENTS",
+  "fr": "NOMBRE D'ÉCHÉANCES",
+  "es": "TOTAL DE CUOTAS"
+ },
+ {
+  "pt": "JÁ PAGAS",
+  "tipo": "exato",
+  "en": "ALREADY PAID",
+  "fr": "DÉJÀ PAYÉES",
+  "es": "YA PAGADAS"
+ },
+ {
+  "pt": "VALOR CONTRATADO (OPCIONAL)",
+  "tipo": "exato",
+  "en": "CONTRACTED AMOUNT (OPTIONAL)",
+  "fr": "MONTANT EMPRUNTÉ (FACULTATIF)",
+  "es": "MONTO CONTRATADO (OPCIONAL)"
+ },
+ {
+  "pt": "JUROS % AO MÊS (OPCIONAL)",
+  "tipo": "exato",
+  "en": "INTEREST % PER MONTH (OPTIONAL)",
+  "fr": "INTÉRÊTS % PAR MOIS (FACULTATIF)",
+  "es": "INTERÉS % AL MES (OPCIONAL)"
+ },
+ {
+  "pt": "\" value=\"{0}\">",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Salvar",
+  "tipo": "exato",
+  "en": "Save",
+  "fr": "Enregistrer",
+  "es": "Guardar"
+ },
+ {
+  "pt": "Dinheiro emprestado, conta dividida, rachadinha do aluguel. Anote e marque quando receber.",
+  "tipo": "exato",
+  "en": "Money lent, split bills, shared rent. Write it down and mark it when you get paid.",
+  "fr": "Argent prêté, addition partagée, loyer partagé. Notez-le et marquez-le quand vous êtes remboursé.",
+  "es": "Dinero prestado, cuenta dividida, alquiler compartido. Anótalo y márcalo cuando te paguen."
+ },
+ {
+  "pt": "A receber",
+  "tipo": "exato",
+  "en": "To receive",
+  "fr": "À recevoir",
+  "es": "Por cobrar"
+ },
+ {
+  "pt": "Pessoas",
+  "tipo": "exato",
+  "en": "People",
+  "fr": "Personnes",
+  "es": "Personas"
+ },
+ {
+  "pt": "Anotar valor a receber",
+  "tipo": "exato",
+  "en": "Note an amount to receive",
+  "fr": "Noter un montant à recevoir",
+  "es": "Anotar monto por cobrar"
+ },
+ {
+  "pt": "DO QUÊ (OPCIONAL)",
+  "tipo": "exato",
+  "en": "FOR WHAT (OPTIONAL)",
+  "fr": "POUR QUOI (FACULTATIF)",
+  "es": "DE QUÉ (OPCIONAL)"
+ },
+ {
+  "pt": "Ex.: metade do jantar",
+  "tipo": "exato",
+  "en": "E.g. half of dinner",
+  "fr": "Ex. : moitié du dîner",
+  "es": "Ej.: mitad de la cena"
+ },
+ {
+  "pt": "COMBINADO PARA (OPCIONAL)",
+  "tipo": "exato",
+  "en": "AGREED BY (OPTIONAL)",
+  "fr": "PRÉVU POUR (FACULTATIF)",
+  "es": "ACORDADO PARA (OPCIONAL)"
+ },
+ {
+  "pt": "Anotar",
+  "tipo": "exato",
+  "en": "Note",
+  "fr": "Noter",
+  "es": "Anotar"
+ },
+ {
+  "pt": "sem descrição",
+  "tipo": "exato",
+  "en": "no description",
+  "fr": "sans description",
+  "es": "sin descripción"
+ },
+ {
+  "pt": "recebeu {0} · falta {1}",
+  "tipo": "padrao",
+  "en": "received {0} · {1} left",
+  "fr": "reçu {0} · reste {1}",
+  "es": "recibió {0} · faltan {1}"
+ },
+ {
+  "pt": "atrasado desde {0}",
+  "tipo": "padrao",
+  "en": "overdue since {0}",
+  "fr": "en retard depuis le {0}",
+  "es": "atrasado desde {0}"
+ },
+ {
+  "pt": "Apagar",
+  "tipo": "exato",
+  "en": "Delete",
+  "fr": "Supprimer",
+  "es": "Borrar"
+ },
+ {
+  "pt": "Parte",
+  "tipo": "exato",
+  "en": "Partial",
+  "fr": "Partiel",
+  "es": "Parte"
+ },
+ {
+  "pt": "Recebi",
+  "tipo": "exato",
+  "en": "Received",
+  "fr": "Reçu",
+  "es": "Recibí"
+ },
+ {
+  "pt": "Ninguém te deve nada por aqui.",
+  "tipo": "exato",
+  "en": "Nobody owes you anything here.",
+  "fr": "Personne ne vous doit rien ici.",
+  "es": "Nadie te debe nada por aquí."
+ },
+ {
+  "pt": "Sem conta",
+  "tipo": "exato",
+  "en": "No account",
+  "fr": "Sans compte",
+  "es": "Sin cuenta"
+ },
+ {
+  "pt": "Sem tag",
+  "tipo": "exato",
+  "en": "No tag",
+  "fr": "Sans tag",
+  "es": "Sin etiqueta"
+ },
+ {
+  "pt": "AGRUPAR POR",
+  "tipo": "exato",
+  "en": "GROUP BY",
+  "fr": "REGROUPER PAR",
+  "es": "AGRUPAR POR"
+ },
+ {
+  "pt": "Receitas e despesas",
+  "tipo": "exato",
+  "en": "Income and expenses",
+  "fr": "Revenus et dépenses",
+  "es": "Ingresos y gastos"
+ },
+ {
+  "pt": "Tag",
+  "tipo": "exato",
+  "en": "Tag",
+  "fr": "Tag",
+  "es": "Etiqueta"
+ },
+ {
+  "pt": "{0} (crédito)",
+  "tipo": "padrao",
+  "en": "{0} (credit)",
+  "fr": "{0} (crédit)",
+  "es": "{0} (crédito)"
+ },
+ {
+  "pt": "Lançamentos",
+  "tipo": "exato",
+  "en": "Transactions",
+  "fr": "Opérations",
+  "es": "Movimientos"
+ },
+ {
+  "pt": "Baixar CSV",
+  "tipo": "exato",
+  "en": "Download CSV",
+  "fr": "Télécharger le CSV",
+  "es": "Descargar CSV"
+ },
+ {
+  "pt": "{0} lançamento{1} · {2}%",
+  "tipo": "padrao",
+  "en": "{0} transaction{1} · {2}%",
+  "fr": "{0} opération{1} · {2} %",
+  "es": "{0} movimiento{1} · {2}%"
+ },
+ {
+  "pt": "Nada encontrado com esses filtros.",
+  "tipo": "exato",
+  "en": "Nothing found with these filters.",
+  "fr": "Rien trouvé avec ces filtres.",
+  "es": "No se encontró nada con estos filtros."
+ },
+ {
+  "pt": "oaze-relatorio-{0}-a-{1}.csv",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "Novo nome da tag",
+  "tipo": "exato",
+  "en": "New tag name",
+  "fr": "Nouveau nom du tag",
+  "es": "Nuevo nombre de la etiqueta"
+ },
+ {
+  "pt": "Excluir esta tag? Os lançamentos continuam, só perdem a marcação.",
+  "tipo": "exato",
+  "en": "Delete this tag? Transactions stay, they just lose the tag.",
+  "fr": "Supprimer ce tag ? Les opérations restent, elles perdent juste le marquage.",
+  "es": "¿Eliminar esta etiqueta? Los movimientos siguen, solo pierden la marca."
+ },
+ {
+  "pt": "Tag excluída.",
+  "tipo": "exato",
+  "en": "Tag deleted.",
+  "fr": "Tag supprimé.",
+  "es": "Etiqueta eliminada."
+ },
+ {
+  "pt": "Parcela marcada como paga.",
+  "tipo": "exato",
+  "en": "Installment marked as paid.",
+  "fr": "Échéance marquée comme payée.",
+  "es": "Cuota marcada como pagada."
+ },
+ {
+  "pt": "Excluir este registro?",
+  "tipo": "exato",
+  "en": "Delete this record?",
+  "fr": "Supprimer cet enregistrement ?",
+  "es": "¿Eliminar este registro?"
+ },
+ {
+  "pt": "Marcado como recebido.",
+  "tipo": "exato",
+  "en": "Marked as received.",
+  "fr": "Marqué comme reçu.",
+  "es": "Marcado como recibido."
+ },
+ {
+  "pt": "Quanto você recebeu agora?",
+  "tipo": "exato",
+  "en": "How much did you receive now?",
+  "fr": "Combien avez-vous reçu maintenant ?",
+  "es": "¿Cuánto recibiste ahora?"
+ },
+ {
+  "pt": "Preencha o nome e o valor da parcela.",
+  "tipo": "exato",
+  "en": "Fill in the name and the installment amount.",
+  "fr": "Renseignez le nom et le montant de l'échéance.",
+  "es": "Completa el nombre y el valor de la cuota."
+ },
+ {
+  "pt": "Salvo.",
+  "tipo": "exato",
+  "en": "Saved.",
+  "fr": "Enregistré.",
+  "es": "Guardado."
+ },
+ {
+  "pt": "Adicionado.",
+  "tipo": "exato",
+  "en": "Added.",
+  "fr": "Ajouté.",
+  "es": "Agregado."
+ },
+ {
+  "pt": "Preencha quem e quanto.",
+  "tipo": "exato",
+  "en": "Fill in who and how much.",
+  "fr": "Renseignez qui et combien.",
+  "es": "Completa quién y cuánto."
+ },
+ {
+  "pt": "Anotado.",
+  "tipo": "exato",
+  "en": "Noted.",
+  "fr": "Noté.",
+  "es": "Anotado."
+ }
+]

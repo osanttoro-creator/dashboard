@@ -10,10 +10,32 @@
   const initialPaths = { '/app': 'home', '/app/financeiro': 'transactions', '/app/carteira': 'wallet', '/app/investimentos': 'investments', '/app/categorias': 'categories', '/app/metas': 'goals', '/app/orcamento': 'investments/planning', '/app/recorrencias': 'calendar', '/app/calendario': 'calendar', '/app/configuracoes': 'settings', '/app/planos': 'plan', '/app/limites': 'plan', '/app/analises': 'coco', '/app/uglez': 'coco' };
   const uiIcons = new Set(['home','transactions','wallet','investments','reports','categories','goals','calendar','reminders','settings','plan','more','plus','arrow','down','utensils','car','heart','leisure','subscription','contactless','education','shopping','receipt','work','exchange','sales']);
   const extraCategoryIcons = new Set(['baby','bus','cake','church','coffee','dog','droplet','dumbbell','film','flame','fuel','gift','glasses','hammer','key','laptop','map-pin','music','package','palmtree','percent','piggy-bank','pill','plane','scissors','shield','shirt','shopping-cart','smartphone','sofa','sparkles','star','stethoscope','ticket','truck','tv','umbrella','users','wifi','wrench','zap']);
-  const icon = (name) => `<span class="v3-fi v3-fi-${uiIcons.has(name) ? name : 'more'}" aria-hidden="true"></span>`;
+  /* ÍCONES EM LUCIDE (01/11/2026)
+     A navegação usava uma fonte de ícones (Flaticon) e as categorias,
+     Lucide: dois desenhos diferentes na mesma tela. Agora é tudo Lucide,
+     em SVG que herda a cor. A classe v3-li-<nome> liga a animação curta
+     (estilo lucide-animated) no passar do mouse, no toque e quando a aba
+     fica ativa — no celular o toque faz o papel do "gif". Sem o SVG
+     vendorizado, cai na fonte antiga. */
+  const LUCIDE_UI = { home:'house', transactions:'arrow-left-right', wallet:'wallet', investments:'trending-up', reports:'chart-column', categories:'shapes', goals:'target', calendar:'calendar', reminders:'bell', settings:'settings', plan:'crown', more:'layout-grid', plus:'plus', arrow:'chevron-right', down:'chevron-down', utensils:'utensils', car:'car', heart:'heart-pulse', leisure:'gamepad-2', subscription:'repeat', contactless:'nfc', education:'graduation-cap', shopping:'shopping-bag', receipt:'receipt', work:'briefcase', exchange:'arrow-left-right', sales:'tag' };
+  const icon = (name) => {
+    const key = uiIcons.has(name) ? name : 'more';
+    const svgBody = global.IconData?.lucide?.[LUCIDE_UI[key]];
+    if (svgBody) return `<span class="v3-fi v3-li v3-li-${key}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false">${svgBody}</svg></span>`;
+    return `<span class="v3-fi v3-fi-${key}" aria-hidden="true"></span>`;
+  };
   const categoryIconMarkup = (name) => extraCategoryIcons.has(name) && global.IconData?.lucide?.[name]
     ? `<svg class="v3-category-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${global.IconData.lucide[name]}</svg>`
     : icon(name);
+  /* Um caminho só para o ícone de categoria (01/11/2026): Lucide, o escolhido
+     ou o palpite pelo nome ("Mercado" vira carrinho). Antes, categoria sem
+     ícone salvo caía no mesmo símbolo genérico e as listas ficavam iguais. */
+  const categoryIconHtml = (cat) => {
+    const L = global.IconData?.lucide || {};
+    const nome = cat?.icon && L[cat.icon] ? cat.icon : (global.Icons && cat ? global.Icons.forCategory(cat) : "");
+    if (nome && L[nome]) return `<svg class="v3-category-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${L[nome]}</svg>`;
+    return categoryIconMarkup(categoryIcon(cat?.icon) || "categories");
+  };
   const statusLabels = { pago: 'Pago', pendente: 'Não pago', cancelado: 'Cancelado' };
   const statusDescriptions = { pago: 'Entra nos totais', pendente: 'Fica no previsto', cancelado: 'Não entra em nenhum total' };
   const NAV_PAGES = ['home','transactions','wallet','investments','categories','calendar','coco','settings'];
@@ -80,7 +102,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -155,6 +177,7 @@
   };
 
   function profile() { return demo ? sample : (state.sharedProfile || Store.profile()); }
+  global.OAZE_REPORT_CONTEXT = () => ({ profile: profile(), owner: demo ? sample.owner : Store.ownerName(), demo });
   function sharedCanEdit() { return !!state.sharedId && state.sharedPermission === 'edit' && V3Backend.activeSharePermission() === 'edit'; }
   /* O CANCELADO NÃO SOME DA LISTA
      Calc.entries filtra o cancelado de todo total — inclusive do
@@ -191,12 +214,27 @@
     catch (e) { return 0; }
   }
   function categoryName(id) { return (profile().categories.find((c) => c.id === id) || {}).name || 'Sem categoria'; }
+  const LEGACY_CATEGORY_COLORS = {
+    moradia:'#34557A',alimentacao:'#B07C3E',transporte:'#2E6E7E',saude:'#3B6558',educacao:'#7B5A8E',
+    lazer:'#1F6B4F',compras:'#9A5F35',assinaturas:'#A85A32','impostos e taxas':'#4E3A55',
+    salario:'#34557A','freelance / pj':'#2E6E7E',rendimentos:'#1F6B4F',reembolso:'#B07C3E',vendas:'#7B5A8E',outros:'#8A7A62'
+  };
+  function categoryColor(category) {
+    const raw = String(category?.color || '').trim();
+    if (/^#[0-9a-f]{6}$/i.test(raw) && !['#5FA99B','#9AA0AC'].includes(raw.toUpperCase())) return raw;
+    const known = LEGACY_CATEGORY_COLORS[U.norm(category?.name || '')];
+    if (known) return known;
+    const palette = Store.ALL_COLORS || Store.PALETTE || [];
+    const index = profile().categories.findIndex((item) => item.id === category?.id);
+    return palette.length ? palette[(Math.max(0,index) * 7 + 3) % palette.length] : '#5fa99b';
+  }
   function categoryIcon(name) { const map={house:'home',utensils:'utensils',car:'car','heart-pulse':'heart','gamepad-2':'leisure',repeat:'subscription','circle-ellipsis':'more',banknote:'investments','trending-up':'investments','graduation-cap':'education','shopping-bag':'shopping',receipt:'receipt',briefcase:'work','arrow-left-right':'exchange',tag:'sales'}; return map[name] || name; }
   function categoryTotals(kind) {
     if (demo && kind === 'expense') return Object.entries(sample.categoryAmounts).map(([id,value]) => ({ id, name: categoryName(id), value, color: sample.categories.find((c) => c.id === id).color })).sort((a,b) => b.value - a.value);
+    if (demo && kind === 'income') return sample.transactions.filter((t) => t.kind === 'income' && t.confirmed).map((t) => ({ id: t.categoryId, name: categoryName(t.categoryId), value: t.amount, color: sample.categories.find((c) => c.id === t.categoryId)?.color || '#5fa99b' })).sort((a,b) => b.value - a.value);
     const map = new Map();
     currentTransactions().filter((t) => t.confirmed && t.contaNosTotais !== false && t.kind === kind).forEach((t) => map.set(t.categoryId || 'other', (map.get(t.categoryId || 'other') || 0) + +t.amount));
-    return [...map].map(([id, value]) => ({ id, name: categoryName(id), value, color: safeColor((profile().categories.find((c) => c.id === id) || {}).color) })).sort((a, b) => b.value - a.value);
+    return [...map].map(([id, value]) => ({ id, name: categoryName(id), value, color: categoryColor(profile().categories.find((c) => c.id === id)) })).sort((a, b) => b.value - a.value);
   }
   function items() {
     const own=[...profile().accounts.filter((a) => !a.archived).map((a) => ({ kind: 'debit', data: a })), ...profile().cards.map((c) => ({ kind: 'credit', data: c }))];
@@ -210,9 +248,10 @@
   function walletItems() { return items().filter((x) => x.kind === state.walletKind && !!x.data.hidden === !!state.walletHidden); }
   function itemById(id) { return items().find((x) => x.data.id === id); }
   function selectedItem() { const saved=global.V3Carteira?.ultimo('v3-'+state.walletKind+(state.walletHidden?'-hidden':''));return walletItems().find((x) => x.data.id === state.selected) || walletItems().find((x)=>x.data.id===saved) || walletItems()[0] || null; }
-  function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}" aria-label="${esc(names[page])}" title="${esc(names[page])}" ${state.page === page ? 'aria-current="page"' : ''}>${page === 'coco' ? '<img class="v3-nav-coco" src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}<span>${esc(names[page])}</span></button>`; }
+  const cocoPetIcon = '<span class="v3-coco-pet" aria-hidden="true"><img src="/assets/coco/corpo-neutra_acolhedora.webp" width="900" height="337" alt=""></span>';
+  function navButton(page) { return `<button class="v3-nav${state.page === page ? ' is-active' : ''}" type="button" data-go="${page}" aria-label="${esc(names[page])}" title="${esc(names[page])}" ${state.page === page ? 'aria-current="page"' : ''}>${page === 'coco' ? cocoPetIcon : icon(page)}<span>${esc(names[page])}</span></button>`; }
   function navEditorMarkup() {
-    return `<div class="v3-nav-editor-head"><strong>Editar menu</strong><button type="button" data-action="sidebar-edit" aria-label="Fechar edição do menu">×</button></div><p>Escolha a ordem e o que aparece neste aparelho.</p><div class="v3-nav-editor-list">${navPrefs.order.map((page, index) => `<div class="v3-nav-editor-row"><span>${page === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(page)}${esc(names[page])}</span><button type="button" data-nav-visibility="${page}" aria-label="${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Ocultar'} ${esc(names[page])}" aria-pressed="${!navPrefs.hidden.includes(page)}" ${page === 'home' ? 'disabled title="Início sempre visível"' : ''}>${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Visível'}</button><button type="button" data-nav-move="up" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para cima" ${index === 0 ? 'disabled' : ''}>↑</button><button type="button" data-nav-move="down" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para baixo" ${index === navPrefs.order.length - 1 ? 'disabled' : ''}>↓</button></div>`).join('')}</div><button class="v3-nav-reset" type="button" data-action="sidebar-reset">Restaurar menu padrão</button>`;
+    return `<div class="v3-nav-editor-head"><strong>Editar menu</strong><button type="button" data-action="sidebar-edit" aria-label="Fechar edição do menu">×</button></div><p>Escolha a ordem e o que aparece neste aparelho.</p><div class="v3-nav-editor-list">${navPrefs.order.map((page, index) => `<div class="v3-nav-editor-row"><span>${page === 'coco' ? cocoPetIcon : icon(page)}${esc(names[page])}</span><button type="button" data-nav-visibility="${page}" aria-label="${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Ocultar'} ${esc(names[page])}" aria-pressed="${!navPrefs.hidden.includes(page)}" ${page === 'home' ? 'disabled title="Início sempre visível"' : ''}>${navPrefs.hidden.includes(page) ? 'Mostrar' : 'Visível'}</button><button type="button" data-nav-move="up" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para cima" ${index === 0 ? 'disabled' : ''}>↑</button><button type="button" data-nav-move="down" data-nav-page="${page}" aria-label="Mover ${esc(names[page])} para baixo" ${index === navPrefs.order.length - 1 ? 'disabled' : ''}>↓</button></div>`).join('')}</div><button class="v3-nav-reset" type="button" data-action="sidebar-reset">Restaurar menu padrão</button>`;
   }
   function renderNav() {
     const sidebar = $('.v3-sidebar');
@@ -253,12 +292,14 @@
     $('#v3-demo-note').hidden = state.page === 'home';
     if (!demo) $('#v3-demo-note').textContent = global.V3Backend?.saving()
       ? 'Salvando no perfil…' : state.sharedId ? `Perfil compartilhado · ${sharedCanEdit()?'edição':'leitura'}` : 'Dados carregados da sua conta';
-    $('#v3-coco-count').hidden = !demo;
-    if (demo) $('#v3-coco-count').textContent = '4';
+    /* O contador saiu de cima da Coco flutuante: agora é o ícone de uso
+       dentro da barra de mensagem dela (cocoUsoMini). */
+    $('#v3-coco-count').hidden = true;
     const alerts = reminders();
     const notificationCount = notificationSeen() === notificationSignature(alerts) ? 0 : alerts.length;
     $('#v3-notification-dot').hidden = !notificationCount;
     $('#v3-notification-dot').textContent = notificationCount > 9 ? '9+' : String(notificationCount);
+    if (nativeNotificationsEnabled()) void syncNativeNotifications().catch(() => {});
     $('[data-action="privacy"]').setAttribute('aria-pressed', String(state.hideMoney));
     $('[data-action="privacy"]').setAttribute('aria-label', state.hideMoney ? 'Mostrar valores' : 'Ocultar valores');
   }
@@ -322,18 +363,31 @@
      Brasil", que a lista nativa não achava. Sem JavaScript o campo
      some e a lista inteira continua lá.
      ============================================================= */
+  /* Banco escolhido nas boas-vindas (antes do login): só sugere a
+     primeira conta, nunca troca o de uma conta que já existe. */
+  function bancoBoasVindas() {
+    try { const k=(JSON.parse(localStorage.getItem('oaze.boasvindas')||'null')||{}).banco; return k&&BANK_NAMES[k]||''; } catch (e) { return ''; }
+  }
   function bankPicker(selected) {
     const known=global.BancosBR?.PRESETS || {};
     const selectedKey=bankKey(selected);
-    const chaves=BANK_GROUPS.reduce((acc,[,keys])=>acc.concat(keys.split(' ')),[])
+    const extras=global.Icons?.MARCAS_EXTRAS || {};
+    const bancos=BANK_GROUPS.reduce((acc,[,keys])=>acc.concat(keys.split(' ')),[])
       .filter((key)=>known[key])
       .map((key)=>({key,name:BANK_NAMES[key]||key}))
       .sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
-    const opcoes=chaves.map(({key,name})=>{
+    const doGrupo=(g)=>Object.keys(extras).filter((k)=>extras[k].grupo===g).map((key)=>({key,name:extras[key].nome}));
+    /* Seções como nos apps de cartão: bancos, vales, bandeiras e lojas. A
+       busca esconde o título da seção que ficar sem opção. */
+    const todosBancos=bancos.concat(doGrupo('banco')).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+    const grupos=[['Bancos e carteiras',todosBancos],['Vale e benefícios',doGrupo('vale')],['Bandeiras',doGrupo('bandeira')],['Lojas e varejo',doGrupo('loja')]].filter(([,l])=>l.length);
+    let primeiro=true;
+    const opcoes=grupos.map(([titulo,lista])=>`<p class="v3-bank-grupo">${esc(titulo)}</p>`+lista.map(({key,name})=>{
       const brand=global.Icons?.bankBrand(name);
       const color=safeColor(brand?.bg || bankBrand(name)), ink=safeColor(brand?.fg || cardInk(color));
-      return `<label class="v3-bank-option" data-banco="${esc(U.norm(name))}"><input type="radio" name="bank" value="${esc(name)}" ${key==='itau'?'required':''} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
-    }).join('');
+      const req=primeiro?'required':''; primeiro=false;
+      return `<label class="v3-bank-option" data-banco="${esc(U.norm(name))}"><input type="radio" name="bank" value="${esc(name)}" ${req} ${selectedKey===key?'checked':''}><span class="v3-bank-option-logo" style="--bank-bg:${color};--bank-ink:${ink}">${bankLogo(name,ink)}</span><span>${esc(name)}</span></label>`;
+    }).join('')).join('');
     const ehOutro=!!selected && !selectedKey;
     return `<fieldset class="v3-bank-picker"><legend>BANCO OU INSTITUIÇÃO</legend>`
       + `<input type="search" class="v3-bank-busca" id="v3-bank-busca" placeholder="Buscar banco…" aria-label="Buscar banco" autocomplete="off">`
@@ -352,7 +406,7 @@
     const brandBg=safeColor(brand?.bg || plastic), brandInk=safeColor(brand?.fg || ink);
     const last=String(d.last4||'').replace(/\D/g,'').slice(-4);
     const visibleLast=state.hideMoney ? ocultarDigitos(last) : last;
-    return `<div data-select="${esc(d.id)}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}${item.originProfileId?' · fatura no perfil '+esc(item.originProfile.name):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong>${item.originProfileId?`<span class="v3-card-linked" title="Fatura no perfil ${esc(item.originProfile.name)}">↗</span>`:`<button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`}</span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-chip" aria-hidden="true"></span><span class="v3-card-footer"><span class="v3-card-number"><small>FINAL DO CARTÃO</small><span>${esc(visibleLast||'—')}</span></span>${d.validThru?`<span class="v3-card-validity"><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}</span><img class="v3-card-oaze" src="/assets/brand/oaze-logo-mono-milk.svg" alt=""></span></div>`;
+    return `<div data-select="${esc(d.id)}" data-oaze-color="${plastic}" class="v3-wallet-item${selected ? ' is-selected' : ''}" style="--deck-i:${i || 0};--card-plastic:${plastic};--card-ink:${ink};--bank-bg:${brandBg};--bank-ink:${brandInk}"><button type="button" class="v3-card-select" data-select="${esc(d.id)}" aria-pressed="${selected}" aria-label="${esc(name)} ${item.kind==='credit'?'crédito':'débito'} ${last?'final '+esc(visibleLast):''}${item.originProfileId?' · fatura no perfil '+esc(item.originProfile.name):''}"></button><span class="v3-card-top"><span class="v3-bankmark">${walletLogo(d,brandInk)}</span><strong>${esc(name)}</strong>${item.originProfileId?`<span class="v3-card-linked" title="Fatura no perfil ${esc(item.originProfile.name)}">↗</span>`:`<button type="button" class="v3-card-hide" data-action="toggle-wallet-item-hidden" data-wallet-id="${esc(d.id)}" aria-label="${d.hidden?'Reexibir':'Ocultar'} ${esc(name)}" title="${d.hidden?'Reexibir na carteira':'Ocultar este item'}">${global.Icons?.lucide(d.hidden?'eye':'eye-off',18)?.outerHTML||'◉'}</button>`}</span><span class="v3-card-body" aria-hidden="${!selected}"><span class="v3-chip" aria-hidden="true"></span><span class="v3-card-footer"><span class="v3-card-number"><small>FINAL DO CARTÃO</small><span>${esc(visibleLast||'—')}</span></span>${d.validThru?`<span class="v3-card-validity"><small>VALIDADE</small>${esc(state.hideMoney?ocultarDigitos(d.validThru):d.validThru)}</span>`:''}</span><img class="v3-card-oaze" src="/assets/brand/oaze-logo-mono-milk.svg" alt=""></span></div>`;
   }
   /* O bolso fala do cartão do meio, e muda enquanto o dedo arrasta.
      Reescrever só estes três nós, e não a tela inteira, é o que
@@ -475,8 +529,8 @@
     if (!rows.length) return `<p class="v3-muted">Suas categorias aparecem depois da primeira ${income ? 'receita' : 'despesa'} confirmada.</p>`;
     const circumference = 2 * Math.PI * 76;
     let offset = 0;
-    const arcs = all.map((r, i) => { const length = circumference * r.value / total; const arc = `<circle class="v3-spend-arc" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" cx="100" cy="100" r="76" fill="none" stroke="${safeColor(r.color)}" stroke-width="24" style="--segment-length:${Math.max(0, length - 4)};--segment-offset:${-offset};--segment-order:${i}"/>`; offset += length; return arc; }).join('');
-    const list = rows.map((r, i) => `<button type="button" class="v3-spend-row" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" style="--swatch:${safeColor(r.color)}"><span class="v3-cat-icon">${icon(categoryIcon((profile().categories.find((c) => c.id === r.id) || {}).icon) || 'categories')}</span><span class="v3-spend-label"><strong>${esc(r.name)}</strong><small>${Math.round(100 * r.value / total)}% do mês</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></button>`).join('');
+    const arcs = all.map((r, i) => { const length = circumference * r.value / total; const visible = Math.max(0, length - 4); const arc = `<circle class="v3-spend-arc" data-oaze-color="${safeColor(r.color)}" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" cx="100" cy="100" r="76" fill="none" stroke="${safeColor(r.color)}" stroke-width="24" stroke-dasharray="${visible} 478" stroke-dashoffset="${-offset}" style="--segment-length:${visible};--segment-offset:${-offset};--segment-order:${i}"/>`; offset += length; return arc; }).join('');
+    const list = rows.map((r, i) => `<button type="button" class="v3-spend-row" data-oaze-color="${safeColor(r.color)}" data-spend-index="${i}" data-spend-name="${esc(r.name)}" data-spend-value="${esc(money(r.value))}" data-spend-share="${Math.round(100 * r.value / total)}" style="--swatch:${safeColor(r.color)};--swatch-ink:${U.inkFor(safeColor(r.color))}"><span class="v3-cat-icon">${categoryIconHtml(profile().categories.find((c) => c.id === r.id))}</span><span class="v3-spend-label"><strong>${esc(r.name)}</strong><small>${Math.round(100 * r.value / total)}% do mês</small></span><strong class="v3-mono v3-sensitive">${money(r.value)}</strong></button>`).join('');
     const remainder = all.length > rows.length ? `<p class="v3-spend-more">Mais ${all.length - rows.length} ${all.length - rows.length === 1 ? 'categoria' : 'categorias'} em “ver tudo”</p>` : '';
     return `<div class="v3-spend-overview" data-kind="${income ? 'income' : 'expense'}"><div class="v3-spend-ring" data-spend-total="${esc(money(total))}" data-spend-count="${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}"><svg viewBox="0 0 200 200" role="img" aria-label="Distribuição das ${income ? 'receitas' : 'despesas'} por categoria"><circle class="v3-spend-track" cx="100" cy="100" r="76" fill="none" stroke-width="24"/>${arcs}</svg><div class="v3-spend-ring-center"><small class="v3-spend-caption">${income ? 'receitas recebidas' : 'gastos feitos'}</small><strong class="v3-sensitive v3-spend-value">${money(total)}</strong><span class="v3-spend-detail">${all.length} ${all.length === 1 ? 'categoria' : 'categorias'}</span></div></div><div class="v3-spend-breakdown"><p class="v3-spend-lead">${esc(rows[0].name)} representa <strong>${Math.round(100 * rows[0].value / total)}%</strong> ${income ? 'das receitas' : 'dos gastos'} deste mês.</p>${list}${remainder}</div></div>`;
   }
@@ -544,16 +598,18 @@
      novo no padrão, e isso é aceitável para uma preferência de tela.
      ============================================================= */
   const CHAVE_INICIO = 'oaze.v3.inicio';
+  let blocosSessao = null;
   const BLOCOS_INICIO = [
-    { id: 'sobra', nome: 'Sobra e curva do mês', padrao: true },
+    { id: 'coco', nome: 'Converse com a Coco', padrao: true, largo: true },
+    { id: 'sobra', nome: 'Sobra e curva do mês', padrao: true, largo: true },
     { id: 'categorias', nome: 'Onde foi o mês', padrao: true },
-    { id: 'receitas', nome: 'De onde veio o mês', padrao: false },
+    { id: 'receitas', nome: 'De onde veio o mês', padrao: true },
     { id: 'proximos', nome: 'Até o fim do mês', padrao: true },
     { id: 'investimentos', nome: 'Investimentos', padrao: true },
     { id: 'faturas', nome: 'Faturas a pagar', padrao: false },
     { id: 'fluxo', nome: 'Fluxo de caixa', padrao: false },
     { id: 'metas', nome: 'Metas em andamento', padrao: false },
-    { id: 'indicadores', nome: 'Indicadores do mês', padrao: false },
+    { id: 'indicadores', nome: 'Indicadores do mês', padrao: false, largo: true },
     { id: 'atalhos', nome: 'Ações rápidas', padrao: false },
     { id: 'score', nome: 'OAZE Score', padrao: false },
     { id: 'contas', nome: 'Saldo por conta', padrao: false },
@@ -572,8 +628,29 @@
     { id: 'assinaturas', nome: 'Assinaturas recorrentes', padrao: false }
   ];
   function blocosEscolhidos() {
+    if (blocosSessao) return blocosSessao;
     try { return JSON.parse(localStorage.getItem(CHAVE_INICIO) || '{}') || {}; }
     catch (e) { return {}; }
+  }
+  /* ORDEM DOS WIDGETS (01/11/2026): a pessoa arrasta ou usa ↑ ↓ em
+     "Gerenciar widgets". Guardada no aparelho, como a escolha de ligar. */
+  const CHAVE_ORDEM = 'oaze.v3.inicio.ordem';
+  const ORDEM_PADRAO = ['coco','proximos','sobra','categorias','receitas','investimentos'];
+  function ordemBlocos() {
+    let salva = [];
+    try { salva = JSON.parse(localStorage.getItem(CHAVE_ORDEM) || '[]'); } catch (e) { salva = []; }
+    const ids = BLOCOS_INICIO.map((b) => b.id);
+    const base = (Array.isArray(salva) && salva.length ? salva : ORDEM_PADRAO).filter((id) => ids.includes(id));
+    return [...new Set(base.concat(ids))];
+  }
+  function moverBloco(id, para) {
+    const ordem = ordemBlocos();
+    const de = ordem.indexOf(id);
+    if (de < 0) return ordem;
+    ordem.splice(de, 1);
+    ordem.splice(Math.max(0, Math.min(ordem.length, para)), 0, id);
+    try { localStorage.setItem(CHAVE_ORDEM, JSON.stringify(ordem)); } catch (e) { /* vale só nesta sessão */ }
+    return ordem;
   }
   function blocoLigado(id) {
     const escolhido = blocosEscolhidos()[id];
@@ -583,11 +660,25 @@
   function alternarBloco(id) {
     const atual = blocosEscolhidos();
     atual[id] = !blocoLigado(id);
+    blocosSessao = atual;
     try { localStorage.setItem(CHAVE_INICIO, JSON.stringify(atual)); } catch (e) { /* sem armazenamento: vale só nesta sessão */ }
   }
+  /* Ponte para módulos de fora (o widget da Coco mora em recursos-app.js). */
+  global.OazeInicio = { ligado: (id) => blocoLigado(id), remover: (id) => { if (blocoLigado(id)) alternarBloco(id); if (state.page === 'home') render(); } };
+  function painelBlocosInicioHtml(alvo) {
+    const nomes = Object.fromEntries(BLOCOS_INICIO.map((b) => [b.id, b.nome]));
+    const ordem = ordemBlocos();
+    alvo.innerHTML = `<ol class="v3-panel v3-widget-picker v3-bloco-lista" id="v3-bloco-lista" style="margin-top:16px">${linhasBlocos(ordem, nomes)}</ol>`;
+  }
+  function linhasBlocos(ordem, nomes) {
+    return ordem.map((id, i) => `<li class="v3-bloco-item${blocoLigado(id) ? '' : ' is-off'}" data-bloco-item="${esc(id)}"><button type="button" class="v3-bloco-alca" data-bloco-alca aria-label="Arrastar ${esc(nomes[id])}">${alcaIcone()}</button><label class="v3-bloco-nome"><input type="checkbox" data-bloco="${esc(id)}" ${blocoLigado(id) ? 'checked' : ''}><span>${esc(nomes[id])}</span></label><span class="v3-bloco-setas"><button type="button" data-bloco-mover="-1" aria-label="Subir ${esc(nomes[id])}" ${i === 0 ? 'disabled' : ''}>↑</button><button type="button" data-bloco-mover="1" aria-label="Descer ${esc(nomes[id])}" ${i === ordem.length - 1 ? 'disabled' : ''}>↓</button></span></li>`).join('');
+  }
+  const alcaIcone = () => global.Icons?.has?.('grip-vertical') ? global.Icons.lucide('grip-vertical', 18).outerHTML : '<span aria-hidden="true">⋮⋮</span>';
   function painelBlocosInicio() {
-    const linhas = BLOCOS_INICIO.map((b) => `<label class="v3-setting-row v3-bloco-linha"><span>${esc(b.nome)}</span><input type="checkbox" data-bloco="${esc(b.id)}" ${blocoLigado(b.id) ? 'checked' : ''}></label>`).join('');
-    openSheet(`${sheetTop('gerenciar widgets', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.</p><section class="v3-panel v3-widget-picker" style="margin-top:16px">${linhas}</section>`, 'Gerenciar widgets');
+    const nomes = Object.fromEntries(BLOCOS_INICIO.map((b) => [b.id, b.nome]));
+    const ordem = ordemBlocos();
+    const linhas = linhasBlocos(ordem, nomes);
+    openSheet(`${sheetTop('gerenciar widgets', 'o que aparece na Início')}<p class="v3-muted">A carteira e a saudação ficam sempre. Marque o que aparece e arraste (ou use ↑ ↓) para mudar a ordem. Vale neste aparelho.</p><ol class="v3-panel v3-widget-picker v3-bloco-lista" id="v3-bloco-lista" style="margin-top:16px">${linhas}</ol>`, 'Gerenciar widgets');
   }
   /* O bloco de investimentos na Início usa a mesma conta da tela de
      investimentos: valor hoje, quanto foi aportado e a diferença. */
@@ -713,13 +804,32 @@
        vence esta semana" é pergunta que se faz com pressa — e era a
        que estava mais embaixo. Curva e categorias continuam na tela,
        logo abaixo: acessíveis, sem disputar a primeira olhada. */
-    const direita = [blocoLigado('proximos') ? painelVence7() : '', blocoLigado('sobra') ? wave() : ''].filter(Boolean).join('');
-    const gastos = blocoLigado('categorias') ? `<section class="v3-panel v3-widget-spending"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>` : '';
-    const receitas = blocoLigado('receitas') ? `<section class="v3-panel v3-widget-spending v3-widget-income"><div class="v3-row"><h2>de onde veio o mês</h2><button type="button" class="v3-link" data-go="categories" data-category-kind="income">ver tudo</button></div>${categoryBars(5, 'income')}</section>` : '';
-    const extraIds = BLOCOS_INICIO.slice(11).filter((b)=>blocoLigado(b.id));
-    const extraContext = extraIds.length ? { p: profile(), ts: currentTransactions().filter((t)=>!t.cancelado && t.contaNosTotais !== false), t: totals() } : null;
-    const extras = [blocoLigado('investimentos') ? painelInvestimentos() : '', blocoLigado('faturas') ? painelFaturasInicio() : '', blocoLigado('fluxo') ? painelFluxoInicio() : '', blocoLigado('metas') ? painelMetasInicio() : '', ...extraIds.map((b)=>extraHomeWidget(b.id, extraContext)), blocoLigado('score') ? painelScore() : ''].filter(Boolean).join('');
-    return `<div class="v3-home-identity"><div class="v3-home-identity-title"><span class="v3-label">VISÃO GERAL</span><h1>início</h1></div><button type="button" class="v3-greeting" data-action="profiles" aria-label="Trocar perfil financeiro"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></button></div>${blocoLigado('indicadores') ? renderHomeMetrics() : ''}<div class="v3-grid v3-home"><div class="v3-stack">${wallet('SALDO TOTAL',false)}${blocoLigado('atalhos') ? quickActions() : ''}</div><div class="v3-stack">${direita}</div>${gastos}${receitas}${extras ? `<div class="v3-home-extras">${extras}</div>` : ''}</div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar widgets</button>`;
+    /* WIDGETS NA ORDEM DA PESSOA (01/11/2026)
+       Antes a posição de cada bloco era fixa no código (duas colunas
+       montadas à mão). Agora a carteira fica sempre primeiro e os widgets
+       ligados entram numa grade na ordem escolhida em "Gerenciar widgets".
+       A grade é densa: um widget estreito sobe para ocupar o buraco ao lado
+       de outro, e os largos (Coco, curva, indicadores) ocupam a linha toda. */
+    const ligados = ordemBlocos().filter((id) => blocoLigado(id));
+    const extraContext = { p: profile(), ts: currentTransactions().filter((t)=>!t.cancelado && t.contaNosTotais !== false), t: totals() };
+    const largos = new Set(BLOCOS_INICIO.filter((b) => b.largo).map((b) => b.id));
+    const desenhar = (id) => {
+      if (id === 'coco') return '<div data-oz-inicio-slot></div>';
+      if (id === 'sobra') return wave();
+      if (id === 'proximos') return painelVence7();
+      if (id === 'categorias') return `<section class="v3-panel v3-widget-spending"><div class="v3-row"><h2>onde foi o mês</h2><button type="button" class="v3-link" data-go="categories">ver tudo</button></div>${categoryBars(5)}</section>`;
+      if (id === 'receitas') return `<section class="v3-panel v3-widget-spending v3-widget-income"><div class="v3-row"><h2>de onde veio o mês</h2><button type="button" class="v3-link" data-go="categories" data-category-kind="income">ver tudo</button></div>${categoryBars(5, 'income')}</section>`;
+      if (id === 'investimentos') return painelInvestimentos();
+      if (id === 'faturas') return painelFaturasInicio();
+      if (id === 'fluxo') return painelFluxoInicio();
+      if (id === 'metas') return painelMetasInicio();
+      if (id === 'indicadores') return renderHomeMetrics();
+      if (id === 'atalhos') return quickActions();
+      if (id === 'score') return painelScore();
+      return extraHomeWidget(id, extraContext);
+    };
+    const widgets = ligados.map((id) => { const html = desenhar(id); return html ? `<div class="v3-widget-slot${largos.has(id) ? ' is-largo' : ''}" data-widget="${esc(id)}">${html}</div>` : ''; }).join('');
+    return `<div class="v3-home-identity"><div class="v3-home-identity-title"><span class="v3-label">VISÃO GERAL</span><h1>início</h1></div><button type="button" class="v3-greeting" data-action="profiles" aria-label="Trocar perfil financeiro"><span class="v3-avatar">${avatarMarkup(owner)}</span><span><small>${greeting},</small><strong>${esc(owner)}</strong></span></button></div><div class="v3-home-layout"><div class="v3-stack v3-home-carteira">${wallet('SALDO TOTAL',false)}</div><div class="v3-home-widgets">${widgets}</div></div><button type="button" class="v3-gerenciar" data-action="home-blocks">Gerenciar widgets</button>`;
   }
   function closeStatusMenu(restoreFocus = true) {
     if (!statusMenu) return;
@@ -857,6 +967,23 @@
       + `<button type="button" class="v3-secondary" data-action="limpar-filtros">Limpar filtros</button>`
       + `<p class="v3-muted">O período continua sendo o mês escolhido no topo. Os filtros valem só nesta sessão.</p></form>`, 'Filtros');
   }
+  /* Selo do lançamento: ícone da categoria na cor dela e, no canto, o logo
+     do banco ou cartão na cor da marca (01/11/2026). Antes era um
+     retângulo cinza igual para todos, com só o final do cartão. */
+  function txBadge(x, card) {
+    const cat = profile().categories.find((c) => c.id === x.categoryId) || null;
+    const cor = x.kind === 'transfer' ? '#C9A44C' : cat ? categoryColor(cat) : '#5A6B75';
+    const miolo = x.kind === 'transfer' ? (global.Icons?.lucide('arrow-left-right', 18)?.outerHTML || '') : categoryIconHtml(cat);
+    const inst = card ? (card.bank || card.name || '') : '';
+    let banco = '';
+    if (inst) {
+      const brand = global.Icons?.bankBrand(inst);
+      const bg = safeColor(card.customColor ? card.color : (brand?.bg || bankBrand(inst, card.color)));
+      const ink = safeColor(brand?.fg || cardInk(bg));
+      banco = `<span class="v3-tx-banco" style="--bank-bg:${bg};--bank-ink:${ink}" title="${esc(inst)}">${walletLogo(card, ink)}</span>`;
+    }
+    return `<span class="v3-mini-card v3-tx-selo" style="--swatch:${cor};--swatch-ink:${U.inkFor(cor)}">${miolo}${banco}</span>`;
+  }
   function renderTransactions() {
     const rows = currentTransactions({ comCancelados: true }).filter(passaNoFiltro).sort((a, b) => b.date.localeCompare(a.date));
     const t = totals();
@@ -871,7 +998,7 @@
       }
       const tone=x.kind==='income'?'v3-positive':x.kind==='transfer'?'v3-transfer':'v3-negative';
       const sign=x.kind==='income'?'+':x.kind==='transfer'?'↔':'−';
-      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}"><span class="v3-mini-card" style="--card-light:${esc((card || {}).color || '#446779')};--card-dark:#1d3442" data-last="${esc((card || {}).last4 || '')}"></span><span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${esc(shortDate(x.date))} · ${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${tone} v3-sensitive">${sign} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
+      return `<div class="v3-tx${x.cancelado ? ' is-cancelada' : x.confirmed ? '' : ' is-pending'}">${txBadge(x, card)}<span class="v3-tx-main"><button class="v3-tx-open" type="button" data-transaction="${esc(x.id)}" aria-label="Editar ${esc(x.description)}">${esc(x.description)}</button><small>${esc(shortDate(x.date))} · ${esc(categoryName(x.categoryId))} · ${esc(method)}</small></span><span class="v3-tx-amount v3-mono ${tone} v3-sensitive">${sign} ${money(x.amount)}</span><button class="v3-status${x.cancelado ? ' is-cancel' : x.confirmed ? ' is-done' : ''}" type="button" data-confirm="${esc(x.id)}" data-confirm-month="${esc(x.ym || ymOf(x.date))}" aria-label="Situação de ${esc(x.description)}: ${statusLabels[x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente']}. Escolher situação" aria-haspopup="dialog" aria-expanded="false" title="Escolher situação">${statusGlyph(x.cancelado ? 'cancelado' : x.confirmed ? 'pago' : 'pendente')}</button></div>`;
     };
 
     const ativos = filtrosAtivos() + (state.filter !== 'Todos' ? 1 : 0);
@@ -1204,8 +1331,8 @@
       const limite = comTeto ? Number(orcamentos[r.id] || 0) : 0;
       const usou = limite > 0 ? Math.round(100 * r.value / limite) : null;
       const estourou = usou != null && usou > 100;
-      return `<div class="v3-cat-tile${estourou ? ' estourou' : ''}">`
-        + `<span class="v3-cat-icon" style="--swatch:${safeColor(r.color)};--swatch-ink:${U.inkFor(safeColor(r.color))}">${categoryIconMarkup(categoryIcon((profile().categories.find((c)=>c.id===r.id)||{}).icon) || 'categories')}</span>`
+      return `<div class="v3-cat-tile${estourou ? ' estourou' : ''}" data-oaze-color="${safeColor(r.color)}" style="--swatch:${safeColor(r.color)};--swatch-ink:${U.inkFor(safeColor(r.color))}">`
+        + `<span class="v3-cat-icon" style="--swatch:${safeColor(r.color)};--swatch-ink:${U.inkFor(safeColor(r.color))}">${categoryIconHtml(profile().categories.find((c) => c.id === r.id))}</span>`
         + `<span class="v3-cat-id"><strong>${esc(r.name)}</strong><small>${Math.round(r.value/total*100)}% do total</small></span>`
         + `<strong class="v3-mono v3-sensitive">${money(r.value)}</strong>`
         + (comTeto ? (limite > 0
@@ -1230,13 +1357,13 @@
       + `<button type="button" class="v3-primary v3-category-create" data-action="add-category">＋ Nova categoria</button></div>`
       + `<div class="v3-grid v3-categories"><section class="v3-panel v3-category-overview"><div class="v3-row"><h2>${comTeto ? 'onde foi o mês' : 'de onde veio o mês'}</h2><small>${esc(periodLabel(state.ym))}</small></div>${categoryBars(5, comTeto ? 'expense' : 'income')}</section>`
       + `<div class="v3-cat-grid">${rows.map(ladrilho).join('') || '<p class="v3-muted">Nenhuma movimentação confirmada neste período.</p>'}`
-      + semGasto.map((b) => `<div class="v3-cat-tile esta-vazia"><span class="v3-cat-icon" style="--swatch:#355565">${icon('categories')}</span>`
+      + semGasto.map((b) => `<div class="v3-cat-tile esta-vazia" style="--swatch:#355565;--swatch-ink:#fff"><span class="v3-cat-icon">${icon('categories')}</span>`
         + `<span class="v3-cat-id"><strong>${esc(b.nome)}</strong><small>nada gasto neste mês</small></span>`
         + `<strong class="v3-mono v3-sensitive">${money(0)}</strong>`
         + `<span class="v3-cat-teto"><button type="button" class="v3-link" data-budget="${esc(b.id)}">teto de ${money(b.limite)}</button></span></div>`).join('')
       + `</div></div>`
       + `<section class="v3-panel"><div class="v3-row"><h2>suas categorias</h2><span class="v3-muted">${defined.length} cadastradas</span></div>`
-      + `<div class="v3-cat-manage">${defined.map((c)=>`<button type="button" data-category="${esc(c.id)}" aria-label="Editar categoria ${esc(c.name)}"><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)};--swatch-ink:${U.inkFor(safeColor(c.color))}">${categoryIconMarkup(categoryIcon(c.icon))}</span><span>${esc(c.name)}</span><small>Editar ›</small></button>`).join('')}</div></section></div>`;
+      + `<div class="v3-cat-manage">${defined.map((c)=>`<button type="button" data-category="${esc(c.id)}" aria-label="Editar categoria ${esc(c.name)}"><span class="v3-cat-icon" data-oaze-color="${categoryColor(c)}" style="--swatch:${categoryColor(c)};--swatch-ink:${U.inkFor(categoryColor(c))}">${categoryIconHtml(c)}</span><span>${esc(c.name)}</span><small>Editar ›</small></button>`).join('')}</div></section></div>`;
   }
   /* =============================================================
      QUANTO POR MÊS, E SE CABE
@@ -1296,7 +1423,7 @@
     const categories = profile().categories.filter((c) => c.kind === 'expense').sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
     const planned = U.round2(Object.values(budgets).reduce((sum, amount)=>sum + Number(amount || 0), 0));
     const remain = U.round2(salary - planned);
-    return `<div class="v3-planning"><section class="v3-panel v3-planning-income"><div><span class="v3-label">SALÁRIO MENSAL PLANEJADO</span><strong class="v3-money v3-sensitive">${money(salary)}</strong><small>Referência manual para os tetos. Não vira lançamento.</small></div><form id="v3-form-planning-salary" class="v3-form"><label>VALOR POR MÊS (R$)<input name="salary" data-money="true" inputmode="decimal" value="${esc(salary ? salary.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '')}" placeholder="0,00" required></label><button type="submit" class="v3-primary">Salvar salário</button></form></section><section class="v3-panel"><div class="v3-row"><div><h2>tetos por categoria</h2><small>Você define cada valor; nenhum teto é criado automaticamente.</small></div><button type="button" class="v3-secondary" data-action="add-budget">Definir teto</button></div><div class="v3-planning-summary"><span>Tetos definidos <strong class="v3-sensitive">${money(planned)}</strong></span><span>Salário menos tetos <strong class="v3-sensitive ${remain<0?'v3-negative':''}">${salary ? money(remain) : '—'}</strong></span></div><div class="v3-planning-list">${categories.map((c)=>{const limit=Number(budgets[c.id]||0);const spent=Number(used.find((r)=>r.id===c.id)?.value||0);return `<button type="button" class="v3-planning-row" ${limit?`data-budget="${esc(c.id)}"`:`data-budget-novo="${esc(c.id)}"`}><span class="v3-cat-icon" style="--swatch:${safeColor(c.color)};--swatch-ink:${U.inkFor(safeColor(c.color))}">${categoryIconMarkup(categoryIcon(c.icon))}</span><span><strong>${esc(c.name)}</strong><small>${limit?`Gasto ${money(spent)} de ${money(limit)}`:'Sem teto definido'}</small></span><span>${limit?'Editar teto':'Definir teto'} ›</span></button>`}).join('')}</div></section></div>`;
+    return `<div class="v3-planning"><section class="v3-panel v3-planning-income"><div><span class="v3-label">SALÁRIO MENSAL PLANEJADO</span><strong class="v3-money v3-sensitive">${money(salary)}</strong><small>Referência manual para os tetos. Não vira lançamento.</small></div><form id="v3-form-planning-salary" class="v3-form"><label>VALOR POR MÊS (R$)<input name="salary" data-money="true" inputmode="decimal" value="${esc(salary ? salary.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '')}" placeholder="0,00" required></label><button type="submit" class="v3-primary">Salvar salário</button></form></section><section class="v3-panel"><div class="v3-row"><div><h2>tetos por categoria</h2><small>Você define cada valor; nenhum teto é criado automaticamente.</small></div><button type="button" class="v3-secondary" data-action="add-budget">Definir teto</button></div><div class="v3-planning-summary"><span>Tetos definidos <strong class="v3-sensitive">${money(planned)}</strong></span><span>Salário menos tetos <strong class="v3-sensitive ${remain<0?'v3-negative':''}">${salary ? money(remain) : '—'}</strong></span></div><div class="v3-planning-list">${categories.map((c)=>{const limit=Number(budgets[c.id]||0);const spent=Number(used.find((r)=>r.id===c.id)?.value||0);return `<button type="button" class="v3-planning-row" ${limit?`data-budget="${esc(c.id)}"`:`data-budget-novo="${esc(c.id)}"`}><span class="v3-cat-icon" data-oaze-color="${categoryColor(c)}" style="--swatch:${categoryColor(c)};--swatch-ink:${U.inkFor(categoryColor(c))}">${categoryIconHtml(c)}</span><span><strong>${esc(c.name)}</strong><small>${limit?`Gasto ${money(spent)} de ${money(limit)}`:'Sem teto definido'}</small></span><span>${limit?'Editar teto':'Definir teto'} ›</span></button>`}).join('')}</div></section></div>`;
   }
   function renderPlanningGuide() {
     const income=Number(profile().planningSalary||0);
@@ -1349,11 +1476,53 @@
     return String(hash >>> 0);
   }
   function notificationSeen() { try { return sessionStorage.getItem(notificationStorageKey()); } catch { return null; } }
+  let scheduledNotificationKey = '';
+  function nativeNotificationsEnabled() {
+    try { return localStorage.getItem('oaze.native.reminders') === 'yes'; } catch { return false; }
+  }
+  async function syncNativeNotifications() {
+    const native = global.OAZE_NATIVE_NOTIFICATIONS;
+    if (demo || !native || !nativeNotificationsEnabled()) return;
+    /* Avisos por tipo (vencimento na véspera, orçamento, metas, dólar,
+       score e dicas) vivem em recursos-app.js; este caminho fica como
+       reserva se o módulo não carregar. */
+    if (global.OazeAvisos) { await global.OazeAvisos.sincronizar(); return; }
+    const list = reminders();
+    const key = `${notificationStorageKey()}:${notificationSignature(list)}`;
+    if (key === scheduledNotificationKey) return;
+    const now = Date.now();
+    const items = list.map((entry, index) => {
+      const due = new Date(`${entry.date}T09:00:00`);
+      if (!Number.isFinite(due.getTime()) || due.getTime() <= now) return null;
+      return { id: 3100000 + index, at: due.toISOString() };
+    }).filter(Boolean);
+    await native.schedule(items);
+    scheduledNotificationKey = key;
+  }
+  async function toggleNativeNotifications() {
+    const native = global.OAZE_NATIVE_NOTIFICATIONS;
+    if (!native || demo) return;
+    if (nativeNotificationsEnabled()) {
+      try { await native.cancel(); } catch { toast('Não consegui cancelar os avisos do sistema.'); return; }
+      try { localStorage.removeItem('oaze.native.reminders'); } catch { /* preferência local */ }
+      scheduledNotificationKey = '';
+      toast('Avisos do sistema desligados neste aparelho.');
+    } else {
+      let granted = false;
+      try { granted = await native.request(); } catch { /* permissão recusada */ }
+      if (!granted) { toast('Permissão não concedida. Você ainda pode ver os lembretes aqui.'); return; }
+      try { localStorage.setItem('oaze.native.reminders', 'yes'); await syncNativeNotifications(); }
+      catch { try { localStorage.removeItem('oaze.native.reminders'); } catch {} toast('Não consegui programar os avisos.'); return; }
+      toast('Avisos do sistema ligados neste aparelho.');
+    }
+    openNotifications();
+  }
   function openNotifications() {
     const list=reminders();
     try { sessionStorage.setItem(notificationStorageKey(),notificationSignature(list)); } catch { /* navegador sem sessão */ }
     $('#v3-notification-dot').hidden=true;
-    openSheet(`${sheetTop('notificações','próximos 30 dias')}<div class="v3-notification-list">${list.length ? list.map((item) => `<div class="v3-notification-item"><span class="v3-date">${esc(item.date.slice(8,10))}<small>${esc(shortDate(item.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(item.title)}</strong><small>${esc(item.sub || 'previsto')}</small></span><strong class="v3-mono v3-sensitive">${money(item.amount)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma notificação pendente.</p>'}</div><div class="v3-notification-actions"><button type="button" class="v3-secondary" data-go="calendar">Abrir agenda</button>${Object.keys(askSilenced()).length ? `<button type="button" class="v3-secondary" data-action="reset-asks">Reativar avisos ocultos</button>` : ''}</div>`, 'Notificações');
+    const permission = global.OAZE_NATIVE_NOTIFICATIONS && !demo ? `<div class="v3-notification-permission"><strong>Avisos neste aparelho</strong><p>${nativeNotificationsEnabled() ? 'Ligados. Você receberá um lembrete no dia do vencimento, às 9h.' : 'Desligados. Ative quando quiser receber avisos fora do app.'}</p><button type="button" class="v3-secondary" data-action="toggle-native-notifications">${nativeNotificationsEnabled() ? 'Desligar avisos' : 'Ativar avisos'}</button><small>${global.__TAURI_INTERNALS__ ? 'No computador, os avisos funcionam enquanto o OAZE estiver aberto.' : 'No Android, o sistema pode adiar avisos para economizar bateria.'}</small></div>` : '';
+    openSheet(`${sheetTop('notificações','próximos 30 dias')}${permission}<p class="v3-muted">Os avisos do sistema não exibem seus valores na tela bloqueada.</p><div class="v3-notification-list">${list.length ? list.map((item) => `<div class="v3-notification-item"><span class="v3-date">${esc(item.date.slice(8,10))}<small>${esc(shortDate(item.date).split(' ')[1].toUpperCase())}</small></span><span><strong>${esc(item.title)}</strong><small>${esc(item.sub || 'previsto')}</small></span><strong class="v3-mono v3-sensitive">${money(item.amount)}</strong></div>`).join('') : '<p class="v3-muted">Nenhuma notificação pendente.</p>'}</div>${global.OazeAvisos?global.OazeAvisos.listaInsights():''}<div class="v3-notification-actions"><button type="button" class="v3-secondary" data-go="calendar">Abrir agenda</button>${global.OazeAvisos?'<button type="button" class="v3-secondary" data-action="avisos-preferencias">Escolher avisos</button>':''}${Object.keys(askSilenced()).length ? `<button type="button" class="v3-secondary" data-action="reset-asks">Reativar avisos ocultos</button>` : ''}</div>`, 'Notificações');
   }
   function eventosDoMes(ym) {
     const alvo = ym || state.ym;
@@ -1756,7 +1925,8 @@
     const serie = serieDoAno(ano);
     if (!serie.length) {
       return `<div class="v3-panel v3-empty"><img src="/assets/brand/oaze-isologo.svg" alt=""><h2>o ano aparece aqui</h2>`
-        + `<p>${demo ? 'Na demonstração não há um ano inteiro para consolidar.' : 'Assim que houver lançamentos, esta tela mostra o consolidado de ' + ano + '.'}</p></div>`;
+        + `<p>${demo ? 'Na demonstração não há um ano inteiro para consolidar.' : 'Assim que houver lançamentos, esta tela mostra o consolidado de ' + ano + '.'}</p>`
+        + `<button type="button" class="v3-primary" data-action="estado-oaze">Estado do OAZE</button></div>`;
     }
     const receitas = serie.reduce((n, r) => n + r.income, 0);
     const despesas = serie.reduce((n, r) => n + r.expense, 0);
@@ -1791,7 +1961,7 @@
 
     return `<div class="v3-reports">`
       + `<div class="v3-row v3-rep-head"><div><span class="v3-label">CONSOLIDADO</span><h2>${ano}</h2></div>`
-      + `<div class="v3-rep-acoes"><button type="button" class="v3-secondary" data-action="export-csv">Exportar CSV</button>`
+      + `<div class="v3-rep-acoes"><button type="button" class="v3-primary" data-action="estado-oaze">Estado do OAZE</button><button type="button" class="v3-secondary" data-action="export-csv">Exportar CSV</button>`
       + `<button type="button" class="v3-secondary" data-action="export-pdf">Salvar em PDF</button></div></div>`
       + `<div class="v3-grid v3-rep-kpis">`
       + kpi('RECEITAS EM ' + ano, money(receitas), 'v3-positive')
@@ -1937,7 +2107,13 @@
       ['Recorrências', 'recurring_items']
     ].map(([label,key]) => `<li>${label}: ${Limites.contar(key)} / ${Limites.limite(key) ?? 'sem limite'}</li>`).join('') : '';
     const ai = signed && global.Limites && Limites.consumoIA ? Limites.consumoIA() : null;
-    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div><div class="v3-setting-row"><span>Biometria</span><span>indisponível na web</span></div></section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai&&Limites.consumoCoco?`<li>Coco: ${Limites.consumoCoco().pct_dia}% de hoje · ${Limites.consumoCoco().pct_semana}% da semana</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a></section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Notificações', '', 'data-action="notifications"')}</section></div></div>`;
+    return `<div class="v3-grid v3-settings"><div><span class="v3-label v3-section-title">CONTA</span><section class="v3-panel">${row('Seus dados', '', 'data-action="account-profile"')}${row('Trocar conta', '', 'data-action="switch-account"')}${row('Sair', '', 'data-action="sign-out"')}${row('Excluir conta', '', 'data-action="delete-account"')}</section><span class="v3-label v3-section-title">SEGURANÇA</span><section class="v3-panel"><div class="v3-setting-row"><span>Sessão e sincronização</span><span>${signed?'Conectada':'Sem sessão'}</span></div><div class="v3-setting-row"><span>PIN do cofre</span><span>na carteira</span></div>${global.OAZE_NATIVE_BIOMETRICS ? row('Desbloqueio do aparelho', '', 'data-action="biometric-toggle"', global.OAZE_NATIVE_BIOMETRICS.isEnabled()?'Ativado':'Ativar ›') : '<div class="v3-setting-row"><span>Desbloqueio do aparelho</span><span>disponível no app</span></div>'}</section></div><div><span class="v3-label v3-section-title">PLANO E AJUDA</span><section class="v3-panel">${row('Plano e assinatura', '', 'data-go="plan"')}${signed?`<details class="v3-usage"><summary>Acompanhar recursos utilizados</summary><ul>${usage}${ai&&Limites.consumoCoco?`<li>Coco: ${Limites.consumoCoco().pct_dia}% de hoje · ${Limites.consumoCoco().pct_semana}% da semana</li>`:''}</ul></details>`:''}<a class="v3-setting-row" href="/suporte"><span>Ajuda e suporte</span><span class="v3-muted">abrir ›</span></a><a class="v3-setting-row" href="mailto:info@oaze.site"><span>Fale com a gente</span><span class="v3-muted">info@oaze.site</span></a></section><span class="v3-label v3-section-title">RELATÓRIOS</span><section class="v3-panel">${row('Estado do OAZE', '', 'data-action="estado-oaze"', 'PDF ›')}${row('Exportar lançamentos', '', 'data-action="export-csv"', 'CSV ›')}</section><span class="v3-label v3-section-title">COCO E DADOS</span><section class="v3-panel">${row('Notificações', '', 'data-action="notifications"')}${row('Permissões do aparelho', '', 'data-action="device-permissions"')}</section><span class="v3-label v3-section-title">PRIVACIDADE E ACESSIBILIDADE</span><section class="v3-panel v3-legal-links" aria-label="Privacidade, LGPD e acessibilidade"><a class="v3-setting-row" href="/privacidade"><span>Política de privacidade</span><span class="v3-muted">ler ›</span></a><a class="v3-setting-row" href="/privacidade#direitos"><span>Seus direitos (LGPD)</span><span class="v3-muted">ler ›</span></a><a class="v3-setting-row" href="/privacidade#encarregado"><span>Canal de privacidade</span><span class="v3-muted">ler ›</span></a><a class="v3-setting-row" href="/termos"><span>Termos de uso</span><span class="v3-muted">ler ›</span></a><a class="v3-setting-row" href="/termos#acessibilidade"><span>Acessibilidade</span><span class="v3-muted">ler ›</span></a></section></div></div>`;
+  }
+  function openDevicePermissions() {
+    const notifications = global.OAZE_NATIVE_NOTIFICATIONS
+      ? `<div class="v3-notification-permission"><strong>Notificações</strong><p>${nativeNotificationsEnabled() ? 'Ativadas neste aparelho.' : 'Desativadas neste aparelho.'} Só solicitamos acesso quando você toca em ativar.</p><button type="button" class="v3-secondary" data-action="notifications">Abrir notificações</button></div>`
+      : '<p>Os lembretes aparecem dentro do OAZE neste navegador.</p>';
+    openSheet(`${sheetTop('permissões do aparelho', 'controle no momento de uso')}<div class="v3-permissions-list">${notifications}<div><strong>Microfone</strong><p>A Coco pede acesso quando você inicia a conversa por voz. O microfone é encerrado ao terminar a conversa.</p></div><div><strong>Câmera e arquivos</strong><p>O seletor do sistema abre apenas quando você escolhe anexar um arquivo ou uma imagem à Coco.</p></div><div><strong>Biometria</strong><p>Não é exigida para entrar. O PIN continua protegendo os dados sensíveis.</p></div><small>Se uma permissão foi negada, altere-a nas configurações do aparelho. O OAZE não consegue mudá-la sozinho.</small></div>`, 'Permissões do aparelho');
   }
   function accountProfileSheet() {
     const owner = V3Backend.user(), data = V3Backend.accountProfile() || {};
@@ -1970,28 +2146,44 @@
   }
   function renderPlan() {
     const list = global.Planos ? Planos.LISTA : [];
+    const playReadonly = !!global.OAZE_BILLING_READONLY;
     const sub = state.subscription, current = sub?.plan_id || 'free';
     const paid = current !== 'free' && ['active', 'past_due', 'canceled'].includes(sub?.status) && (!sub?.current_period_end || new Date(sub.current_period_end) > new Date());
     const linkedSubscription=!!(sub?.stripe_subscription_id || sub?.asaas_subscription_id);
     const period = state.billing === 'annual' ? 'ano' : 'mês';
-    const status = demo ? 'Prévia: nenhuma assinatura é criada aqui.' : state.billingError ? `Não consegui consultar sua assinatura: ${esc(state.billingError)}` : !sub ? 'Consultando sua assinatura…' : paid ? `Plano ${esc(Planos.get(current).nome)} · ${sub.cancel_at_period_end ? 'cancelamento agendado' : sub.status === 'past_due' ? 'pagamento pendente' : 'ativo'}` : 'Seu plano atual é Semente.';
-    return `<div class="v3-plan-head"><div class="v3-segment" role="group" aria-label="Ciclo de cobrança"><button type="button" data-billing="monthly" class="${state.billing === 'monthly' ? 'is-active' : ''}" aria-pressed="${state.billing === 'monthly'}">Mensal</button><button type="button" data-billing="annual" class="${state.billing === 'annual' ? 'is-active' : ''}" aria-pressed="${state.billing === 'annual'}">Anual</button></div></div><p class="v3-plan-status" role="status">${status}</p>${!demo&&paid&&!sub.cancel_at_period_end&&!linkedSubscription?'<p class="v3-plan-alert" role="alert">Não foi possível identificar a assinatura ligada a este plano. <a href="/suporte">Peça ajuda para conferir a cobrança ou cancelar</a> antes de assinar outro.</p>':''}<div class="v3-grid v3-plan-grid">${list.map((p) => {
+    const status = demo ? 'Prévia: nenhuma assinatura é criada aqui.' : state.billingError ? `Não consegui consultar sua assinatura: ${esc(state.billingError)}` : !sub ? 'Consultando sua assinatura…' : sub.status === 'past_due' && sub.stripe_subscription_id ? 'Pagamento pendente. Confira seu cartão e suas cobranças na Stripe.' : paid ? `Plano ${esc(Planos.get(current).nome)} · ${sub.cancel_at_period_end ? 'cancelamento agendado' : 'ativo'}` : 'Seu plano atual é Semente.';
+    const renewDate = sub?.current_period_end && !Number.isNaN(new Date(sub.current_period_end).getTime()) ? new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(sub.current_period_end)) : '';
+    const paidDetails = !demo && (paid || sub?.stripe_subscription_id) ? `<section class="v3-panel v3-billing-details" aria-label="Sua cobrança"><h2>cobrança</h2><dl><div><dt>Ciclo</dt><dd>${sub.billing_cycle === 'annual' ? 'Anual' : sub.billing_cycle === 'monthly' ? 'Mensal' : 'Não informado'}</dd></div>${renewDate ? `<div><dt>${sub.cancel_at_period_end ? 'Acesso até' : 'Fim do período atual'}</dt><dd>${esc(renewDate)}</dd></div>` : ''}<div><dt>Forma de pagamento</dt><dd>${sub.stripe_subscription_id ? 'Gerenciada com segurança pela Stripe' : 'Consulte o suporte'}</dd></div></dl>${playReadonly ? '<p class="v3-muted">Gerencie a forma de pagamento no canal em que contratou a assinatura.</p>' : sub.stripe_subscription_id ? '<button type="button" class="v3-secondary" data-action="billing-portal">Atualizar cartão e consultar cobranças</button>' : '<a class="v3-secondary" href="/suporte">Pedir ajuda sobre a cobrança</a>'}<p class="v3-muted">O OAZE não recebe nem guarda o número completo do seu cartão.</p></section>` : '';
+    return `<div class="v3-plan-head"><div class="v3-segment" role="group" aria-label="Ciclo de cobrança"><button type="button" data-billing="monthly" class="${state.billing === 'monthly' ? 'is-active' : ''}" aria-pressed="${state.billing === 'monthly'}">Mensal</button><button type="button" data-billing="annual" class="${state.billing === 'annual' ? 'is-active' : ''}" aria-pressed="${state.billing === 'annual'}">Anual</button></div></div><p class="v3-plan-status" role="status">${status}</p>${paidDetails}${!demo&&paid&&!sub.cancel_at_period_end&&!linkedSubscription?'<p class="v3-plan-alert" role="alert">Não foi possível identificar a assinatura ligada a este plano. <a href="/suporte">Peça ajuda para conferir a cobrança ou cancelar</a> antes de assinar outro.</p>':''}<div class="v3-grid v3-plan-grid">${list.map((p) => {
       const isCurrent = p.id === current && (p.id === 'free' || paid);
-      const disabled = demo || !sub || !!state.billingError || state.paymentBusy || isCurrent || (paid && !sub.cancel_at_period_end) || p.id === 'free';
+      const disabled = playReadonly || demo || !sub || !!state.billingError || state.paymentBusy || isCurrent || (paid && !sub.cancel_at_period_end) || (sub.status === 'past_due' && linkedSubscription) || p.id === 'free';
       const price = state.billing === 'annual' ? p.anualCentavos : p.mensalCentavos;
-      const label = isCurrent ? 'Plano atual' : p.id === 'free' ? 'Plano inicial' : paid && !sub.cancel_at_period_end ? 'Cancele o plano atual antes' : demo ? 'Disponível no app' : 'Assinar com Stripe';
+      const label = isCurrent ? 'Plano atual' : p.id === 'free' ? 'Plano inicial' : playReadonly ? 'Assinatura indisponível neste app' : paid && !sub.cancel_at_period_end ? 'Cancele o plano atual antes' : demo ? 'Disponível no app' : 'Assinar com Stripe';
       const quantidade=(n,sing,plural)=>n==null?`${plural[0].toUpperCase()+plural.slice(1)} sem limite`:`Até ${n} ${n===1?sing:plural}`;
       const resumo=p.id==='free'?'O essencial para começar a organizar seu dinheiro.':'Mais espaço para contas, cartões e conversas com a Coco.';
       return `<section class="v3-panel v3-plan${p.destaque ? ' highlight' : ''}"><div class="v3-row"><h2>${esc(p.nome)}</h2>${p.destaque ? '<span class="v3-label">PLANO PRINCIPAL</span>' : ''}</div><p class="v3-plan-summary">${resumo}</p><p class="v3-money">${money(price / 100)} <span>por ${period}</span></p><ul><li>${quantidade(p.limites.workspaces,'espaço','espaços')}</li><li>${quantidade(p.limites.accounts,'conta','contas')}</li><li>${quantidade(p.limites.credit_cards,'cartão','cartões')}</li><li>${p.limites.ai_queries_per_month == null ? 'Conversas com a Coco sem limite mensal' : `${p.limites.ai_queries_per_month} ${p.limites.ai_queries_per_month===1?'pedido':'pedidos'} à Coco por mês`}</li></ul><button type="button" class="${p.destaque ? 'v3-secondary' : 'v3-primary'}" data-action="subscribe" data-plan="${esc(p.id)}" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
-    }).join('')}</div>${!demo && paid && !sub.cancel_at_period_end && linkedSubscription ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
+    }).join('')}</div>${!playReadonly && !demo && paid && !sub.cancel_at_period_end && linkedSubscription ? '<button type="button" class="v3-secondary v3-plan-cancel" data-action="cancel-subscription">Cancelar renovação da assinatura</button>' : ''}`;
   }
   function renderMore() {
-    const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'calendário e recorrências', coco: 'conversa e análises', settings: 'segurança, dados', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
-    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div><div class="v3-more">${['investments','categories','calendar','coco','settings'].map((p)=>`<button type="button" data-go="${p}">${p === 'coco' ? '<img src="/assets/coco/corpo-neutra_acolhedora.webp" alt="">' : icon(p)}<strong>${esc(names[p])}</strong><small>${esc(desc[p])}</small></button>`).join('')}</div>`;
+    const desc = { investments: `${money(invested())} investidos`, categories: `${profile().categories.length} em uso`, goals: `${profile().goals.length} metas ativas`, calendar: 'calendário e recorrências', coco: 'conversa e análises', settings: 'privacidade, ajuda e contato', plan: demo ? 'OAZE mensal' : 'planos vigentes' };
+    return `<div class="v3-row" style="margin-bottom:22px"><span class="v3-avatar" style="width:55px;height:55px;font-size:23px">${avatarMarkup(demo?sample.owner:Store.ownerName())}</span><span style="flex:1"><h2>${esc(demo?sample.owner:Store.ownerName()||'Seu OAZE')}</h2><small>Perfil ${esc(profile().name||'Pessoal')}</small></span></div>${moreSections(desc)}`;
+  }
+  /* "Mais" em seções, como lista (31/10/2026, inspiração Kontto):
+     cada linha leva a uma tela que já existe; nada aqui é atalho morto. */
+  function moreSections(desc) {
+    const nItems=items().length;
+    const secoes=[
+      ['Organizar','org',[['data-go="wallet"','wallet','Contas e cartões',`${nItems} na carteira`],['data-go="categories"','categories','Categorias',desc.categories],['data-oz-mais="tags"','tag','Tags',`${(profile().tags||[]).length} criadas`],['data-oz-mais="caixinhas"','piggy-bank','Caixinhas','dinheiro separado por objetivo'],['data-oz-mais="busca"','search','Buscar lançamentos','em todos os meses']]],
+      ['Planejar','plan',[['data-go="goals"','goals','Orçamento e metas',desc.goals],['data-go="investments"','investments','Investimentos',desc.investments],['data-oz-mais="projecoes"','trending-up','Projeções','saldo dos próximos meses'],['data-oz-mais="desejos"','gift','Lista de desejos','posso comprar?'],['data-oz-mais="simulador"','calculator','Simulador de quitação','bola de neve × avalanche']]],
+      ['Acompanhar','track',[['data-go="calendar"','calendar','Agenda e recorrências','vencimentos, fixos e parcelas'],['data-oz-mais="financiamentos"','landmark','Financiamentos',`${(profile().dividas||[]).filter((d)=>d.tipo==='financiamento').length} ativos`],['data-oz-mais="emprestimos"','banknote','Empréstimos',`${(profile().dividas||[]).filter((d)=>d.tipo==='emprestimo').length} ativos`],['data-oz-mais="receber"','hand-coins','Quem me deve',`${(profile().aReceber||[]).filter((x)=>!x.quitado).length} em aberto`],['data-oz-mais="resumo"','bell','Resumo automático','semana e mês em 1 minuto']]],
+      ['Analisar','analyze',[['data-oz-mais="relatorio"','chart-line','Relatório personalizado','período, conta, categoria e tag'],['data-action="estado-oaze"','receipt','Estado do OAZE','relatório em PDF'],['data-action="export-csv"','reports','Exportar lançamentos','planilha CSV'],['data-oz-mais="ir"','receipt','Relatório para o IR','rendimentos, dedutíveis, bens']]],
+      ['Ferramentas','tools',[['data-go="coco"','coco','Coco','conversa e análises'],['data-oz-comprovante','receipt','Importar comprovante','foto, câmera ou PDF'],['data-oz-mais="nota"','scan-line','Nota fiscal (QR)','loja, total e itens da NFC-e'],['data-oz-mais="banco"','smartphone','Avisos do banco','lançar pela notificação'],['data-go="settings"','settings','Configurações',desc.settings]]]
+    ];
+    return `<div class="v3-more-lista">${secoes.map(([titulo,tom,linhas])=>`<section class="v3-more-secao" data-tom="${tom}"><h2>${esc(titulo)}</h2>${linhas.map(([attr,ic,t,s])=>`<button type="button" ${attr}><span class="v3-more-ic">${ic==='coco'?cocoPetIcon:uiIcons.has(ic)?icon(ic):(global.Icons?.lucide(ic,22)?.outerHTML||icon('more'))}</span><span class="v3-more-txt"><strong>${esc(t)}</strong><small>${esc(s||'')}</small></span><span class="v3-more-seta" aria-hidden="true">›</span></button>`).join('')}</section>`).join('')}</div>`;
   }
   function cocoMessages() {
     if (!state.chat.length) return `<div class="v3-coco-empty"><img src="/assets/coco/rostinhos/02_feliz.png" alt="Coco"></div>`;
-    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?'Parar áudio':'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
+    return state.chat.map((x,i)=>`<article class="v3-coco-message ${x.who==='user'?'is-user':'is-coco'}">${x.who==='coco'?`<img class="v3-coco-message-avatar ${state.cocoSpeaking===i?'is-speaking':''}" src="/assets/coco/rostinhos/${state.cocoSpeaking===i?'06_orgulhosa':'02_feliz'}.png" alt="Coco">`:''}<p>${esc(x.text)}</p>${x.who==='coco'?`<button type="button" class="v3-coco-listen" data-action="coco-speak" data-message-index="${i}" aria-label="${state.cocoSpeaking===i?(state.cocoAudioLoading?'Cancelar preparo do áudio':'Parar áudio'):'Ouvir resposta da Coco'}">${state.cocoSpeaking===i?(state.cocoAudioLoading?'Preparando áudio…':'Parar áudio'):'Ouvir resposta'}</button>`:''}${x.proposal?`<div class="v3-suggestion"><span class="v3-label">LANÇAMENTO PARA REVISAR</span><strong>${esc(x.proposal.descricao)}</strong><small>${money(x.proposal.valor)} · ${esc(shortDate(x.proposal.data))}</small>${x.proposal.sourceNeedsReview?'<small role="status">Conta não identificada. Escolha no formulário.</small>':''}<button type="button" class="v3-primary" data-action="review-proposal" data-proposal-index="${i}">Revisar antes de salvar</button></div>`:''}${x.goalProposal?`<div class="v3-suggestion"><span class="v3-label">META PARA REVISAR</span><strong>${esc(x.goalProposal.nome)}</strong><small>${money(x.goalProposal.valor_alvo)}${x.goalProposal.prazo?' · '+esc(shortDate(x.goalProposal.prazo)):''}</small><button type="button" class="v3-primary" data-action="review-goal-proposal" data-proposal-index="${i}">Revisar meta</button></div>`:''}${x.memory?`<div class="v3-suggestion"><span class="v3-label">MEMÓRIA PARA APROVAR</span><strong>${esc(x.memory.label)}</strong><small>${esc(x.memory.value)}</small><button type="button" class="v3-primary" data-action="remember-proposal" data-proposal-index="${i}">Guardar esta regra</button></div>`:''}</article>`).join('');
   }
   function cocoTools() {
     const tools=[['debts','wallet','Dívidas','organizar a quitação'],['planning','calendar','Planejar','próximos meses'],['goals','goals','Metas','chegar com calma'],['analysis','reports','Análises','entender os números']];
@@ -2046,7 +2238,12 @@
     if (state.page === 'investments') enrichInvestmentCharts();
     if (['investments','home'].includes(state.page) && !state.market.loading) queueMicrotask(() => refreshInvestmentMarket(false));
     const micIndicator=$('#v3-voice-global');if(micIndicator)micIndicator.hidden=!voiceSession?.stream;
-    if (state.page === 'settings') $('#v3-view').insertAdjacentHTML('beforeend', '<p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
+    if (state.page === 'settings') {
+      $('#v3-view').insertAdjacentHTML('beforeend', '<section class="v3-panel v3-settings-extra" aria-label="Idioma"><h2>idioma</h2><label class="v3-setting-row" for="v3-language"><span>Idioma do aplicativo</span><select id="v3-language" data-oaze-language><option value="pt">Português</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></label></section><p class="v3-icon-credit">Ícones de interface: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>.</p>');
+      $('#v3-language').value = document.documentElement.getAttribute('data-idioma') || 'pt';
+    }
+    const proShortcut = document.querySelector('.v3-pro-shortcut');
+    if (proShortcut) { const subscribed = state.subscription?.plan_id === 'pro' && state.subscription?.status === 'active'; proShortcut.textContent = subscribed ? 'Seu plano' : 'Seja Pro'; proShortcut.setAttribute('aria-label', subscribed ? 'Consultar seu plano OAZE' : 'Conhecer o OAZE Pro'); }
     document.body.classList.toggle('v3-hide-money',state.hideMoney);
     document.body.classList.toggle('v3-home-screen',state.page==='home');
     document.body.classList.toggle('v3-coco-screen',state.page==='coco');
@@ -2056,6 +2253,8 @@
     }
     montarCarteira();
     document.querySelectorAll('.v3-contactless').forEach((mark)=>{mark.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><path d="M8.5 8.5a5 5 0 0 1 0 7M12 5a10 10 0 0 1 0 14M15.5 2a15 15 0 0 1 0 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';});
+    /* Módulos complementares (recursos-app.js) desenham por cima da tela pronta. */
+    document.dispatchEvent(new CustomEvent('oaze:render',{detail:{page:state.page,demo}}));
   }
   function go(page) { if (page === 'reminders') page = 'calendar'; if (page === 'reports') page = 'home'; if (page === 'goals') { page = 'investments'; state.investTab = 'goals'; } else if (page === 'investments') state.investTab = 'overview'; if (!names[page]) return; if(page!=='coco'&&state.page==='coco')stopVoice(); if(page!=='wallet')state.walletHidden=false; navEditorOpen=false; state.page=page; render(); window.scrollTo({top:0,behavior:'instant'}); history.replaceState(null,'',`${!demo && location.pathname.startsWith('/app') && location.pathname !== '/app-v3.html' ? '/app' : location.pathname}${location.search}#${page==='investments'&&state.investTab!=='overview'?`investments/${state.investTab}`:page}`); }
 
@@ -2186,9 +2385,18 @@
       finally { analysisBusy = false; }
     }, 750);
   }
+  /* Uso da Coco no dia, em ícone pequeno dentro da barra de mensagem. */
+  function cocoUsoMini() {
+    const c = demo ? { carregado: true, pct_dia: 18, pct_semana: 31 } : (global.Limites?.consumoCoco?.() || {});
+    if (!c.carregado || c.ilimitado) return '';
+    const pct = Math.max(0, Math.min(100, Math.round(Number(c.pct_dia) || 0)));
+    const corpo = global.IconData?.lucide?.['bookmark-check'] || '';
+    const nivel = pct >= 100 ? ' is-cheio' : pct >= 80 ? ' is-alto' : '';
+    return `<button type="button" class="v3-coco-uso-mini${nivel}" data-action="coco-uso" aria-label="Uso da Coco hoje: ${pct}%. Esta semana: ${Math.round(Number(c.pct_semana)||0)}%." title="Uso da Coco hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${corpo}</svg><span>${pct}%</span></button>`;
+  }
   function cocoMediaControls() {
     const audio = `<button type="button" class="v3-coco-icon" data-action="voice-start" data-voice-mode="continuous" aria-label="Conversar por voz" title="Conversar por voz" ${state.mediaDraft.trim()?'hidden':''}>${cocoMediaIcon('mic')}</button>`;
-    return `<form class="v3-chat-form" id="v3-chat-form"><div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar arquivo" title="Anexar arquivo">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Mensagem para a Coco" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}>${audio}<button type="submit" aria-label="Enviar mensagem" ${state.mediaDraft.trim()?'':'hidden'} ${state.cocoAsking?'disabled':''}>↑</button></form>`;
+    return `<form class="v3-chat-form" id="v3-chat-form">${cocoUsoMini()}<div class="v3-coco-media"><button type="button" class="v3-coco-icon" data-action="choose-coco-file" aria-label="Anexar arquivo" title="Anexar arquivo">${cocoMediaIcon('attach')}</button><input id="v3-coco-file" type="file" hidden></div><input name="question" maxlength="500" value="${esc(state.mediaDraft)}" placeholder="Mensagem para a Coco" aria-label="Pergunta para a Coco" required ${state.cocoAsking?'disabled':''}>${audio}<button type="submit" aria-label="Enviar mensagem" ${state.mediaDraft.trim()?'':'hidden'} ${state.cocoAsking?'disabled':''}>↑</button></form>`;
   }
   function voiceControls() {
     const active = !!voiceSession?.active;
@@ -2234,13 +2442,13 @@
   }
   function renderCocoImport() {
     const report = state.importPreview;
-    const picker='<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv" hidden>';
-    if (!report) return `<div class="v3-import-empty"><h2>seus extratos, sem adivinhação</h2><p>Escolha um CSV ou PDF de extrato. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.</p><button type="button" class="v3-secondary" data-action="choose-coco-file">Escolher arquivo</button><small>Layouts ainda desconhecidos e PDFs digitalizados não são importados.</small>${picker}</div>`;
+    const picker='<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv,.ofx,.qfx" hidden>';
+    if (!report) return `<div class="v3-import-empty"><h2>seus extratos, sem adivinhação</h2><p>Escolha um extrato OFX, CSV ou PDF. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.</p><button type="button" class="v3-secondary" data-action="choose-coco-file">Escolher arquivo</button><small>Layouts ainda desconhecidos e PDFs digitalizados não são importados.</small>${picker}</div>`;
     const accounts = profile().accounts.filter((account) => !account.archived && (!account.moeda || account.moeda === 'BRL'));
     const visible = report.rows.slice(0, state.importLimit);
     const positive = report.rows.filter((item) => item.cents > 0).reduce((sum, item) => sum + item.cents, 0) / 100;
     const negative = report.rows.filter((item) => item.cents < 0).reduce((sum, item) => sum - item.cents, 0) / 100;
-    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p><div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${suggestion.count} anteriores iguais</small>`:''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId || report.checks.failed ? 'disabled' : ''}>${importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
+    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p><div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${suggestion.count} anteriores iguais</small>`:''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId || report.checks.failed ? 'disabled' : ''}>${importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}${state.importAccountId && !report.checks.failed ? `<button type="button" class="v3-primary" data-action="import-all">Importar todos os novos</button><small class="v3-muted">Pula os que já parecem registrados e usa a categoria sugerida. Você pode editar depois.</small>` : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
   }
   function openCoco() {
     if (state.cocoTab==='Conversa' || state.cocoTab==='Agora') { closeSheet();state.cocoView='conversation';go('coco');return; }
@@ -2249,7 +2457,7 @@
       return;
     }
     if (!cocoAllowed() && !['Memória','Extratos'].includes(state.cocoTab)) {
-      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
+      openSheet(`${sheetTop('coco','seus dados, suas regras','/assets/coco/corpo-neutra_acolhedora.webp')}<div class="v3-coco-consent"><p>Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. A voz da Coco é gerada por IA. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.</p><p>Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.</p><form id="v3-coco-consent-form" class="v3-form"><label class="v3-check"><input type="checkbox" name="accept" required> Autorizo esse uso dos meus dados pela Coco.</label><button class="v3-primary" type="submit">Autorizar Coco</button></form><button type="button" class="v3-secondary" data-coco-tab="Extratos">Ler extrato local sem autorizar IA</button><button type="button" class="v3-secondary" data-action="coco-memory">Ver ou apagar memórias</button></div>`,'Consentimento da Coco');
       return;
     }
     let body='';
@@ -2275,7 +2483,7 @@
     const optionArtwork=(name,value)=>{
       if(name==='category'){
         const item=profile().categories.find((category)=>category.id===value);
-        return item ? `<span class="v3-picker-icon" style="--picker-accent:${safeColor(item.color)}">${categoryIconMarkup(item.icon||'categories')}</span>` : `<span class="v3-picker-icon">${icon('categories')}</span>`;
+        return item ? `<span class="v3-picker-icon" style="--picker-accent:${categoryColor(item)}">${categoryIconHtml(item)}</span>` : `<span class="v3-picker-icon">${icon('categories')}</span>`;
       }
       if(name==='source'||name==='destination'){
         const [type,id]=name==='source'?String(value).split(':'):['account',value];
@@ -2354,6 +2562,17 @@
     form.addEventListener('change',refresh);
     form.addEventListener('click',refresh);
   }
+  /* Porta para módulos de fora (notificação do banco, nota fiscal, busca):
+     abre o formulário preenchido para revisão — nada é salvo sozinho.
+     dados = {tipo:expense|income, descricao, valor, data, origem, forma_pagamento, categoria} */
+  global.OazeCompor = (dados, tag) => {
+    const p = proposalForReview(Object.assign({ tipo: 'expense', forma_pagamento: 'account', confirmado: true }, dados || {}));
+    if (!p) { toast('Não consegui montar o lançamento. Confira valor, data e descrição.'); return false; }
+    if (tag) p.sourceTag = tag;
+    composer(p.tipo === 'income' ? 'Receita' : 'Despesa', p.data, null, p);
+    return true;
+  };
+  global.OazeEditar = (id) => composer(null, null, id);
   function composer(kind, selectedDate, editId, proposal, draftAmount, draftDescription) {
     const editing = editId ? profile().transactions.find((t) => t.id === editId) : null;
     if (editId && !editing) { toast('Lançamento não encontrado. Atualize a página.'); return; }
@@ -2430,7 +2649,9 @@
     receiptField.className='v3-receipt-field';
     const canAttach=!demo&&!state.sharedId;
     receiptField.innerHTML=`<span class="v3-receipt-title">Comprovante ou foto</span>${editing?.receiptPath&&canAttach?'<button type="button" class="v3-receipt-open">Ver anexo atual</button><label class="v3-check"><input type="checkbox" name="removeReceipt"> Remover anexo atual</label>':''}<label class="v3-receipt-upload"><span>＋ ${editing?.receiptPath?'Substituir anexo':'Adicionar anexo'}</span><input type="file" name="receipt" accept="image/jpeg,image/png,image/webp,application/pdf" ${canAttach?'':'disabled'}></label><small>${canAttach?'JPG, PNG, WebP ou PDF até 5 MB. Arquivo privado, associado a este lançamento.':demo?'A demonstração não salva anexos.':'Anexos existentes e novos estão indisponíveis neste perfil compartilhado.'}</small><span class="v3-receipt-name" aria-live="polite"></span>`;
-    txForm.insertBefore(receiptField,more);
+    /* Anexo, local e tags ficam em "Mais opções" (pedido de 01/11/2026): o principal é valor, descrição, categoria, conta e data. */
+    moreBody.append(receiptField);
+    if(editing?.receiptPath)more.open=true;
     receiptField.querySelector('[name="receipt"]')?.addEventListener('change',(event)=>{
       const file=event.target.files?.[0];
       receiptField.querySelector('.v3-receipt-name').textContent=file?file.name:'';
@@ -2703,7 +2924,7 @@
     const billAccounts=profile().accounts.filter((a)=>!a.archived).map((a)=>`<option value="${esc(a.id)}" ${card?.accountId===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
     /* Todos os meios disponíveis: a distinção é feita no lançamento. */
     const oferecidos=(Store.MEIOS_OFERECIVEIS||[]).map((m)=>m.id);
-    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank)}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
+    openSheet(`${sheetTop(existing?'editar '+(card?'cartão':'conta'):'adicionar à carteira',demo?'demonstração sem gravação':'conta ou cartão')}${existing?'':`<div class="v3-segment"><button type="button" data-account-type="account" class="${type==='account'?'is-active':''}">Conta</button><button type="button" data-account-type="card" class="${type==='card'?'is-active':''}">Crédito</button></div>`}<form class="v3-form" id="v3-form-account"><input type="hidden" name="id" value="${esc(existing?.id||'')}"><input type="hidden" name="type" value="${type}"><label>NOME DA CONTA OU CARTÃO<input name="name" maxlength="60" value="${esc(existing?.name||'')}" placeholder="Ex.: Conta corrente" required></label>${bankPicker(existing?.bank || (!items().length ? bancoBoasVindas() : ''))}<label>ÚLTIMOS 4 DÍGITOS (OPCIONAL)<input name="last4" inputmode="numeric" pattern="[0-9]{0,4}" maxlength="4" value="${esc(existing?.last4||'')}"></label><label>MOEDA<select name="moeda">${currencyOptions}</select></label><label id="v3-cotacao" ${(existing?.moeda||"BRL")==="BRL"?"hidden":""}>COTAÇÃO (R$ POR 1 UNIDADE)<input name="cotacao" inputmode="decimal" value="${esc(existing?.cotacao==null?'':String(existing.cotacao).replace('.',','))}" placeholder="Ex.: 5,45"></label><label>VALOR INICIAL / LIMITE NA MOEDA ESCOLHIDA<input name="amount" inputmode="decimal" data-money="true" value="${esc(fmt(card?card.limit:account?.openingBalance))}" placeholder="0,00"></label><div id="v3-account-fields" ${type==='card'?'hidden':''}><label>TIPO DE CONTA<select name="accountType">${accountTypes}</select></label><label>CONSIDERAR SALDO A PARTIR DE<input type="date" name="openedAt" value="${esc(account?.openedAt||U.todayISO())}"></label><fieldset class="v3-meios"><legend>O QUE A CONTA OFERECE</legend>${(Store.MEIOS_OFERECIVEIS||[]).map((m)=>`<label class="v3-check"><input type="checkbox" name="meios" value="${esc(m.id)}" ${oferecidos.includes(m.id)?'checked':''}> ${esc(m.nome)}</label>`).join('')}<small class="v3-muted">Só o que estiver marcado aqui aparece como forma de pagamento nos lançamentos desta conta.</small></fieldset></div><div id="v3-card-dates" ${type==='account'?'hidden':''}><div class="v3-form-row"><label>DIA DE FECHAMENTO<input name="closing" type="number" min="1" max="31" value="${esc(card?.closingDay||28)}"></label><label>DIA DE VENCIMENTO<input name="due" type="number" min="1" max="31" value="${esc(card?.dueDay||5)}"></label></div><label>CONTA PARA PAGAR A FATURA<select name="billAccount"><option value="">Nenhuma</option>${billAccounts}</select></label></div><label class="v3-check"><input type="checkbox" name="considerado" ${existing?.considerado===false?'':'checked'}> Considerar nos totais</label>${account?`<label class="v3-check"><input type="checkbox" name="archived" ${account.archived?'checked':''}> Arquivar conta</label>`:''}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':existing?'Salvar alterações':'Adicionar à carteira'}</button>${existing?`<button type="button" class="v3-secondary" data-action="delete-wallet-item" data-wallet-id="${esc(existing.id)}" data-wallet-type="${card?'card':'account'}">Excluir ${card?'cartão':'conta'}</button>`:''}</form>`,'Conta ou cartão');
     const form=document.getElementById('v3-form-account');
     const otherProfiles=!demo&&!state.sharedId?(Store.state()?.profiles||[]).filter((p)=>p.id!==Store.profile().id):[];
     if(otherProfiles.length){
@@ -3154,7 +3375,7 @@
     const ehAtual=(c)=>String(c).toLowerCase()===String(atual).toLowerCase();
     return `<fieldset class="v3-color-picker"><legend>COR</legend><div class="v3-color-tira">${familias.map((f)=>
       `<div class="v3-color-fam${f.herdada?' is-herdada':''}">${f.tons.map((c)=>
-        `<label class="v3-color-opt" title="${esc(Store.colorName?Store.colorName(c):c)}" style="--cor:${esc(c)}"><input type="radio" name="${esc(fieldName)}" value="${esc(c)}" ${ehAtual(c)?'checked':''} ${required?'required':''} aria-label="${esc(Store.colorName?Store.colorName(c):c)}"><span aria-hidden="true"></span></label>`
+        `<label class="v3-color-opt" data-oaze-color="${esc(c)}" title="${esc(Store.colorName?Store.colorName(c):c)}" style="--cor:${esc(c)}"><input type="radio" name="${esc(fieldName)}" value="${esc(c)}" ${ehAtual(c)?'checked':''} ${required?'required':''} aria-label="${esc(Store.colorName?Store.colorName(c):c)}"><span aria-hidden="true"></span></label>`
       ).join('')}</div>`
     ).join('')}</div></fieldset>`;
   }
@@ -3164,7 +3385,7 @@
     if (id&&!item) { toast('Esta categoria não existe mais.'); return; }
     const choices=[['home','Casa'],['utensils','Alimentação'],['car','Transporte'],['heart','Saúde'],['leisure','Lazer'],['subscription','Assinatura'],['shopping','Compras'],['work','Trabalho'],['education','Educação'],['receipt','Conta'],['investments','Investimento'],['more','Outros'],['baby','Bebê'],['bus','Ônibus'],['cake','Festa'],['church','Doação'],['coffee','Café'],['dog','Pet'],['droplet','Água'],['dumbbell','Academia'],['film','Cinema'],['flame','Gás'],['fuel','Combustível'],['gift','Presente'],['glasses','Ótica'],['hammer','Obras'],['key','Aluguel'],['laptop','Tecnologia'],['map-pin','Viagem'],['music','Música'],['package','Encomenda'],['palmtree','Férias'],['percent','Taxas'],['piggy-bank','Reserva'],['pill','Farmácia'],['plane','Avião'],['scissors','Beleza'],['shield','Seguro'],['shirt','Roupas'],['shopping-cart','Mercado'],['smartphone','Celular'],['sofa','Móveis'],['sparkles','Cuidados'],['star','Especial'],['stethoscope','Médico'],['ticket','Ingresso'],['truck','Frete'],['tv','Streaming'],['umbrella','Proteção'],['users','Família'],['wifi','Internet'],['wrench','Conserto'],['zap','Energia']];
     const currentIcon=categoryIcon(item?.icon||'more');
-    openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label>${iconPicker(currentIcon,choices)}${colorPicker(safeColor(item?.color||corPadraoDeCategoria()))}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
+    openSheet(`${sheetTop(item?'editar categoria':'nova categoria',state.catKind==='income'?'receita':'despesa')}<form class="v3-form" id="v3-form-category"><input type="hidden" name="id" value="${esc(item?.id||'')}"><input type="hidden" name="kind" value="${esc(item?.kind||state.catKind)}"><label>NOME<input name="name" maxlength="40" value="${esc(item?.name||'')}" required></label>${iconPicker(currentIcon,choices)}${colorPicker(item?categoryColor(item):corPadraoDeCategoria())}<button type="submit" class="v3-primary">${demo?'Ver na demonstração':'Salvar categoria'}</button>${item?`<button type="button" class="v3-secondary" data-action="delete-category" data-category="${esc(item.id)}">Excluir categoria</button>`:''}</form>`,'Categoria');
   }
   function budgetForm(categoryId, suggestedLimit) {
     const categories = profile().categories.filter((c) => c.kind === 'expense');
@@ -3341,7 +3562,12 @@
     const categoryId=transfer?null:String(fd.get('category')||'');
     if (!transfer && !profile().categories.some((c)=>c.id===categoryId && c.kind===(kind==='Receita'?'income':'expense'))) { toast('Escolha uma categoria válida.'); return; }
     const sourceTag=String(fd.get('sourceTag')||'manual');
-    const base={kind:transfer?'transfer':kind==='Receita'?'income':'expense',faturaRef:faturaManual,description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:status==='pago',cancelado:status==='cancelado',ignored:kind==='Despesa'&&fd.get('ignored')==='on',remindDaysBefore:reminder===''?null:Number(reminder),meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
+    let local=editing?(editing.local||null):null;
+    if(fd.has('local')){ try{ const raw=String(fd.get('local')||''); local=raw?JSON.parse(raw):null; }catch{ local=null; } }
+    /* Tags (31/10/2026): ids separados por vírgula, vindos de mais-telas.js. */
+    let tags=editing?(editing.tags||[]):[];
+    if(fd.has('tags')) tags=String(fd.get('tags')||'').split(',').map((x)=>x.trim()).filter(Boolean);
+    const base={local,tags,kind:transfer?'transfer':kind==='Receita'?'income':'expense',faturaRef:faturaManual,description,amount:U.round2(amount*rate),moeda:currency,valorMoeda:currency?amount:null,date,categoryId,accountId:sourceType==='account'?sourceId:null,cardId:sourceType==='card'?sourceId:null,toAccountId:transfer?destination:null,confirmed:status==='pago',cancelado:status==='cancelado',ignored:kind==='Despesa'&&fd.get('ignored')==='on',remindDaysBefore:reminder===''?null:Number(reminder),meio:sourceType==='account'?(String(fd.get('meio')||'')||null):null,recurring,recurEnd:recurring?(recurEnd||null):null,notes:String(fd.get('notes')||'').trim().slice(0,500),source:editing?(editing.source||'manual'):['uglez','import'].includes(sourceTag)?sourceTag:'manual'};
     if(editing&&fd.get('removeReceipt')==='on'&&!receipt)base.receiptPath=null;
     if (installments>1 && amount/installments<0.01) { toast('Cada parcela precisa ter pelo menos um centavo.'); return; }
     try {
@@ -3546,19 +3772,35 @@
     if (state.page === 'plan') render();
   }
   async function startCheckout(planId) {
-    if (demo || state.paymentBusy || !['basic', 'pro'].includes(planId) || !state.subscription || state.billingError) return;
+    if (global.OAZE_BILLING_READONLY || demo || state.paymentBusy || planId !== 'pro' || !state.subscription || state.billingError) return;
     state.paymentBusy = true; render();
     try {
-      const result = await V3Backend.payment({ acao: 'assinar', plano: planId, ciclo: state.billing, moeda: 'BRL' });
+      const result = await V3Backend.payment({ acao: 'assinar', plano: planId, ciclo: state.billing, moeda: 'BRL', ...(global.OAZE_NATIVE_DESKTOP ? { canal: 'windows' } : {}) });
       if (!/^https:\/\/checkout\.stripe\.com\//.test(String(result.url || ''))) throw new Error('O servidor não retornou uma página segura de pagamento.');
-      global.location.assign(result.url);
+      if (global.OAZE_NATIVE_OPEN_EXTERNAL) await global.OAZE_NATIVE_OPEN_EXTERNAL(result.url);
+      else global.location.assign(result.url);
+      if (global.OAZE_NATIVE_OPEN_EXTERNAL) { state.paymentBusy = false; render(); }
     } catch (error) {
       toast(error.message || 'Não foi possível iniciar o pagamento. Nada foi cobrado.');
       state.paymentBusy = false; render();
     }
   }
+  async function openBillingPortal() {
+    if (global.OAZE_BILLING_READONLY || demo || state.paymentBusy || !state.subscription?.stripe_subscription_id) return;
+    state.paymentBusy = true;
+    try {
+      const result = await V3Backend.billingPortal();
+      if (!/^https:\/\/billing\.stripe\.com\//.test(String(result.url || ''))) throw new Error('O servidor não retornou uma página segura de cobrança.');
+      if (global.OAZE_NATIVE_OPEN_EXTERNAL) await global.OAZE_NATIVE_OPEN_EXTERNAL(result.url);
+      else global.location.assign(result.url);
+      if (global.OAZE_NATIVE_OPEN_EXTERNAL) { state.paymentBusy = false; render(); }
+    } catch (error) {
+      toast(error.message || 'Não foi possível abrir suas cobranças. Tente novamente.');
+      state.paymentBusy = false;
+    }
+  }
   async function cancelSubscription() {
-    if (demo || state.paymentBusy || !state.subscription) return;
+    if (global.OAZE_BILLING_READONLY || demo || state.paymentBusy || !state.subscription) return;
     state.paymentBusy = true; closeSheet(); render();
     try {
       await V3Backend.payment({ acao: 'cancelar' });
@@ -3627,6 +3869,11 @@
       }
     }
     state.chat.push({who:'user',text:q}); render();
+    const waitingNotice=setTimeout(()=>{
+      if (!state.cocoAsking) return;
+      const status=document.querySelector('.v3-coco-thinking');
+      if (status) status.textContent='A Coco ainda está preparando a resposta…';
+    },8000);
     let answered=false;
     try {
       const body=AI.corpoDaPergunta(q,state.ym);
@@ -3641,7 +3888,7 @@
       state.chat.push({who:'coco',text:r.texto || (proposal?'Preparei um lançamento para você revisar.':goalProposal?'Preparei uma meta para você revisar.':memory?'Posso guardar esta preferência, se você confirmar.':'Não consegui responder agora.'),proposal,goalProposal,memory});
       answered=true;
     } catch (e) { console.error('V3/Coco:',e); state.chat.push({who:'coco',text:e.message || 'A conversa está indisponível agora. Tente de novo.'}); }
-    state.cocoAsking=false;render();
+    clearTimeout(waitingNotice);state.cocoAsking=false;render();
     if (speakAfter && answered) playCocoAnswer(state.chat.length-1);
   }
   function updateVoiceCaption() {
@@ -3777,22 +4024,23 @@
     }}
     finally{if(version===voiceStartVersion)voiceStarting=false;}
   }
-  function stopCocoAudio() {
+  function stopCocoAudio(renderNow=true) {
     cocoAudioRequest++;
     cocoPlayer?.pause();cocoPlayer=null;
     if (cocoAudioUrl) URL.revokeObjectURL(cocoAudioUrl);
-    cocoAudioUrl=null;state.cocoSpeaking=false;
-    if (state.page==='coco') render();
+    cocoAudioUrl=null;state.cocoSpeaking=false;state.cocoAudioLoading=false;
+    if (renderNow && state.page==='coco') render();
   }
   async function playCocoAnswer(index) {
     if(voiceSession?.active){toast('Encerre a conversa por voz antes de ouvir esta resposta.');return;}
     if (state.cocoSpeaking===index) { stopCocoAudio();return; }
     const message=state.chat[index];
     if (demo || !message || message.who!=='coco' || !cocoAllowed()) return;
-    stopCocoAudio();const request=++cocoAudioRequest;state.cocoSpeaking=index;render();
+    stopCocoAudio(false);const request=++cocoAudioRequest;state.cocoSpeaking=index;state.cocoAudioLoading=true;render();
     try {
       const blob=await V3Backend.cocoSpeak(message.text);
       if (state.cocoSpeaking!==index || request!==cocoAudioRequest) return;
+      state.cocoAudioLoading=false;render();
       cocoAudioUrl=URL.createObjectURL(blob);
       cocoPlayer=new Audio(cocoAudioUrl);
       cocoPlayer.onended=()=>{if(request===cocoAudioRequest)stopCocoAudio();};
@@ -3811,7 +4059,7 @@
   }
   async function readCocoMedia(file, sendRecording=false) {
     if (!file) return;
-    const statement=/\.(pdf|csv)$/i.test(file.name) || ['application/pdf','text/csv','application/vnd.ms-excel'].includes(file.type);
+    const statement=/\.(pdf|csv|ofx|qfx)$/i.test(file.name) || ['application/pdf','text/csv','application/vnd.ms-excel'].includes(file.type);
     if (statement) {
       toast('Lendo o extrato neste aparelho…');
       try {
@@ -3841,9 +4089,12 @@
     toast('Lendo arquivo…');
     try {
       const result=await V3Backend.cocoReadMedia(file,profile().id);
-      state.cocoTab='Conversa';state.cocoView='conversation';state.mediaDraft=String(result.texto||'').slice(0,500);state.voiceDraft=audio;
+      /* Captura rápida (Início ou atalho do ícone): a leitura da foto já
+         segue como pedido de registro e volta como proposta para revisar. */
+      const captura=image && global.__ozCapturaRecibo; global.__ozCapturaRecibo=false;
+      state.cocoTab='Conversa';state.cocoView='conversation';state.mediaDraft=(captura?'Registre este gasto já pago: ':'')+String(result.texto||'').slice(0,captura?470:500);state.voiceDraft=audio;
       closeSheet();go('coco');$('#v3-chat-form [name="question"]')?.focus();
-      if(sendRecording && state.mediaDraft){await askCoco($('#v3-chat-form'));}
+      if((sendRecording||captura) && state.mediaDraft){await askCoco($('#v3-chat-form'));}
       else toast('Revise o texto antes de enviar à Coco.');
     } catch (error) { toast(error.message || 'Não consegui ler o arquivo.'); }
   }
@@ -3956,7 +4207,7 @@
     }
     if (target.dataset.paymentKind) { updateComposerPayment(target.closest('#v3-form-tx'), target.dataset.paymentKind); return; }
     if (target.dataset.accountType) { const f=$('#v3-form-account');f.elements.type.value=target.dataset.accountType;$('#v3-card-dates').hidden=target.dataset.accountType!=='card';$('#v3-account-fields').hidden=target.dataset.accountType!=='account';const links=f.querySelector('.v3-card-profile-links');if(links)links.hidden=target.dataset.accountType!=='card';document.querySelectorAll('[data-account-type]').forEach((b)=>b.classList.toggle('is-active',b===target));return; }
-    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();render();refreshCoco();}return; }
+    if (target.dataset.profile) { if(!demo){stopVoice();stopCocoAudio();state.sharedId=null;state.sharedProfile=null;state.sharedPermission='read';state.sharedRights=null;state.chat=[];state.cocoMemories=[];state.cocoAnalyses=[];state.mediaDraft='';state.voiceDraft=false;state.importPreview=null;state.importAccountId='';closeSheet();V3Backend.setActiveShare(null);Store.setActiveProfile(target.dataset.profile);refreshCoco();}return; }
     if (target.dataset.billing) { state.billing=target.dataset.billing;render();return; }
     if (target.dataset.calDay) { state.calDay=Number(target.dataset.calDay);render();return; }
     /* No ano, a seta anda doze meses: ela muda o ANO, que é o que
@@ -4052,7 +4303,11 @@
     if (action==='switch-account' || action==='sign-out') {
       stopVoice();
       if (demo) { toast('Demonstração sem sessão.'); return; }
-      V3Backend.signOut().catch((e)=>toast(e.message||'Não foi possível encerrar a sessão.'));
+      target.disabled = true;
+      const biometricKey = 'oaze.native.biometric-lock.v1';
+      const lockEnabled = !!global.OAZE_NATIVE_BIOMETRICS && localStorage.getItem(biometricKey) === '1';
+      if (lockEnabled) localStorage.removeItem(biometricKey);
+      V3Backend.signOut().catch((e)=>{if(lockEnabled)localStorage.setItem(biometricKey,'1');target.disabled=false;toast(e.message||'Não foi possível encerrar a sessão.');});
       return;
     }
     if (action==='delete-account') { if (!demo) deleteAccountSheet(); return; }
@@ -4132,6 +4387,37 @@
     }
     if (action==='choose-coco-file') { const picker=target.closest('#v3-sheet')?.querySelector('#v3-coco-import-file') || $('#v3-coco-file'); picker?.click();return; }
     if (action==='import-more') { state.importLimit=Math.min(state.importLimit+30,state.importPreview?.rows.length||30);openCoco();return; }
+    if (action==='import-all') {
+      if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+      const report=state.importPreview;
+      const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
+      if (!report || !account || report.checks.failed) { toast('Confira o extrato e escolha uma conta em reais.'); return; }
+      /* Duplicado: mesma conta, mesmo tipo e valor, até 2 dias de diferença
+         (o banco às vezes lança no dia útil seguinte). */
+      const parecido=(item)=>profile().transactions.some((tx)=>tx.accountId===account.id && !tx.cancelado &&
+        tx.kind===(item.cents>0?'income':'expense') && Math.round(Number(tx.amount)*100)===Math.abs(item.cents) &&
+        Math.abs((new Date(tx.date+'T12:00:00')-new Date(item.date+'T12:00:00'))/86400000)<=2);
+      const reserva=(kind)=>profile().categories.find((c)=>c.kind===kind && /^outr/i.test(c.name)) || profile().categories.find((c)=>c.kind===kind);
+      const usados={}, lista=[]; let pulados=0, semEspaco=0;
+      for (const item of report.rows) {
+        if (parecido(item)) { pulados++; continue; }
+        const ym=item.date.slice(0,7), teto=global.Limites?Limites.limite('transactions_per_month'):null;
+        usados[ym]=usados[ym]??(global.Limites?Limites.contar('transactions_per_month',ym):0);
+        if (teto!==null && teto!==undefined && usados[ym]>=teto) { semEspaco++; continue; }
+        const kind=item.cents>0?'income':'expense';
+        const sug=global.Categorizacao?Categorizacao.sugerir(item.description,kind,profile()):null;
+        const cat=(sug && sug.categoryId && sug.confidence!=='low' && profile().categories.some((c)=>c.id===sug.categoryId)) ? sug.categoryId : reserva(kind)?.id;
+        if (!cat) continue;
+        usados[ym]++;
+        lista.push({kind,description:item.description,amount:U.round2(Math.abs(item.cents)/100),date:item.date,categoryId:cat,accountId:account.id,cardId:null,toAccountId:null,confirmed:true,cancelado:false,recurring:false,notes:'',source:'import',meio:null});
+      }
+      if (!lista.length) { toast(semEspaco?'Sem espaço no limite de lançamentos do mês. Nada foi importado.':'Todos os movimentos já parecem registrados.'); return; }
+      V3Backend.mutate(()=>{ Store.transactions.addMany(lista); }).then(()=>{
+        state.importPreview=null; render();
+        toast(lista.length+' lançamentos importados'+(pulados?', '+pulados+' já existiam':'')+(semEspaco?', '+semEspaco+' ficaram fora pelo limite do plano':'')+'.');
+      }).catch(()=>toast('Não consegui salvar a importação. Nada foi alterado.'));
+      return;
+    }
     if (action==='review-import-row') {
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
@@ -4269,6 +4555,7 @@
       return;
     }
     if (action==='subscribe'){startCheckout(target.dataset.plan);return;}
+    if (action==='billing-portal'){openBillingPortal();return;}
     if (action==='cancel-subscription') {
       openSheet(`${sheetTop('cancelar renovação','o plano não termina hoje')}<p>Você mantém o plano até o fim do período já pago. Depois, sua conta volta ao Semente.</p><div class="v3-form-row" style="margin-top:24px"><button type="button" class="v3-secondary" data-action="close">Manter assinatura</button><button type="button" class="v3-primary" data-action="confirm-cancel-subscription">Cancelar renovação</button></div>`,'Confirmar cancelamento');
       return;
@@ -4298,8 +4585,18 @@
     if (action==='vault'){openVault(target.dataset.walletId);return;}
     if (action==='privacy'){state.hideMoney=!state.hideMoney;render();return;}
     if (action==='notifications'){openNotifications();return;}
+    if (action==='biometric-toggle'){
+      const b=global.OAZE_NATIVE_BIOMETRICS;
+      if(!b) return;
+      const enabling=!b.isEnabled();
+      b.setEnabled(enabling).then((ok)=>{toast(ok?(enabling?'Desbloqueio do aparelho ativado.':'Desbloqueio do aparelho desativado.'):'Não foi possível confirmar pelo aparelho.');render();});
+      return;
+    }
+    if (action==='device-permissions'){if(global.OazePermissoes)global.OazePermissoes.abrir();else openDevicePermissions();return;}
+    if (action==='toggle-native-notifications'){void toggleNativeNotifications();return;}
     if (action==='reset-asks'){askReset();render();openNotifications();toast('Os avisos voltarão a aparecer neste aparelho.');return;}
     if (action==='home-blocks'){painelBlocosInicio();return;}
+    if (action==='coco-uso'){const c=demo?{pct_dia:18,pct_semana:31}:(global.Limites?.consumoCoco?.()||{});toast(`Coco hoje: ${Math.round(Number(c.pct_dia)||0)}% usado · semana: ${Math.round(Number(c.pct_semana)||0)}%. Detalhes em Configurações › Plano.`);return;}
     if (action==='filtros'){painelFiltros();return;}
     if (action==='limpar-filtros'){limparFiltros();state.filter='Todos';closeSheet();render();toast('Filtros limpos.');return;}
     if (action==='tirar-rapido'){state.filter='Todos';render();return;}
@@ -4371,9 +4668,22 @@
        existe mais, e a chamada quebraria no meio da ação que ia
        parar, virando silêncio. */
     if(global.Limites){
-      Limites.avisar=(aviso)=>openSheet(sheetTop(String(aviso.titulo||'').toLowerCase(),'limite do seu plano')
+      /* Semente (01/11/2026): lançamentos sem limite, liberados de 20 em 20 por anúncio. */
+      const avisoGeral=(aviso)=>openSheet(sheetTop(String(aviso.titulo||'').toLowerCase(),'limite do seu plano')
         +aviso.linhas.map((linha)=>`<p class="v3-muted" style="margin-top:10px">${esc(linha)}</p>`).join('')
+        +(aviso.tipo==='transactions_per_month'&&global.OazeAnuncios?(global.OazeAnuncios.disponivel()?global.OazeAnuncios.botao():global.OazeAnuncios.dica()):'')
         +(aviso.verPlanos?'<button type="button" class="v3-primary" style="margin-top:18px" data-go="plan">Ver planos</button>':''),aviso.titulo);
+      Limites.avisar=(aviso)=>{
+        const A=global.OazeAnuncios;
+        if(aviso.tipo==='transactions_per_month'&&A&&Limites.plano()==='free'&&A.estado().por_anuncio>0){
+          openSheet(sheetTop('mais '+A.estado().por_anuncio+' lançamentos','plano grátis')
+            +`<p style="margin-top:12px">No plano grátis os lançamentos não têm limite: a cada ${A.estado().por_anuncio}, um anúncio curto libera os próximos.</p>`
+            +(A.disponivel()?A.botao():'<p class="v3-muted" style="margin-top:10px">Você chegou ao máximo de anúncios de hoje. Amanhã libera de novo.</p>')
+            +'<button type="button" class="v3-secondary" style="margin-top:12px" data-go="plan">Assinar o Pro, sem anúncios</button>','Liberar lançamentos');
+          return;
+        }
+        avisoGeral(aviso);
+      };
       Limites.aoMudar=()=>{ if(state.page==='plan'||state.page==='settings') render(); };
     }
     if(!demo && global.Limites) limitsPromise=V3Backend.withTimeout(Limites.carregar()).catch((e)=>{console.error('V3/limites:',e);return null;});
@@ -4428,13 +4738,52 @@
     document.addEventListener('input',(event)=>{
       if(event.target.matches?.('[data-voice-volume]'))voiceSession?.setVolume(Number(event.target.value)/100);
     });
+    /* Ordem dos widgets: setas (teclado e leitor de tela) e arrasto pela
+       alça (mouse e dedo). A lista da gaveta é refeita no lugar, sem
+       fechar a gaveta, e a Início por baixo acompanha. */
+    const redesenharBlocos=(foco)=>{
+      const lista=$('#v3-bloco-lista');
+      if(lista){const corpo=document.createElement('div');painelBlocosInicioHtml(corpo);const nova=corpo.querySelector('#v3-bloco-lista');if(nova)lista.replaceWith(nova);}
+      if(foco)$('[data-bloco-item="'+foco.id+'"] [data-bloco-mover="'+foco.dir+'"]')?.focus();
+      if(state.page==='home'){const vista=$('#v3-view');if(vista)vista.innerHTML=renderHome();document.dispatchEvent(new CustomEvent('oaze:render',{detail:{page:'home',demo}}));}
+    };
+    document.addEventListener('click',(event)=>{
+      const seta=event.target.closest?.('[data-bloco-mover]');
+      if(!seta)return;
+      const id=seta.closest('[data-bloco-item]').dataset.blocoItem, dir=Number(seta.dataset.blocoMover);
+      const ordem=ordemBlocos();moverBloco(id,ordem.indexOf(id)+dir);
+      redesenharBlocos({id,dir});
+    });
+    document.addEventListener('pointerdown',(event)=>{
+      const alca=event.target.closest?.('[data-bloco-alca]');
+      if(!alca)return;
+      const item=alca.closest('[data-bloco-item]'), lista=item.parentElement;
+      event.preventDefault();
+      alca.setPointerCapture?.(event.pointerId);
+      item.classList.add('is-arrastando');
+      const mover=(ev)=>{
+        const irmaos=[...lista.children].filter((n)=>n!==item);
+        const alvo=irmaos.find((n)=>{const r=n.getBoundingClientRect();return ev.clientY<r.top+r.height/2;});
+        if(alvo)lista.insertBefore(item,alvo);else lista.appendChild(item);
+      };
+      const soltar=()=>{
+        alca.removeEventListener('pointermove',mover);alca.removeEventListener('pointerup',soltar);alca.removeEventListener('pointercancel',soltar);
+        item.classList.remove('is-arrastando');
+        const ordem=[...lista.querySelectorAll('[data-bloco-item]')].map((n)=>n.dataset.blocoItem);
+        try{localStorage.setItem('oaze.v3.inicio.ordem',JSON.stringify(ordem));}catch(e){}
+        redesenharBlocos(null);
+      };
+      alca.addEventListener('pointermove',mover);alca.addEventListener('pointerup',soltar);alca.addEventListener('pointercancel',soltar);
+    });
     document.addEventListener('change',(event)=>{
       /* A escolha dos blocos muda a Início por baixo da gaveta aberta:
          redesenhar a tela inteira fecharia a gaveta e a pessoa
          perderia o lugar onde estava marcando. */
       if(event.target.matches?.('[data-bloco]')){
-        alternarBloco(event.target.dataset.bloco);
-        if(state.page==='home'){const vista=$('#v3-view');if(vista)vista.innerHTML=renderHome();}
+        const bloco=event.target.dataset.bloco;
+        alternarBloco(bloco);
+        redesenharBlocos(null);
+        $('[data-bloco="'+bloco+'"]')?.focus();
         return;
       }
       if(event.target.matches?.('[data-voice-device]')){
@@ -4544,6 +4893,11 @@
         n.hidden=!casa;
         if(casa&&!outro)achou++;
       });
+      document.querySelectorAll('#v3-bank-options .v3-bank-grupo').forEach((t)=>{
+        let n=t.nextElementSibling,algum=false;
+        while(n&&!n.classList.contains('v3-bank-grupo')){if(!n.hidden&&!n.classList.contains('v3-bank-other'))algum=true;n=n.nextElementSibling;}
+        t.hidden=!algum;
+      });
       const vazio=document.getElementById('v3-bank-vazio');
       if(vazio)vazio.hidden=achou>0;
     });
@@ -4578,6 +4932,20 @@
         history.replaceState(null, '', location.pathname + (query ? '?' + query : '') + location.hash);
       }
       refreshSubscription();
+      if (global.OAZE_NATIVE_OPEN_EXTERNAL) {
+        const billingReturn = () => {
+          try { sessionStorage.removeItem('oaze.native.billing-return'); } catch {}
+          go('plan'); void refreshSubscription();
+        };
+        global.addEventListener('oaze:billing-return', billingReturn);
+        try { if (sessionStorage.getItem('oaze.native.billing-return') === '1') billingReturn(); } catch {}
+        const refreshOnReturn = () => {
+          if (document.visibilityState === 'visible') void refreshSubscription();
+          if (nativeNotificationsEnabled()) void syncNativeNotifications().catch(() => {});
+        };
+        document.addEventListener('visibilitychange', refreshOnReturn);
+        global.addEventListener('focus', refreshOnReturn);
+      }
       if (paymentReturn === 'sucesso') {
         toast('Pagamento enviado. O plano será liberado após confirmação da Stripe.');
         let attempts = 0;

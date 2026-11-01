@@ -1,0 +1,30 @@
+[
+ {
+  "pt": "{0} dias seguidos registrando",
+  "tipo": "padrao",
+  "en": "{0} days in a row logging",
+  "fr": "{0} jours d'affilée à enregistrer",
+  "es": "{0} días seguidos registrando"
+ },
+ {
+  "pt": "Registrou {0}",
+  "tipo": "padrao",
+  "en": "Logged {0}",
+  "fr": "Enregistré {0}",
+  "es": "Registró {0}"
+ },
+ {
+  "pt": "Nenhum registro hoje nem ontem",
+  "tipo": "exato",
+  "en": "Nothing logged today or yesterday",
+  "fr": "Rien d'enregistré aujourd'hui ni hier",
+  "es": "Ningún registro hoy ni ayer"
+ },
+ {
+  "pt": "{0}{1} com registro nesta semana",
+  "tipo": "padrao",
+  "en": "{0}{1} with entries this week",
+  "fr": "{0}{1} avec des saisies cette semaine",
+  "es": "{0}{1} con registros esta semana"
+ }
+]

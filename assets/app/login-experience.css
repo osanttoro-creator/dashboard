@@ -1,0 +1,17 @@
+.oaze-entrance[hidden],.oaze-entrance-skip[hidden]{display:none}
+body:has(.oaze-entrance) .topo{padding-top:max(56px,calc(24px + env(safe-area-inset-top,0px)))}
+body:has(.oaze-entrance) main{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.oaze-entrance{position:fixed;z-index:10001;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:32px;background:#0d1821;color:#f0e5cf;text-align:center;overflow:hidden}
+.oaze-entrance>*{position:relative;z-index:1}
+.oaze-entrance-glow{position:absolute;z-index:0;width:min(70vw,600px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(95,169,155,.26),rgba(53,85,101,.1) 45%,transparent 70%);animation:oaze-breathe 2.4s ease-in-out infinite alternate}
+.oaze-entrance img{max-width:50vw;height:auto;animation:oaze-appear .55s ease-out both}
+.oaze-entrance-line{width:50px;height:2px;border-radius:2px;background:#5fa99b;box-shadow:0 0 20px #5fa99b;animation:oaze-appear .7s .1s ease-out both}
+.oaze-entrance h1{width:100%;max-width:520px;font:500 clamp(22px,5.5vw,38px)/1.25 Unbounded,Instrument Sans,sans-serif;letter-spacing:-.05em;text-wrap:balance;animation:oaze-appear .7s .16s ease-out both}
+.oaze-entrance p{width:100%;max-width:30ch;color:#b7c9c7;text-wrap:balance;animation:oaze-appear .7s .24s ease-out both}
+.oaze-entrance-skip{min-height:48px;padding:12px 28px;border:1px solid rgba(240,229,207,.25);border-radius:999px;background:#f0e5cf;color:#0d1821;font-weight:700;cursor:pointer;animation:oaze-appear .7s .32s ease-out both}
+.oaze-entrance-skip:focus-visible{outline:2px solid #5fa99b;outline-offset:4px}
+.oaze-entrance.is-loading .oaze-entrance-line{width:70px;background:linear-gradient(90deg,transparent,#5fa99b,transparent);animation:oaze-pulse 1.2s ease-in-out infinite}
+@keyframes oaze-appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes oaze-breathe{from{transform:scale(.88);opacity:.5}to{transform:scale(1.12);opacity:1}}
+@keyframes oaze-pulse{50%{opacity:.35;transform:scaleX(.7)}}
+@media(prefers-reduced-motion:reduce){.oaze-entrance *{animation:none!important}}

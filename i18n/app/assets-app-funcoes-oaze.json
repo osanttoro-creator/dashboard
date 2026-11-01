@@ -1,0 +1,1161 @@
+[
+ {
+  "pt": "Separe dinheiro para \"viagem\", \"IPVA\", \"reserva\" sem abrir outra conta. O saldo livre já desconta o que está guardado.",
+  "tipo": "exato",
+  "en": "Set money aside for \"trip\", \"car tax\", \"emergency fund\" without opening another account. The free balance already deducts what's saved.",
+  "fr": "Mettez de l'argent de côté pour « voyage », « taxe auto », « réserve » sans ouvrir d'autre compte. Le solde libre déduit déjà ce qui est épargné.",
+  "es": "Separa dinero para \"viaje\", \"impuesto del auto\", \"reserva\" sin abrir otra cuenta. El saldo libre ya descuenta lo guardado."
+ },
+ {
+  "pt": "Nas caixinhas",
+  "tipo": "exato",
+  "en": "In pots",
+  "fr": "Dans les cagnottes",
+  "es": "En alcancías"
+ },
+ {
+  "pt": "Livre nas contas",
+  "tipo": "exato",
+  "en": "Free in accounts",
+  "fr": "Libre sur les comptes",
+  "es": "Libre en las cuentas"
+ },
+ {
+  "pt": "Guardar",
+  "tipo": "exato",
+  "en": "Add",
+  "fr": "Mettre de côté",
+  "es": "Guardar"
+ },
+ {
+  "pt": "Tirar",
+  "tipo": "exato",
+  "en": "Take out",
+  "fr": "Retirer",
+  "es": "Sacar"
+ },
+ {
+  "pt": "sem conta",
+  "tipo": "exato",
+  "en": "no account",
+  "fr": "sans compte",
+  "es": "sin cuenta"
+ },
+ {
+  "pt": "· meta {0}",
+  "tipo": "padrao",
+  "en": "· goal {0}",
+  "fr": "· objectif {0}",
+  "es": "· meta {0}"
+ },
+ {
+  "pt": "Quanto da meta",
+  "tipo": "exato",
+  "en": "How much of the goal",
+  "fr": "Part de l'objectif",
+  "es": "Cuánto de la meta"
+ },
+ {
+  "pt": "{0}% da meta",
+  "tipo": "padrao",
+  "en": "{0}% of the goal",
+  "fr": "{0} % de l'objectif",
+  "es": "{0}% de la meta"
+ },
+ {
+  "pt": "Nenhuma caixinha ainda.",
+  "tipo": "exato",
+  "en": "No pots yet.",
+  "fr": "Aucune cagnotte pour l'instant.",
+  "es": "Aún no hay alcancías."
+ },
+ {
+  "pt": "Nova caixinha",
+  "tipo": "exato",
+  "en": "New pot",
+  "fr": "Nouvelle cagnotte",
+  "es": "Nueva alcancía"
+ },
+ {
+  "pt": "Ex.: Viagem, IPVA",
+  "tipo": "exato",
+  "en": "E.g. Trip, Car tax",
+  "fr": "Ex. : Voyage, Taxe auto",
+  "es": "Ej.: Viaje, Impuesto del auto"
+ },
+ {
+  "pt": "EM QUAL CONTA",
+  "tipo": "exato",
+  "en": "IN WHICH ACCOUNT",
+  "fr": "SUR QUEL COMPTE",
+  "es": "EN QUÉ CUENTA"
+ },
+ {
+  "pt": "GUARDAR AGORA",
+  "tipo": "exato",
+  "en": "ADD NOW",
+  "fr": "METTRE DE CÔTÉ MAINTENANT",
+  "es": "GUARDAR AHORA"
+ },
+ {
+  "pt": "META (OPCIONAL)",
+  "tipo": "exato",
+  "en": "GOAL (OPTIONAL)",
+  "fr": "OBJECTIF (FACULTATIF)",
+  "es": "META (OPCIONAL)"
+ },
+ {
+  "pt": "Criar caixinha",
+  "tipo": "exato",
+  "en": "Create pot",
+  "fr": "Créer la cagnotte",
+  "es": "Crear alcancía"
+ },
+ {
+  "pt": "{0} · livre {1}",
+  "tipo": "padrao",
+  "en": "{0} · free {1}",
+  "fr": "{0} · libre {1}",
+  "es": "{0} · libre {1}"
+ },
+ {
+  "pt": "Cadastre uma conta na carteira para criar caixinhas.",
+  "tipo": "exato",
+  "en": "Add an account to the wallet to create pots.",
+  "fr": "Ajoutez un compte au portefeuille pour créer des cagnottes.",
+  "es": "Registra una cuenta en la billetera para crear alcancías."
+ },
+ {
+  "pt": "Quanto guardar em \"{0}\"?",
+  "tipo": "padrao",
+  "en": "How much to put in \"{0}\"?",
+  "fr": "Combien mettre dans « {0} » ?",
+  "es": "¿Cuánto guardar en \"{0}\"?"
+ },
+ {
+  "pt": "Quanto tirar de \"{0}\"?",
+  "tipo": "padrao",
+  "en": "How much to take from \"{0}\"?",
+  "fr": "Combien retirer de « {0} » ?",
+  "es": "¿Cuánto sacar de \"{0}\"?"
+ },
+ {
+  "pt": "Isso passa do saldo livre da conta ({0}). Guardar mesmo assim?",
+  "tipo": "padrao",
+  "en": "That exceeds the account's free balance ({0}). Save it anyway?",
+  "fr": "Cela dépasse le solde libre du compte ({0}). Mettre de côté quand même ?",
+  "es": "Eso supera el saldo libre de la cuenta ({0}). ¿Guardar igual?"
+ },
+ {
+  "pt": "Guardado.",
+  "tipo": "exato",
+  "en": "Saved.",
+  "fr": "Mis de côté.",
+  "es": "Guardado."
+ },
+ {
+  "pt": "Retirado.",
+  "tipo": "exato",
+  "en": "Taken out.",
+  "fr": "Retiré.",
+  "es": "Retirado."
+ },
+ {
+  "pt": "{0} guardado em caixinhas ·",
+  "tipo": "padrao",
+  "en": "{0} saved in pots ·",
+  "fr": "{0} dans les cagnottes ·",
+  "es": "{0} guardado en alcancías ·"
+ },
+ {
+  "pt": "{0} guardado em caixinhas",
+  "tipo": "padrao",
+  "en": "{0} saved in pots",
+  "fr": "{0} dans les cagnottes",
+  "es": "{0} guardado en alcancías"
+ },
+ {
+  "pt": "data-oz-cx-linha>",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "data-oz-cx-linha data-oz-texto=\"{0}\">",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "DIVIDIR COM (OPCIONAL)",
+  "tipo": "exato",
+  "en": "SPLIT WITH (OPTIONAL)",
+  "fr": "PARTAGER AVEC (FACULTATIF)",
+  "es": "DIVIDIR CON (OPCIONAL)"
+ },
+ {
+  "pt": "Ex.: Ana, João",
+  "tipo": "exato",
+  "en": "E.g. Ana, John",
+  "fr": "Ex. : Ana, Jean",
+  "es": "Ej.: Ana, Juan"
+ },
+ {
+  "pt": "Partes iguais entre você e quem você citar. A parte de cada um vai para \"Quem me deve\".",
+  "tipo": "exato",
+  "en": "Equal shares between you and the people you name. Each share goes to \"Who owes me\".",
+  "fr": "Parts égales entre vous et les personnes citées. La part de chacun va dans « Qui me doit ».",
+  "es": "Partes iguales entre tú y quienes menciones. La parte de cada uno va a \"Quién me debe\"."
+ },
+ {
+  "pt": "{0} (dividido)",
+  "tipo": "padrao",
+  "en": "{0} (split)",
+  "fr": "{0} (partagé)",
+  "es": "{0} (dividido)"
+ },
+ {
+  "pt": "Texto, valor (ex.: 45,90), categoria ou tag",
+  "tipo": "exato",
+  "en": "Text, amount (e.g. 45.90), category or tag",
+  "fr": "Texte, montant (ex. : 45,90), catégorie ou tag",
+  "es": "Texto, valor (ej.: 45,90), categoría o etiqueta"
+ },
+ {
+  "pt": "CONTA OU CARTÃO",
+  "tipo": "exato",
+  "en": "ACCOUNT OR CARD",
+  "fr": "COMPTE OU CARTE",
+  "es": "CUENTA O TARJETA"
+ },
+ {
+  "pt": "VALOR DE",
+  "tipo": "exato",
+  "en": "AMOUNT FROM",
+  "fr": "MONTANT DE",
+  "es": "VALOR DESDE"
+ },
+ {
+  "pt": "ATÉ",
+  "tipo": "exato",
+  "en": "TO",
+  "fr": "À",
+  "es": "HASTA"
+ },
+ {
+  "pt": "Procura em todos os meses, não só no mês aberto.",
+  "tipo": "exato",
+  "en": "Searches all months, not just the open one.",
+  "fr": "Cherche dans tous les mois, pas seulement le mois ouvert.",
+  "es": "Busca en todos los meses, no solo en el mes abierto."
+ },
+ {
+  "pt": "{0}{1} resultado{2}",
+  "tipo": "padrao",
+  "en": "{0}{1} result{2}",
+  "fr": "{0}{1} résultat{2}",
+  "es": "{0}{1} resultado{2}"
+ },
+ {
+  "pt": "Abrir",
+  "tipo": "exato",
+  "en": "Open",
+  "fr": "Ouvrir",
+  "es": "Abrir"
+ },
+ {
+  "pt": "· mensal",
+  "tipo": "exato",
+  "en": "· monthly",
+  "fr": "· mensuel",
+  "es": "· mensual"
+ },
+ {
+  "pt": "Cadastre seus financiamentos e empréstimos (com os juros ao mês) para comparar as estratégias.",
+  "tipo": "exato",
+  "en": "Add your financing and loans (with monthly interest) to compare strategies.",
+  "fr": "Ajoutez vos financements et prêts (avec les intérêts mensuels) pour comparer les stratégies.",
+  "es": "Registra tus financiamientos y préstamos (con el interés mensual) para comparar estrategias."
+ },
+ {
+  "pt": "Cadastrar empréstimo",
+  "tipo": "exato",
+  "en": "Add loan",
+  "fr": "Ajouter un prêt",
+  "es": "Registrar préstamo"
+ },
+ {
+  "pt": "Cadastrar financiamento",
+  "tipo": "exato",
+  "en": "Add financing",
+  "fr": "Ajouter un financement",
+  "es": "Registrar financiamiento"
+ },
+ {
+  "pt": "{0} meses · {1} de juros",
+  "tipo": "padrao",
+  "en": "{0} months · {1} in interest",
+  "fr": "{0} mois · {1} d'intérêts",
+  "es": "{0} meses · {1} de intereses"
+ },
+ {
+  "pt": "economiza {0} e {1} meses",
+  "tipo": "padrao",
+  "en": "saves {0} and {1} months",
+  "fr": "économise {0} et {1} mois",
+  "es": "ahorra {0} y {1} meses"
+ },
+ {
+  "pt": "bola de neve",
+  "tipo": "exato",
+  "en": "snowball",
+  "fr": "boule de neige",
+  "es": "bola de nieve"
+ },
+ {
+  "pt": "Quanto a mais por mês você consegue pôr nas dívidas? O OAZE compara as duas ordens de pagamento com as {0} dívidas cadastradas.",
+  "tipo": "padrao",
+  "en": "How much extra per month can you put toward debt? OAZE compares the two payment orders with the {0} debts you registered.",
+  "fr": "Combien de plus par mois pouvez-vous mettre sur vos dettes ? OAZE compare les deux ordres de remboursement avec les {0} dettes enregistrées.",
+  "es": "¿Cuánto más por mes puedes poner en las deudas? OAZE compara los dos órdenes de pago con las {0} deudas registradas."
+ },
+ {
+  "pt": "A MAIS POR MÊS",
+  "tipo": "exato",
+  "en": "EXTRA PER MONTH",
+  "fr": "EN PLUS PAR MOIS",
+  "es": "EXTRA POR MES"
+ },
+ {
+  "pt": "Pagando só as parcelas: termina em",
+  "tipo": "exato",
+  "en": "Paying only the installments: you finish in",
+  "fr": "En payant seulement les échéances : vous terminez en",
+  "es": "Pagando solo las cuotas: terminas en"
+ },
+ {
+  "pt": "com {0} de juros.",
+  "tipo": "padrao",
+  "en": "with {0} in interest.",
+  "fr": "avec {0} d'intérêts.",
+  "es": "con {0} de intereses."
+ },
+ {
+  "pt": "{0} Quitada uma dívida, a parcela dela passa para a próxima.{1}",
+  "tipo": "padrao",
+  "en": "{0} Once a debt is paid off, its installment moves to the next one.{1}",
+  "fr": "{0} Une dette remboursée, son échéance passe à la suivante.{1}",
+  "es": "{0} Al pagar una deuda, su cuota pasa a la siguiente.{1}"
+ },
+ {
+  "pt": "Bola de neve",
+  "tipo": "exato",
+  "en": "Snowball",
+  "fr": "Boule de neige",
+  "es": "Bola de nieve"
+ },
+ {
+  "pt": "primeiro a menor dívida",
+  "tipo": "exato",
+  "en": "smallest debt first",
+  "fr": "la plus petite dette d'abord",
+  "es": "primero la deuda menor"
+ },
+ {
+  "pt": "Avalanche",
+  "tipo": "exato",
+  "en": "Avalanche",
+  "fr": "Avalanche",
+  "es": "Avalancha"
+ },
+ {
+  "pt": "primeiro a de juros mais alto",
+  "tipo": "exato",
+  "en": "highest interest first",
+  "fr": "le taux le plus élevé d'abord",
+  "es": "primero la de interés más alto"
+ },
+ {
+  "pt": "Neste cenário as duas ordens dão o mesmo resultado (a dívida menor é também a de juros mais alto).",
+  "tipo": "exato",
+  "en": "In this scenario both orders give the same result (the smallest debt also has the highest interest).",
+  "fr": "Dans ce scénario, les deux ordres donnent le même résultat (la plus petite dette a aussi le taux le plus élevé).",
+  "es": "En este escenario los dos órdenes dan el mismo resultado (la deuda menor es también la de interés más alto)."
+ },
+ {
+  "pt": "Neste cenário, a",
+  "tipo": "exato",
+  "en": "In this scenario, the",
+  "fr": "Dans ce scénario, la",
+  "es": "En este escenario, la"
+ },
+ {
+  "pt": "sai mais barata.",
+  "tipo": "exato",
+  "en": "is cheaper.",
+  "fr": "revient moins cher.",
+  "es": "sale más barata."
+ },
+ {
+  "pt": "{0} dívida(s) sem juros informados entram como juro zero.",
+  "tipo": "padrao",
+  "en": "{0} debt(s) without interest entered count as zero interest.",
+  "fr": "{0} dette(s) sans intérêt renseigné comptent à taux zéro.",
+  "es": "{0} deuda(s) sin interés informado cuentan como interés cero."
+ },
+ {
+  "pt": "Valor recebido",
+  "tipo": "exato",
+  "en": "Amount received",
+  "fr": "Montant reçu",
+  "es": "Valor recibido"
+ },
+ {
+  "pt": "Compra no cartão",
+  "tipo": "exato",
+  "en": "Card purchase",
+  "fr": "Achat par carte",
+  "es": "Compra con tarjeta"
+ },
+ {
+  "pt": "Disponível no app OAZE para Android: quando o seu banco avisa \"Compra aprovada R$ 45,90 em Padaria X\", o OAZE sugere o lançamento para você confirmar.",
+  "tipo": "exato",
+  "en": "Available in the OAZE Android app: when your bank says \"Purchase approved R$ 45.90 at Bakery X\", OAZE suggests the transaction for you to confirm.",
+  "fr": "Disponible dans l'app OAZE pour Android : quand votre banque annonce « Achat approuvé R$ 45,90 à Boulangerie X », OAZE propose l'opération à confirmer.",
+  "es": "Disponible en la app OAZE para Android: cuando tu banco avisa \"Compra aprobada R$ 45,90 en Panadería X\", OAZE sugiere el movimiento para que lo confirmes."
+ },
+ {
+  "pt": "O OAZE lê",
+  "tipo": "exato",
+  "en": "OAZE reads",
+  "fr": "OAZE lit",
+  "es": "OAZE lee"
+ },
+ {
+  "pt": "só",
+  "tipo": "exato",
+  "en": "only",
+  "fr": "uniquement",
+  "es": "solo"
+ },
+ {
+  "pt": "as notificações dos apps de banco e cartão, no próprio aparelho. Nada é enviado; cada sugestão espera você confirmar.",
+  "tipo": "exato",
+  "en": "the notifications from bank and card apps, on the device itself. Nothing is sent; each suggestion waits for you to confirm.",
+  "fr": "les notifications des apps de banque et de carte, sur l'appareil lui-même. Rien n'est envoyé ; chaque suggestion attend votre confirmation.",
+  "es": "las notificaciones de las apps de banco y tarjeta, en el propio dispositivo. No se envía nada; cada sugerencia espera tu confirmación."
+ },
+ {
+  "pt": "Permitir leitura dos avisos do banco",
+  "tipo": "exato",
+  "en": "Allow reading bank notifications",
+  "fr": "Autoriser la lecture des notifications bancaires",
+  "es": "Permitir leer los avisos del banco"
+ },
+ {
+  "pt": "O Android abre a tela \"Acesso a notificações\". Ative o OAZE e volte.",
+  "tipo": "exato",
+  "en": "Android opens the \"Notification access\" screen. Turn on OAZE and come back.",
+  "fr": "Android ouvre l'écran « Accès aux notifications ». Activez OAZE et revenez.",
+  "es": "Android abre la pantalla \"Acceso a notificaciones\". Activa OAZE y vuelve."
+ },
+ {
+  "pt": "Avisos dos seus bancos que parecem compras ou recebimentos. Toque para revisar e lançar.",
+  "tipo": "exato",
+  "en": "Notifications from your banks that look like purchases or income. Tap to review and log.",
+  "fr": "Notifications de vos banques qui ressemblent à des achats ou des encaissements. Touchez pour vérifier et saisir.",
+  "es": "Avisos de tus bancos que parecen compras o ingresos. Toca para revisar y registrar."
+ },
+ {
+  "pt": "Parar de ler avisos",
+  "tipo": "exato",
+  "en": "Stop reading notifications",
+  "fr": "Arrêter de lire les notifications",
+  "es": "Dejar de leer avisos"
+ },
+ {
+  "pt": "Lançar",
+  "tipo": "exato",
+  "en": "Log",
+  "fr": "Saisir",
+  "es": "Registrar"
+ },
+ {
+  "pt": "Ignorar",
+  "tipo": "exato",
+  "en": "Ignore",
+  "fr": "Ignorer",
+  "es": "Ignorar"
+ },
+ {
+  "pt": "Nenhum aviso novo de banco. Assim que chegar, aparece aqui.",
+  "tipo": "exato",
+  "en": "No new bank notifications. As soon as one arrives, it shows up here.",
+  "fr": "Aucune nouvelle notification bancaire. Dès qu'une arrive, elle apparaît ici.",
+  "es": "Ningún aviso nuevo del banco. En cuanto llegue, aparece aquí."
+ },
+ {
+  "pt": "Aponte a câmera para o QR Code do cupom fiscal (NFC-e). O OAZE busca loja, data, total e os itens na Sefaz.",
+  "tipo": "exato",
+  "en": "Point the camera at the receipt's QR code (NFC-e). OAZE fetches store, date, total and items from the tax authority.",
+  "fr": "Pointez la caméra vers le QR code du ticket (NFC-e). OAZE récupère magasin, date, total et articles auprès de l'administration fiscale.",
+  "es": "Apunta la cámara al código QR del ticket (NFC-e). OAZE busca tienda, fecha, total y artículos en la Sefaz."
+ },
+ {
+  "pt": "Abrir câmera",
+  "tipo": "exato",
+  "en": "Open camera",
+  "fr": "Ouvrir la caméra",
+  "es": "Abrir cámara"
+ },
+ {
+  "pt": "Escolher foto do QR",
+  "tipo": "exato",
+  "en": "Choose a photo of the QR",
+  "fr": "Choisir une photo du QR",
+  "es": "Elegir foto del QR"
+ },
+ {
+  "pt": "Tentar outro QR",
+  "tipo": "exato",
+  "en": "Try another QR",
+  "fr": "Essayer un autre QR",
+  "es": "Probar otro QR"
+ },
+ {
+  "pt": "Data",
+  "tipo": "exato",
+  "en": "Date",
+  "fr": "Date",
+  "es": "Fecha"
+ },
+ {
+  "pt": "Lançar {0}",
+  "tipo": "padrao",
+  "en": "Log {0}",
+  "fr": "Saisir {0}",
+  "es": "Registrar {0}"
+ },
+ {
+  "pt": "Ler outro",
+  "tipo": "exato",
+  "en": "Read another",
+  "fr": "Lire un autre",
+  "es": "Leer otro"
+ },
+ {
+  "pt": "Loja",
+  "tipo": "exato",
+  "en": "Store",
+  "fr": "Magasin",
+  "es": "Tienda"
+ },
+ {
+  "pt": "A Sefaz deste estado não mostrou os itens; o total foi lido.",
+  "tipo": "exato",
+  "en": "This state's tax authority didn't show the items; the total was read.",
+  "fr": "L'administration fiscale de cet État n'a pas affiché les articles ; le total a été lu.",
+  "es": "La Sefaz de este estado no mostró los artículos; se leyó el total."
+ },
+ {
+  "pt": "BarcodeDetector",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Este aparelho não lê QR pelo app. Use a câmera do celular e abra o link no navegador.",
+  "tipo": "exato",
+  "en": "This device can't read QR codes in the app. Use the phone camera and open the link in the browser.",
+  "fr": "Cet appareil ne lit pas les QR dans l'app. Utilisez l'appareil photo du téléphone et ouvrez le lien dans le navigateur.",
+  "es": "Este dispositivo no lee QR en la app. Usa la cámara del celular y abre el enlace en el navegador."
+ },
+ {
+  "pt": "Consultando a Sefaz…",
+  "tipo": "exato",
+  "en": "Checking with the tax authority…",
+  "fr": "Consultation de l'administration fiscale…",
+  "es": "Consultando la Sefaz…"
+ },
+ {
+  "pt": "Esse QR não é de uma NFC-e (cupom fiscal eletrônico).",
+  "tipo": "exato",
+  "en": "This QR isn't from an NFC-e (electronic receipt).",
+  "fr": "Ce QR ne provient pas d'une NFC-e (ticket électronique).",
+  "es": "Este QR no es de una NFC-e (ticket electrónico)."
+ },
+ {
+  "pt": "Supermercado Exemplo",
+  "tipo": "exato",
+  "en": "Example Supermarket",
+  "fr": "Supermarché Exemple",
+  "es": "Supermercado Ejemplo"
+ },
+ {
+  "pt": "Arroz 5kg",
+  "tipo": "exato",
+  "en": "Rice 5kg",
+  "fr": "Riz 5 kg",
+  "es": "Arroz 5 kg"
+ },
+ {
+  "pt": "Café 500g",
+  "tipo": "exato",
+  "en": "Coffee 500g",
+  "fr": "Café 500 g",
+  "es": "Café 500 g"
+ },
+ {
+  "pt": "Banana",
+  "tipo": "exato",
+  "en": "Banana",
+  "fr": "Banane",
+  "es": "Banana"
+ },
+ {
+  "pt": "A Sefaz não respondeu agora.",
+  "tipo": "exato",
+  "en": "The tax authority didn't respond right now.",
+  "fr": "L'administration fiscale n'a pas répondu pour l'instant.",
+  "es": "La Sefaz no respondió ahora."
+ },
+ {
+  "pt": "Não consegui ler a nota.",
+  "tipo": "exato",
+  "en": "Couldn't read the receipt.",
+  "fr": "Impossible de lire le ticket.",
+  "es": "No se pudo leer el ticket."
+ },
+ {
+  "pt": "Saúde (dedutível sem limite)",
+  "tipo": "exato",
+  "en": "Health (deductible without limit)",
+  "fr": "Santé (déductible sans limite)",
+  "es": "Salud (deducible sin límite)"
+ },
+ {
+  "pt": "Educação (limite anual por pessoa)",
+  "tipo": "exato",
+  "en": "Education (annual limit per person)",
+  "fr": "Éducation (plafond annuel par personne)",
+  "es": "Educación (límite anual por persona)"
+ },
+ {
+  "pt": "Previdência privada PGBL (até 12% da renda)",
+  "tipo": "exato",
+  "en": "PGBL private pension (up to 12% of income)",
+  "fr": "Retraite privée PGBL (jusqu'à 12 % du revenu)",
+  "es": "Previsión privada PGBL (hasta 12% de la renta)"
+ },
+ {
+  "pt": "Pensão alimentícia judicial",
+  "tipo": "exato",
+  "en": "Court-ordered alimony",
+  "fr": "Pension alimentaire judiciaire",
+  "es": "Pensión alimentaria judicial"
+ },
+ {
+  "pt": "Conta (grupo 06)",
+  "tipo": "exato",
+  "en": "Account (group 06)",
+  "fr": "Compte (groupe 06)",
+  "es": "Cuenta (grupo 06)"
+ },
+ {
+  "pt": "Aplicação (grupo 04)",
+  "tipo": "exato",
+  "en": "Investment (group 04)",
+  "fr": "Placement (groupe 04)",
+  "es": "Inversión (grupo 04)"
+ },
+ {
+  "pt": "ANO-CALENDÁRIO",
+  "tipo": "exato",
+  "en": "CALENDAR YEAR",
+  "fr": "ANNÉE CIVILE",
+  "es": "AÑO CALENDARIO"
+ },
+ {
+  "pt": "Organizado na ordem da declaração. Confira com os informes do banco e da empresa: o OAZE só soma o que você lançou.",
+  "tipo": "exato",
+  "en": "Organized in the order of the tax return. Check against your bank and employer statements: OAZE only adds up what you recorded.",
+  "fr": "Organisé dans l'ordre de la déclaration. Comparez avec les relevés de la banque et de l'employeur : OAZE ne fait que totaliser ce que vous avez saisi.",
+  "es": "Organizado en el orden de la declaración. Compara con los informes del banco y de la empresa: OAZE solo suma lo que registraste."
+ },
+ {
+  "pt": "Pagamentos dedutíveis",
+  "tipo": "exato",
+  "en": "Deductible payments",
+  "fr": "Paiements déductibles",
+  "es": "Pagos deducibles"
+ },
+ {
+  "pt": "Bens e direitos em 31/12/{0}",
+  "tipo": "padrao",
+  "en": "Assets and rights on 12/31/{0}",
+  "fr": "Biens et droits au 31/12/{0}",
+  "es": "Bienes y derechos al 31/12/{0}"
+ },
+ {
+  "pt": "Dívidas e ônus em 31/12",
+  "tipo": "exato",
+  "en": "Debts and liabilities on 12/31",
+  "fr": "Dettes et charges au 31/12",
+  "es": "Deudas y cargas al 31/12"
+ },
+ {
+  "pt": "Baixar planilha",
+  "tipo": "exato",
+  "en": "Download spreadsheet",
+  "fr": "Télécharger le tableur",
+  "es": "Descargar planilla"
+ },
+ {
+  "pt": "Imprimir ou salvar PDF",
+  "tipo": "exato",
+  "en": "Print or save PDF",
+  "fr": "Imprimer ou enregistrer en PDF",
+  "es": "Imprimir o guardar PDF"
+ },
+ {
+  "pt": "Não é orientação tributária. Saldo de dívida estimado pelas parcelas que faltam e pelos juros informados.",
+  "tipo": "exato",
+  "en": "Not tax advice. Debt balance estimated from remaining installments and the interest entered.",
+  "fr": "Ceci n'est pas un conseil fiscal. Solde des dettes estimé à partir des échéances restantes et des intérêts renseignés.",
+  "es": "No es orientación tributaria. Saldo de deuda estimado con las cuotas que faltan y el interés informado."
+ },
+ {
+  "pt": "Nenhuma receita confirmada em {0}.",
+  "tipo": "padrao",
+  "en": "No confirmed income in {0}.",
+  "fr": "Aucun revenu confirmé en {0}.",
+  "es": "Ningún ingreso confirmado en {0}."
+ },
+ {
+  "pt": "Nada em saúde, educação ou previdência neste ano.",
+  "tipo": "exato",
+  "en": "Nothing in health, education or pension this year.",
+  "fr": "Rien en santé, éducation ou retraite cette année.",
+  "es": "Nada en salud, educación o previsión este año."
+ },
+ {
+  "pt": "Sem contas ou investimentos.",
+  "tipo": "exato",
+  "en": "No accounts or investments.",
+  "fr": "Aucun compte ni placement.",
+  "es": "Sin cuentas ni inversiones."
+ },
+ {
+  "pt": "Sem financiamentos ou empréstimos cadastrados.",
+  "tipo": "exato",
+  "en": "No financing or loans registered.",
+  "fr": "Aucun financement ni prêt enregistré.",
+  "es": "Sin financiamientos ni préstamos registrados."
+ },
+ {
+  "pt": "Seção",
+  "tipo": "exato",
+  "en": "Section",
+  "fr": "Section",
+  "es": "Sección"
+ },
+ {
+  "pt": "Item",
+  "tipo": "exato",
+  "en": "Item",
+  "fr": "Élément",
+  "es": "Ítem"
+ },
+ {
+  "pt": "Valor",
+  "tipo": "exato",
+  "en": "Amount",
+  "fr": "Montant",
+  "es": "Valor"
+ },
+ {
+  "pt": "Dedutível · {0}",
+  "tipo": "padrao",
+  "en": "Deductible · {0}",
+  "fr": "Déductible · {0}",
+  "es": "Deducible · {0}"
+ },
+ {
+  "pt": "Bens e direitos",
+  "tipo": "exato",
+  "en": "Assets and rights",
+  "fr": "Biens et droits",
+  "es": "Bienes y derechos"
+ },
+ {
+  "pt": "oaze-ir-{0}.csv",
+  "tipo": "padrao",
+  "ignorar": true
+ },
+ {
+  "pt": "{0} em {1} ({2})",
+  "tipo": "padrao",
+  "en": "{0} on {1} ({2})",
+  "fr": "{0} le {1} ({2})",
+  "es": "{0} el {1} ({2})"
+ },
+ {
+  "pt": "Sua semana em 1 minuto",
+  "tipo": "exato",
+  "en": "Your week in 1 minute",
+  "fr": "Votre semaine en 1 minute",
+  "es": "Tu semana en 1 minuto"
+ },
+ {
+  "pt": "Entrou {0}, saiu {1}{2}{3}.",
+  "tipo": "padrao",
+  "en": "In {0}, out {1}{2}{3}.",
+  "fr": "Entré {0}, sorti {1}{2}{3}.",
+  "es": "Entró {0}, salió {1}{2}{3}."
+ },
+ {
+  "pt": ". Maior gasto: {0}",
+  "tipo": "padrao",
+  "en": ". Biggest expense: {0}",
+  "fr": ". Plus grosse dépense : {0}",
+  "es": ". Mayor gasto: {0}"
+ },
+ {
+  "pt": ". Próximo: {0}",
+  "tipo": "padrao",
+  "en": ". Next: {0}",
+  "fr": ". Prochain : {0}",
+  "es": ". Próximo: {0}"
+ },
+ {
+  "pt": "Seu mês em 1 minuto",
+  "tipo": "exato",
+  "en": "Your month in 1 minute",
+  "fr": "Votre mois en 1 minute",
+  "es": "Tu mes en 1 minuto"
+ },
+ {
+  "pt": "{0}: entrou {1}, saiu {2}, sobra {3}{4}.",
+  "tipo": "padrao",
+  "en": "{0}: in {1}, out {2}, left {3}{4}.",
+  "fr": "{0} : entré {1}, sorti {2}, reste {3}{4}.",
+  "es": "{0}: entró {1}, salió {2}, sobra {3}{4}."
+ },
+ {
+  "pt": "Uma notificação curta, no aparelho: quanto entrou, quanto saiu, a maior categoria e o que vence a seguir.",
+  "tipo": "exato",
+  "en": "A short notification on the device: how much came in, how much went out, the biggest category and what's due next.",
+  "fr": "Une courte notification sur l'appareil : ce qui est entré, ce qui est sorti, la plus grosse catégorie et la prochaine échéance.",
+  "es": "Un aviso corto en el dispositivo: cuánto entró, cuánto salió, la mayor categoría y lo que vence después."
+ },
+ {
+  "pt": "Resumo da semana (domingo, 19h)",
+  "tipo": "exato",
+  "en": "Weekly summary (Sunday, 7 pm)",
+  "fr": "Résumé de la semaine (dimanche, 19 h)",
+  "es": "Resumen de la semana (domingo, 19 h)"
+ },
+ {
+  "pt": "Resumo do mês (dia 1, 9h)",
+  "tipo": "exato",
+  "en": "Monthly summary (day 1, 9 am)",
+  "fr": "Résumé du mois (le 1er, 9 h)",
+  "es": "Resumen del mes (día 1, 9 h)"
+ },
+ {
+  "pt": "PRÉVIA DE {0}",
+  "tipo": "padrao",
+  "en": "PREVIEW OF {0}",
+  "fr": "APERÇU DE {0}",
+  "es": "VISTA PREVIA DE {0}"
+ },
+ {
+  "pt": "Entrou",
+  "tipo": "exato",
+  "en": "In",
+  "fr": "Entré",
+  "es": "Entró"
+ },
+ {
+  "pt": ", saiu",
+  "tipo": "exato",
+  "en": ", out",
+  "fr": ", sorti",
+  "es": ", salió"
+ },
+ {
+  "pt": ", sobra",
+  "tipo": "exato",
+  "en": ", left",
+  "fr": ", reste",
+  "es": ", sobra"
+ },
+ {
+  "pt": "Os avisos precisam estar ligados em Configurações › Notificações. Resumo por e-mail ainda não existe.",
+  "tipo": "exato",
+  "en": "Notifications must be on in Settings › Notifications. Email summaries don't exist yet.",
+  "fr": "Les notifications doivent être activées dans Réglages › Notifications. Le résumé par e-mail n'existe pas encore.",
+  "es": "Los avisos deben estar activados en Configuración › Avisos. El resumen por correo aún no existe."
+ },
+ {
+  "pt": "Maior gasto: {0}.",
+  "tipo": "padrao",
+  "en": "Biggest expense: {0}.",
+  "fr": "Plus grosse dépense : {0}.",
+  "es": "Mayor gasto: {0}."
+ },
+ {
+  "pt": "Cabe na sobra deste mês.",
+  "tipo": "exato",
+  "en": "Fits in this month's surplus.",
+  "fr": "Ça rentre dans le surplus du mois.",
+  "es": "Cabe en lo que sobra este mes."
+ },
+ {
+  "pt": "Guardando a sobra média ({0}/mês), dá em {1} meses.",
+  "tipo": "padrao",
+  "en": "Saving the average surplus ({0}/month), you get there in {1} months.",
+  "fr": "En mettant de côté le surplus moyen ({0}/mois), vous y arrivez en {1} mois.",
+  "es": "Guardando lo que sobra en promedio ({0}/mes), llegas en {1} meses."
+ },
+ {
+  "pt": "Hoje não sobra dinheiro no mês. Vale rever gastos antes.",
+  "tipo": "exato",
+  "en": "There's no surplus this month. Worth reviewing spending first.",
+  "fr": "Il ne reste rien ce mois-ci. Mieux vaut revoir les dépenses d'abord.",
+  "es": "Hoy no sobra dinero en el mes. Conviene revisar gastos antes."
+ },
+ {
+  "pt": "Anote o que você quer comprar. O OAZE compara com o que está livre e com a sobra média dos próximos meses.",
+  "tipo": "exato",
+  "en": "Write down what you want to buy. OAZE compares it with what's free and with the average surplus of the coming months.",
+  "fr": "Notez ce que vous voulez acheter. OAZE compare avec ce qui est libre et le surplus moyen des prochains mois.",
+  "es": "Anota lo que quieres comprar. OAZE lo compara con lo que está libre y con lo que sobra en promedio en los próximos meses."
+ },
+ {
+  "pt": "Sobra média/mês",
+  "tipo": "exato",
+  "en": "Average surplus/month",
+  "fr": "Surplus moyen/mois",
+  "es": "Sobra promedio/mes"
+ },
+ {
+  "pt": "Adicionar desejo",
+  "tipo": "exato",
+  "en": "Add wish",
+  "fr": "Ajouter une envie",
+  "es": "Agregar deseo"
+ },
+ {
+  "pt": "O QUÊ",
+  "tipo": "exato",
+  "en": "WHAT",
+  "fr": "QUOI",
+  "es": "QUÉ"
+ },
+ {
+  "pt": "Ex.: Fone novo",
+  "tipo": "exato",
+  "en": "E.g. New headphones",
+  "fr": "Ex. : Nouveau casque",
+  "es": "Ej.: Auriculares nuevos"
+ },
+ {
+  "pt": "Alta",
+  "tipo": "exato",
+  "en": "High",
+  "fr": "Haute",
+  "es": "Alta"
+ },
+ {
+  "pt": "Média",
+  "tipo": "exato",
+  "en": "Medium",
+  "fr": "Moyenne",
+  "es": "Media"
+ },
+ {
+  "pt": "Baixa",
+  "tipo": "exato",
+  "en": "Low",
+  "fr": "Basse",
+  "es": "Baja"
+ },
+ {
+  "pt": "Adicionar",
+  "tipo": "exato",
+  "en": "Add",
+  "fr": "Ajouter",
+  "es": "Agregar"
+ },
+ {
+  "pt": "prioridade {0}",
+  "tipo": "padrao",
+  "en": "{0} priority",
+  "fr": "priorité {0}",
+  "es": "prioridad {0}"
+ },
+ {
+  "pt": "Comprado.",
+  "tipo": "exato",
+  "en": "Bought.",
+  "fr": "Acheté.",
+  "es": "Comprado."
+ },
+ {
+  "pt": "Pode comprar.",
+  "tipo": "exato",
+  "en": "You can buy it.",
+  "fr": "Vous pouvez l'acheter.",
+  "es": "Puedes comprarlo."
+ },
+ {
+  "pt": "Melhor esperar.",
+  "tipo": "exato",
+  "en": "Better to wait.",
+  "fr": "Mieux vaut attendre.",
+  "es": "Mejor esperar."
+ },
+ {
+  "pt": "Agora não.",
+  "tipo": "exato",
+  "en": "Not now.",
+  "fr": "Pas maintenant.",
+  "es": "Ahora no."
+ },
+ {
+  "pt": "Perguntar à Coco",
+  "tipo": "exato",
+  "en": "Ask Coco",
+  "fr": "Demander à Coco",
+  "es": "Preguntar a Coco"
+ },
+ {
+  "pt": "Comprei",
+  "tipo": "exato",
+  "en": "I bought it",
+  "fr": "Je l'ai acheté",
+  "es": "Lo compré"
+ },
+ {
+  "pt": "Nota fiscal (NFC-e)",
+  "tipo": "exato",
+  "en": "Receipt (NFC-e)",
+  "fr": "Ticket (NFC-e)",
+  "es": "Ticket (NFC-e)"
+ },
+ {
+  "pt": "Excluir a caixinha? O dinheiro volta a contar como livre.",
+  "tipo": "exato",
+  "en": "Delete the pot? The money counts as free again.",
+  "fr": "Supprimer la cagnotte ? L'argent redevient libre.",
+  "es": "¿Eliminar la alcancía? El dinero vuelve a contar como libre."
+ },
+ {
+  "pt": "Caixinha excluída.",
+  "tipo": "exato",
+  "en": "Pot deleted.",
+  "fr": "Cagnotte supprimée.",
+  "es": "Alcancía eliminada."
+ },
+ {
+  "pt": "Ative o OAZE em \"Acesso a notificações\" e volte.",
+  "tipo": "exato",
+  "en": "Turn on OAZE in \"Notification access\" and come back.",
+  "fr": "Activez OAZE dans « Accès aux notifications » et revenez.",
+  "es": "Activa OAZE en \"Acceso a notificaciones\" y vuelve."
+ },
+ {
+  "pt": "Este aparelho não lê QR pelo app. Escolha uma foto do QR.",
+  "tipo": "exato",
+  "en": "This device can't read QR codes in the app. Choose a photo of the QR.",
+  "fr": "Cet appareil ne lit pas les QR dans l'app. Choisissez une photo du QR.",
+  "es": "Este dispositivo no lee QR en la app. Elige una foto del QR."
+ },
+ {
+  "pt": "Procurando o QR…",
+  "tipo": "exato",
+  "en": "Looking for the QR…",
+  "fr": "Recherche du QR…",
+  "es": "Buscando el QR…"
+ },
+ {
+  "pt": "Não achei o QR. Tente com mais luz ou escolha uma foto.",
+  "tipo": "exato",
+  "en": "Couldn't find the QR. Try with more light or choose a photo.",
+  "fr": "QR introuvable. Essayez avec plus de lumière ou choisissez une photo.",
+  "es": "No encontré el QR. Prueba con más luz o elige una foto."
+ },
+ {
+  "pt": "Câmera indisponível.",
+  "tipo": "exato",
+  "en": "Camera unavailable.",
+  "fr": "Caméra indisponible.",
+  "es": "Cámara no disponible."
+ },
+ {
+  "pt": "Compra",
+  "tipo": "exato",
+  "en": "Purchase",
+  "fr": "Achat",
+  "es": "Compra"
+ },
+ {
+  "pt": "Marcado como comprado.",
+  "tipo": "exato",
+  "en": "Marked as bought.",
+  "fr": "Marqué comme acheté.",
+  "es": "Marcado como comprado."
+ },
+ {
+  "pt": "Posso comprar {0} por {1} agora? Se não, em quantos meses consigo guardar esse valor?",
+  "tipo": "padrao",
+  "en": "Can I buy {0} for {1} now? If not, in how many months can I save that amount?",
+  "fr": "Puis-je acheter {0} pour {1} maintenant ? Sinon, en combien de mois puis-je épargner ce montant ?",
+  "es": "¿Puedo comprar {0} por {1} ahora? Si no, ¿en cuántos meses puedo ahorrar ese valor?"
+ },
+ {
+  "pt": "Não encontrei um QR nessa foto.",
+  "tipo": "exato",
+  "en": "No QR found in that photo.",
+  "fr": "Aucun QR trouvé sur cette photo.",
+  "es": "No encontré un QR en esa foto."
+ },
+ {
+  "pt": "Não consegui ler a foto.",
+  "tipo": "exato",
+  "en": "Couldn't read the photo.",
+  "fr": "Impossible de lire la photo.",
+  "es": "No se pudo leer la foto."
+ },
+ {
+  "pt": "Resumo atualizado.",
+  "tipo": "exato",
+  "en": "Summary updated.",
+  "fr": "Résumé mis à jour.",
+  "es": "Resumen actualizado."
+ },
+ {
+  "pt": "oaze:avisos-mudaram",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Caixinha criada.",
+  "tipo": "exato",
+  "en": "Pot created.",
+  "fr": "Cagnotte créée.",
+  "es": "Alcancía creada."
+ },
+ {
+  "pt": "Preencha o nome e o valor.",
+  "tipo": "exato",
+  "en": "Fill in the name and the amount.",
+  "fr": "Renseignez le nom et le montant.",
+  "es": "Completa el nombre y el valor."
+ },
+ {
+  "pt": "Adicionado à lista.",
+  "tipo": "exato",
+  "en": "Added to the list.",
+  "fr": "Ajouté à la liste.",
+  "es": "Agregado a la lista."
+ }
+]

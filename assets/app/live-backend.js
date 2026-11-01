@@ -173,7 +173,7 @@
   V3Backend.subscription = async function () {
     if (!client || !user) throw new Error('Entre na sua conta para consultar a assinatura.');
     const { data, error } = await bounded(client.from('subscriptions')
-      .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
+      .select('plan_id,status,billing_cycle,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
       .eq('user_id', user.id).maybeSingle());
     if (error) throw error;
     return data || { plan_id: 'free', status: 'free', cancel_at_period_end: false };
@@ -194,6 +194,24 @@
     }));
     const result = await response.json().catch(() => ({}));
     if (!response.ok || result.erro) throw new Error(result.mensagem || 'Pagamento indisponível agora. Nada foi cobrado.');
+    return result;
+  };
+  V3Backend.billingPortal = async function () {
+    if (!client || !user) throw new Error('Entre na sua conta para consultar a cobrança.');
+    const config = global.SupabaseConfig || {};
+    const base = String(config.url || '').replace(/\/+$/, '');
+    const publicKey = String(config.publishableKey || config.anonKey || '');
+    if (!/^https:\/\//.test(base) || !publicKey) throw new Error('Cobrança indisponível: conexão não configurada.');
+    const { data, error } = await bounded(client.auth.getSession());
+    if (error || !data?.session?.access_token) throw new Error('Sua sessão expirou. Entre novamente.');
+    const response = await bounded(fetch(base + '/functions/v1/oaze-billing-portal', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json', apikey: publicKey,
+        authorization: 'Bearer ' + data.session.access_token },
+      body: JSON.stringify(global.OAZE_NATIVE_DESKTOP ? { canal: 'windows' } : {})
+    }));
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.url) throw new Error(result.mensagem || 'Não foi possível abrir suas cobranças.');
     return result;
   };
   V3Backend.vault = async function (body) {
@@ -227,9 +245,13 @@
     Store.setOwnerName(name);
     return record;
   };
-  V3Backend.signOut = async function () {
+  V3Backend.signOut = async function (everywhere = false) {
     if (!client) throw new Error('Sessão indisponível.');
-    const { error } = await bounded(client.auth.signOut());
+    if (global.OAZE_NATIVE_NOTIFICATIONS) {
+      try { await global.OAZE_NATIVE_NOTIFICATIONS.cancel(); }
+      catch (error) { console.warn('V3/avisos pendentes:', error); }
+    }
+    const { error } = await bounded(client.auth.signOut({ scope: everywhere ? 'global' : 'local' }));
     if (error) throw error;
     global.location.replace(loginUrl);
   };
@@ -491,11 +513,40 @@
     });
   }
 
-  async function requirePinSetup() {
-    const status = await V3Backend.vault({ action: 'status' });
-    if (status.configured) return;
+  /* PIN NA CRIAÇÃO DA CONTA (01/11/2026)
+     Antes só era pedido a quem tinha a marca oaze_pin_required. Agora toda
+     conta sem PIN cria o seu na entrada — quem já existia, na próxima vez.
+     Servidor fora do ar (status null) não tranca a entrada: pede depois.
+     No app instalado, logo em seguida, oferece destravar com o bloqueio
+     do aparelho (digital, rosto, PIN do Windows). */
+  async function oferecerBloqueioDoAparelho() {
+    const bio = global.OAZE_NATIVE_BIOMETRICS;
+    if (!bio || bio.isEnabled()) return;
+    try { if (localStorage.getItem('oaze.native.biometric-offered')) return; } catch { /* segue */ }
+    if (!(await bio.available().catch(() => false))) return;
+    const windows = !!global.OAZE_NATIVE_DESKTOP;
+    const nome = windows ? 'Windows Hello (rosto, digital ou PIN do Windows)' : 'digital, rosto ou a senha do celular';
     const view = document.getElementById('v3-view');
-    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">PROTEÇÃO EXTRA</span><h2>Crie seu PIN de seis dígitos.</h2><p>Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.</p><form id="v3-pin-first-form" class="v3-form"><label>PIN<input name="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><label>CONFIRME O PIN<input name="confirm" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><button type="submit" class="v3-primary">Criar PIN e continuar</button><p role="alert" id="v3-pin-first-error" hidden></p></form></section>';
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">DESBLOQUEIO RÁPIDO</span><h2>Abrir o OAZE com o bloqueio do aparelho?</h2><p>Quando o app ficar um tempo fechado, ele pede ' + nome + ' antes de mostrar seus dados. O PIN continua valendo para as áreas sensíveis.</p><div class="v3-form"><button type="button" class="v3-primary" id="v3-bio-sim">Usar bloqueio do aparelho</button><button type="button" class="v3-secondary" id="v3-bio-nao">Agora não</button><p role="alert" id="v3-bio-erro" hidden></p></div></section>';
+    await new Promise((resolve) => {
+      const fim = () => { try { localStorage.setItem('oaze.native.biometric-offered', '1'); } catch { /* segue */ } resolve(); };
+      document.getElementById('v3-bio-nao').addEventListener('click', fim);
+      document.getElementById('v3-bio-sim').addEventListener('click', async (event) => {
+        event.currentTarget.disabled = true;
+        if (await bio.setEnabled(true).catch(() => false)) { fim(); return; }
+        const erro = document.getElementById('v3-bio-erro');
+        erro.textContent = 'Não foi possível confirmar. Você pode ligar depois em Configurações › Segurança.';
+        erro.hidden = false;
+        setTimeout(fim, 2200);
+      });
+    });
+  }
+
+  async function requirePinSetup(status) {
+    if (!status) return;
+    if (status.configured) { await oferecerBloqueioDoAparelho(); return; }
+    const view = document.getElementById('v3-view');
+    view.innerHTML = '<section class="v3-panel v3-consent"><span class="v3-label">PROTEÇÃO DA CONTA</span><h2>Crie seu PIN de seis dígitos.</h2><p>Ele destrava os dados sensíveis dentro do OAZE: números de conta, cofre e exclusões. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.</p><form id="v3-pin-first-form" class="v3-form"><label>PIN<input name="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><label>CONFIRME O PIN<input name="confirm" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required></label><button type="submit" class="v3-primary">Criar PIN e continuar</button><p role="alert" id="v3-pin-first-error" hidden></p></form></section>';
     await new Promise((resolve) => {
       document.getElementById('v3-pin-first-form').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -521,15 +572,10 @@
         }
       });
     });
+    await oferecerBloqueioDoAparelho();
   }
 
-  V3Backend.reload = async function () {
-    if (saving) { refreshPending = true; return false; }
-    const verified = await bounded(SiteAuth.quemEsta());
-    if (!verified || verified.id !== user?.id) {
-      global.location.replace(loginUrl);
-      return false;
-    }
+  const loadRemoteData = async function () {
     const { data, error } = await bounded(client.from('dados')
       .select('profiles,removidos').eq('user_id', user.id).maybeSingle());
     if (error) throw error;
@@ -541,6 +587,15 @@
     revisions = Object.fromEntries(Object.entries(valid).map(([id, profile]) => [id, stamp(profile)]));
     Store.loadRemoteMap(valid, ownerName(), active);
     return true;
+  };
+  V3Backend.reload = async function () {
+    if (saving) { refreshPending = true; return false; }
+    const verified = await bounded(SiteAuth.quemEsta());
+    if (!verified || verified.id !== user?.id) {
+      global.location.replace(loginUrl);
+      return false;
+    }
+    return loadRemoteData();
   };
 
   V3Backend.mutate = async function (change) {
@@ -705,9 +760,17 @@
   V3Backend.start = async function () {
     client = SiteAuth.cliente();
     if (!client) throw new Error('A conexão com o Supabase não está configurada.');
-    const verified = await bounded(SiteAuth.quemEsta());
+    /* ENTRADA EM TRÊS IDAS AO SERVIDOR, NÃO SEIS
+       Antes: conferência do token, usuário, aceite, perfil e dados, uma
+       depois da outra (≈ 6 viagens; no Windows com rede comum, 3–5 s de
+       tela vazia). Agora o que não depende de nada sai junto. O que NÃO
+       muda: dados financeiros só são lidos depois do aceite. */
+    const [verified, userResult] = await Promise.all([
+      bounded(SiteAuth.quemEsta()),
+      bounded(client.auth.getUser()).catch((error) => ({ data: null, error }))
+    ]);
     if (!verified) { global.location.replace(loginUrl); return false; }
-    const { data: authData, error: authError } = await bounded(client.auth.getUser());
+    const { data: authData, error: authError } = userResult;
     if (authError) throw authError;
     if (!authData?.user || authData.user.id !== verified.id) {
       global.location.replace(loginUrl);
@@ -720,11 +783,15 @@
       name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || '',
       photo: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || ''
     };
+    // Nome, moeda e fuso não são documento financeiro: vêm junto com o aceite.
+    const perfilPromessa = bounded(client.from('profiles')
+      .select('nome,moeda,pais,fuso').eq('user_id', user.id).maybeSingle())
+      .catch((error) => ({ data: null, error }));
+    const cofrePromessa = V3Backend.vault({ action: 'status' }).catch(() => null);
     // Nenhum documento financeiro é lido antes do aceite obrigatório.
     await requireConsent();
-    if (authUser.user_metadata?.oaze_pin_required === true) await requirePinSetup();
-    const { data: profileRow, error: profileError } = await bounded(client.from('profiles')
-      .select('nome,moeda,pais,fuso').eq('user_id', user.id).maybeSingle());
+    await requirePinSetup(await cofrePromessa);
+    const { data: profileRow, error: profileError } = await perfilPromessa;
     if (profileError) throw profileError;
     accountProfile = profileRow || {};
     if (accountProfile.nome) user.name = accountProfile.nome;
@@ -732,7 +799,7 @@
        inicializa o Sync antigo nem sua cópia local compartilhada. */
     global.Sync = { currentUser: () => ({ uid: user.id, email: user.email, displayName: ownerName() }) };
     global.SupabaseBackend = { cliente: () => client };
-    await V3Backend.reload();
+    await loadRemoteData();
     if (V3Backend.receiptCleanupStatus().pending) await V3Backend.retryReceiptCleanup();
     channel = client.channel('oaze-v3-dados-' + user.id)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'dados', filter: 'user_id=eq.' + user.id },

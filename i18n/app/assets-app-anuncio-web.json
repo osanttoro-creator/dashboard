@@ -1,0 +1,51 @@
+[
+ {
+  "pt": "Anúncio",
+  "tipo": "exato",
+  "en": "Ad",
+  "fr": "Publicité",
+  "es": "Anuncio"
+ },
+ {
+  "pt": "Anúncio · ao terminar, +20 lançamentos",
+  "tipo": "exato",
+  "en": "Ad · when it ends, +20 transactions",
+  "fr": "Publicité · à la fin, +20 opérations",
+  "es": "Anuncio · al terminar, +20 movimientos"
+ },
+ {
+  "pt": "Entre na sua conta para liberar lançamentos.",
+  "tipo": "exato",
+  "en": "Sign in to unlock transactions.",
+  "fr": "Connectez-vous pour débloquer des opérations.",
+  "es": "Inicia sesión para liberar movimientos."
+ },
+ {
+  "pt": "Espere alguns segundos entre um anúncio e outro.",
+  "tipo": "exato",
+  "en": "Wait a few seconds between ads.",
+  "fr": "Attendez quelques secondes entre deux publicités.",
+  "es": "Espera unos segundos entre un anuncio y otro."
+ },
+ {
+  "pt": "Não consegui liberar agora. Tente de novo.",
+  "tipo": "exato",
+  "en": "Couldn't unlock right now. Try again.",
+  "fr": "Impossible de débloquer pour l'instant. Réessayez.",
+  "es": "No se pudo liberar ahora. Inténtalo de nuevo."
+ },
+ {
+  "pt": "Você chegou ao limite de anúncios de hoje.",
+  "tipo": "exato",
+  "en": "You've reached today's ad limit.",
+  "fr": "Vous avez atteint la limite de publicités du jour.",
+  "es": "Llegaste al límite de anuncios de hoy."
+ },
+ {
+  "pt": "Não consegui liberar agora.",
+  "tipo": "exato",
+  "en": "Couldn't unlock right now.",
+  "fr": "Impossible de débloquer pour l'instant.",
+  "es": "No se pudo liberar ahora."
+ }
+]

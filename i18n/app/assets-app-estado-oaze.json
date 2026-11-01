@@ -1,0 +1,114 @@
+[
+ {
+  "pt": "Últimos 30 dias",
+  "tipo": "exato",
+  "en": "Last 30 days",
+  "fr": "30 derniers jours",
+  "es": "Últimos 30 días"
+ },
+ {
+  "pt": "Ano de {0}",
+  "tipo": "padrao",
+  "en": "Year {0}",
+  "fr": "Année {0}",
+  "es": "Año {0}"
+ },
+ {
+  "pt": "Escolha um período válido.",
+  "tipo": "exato",
+  "en": "Choose a valid period.",
+  "fr": "Choisissez une période valide.",
+  "es": "Elige un período válido."
+ },
+ {
+  "pt": "Entre na sua conta para criar o relatório.",
+  "tipo": "exato",
+  "en": "Sign in to create the report.",
+  "fr": "Connectez-vous pour créer le rapport.",
+  "es": "Inicia sesión para crear el informe."
+ },
+ {
+  "pt": "Usuário OAZE",
+  "tipo": "exato",
+  "en": "OAZE user",
+  "fr": "Utilisateur OAZE",
+  "es": "Usuario OAZE"
+ },
+ {
+  "pt": "{0} · Receitas {1} · Despesas {2} · Saldo {3}",
+  "tipo": "padrao",
+  "en": "{0} · Income {1} · Expenses {2} · Balance {3}",
+  "fr": "{0} · Revenus {1} · Dépenses {2} · Solde {3}",
+  "es": "{0} · Ingresos {1} · Gastos {2} · Saldo {3}"
+ },
+ {
+  "pt": "Não foi possível calcular o relatório.",
+  "tipo": "exato",
+  "en": "Couldn't calculate the report.",
+  "fr": "Impossible de calculer le rapport.",
+  "es": "No se pudo calcular el informe."
+ },
+ {
+  "pt": "Fechar relatório",
+  "tipo": "exato",
+  "en": "Close report",
+  "fr": "Fermer le rapport",
+  "es": "Cerrar informe"
+ },
+ {
+  "pt": "Escolha o período. O PDF é criado neste aparelho a partir dos seus lançamentos confirmados.",
+  "tipo": "exato",
+  "en": "Choose the period. The PDF is created on this device from your confirmed transactions.",
+  "fr": "Choisissez la période. Le PDF est créé sur cet appareil à partir de vos opérations confirmées.",
+  "es": "Elige el período. El PDF se crea en este dispositivo con tus movimientos confirmados."
+ },
+ {
+  "pt": "Período",
+  "tipo": "exato",
+  "en": "Period",
+  "fr": "Période",
+  "es": "Período"
+ },
+ {
+  "pt": "Mês específico",
+  "tipo": "exato",
+  "en": "Specific month",
+  "fr": "Mois précis",
+  "es": "Mes específico"
+ },
+ {
+  "pt": "Ano específico",
+  "tipo": "exato",
+  "en": "Specific year",
+  "fr": "Année précise",
+  "es": "Año específico"
+ },
+ {
+  "pt": "Escolha o mês",
+  "tipo": "exato",
+  "en": "Choose the month",
+  "fr": "Choisissez le mois",
+  "es": "Elige el mes"
+ },
+ {
+  "pt": "Escolha o ano",
+  "tipo": "exato",
+  "en": "Choose the year",
+  "fr": "Choisissez l'année",
+  "es": "Elige el año"
+ },
+ {
+  "pt": "Salvar PDF",
+  "tipo": "exato",
+  "en": "Save PDF",
+  "fr": "Enregistrer le PDF",
+  "es": "Guardar PDF"
+ },
+ {
+  "pt": "Não foi possível criar o PDF.",
+  "tipo": "exato",
+  "en": "Couldn't create the PDF.",
+  "fr": "Impossible de créer le PDF.",
+  "es": "No se pudo crear el PDF."
+ }
+]

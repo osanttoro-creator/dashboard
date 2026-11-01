@@ -174,6 +174,27 @@
   "es": "Pago no disponible ahora. No se cobró nada."
  },
  {
+  "pt": "Entre na sua conta para consultar a cobrança.",
+  "tipo": "exato",
+  "en": "Sign in to check billing.",
+  "fr": "Connectez-vous pour consulter la facturation.",
+  "es": "Inicia sesión para consultar el cobro."
+ },
+ {
+  "pt": "Cobrança indisponível: conexão não configurada.",
+  "tipo": "exato",
+  "en": "Billing unavailable: connection not configured.",
+  "fr": "Facturation indisponible : connexion non configurée.",
+  "es": "Cobro no disponible: conexión no configurada."
+ },
+ {
+  "pt": "Não foi possível abrir suas cobranças.",
+  "tipo": "exato",
+  "en": "Couldn't open your billing.",
+  "fr": "Impossible d'ouvrir votre facturation.",
+  "es": "No se pudieron abrir tus cobros."
+ },
+ {
   "pt": "Entre na conta para acessar o cofre.",
   "tipo": "exato",
   "en": "Sign in to access the vault.",
@@ -200,6 +221,11 @@
   "en": "Session unavailable.",
   "fr": "Session indisponible.",
   "es": "Sesión no disponible."
+ },
+ {
+  "pt": "V3/avisos pendentes:",
+  "tipo": "exato",
+  "ignorar": true
  },
  {
   "pt": "Sua sessão expirou. Nada foi apagado.",
@@ -366,20 +392,6 @@
   "es": "Esta es la única autorización que OAZE pide. Sin ella, la aplicación no carga tus datos financieros."
  },
  {
-  "pt": "Política de privacidade",
-  "tipo": "exato",
-  "en": "Privacy policy",
-  "fr": "Politique de confidentialité",
-  "es": "Política de privacidad"
- },
- {
-  "pt": "Termos de uso",
-  "tipo": "exato",
-  "en": "Terms of use",
-  "fr": "Conditions d’utilisation",
-  "es": "Términos de uso"
- },
- {
   "pt": "Li e aceito a Política de privacidade (versão 01/10/2026) e os Termos de uso, e autorizo a Coco a usar meus dados financeiros para me responder.",
   "tipo": "exato",
   "en": "I have read and accept the Privacy Policy (version 2026-10-01) and the Terms of use, and I authorize Coco to use my financial data to answer me.",
@@ -415,11 +427,65 @@
   "es": "No pude registrar la autorización. Inténtalo de nuevo; tus datos no se cargaron."
  },
  {
-  "pt": "PROTEÇÃO EXTRA",
+  "pt": "oaze.native.biometric-offered",
   "tipo": "exato",
-  "en": "EXTRA PROTECTION",
-  "fr": "PROTECTION SUPPLÉMENTAIRE",
-  "es": "PROTECCIÓN ADICIONAL"
+  "ignorar": true
+ },
+ {
+  "pt": "Windows Hello (rosto, digital ou PIN do Windows)",
+  "tipo": "exato",
+  "en": "Windows Hello (face, fingerprint or Windows PIN)",
+  "fr": "Windows Hello (visage, empreinte ou code PIN Windows)",
+  "es": "Windows Hello (rostro, huella o PIN de Windows)"
+ },
+ {
+  "pt": "digital, rosto ou a senha do celular",
+  "tipo": "exato",
+  "en": "fingerprint, face or your phone's passcode",
+  "fr": "empreinte, visage ou code du téléphone",
+  "es": "huella, rostro o el código del celular"
+ },
+ {
+  "pt": "DESBLOQUEIO RÁPIDO",
+  "tipo": "exato",
+  "en": "QUICK UNLOCK",
+  "fr": "DÉVERROUILLAGE RAPIDE",
+  "es": "DESBLOQUEO RÁPIDO"
+ },
+ {
+  "pt": "Abrir o OAZE com o bloqueio do aparelho?",
+  "tipo": "exato",
+  "en": "Open OAZE with your device lock?",
+  "fr": "Ouvrir OAZE avec le verrouillage de l'appareil ?",
+  "es": "¿Abrir OAZE con el bloqueo del dispositivo?"
+ },
+ {
+  "pt": "Quando o app ficar um tempo fechado, ele pede {0} antes de mostrar seus dados. O PIN continua valendo para as áreas sensíveis.",
+  "tipo": "padrao",
+  "en": "When the app has been closed for a while, it asks for {0} before showing your data. The PIN still protects sensitive areas.",
+  "fr": "Quand l'app reste fermée un moment, elle demande {0} avant d'afficher vos données. Le code PIN protège toujours les zones sensibles.",
+  "es": "Cuando la app queda cerrada un rato, pide {0} antes de mostrar tus datos. El PIN sigue protegiendo las áreas sensibles."
+ },
+ {
+  "pt": "Usar bloqueio do aparelho",
+  "tipo": "exato",
+  "en": "Use device lock",
+  "fr": "Utiliser le verrouillage de l'appareil",
+  "es": "Usar bloqueo del dispositivo"
+ },
+ {
+  "pt": "Não foi possível confirmar. Você pode ligar depois em Configurações › Segurança.",
+  "tipo": "exato",
+  "en": "Couldn't confirm. You can turn it on later in Settings › Security.",
+  "fr": "Confirmation impossible. Vous pourrez l'activer plus tard dans Réglages › Sécurité.",
+  "es": "No se pudo confirmar. Puedes activarlo después en Configuración › Seguridad."
+ },
+ {
+  "pt": "PROTEÇÃO DA CONTA",
+  "tipo": "exato",
+  "en": "ACCOUNT PROTECTION",
+  "fr": "PROTECTION DU COMPTE",
+  "es": "PROTECCIÓN DE LA CUENTA"
  },
  {
   "pt": "Crie seu PIN de seis dígitos.",
@@ -429,11 +495,11 @@
   "es": "Crea tu PIN de seis dígitos."
  },
  {
-  "pt": "Você já confirmou o e-mail. Agora escolha o PIN que desbloqueia os dados sensíveis da sua conta. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.",
+  "pt": "Ele destrava os dados sensíveis dentro do OAZE: números de conta, cofre e exclusões. Evite datas, sequências e números iguais. O PIN sozinho não dá acesso ao OAZE.",
   "tipo": "exato",
-  "en": "You have confirmed your email. Now choose the PIN that unlocks your sensitive account details. Avoid dates, sequences and repeated digits. The PIN alone cannot sign you in to OAZE.",
-  "fr": "Vous avez confirmé votre e-mail. Choisissez maintenant le code PIN qui déverrouille les données sensibles de votre compte. Évitez les dates, les suites et les chiffres répétés. Le code PIN seul ne permet pas d'accéder à OAZE.",
-  "es": "Ya confirmaste tu correo. Ahora elige el PIN que desbloquea los datos sensibles de tu cuenta. Evita fechas, secuencias y números repetidos. El PIN por sí solo no permite acceder a OAZE."
+  "en": "It unlocks sensitive data inside OAZE: account numbers, vault and deletions. Avoid dates, sequences and repeated digits. The PIN alone doesn't give access to OAZE.",
+  "fr": "Il déverrouille les données sensibles dans OAZE : numéros de compte, coffre et suppressions. Évitez les dates, suites et chiffres répétés. Le code PIN seul ne donne pas accès à OAZE.",
+  "es": "Desbloquea los datos sensibles dentro de OAZE: números de cuenta, caja fuerte y eliminaciones. Evita fechas, secuencias y números repetidos. El PIN solo no da acceso a OAZE."
  },
  {
   "pt": "CONFIRME O PIN",

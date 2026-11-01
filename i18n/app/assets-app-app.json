@@ -277,6 +277,20 @@
   "ignorar": true
  },
  {
+  "pt": "impostos e taxas",
+  "tipo": "exato",
+  "en": "taxes and fees",
+  "fr": "impôts et taxes",
+  "es": "impuestos y tasas"
+ },
+ {
+  "pt": "freelance / pj",
+  "tipo": "exato",
+  "en": "freelance / contractor",
+  "fr": "freelance / indépendant",
+  "es": "freelance / autónomo"
+ },
+ {
   "pt": "-hidden",
   "tipo": "exato",
   "ignorar": true
@@ -591,6 +605,34 @@
   "en": "Banknote",
   "fr": "Billet de banque",
   "es": "Billete"
+ },
+ {
+  "pt": "Bancos e carteiras",
+  "tipo": "exato",
+  "en": "Banks and wallets",
+  "fr": "Banques et portefeuilles",
+  "es": "Bancos y billeteras"
+ },
+ {
+  "pt": "Vale e benefícios",
+  "tipo": "exato",
+  "en": "Meal and benefit cards",
+  "fr": "Titres-restaurant et avantages",
+  "es": "Vales y beneficios"
+ },
+ {
+  "pt": "Bandeiras",
+  "tipo": "exato",
+  "en": "Card networks",
+  "fr": "Réseaux de cartes",
+  "es": "Marcas de tarjeta"
+ },
+ {
+  "pt": "Lojas e varejo",
+  "tipo": "exato",
+  "en": "Stores and retail",
+  "fr": "Magasins et commerce",
+  "es": "Tiendas y comercio"
  },
  {
   "pt": "BANCO OU INSTITUIÇÃO",
@@ -1123,6 +1165,13 @@
   "ignorar": true
  },
  {
+  "pt": "Converse com a Coco",
+  "tipo": "exato",
+  "en": "Chat with Coco",
+  "fr": "Discuter avec Coco",
+  "es": "Conversa con Coco"
+ },
+ {
   "pt": "Sobra e curva do mês",
   "tipo": "exato",
   "en": "Month’s leftover and curve",
@@ -1284,6 +1333,32 @@
   "es": "Suscripciones recurrentes"
  },
  {
+  "pt": "oaze.v3.inicio.ordem",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Arrastar {0}",
+  "tipo": "padrao",
+  "en": "Drag {0}",
+  "fr": "Glisser {0}",
+  "es": "Arrastrar {0}"
+ },
+ {
+  "pt": "Subir {0}",
+  "tipo": "padrao",
+  "en": "Move {0} up",
+  "fr": "Monter {0}",
+  "es": "Subir {0}"
+ },
+ {
+  "pt": "Descer {0}",
+  "tipo": "padrao",
+  "en": "Move {0} down",
+  "fr": "Descendre {0}",
+  "es": "Bajar {0}"
+ },
+ {
   "pt": "gerenciar widgets",
   "tipo": "exato",
   "en": "manage widgets",
@@ -1298,11 +1373,11 @@
   "es": "lo que aparece en Inicio"
  },
  {
-  "pt": "A carteira e a saudação ficam sempre. Ative só o que você consulta. A escolha vale neste aparelho.",
+  "pt": "A carteira e a saudação ficam sempre. Marque o que aparece e arraste (ou use ↑ ↓) para mudar a ordem. Vale neste aparelho.",
   "tipo": "exato",
-  "en": "The wallet and greeting always stay. Turn on only what you use. This choice applies on this device.",
-  "fr": "Le portefeuille et le message d’accueil restent toujours visibles. Activez uniquement ce que vous consultez. Ce choix s’applique à cet appareil.",
-  "es": "La cartera y el saludo siempre permanecen. Activa solo lo que consultas. Esta elección se aplica en este dispositivo."
+  "en": "Wallet and greeting always stay. Check what appears and drag (or use ↑ ↓) to change the order. Applies to this device.",
+  "fr": "Le portefeuille et le message d'accueil restent toujours. Cochez ce qui apparaît et faites glisser (ou utilisez ↑ ↓) pour changer l'ordre. Valable sur cet appareil.",
+  "es": "La billetera y el saludo quedan siempre. Marca lo que aparece y arrastra (o usa ↑ ↓) para cambiar el orden. Vale en este dispositivo."
  },
  {
   "pt": "Gerenciar widgets",
@@ -3326,6 +3401,90 @@
   "ignorar": true
  },
  {
+  "pt": "Não consegui cancelar os avisos do sistema.",
+  "tipo": "exato",
+  "en": "Couldn't cancel system notifications.",
+  "fr": "Impossible d'annuler les notifications système.",
+  "es": "No se pudieron cancelar los avisos del sistema."
+ },
+ {
+  "pt": "Avisos do sistema desligados neste aparelho.",
+  "tipo": "exato",
+  "en": "System notifications off on this device.",
+  "fr": "Notifications système désactivées sur cet appareil.",
+  "es": "Avisos del sistema desactivados en este dispositivo."
+ },
+ {
+  "pt": "Permissão não concedida. Você ainda pode ver os lembretes aqui.",
+  "tipo": "exato",
+  "en": "Permission not granted. You can still see reminders here.",
+  "fr": "Autorisation refusée. Vous pouvez toujours voir les rappels ici.",
+  "es": "Permiso no concedido. Aún puedes ver los recordatorios aquí."
+ },
+ {
+  "pt": "Não consegui programar os avisos.",
+  "tipo": "exato",
+  "en": "Couldn't schedule notifications.",
+  "fr": "Impossible de programmer les notifications.",
+  "es": "No se pudieron programar los avisos."
+ },
+ {
+  "pt": "Avisos do sistema ligados neste aparelho.",
+  "tipo": "exato",
+  "en": "System notifications on for this device.",
+  "fr": "Notifications système activées sur cet appareil.",
+  "es": "Avisos del sistema activados en este dispositivo."
+ },
+ {
+  "pt": "Ligados. Você receberá um lembrete no dia do vencimento, às 9h.",
+  "tipo": "exato",
+  "en": "On. You'll get a reminder on the due date, at 9 am.",
+  "fr": "Activées. Vous recevrez un rappel le jour de l'échéance, à 9 h.",
+  "es": "Activados. Recibirás un recordatorio el día del vencimiento, a las 9 h."
+ },
+ {
+  "pt": "Desligados. Ative quando quiser receber avisos fora do app.",
+  "tipo": "exato",
+  "en": "Off. Turn them on when you want notifications outside the app.",
+  "fr": "Désactivées. Activez-les quand vous voulez des notifications hors de l'app.",
+  "es": "Desactivados. Actívalos cuando quieras avisos fuera de la app."
+ },
+ {
+  "pt": "Desligar avisos",
+  "tipo": "exato",
+  "en": "Turn off notifications",
+  "fr": "Désactiver les notifications",
+  "es": "Desactivar avisos"
+ },
+ {
+  "pt": "Ativar avisos",
+  "tipo": "exato",
+  "en": "Turn on notifications",
+  "fr": "Activer les notifications",
+  "es": "Activar avisos"
+ },
+ {
+  "pt": "No computador, os avisos funcionam enquanto o OAZE estiver aberto.",
+  "tipo": "exato",
+  "en": "On a computer, notifications work while OAZE is open.",
+  "fr": "Sur ordinateur, les notifications fonctionnent tant qu'OAZE est ouvert.",
+  "es": "En la computadora, los avisos funcionan mientras OAZE esté abierto."
+ },
+ {
+  "pt": "No Android, o sistema pode adiar avisos para economizar bateria.",
+  "tipo": "exato",
+  "en": "On Android, the system may delay notifications to save battery.",
+  "fr": "Sur Android, le système peut retarder les notifications pour économiser la batterie.",
+  "es": "En Android, el sistema puede retrasar avisos para ahorrar batería."
+ },
+ {
+  "pt": "Avisos neste aparelho",
+  "tipo": "exato",
+  "en": "Notifications on this device",
+  "fr": "Notifications sur cet appareil",
+  "es": "Avisos en este dispositivo"
+ },
+ {
   "pt": "notificações",
   "tipo": "exato",
   "en": "notifications",
@@ -3347,11 +3506,25 @@
   "es": "Ninguna notificación pendiente."
  },
  {
+  "pt": "Escolher avisos",
+  "tipo": "exato",
+  "en": "Choose notifications",
+  "fr": "Choisir les notifications",
+  "es": "Elegir avisos"
+ },
+ {
   "pt": "Reativar avisos ocultos",
   "tipo": "exato",
   "en": "Restore hidden alerts",
   "fr": "Réactiver les alertes masquées",
   "es": "Reactivar avisos ocultos"
+ },
+ {
+  "pt": "Os avisos do sistema não exibem seus valores na tela bloqueada.",
+  "tipo": "exato",
+  "en": "System notifications don't show your amounts on the lock screen.",
+  "fr": "Les notifications système n'affichent pas vos montants sur l'écran verrouillé.",
+  "es": "Los avisos del sistema no muestran tus valores en la pantalla bloqueada."
  },
  {
   "pt": "Abrir agenda",
@@ -3978,6 +4151,13 @@
   "es": "En cuanto haya movimientos, esta pantalla muestra el consolidado de {0}."
  },
  {
+  "pt": "Estado do OAZE",
+  "tipo": "exato",
+  "en": "OAZE state",
+  "fr": "État OAZE",
+  "es": "Estado de OAZE"
+ },
+ {
   "pt": "sem {0} para comparar",
   "tipo": "padrao",
   "en": "no {0} to compare with",
@@ -4382,6 +4562,39 @@
   "es": "Sin sesión"
  },
  {
+  "pt": "Desbloqueio do aparelho",
+  "tipo": "exato",
+  "en": "Device unlock",
+  "fr": "Déverrouillage de l'appareil",
+  "es": "Desbloqueo del dispositivo"
+ },
+ {
+  "pt": "data-action=\"biometric-toggle\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Ativado",
+  "tipo": "exato",
+  "en": "On",
+  "fr": "Activé",
+  "es": "Activado"
+ },
+ {
+  "pt": "Ativar ›",
+  "tipo": "exato",
+  "en": "Turn on ›",
+  "fr": "Activer ›",
+  "es": "Activar ›"
+ },
+ {
+  "pt": "disponível no app",
+  "tipo": "exato",
+  "en": "available in the app",
+  "fr": "disponible dans l'app",
+  "es": "disponible en la app"
+ },
+ {
   "pt": "Plano e assinatura",
   "tipo": "exato",
   "en": "Plan and subscription",
@@ -4394,13 +4607,6 @@
   "ignorar": true
  },
  {
-  "pt": "Coco neste mês: {0} / {1}",
-  "tipo": "padrao",
-  "en": "Coco this month: {0} / {1}",
-  "fr": "Coco ce mois-ci : {0} / {1}",
-  "es": "Coco este mes: {0} / {1}"
- },
- {
   "pt": "Acompanhar recursos utilizados",
   "tipo": "exato",
   "en": "Track resources used",
@@ -4408,7 +4614,50 @@
   "es": "Seguir los recursos usados"
  },
  {
+  "pt": "data-action=\"estado-oaze\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "PDF ›",
+  "tipo": "exato",
+  "en": "PDF ›",
+  "fr": "PDF ›",
+  "es": "PDF ›"
+ },
+ {
+  "pt": "Exportar lançamentos",
+  "tipo": "exato",
+  "en": "Export transactions",
+  "fr": "Exporter les opérations",
+  "es": "Exportar movimientos"
+ },
+ {
+  "pt": "data-action=\"export-csv\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "CSV ›",
+  "tipo": "exato",
+  "en": "CSV ›",
+  "fr": "CSV ›",
+  "es": "CSV ›"
+ },
+ {
   "pt": "data-action=\"notifications\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Permissões do aparelho",
+  "tipo": "exato",
+  "en": "Device permissions",
+  "fr": "Autorisations de l'appareil",
+  "es": "Permisos del dispositivo"
+ },
+ {
+  "pt": "data-action=\"device-permissions\"",
   "tipo": "exato",
   "ignorar": true
  },
@@ -4441,20 +4690,6 @@
   "es": "en la cartera"
  },
  {
-  "pt": "Biometria",
-  "tipo": "exato",
-  "en": "Biometrics",
-  "fr": "Biométrie",
-  "es": "Biometría"
- },
- {
-  "pt": "indisponível na web",
-  "tipo": "exato",
-  "en": "unavailable on the web",
-  "fr": "indisponible sur le web",
-  "es": "no disponible en la web"
- },
- {
   "pt": "PLANO E AJUDA",
   "tipo": "exato",
   "en": "PLAN AND HELP",
@@ -4469,11 +4704,184 @@
   "es": "Ayuda y soporte"
  },
  {
+  "pt": "Fale com a gente",
+  "tipo": "exato",
+  "en": "Talk to us",
+  "fr": "Nous contacter",
+  "es": "Habla con nosotros"
+ },
+ {
+  "pt": "info@oaze.site",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "RELATÓRIOS",
+  "tipo": "exato",
+  "en": "REPORTS",
+  "fr": "RAPPORTS",
+  "es": "INFORMES"
+ },
+ {
   "pt": "COCO E DADOS",
   "tipo": "exato",
   "en": "COCO AND DATA",
   "fr": "COCO ET DONNÉES",
   "es": "COCO Y DATOS"
+ },
+ {
+  "pt": "PRIVACIDADE E ACESSIBILIDADE",
+  "tipo": "exato",
+  "en": "PRIVACY AND ACCESSIBILITY",
+  "fr": "CONFIDENTIALITÉ ET ACCESSIBILITÉ",
+  "es": "PRIVACIDAD Y ACCESIBILIDAD"
+ },
+ {
+  "pt": "Privacidade, LGPD e acessibilidade",
+  "tipo": "exato",
+  "en": "Privacy, data protection and accessibility",
+  "fr": "Confidentialité, protection des données et accessibilité",
+  "es": "Privacidad, protección de datos y accesibilidad"
+ },
+ {
+  "pt": "Política de privacidade",
+  "tipo": "exato",
+  "en": "Privacy policy",
+  "fr": "Politique de confidentialité",
+  "es": "Política de privacidad"
+ },
+ {
+  "pt": "ler ›",
+  "tipo": "exato",
+  "en": "read ›",
+  "fr": "lire ›",
+  "es": "leer ›"
+ },
+ {
+  "pt": "Seus direitos (LGPD)",
+  "tipo": "exato",
+  "en": "Your rights (LGPD)",
+  "fr": "Vos droits (LGPD)",
+  "es": "Tus derechos (LGPD)"
+ },
+ {
+  "pt": "Canal de privacidade",
+  "tipo": "exato",
+  "en": "Privacy contact",
+  "fr": "Contact confidentialité",
+  "es": "Canal de privacidad"
+ },
+ {
+  "pt": "Termos de uso",
+  "tipo": "exato",
+  "en": "Terms of use",
+  "fr": "Conditions d’utilisation",
+  "es": "Términos de uso"
+ },
+ {
+  "pt": "Acessibilidade",
+  "tipo": "exato",
+  "en": "Accessibility",
+  "fr": "Accessibilité",
+  "es": "Accesibilidad"
+ },
+ {
+  "pt": "Ativadas neste aparelho.",
+  "tipo": "exato",
+  "en": "On for this device.",
+  "fr": "Activées sur cet appareil.",
+  "es": "Activadas en este dispositivo."
+ },
+ {
+  "pt": "Desativadas neste aparelho.",
+  "tipo": "exato",
+  "en": "Off for this device.",
+  "fr": "Désactivées sur cet appareil.",
+  "es": "Desactivadas en este dispositivo."
+ },
+ {
+  "pt": "{0} Só solicitamos acesso quando você toca em ativar.",
+  "tipo": "padrao",
+  "en": "{0} We only ask for access when you tap to turn it on.",
+  "fr": "{0} Nous ne demandons l'accès que lorsque vous touchez activer.",
+  "es": "{0} Solo pedimos acceso cuando tocas en activar."
+ },
+ {
+  "pt": "Abrir notificações",
+  "tipo": "exato",
+  "en": "Open notifications",
+  "fr": "Ouvrir les notifications",
+  "es": "Abrir avisos"
+ },
+ {
+  "pt": "Os lembretes aparecem dentro do OAZE neste navegador.",
+  "tipo": "exato",
+  "en": "Reminders appear inside OAZE in this browser.",
+  "fr": "Les rappels apparaissent dans OAZE dans ce navigateur.",
+  "es": "Los recordatorios aparecen dentro de OAZE en este navegador."
+ },
+ {
+  "pt": "permissões do aparelho",
+  "tipo": "exato",
+  "en": "device permissions",
+  "fr": "autorisations de l'appareil",
+  "es": "permisos del dispositivo"
+ },
+ {
+  "pt": "controle no momento de uso",
+  "tipo": "exato",
+  "en": "control at the moment of use",
+  "fr": "contrôle au moment de l'utilisation",
+  "es": "control en el momento de uso"
+ },
+ {
+  "pt": "Microfone",
+  "tipo": "exato",
+  "en": "Microphone",
+  "fr": "Microphone",
+  "es": "Micrófono"
+ },
+ {
+  "pt": "A Coco pede acesso quando você inicia a conversa por voz. O microfone é encerrado ao terminar a conversa.",
+  "tipo": "exato",
+  "en": "Coco asks for access when you start a voice chat. The microphone is closed when the conversation ends.",
+  "fr": "Coco demande l'accès quand vous lancez une conversation vocale. Le micro est coupé à la fin.",
+  "es": "Coco pide acceso cuando inicias la conversación por voz. El micrófono se cierra al terminar."
+ },
+ {
+  "pt": "Câmera e arquivos",
+  "tipo": "exato",
+  "en": "Camera and files",
+  "fr": "Caméra et fichiers",
+  "es": "Cámara y archivos"
+ },
+ {
+  "pt": "O seletor do sistema abre apenas quando você escolhe anexar um arquivo ou uma imagem à Coco.",
+  "tipo": "exato",
+  "en": "The system picker only opens when you choose to attach a file or image to Coco.",
+  "fr": "Le sélecteur du système ne s'ouvre que lorsque vous choisissez de joindre un fichier ou une image à Coco.",
+  "es": "El selector del sistema solo se abre cuando eliges adjuntar un archivo o imagen a Coco."
+ },
+ {
+  "pt": "Biometria",
+  "tipo": "exato",
+  "en": "Biometrics",
+  "fr": "Biométrie",
+  "es": "Biometría"
+ },
+ {
+  "pt": "Não é exigida para entrar. O PIN continua protegendo os dados sensíveis.",
+  "tipo": "exato",
+  "en": "Not required to sign in. The PIN still protects sensitive data.",
+  "fr": "Non requis pour se connecter. Le code PIN protège toujours les données sensibles.",
+  "es": "No es obligatorio para entrar. El PIN sigue protegiendo los datos sensibles."
+ },
+ {
+  "pt": "Se uma permissão foi negada, altere-a nas configurações do aparelho. O OAZE não consegue mudá-la sozinho.",
+  "tipo": "exato",
+  "en": "If a permission was denied, change it in the device settings. OAZE can't change it by itself.",
+  "fr": "Si une autorisation a été refusée, modifiez-la dans les réglages de l'appareil. OAZE ne peut pas la changer seul.",
+  "es": "Si un permiso fue denegado, cámbialo en la configuración del dispositivo. OAZE no puede cambiarlo solo."
  },
  {
   "pt": "seus dados",
@@ -4657,18 +5065,18 @@
   "es": "Consultando tu suscripción…"
  },
  {
+  "pt": "Pagamento pendente. Confira seu cartão e suas cobranças na Stripe.",
+  "tipo": "exato",
+  "en": "Payment pending. Check your card and billing on Stripe.",
+  "fr": "Paiement en attente. Vérifiez votre carte et votre facturation sur Stripe.",
+  "es": "Pago pendiente. Revisa tu tarjeta y tus cobros en Stripe."
+ },
+ {
   "pt": "cancelamento agendado",
   "tipo": "exato",
   "en": "cancellation scheduled",
   "fr": "résiliation programmée",
   "es": "cancelación programada"
- },
- {
-  "pt": "pagamento pendente",
-  "tipo": "exato",
-  "en": "payment pending",
-  "fr": "paiement en attente",
-  "es": "pago pendiente"
  },
  {
   "pt": "Plano {0} · {1}",
@@ -4683,6 +5091,111 @@
   "en": "Your current plan is Semente.",
   "fr": "Votre forfait actuel est Semente.",
   "es": "Tu plan actual es Semente."
+ },
+ {
+  "pt": "Anual",
+  "tipo": "exato",
+  "en": "Yearly",
+  "fr": "Annuel",
+  "es": "Anual"
+ },
+ {
+  "pt": "Mensal",
+  "tipo": "exato",
+  "en": "Monthly",
+  "fr": "Mensuel",
+  "es": "Mensual"
+ },
+ {
+  "pt": "Não informado",
+  "tipo": "exato",
+  "en": "Not specified",
+  "fr": "Non précisé",
+  "es": "Sin especificar"
+ },
+ {
+  "pt": "Acesso até",
+  "tipo": "exato",
+  "en": "Access until",
+  "fr": "Accès jusqu'au",
+  "es": "Acceso hasta"
+ },
+ {
+  "pt": "Fim do período atual",
+  "tipo": "exato",
+  "en": "End of current period",
+  "fr": "Fin de la période actuelle",
+  "es": "Fin del período actual"
+ },
+ {
+  "pt": "Gerenciada com segurança pela Stripe",
+  "tipo": "exato",
+  "en": "Securely managed by Stripe",
+  "fr": "Géré en toute sécurité par Stripe",
+  "es": "Gestionada con seguridad por Stripe"
+ },
+ {
+  "pt": "Consulte o suporte",
+  "tipo": "exato",
+  "en": "Contact support",
+  "fr": "Contacter le support",
+  "es": "Consulta al soporte"
+ },
+ {
+  "pt": "Gerencie a forma de pagamento no canal em que contratou a assinatura.",
+  "tipo": "exato",
+  "en": "Manage the payment method in the channel where you subscribed.",
+  "fr": "Gérez le moyen de paiement sur le canal où vous vous êtes abonné.",
+  "es": "Gestiona la forma de pago en el canal donde contrataste la suscripción."
+ },
+ {
+  "pt": "Atualizar cartão e consultar cobranças",
+  "tipo": "exato",
+  "en": "Update card and check billing",
+  "fr": "Mettre à jour la carte et consulter la facturation",
+  "es": "Actualizar tarjeta y consultar cobros"
+ },
+ {
+  "pt": "Pedir ajuda sobre a cobrança",
+  "tipo": "exato",
+  "en": "Ask for help with billing",
+  "fr": "Demander de l'aide sur la facturation",
+  "es": "Pedir ayuda sobre el cobro"
+ },
+ {
+  "pt": "Sua cobrança",
+  "tipo": "exato",
+  "en": "Your billing",
+  "fr": "Votre facturation",
+  "es": "Tu cobro"
+ },
+ {
+  "pt": "cobrança",
+  "tipo": "exato",
+  "en": "billing",
+  "fr": "facturation",
+  "es": "cobro"
+ },
+ {
+  "pt": "Ciclo",
+  "tipo": "exato",
+  "en": "Cycle",
+  "fr": "Cycle",
+  "es": "Ciclo"
+ },
+ {
+  "pt": "Forma de pagamento",
+  "tipo": "exato",
+  "en": "Payment method",
+  "fr": "Moyen de paiement",
+  "es": "Forma de pago"
+ },
+ {
+  "pt": "O OAZE não recebe nem guarda o número completo do seu cartão.",
+  "tipo": "exato",
+  "en": "OAZE doesn't receive or store your full card number.",
+  "fr": "OAZE ne reçoit ni ne conserve le numéro complet de votre carte.",
+  "es": "OAZE no recibe ni guarda el número completo de tu tarjeta."
  },
  {
   "pt": "Não foi possível identificar a assinatura ligada a este plano.",
@@ -4718,6 +5231,13 @@
   "en": "Starter plan",
   "fr": "Forfait de départ",
   "es": "Plan inicial"
+ },
+ {
+  "pt": "Assinatura indisponível neste app",
+  "tipo": "exato",
+  "en": "Subscription unavailable in this app",
+  "fr": "Abonnement indisponible dans cette app",
+  "es": "Suscripción no disponible en esta app"
  },
  {
   "pt": "Cancele o plano atual antes",
@@ -4832,20 +5352,6 @@
   "es": "Ciclo de cobro"
  },
  {
-  "pt": "Mensal",
-  "tipo": "exato",
-  "en": "Monthly",
-  "fr": "Mensuel",
-  "es": "Mensual"
- },
- {
-  "pt": "Anual",
-  "tipo": "exato",
-  "en": "Yearly",
-  "fr": "Annuel",
-  "es": "Anual"
- },
- {
   "pt": "{0} investidos",
   "tipo": "padrao",
   "en": "{0} invested",
@@ -4881,11 +5387,11 @@
   "es": "conversación y análisis"
  },
  {
-  "pt": "segurança, dados",
+  "pt": "privacidade, ajuda e contato",
   "tipo": "exato",
-  "en": "security, data",
-  "fr": "sécurité, données",
-  "es": "seguridad, datos"
+  "en": "privacy, help and contact",
+  "fr": "confidentialité, aide et contact",
+  "es": "privacidad, ayuda y contacto"
  },
  {
   "pt": "planos vigentes",
@@ -4902,11 +5408,410 @@
   "es": "Perfil {0}"
  },
  {
+  "pt": "Organizar",
+  "tipo": "exato",
+  "en": "Organize",
+  "fr": "Organiser",
+  "es": "Organizar"
+ },
+ {
+  "pt": "data-go=\"wallet\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Contas e cartões",
+  "tipo": "exato",
+  "en": "Accounts and cards",
+  "fr": "Comptes et cartes",
+  "es": "Cuentas y tarjetas"
+ },
+ {
+  "pt": "{0} na carteira",
+  "tipo": "padrao",
+  "en": "{0} in the wallet",
+  "fr": "{0} dans le portefeuille",
+  "es": "{0} en la billetera"
+ },
+ {
+  "pt": "data-go=\"categories\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "data-oz-mais=\"tags\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Tags",
+  "tipo": "exato",
+  "en": "Tags",
+  "fr": "Tags",
+  "es": "Etiquetas"
+ },
+ {
+  "pt": "{0} criadas",
+  "tipo": "padrao",
+  "en": "{0} created",
+  "fr": "{0} créés",
+  "es": "{0} creadas"
+ },
+ {
+  "pt": "data-oz-mais=\"caixinhas\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Caixinhas",
+  "tipo": "exato",
+  "en": "Savings pots",
+  "fr": "Cagnottes",
+  "es": "Alcancías"
+ },
+ {
+  "pt": "dinheiro separado por objetivo",
+  "tipo": "exato",
+  "en": "money set aside per goal",
+  "fr": "argent mis de côté par objectif",
+  "es": "dinero separado por objetivo"
+ },
+ {
+  "pt": "data-oz-mais=\"busca\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Buscar lançamentos",
+  "tipo": "exato",
+  "en": "Search transactions",
+  "fr": "Rechercher des opérations",
+  "es": "Buscar movimientos"
+ },
+ {
+  "pt": "em todos os meses",
+  "tipo": "exato",
+  "en": "across all months",
+  "fr": "sur tous les mois",
+  "es": "en todos los meses"
+ },
+ {
+  "pt": "Planejar",
+  "tipo": "exato",
+  "en": "Plan",
+  "fr": "Planifier",
+  "es": "Planificar"
+ },
+ {
+  "pt": "data-go=\"goals\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Orçamento e metas",
+  "tipo": "exato",
+  "en": "Budget and goals",
+  "fr": "Budget et objectifs",
+  "es": "Presupuesto y metas"
+ },
+ {
+  "pt": "data-go=\"investments\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "data-oz-mais=\"projecoes\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Projeções",
+  "tipo": "exato",
+  "en": "Projections",
+  "fr": "Projections",
+  "es": "Proyecciones"
+ },
+ {
+  "pt": "saldo dos próximos meses",
+  "tipo": "exato",
+  "en": "balance for the coming months",
+  "fr": "solde des prochains mois",
+  "es": "saldo de los próximos meses"
+ },
+ {
+  "pt": "data-oz-mais=\"desejos\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Lista de desejos",
+  "tipo": "exato",
+  "en": "Wish list",
+  "fr": "Liste d'envies",
+  "es": "Lista de deseos"
+ },
+ {
+  "pt": "posso comprar?",
+  "tipo": "exato",
+  "en": "can I buy it?",
+  "fr": "puis-je l'acheter ?",
+  "es": "¿puedo comprarlo?"
+ },
+ {
+  "pt": "data-oz-mais=\"simulador\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Simulador de quitação",
+  "tipo": "exato",
+  "en": "Debt payoff simulator",
+  "fr": "Simulateur de remboursement",
+  "es": "Simulador de pago de deudas"
+ },
+ {
+  "pt": "bola de neve × avalanche",
+  "tipo": "exato",
+  "en": "snowball × avalanche",
+  "fr": "boule de neige × avalanche",
+  "es": "bola de nieve × avalancha"
+ },
+ {
+  "pt": "Acompanhar",
+  "tipo": "exato",
+  "en": "Track",
+  "fr": "Suivre",
+  "es": "Seguir"
+ },
+ {
+  "pt": "data-go=\"calendar\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Agenda e recorrências",
+  "tipo": "exato",
+  "en": "Calendar and recurring",
+  "fr": "Agenda et récurrences",
+  "es": "Agenda y recurrencias"
+ },
+ {
+  "pt": "vencimentos, fixos e parcelas",
+  "tipo": "exato",
+  "en": "due dates, fixed items and installments",
+  "fr": "échéances, fixes et mensualités",
+  "es": "vencimientos, fijos y cuotas"
+ },
+ {
+  "pt": "data-oz-mais=\"financiamentos\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Financiamentos",
+  "tipo": "exato",
+  "en": "Financing",
+  "fr": "Financements",
+  "es": "Financiamientos"
+ },
+ {
+  "pt": "{0} ativos",
+  "tipo": "padrao",
+  "en": "{0} active",
+  "fr": "{0} actifs",
+  "es": "{0} activos"
+ },
+ {
+  "pt": "data-oz-mais=\"emprestimos\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Empréstimos",
+  "tipo": "exato",
+  "en": "Loans",
+  "fr": "Prêts",
+  "es": "Préstamos"
+ },
+ {
+  "pt": "data-oz-mais=\"receber\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Quem me deve",
+  "tipo": "exato",
+  "en": "Who owes me",
+  "fr": "Qui me doit",
+  "es": "Quién me debe"
+ },
+ {
+  "pt": "{0} em aberto",
+  "tipo": "padrao",
+  "en": "{0} open",
+  "fr": "{0} en cours",
+  "es": "{0} pendientes"
+ },
+ {
+  "pt": "data-oz-mais=\"resumo\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Resumo automático",
+  "tipo": "exato",
+  "en": "Automatic summary",
+  "fr": "Résumé automatique",
+  "es": "Resumen automático"
+ },
+ {
+  "pt": "semana e mês em 1 minuto",
+  "tipo": "exato",
+  "en": "week and month in 1 minute",
+  "fr": "semaine et mois en 1 minute",
+  "es": "semana y mes en 1 minuto"
+ },
+ {
+  "pt": "Analisar",
+  "tipo": "exato",
+  "en": "Analyze",
+  "fr": "Analyser",
+  "es": "Analizar"
+ },
+ {
+  "pt": "data-oz-mais=\"relatorio\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Relatório personalizado",
+  "tipo": "exato",
+  "en": "Custom report",
+  "fr": "Rapport personnalisé",
+  "es": "Informe personalizado"
+ },
+ {
+  "pt": "período, conta, categoria e tag",
+  "tipo": "exato",
+  "en": "period, account, category and tag",
+  "fr": "période, compte, catégorie et tag",
+  "es": "período, cuenta, categoría y etiqueta"
+ },
+ {
+  "pt": "relatório em PDF",
+  "tipo": "exato",
+  "en": "PDF report",
+  "fr": "rapport PDF",
+  "es": "informe en PDF"
+ },
+ {
+  "pt": "planilha CSV",
+  "tipo": "exato",
+  "en": "CSV spreadsheet",
+  "fr": "tableur CSV",
+  "es": "planilla CSV"
+ },
+ {
+  "pt": "data-oz-mais=\"ir\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Relatório para o IR",
+  "tipo": "exato",
+  "en": "Income tax report",
+  "fr": "Rapport pour l'impôt sur le revenu",
+  "es": "Informe para el impuesto a la renta"
+ },
+ {
+  "pt": "rendimentos, dedutíveis, bens",
+  "tipo": "exato",
+  "en": "income, deductibles, assets",
+  "fr": "revenus, déductibles, biens",
+  "es": "ingresos, deducibles, bienes"
+ },
+ {
+  "pt": "Ferramentas",
+  "tipo": "exato",
+  "en": "Tools",
+  "fr": "Outils",
+  "es": "Herramientas"
+ },
+ {
+  "pt": "data-go=\"coco\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Coco",
   "tipo": "exato",
   "en": "Coco",
   "fr": "Coco",
   "es": "Coco"
+ },
+ {
+  "pt": "Importar comprovante",
+  "tipo": "exato",
+  "en": "Import receipt",
+  "fr": "Importer un justificatif",
+  "es": "Importar comprobante"
+ },
+ {
+  "pt": "foto, câmera ou PDF",
+  "tipo": "exato",
+  "en": "photo, camera or PDF",
+  "fr": "photo, caméra ou PDF",
+  "es": "foto, cámara o PDF"
+ },
+ {
+  "pt": "data-oz-mais=\"nota\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Nota fiscal (QR)",
+  "tipo": "exato",
+  "en": "Receipt QR (NFC-e)",
+  "fr": "QR du ticket (NFC-e)",
+  "es": "QR del ticket (NFC-e)"
+ },
+ {
+  "pt": "loja, total e itens da NFC-e",
+  "tipo": "exato",
+  "en": "store, total and items from the NFC-e",
+  "fr": "magasin, total et articles de la NFC-e",
+  "es": "tienda, total y artículos de la NFC-e"
+ },
+ {
+  "pt": "data-oz-mais=\"banco\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Avisos do banco",
+  "tipo": "exato",
+  "en": "Bank notifications",
+  "fr": "Notifications de la banque",
+  "es": "Avisos del banco"
+ },
+ {
+  "pt": "lançar pela notificação",
+  "tipo": "exato",
+  "en": "log from the notification",
+  "fr": "saisir depuis la notification",
+  "es": "registrar desde la notificación"
+ },
+ {
+  "pt": "data-go=\"settings\"",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Configurações",
+  "tipo": "exato",
+  "en": "Settings",
+  "fr": "Réglages",
+  "es": "Configuración"
  },
  {
   "pt": "06_orgulhosa",
@@ -4917,6 +5822,13 @@
   "pt": "02_feliz",
   "tipo": "exato",
   "ignorar": true
+ },
+ {
+  "pt": "Cancelar preparo do áudio",
+  "tipo": "exato",
+  "en": "Cancel audio preparation",
+  "fr": "Annuler la préparation audio",
+  "es": "Cancelar preparación del audio"
  },
  {
   "pt": "Parar áudio",
@@ -4931,6 +5843,13 @@
   "en": "Listen to Coco’s answer",
   "fr": "Écouter la réponse de Coco",
   "es": "Escuchar respuesta de Coco"
+ },
+ {
+  "pt": "Preparando áudio…",
+  "tipo": "exato",
+  "en": "Preparing audio…",
+  "fr": "Préparation de l'audio…",
+  "es": "Preparando audio…"
  },
  {
   "pt": "Ouvir resposta",
@@ -5001,13 +5920,6 @@
   "en": "plan repayment",
   "fr": "organiser le remboursement",
   "es": "organizar el pago"
- },
- {
-  "pt": "Planejar",
-  "tipo": "exato",
-  "en": "Plan",
-  "fr": "Planifier",
-  "es": "Planificar"
  },
  {
   "pt": "próximos meses",
@@ -5360,6 +6272,20 @@
   "es": "{0} · el saldo ahorrado sigue siendo {1}. Las tasas futuras y los impuestos pueden cambiar el resultado."
  },
  {
+  "pt": "Idioma",
+  "tipo": "exato",
+  "en": "Language",
+  "fr": "Langue",
+  "es": "Idioma"
+ },
+ {
+  "pt": "Idioma do aplicativo",
+  "tipo": "exato",
+  "en": "App language",
+  "fr": "Langue de l'application",
+  "es": "Idioma de la aplicación"
+ },
+ {
   "pt": "Ícones de interface:",
   "tipo": "exato",
   "en": "Interface icons:",
@@ -5368,6 +6294,39 @@
  },
  {
   "pt": "Uicons by Flaticon",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "Seu plano",
+  "tipo": "exato",
+  "en": "Your plan",
+  "fr": "Votre forfait",
+  "es": "Tu plan"
+ },
+ {
+  "pt": "Seja Pro",
+  "tipo": "exato",
+  "en": "Go Pro",
+  "fr": "Passer Pro",
+  "es": "Hazte Pro"
+ },
+ {
+  "pt": "Consultar seu plano OAZE",
+  "tipo": "exato",
+  "en": "Check your OAZE plan",
+  "fr": "Consulter votre forfait OAZE",
+  "es": "Consultar tu plan OAZE"
+ },
+ {
+  "pt": "Conhecer o OAZE Pro",
+  "tipo": "exato",
+  "en": "Discover OAZE Pro",
+  "fr": "Découvrir OAZE Pro",
+  "es": "Conocer OAZE Pro"
+ },
+ {
+  "pt": "oaze:render",
   "tipo": "exato",
   "ignorar": true
  },
@@ -5558,6 +6517,20 @@
   "ignorar": true
  },
  {
+  "pt": "Uso da Coco hoje: {0}%. Esta semana: {1}%.",
+  "tipo": "padrao",
+  "en": "Coco usage today: {0}%. This week: {1}%.",
+  "fr": "Utilisation de Coco aujourd'hui : {0} %. Cette semaine : {1} %.",
+  "es": "Uso de Coco hoy: {0}%. Esta semana: {1}%."
+ },
+ {
+  "pt": "Uso da Coco hoje",
+  "tipo": "exato",
+  "en": "Coco usage today",
+  "fr": "Utilisation de Coco aujourd'hui",
+  "es": "Uso de Coco hoy"
+ },
+ {
   "pt": "Conversar por voz",
   "tipo": "exato",
   "en": "Talk by voice",
@@ -5726,11 +6699,11 @@
   "es": "tus extractos, sin adivinar"
  },
  {
-  "pt": "Escolha um CSV ou PDF de extrato. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.",
+  "pt": "Escolha um extrato OFX, CSV ou PDF. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.",
   "tipo": "exato",
-  "en": "Choose a CSV or PDF statement. The reading happens on this device, with nothing sent to OpenAI. Coco separates entries from balances and shows a preview for you to review.",
-  "fr": "Choisissez un relevé CSV ou PDF. La lecture se fait sur cet appareil, sans envoi à OpenAI. Coco sépare les opérations des soldes et affiche un aperçu à vérifier.",
-  "es": "Elige un CSV o PDF de extracto. La lectura ocurre en este dispositivo, sin envío a OpenAI. Coco separa movimientos de saldos y muestra una vista previa para que la revises."
+  "en": "Choose an OFX, CSV or PDF statement. It's read on this device, without sending it to OpenAI. Coco separates transactions from balances and shows a preview for you to review.",
+  "fr": "Choisissez un relevé OFX, CSV ou PDF. La lecture se fait sur cet appareil, sans envoi à OpenAI. Coco sépare mouvements et soldes et affiche un aperçu à vérifier.",
+  "es": "Elige un extracto OFX, CSV o PDF. Se lee en este dispositivo, sin envío a OpenAI. Coco separa movimientos de saldos y muestra una vista previa para revisar."
  },
  {
   "pt": "Escolher arquivo",
@@ -5787,6 +6760,20 @@
   "en": "See more entries",
   "fr": "Voir plus d’opérations",
   "es": "Ver más movimientos"
+ },
+ {
+  "pt": "Importar todos os novos",
+  "tipo": "exato",
+  "en": "Import all new ones",
+  "fr": "Importer toutes les nouvelles",
+  "es": "Importar todos los nuevos"
+ },
+ {
+  "pt": "Pula os que já parecem registrados e usa a categoria sugerida. Você pode editar depois.",
+  "tipo": "exato",
+  "en": "Skips the ones that already look recorded and uses the suggested category. You can edit later.",
+  "fr": "Ignore celles qui semblent déjà saisies et utilise la catégorie suggérée. Vous pourrez modifier ensuite.",
+  "es": "Omite los que ya parecen registrados y usa la categoría sugerida. Puedes editar después."
  },
  {
   "pt": "revisar extrato",
@@ -5859,11 +6846,11 @@
   "es": "tus datos, tus reglas"
  },
  {
-  "pt": "Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.",
+  "pt": "Para conversar, o OAZE envia à OpenAI seu pedido, as últimas trocas e resumos financeiros necessários. A voz da Coco é gerada por IA. Fotos e áudios só são enviados quando você escolher um arquivo ou iniciar uma gravação e confirmar o envio. Extratos PDF/CSV reconhecidos são lidos localmente, sem envio do arquivo à OpenAI. A Coco guarda regras que você aprovar e resumos mensais calculados automaticamente; você pode apagar ou pausar ambos depois.",
   "tipo": "exato",
-  "en": "To chat, OAZE sends OpenAI your request, the latest exchanges and the financial summaries needed. Photos and audio are only sent when you choose a file or start a recording and confirm the sending. Recognised PDF/CSV statements are read locally, without sending the file to OpenAI. Coco keeps rules you approve and monthly summaries calculated automatically; you can delete or pause both later.",
-  "fr": "Pour discuter, OAZE envoie à OpenAI votre demande, les derniers échanges et les résumés financiers nécessaires. Les photos et les audios ne sont envoyés que lorsque vous choisissez un fichier ou démarrez un enregistrement et confirmez l'envoi. Les relevés PDF/CSV reconnus sont lus localement, sans envoyer le fichier à OpenAI. Coco conserve les règles que vous approuvez et les résumés mensuels calculés automatiquement ; vous pouvez supprimer ou mettre en pause les deux ensuite.",
-  "es": "Para conversar, OAZE envía a OpenAI su solicitud, los últimos intercambios y los resúmenes financieros necesarios. Las fotos y los audios solo se envían cuando usted elige un archivo o inicia una grabación y confirma el envío. Los extractos PDF/CSV reconocidos se leen localmente, sin enviar el archivo a OpenAI. Coco guarda las reglas que usted apruebe y los resúmenes mensuales calculados automáticamente; puede borrar o pausar ambos después."
+  "en": "To chat, OAZE sends OpenAI your request, the latest exchanges and the financial summaries needed. Coco's voice is AI-generated. Photos and audio are only sent when you choose a file or start a recording and confirm. Recognized PDF/CSV statements are read locally, without sending the file to OpenAI. Coco keeps rules you approve and automatically calculated monthly summaries; you can delete or pause both later.",
+  "fr": "Pour discuter, OAZE envoie à OpenAI votre demande, les derniers échanges et les résumés financiers nécessaires. La voix de Coco est générée par IA. Photos et audios ne sont envoyés que si vous choisissez un fichier ou lancez un enregistrement et confirmez. Les relevés PDF/CSV reconnus sont lus localement, sans envoi du fichier à OpenAI. Coco garde les règles que vous approuvez et des résumés mensuels calculés automatiquement ; vous pouvez les supprimer ou les suspendre.",
+  "es": "Para conversar, OAZE envía a OpenAI tu pedido, los últimos intercambios y los resúmenes financieros necesarios. La voz de Coco es generada por IA. Fotos y audios solo se envían cuando eliges un archivo o inicias una grabación y confirmas. Los extractos PDF/CSV reconocidos se leen localmente, sin enviar el archivo a OpenAI. Coco guarda reglas que apruebes y resúmenes mensuales calculados automáticamente; puedes borrarlos o pausarlos después."
  },
  {
   "pt": "Não mande senhas, documentos de identidade ou números completos de conta. Revogue o acesso aqui quando quiser.",
@@ -6331,6 +7318,13 @@
   "ignorar": true
  },
  {
+  "pt": "Não consegui montar o lançamento. Confira valor, data e descrição.",
+  "tipo": "exato",
+  "en": "Couldn't build the transaction. Check amount, date and description.",
+  "fr": "Impossible de préparer l'opération. Vérifiez montant, date et description.",
+  "es": "No se pudo armar el movimiento. Revisa valor, fecha y descripción."
+ },
+ {
   "pt": "Lançamento não encontrado. Atualize a página.",
   "tipo": "exato",
   "en": "Entry not found. Refresh the page.",
@@ -6518,13 +7512,6 @@
   "en": "More details",
   "fr": "Plus de détails",
   "es": "Más detalles"
- },
- {
-  "pt": "Não informado",
-  "tipo": "exato",
-  "en": "Not specified",
-  "fr": "Non précisé",
-  "es": "Sin especificar"
  },
  {
   "pt": "Como o dinheiro entrou ou saiu dessa conta.",
@@ -9296,6 +10283,20 @@
   "es": "No se pudo iniciar el pago. No se cobró nada."
  },
  {
+  "pt": "O servidor não retornou uma página segura de cobrança.",
+  "tipo": "exato",
+  "en": "The server didn't return a secure billing page.",
+  "fr": "Le serveur n'a pas renvoyé de page de facturation sécurisée.",
+  "es": "El servidor no devolvió una página segura de cobro."
+ },
+ {
+  "pt": "Não foi possível abrir suas cobranças. Tente novamente.",
+  "tipo": "exato",
+  "en": "Couldn't open your billing. Try again.",
+  "fr": "Impossible d'ouvrir votre facturation. Réessayez.",
+  "es": "No se pudieron abrir tus cobros. Inténtalo de nuevo."
+ },
+ {
   "pt": "Renovação cancelada. O acesso segue até o fim do período pago.",
   "tipo": "exato",
   "en": "Renewal cancelled. Access continues until the end of the paid period.",
@@ -9350,6 +10351,13 @@
   "en": "Voice is still connecting. Try again in a moment.",
   "fr": "La voix est encore en cours de connexion. Réessayez dans un instant.",
   "es": "La voz todavía se está conectando. Inténtalo de nuevo en un momento."
+ },
+ {
+  "pt": "A Coco ainda está preparando a resposta…",
+  "tipo": "exato",
+  "en": "Coco is still preparing the answer…",
+  "fr": "Coco prépare encore la réponse…",
+  "es": "Coco aún está preparando la respuesta…"
  },
  {
   "pt": "A Coco está indisponível agora.",
@@ -9824,6 +10832,13 @@
   "es": "Leyendo archivo…"
  },
  {
+  "pt": "Registre este gasto já pago:",
+  "tipo": "exato",
+  "en": "Record this already-paid expense:",
+  "fr": "Enregistrez cette dépense déjà payée :",
+  "es": "Registra este gasto ya pagado:"
+ },
+ {
   "pt": "Revise o texto antes de enviar à Coco.",
   "tipo": "exato",
   "en": "Review the text before sending it to Coco.",
@@ -10249,6 +11264,11 @@
   "es": "Demostración sin sesión."
  },
  {
+  "pt": "oaze.native.biometric-lock.v1",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
   "pt": "Não foi possível encerrar a sessão.",
   "tipo": "exato",
   "en": "We could not sign you out.",
@@ -10366,6 +11386,48 @@
   "en": "Check the statement and choose an account in reais.",
   "fr": "Vérifiez le relevé et choisissez un compte en réaux.",
   "es": "Revisa el extracto y elige una cuenta en reales."
+ },
+ {
+  "pt": "Sem espaço no limite de lançamentos do mês. Nada foi importado.",
+  "tipo": "exato",
+  "en": "No room left in this month's transaction limit. Nothing was imported.",
+  "fr": "Plus de place dans la limite d'opérations du mois. Rien n'a été importé.",
+  "es": "Sin espacio en el límite de movimientos del mes. No se importó nada."
+ },
+ {
+  "pt": "Todos os movimentos já parecem registrados.",
+  "tipo": "exato",
+  "en": "All transactions already look recorded.",
+  "fr": "Toutes les opérations semblent déjà saisies.",
+  "es": "Todos los movimientos ya parecen registrados."
+ },
+ {
+  "pt": "{0} lançamentos importados{1}{2}.",
+  "tipo": "padrao",
+  "en": "{0} transactions imported{1}{2}.",
+  "fr": "{0} opérations importées{1}{2}.",
+  "es": "{0} movimientos importados{1}{2}."
+ },
+ {
+  "pt": ", {0} já existiam",
+  "tipo": "padrao",
+  "en": ", {0} already existed",
+  "fr": ", {0} existaient déjà",
+  "es": ", {0} ya existían"
+ },
+ {
+  "pt": ", {0} ficaram fora pelo limite do plano",
+  "tipo": "padrao",
+  "en": ", {0} left out by the plan limit",
+  "fr": ", {0} exclues par la limite du forfait",
+  "es": ", {0} quedaron fuera por el límite del plan"
+ },
+ {
+  "pt": "Não consegui salvar a importação. Nada foi alterado.",
+  "tipo": "exato",
+  "en": "Couldn't save the import. Nothing was changed.",
+  "fr": "Impossible d'enregistrer l'import. Rien n'a été modifié.",
+  "es": "No se pudo guardar la importación. No se cambió nada."
  },
  {
   "pt": "Existe um lançamento parecido nessa conta. Revisar mesmo assim? Não salve duas vezes o mesmo movimento.",
@@ -10756,11 +11818,39 @@
   "es": "¿Cómo cambiaron mis ingresos y gastos en los últimos seis meses?"
  },
  {
+  "pt": "Desbloqueio do aparelho ativado.",
+  "tipo": "exato",
+  "en": "Device unlock on.",
+  "fr": "Déverrouillage de l'appareil activé.",
+  "es": "Desbloqueo del dispositivo activado."
+ },
+ {
+  "pt": "Desbloqueio do aparelho desativado.",
+  "tipo": "exato",
+  "en": "Device unlock off.",
+  "fr": "Déverrouillage de l'appareil désactivé.",
+  "es": "Desbloqueo del dispositivo desactivado."
+ },
+ {
+  "pt": "Não foi possível confirmar pelo aparelho.",
+  "tipo": "exato",
+  "en": "Couldn't confirm with the device.",
+  "fr": "Confirmation impossible avec l'appareil.",
+  "es": "No se pudo confirmar con el dispositivo."
+ },
+ {
   "pt": "Os avisos voltarão a aparecer neste aparelho.",
   "tipo": "exato",
   "en": "Warnings will appear again on this device.",
   "fr": "Les avertissements réapparaîtront sur cet appareil.",
   "es": "Los avisos volverán a aparecer en este dispositivo."
+ },
+ {
+  "pt": "Coco hoje: {0}% usado · semana: {1}%. Detalhes em Configurações › Plano.",
+  "tipo": "padrao",
+  "en": "Coco today: {0}% used · week: {1}%. Details in Settings › Plan.",
+  "fr": "Coco aujourd'hui : {0} % utilisé · semaine : {1} %. Détails dans Réglages › Forfait.",
+  "es": "Coco hoy: {0}% usado · semana: {1}%. Detalles en Configuración › Plan."
  },
  {
   "pt": "Filtros limpos.",
@@ -10831,6 +11921,48 @@
   "es": "Ver planes"
  },
  {
+  "pt": "mais {0} lançamentos",
+  "tipo": "padrao",
+  "en": "{0} more transactions",
+  "fr": "{0} opérations de plus",
+  "es": "{0} movimientos más"
+ },
+ {
+  "pt": "plano grátis",
+  "tipo": "exato",
+  "en": "free plan",
+  "fr": "forfait gratuit",
+  "es": "plan gratis"
+ },
+ {
+  "pt": "No plano grátis os lançamentos não têm limite: a cada {0}, um anúncio curto libera os próximos.",
+  "tipo": "padrao",
+  "en": "On the free plan transactions are unlimited: every {0}, a short ad unlocks the next ones.",
+  "fr": "Avec le forfait gratuit, les opérations sont illimitées : tous les {0}, une courte publicité débloque les suivantes.",
+  "es": "En el plan gratis los movimientos no tienen límite: cada {0}, un anuncio corto libera los siguientes."
+ },
+ {
+  "pt": "Você chegou ao máximo de anúncios de hoje. Amanhã libera de novo.",
+  "tipo": "exato",
+  "en": "You've reached today's maximum ads. It unlocks again tomorrow.",
+  "fr": "Vous avez atteint le maximum de publicités du jour. Ça se débloque demain.",
+  "es": "Llegaste al máximo de anuncios de hoy. Mañana se libera de nuevo."
+ },
+ {
+  "pt": "Assinar o Pro, sem anúncios",
+  "tipo": "exato",
+  "en": "Subscribe to Pro, no ads",
+  "fr": "S'abonner au Pro, sans publicité",
+  "es": "Suscribirse a Pro, sin anuncios"
+ },
+ {
+  "pt": "Liberar lançamentos",
+  "tipo": "exato",
+  "en": "Unlock transactions",
+  "fr": "Débloquer des opérations",
+  "es": "Liberar movimientos"
+ },
+ {
   "pt": "V3/limites:",
   "tipo": "exato",
   "ignorar": true
@@ -10878,6 +12010,16 @@
  },
  {
   "pt": "V3/primeiros passos:",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze.native.billing-return",
+  "tipo": "exato",
+  "ignorar": true
+ },
+ {
+  "pt": "oaze:billing-return",
   "tipo": "exato",
   "ignorar": true
  },

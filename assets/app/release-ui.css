@@ -1,0 +1,15 @@
+.v3-pro-shortcut{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border:1px solid rgba(95,169,155,.65);border-radius:99px;background:linear-gradient(125deg,rgba(95,169,155,.22),rgba(53,85,101,.48));color:#f0e5cf;font:600 12px/1 Instrument,Arial,sans-serif;white-space:nowrap;box-shadow:inset 0 1px rgba(240,229,207,.09)}
+.v3-pro-shortcut:hover{background:rgba(95,169,155,.35)}
+.v3-pro-shortcut:focus-visible{outline:2px solid #5fa99b;outline-offset:3px}
+.v3-settings-extra{margin-top:16px}
+.v3-settings-extra .v3-setting-row{min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.v3-settings-extra select{min-height:44px;max-width:190px;padding:7px 12px;border:1px solid rgba(240,229,207,.24);border-radius:12px;background:#172d3a;color:#f0e5cf}
+.v3-settings-extra select:focus-visible{outline:2px solid #5fa99b;outline-offset:3px}
+@media(max-width:600px){.v3-pro-shortcut{min-height:44px;padding:0 12px}.v3-settings-extra .v3-setting-row{flex-wrap:wrap}}
+.v3-wallet-item,.v3-wallet-item:not(.is-selected){border-left:5px solid color-mix(in srgb,var(--card-plastic,#5fa99b) 78%,#f0e5cf)}
+.v3-wallet-item:after{background:linear-gradient(90deg,var(--card-plastic),color-mix(in srgb,var(--card-plastic) 72%,#f0e5cf)) 0 0 / 13px 100% no-repeat,linear-gradient(90deg,var(--card-plastic),transparent 60%) 0 0 / 100% 7px no-repeat}
+.v3-wallet-item .v3-bankmark{box-shadow:0 0 0 1px color-mix(in srgb,var(--card-plastic) 65%,transparent),0 4px 16px color-mix(in srgb,var(--card-plastic) 25%,transparent)}
+.v3-spend-row{box-shadow:inset 3px 0 var(--swatch)}
+.v3-spend-row:hover,.v3-spend-row.is-active{box-shadow:inset 4px 0 var(--swatch)}
+.v3-cat-tile{border-left:3px solid var(--swatch,var(--teal))}
+.v3-cat-tile .v3-cat-icon,.v3-spend-row .v3-cat-icon,.v3-cat-manage .v3-cat-icon,.v3-planning-row .v3-cat-icon{border:1px solid color-mix(in srgb,var(--swatch,var(--teal)) 72%,white);background:var(--swatch,var(--teal));color:var(--swatch-ink,var(--night))}

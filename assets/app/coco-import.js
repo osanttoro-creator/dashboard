@@ -95,6 +95,48 @@
     }
     return result('CSV bancário', rows, checks, warnings);
   }
+  /* OFX (31/10/2026): o formato que quase todo banco brasileiro exporta.
+     Aceita a versão SGML (sem fechamento de tag) e a XML. Cada <STMTTRN>
+     vira um movimento; FITID repetido no arquivo é descartado. */
+  function ofxTag(bloco, tag) {
+    const m = new RegExp('<' + tag + '>([^<\\r\\n]*)', 'i').exec(bloco);
+    return m ? m[1].trim() : '';
+  }
+  function ofxDate(raw) {
+    const m = /^(\d{4})(\d{2})(\d{2})/.exec(String(raw || ''));
+    if (!m) return null;
+    const iso = `${m[1]}-${m[2]}-${m[3]}`;
+    const date = new Date(`${iso}T00:00:00Z`);
+    return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === iso ? iso : null;
+  }
+  function ofxCents(raw) {
+    const value = String(raw || '').trim().replace(',', '.');
+    if (!/^[-+]?\d+(\.\d{1,2})?$/.test(value)) return null;
+    const negative = value.startsWith('-');
+    const [inteiro, fracao = ''] = value.replace(/^[-+]/, '').split('.');
+    const amount = Number(inteiro) * 100 + Number((fracao + '00').slice(0, 2));
+    return Number.isSafeInteger(amount) ? (negative ? -amount : amount) : null;
+  }
+  function parseOfx(text) {
+    const corpo = String(text || '');
+    if (!/<OFX>/i.test(corpo) || !/<STMTTRN>/i.test(corpo)) throw new Error('Arquivo OFX sem movimentos. Nenhum lançamento foi importado.');
+    const blocos = corpo.split(/<STMTTRN>/i).slice(1).map((b) => b.split(/<\/STMTTRN>/i)[0]);
+    const rows = [], warnings = [], vistos = new Set();
+    for (const bloco of blocos) {
+      const fitid = ofxTag(bloco, 'FITID');
+      if (fitid) { if (vistos.has(fitid)) continue; vistos.add(fitid); }
+      const date = ofxDate(ofxTag(bloco, 'DTPOSTED'));
+      const valor = ofxCents(ofxTag(bloco, 'TRNAMT'));
+      const descricao = ofxTag(bloco, 'MEMO') || ofxTag(bloco, 'NAME') || ofxTag(bloco, 'TRNTYPE');
+      if (!date || valor === null) throw new Error('OFX com data ou valor ilegível. Nenhum lançamento foi importado.');
+      if (!valor) continue;
+      const item = row(date, descricao, valor, null);
+      if (!item) throw new Error('Movimento incompleto no OFX.');
+      if (fitid) item.fitid = fitid.slice(0, 80);
+      rows.push(item);
+    }
+    return result('OFX bancário', rows, { passed: 0, failed: 0 }, warnings);
+  }
   function linesFromItems(items) {
     const lines = [];
     for (const item of items) {
@@ -182,7 +224,14 @@
     if (!file || file.size < 40 || file.size > MAX_BYTES) throw new Error('Arquivo vazio ou maior que 10 MB.');
     const name = String(file.name || '').toLowerCase();
     if (name.endsWith('.csv')) return parseCsv(await file.text());
-    if (!name.endsWith('.pdf')) throw new Error('Use um extrato PDF ou CSV.');
+    if (name.endsWith('.ofx') || name.endsWith('.qfx')) {
+      /* Bancos brasileiros costumam gravar OFX em Latin-1. */
+      const bytes = await file.arrayBuffer();
+      let texto = new TextDecoder('utf-8').decode(bytes);
+      if (texto.includes('�')) texto = new TextDecoder('windows-1252').decode(bytes);
+      return parseOfx(texto);
+    }
+    if (!name.endsWith('.pdf')) throw new Error('Use um extrato OFX, CSV ou PDF.');
     const bytes = new Uint8Array(await file.arrayBuffer());
     if (String.fromCharCode(...bytes.slice(0, 5)) !== '%PDF-') throw new Error('O arquivo não é um PDF válido.');
     const pdfjs = await import('/assets/vendor/pdfjs/pdf.min.mjs');
@@ -199,7 +248,7 @@
     } finally { await pdf.destroy(); }
     return parsePdfItems(pages);
   }
-  const api = Object.freeze({ parseCsv, parsePdfItems, parseFile, normalized });
+  const api = Object.freeze({ parseCsv, parseOfx, parsePdfItems, parseFile, normalized });
   global.CocoImport = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
