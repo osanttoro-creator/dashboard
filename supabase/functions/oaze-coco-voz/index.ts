@@ -4,7 +4,7 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { reservarRateLimit } from '../_shared/security.ts';
 
 function cors(origin: string | null) {
-  const allowed = (Deno.env.get('OAZE_ALLOWED_ORIGINS') || '').split(',').map((x) => x.trim());
+  const allowed = [...new Set((Deno.env.get('OAZE_ALLOWED_ORIGINS') || '').split(',').map((x) => x.trim()).filter(Boolean).concat(["http://tauri.localhost","tauri://localhost","http://localhost","https://localhost"]))];
   return {
     'Access-Control-Allow-Origin': origin && allowed.includes(origin) ? origin : 'null',
     'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
