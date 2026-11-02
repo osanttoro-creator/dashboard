@@ -126,13 +126,13 @@ Regras obrigatórias:
 /* ---------------- CORS ---------------- */
 
 /**
- * Só as origens declaradas. Sem OAZE_ALLOWED_ORIGINS configurada,
- * nenhuma origem é liberada — falhar fechado é o certo aqui:
+ * Origens do site declaradas e origens locais dos apps nativos.
+ * A sessão autenticada continua obrigatória; outras origens falham fechadas:
  * "*" numa rota autenticada e paga por token é convite.
  */
 function origensPermitidas(): string[] {
-  return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
-    .split(',').map((o) => o.trim()).filter(Boolean);
+  return [...new Set((Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
+    .split(',').map((o) => o.trim()).filter(Boolean).concat(["http://tauri.localhost","tauri://localhost","http://localhost","https://localhost"]))];
 }
 
 function cors(origem: string | null): Record<string, string> {
