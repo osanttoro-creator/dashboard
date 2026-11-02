@@ -3,7 +3,7 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { corpoCabeNoLimite, reservarRateLimit, sha256 } from '../_shared/security.ts';
 import { BACKEND_INSTRUCTIONS, COCO_TOOLS, LIVE_INSTRUCTIONS } from './prompts.ts';
 
-const origins = (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+const origins = [...new Set((Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '').split(',').map((x) => x.trim()).filter(Boolean).concat(["http://tauri.localhost","tauri://localhost","http://localhost","https://localhost"]))];
 const headers = (origin: string | null) => ({
   'Access-Control-Allow-Origin': origin && origins.includes(origin) ? origin : 'null',
   'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
