@@ -30,8 +30,11 @@
   }
   function row(date, description, signedCents, balanceCents) {
     if (!date || !description || !Number.isSafeInteger(signedCents) || !signedCents) return null;
-    return { date, description: String(description).replace(/\s+/g, ' ').trim().slice(0, 120),
-      cents: signedCents, balanceCents: Number.isSafeInteger(balanceCents) ? balanceCents : null };
+    const cleanDescription = String(description).replace(/\s+/g, ' ').trim().slice(0, 120);
+    const investmentTransfer = /^(aplicacao|resgate) cofrinhos\b/.test(normalized(cleanDescription));
+    return { date, description: cleanDescription, cents: signedCents,
+      balanceCents: Number.isSafeInteger(balanceCents) ? balanceCents : null,
+      investmentTransfer };
   }
   function result(format, rows, checks, warnings) {
     if (!rows.length || rows.length > MAX_ROWS) throw new Error('Não encontrei movimentos seguros para revisar neste arquivo.');
@@ -152,22 +155,39 @@
   function parseDatedPdf(pages) {
     const parsed = [], warnings = [], balances = [];
     const linePattern = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+(-?\d[\d.]*,\d{2})$/;
-    for (const page of pages) {
-      for (const line of linesFromItems(page)) {
-        const match = linePattern.exec(line);
-        if (!match) continue;
-        const date = isoDate(match[1]), amount = cents(match[3]);
-        if (!date || amount === null) throw new Error('Data ou valor inválido no extrato PDF.');
-        if (normalized(match[2]) === 'saldo do dia') balances.push({ date, cents: amount });
-        else if (amount) {
-          const item = row(date, match[2], amount, null);
-          if (!item) throw new Error('Movimento incompleto no PDF.');
-          parsed.push(item);
-        }
+    const lines = pages.flatMap(linesFromItems);
+    /* Alguns PDFs do Itaú juntam o valor de uma linha à data da seguinte.
+       Separar apenas essa fronteira evita perder o movimento sem adivinhar valores. */
+    const entries = lines.flatMap((line) => line.replace(
+      /(-?\d[\d.]*,\d{2})(?=\d{2}\/\d{2}\/\d{4}\b)/g, '$1\n'
+    ).split('\n'));
+    let unreadable = 0;
+    for (const line of entries) {
+      const match = linePattern.exec(line.trim());
+      if (!match) {
+        if (/^\d{2}\/\d{2}\/\d{4}\b/.test(line.trim())) unreadable++;
+        continue;
+      }
+      const date = isoDate(match[1]), amount = cents(match[3]);
+      if (!date || amount === null) throw new Error('Data ou valor inválido no extrato PDF.');
+      if (normalized(match[2]) === 'saldo do dia') balances.push({ date, cents: amount });
+      else if (amount) {
+        const item = row(date, match[2], amount, null);
+        if (!item) throw new Error('Movimento incompleto no PDF.');
+        parsed.push(item);
       }
     }
     if (!balances.length) throw new Error('Layout do extrato PDF não reconhecido.');
-    const checks = { passed: 0, failed: 0 };
+    const checks = { passed: 0, failed: unreadable };
+    if (unreadable) warnings.push(unreadable + ' linha(s) com data não puderam ser lidas. Confira o PDF original.');
+    const periodText = lines.join(' ');
+    const periodMatch = /per[ií]odo de visualiza[cç][aã]o\s*:\s*\d{2}\/\d{2}\/\d{4}\s+at[eé]\s+(\d{2}\/\d{2}\/\d{4})/i.exec(periodText);
+    const periodEnd = periodMatch ? isoDate(periodMatch[1]) : null;
+    if (periodEnd) {
+      const afterPeriod = parsed.filter((item) => item.date > periodEnd);
+      for (const item of afterPeriod) item.dateConcern = true;
+      if (afterPeriod.length) warnings.push(afterPeriod.length + ' movimento(s) têm data posterior ao fim do período do PDF. Confirme a data no banco antes de registrar.');
+    }
     const ordered = balances.slice().sort((a, b) => a.date.localeCompare(b.date));
     for (let i = 1; i < ordered.length; i++) {
       const movement = parsed.filter((item) => item.date > ordered[i - 1].date && item.date <= ordered[i].date)
@@ -218,6 +238,7 @@
     const text = pages.slice(0, 2).flatMap(linesFromItems).join(' ').toLowerCase();
     if (text.includes('saldo do dia') && /\d{2}\/\d{2}\/\d{4}/.test(text)) return parseDatedPdf(pages);
     if (text.includes('crédito') && text.includes('débito') && text.includes('saldo')) return parseColumnPdf(pages);
+    if (/registrato|banco central do brasil/i.test(text)) throw new Error('Este relatório do Registrato não é um extrato bancário. Nenhum lançamento foi criado; use um extrato da conta para registrar movimentos.');
     throw new Error('Este PDF não tem um layout de extrato reconhecido. Nada foi importado.');
   }
   async function parseFile(file) {
