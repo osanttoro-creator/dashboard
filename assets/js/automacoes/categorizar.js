@@ -5,7 +5,8 @@
   const CURADAS = [
     { re: /\b(supermercado|mercado|hortifruti|padaria|restaurante|ifood)\b/, nomes: ['Alimentação'] },
     { re: /\b(uber|taxi|combustivel|posto|metro|onibus)\b/, nomes: ['Transporte'] },
-    { re: /\b(netflix|spotify|disney\s*(?:plus|\+)?|disneyplus|prime\s*video|globoplay|hbo\s*max|max|streaming|assinatura|vivo|claro)\b/, nomes: ['Assinaturas', 'Serviços', 'Telefonia'] },
+    { re: /\b(netflix|spotify|disney\s*(?:plus|\+)?|disneyplus|prime\s*video|globoplay|hbo\s*max|streaming|assinatura)\b/, nomes: ['Assinaturas', 'Serviços'] },
+    { re: /\b(vivo|claro)\b/, nomes: ['Telefonia', 'Internet', 'Assinaturas'] },
     { re: /\b(aluguel|condominio|energia|luz|agua|gas)\b/, nomes: ['Moradia'] },
     { re: /\b(farmacia|hospital|clinica|medico)\b/, nomes: ['Saúde'] },
     { re: /\b(salario|pro labore|folha)\b/, nomes: ['Salário'] }
