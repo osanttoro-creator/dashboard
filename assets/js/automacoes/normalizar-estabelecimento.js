@@ -8,7 +8,12 @@
     { teste: /\bspotify\b/, chave: 'spotify', nome: 'Spotify' },
     { teste: /\bamazon(?: prime)?\b/, chave: 'amazon', nome: 'Amazon' },
     { teste: /\buber\b/, chave: 'uber', nome: 'Uber' },
-    { teste: /\bifood\b/, chave: 'ifood', nome: 'iFood' }
+    { teste: /\bifood\b/, chave: 'ifood', nome: 'iFood' },
+    { teste: /\bdisney\s*(?:plus|\+)?\b|\bdisneyplus\b/, chave: 'disney-plus', nome: 'Disney+' },
+    { teste: /\bvivo\b/, chave: 'vivo', nome: 'Vivo' },
+    { teste: /\bclaro\b/, chave: 'claro', nome: 'Claro' },
+    { teste: /\bshopee\b/, chave: 'shopee', nome: 'Shopee' },
+    { teste: /\bshein\b/, chave: 'shein', nome: 'Shein' }
   ];
 
   function semAcento(valor) {
