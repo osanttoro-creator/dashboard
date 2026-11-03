@@ -52,4 +52,11 @@ assert.equal(futurePdf.checks.failed, 1);
 assert.equal(futurePdf.rows[0].dateConcern, true);
 assert.throws(() => parsePdfItems([[line(700, 'Banco Central do Brasil · Registrato')]]), /Registrato/);
 
+const transfer = parsePdfItems([[
+  line(710, '01/10/2026 SALDO DO DIA 100,00'),
+  line(690, '02/10/2026 APLICACAO COFRINHOS -50,00'),
+  line(650, '02/10/2026 SALDO DO DIA 50,00')
+]]);
+assert.equal(transfer.rows[0].investmentTransfer, true);
+
 console.log('Coco: extratos CSV/PDF reconhecidos, saldos conferidos e layouts desconhecidos bloqueados.');

@@ -30,8 +30,11 @@
   }
   function row(date, description, signedCents, balanceCents) {
     if (!date || !description || !Number.isSafeInteger(signedCents) || !signedCents) return null;
-    return { date, description: String(description).replace(/\s+/g, ' ').trim().slice(0, 120),
-      cents: signedCents, balanceCents: Number.isSafeInteger(balanceCents) ? balanceCents : null };
+    const cleanDescription = String(description).replace(/\s+/g, ' ').trim().slice(0, 120);
+    const investmentTransfer = /^(aplicacao|resgate) cofrinhos\b/.test(normalized(cleanDescription));
+    return { date, description: cleanDescription, cents: signedCents,
+      balanceCents: Number.isSafeInteger(balanceCents) ? balanceCents : null,
+      investmentTransfer };
   }
   function result(format, rows, checks, warnings) {
     if (!rows.length || rows.length > MAX_ROWS) throw new Error('Não encontrei movimentos seguros para revisar neste arquivo.');

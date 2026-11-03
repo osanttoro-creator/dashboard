@@ -80,7 +80,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, retryAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -1022,7 +1022,8 @@
     const symbols = [...new Set(list.filter((x) => ['Ações', 'FIIs', 'ETF'].includes(x.type) && x.ticker && +x.quantity > 0 && x.currentValue == null).map((x) => x.ticker))].sort().slice(0, 10);
     const quoteKey = symbols.join(',');
     if (investmentMarketRequest) return investmentMarketRequest;
-    if (!force && Date.now() - state.market.loadedAt < 15 * 60 * 1000 && cdiStart === state.market.cdiStart && quoteKey === state.market.quoteKey) return;
+    if (!force && Date.now() < state.market.retryAt && cdiStart === state.market.cdiStart && quoteKey === state.market.quoteKey) return;
+    const previousCdiStart = state.market.cdiStart;
     state.market.loading = true; state.market.error = ''; state.market.historyError = ''; state.market.quoteError = '';
     if (state.page === 'investments') render();
     investmentMarketRequest = (async () => {
@@ -1030,25 +1031,34 @@
         cdiStart ? V3Backend.investmentMarket({ action: 'cdi_history', start: cdiStart, end: U.todayISO() }) : Promise.resolve(null),
         symbols.length ? V3Backend.investmentMarket({ action: 'quotes', symbols }) : Promise.resolve(null)];
       const results = await Promise.allSettled(jobs);
-      if (results[0].status === 'fulfilled') state.market.indices = results[0].value;
-      else state.market.error = results[0].reason?.message || 'Índices indisponíveis.';
-      if (results[1].status === 'fulfilled') {
-        investmentMarketData.cdi = results[1].value?.observations || [];
-        state.market.cdiStart = cdiStart;
-      } else {
-        investmentMarketData.cdi = [];
+      if (results[0].status === 'fulfilled') {
+        state.market.indices = results[0].value;
+        if (!results[0].value?.cdiAnnual && !results[0].value?.cdiDaily) state.market.error = 'O Banco Central não retornou CDI. Tente atualizar novamente.';
+      } else state.market.error = results[0].reason?.message || 'Índices indisponíveis.';
+      if (cdiStart && results[1].status === 'fulfilled') {
+        const observations = results[1].value?.observations || [];
+        if (observations.length) investmentMarketData.cdi = observations;
+        else state.market.historyError = 'O histórico do CDI veio vazio. Tente atualizar novamente.';
+      } else if (cdiStart) {
+        if (previousCdiStart !== cdiStart) investmentMarketData.cdi = [];
         state.market.historyError = results[1].reason?.message || 'Histórico CDI indisponível.';
-      }
-      if (results[2].status === 'fulfilled') {
-        investmentMarketData.quotes = Object.fromEntries((results[2].value?.quotes || []).map((x) => [x.requestedSymbol, x]));
-        state.market.quoteKey = quoteKey;
-      } else {
-        investmentMarketData.quotes = {};
+      } else investmentMarketData.cdi = [];
+      investmentMarketData.quotes = Object.fromEntries(symbols.filter((symbol) => investmentMarketData.quotes[symbol]).map((symbol) => [symbol, investmentMarketData.quotes[symbol]]));
+      if (symbols.length && results[2].status === 'fulfilled') {
+        const quotes = results[2].value?.quotes || [];
+        for (const quote of quotes) investmentMarketData.quotes[quote.requestedSymbol] = quote;
+        const missing = symbols.filter((symbol) => !quotes.some((quote) => quote.requestedSymbol === symbol));
+        if (missing.length) state.market.quoteError = 'Sem cotação para ' + missing.join(', ') + '. Confira o ticker ou informe o valor atual manualmente.';
+      } else if (symbols.length) {
         state.market.quoteError = results[2].reason?.message || 'Cotações indisponíveis.';
       }
       state.market.cdiStart = cdiStart; state.market.quoteKey = quoteKey;
-      Calc.setInvestmentMarket({ cdiStart: state.market.cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
-      state.market.loadedAt = Date.now(); state.market.loading = false;
+      Calc.setInvestmentMarket({ cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
+      state.market.loadedAt = Date.now();
+      /* Falha ou resposta vazia: nova tentativa automática em 1 minuto.
+         Sucesso: evita consultas repetidas por 15 minutos. */
+      state.market.retryAt = state.market.loadedAt + (state.market.error || state.market.historyError || state.market.quoteError ? 60 * 1000 : 15 * 60 * 1000);
+      state.market.loading = false;
       if (state.page === 'investments' || state.page === 'home') render();
     })().finally(() => { investmentMarketRequest = null; });
     return investmentMarketRequest;
@@ -2248,7 +2258,7 @@
     const visible = report.rows.slice(0, state.importLimit);
     const positive = report.rows.filter((item) => item.cents > 0).reduce((sum, item) => sum + item.cents, 0) / 100;
     const negative = report.rows.filter((item) => item.cents < 0).reduce((sum, item) => sum - item.cents, 0) / 100;
-    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p>${report.checks.failed ? '<p class="v3-import-warning" role="alert">O saldo não confere com o PDF. Revise cada movimento separadamente e confirme data e valor no banco.</p>' : ''}<div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${suggestion.count} anteriores iguais</small>`:''}${item.dateConcern ? '<small class="v3-import-warning">Data após o período do PDF: confirme no banco.</small>' : ''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId ? 'disabled' : ''}>${importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
+    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p>${report.checks.failed ? '<p class="v3-import-warning" role="alert">O saldo não confere com o PDF. Revise cada movimento separadamente e confirme data e valor no banco.</p>' : ''}<div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${suggestion.count} anteriores iguais</small>`:''}${item.dateConcern ? '<small class="v3-import-warning">Data após o período do PDF: confirme no banco.</small>' : ''}${item.investmentTransfer ? '<small class="v3-import-warning">Aplicação ou resgate de cofrinho: não é gasto nem receita.</small>' : ''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId ? 'disabled' : ''}>${item.investmentTransfer ? 'Ver investimentos' : importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
   }
   function openCoco() {
     if (state.cocoTab==='Conversa' || state.cocoTab==='Agora') { closeSheet();state.cocoView='conversation';go('coco');return; }
@@ -4157,6 +4167,7 @@
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
       if (!Number.isInteger(index) || !item || !account) { toast('Confira o extrato e escolha uma conta em reais.');return; }
+      if (item.investmentTransfer) { closeSheet(); go('investments'); toast('Aplicações e resgates de cofrinho não são despesa ou receita. Confira a posição no banco antes de registrar.'); return; }
       const revisar=()=>{
         const suggestion=importCategorySuggestion(item,account.id);
         composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
