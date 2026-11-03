@@ -1,0 +1,21 @@
+name: App do site · verificação
+
+on:
+  pull_request:
+    paths:
+      - 'assets/app/**'
+      - 'app-v3.html'
+      - 'tools/testes/**'
+      - '.github/workflows/site-verify.yml'
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: node tools/testes/coco-extratos.js
+      - run: node tools/verificar-tudo.js
