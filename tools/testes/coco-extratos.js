@@ -33,4 +33,23 @@ assert.equal(parsedPdf.rows.length, 2);
 assert.deepEqual(parsedPdf.checks, { passed: 1, failed: 0 });
 assert.throws(() => parsePdfItems([[line(700, 'COMPROVANTE DE PIX')]]), /layout de extrato reconhecido/);
 
+const gluedPdf = parsePdfItems([[
+  line(740, 'período de visualização: 01/10/2026 até 02/10/2026'),
+  line(710, '01/10/2026 SALDO DO DIA 100,00'),
+  line(690, '02/10/2026 COMPRA -20,0002/10/2026 PIX RECEBIDO 5,00'),
+  line(650, '02/10/2026 SALDO DO DIA 85,00')
+]]);
+assert.equal(gluedPdf.rows.length, 2);
+assert.deepEqual(gluedPdf.checks, { passed: 1, failed: 0 });
+
+const futurePdf = parsePdfItems([[
+  line(740, 'período de visualização: 01/10/2026 até 02/10/2026'),
+  line(710, '01/10/2026 SALDO DO DIA 100,00'),
+  line(690, '03/10/2026 PIX RECEBIDO 10,00'),
+  line(650, '02/10/2026 SALDO DO DIA 110,00')
+]]);
+assert.equal(futurePdf.checks.failed, 1);
+assert.equal(futurePdf.rows[0].dateConcern, true);
+assert.throws(() => parsePdfItems([[line(700, 'Banco Central do Brasil · Registrato')]]), /Registrato/);
+
 console.log('Coco: extratos CSV/PDF reconhecidos, saldos conferidos e layouts desconhecidos bloqueados.');
