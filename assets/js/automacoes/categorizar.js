@@ -5,7 +5,7 @@
   const CURADAS = [
     { re: /\b(supermercado|mercado|hortifruti|padaria|restaurante|ifood)\b/, nomes: ['Alimentação'] },
     { re: /\b(uber|taxi|combustivel|posto|metro|onibus)\b/, nomes: ['Transporte'] },
-    { re: /\b(netflix|spotify|streaming|assinatura)\b/, nomes: ['Assinaturas'] },
+    { re: /\b(netflix|spotify|disney\s*(?:plus|\+)?|disneyplus|prime\s*video|globoplay|hbo\s*max|max|streaming|assinatura|vivo|claro)\b/, nomes: ['Assinaturas', 'Serviços', 'Telefonia'] },
     { re: /\b(aluguel|condominio|energia|luz|agua|gas)\b/, nomes: ['Moradia'] },
     { re: /\b(farmacia|hospital|clinica|medico)\b/, nomes: ['Saúde'] },
     { re: /\b(salario|pro labore|folha)\b/, nomes: ['Salário'] }
@@ -43,6 +43,11 @@
           evidence: `${contagem[melhor]} de ${historico.length} lançamentos parecidos usaram esta categoria.` };
       }
     }
+
+    const categoriaComMesmoNome = (profile.categories || []).find((c) => c.kind === kind &&
+      U.norm(c.name) === U.norm(norm.canonicalName));
+    if (categoriaComMesmoNome) return { categoryId: categoriaComMesmoNome.id, confidence: 'medium',
+      source: 'category-name', merchantKey: norm.merchantKey, evidence: 'O nome corresponde à sua categoria.' };
 
     const curada = CURADAS.find((r) => r.re.test(norm.normalized));
     const cat = curada && porNome(profile, curada.nomes, kind);
