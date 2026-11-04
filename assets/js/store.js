@@ -583,6 +583,7 @@
       date: U.isValidISO(i.date) ? i.date : U.todayISO(),
       rate: +i.rate || 0,
       currentValue: i.currentValue === '' || i.currentValue == null ? null : U.round2(+i.currentValue),
+      currentValueAt: i.currentValue != null && U.isValidISO(i.currentValueAt) && i.currentValueAt >= i.date ? i.currentValueAt : null,
       indexer: i.type === 'CDB' && i.indexer === 'cdi' ? 'cdi' : 'fixed',
       ticker: /^(Ações|FIIs|ETF)$/.test(i.type) && /^[A-Z0-9]{4,8}$/.test(String(i.ticker || '').toUpperCase()) ? String(i.ticker).toUpperCase() : null,
       quantity: Number.isFinite(+i.quantity) && +i.quantity > 0 ? +i.quantity : null,
