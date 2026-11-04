@@ -958,47 +958,48 @@
      6 · INVESTIMENTOS
      ============================================================ */
 
-  /** Valor estimado do aporte numa data (juros compostos sobre a taxa a.a.). */
-  let market = { cdiStart: '', cdi: [], quotes: {} };
+  /** Valor de mercado e estimativas brutas. O saldo informado é uma fotografia datada. */
+  let market = { cdiStart: '', cdi: [], cdiAnnual: null, quotes: {} };
   Calc.setInvestmentMarket = function (input) {
     market = {
       cdiStart: String(input?.cdiStart || ''),
       cdi: Array.isArray(input?.cdi) ? input.cdi.filter((x) => /^\d{4}-\d{2}-\d{2}$/.test(x.date) && Number.isFinite(+x.value)) : [],
+      cdiAnnual: Number.isFinite(+input?.cdiAnnual) && +input.cdiAnnual > 0 ? +input.cdiAnnual : null,
       quotes: input?.quotes && typeof input.quotes === 'object' ? input.quotes : {}
     };
   };
+  const snapshotAt = (inv) => inv.currentValue != null && U.isValidISO(inv.currentValueAt)
+    && inv.currentValueAt >= inv.date ? inv.currentValueAt : null;
   Calc.cdiValueAt = function (inv, atISO) {
-    if (!market.cdi.length || !market.cdiStart || inv.date < market.cdiStart) return null;
+    const snapshot = snapshotAt(inv);
+    const baseDate = snapshot && snapshot <= atISO ? snapshot : inv.date;
+    if (!market.cdi.length || !market.cdiStart || baseDate < market.cdiStart) return null;
     const end = inv.maturityDate && inv.maturityDate < atISO ? inv.maturityDate : atISO;
-    let value = +inv.amount || 0, days = 0;
+    let value = snapshot && baseDate === snapshot ? +inv.currentValue : +inv.amount || 0;
+    let days = 0;
     for (const observation of market.cdi) {
-      if (observation.date <= inv.date || observation.date > end) continue;
+      if (observation.date <= baseDate || observation.date > end) continue;
       value *= 1 + (+observation.value / 100) * ((+inv.rate || 0) / 100);
       days++;
     }
-    return days ? U.round2(value) : null;
+    return days || baseDate === snapshot ? U.round2(value) : null;
   };
-  /**
-   * DE ONDE VEIO O NÚMERO.
-   *
-   * O mesmo valor na tela pode ser três coisas com confiabilidades
-   * bem diferentes: o preço de mercado de hoje, uma projeção a juros
-   * compostos, ou um número que a própria pessoa digitou semana
-   * passada. Mostrados iguais, o OAZE parece saber a cotação quando
-   * está exibindo um palpite.
-   *
-   * Esta função ESPELHA os desvios de investmentValueAt, na mesma
-   * ordem. Se um dos dois mudar sem o outro, a etiqueta passa a
-   * mentir sobre o número ao lado — por isso elas vivem juntas.
-   */
   Calc.investmentValueSource = function (inv, atISO) {
     const at = atISO || U.todayISO();
     if (inv.date > at) return { origem: 'futuro', em: null };
-    if (inv.currentValue != null && at >= U.todayISO()) return { origem: 'manual', em: inv.currentValueAt || null };
+    const snapshot = snapshotAt(inv);
     if (inv.type === 'CDB' && inv.indexer === 'cdi') {
-      return Calc.cdiValueAt(inv, at) == null
-        ? { origem: 'aporte', em: null }
-        : { origem: 'indexador', em: (market.cdi && market.cdi.length ? market.cdi[market.cdi.length - 1].date : null) };
+      const value = Calc.cdiValueAt(inv, at);
+      if (value != null && market.cdi.some((row) => row.date > (snapshot && snapshot <= at ? snapshot : inv.date) && row.date <= at))
+        return { origem: 'indexador', em: market.cdi.filter((row) => row.date <= at).at(-1)?.date || null };
+      if (snapshot && snapshot <= at) return { origem: 'manual', em: snapshot };
+      if (inv.currentValue != null && (snapshot ? at >= snapshot : at >= U.todayISO())) return { origem: 'manual', em: null };
+      return { origem: 'aporte', em: null };
+    }
+    if (inv.currentValue != null && (snapshot ? at >= snapshot : at >= U.todayISO())) {
+      if (snapshot && snapshot < at && !['Ações', 'FIIs', 'ETF', 'Porquinho'].includes(inv.type) && +inv.rate)
+        return { origem: 'estimativa', em: snapshot };
+      return { origem: 'manual', em: snapshot };
     }
     if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0 && at.slice(0, 7) === U.todayYM()) {
       const quote = market.quotes[inv.ticker];
@@ -1006,17 +1007,25 @@
       if (quote?.currency === 'BRL' && Number.isFinite(+quote.price) && Number.isFinite(age) && age >= 0 && age <= 7 * 86400000)
         return { origem: 'cotacao', em: quote.marketTime };
     }
-    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0)
-      return { origem: 'aporte', em: null };
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type)) return { origem: 'aporte', em: null };
     return { origem: 'estimativa', em: null };
   };
-
   Calc.investmentValueAt = function (inv, atISO, profile) {
     const at = atISO || U.todayISO();
     if (inv.date > at) return 0;
-    if (inv.currentValue != null && at >= U.todayISO()) return U.round2(inv.currentValue);
+    const snapshot = snapshotAt(inv);
     if (inv.type === 'CDB' && inv.indexer === 'cdi') {
-      return Calc.cdiValueAt(inv, at) ?? U.round2(+inv.amount || 0);
+      const observed = Calc.cdiValueAt(inv, at);
+      if (observed != null) return observed;
+      if (inv.currentValue != null && (snapshot ? at >= snapshot : at >= U.todayISO())) return U.round2(+inv.currentValue);
+      return U.round2(+inv.amount || 0);
+    }
+    if (inv.currentValue != null && (snapshot ? at >= snapshot : at >= U.todayISO())) {
+      if (snapshot && snapshot < at && !['Ações', 'FIIs', 'ETF', 'Porquinho'].includes(inv.type) && +inv.rate) {
+        const end = inv.maturityDate && inv.maturityDate < at ? inv.maturityDate : at;
+        return U.round2(+inv.currentValue * Math.pow(1 + (+inv.rate / 100), Math.max(0, U.yearsBetween(snapshot, end))));
+      }
+      return U.round2(+inv.currentValue);
     }
     if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0 && at.slice(0, 7) === U.todayYM()) {
       const quote = market.quotes[inv.ticker];
@@ -1024,33 +1033,45 @@
       if (quote?.currency === 'BRL' && Number.isFinite(+quote.price) && Number.isFinite(age) && age >= 0 && age <= 7 * 86400000)
         return U.round2(+quote.price * +inv.quantity);
     }
-    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) && inv.ticker && +inv.quantity > 0)
-      return U.round2(+inv.amount || 0);
-    // O valor corrente não pode antecipar juros de dias que ainda não passaram.
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type)) return U.round2(+inv.amount || 0);
     const end = at > U.todayISO() ? U.todayISO() : at;
     const valuedAt = inv.maturityDate && end > inv.maturityDate ? inv.maturityDate : end;
     const years = Math.max(0, U.yearsBetween(inv.date, valuedAt));
-    const rate = (+inv.rate || 0) / 100;
-    return U.round2((+inv.amount || 0) * Math.pow(1 + rate, years));
+    return U.round2((+inv.amount || 0) * Math.pow(1 + (+inv.rate || 0) / 100, years));
   };
-
-  /** Variação bruta do último dia com taxa disponível; null significa sem base verificável. */
+  /** Cenário bruto com taxa constante. Não representa saldo futuro do banco. */
+  Calc.investmentProjection = function (inv, atISO) {
+    const at = atISO || U.todayISO();
+    if (inv.date > at || ['Ações', 'FIIs', 'ETF', 'Porquinho'].includes(inv.type)) return null;
+    const annual = inv.type === 'CDB' && inv.indexer === 'cdi'
+      ? market.cdiAnnual == null ? null : market.cdiAnnual * (+inv.rate || 0) / 100
+      : +inv.rate || 0;
+    if (annual == null || !Number.isFinite(annual) || annual <= -100 || annual === 0) return null;
+    const base = Calc.investmentValueAt(inv, at);
+    const endFor = (days) => {
+      const end = U.addDaysISO(at, days);
+      const until = inv.maturityDate && inv.maturityDate < end ? inv.maturityDate : end;
+      const elapsed = Math.max(0, (Date.parse(until + 'T00:00:00Z') - Date.parse(at + 'T00:00:00Z')) / 86400000);
+      return U.round2(base * Math.pow(1 + annual / 100, elapsed / 365));
+    };
+    return { base, value30: endFor(30), value365: endFor(365), annualRate: annual,
+      source: inv.type === 'CDB' && inv.indexer === 'cdi' ? 'cdi' : 'manual' };
+  };
+  /** Variação bruta no último dia com taxa observada. */
   Calc.investmentDailyChange = function (inv, atISO) {
     const at = atISO && atISO < U.todayISO() ? atISO : U.todayISO();
-    if (inv.currentValue != null || inv.date >= at || inv.type === 'Porquinho') return null;
+    if (inv.date >= at || inv.type === 'Porquinho') return null;
     if (inv.type === 'CDB' && inv.indexer === 'cdi') {
-      const observation = market.cdi.filter((row) => row.date > inv.date && row.date <= at && (!inv.maturityDate || row.date <= inv.maturityDate)).at(-1);
-      if (!observation || inv.date < market.cdiStart || (+inv.rate || 0) <= 0) return null;
-      const previous = new Date(observation.date + 'T00:00:00Z');
-      previous.setUTCDate(previous.getUTCDate() - 1);
-      const base = Calc.investmentValueAt(inv, previous.toISOString().slice(0, 10));
+      const baseDate = snapshotAt(inv) || inv.date;
+      const observation = market.cdi.filter((row) => row.date > baseDate && row.date <= at && (!inv.maturityDate || row.date <= inv.maturityDate)).at(-1);
+      if (!observation || baseDate < market.cdiStart || (+inv.rate || 0) <= 0) return null;
+      const previous = U.addDaysISO(observation.date, -1);
+      const base = Calc.investmentValueAt(inv, previous);
       return { value: U.round2(base * (+observation.value / 100) * (+inv.rate / 100)), date: observation.date };
     }
-    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) || !Number.isFinite(+inv.rate) || +inv.rate === 0) return null;
-    const previous = new Date(at + 'T00:00:00Z');
-    previous.setUTCDate(previous.getUTCDate() - 1);
-    const before = Calc.investmentValueAt(inv, previous.toISOString().slice(0, 10));
-    return { value: U.round2(Calc.investmentValueAt(inv, at) - before), date: at };
+    if (['Ações', 'FIIs', 'ETF'].includes(inv.type) || !Number.isFinite(+inv.rate) || +inv.rate === 0 || (snapshotAt(inv) && at <= snapshotAt(inv))) return null;
+    const previous = U.addDaysISO(at, -1);
+    return { value: U.round2(Calc.investmentValueAt(inv, at) - Calc.investmentValueAt(inv, previous)), date: at };
   };
 
   Calc.investedTotal = function (atISO, profile) {
