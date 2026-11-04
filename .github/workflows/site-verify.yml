@@ -1,0 +1,26 @@
+name: OAZE site · verifica extratos e investimentos
+
+on:
+  push:
+    branches:
+      - codex/oaze-extrato-investimentos-20261103
+  pull_request:
+    paths:
+      - 'app-v3.html'
+      - 'assets/app/**'
+      - 'assets/js/i18n/**'
+      - 'i18n/app/**'
+      - 'tools/**'
+      - '.github/workflows/site-verify.yml'
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Verificação completa do site
+        run: node tools/verificar-tudo.js

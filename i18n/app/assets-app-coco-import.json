@@ -178,5 +178,26 @@
   "en": "The file isn’t a valid PDF.",
   "fr": "Le fichier n’est pas un PDF valide.",
   "es": "El archivo no es un PDF válido."
+ },
+ {
+  "pt": "{0} linha(s) com data não puderam ser lidas. Confira o PDF original.",
+  "tipo": "padrao",
+  "en": "{0} dated line(s) could not be read. Check the original PDF.",
+  "fr": "{0} ligne(s) datée(s) n’ont pas pu être lues. Vérifiez le PDF original.",
+  "es": "No se pudieron leer {0} línea(s) con fecha. Comprueba el PDF original."
+ },
+ {
+  "pt": "{0} movimento(s) têm data posterior ao fim do período do PDF. Confirme a data no banco antes de registrar.",
+  "tipo": "padrao",
+  "en": "{0} transaction(s) are dated after the PDF period. Confirm the date with your bank before recording them.",
+  "fr": "{0} opération(s) sont datées après la période du PDF. Confirmez la date auprès de votre banque avant de les enregistrer.",
+  "es": "{0} movimiento(s) tienen una fecha posterior al período del PDF. Confirma la fecha con tu banco antes de registrarlos."
+ },
+ {
+  "pt": "Este relatório do Registrato não é um extrato bancário. Nenhum lançamento foi criado; use um extrato da conta para registrar movimentos.",
+  "tipo": "exato",
+  "en": "This Registrato report is not a bank statement. No transaction was created; use an account statement to record transactions.",
+  "fr": "Ce rapport Registrato n’est pas un relevé bancaire. Aucune opération n’a été créée ; utilisez un relevé de compte pour enregistrer des opérations.",
+  "es": "Este informe de Registrato no es un extracto bancario. No se creó ningún movimiento; usa un extracto de cuenta para registrar movimientos."
  }
 ]

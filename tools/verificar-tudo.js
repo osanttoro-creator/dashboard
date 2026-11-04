@@ -74,6 +74,7 @@ const VERIFICACOES = [
   ['tools/testes/v3-widgets-inicio.js', 'a Início oferece 25 widgets e enquadra os gráficos de despesas e receitas'],
   ['tools/testes/fatura-escolhida.js', 'a fatura escolhida à mão manda, sem apagar pagamento anterior'],
   ['tools/testes/coco-extratos.js', 'Coco confere extratos locais antes de propor lançamentos'],
+  ['tools/testes/invest-market.mjs', 'Investimentos preservam CDI e cotação válidos após falha temporária'],
   ['tools/testes/coco-conversa-voz.js', 'Coco separa conversa e análises e protege a resposta falada'],
   ['tools/testes/coco-consulta-mensal.js', 'Coco usa o total exato do mês e deixa a conta ambígua para revisão'],
   ['tools/testes/coco-realtime.js', 'Coco Realtime encerra microfone e preserva a conversa']

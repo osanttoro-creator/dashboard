@@ -12456,5 +12456,124 @@
   "pt": "DOMContentLoaded",
   "tipo": "exato",
   "ignorar": true
+ },
+ {
+  "pt": "O Banco Central não retornou CDI. Tente atualizar novamente.",
+  "tipo": "exato",
+  "en": "The Central Bank did not return CDI data. Try updating again.",
+  "fr": "La Banque centrale n’a renvoyé aucune donnée CDI. Réessayez la mise à jour.",
+  "es": "El Banco Central no devolvió datos del CDI. Intenta actualizar de nuevo."
+ },
+ {
+  "pt": "O histórico do CDI veio vazio. Tente atualizar novamente.",
+  "tipo": "exato",
+  "en": "The CDI history is empty. Try updating again.",
+  "fr": "L’historique du CDI est vide. Réessayez la mise à jour.",
+  "es": "El historial del CDI está vacío. Intenta actualizar de nuevo."
+ },
+ {
+  "pt": "Sem cotação para {0}. Confira o ticker ou informe o valor atual manualmente.",
+  "tipo": "padrao",
+  "en": "No quote for {0}. Check the ticker or enter the current value manually.",
+  "fr": "Aucun cours pour {0}. Vérifiez le symbole ou saisissez la valeur actuelle manuellement.",
+  "es": "No hay cotización para {0}. Comprueba el símbolo o introduce el valor actual manualmente."
+ },
+ {
+  "pt": "O saldo não confere com o PDF: importação em lote bloqueada. Você pode revisar cada movimento separadamente e confirmar data e valor no banco.",
+  "tipo": "exato",
+  "en": "The balance does not match the PDF: bulk import is blocked. You can review each transaction separately and confirm its date and amount with your bank.",
+  "fr": "Le solde ne correspond pas au PDF : l’importation groupée est bloquée. Vous pouvez vérifier chaque opération séparément et confirmer sa date et son montant auprès de votre banque.",
+  "es": "El saldo no coincide con el PDF: se bloqueó la importación masiva. Puedes revisar cada movimiento por separado y confirmar la fecha y el importe con tu banco."
+ },
+ {
+  "pt": "Categoria sugerida: {0} · {1}",
+  "tipo": "padrao",
+  "en": "Suggested category: {0} · {1}",
+  "fr": "Catégorie suggérée : {0} · {1}",
+  "es": "Categoría sugerida: {0} · {1}"
+ },
+ {
+  "pt": "Categoria ainda sem correspondência. Revise antes de salvar.",
+  "tipo": "exato",
+  "en": "No matching category yet. Review before saving.",
+  "fr": "Aucune catégorie correspondante pour le moment. Vérifiez avant d’enregistrer.",
+  "es": "Aún no hay una categoría coincidente. Revísala antes de guardar."
+ },
+ {
+  "pt": "Data após o período do PDF: confirme no banco.",
+  "tipo": "exato",
+  "en": "Date after the PDF period: confirm with your bank.",
+  "fr": "Date postérieure à la période du PDF : confirmez auprès de votre banque.",
+  "es": "Fecha posterior al período del PDF: confírmala con tu banco."
+ },
+ {
+  "pt": "Aplicação ou resgate de cofrinho: não é gasto nem receita.",
+  "tipo": "exato",
+  "en": "Savings pot deposit or withdrawal: this is neither an expense nor income.",
+  "fr": "Dépôt ou retrait d’une cagnotte : ce n’est ni une dépense ni un revenu.",
+  "es": "Depósito o retiro de un apartado de ahorro: no es un gasto ni un ingreso."
+ },
+ {
+  "pt": "Ver investimentos",
+  "tipo": "exato",
+  "en": "View investments",
+  "fr": "Voir les investissements",
+  "es": "Ver inversiones"
+ },
+ {
+  "pt": "Importar categorizados",
+  "tipo": "exato",
+  "en": "Import categorized transactions",
+  "fr": "Importer les opérations catégorisées",
+  "es": "Importar movimientos categorizados"
+ },
+ {
+  "pt": "Mantém a data do extrato. Movimentos sem categoria segura ficam para revisão individual.",
+  "tipo": "exato",
+  "en": "Keeps the statement date. Transactions without a reliable category remain for individual review.",
+  "fr": "Conserve la date du relevé. Les opérations sans catégorie fiable restent à vérifier individuellement.",
+  "es": "Conserva la fecha del extracto. Los movimientos sin categoría fiable quedan para revisión individual."
+ },
+ {
+  "pt": "Aplicações e resgates de cofrinho exigem conferência em Investimentos; nada foi registrado como gasto ou receita.",
+  "tipo": "exato",
+  "en": "Savings pot deposits and withdrawals need checking in Investments; nothing was recorded as an expense or income.",
+  "fr": "Les dépôts et retraits de cagnottes doivent être vérifiés dans Investissements ; rien n’a été enregistré comme dépense ou revenu.",
+  "es": "Los depósitos y retiros de apartados de ahorro deben revisarse en Inversiones; no se registró nada como gasto o ingreso."
+ },
+ {
+  "pt": "Nenhum movimento tem categoria segura. Revise e lance cada um pela data do extrato.",
+  "tipo": "exato",
+  "en": "No transaction has a reliable category. Review and enter each one using the statement date.",
+  "fr": "Aucune opération n’a de catégorie fiable. Vérifiez et saisissez chacune à la date du relevé.",
+  "es": "Ningún movimiento tiene una categoría fiable. Revisa y registra cada uno con la fecha del extracto."
+ },
+ {
+  "pt": "{0} lançamentos importados na data do extrato{1}{2}{3}{4}.",
+  "tipo": "padrao",
+  "en": "{0} transactions imported on the statement date{1}{2}{3}{4}.",
+  "fr": "{0} opérations importées à la date du relevé{1}{2}{3}{4}.",
+  "es": "{0} movimientos importados en la fecha del extracto{1}{2}{3}{4}."
+ },
+ {
+  "pt": ", {0} precisam de categoria e revisão",
+  "tipo": "padrao",
+  "en": ", {0} need a category and review",
+  "fr": ", {0} nécessitent une catégorie et une vérification",
+  "es": ", {0} necesitan categoría y revisión"
+ },
+ {
+  "pt": ", {0} aplicações/resgates de cofrinho exigem conferência em Investimentos",
+  "tipo": "padrao",
+  "en": ", {0} savings pot deposits/withdrawals need checking in Investments",
+  "fr": ", {0} dépôts/retraits de cagnottes doivent être vérifiés dans Investissements",
+  "es": ", {0} depósitos/retiros de apartados de ahorro deben revisarse en Inversiones"
+ },
+ {
+  "pt": "Aplicações e resgates de cofrinho não são despesa ou receita. Confira a posição no banco antes de registrar.",
+  "tipo": "exato",
+  "en": "Savings pot deposits and withdrawals are not expenses or income. Check the position with your bank before recording them.",
+  "fr": "Les dépôts et retraits de cagnottes ne sont ni des dépenses ni des revenus. Vérifiez la position auprès de votre banque avant de les enregistrer.",
+  "es": "Los depósitos y retiros de apartados de ahorro no son gastos ni ingresos. Comprueba la posición con tu banco antes de registrarlos."
  }
 ]
