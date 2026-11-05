@@ -106,7 +106,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, retryAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', importFilter: 'Todas', importEdits: {}, importSelection: {}, importRemoved: {}, sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, retryAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importSaving: false, importLimit: 30, importAccountId: '', importFilter: 'Todas', importEdits: {}, importSelection: {}, importRemoved: {}, sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -2514,12 +2514,31 @@
     const bankColor = account ? safeColor(bankBrand(account.bank || account.name)) : '#28434b';
     return `<div class="v3-import-bank"><span class="v3-import-bank-icon" style="--import-bank:${bankColor}">${account ? walletLogo(account, '#f7f4e9') : icon('wallet')}</span><label><strong>CONTA DESTE EXTRATO</strong><select id="v3-import-account" aria-label="Conta deste extrato"><option value="">Escolha a conta</option>${accounts.map((entry) => `<option value="${esc(entry.id)}" ${account?.id === entry.id ? 'selected' : ''}>${esc(entry.bank || entry.name)} · ${esc(entry.name)}${entry.last4 ? ' •• ' + esc(entry.last4) : ''}</option>`).join('')}</select></label></div>`;
   }
+  function syncImportSelectionUI() {
+    const report=state.importPreview, root=$('#v3-sheet .v3-import');
+    if (!report || !root) return;
+    const count=report.rows.reduce((total,item,index)=>total+(!item.creditCard && importIsSelected(item,index,report)?1:0),0);
+    const label=root.querySelector('[data-import-count]');
+    if (label) label.textContent=count+' selecionados';
+    const save=root.querySelector('[data-action="import-all"]');
+    if (save) { save.textContent='Salvar selecionados · '+count; save.disabled=!count || !state.importAccountId || state.importSaving; }
+    const remove=root.querySelector('[data-action="import-remove-selected"]');
+    if (remove) remove.disabled=!count;
+    root.querySelectorAll('[data-action="import-select"]').forEach((button)=>{
+      const index=Number(button.dataset.importIndex),item=report.rows[index];
+      if (!item) return;
+      const selected=importIsSelected(item,index,report);
+      button.setAttribute('aria-pressed',String(selected));
+      button.textContent=selected?'✓':'○';
+      button.closest('.v3-import-row')?.classList.toggle('is-selected',selected);
+    });
+  }
   function renderCocoImport() {
     const report = state.importPreview;
     const accounts = profile().accounts.filter((account) => !account.archived && (!account.moeda || account.moeda === 'BRL'));
     const picker = '<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv,.ofx,.qfx" hidden>';
     const accountPicker = importAccountPicker(accounts);
-    if (!report) return `<div class="v3-import-empty"><h2>Importar extrato</h2>${accountPicker}<button type="button" class="v3-primary" data-action="choose-coco-file" ${state.importAccountId ? '' : 'disabled'}>Escolher PDF, CSV ou OFX</button>${picker}</div>`;
+    if (!report) return `<div class="v3-import-empty"><h2>Importar extrato</h2>${accountPicker}<button type="button" class="v3-primary" data-action="choose-coco-file" ${state.importAccountId ? '' : 'disabled'}>Escolher extrato e salvar</button>${picker}</div>`;
     const entries = report.rows.map((item, index) => ({ item, index }))
       .filter(({ index }) => !state.importRemoved[index]);
     const filtered = entries.filter(({ item }) => state.importFilter === 'Todas'
@@ -2543,18 +2562,17 @@
         : item.investmentTransfer ? (item.cents > 0 ? 'Retorno de investimento · rendimento bruto recebido' : 'Aplicação · saída da conta')
         : concern ? 'Saldo ou data: confira com o banco' : '';
       return `<article class="v3-import-row ${checked ? 'is-selected' : ''}" data-import-row="${index}">
-        <div class="v3-import-row-head"><button type="button" class="v3-import-select" data-action="import-select" data-import-index="${index}" aria-pressed="${checked}" ${item.creditCard ? 'disabled' : ''} aria-label="Selecionar movimento ${index + 1}">${checked ? '✓' : '○'}</button><span>${item.cents > 0 ? 'Entrada' : 'Saída'} · ${esc(shortDate(item.date))}</span><strong class="v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong></div>
-        ${badge ? `<small class="v3-import-warning">${badge}</small>` : ''}
+        <div class="v3-import-row-head"><button type="button" class="v3-import-select" data-action="import-select" data-import-index="${index}" aria-pressed="${checked}" ${item.creditCard ? 'disabled' : ''} aria-label="Selecionar movimento ${index + 1}">${checked ? '✓' : '○'}</button><span class="v3-import-meta"><span>${item.cents > 0 ? 'Entrada' : 'Saída'} · ${esc(shortDate(item.date))}</span>${badge ? `<small class="v3-import-badge ${item.investmentTransfer ? 'is-investment' : concern ? 'is-concern' : 'is-credit'}">${esc(badge)}</small>` : ''}</span><strong class="v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong></div>
         <div class="v3-import-edit-grid"><label>Nome<input data-import-edit="description" data-import-index="${index}" maxlength="120" value="${esc(draft.description)}" ${item.creditCard ? 'disabled' : ''}></label><label>Data<input type="date" data-import-edit="date" data-import-index="${index}" value="${esc(draft.date)}" ${item.creditCard ? 'disabled' : ''}></label><label>Categoria<select data-import-edit="categoryId" data-import-index="${index}" ${item.creditCard ? 'disabled' : ''}>${categories.map((category) => `<option value="${esc(category.id)}" ${draft.categoryId === category.id ? 'selected' : ''}>${esc(category.name)}</option>`).join('')}</select></label><label>Pagamento<select data-import-edit="meio" data-import-index="${index}" ${item.creditCard ? 'disabled' : ''}><option value="">Não identificado</option>${Store.MEIOS.map((method) => `<option value="${esc(method.id)}" ${draft.meio === method.id ? 'selected' : ''}>${esc(method.nome)}</option>`).join('')}</select></label></div>
       </article>`;
     }).join('');
-    return `<div class="v3-import"><div class="v3-row"><h2>Revisar extrato</h2><strong>${selected.length} selecionados</strong></div>${accountPicker}
+    return `<div class="v3-import"><div class="v3-row"><h2>Movimentos do extrato</h2><strong data-import-count>${selected.length} selecionados</strong></div>${accountPicker}
       <div class="v3-import-filters" role="group" aria-label="Filtrar movimentos">${['Todas','Entradas','Saídas','Investimentos'].map((filter) => `<button type="button" data-action="import-filter" data-import-filter="${filter}" aria-pressed="${state.importFilter === filter}">${filter}${filter === 'Todas' ? ' · ' + entries.length : ' · ' + counts[filter]}</button>`).join('')}</div>
       ${report.warnings.map((warning) => `<p class="v3-import-warning" role="status">${esc(warning)}</p>`).join('')}
       ${ignored ? `<p class="v3-muted">${ignored} movimento(s) de cartão de crédito ficam fora do salvamento.</p>` : ''}
-      <div class="v3-import-bulk"><button type="button" class="v3-secondary" data-action="import-select-all">Selecionar tudo seguro</button><button type="button" class="v3-secondary" data-action="import-clear-selection">Limpar seleção</button><button type="button" class="v3-secondary v3-import-trash" data-action="import-remove-selected" ${selected.length ? '' : 'disabled'} aria-label="Remover selecionados da prévia">${icon('trash')} Remover da prévia</button></div>
+      <div class="v3-import-bulk"><button type="button" class="v3-secondary" data-action="import-select-all">Selecionar tudo</button><button type="button" class="v3-secondary" data-action="import-clear-selection">Limpar seleção</button><button type="button" class="v3-secondary v3-import-trash" data-action="import-remove-selected" ${selected.length ? '' : 'disabled'} aria-label="Remover selecionados da prévia">${icon('trash')} Remover da prévia</button></div>
       <div class="v3-import-list">${rows || '<p class="v3-muted">Nenhum movimento neste filtro.</p>'}</div>${state.importLimit < filtered.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}
-      <div class="v3-import-footer"><button type="button" class="v3-primary" data-action="import-all" ${!selected.length || !state.importAccountId ? 'disabled' : ''}>Salvar tudo · ${selected.length}</button><button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button></div>${picker}</div>`;
+      <div class="v3-import-footer"><button type="button" class="v3-primary" data-action="import-all" ${!selected.length || !state.importAccountId ? 'disabled' : ''}>Salvar selecionados · ${selected.length}</button><button type="button" class="v3-link" data-action="choose-coco-file">Ler e salvar outro arquivo</button></div>${picker}</div>`;
   }
   function openCoco() {
     if (state.cocoTab==='Conversa' || state.cocoTab==='Agora') { closeSheet();state.cocoView='conversation';go('coco');return; }
@@ -4179,6 +4197,71 @@
     try { await V3Backend.cocoRemember(profile().id,{kind,label,value}); await refreshCoco(); toast('Regra guardada. Você pode esquecê-la quando quiser.'); return true; }
     catch (error) { toast(error.message || 'Não consegui guardar a regra.'); return false; }
   }
+  async function saveCocoImport(automatic=false) {
+    if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
+    const report=state.importPreview;
+    const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
+    if (!report || !account) { if (!automatic) toast('Escolha uma conta em reais para este extrato.'); return; }
+    if (state.importSaving) return;
+    const chosen=report.rows.map((item,index)=>({item,index}))
+      .filter(({item,index})=>!item.creditCard && !state.importRemoved[index]
+        && (automatic ? importEligible(item,report) : importIsSelected(item,index,report)));
+    if (!chosen.length) {
+      if (automatic) { openCoco(); toast('Nenhum movimento pôde ser salvo automaticamente. Confira os itens pendentes.'); }
+      else toast('Selecione ao menos um movimento.');
+      return;
+    }
+    const usados={},lista=[],completed=[],seen=new Set();
+    let pulados=0,semEspaco=0,invalidos=0,iguaisNoArquivo=0;
+    for (const {item,index} of chosen) {
+      const draft=importDraft(item,index),kind=item.cents>0?'income':'expense';
+      const valid=draft.description.trim() && U.isValidISO(draft.date)
+        && profile().categories.some((category)=>category.id===draft.categoryId && category.kind===kind)
+        && (!draft.meio || Store.MEIOS.some((method)=>method.id===draft.meio));
+      if (!valid) { invalidos++; continue; }
+      const key=[draft.date,kind,Math.abs(item.cents),global.CocoImport.normalized(draft.description)].join('|');
+      if (seen.has(key)) { iguaisNoArquivo++; continue; }
+      const duplicate=profile().transactions.some((tx)=>tx.accountId===account.id && !tx.cancelado
+        && tx.date===draft.date && tx.kind===kind && Math.round(Number(tx.amount)*100)===Math.abs(item.cents)
+        && global.CocoImport.normalized(tx.description)===global.CocoImport.normalized(draft.description));
+      if (duplicate) { pulados++;completed.push(index);continue; }
+      seen.add(key);
+      const ym=draft.date.slice(0,7),teto=global.Limites?Limites.limite('transactions_per_month'):null;
+      usados[ym]=usados[ym]??(global.Limites?Limites.contar('transactions_per_month',ym):0);
+      if (teto!==null && teto!==undefined && usados[ym]>=teto) { semEspaco++;continue; }
+      usados[ym]++;
+      lista.push({kind,description:draft.description.trim(),amount:U.round2(Math.abs(item.cents)/100),
+        date:draft.date,categoryId:draft.categoryId,accountId:account.id,cardId:null,toAccountId:null,
+        confirmed:true,cancelado:false,recurring:false,notes:'',source:'import',meio:draft.meio||null});
+      completed.push(index);
+    }
+    if (!lista.length) {
+      for (const index of completed) state.importRemoved[index]=true;
+      openCoco();
+      toast(invalidos?'Corrija os itens sem nome, data ou categoria antes de salvar.':semEspaco?'Limite de lançamentos do mês atingido.':'Estes movimentos já estão registrados.');
+      return;
+    }
+    state.importSaving=true;
+    syncImportSelectionUI();
+    try {
+      await V3Backend.mutate(()=>{Store.transactions.addMany(lista);});
+      for (const index of completed) state.importRemoved[index]=true;
+      const pending=report.rows.some((item,index)=>!item.creditCard && !state.importRemoved[index]);
+      if (pending) { state.importSelection={}; openCoco(); }
+      else {
+        state.importPreview=null;state.importEdits={};state.importSelection={};state.importRemoved={};
+        state.ym=lista.map((item)=>item.date.slice(0,7)).sort().at(-1);go('transactions');
+      }
+      toast(lista.length+' lançamentos salvos nas datas do extrato'
+        +(pulados?', '+pulados+' duplicados ignorados':'')
+        +(semEspaco?', '+semEspaco+' fora pelo limite':'')
+        +(invalidos?', '+invalidos+' pendentes por dados incompletos':'')
+        +(iguaisNoArquivo?', '+iguaisNoArquivo+' repetidos no arquivo para conferir':'')+'.');
+    } catch {
+      openCoco();
+      toast('Não consegui salvar a importação. Confira sua conexão e tente novamente.');
+    } finally { state.importSaving=false; syncImportSelectionUI(); }
+  }
   async function readCocoMedia(file, sendRecording=false) {
     if (!file) return;
     const statement=/\.(pdf|csv|ofx|qfx)$/i.test(file.name) || ['application/pdf','text/csv','application/vnd.ms-excel'].includes(file.type);
@@ -4188,7 +4271,8 @@
         if (!global.CocoImport) throw new Error('Leitor de extratos indisponível. Atualize a página.');
         const report=await global.CocoImport.parseFile(file);
         state.importPreview=report;state.importLimit=30;state.importFilter='Todas';state.importEdits={};state.importSelection={};state.importRemoved={};state.cocoTab='Extratos';
-        openCoco();toast(`${report.rows.length} movimentos encontrados. Revise antes de salvar.`);
+        if (!state.importAccountId) { openCoco(); toast('Escolha a conta do extrato para salvar automaticamente.'); }
+        else { toast('Salvando movimentos legíveis…'); await saveCocoImport(true); }
       } catch (error) { toast(error.message || 'Não consegui ler este extrato. Nada foi salvo.'); }
       return;
     }
@@ -4513,15 +4597,15 @@
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       if (!item || item.creditCard || state.importRemoved[index]) return;
       state.importSelection[index]=!importIsSelected(item,index,state.importPreview);
-      openCoco();return;
+      syncImportSelectionUI();return;
     }
     if (action==='import-select-all' || action==='import-clear-selection') {
       const report=state.importPreview;if (!report) return;
       report.rows.forEach((item,index)=>{
         if (!state.importRemoved[index] && !item.creditCard)
-          state.importSelection[index]=action==='import-select-all' ? importEligible(item,report) : false;
+          state.importSelection[index]=action==='import-select-all';
       });
-      openCoco();return;
+      syncImportSelectionUI();return;
     }
     if (action==='import-remove-selected') {
       const report=state.importPreview;if (!report) return;
@@ -4529,42 +4613,7 @@
       openCoco();return;
     }
     if (action==='import-more') { state.importLimit=Math.min(state.importLimit+30,state.importPreview?.rows.length||30);openCoco();return; }
-    if (action==='import-all') {
-      if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
-      const report=state.importPreview;
-      const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
-      if (!report || !account) { toast('Escolha uma conta em reais para este extrato.'); return; }
-      const chosen=report.rows.map((item,index)=>({item,index}))
-        .filter(({item,index})=>!item.creditCard && importIsSelected(item,index,report));
-      if (!chosen.length) { toast('Selecione ao menos um movimento.'); return; }
-      const drafts=chosen.map(({item,index})=>({item,draft:importDraft(item,index)}));
-      const valid=drafts.every(({item,draft})=>draft.description.trim() && U.isValidISO(draft.date)
-        && profile().categories.some((category)=>category.id===draft.categoryId && category.kind===(item.cents>0?'income':'expense'))
-        && (!draft.meio || Store.MEIOS.some((method)=>method.id===draft.meio)));
-      if (!valid) { toast('Confira nome, data, categoria e pagamento dos movimentos selecionados.'); return; }
-      const usados={},lista=[];let pulados=0,semEspaco=0;
-      for (const {item,draft} of drafts) {
-        const kind=item.cents>0?'income':'expense';
-        const duplicate=profile().transactions.some((tx)=>tx.accountId===account.id && !tx.cancelado
-          && tx.date===draft.date && tx.kind===kind && Math.round(Number(tx.amount)*100)===Math.abs(item.cents)
-          && global.CocoImport.normalized(tx.description)===global.CocoImport.normalized(draft.description));
-        if (duplicate) { pulados++;continue; }
-        const ym=draft.date.slice(0,7),teto=global.Limites?Limites.limite('transactions_per_month'):null;
-        usados[ym]=usados[ym]??(global.Limites?Limites.contar('transactions_per_month',ym):0);
-        if (teto!==null && teto!==undefined && usados[ym]>=teto) { semEspaco++;continue; }
-        usados[ym]++;
-        lista.push({kind,description:draft.description.trim(),amount:U.round2(Math.abs(item.cents)/100),
-          date:draft.date,categoryId:draft.categoryId,accountId:account.id,cardId:null,toAccountId:null,
-          confirmed:true,cancelado:false,recurring:false,notes:'',source:'import',meio:draft.meio||null});
-      }
-      if (!lista.length) { toast(semEspaco?'Limite de lançamentos do mês atingido.':'Os movimentos selecionados já estão registrados.');return; }
-      V3Backend.mutate(()=>{Store.transactions.addMany(lista);}).then(()=>{
-        state.importPreview=null;state.importEdits={};state.importSelection={};state.importRemoved={};
-        state.ym=lista.map((item)=>item.date.slice(0,7)).sort().at(-1);go('transactions');
-        toast(lista.length+' lançamentos salvos nas datas do extrato'+(pulados?', '+pulados+' duplicados ignorados':'')+(semEspaco?', '+semEspaco+' fora pelo limite':'')+'.');
-      }).catch(()=>toast('Não consegui salvar a importação. Confira sua conexão e tente novamente.'));
-      return;
-    }
+    if (action==='import-all') { void saveCocoImport(false); return; }
     if (action==='review-import-row') {
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
@@ -4971,7 +5020,7 @@
       state.importEdits[index]={...(state.importEdits[index]||{}),[field]:event.target.value};
     });
     document.addEventListener('change',(event)=>{
-      if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
+      if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value; if (state.importPreview && state.importAccountId) void saveCocoImport(true); else openCoco(); return; }
       if (!['v3-coco-file','v3-coco-import-file'].includes(event.target?.id)) return;
       const file=event.target.files?.[0];
       event.target.value='';
