@@ -402,7 +402,7 @@
       return response.blob();
     } finally { global.clearTimeout(timer); }
   };
-  V3Backend.cocoLiveSession = async function (sdp, history) {
+  V3Backend.cocoLiveSession = async function (sdp, history, options = {}) {
     if (!client || !user) throw new Error('Entre na sua conta para falar com a Coco.');
     const config = global.SupabaseConfig || {};
     const base = String(config.url || '').replace(/\/+$/, '');
@@ -410,17 +410,31 @@
     const { data, error } = await bounded(client.auth.getSession());
     if (error || !data?.session?.access_token || !/^https:\/\//.test(base) || !publicKey)
       throw new Error('Sua sessão expirou. Entre novamente.');
-    const response = await bounded(fetch(base + '/functions/v1/oaze-coco-realtime', {
-      method: 'POST', cache: 'no-store',
-      headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token,
-        'content-type': 'application/json' }, body: JSON.stringify({
-          sdp: String(sdp || '').slice(0, 48000),
-          history: Array.isArray(history) ? history.slice(-6) : []
-        })
-    }));
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.sdp) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
-    return { sdp: result.sdp, sessionId: result.session_id || null };
+    const controller = new AbortController();
+    const parentSignal = options?.signal;
+    const cancel = () => controller.abort();
+    if (parentSignal?.aborted) cancel();
+    else parentSignal?.addEventListener('abort', cancel, { once: true });
+    const timer = global.setTimeout(cancel, 12000);
+    try {
+      const response = await fetch(base + '/functions/v1/oaze-coco-realtime', {
+        method: 'POST', cache: 'no-store', signal: controller.signal,
+        headers: { apikey: publicKey, authorization: 'Bearer ' + data.session.access_token,
+          'content-type': 'application/json' }, body: JSON.stringify({
+            sdp: String(sdp || '').slice(0, 48000),
+            history: Array.isArray(history) ? history.slice(-6) : []
+          })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.sdp) throw new Error(result.mensagem || 'Voz em tempo real indisponível.');
+      return { sdp: result.sdp, sessionId: result.session_id || null };
+    } catch (error) {
+      if (controller.signal.aborted) throw new Error(parentSignal?.aborted ? 'Conexão por voz cancelada.' : 'A conexão por voz demorou demais. Tente novamente.');
+      throw error;
+    } finally {
+      global.clearTimeout(timer);
+      parentSignal?.removeEventListener('abort', cancel);
+    }
   };
   /* =============================================================
      UMA AUTORIZAÇÃO SÓ, E ELA É A DA ENTRADA

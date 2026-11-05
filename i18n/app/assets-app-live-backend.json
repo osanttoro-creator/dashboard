@@ -1,5 +1,19 @@
 [
  {
+  "pt": "Conexão por voz cancelada.",
+  "tipo": "exato",
+  "en": "Voice connection cancelled.",
+  "fr": "Connexion vocale annulée.",
+  "es": "Conexión de voz cancelada."
+ },
+ {
+  "pt": "A conexão por voz demorou demais. Tente novamente.",
+  "tipo": "exato",
+  "en": "The voice connection took too long. Please try again.",
+  "fr": "La connexion vocale a pris trop de temps. Réessayez.",
+  "es": "La conexión de voz tardó demasiado. Inténtalo de nuevo."
+ },
+ {
   "pt": "Tempo esgotado ao conectar sua conta.",
   "tipo": "exato",
   "en": "Timed out connecting your account.",

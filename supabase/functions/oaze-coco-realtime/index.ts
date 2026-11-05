@@ -3,7 +3,10 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { corpoCabeNoLimite, reservarRateLimit, sha256 } from '../_shared/security.ts';
 import { BACKEND_INSTRUCTIONS, COCO_TOOLS, LIVE_INSTRUCTIONS } from './prompts.ts';
 
-const origins = (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+const origins = [...new Set([
+  ...(Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '').split(',').map((x) => x.trim()).filter(Boolean),
+  'http://tauri.localhost', 'tauri://localhost', 'http://localhost', 'https://localhost'
+])];
 const headers = (origin: string | null) => ({
   'Access-Control-Allow-Origin': origin && origins.includes(origin) ? origin : 'null',
   'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
@@ -73,8 +76,10 @@ Deno.serve(async (req: Request) => {
   }) : [];
   const admin = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
   try {
-    const hour = await reservarRateLimit(admin, 'coco_realtime:hora', data.user.id, 6, 3600);
-    const day = await reservarRateLimit(admin, 'coco_realtime:dia', data.user.id, 20, 86400);
+    const [hour, day] = await Promise.all([
+      reservarRateLimit(admin, 'coco_realtime:hora', data.user.id, 6, 3600),
+      reservarRateLimit(admin, 'coco_realtime:dia', data.user.id, 20, 86400)
+    ]);
     if (!hour.permitido || !day.permitido) return reply(origin, 429, { mensagem: 'Limite de sessões de voz atingido. Use a conversa por texto.' });
   } catch { return reply(origin, 503, { mensagem: 'Voz indisponível agora.' }); }
   /* 31/10/2026: abrir uma sessão de voz custa 2 unidades da janela
