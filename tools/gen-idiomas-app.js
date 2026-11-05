@@ -569,7 +569,7 @@ function gerar(soConferir) {
     if (atual !== r.js) {
       if (soConferir) {
         velhos.push(path.relative(RAIZ, destino));
-        const at = [...r.js].findIndex((ch, index) => ch !== atual?.[index]);
+        let at = 0; while (at < r.js.length && r.js[at] === atual?.[at]) at++;
         console.log('    diferença em ' + path.relative(RAIZ, destino) + ' @' + at
           + ' esperado: ' + JSON.stringify(r.js.slice(Math.max(0, at - 40), at + 120))
           + ' atual: ' + JSON.stringify((atual || '').slice(Math.max(0, at - 40), at + 120)));
