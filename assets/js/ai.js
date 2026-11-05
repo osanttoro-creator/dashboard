@@ -512,7 +512,8 @@
     if (!sessao) return { erro: 'sem_sessao' };
 
     const controller = new AbortController();
-    const timer = global.setTimeout(() => controller.abort(), 30000);
+    // O backend pode usar 30 s só no provedor; validações e rede vêm antes/depois.
+    const timer = global.setTimeout(() => controller.abort(), 45000);
     try {
       const r = await fetch(base + '/functions/v1/' + FUNCAO, {
         method: 'POST', signal: controller.signal,
