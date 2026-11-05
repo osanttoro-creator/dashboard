@@ -2437,7 +2437,7 @@
   }
   function voiceControls() {
     const active = !!voiceSession?.active;
-    const label = ({ IDLE:'Vamos conversar?', LISTENING:'Ouvindo você', PROCESSING:'Conferindo seu OAZE', SPEAKING:'Coco está falando', INTERRUPTED:'Pode falar', ERROR:'Não consegui conectar', OFFLINE:'Conexão encerrada' }[state.voiceState] || 'Vamos conversar?');
+    const label = ({ IDLE:'Vamos conversar?', LISTENING:'Ouvindo você', PROCESSING:'Conferindo seu OAZE', SPEAKING:'Coco está falando', INTERRUPTED:'Pode falar', ERROR:'Não consegui conectar', OFFLINE:'Conectando…' }[state.voiceState] || 'Vamos conversar?');
     const micOn=active && !!voiceSession.stream?.getAudioTracks().some((track)=>track.enabled);
     const actor='/assets/coco/'+(state.voiceState==='SPEAKING'?'corpo-explicando':'corpo-neutra_acolhedora')+'.webp';
     return `<section class="v3-coco-voice-stage v3-voice" data-state="${esc(state.voiceState)}" aria-label="Conversa por voz"><div class="v3-coco-actor"><span class="v3-coco-water-ring" aria-hidden="true"></span><img class="v3-coco-echo echo-one" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-echo echo-two" src="${actor}" alt="" aria-hidden="true"><img class="v3-coco-character" src="${actor}" alt="Coco"></div><h2 class="v3-voice-status" role="status">${label}</h2><div class="v3-voice-wave" aria-hidden="true">${'<i></i>'.repeat(7)}</div><p class="v3-voice-caption" id="v3-voice-caption" aria-live="polite">${esc(state.voiceAnswerDraft||state.voiceDraftText||state.chat.at(-1)?.text||'')}</p><div class="v3-voice-actions">${active?`<button type="button" class="v3-voice-control" data-action="voice-mute" aria-label="${state.voiceMuted?'Ativar microfone':'Pausar microfone'}" aria-pressed="${state.voiceMuted}">${cocoMediaIcon(state.voiceMuted?'mute':'mic')}<span>${state.voiceMuted?'Ativar':'Pausar'}</span></button><button type="button" class="v3-voice-control is-stop" data-action="voice-stop" aria-label="Encerrar conversa por voz">${cocoMediaIcon('stop')}<span>Encerrar</span></button>`:`<button type="button" class="v3-primary" data-action="voice-start" data-voice-mode="continuous" ${voiceStarting?'disabled':''}>${voiceStarting?'Conectando…':'Conversar por voz'}</button>`}<button type="button" class="v3-voice-control" data-action="coco-mode" data-mode="text" aria-label="Escrever em texto">${cocoMediaIcon('text')}<span>Escrever em texto</span></button>${state.voicePlaybackBlocked?'<button type="button" class="v3-secondary" data-action="voice-unlock-audio">Ativar som</button>':''}</div>${active?`<span class="v3-voice-live">${micOn?'Microfone ativo':'Microfone pausado'}</span>`:''}</section>`;
@@ -4038,7 +4038,7 @@
   function updateVoiceVisual() {
     const stage=$('.v3-coco-voice-stage');if(!stage)return;
     stage.dataset.state=state.voiceState;
-    const label=$('.v3-voice-status');if(label)label.textContent=({IDLE:'Vamos conversar?',LISTENING:'Ouvindo você',PROCESSING:'Conferindo seu OAZE',SPEAKING:'Coco está falando',INTERRUPTED:'Pode falar',ERROR:'Não consegui conectar',OFFLINE:'Conexão encerrada'}[state.voiceState]||'Vamos conversar?');
+    const label=$('.v3-voice-status');if(label)label.textContent=({IDLE:'Vamos conversar?',LISTENING:'Ouvindo você',PROCESSING:'Conferindo seu OAZE',SPEAKING:'Coco está falando',INTERRUPTED:'Pode falar',ERROR:'Não consegui conectar',OFFLINE:'Conectando…'}[state.voiceState]||'Vamos conversar?');
     const actor='/assets/coco/'+(state.voiceState==='SPEAKING'?'corpo-explicando':'corpo-neutra_acolhedora')+'.webp';
     stage.querySelectorAll('.v3-coco-actor img').forEach((img)=>{if(img.getAttribute('src')!==actor)img.src=actor;});
     updateVoiceCaption();
@@ -4134,7 +4134,7 @@
       voiceSession=session;
       session.setReplyMuted(state.voiceReplyMuted);
       await session.start({
-        connect:(sdp,history)=>V3Backend.cocoLiveSession(sdp,history),
+        connect:(sdp,history,options)=>V3Backend.cocoLiveSession(sdp,history,options),
         mode:state.voiceMode,deviceId:state.voiceDevice,history:state.chat
       });
       if(version!==voiceStartVersion){session.stop();return;}

@@ -131,8 +131,10 @@ Regras obrigatórias:
  * "*" numa rota autenticada e paga por token é convite.
  */
 function origensPermitidas(): string[] {
-  return (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
+  const site = (Deno.env.get('OAZE_ALLOWED_ORIGINS') ?? '')
     .split(',').map((o) => o.trim()).filter(Boolean);
+  return [...new Set([...site, 'http://tauri.localhost', 'tauri://localhost',
+    'http://localhost', 'https://localhost'])];
 }
 
 function cors(origem: string | null): Record<string, string> {
@@ -582,8 +584,10 @@ Deno.serve(async (req: Request) => {
   const porMinuto = Number(regraRitmo?.por_minuto || (plano === 'pro' ? 10 : plano === 'basic' ? 6 : 3));
   const porDia = Number(regraRitmo?.por_dia || (plano === 'pro' ? 200 : plano === 'basic' ? 100 : 20));
   try {
-    const minuto = await reservarRateLimit(admin, 'assistente:minuto', userId, porMinuto, 60);
-    const dia = await reservarRateLimit(admin, 'assistente:dia', userId, porDia, 86_400);
+    const [minuto, dia] = await Promise.all([
+      reservarRateLimit(admin, 'assistente:minuto', userId, porMinuto, 60),
+      reservarRateLimit(admin, 'assistente:dia', userId, porDia, 86_400)
+    ]);
     if (!minuto.permitido || !dia.permitido) return erro('ritmo', 429, origem, requestId);
   } catch {
     console.error(JSON.stringify({ request_id: requestId, evento: 'rate_limit_indisponivel' }));
