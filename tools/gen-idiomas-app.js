@@ -567,7 +567,13 @@ function gerar(soConferir) {
     const destino = path.join(SAIDA, 'app-' + lang + '.js');
     const atual = fs.existsSync(destino) ? fs.readFileSync(destino, 'utf8') : null;
     if (atual !== r.js) {
-      if (soConferir) velhos.push(path.relative(RAIZ, destino));
+      if (soConferir) {
+        velhos.push(path.relative(RAIZ, destino));
+        let at = 0; while (at < r.js.length && r.js[at] === atual?.[at]) at++;
+        console.log('    diferença em ' + path.relative(RAIZ, destino) + ' @' + at
+          + ' esperado: ' + JSON.stringify(r.js.slice(Math.max(0, at - 40), at + 120))
+          + ' atual: ' + JSON.stringify((atual || '').slice(Math.max(0, at - 40), at + 120)));
+      }
       else fs.writeFileSync(destino, r.js);
     }
   }

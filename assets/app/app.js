@@ -106,7 +106,7 @@
   const ymOf = (d) => String(d || '').slice(0, 7);
   const periodLabel = (ym) => `${['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+ym.slice(5, 7) - 1]} ${ym.slice(0, 4)}`;
   const niceMonth = (ym) => `${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][+ym.slice(5, 7) - 1]} de ${ym.slice(0, 4)}`;
-  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, retryAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
+  const state = { page: 'home', ym: demo ? '2026-09' : U.todayYM(), filter: 'Todos', filtros: { situacao: 'todas', fonte: 'todas', categoria: 'todas', busca: '' }, catKind: 'expense', investTab: 'overview', market: { indices: null, error: '', historyError: '', quoteError: '', loading: false, loadedAt: 0, retryAt: 0, cdiStart: '', quoteKey: '' }, calDay: null, calView: 'month', selected: null, walletKind: 'debit', walletOpen: true, walletHidden: false, voiceDraft: false, voiceState: 'IDLE', voiceMode: 'continuous', voiceMuted: false, voiceReplyMuted: false, voicePlaybackBlocked: false, voiceDraftText: '', voiceAnswerDraft: '', voiceDevice: '', cocoTab: 'Conversa', cocoView: 'conversation', cocoAsking: false, cocoSpeaking: false, cocoAudioLoading: false, hideMoney: false, sim: { aporte: 500, taxa: 10, meses: 24 }, billing: 'monthly', subscription: null, billingError: '', paymentBusy: false, chat: [], cocoSettings: null, cocoMemories: [], cocoAnalyses: [], cocoLoading: false, cocoError: '', mediaDraft: '', importPreview: null, importLimit: 30, importAccountId: '', importFilter: 'Todas', importEdits: {}, importSelection: {}, importRemoved: {}, sharedProfile: null, sharedId: null, sharedPermission: 'read', sharedRights: null, shares: { owned: [], received: [] } };
   let statusMenu = null;
   let statusBusy = false;
   let recorder = null;
@@ -1152,18 +1152,20 @@
   }
 
   let investmentMarketRequest = null;
+  let investmentMarketTimer = null;
   let investmentMarketData = { cdi: [], quotes: {} };
   async function refreshInvestmentMarket(force) {
     if (demo || state.sharedId || !global.V3Backend?.investmentMarket) return;
     const list = profile().investments || [];
     const floor = new Date(); floor.setUTCFullYear(floor.getUTCFullYear() - 9);
     const floorISO = floor.toISOString().slice(0, 10);
-    const cdiDates = list.filter((x) => x.type === 'CDB' && x.indexer === 'cdi' && x.currentValue == null && x.date >= floorISO).map((x) => x.date);
+    const cdiDates = list.filter((x) => x.type === 'CDB' && x.indexer === 'cdi' && x.date >= floorISO).map((x) => x.date);
     const cdiStart = cdiDates.length ? cdiDates.sort()[0] : '';
     const symbols = [...new Set(list.filter((x) => ['Ações', 'FIIs', 'ETF'].includes(x.type) && x.ticker && +x.quantity > 0 && x.currentValue == null).map((x) => x.ticker))].sort().slice(0, 10);
     const quoteKey = symbols.join(',');
     if (investmentMarketRequest) return investmentMarketRequest;
     if (!force && Date.now() < state.market.retryAt && cdiStart === state.market.cdiStart && quoteKey === state.market.quoteKey) return;
+    if (investmentMarketTimer) { clearTimeout(investmentMarketTimer); investmentMarketTimer = null; }
     const previousCdiStart = state.market.cdiStart;
     state.market.loading = true; state.market.error = ''; state.market.historyError = ''; state.market.quoteError = '';
     if (state.page === 'investments') render();
@@ -1173,8 +1175,8 @@
         symbols.length ? V3Backend.investmentMarket({ action: 'quotes', symbols }) : Promise.resolve(null)];
       const results = await Promise.allSettled(jobs);
       if (results[0].status === 'fulfilled') {
-        state.market.indices = results[0].value;
-        if (!results[0].value?.cdiAnnual && !results[0].value?.cdiDaily) state.market.error = 'O Banco Central não retornou CDI. Tente atualizar novamente.';
+        if (results[0].value?.cdiAnnual || results[0].value?.cdiDaily) state.market.indices = results[0].value;
+        else state.market.error = 'O Banco Central não retornou CDI. Tente atualizar novamente.';
       } else state.market.error = results[0].reason?.message || 'Índices indisponíveis.';
       if (cdiStart && results[1].status === 'fulfilled') {
         const observations = results[1].value?.observations || [];
@@ -1194,13 +1196,16 @@
         state.market.quoteError = results[2].reason?.message || 'Cotações indisponíveis.';
       }
       state.market.cdiStart = cdiStart; state.market.quoteKey = quoteKey;
-      Calc.setInvestmentMarket({ cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
+      Calc.setInvestmentMarket({ cdiStart, cdi: investmentMarketData.cdi, cdiAnnual: state.market.indices?.cdiAnnual?.value, quotes: investmentMarketData.quotes });
       state.market.loadedAt = Date.now();
       /* Falha ou resposta vazia: nova tentativa automática em 1 minuto.
          Sucesso: evita consultas repetidas por 15 minutos. */
       state.market.retryAt = state.market.loadedAt + (state.market.error || state.market.historyError || state.market.quoteError ? 60 * 1000 : 15 * 60 * 1000);
       state.market.loading = false;
       if (state.page === 'investments' || state.page === 'home') render();
+      if (typeof document !== 'undefined' && !document.hidden) {
+        investmentMarketTimer = setTimeout(() => { investmentMarketTimer = null; if (state.page === 'investments' || state.page === 'home') refreshInvestmentMarket(false); }, Math.max(1000, state.market.retryAt - Date.now()));
+      }
     })().finally(() => { investmentMarketRequest = null; });
     return investmentMarketRequest;
   }
@@ -1259,7 +1264,11 @@
     const chart = linha('value');
     const chartAportes = linha('contributed');
     const rendimento = series.length ? U.round2(series[series.length-1].value - series[series.length-1].contributed) : U.round2(gain);
-    const rows = list.map((x) => `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small></span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`).join('');
+    const rows = list.map((x) => {
+      const projection = demo ? null : Calc.investmentProjection(x, U.todayISO());
+      const outlook = projection ? `<small class="v3-invest-projection">Cenário bruto: ${money(projection.value30)} em 30 dias · ${money(projection.value365)} em 1 ano</small>` : '';
+      return `<div class="v3-invest-row"><span><strong>${esc(x.name)}</strong><small>${esc(x.type || 'Outro')} · ${esc(shortDate(x.date))}</small>${outlook}</span><span><strong class="v3-mono v3-sensitive">${money(valueAt(x))}</strong><small>Aportado: ${money(x.amount)}</small></span><button type="button" data-investment="${esc(x.id)}" aria-label="Editar ${esc(x.name)}">Editar</button></div>`;
+    }).join('');
     const reserves=list.filter((x)=>x.type==='Porquinho'), cdbs=list.filter((x)=>x.type==='CDB');
     const collection=(items,empty)=>items.length?items.map((x)=>`<button type="button" class="v3-invest-bucket" data-investment="${esc(x.id)}"><span><strong>${esc(x.name)}</strong><small>${x.type==='CDB'?(x.maturityDate?`Vence em ${esc(shortDate(x.maturityDate))}`:'Sem vencimento informado')+' · '+(x.liquidity==='diaria'?'liquidez diária':x.liquidity==='vencimento'?'resgate no vencimento':'liquidez não informada'):'Dinheiro reservado'}</small></span><strong class="v3-sensitive">${money(valueAt(x))}</strong></button>`).join(''):`<p class="v3-muted">${empty}</p>`;
     return `<div class="v3-invest-page"><div class="v3-invest-collections"><section class="v3-panel"><div class="v3-row"><h2>porquinhos</h2><button type="button" class="v3-link" data-action="add-investment" data-type="Porquinho">Criar porquinho</button></div><p class="v3-muted">Separe um valor de uma conta sem contar o mesmo dinheiro duas vezes.</p>${collection(reserves,'Crie uma reserva para um objetivo ou emergência.')}</section><section class="v3-panel"><div class="v3-row"><h2>CDBs</h2><button type="button" class="v3-link" data-action="add-investment" data-type="CDB">Registrar CDB</button></div><p class="v3-muted">Acompanhe aporte, prazo, liquidez e valor informado pelo banco.</p>${collection(cdbs,'Nenhum CDB registrado neste perfil.')}</section></div><div class="v3-grid v3-invest"><div class="v3-stack"><section class="v3-panel v3-wave"><span class="v3-label">PATRIMÔNIO INVESTIDO</span><div class="v3-row"><strong class="v3-money v3-sensitive">${money(total)}</strong><span class="v3-mono ${gain >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${gain >= 0 ? '+' : '−'} ${money(Math.abs(gain))} de diferença para o aportado</span></div>${chart ? `<svg viewBox="0 0 720 150" preserveAspectRatio="none" aria-label="Evolução dos investimentos: o que foi aportado e quanto vale hoje"><path d="${chartAportes}" fill="none" stroke="rgba(240,229,207,.45)" stroke-width="2" stroke-dasharray="6 6"/><path d="${chart}" fill="none" stroke="#5fa99b" stroke-width="3"/></svg><div class="v3-axis"><span>${esc(periodLabel(series[0].ym))}</span><span>${esc(periodLabel(state.ym))}</span></div><div class="v3-invest-legenda"><span><i class="e-valor"></i>Valor exibido</span><span><i class="e-aporte"></i>Só os aportes</span><strong class="v3-mono ${rendimento >= 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${rendimento >= 0 ? '+' : '−'} ${money(Math.abs(rendimento))} de diferença</strong></div>` : '<p class="v3-muted" style="margin:auto 0">A evolução aparece depois do segundo mês com aporte.</p>'}</section><section class="v3-panel"><div class="v3-row"><h2>todos os aportes</h2><button type="button" class="v3-link" data-action="add-investment">Novo aporte</button></div>${rows || '<p class="v3-muted">Nenhum aporte registrado neste período.</p>'}</section></div><div class="v3-stack"><section class="v3-panel"><h2>distribuição por tipo</h2>${distribution.length ? `<div class="v3-distribution">${distribution.map((x) => `<span style="width:${pct(100 * x.value / total)}%;background:${x.color}"></span>`).join('')}</div>${distribution.map((x) => `<div class="v3-row v3-invest-mix"><strong><i style="background:${x.color}"></i>${esc(x.name)}</strong><span class="v3-mono v3-sensitive">${state.hideMoney ? ocultarDigitos(String(Math.round(100 * x.value / total))) : Math.round(100 * x.value / total)}% · ${money(x.value)}</span></div>`).join('')}` : '<p class="v3-muted">A distribuição aparece com o primeiro aporte.</p>'}</section><section class="v3-panel"><h2>simular juros compostos</h2><div class="v3-range">${[['aporte','Aporte mensal',50,5000,50,money(sim.aporte)],['taxa','Taxa ao ano',0,30,0.5,`${sim.taxa}%`],['meses','Prazo',1,360,1,`${sim.meses} meses`]].map(([key,label,min,max,step,value]) => `<label><span><strong>${label}</strong><strong class="v3-mono">${value}</strong></span><input type="range" data-sim="${key}" min="${min}" max="${max}" step="${step}" value="${sim[key]}"></label>`).join('')}</div><div class="v3-estimate"><span class="v3-label">ESTIMATIVA AO FINAL</span><strong class="v3-money">${money(estimate)}</strong><p class="v3-muted">${money(estimate - sim.aporte * sim.meses)} de juros estimados. Não é promessa de rentabilidade.</p></div></section></div></div></div>`;
@@ -1295,6 +1304,7 @@
         : fonte.origem === 'indexador' ? `${item.rate}% do CDI · estimativa bruta até ${shortDate(fonte.em || U.todayISO())}`
         : fonte.origem === 'cotacao' ? `${item.ticker} · ${item.quantity} cotas · cotação de ${carimboMercado(fonte.em) || shortDate(String(fonte.em).slice(0, 10))}`
         : fonte.origem === 'aporte' ? (papel ? 'Sem cotação atual; exibindo apenas o aporte' : 'CDI não sincronizado; exibindo apenas o aporte')
+        : fonte.origem === 'estimativa' && item.currentValueAt ? `Cenário bruto desde o saldo informado em ${shortDate(item.currentValueAt)}`
         : '';
       if (note) row.querySelector('span:first-child')?.insertAdjacentHTML('beforeend', `<small>${esc(note)}</small>`);
       if (!demo && state.ym === U.todayYM()) {
@@ -2438,9 +2448,14 @@
     state.cocoLoading = true;
     state.cocoError='';
     try {
-      state.cocoSettings = await V3Backend.cocoSettings();
-      state.cocoMemories = await V3Backend.cocoMemories(profile().id);
-      state.cocoAnalyses = await V3Backend.cocoAnalyses(profile().id);
+      const id=profile().id;
+      const [settings,memories,analyses]=await Promise.allSettled([
+        V3Backend.cocoSettings(),V3Backend.cocoMemories(id),V3Backend.cocoAnalyses(id)
+      ]);
+      if(settings.status==='fulfilled')state.cocoSettings=settings.value;
+      else {state.cocoSettings=null;state.cocoError=settings.reason?.message||'Não consegui carregar as configurações da Coco.';}
+      if(memories.status==='fulfilled')state.cocoMemories=memories.value;
+      if(analyses.status==='fulfilled')state.cocoAnalyses=analyses.value;
     } catch (error) { state.cocoSettings=null;state.cocoError=error.message || 'Não consegui carregar as configurações da Coco.'; }
     finally {
       state.cocoLoading = false;
@@ -2458,22 +2473,88 @@
       global.CocoImport.normalized(tx.description) === global.CocoImport.normalized(item.description));
   }
   function importCategorySuggestion(item, accountId) {
-    if (!accountId || !global.Categorizacao) return null;
-    const kind=item.cents>0?'income':'expense';
-    const suggestion=Categorizacao.sugerir(item.description,kind,profile());
-    if (!suggestion.categoryId || suggestion.confidence==='low') return null;
-    const category=profile().categories.find((entry)=>entry.id===suggestion.categoryId && entry.kind===kind);
-    return category ? {id:category.id,name:category.name,evidence:suggestion.evidence} : null;
+    if (!accountId) return null;
+    const kind = item.cents > 0 ? 'income' : 'expense';
+    if (item.investmentTransfer) {
+      const name = kind === 'income' ? 'rendimentos' : 'investimentos';
+      const category = profile().categories.find((entry) => entry.kind === kind && U.norm(entry.name) === name);
+      if (category) return { id: category.id, name: category.name, evidence: 'Movimento de investimento', fallback: false };
+    }
+    const suggestion = global.Categorizacao?.sugerir(item.description, kind, profile());
+    const found = suggestion?.categoryId && suggestion.confidence !== 'low'
+      ? profile().categories.find((entry) => entry.id === suggestion.categoryId && entry.kind === kind) : null;
+    if (found) return { id: found.id, name: found.name, evidence: suggestion.evidence, fallback: false };
+    const other = profile().categories.find((entry) => entry.kind === kind && U.norm(entry.name) === 'outros');
+    return other ? { id: other.id, name: other.name, evidence: '', fallback: true } : null;
+  }
+  function importPaymentMethod(description) {
+    const text = global.CocoImport.normalized(description);
+    if (/\bpix\b/.test(text)) return 'pix';
+    if (/\bboleto\b/.test(text)) return 'boleto';
+    if (/\bdebito automatico\b/.test(text)) return 'debito_automatico';
+    if (/\b(compra|cartao) debito\b/.test(text)) return 'cartao_fisico';
+    if (/\b(ted|doc|transferencia)\b/.test(text)) return 'transferencia';
+    if (/\bsaque\b/.test(text)) return 'dinheiro';
+    return null;
+  }
+  function importDraft(item, index) {
+    const suggestion = importCategorySuggestion(item, state.importAccountId);
+    return { description: item.description, date: item.date, categoryId: suggestion?.id || '',
+      meio: importPaymentMethod(item.description), ...(state.importEdits[index] || {}) };
+  }
+  function importEligible(item, report) {
+    return !item.creditCard && !item.dateConcern && !item.balanceConcern
+      && (!report.checks.failed || report.rows.some((entry) => entry.balanceConcern));
+  }
+  function importIsSelected(item, index, report) {
+    return !state.importRemoved[index] && (state.importSelection[index] ?? importEligible(item, report));
+  }
+  function importAccountPicker(accounts) {
+    const account = accounts.find((entry) => entry.id === state.importAccountId);
+    const bankColor = account ? safeColor(bankBrand(account.bank || account.name)) : '#28434b';
+    return `<div class="v3-import-bank"><span class="v3-import-bank-icon" style="--import-bank:${bankColor}">${account ? walletLogo(account, '#f7f4e9') : icon('wallet')}</span><label><strong>CONTA DESTE EXTRATO</strong><select id="v3-import-account" aria-label="Conta deste extrato"><option value="">Escolha a conta</option>${accounts.map((entry) => `<option value="${esc(entry.id)}" ${account?.id === entry.id ? 'selected' : ''}>${esc(entry.bank || entry.name)} · ${esc(entry.name)}${entry.last4 ? ' •• ' + esc(entry.last4) : ''}</option>`).join('')}</select></label></div>`;
   }
   function renderCocoImport() {
     const report = state.importPreview;
-    const picker='<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv,.ofx,.qfx" hidden>';
-    if (!report) return `<div class="v3-import-empty"><h2>seus extratos, sem adivinhação</h2><p>Escolha um extrato OFX, CSV ou PDF. A leitura acontece neste aparelho, sem envio à OpenAI. A Coco separa movimentos de saldos e mostra uma prévia para você revisar.</p><button type="button" class="v3-secondary" data-action="choose-coco-file">Escolher arquivo</button><small>Layouts ainda desconhecidos e PDFs digitalizados não são importados.</small>${picker}</div>`;
     const accounts = profile().accounts.filter((account) => !account.archived && (!account.moeda || account.moeda === 'BRL'));
-    const visible = report.rows.slice(0, state.importLimit);
-    const positive = report.rows.filter((item) => item.cents > 0).reduce((sum, item) => sum + item.cents, 0) / 100;
-    const negative = report.rows.filter((item) => item.cents < 0).reduce((sum, item) => sum - item.cents, 0) / 100;
-    return `<div class="v3-import"><h2>revisar extrato</h2><p class="v3-muted">${esc(report.format)} · ${report.rows.length} movimentos · ${report.checks.passed} conferências de saldo corretas</p>${report.warnings.map((warning) => `<p class="v3-import-warning" role="alert">${esc(warning)}</p>`).join('')}<div class="v3-import-totals"><span>Entradas <strong class="v3-positive v3-sensitive">${money(positive)}</strong></span><span>Saídas <strong class="v3-negative v3-sensitive">${money(negative)}</strong></span></div><label class="v3-import-account">CONTA DESTE EXTRATO<select id="v3-import-account"><option value="">Escolha a conta antes de revisar</option>${accounts.map((account) => `<option value="${esc(account.id)}" ${state.importAccountId === account.id ? 'selected' : ''}>${esc(account.bank || account.name)} •• ${esc(account.last4 || '')}</option>`).join('')}</select></label>${accounts.length ? '' : '<p class="v3-import-warning">Cadastre uma conta em reais antes de revisar os movimentos.</p>'}<p class="v3-muted">Nada foi salvo. Revise data, categoria, origem e possível duplicata em cada lançamento.</p>${report.checks.failed ? '<p class="v3-import-warning" role="alert">O saldo não confere com o PDF: importação em lote bloqueada. Você pode revisar cada movimento separadamente e confirmar data e valor no banco.</p>' : ''}<div class="v3-import-list">${visible.map((item, index) => { const suggestion=importCategorySuggestion(item,state.importAccountId);return `<div class="v3-import-row"><span><small>${esc(shortDate(item.date))} · ${item.cents > 0 ? 'entrada' : 'saída'}</small><strong>${esc(item.description)}</strong>${suggestion?`<small>Categoria sugerida: ${esc(suggestion.name)} · ${esc(suggestion.evidence)}</small>`:'<small>Categoria ainda sem correspondência. Revise antes de salvar.</small>'}${item.dateConcern ? '<small class="v3-import-warning">Data após o período do PDF: confirme no banco.</small>' : ''}${item.investmentTransfer ? '<small class="v3-import-warning">Aplicação ou resgate de cofrinho: não é gasto nem receita.</small>' : ''}</span><strong class="v3-mono ${item.cents > 0 ? 'v3-positive' : 'v3-negative'} v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong><button type="button" class="v3-secondary" data-action="review-import-row" data-import-index="${index}" ${!state.importAccountId ? 'disabled' : ''}>${item.investmentTransfer ? 'Ver investimentos' : importDuplicate(item, state.importAccountId) ? 'Possível duplicata · revisar' : 'Revisar'}</button></div>`; }).join('')}</div>${state.importLimit < report.rows.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}${state.importAccountId && !report.checks.failed ? `<button type="button" class="v3-primary" data-action="import-all">Importar categorizados</button><small class="v3-muted">Mantém a data do extrato. Movimentos sem categoria segura ficam para revisão individual.</small>` : ''}<button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button>${picker}</div>`;
+    const picker = '<input id="v3-coco-import-file" type="file" accept="application/pdf,text/csv,.pdf,.csv,.ofx,.qfx" hidden>';
+    const accountPicker = importAccountPicker(accounts);
+    if (!report) return `<div class="v3-import-empty"><h2>Importar extrato</h2>${accountPicker}<button type="button" class="v3-primary" data-action="choose-coco-file" ${state.importAccountId ? '' : 'disabled'}>Escolher PDF, CSV ou OFX</button>${picker}</div>`;
+    const entries = report.rows.map((item, index) => ({ item, index }))
+      .filter(({ index }) => !state.importRemoved[index]);
+    const filtered = entries.filter(({ item }) => state.importFilter === 'Todas'
+      || (state.importFilter === 'Entradas' && item.cents > 0 && !item.investmentTransfer && !item.creditCard)
+      || (state.importFilter === 'Saídas' && item.cents < 0 && !item.investmentTransfer && !item.creditCard)
+      || (state.importFilter === 'Investimentos' && item.investmentTransfer));
+    const visible = filtered.slice(0, state.importLimit);
+    const selected = entries.filter(({ item, index }) => importIsSelected(item, index, report) && !item.creditCard);
+    const counts = {
+      Entradas: entries.filter(({ item }) => item.cents > 0 && !item.investmentTransfer && !item.creditCard).length,
+      Saídas: entries.filter(({ item }) => item.cents < 0 && !item.investmentTransfer && !item.creditCard).length,
+      Investimentos: entries.filter(({ item }) => item.investmentTransfer).length
+    };
+    const ignored = entries.filter(({ item }) => item.creditCard).length;
+    const rows = visible.map(({ item, index }) => {
+      const draft = importDraft(item, index), checked = importIsSelected(item, index, report);
+      const kind = item.cents > 0 ? 'income' : 'expense';
+      const categories = profile().categories.filter((category) => category.kind === kind);
+      const concern = item.dateConcern || item.balanceConcern;
+      const badge = item.creditCard ? 'Cartão de crédito · fora da importação'
+        : item.investmentTransfer ? (item.cents > 0 ? 'Retorno de investimento · rendimento bruto recebido' : 'Aplicação · saída da conta')
+        : concern ? 'Saldo ou data: confira com o banco' : '';
+      return `<article class="v3-import-row ${checked ? 'is-selected' : ''}" data-import-row="${index}">
+        <div class="v3-import-row-head"><button type="button" class="v3-import-select" data-action="import-select" data-import-index="${index}" aria-pressed="${checked}" ${item.creditCard ? 'disabled' : ''} aria-label="Selecionar movimento ${index + 1}">${checked ? '✓' : '○'}</button><span>${item.cents > 0 ? 'Entrada' : 'Saída'} · ${esc(shortDate(item.date))}</span><strong class="v3-sensitive">${item.cents > 0 ? '+' : '−'} ${money(Math.abs(item.cents) / 100)}</strong></div>
+        ${badge ? `<small class="v3-import-warning">${badge}</small>` : ''}
+        <div class="v3-import-edit-grid"><label>Nome<input data-import-edit="description" data-import-index="${index}" maxlength="120" value="${esc(draft.description)}" ${item.creditCard ? 'disabled' : ''}></label><label>Data<input type="date" data-import-edit="date" data-import-index="${index}" value="${esc(draft.date)}" ${item.creditCard ? 'disabled' : ''}></label><label>Categoria<select data-import-edit="categoryId" data-import-index="${index}" ${item.creditCard ? 'disabled' : ''}>${categories.map((category) => `<option value="${esc(category.id)}" ${draft.categoryId === category.id ? 'selected' : ''}>${esc(category.name)}</option>`).join('')}</select></label><label>Pagamento<select data-import-edit="meio" data-import-index="${index}" ${item.creditCard ? 'disabled' : ''}><option value="">Não identificado</option>${Store.MEIOS.map((method) => `<option value="${esc(method.id)}" ${draft.meio === method.id ? 'selected' : ''}>${esc(method.nome)}</option>`).join('')}</select></label></div>
+      </article>`;
+    }).join('');
+    return `<div class="v3-import"><div class="v3-row"><h2>Revisar extrato</h2><strong>${selected.length} selecionados</strong></div>${accountPicker}
+      <div class="v3-import-filters" role="group" aria-label="Filtrar movimentos">${['Todas','Entradas','Saídas','Investimentos'].map((filter) => `<button type="button" data-action="import-filter" data-import-filter="${filter}" aria-pressed="${state.importFilter === filter}">${filter}${filter === 'Todas' ? ' · ' + entries.length : ' · ' + counts[filter]}</button>`).join('')}</div>
+      ${report.warnings.map((warning) => `<p class="v3-import-warning" role="status">${esc(warning)}</p>`).join('')}
+      ${ignored ? `<p class="v3-muted">${ignored} movimento(s) de cartão de crédito ficam fora do salvamento.</p>` : ''}
+      <div class="v3-import-bulk"><button type="button" class="v3-secondary" data-action="import-select-all">Selecionar tudo seguro</button><button type="button" class="v3-secondary" data-action="import-clear-selection">Limpar seleção</button><button type="button" class="v3-secondary v3-import-trash" data-action="import-remove-selected" ${selected.length ? '' : 'disabled'} aria-label="Remover selecionados da prévia">${icon('trash')} Remover da prévia</button></div>
+      <div class="v3-import-list">${rows || '<p class="v3-muted">Nenhum movimento neste filtro.</p>'}</div>${state.importLimit < filtered.length ? '<button type="button" class="v3-secondary" data-action="import-more">Ver mais movimentos</button>' : ''}
+      <div class="v3-import-footer"><button type="button" class="v3-primary" data-action="import-all" ${!selected.length || !state.importAccountId ? 'disabled' : ''}>Salvar tudo · ${selected.length}</button><button type="button" class="v3-link" data-action="choose-coco-file">Ler outro arquivo</button></div>${picker}</div>`;
   }
   function openCoco() {
     if (state.cocoTab==='Conversa' || state.cocoTab==='Agora') { closeSheet();state.cocoView='conversation';go('coco');return; }
@@ -3284,7 +3365,7 @@
           investmentMarketData.cdi = data.observations || [];
           state.market.cdiStart = date;
         }
-        Calc.setInvestmentMarket({ cdiStart: state.market.cdiStart, cdi: investmentMarketData.cdi, quotes: investmentMarketData.quotes });
+        Calc.setInvestmentMarket({ cdiStart: state.market.cdiStart, cdi: investmentMarketData.cdi, cdiAnnual: state.market.indices?.cdiAnnual?.value, quotes: investmentMarketData.quotes });
         renderValuation();
       } catch (error) {
         if (live() && key === marketKey) {
@@ -3743,8 +3824,11 @@
       toast('Confira nome, tipo, valor, data, taxa e conta.'); return;
     }
     if (id && !profile().investments.some((x) => x.id === id)) { toast('Este aporte não existe mais. Atualize a página.'); return; }
+    const existing = id ? profile().investments.find((item) => item.id === id) : null;
+    const currentValueAt = currentValue == null || type === 'Porquinho' ? null
+      : existing && existing.currentValue === currentValue ? existing.currentValueAt || null : U.todayISO();
     const data = { name, type, amount, date, rate:type==='Porquinho'?0:rate, indexer, ticker:ticker||null, quantity,
-      currentValue:type==='Porquinho'?null:currentValue, accountId, maturityDate:maturityDate||null, liquidity:liquidity||null, notes: String(fd.get('notes') || '').trim().slice(0, 240) };
+      currentValue:type==='Porquinho'?null:currentValue, currentValueAt, accountId, maturityDate:maturityDate||null, liquidity:liquidity||null, notes: String(fd.get('notes') || '').trim().slice(0, 240) };
     try {
       await V3Backend.mutate(() => id ? Store.investments.update(id, data) : Store.investments.add(data));
       closeSheet(); render(); toast('Aporte salvo na sua conta.');
@@ -4103,7 +4187,7 @@
       try {
         if (!global.CocoImport) throw new Error('Leitor de extratos indisponível. Atualize a página.');
         const report=await global.CocoImport.parseFile(file);
-        state.importPreview=report;state.importLimit=30;state.importAccountId='';state.cocoTab='Extratos';
+        state.importPreview=report;state.importLimit=30;state.importFilter='Todas';state.importEdits={};state.importSelection={};state.importRemoved={};state.cocoTab='Extratos';
         openCoco();toast(`${report.rows.length} movimentos encontrados. Revise antes de salvar.`);
       } catch (error) { toast(error.message || 'Não consegui ler este extrato. Nada foi salvo.'); }
       return;
@@ -4424,44 +4508,67 @@
       return;
     }
     if (action==='choose-coco-file') { const picker=target.closest('#v3-sheet')?.querySelector('#v3-coco-import-file') || $('#v3-coco-file'); picker?.click();return; }
+    if (action==='import-filter') { state.importFilter=target.dataset.importFilter||'Todas';state.importLimit=30;openCoco();return; }
+    if (action==='import-select') {
+      const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
+      if (!item || item.creditCard || state.importRemoved[index]) return;
+      state.importSelection[index]=!importIsSelected(item,index,state.importPreview);
+      openCoco();return;
+    }
+    if (action==='import-select-all' || action==='import-clear-selection') {
+      const report=state.importPreview;if (!report) return;
+      report.rows.forEach((item,index)=>{
+        if (!state.importRemoved[index] && !item.creditCard)
+          state.importSelection[index]=action==='import-select-all' ? importEligible(item,report) : false;
+      });
+      openCoco();return;
+    }
+    if (action==='import-remove-selected') {
+      const report=state.importPreview;if (!report) return;
+      report.rows.forEach((item,index)=>{if(importIsSelected(item,index,report) && !item.creditCard)state.importRemoved[index]=true;});
+      openCoco();return;
+    }
     if (action==='import-more') { state.importLimit=Math.min(state.importLimit+30,state.importPreview?.rows.length||30);openCoco();return; }
     if (action==='import-all') {
       if (demo) { toast('Demonstração: nenhum dado foi salvo.'); return; }
       const report=state.importPreview;
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
-      if (!report || !account || report.checks.failed) { toast('Confira o extrato e escolha uma conta em reais.'); return; }
-      /* Duplicado: mesma conta, mesmo tipo e valor, até 2 dias de diferença
-         (o banco às vezes lança no dia útil seguinte). */
-      const parecido=(item)=>profile().transactions.some((tx)=>tx.accountId===account.id && !tx.cancelado &&
-        tx.kind===(item.cents>0?'income':'expense') && Math.round(Number(tx.amount)*100)===Math.abs(item.cents) &&
-        Math.abs((new Date(tx.date+'T12:00:00')-new Date(item.date+'T12:00:00'))/86400000)<=2 &&
-        global.CocoImport.normalized(tx.description)===global.CocoImport.normalized(item.description));
-      const usados={}, lista=[]; let pulados=0, semEspaco=0, semCategoria=0, investimento=0;
-      for (const item of report.rows) {
-        if (item.investmentTransfer) { investimento++; continue; }
-        if (parecido(item)) { pulados++; continue; }
-        const ym=item.date.slice(0,7), teto=global.Limites?Limites.limite('transactions_per_month'):null;
-        usados[ym]=usados[ym]??(global.Limites?Limites.contar('transactions_per_month',ym):0);
-        if (teto!==null && teto!==undefined && usados[ym]>=teto) { semEspaco++; continue; }
+      if (!report || !account) { toast('Escolha uma conta em reais para este extrato.'); return; }
+      const chosen=report.rows.map((item,index)=>({item,index}))
+        .filter(({item,index})=>!item.creditCard && importIsSelected(item,index,report));
+      if (!chosen.length) { toast('Selecione ao menos um movimento.'); return; }
+      const drafts=chosen.map(({item,index})=>({item,draft:importDraft(item,index)}));
+      const valid=drafts.every(({item,draft})=>draft.description.trim() && U.isValidISO(draft.date)
+        && profile().categories.some((category)=>category.id===draft.categoryId && category.kind===(item.cents>0?'income':'expense'))
+        && (!draft.meio || Store.MEIOS.some((method)=>method.id===draft.meio)));
+      if (!valid) { toast('Confira nome, data, categoria e pagamento dos movimentos selecionados.'); return; }
+      const usados={},lista=[];let pulados=0,semEspaco=0;
+      for (const {item,draft} of drafts) {
         const kind=item.cents>0?'income':'expense';
-        const sug=global.Categorizacao?Categorizacao.sugerir(item.description,kind,profile()):null;
-        const cat=(sug && sug.categoryId && sug.confidence!=='low' && profile().categories.some((c)=>c.id===sug.categoryId && c.kind===kind)) ? sug.categoryId : null;
-        if (!cat) { semCategoria++; continue; }
+        const duplicate=profile().transactions.some((tx)=>tx.accountId===account.id && !tx.cancelado
+          && tx.date===draft.date && tx.kind===kind && Math.round(Number(tx.amount)*100)===Math.abs(item.cents)
+          && global.CocoImport.normalized(tx.description)===global.CocoImport.normalized(draft.description));
+        if (duplicate) { pulados++;continue; }
+        const ym=draft.date.slice(0,7),teto=global.Limites?Limites.limite('transactions_per_month'):null;
+        usados[ym]=usados[ym]??(global.Limites?Limites.contar('transactions_per_month',ym):0);
+        if (teto!==null && teto!==undefined && usados[ym]>=teto) { semEspaco++;continue; }
         usados[ym]++;
-        lista.push({kind,description:item.description,amount:U.round2(Math.abs(item.cents)/100),date:item.date,categoryId:cat,accountId:account.id,cardId:null,toAccountId:null,confirmed:true,cancelado:false,recurring:false,notes:'',source:'import',meio:null});
+        lista.push({kind,description:draft.description.trim(),amount:U.round2(Math.abs(item.cents)/100),
+          date:draft.date,categoryId:draft.categoryId,accountId:account.id,cardId:null,toAccountId:null,
+          confirmed:true,cancelado:false,recurring:false,notes:'',source:'import',meio:draft.meio||null});
       }
-      if (!lista.length) { toast(investimento && investimento===report.rows.length?'Aplicações e resgates de cofrinho exigem conferência em Investimentos; nada foi registrado como gasto ou receita.':semCategoria?'Nenhum movimento tem categoria segura. Revise e lance cada um pela data do extrato.':semEspaco?'Sem espaço no limite de lançamentos do mês. Nada foi importado.':'Todos os movimentos já parecem registrados.'); return; }
-      V3Backend.mutate(()=>{ Store.transactions.addMany(lista); }).then(()=>{
-        state.importPreview=null; state.ym=lista.map((item)=>item.date.slice(0,7)).sort().at(-1); go('transactions');
-        toast(lista.length+' lançamentos importados na data do extrato'+(pulados?', '+pulados+' já existiam':'')+(semCategoria?', '+semCategoria+' precisam de categoria e revisão':'')+(semEspaco?', '+semEspaco+' ficaram fora pelo limite do plano':'')+(investimento?', '+investimento+' aplicações/resgates de cofrinho exigem conferência em Investimentos':'')+'.');
-      }).catch(()=>toast('Não consegui salvar a importação. Nada foi alterado.'));
+      if (!lista.length) { toast(semEspaco?'Limite de lançamentos do mês atingido.':'Os movimentos selecionados já estão registrados.');return; }
+      V3Backend.mutate(()=>{Store.transactions.addMany(lista);}).then(()=>{
+        state.importPreview=null;state.importEdits={};state.importSelection={};state.importRemoved={};
+        state.ym=lista.map((item)=>item.date.slice(0,7)).sort().at(-1);go('transactions');
+        toast(lista.length+' lançamentos salvos nas datas do extrato'+(pulados?', '+pulados+' duplicados ignorados':'')+(semEspaco?', '+semEspaco+' fora pelo limite':'')+'.');
+      }).catch(()=>toast('Não consegui salvar a importação. Confira sua conexão e tente novamente.'));
       return;
     }
     if (action==='review-import-row') {
       const index=Number(target.dataset.importIndex), item=state.importPreview?.rows[index];
       const account=profile().accounts.find((entry)=>entry.id===state.importAccountId && !entry.archived && (!entry.moeda || entry.moeda==='BRL'));
       if (!Number.isInteger(index) || !item || !account) { toast('Confira o extrato e escolha uma conta em reais.');return; }
-      if (item.investmentTransfer) { closeSheet(); go('investments'); toast('Aplicações e resgates de cofrinho não são despesa ou receita. Confira a posição no banco antes de registrar.'); return; }
       const revisar=()=>{
         const suggestion=importCategorySuggestion(item,account.id);
         composer(item.cents>0?'Receita':'Despesa',null,null,{descricao:item.description,valor:Math.abs(item.cents)/100,data:item.date,source:`account:${account.id}`,confirmado:true,categoryId:suggestion?.id,sourceTag:'import'});
@@ -4856,12 +4963,22 @@
       if (statusMenu && !event.target.closest?.('.v3-status-menu,[data-confirm]')) closeStatusMenu(false);
     });
     document.addEventListener('wheel',()=>closeStatusMenu(false),{passive:true});
+    document.addEventListener('input',(event)=>{
+      const field=event.target?.dataset?.importEdit;
+      if(!field || !['description','date','categoryId','meio'].includes(field))return;
+      const index=Number(event.target.dataset.importIndex);
+      if(!Number.isInteger(index)||!state.importPreview?.rows[index])return;
+      state.importEdits[index]={...(state.importEdits[index]||{}),[field]:event.target.value};
+    });
     document.addEventListener('change',(event)=>{
       if (event.target?.id==='v3-import-account') { state.importAccountId=event.target.value;openCoco();return; }
       if (!['v3-coco-file','v3-coco-import-file'].includes(event.target?.id)) return;
       const file=event.target.files?.[0];
       event.target.value='';
       if (file) readCocoMedia(file);
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && ['home', 'investments'].includes(state.page)) refreshInvestmentMarket(false);
     });
     document.addEventListener('beforeinput',(ev)=>{
       const input=ev.target;

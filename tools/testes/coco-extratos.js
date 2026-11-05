@@ -58,5 +58,20 @@ const transfer = parsePdfItems([[
   line(650, '02/10/2026 SALDO DO DIA 50,00')
 ]]);
 assert.equal(transfer.rows[0].investmentTransfer, true);
+assert.equal(transfer.rows[0].cents, -5000, 'aplicação sai da conta');
+const retorno = parsePdfItems([[
+  line(710, '01/10/2026 SALDO DO DIA 50,00'),
+  line(690, '02/10/2026 RESGATE INVESTIMENTO 55,00'),
+  line(650, '02/10/2026 SALDO DO DIA 105,00')
+]]);
+assert.equal(retorno.rows[0].investmentTransfer, true);
+assert.equal(retorno.rows[0].cents, 5500, 'resgate volta como entrada');
+const cartao = parsePdfItems([[
+  line(710, '01/10/2026 SALDO DO DIA 100,00'),
+  line(690, '02/10/2026 PAGAMENTO FATURA CARTAO DE CREDITO -30,00'),
+  line(650, '02/10/2026 SALDO DO DIA 70,00')
+]]);
+assert.equal(cartao.rows[0].creditCard, true, 'fatura de cartão fica identificada para exclusão');
+
 
 console.log('Coco: extratos CSV/PDF reconhecidos, saldos conferidos e layouts desconhecidos bloqueados.');

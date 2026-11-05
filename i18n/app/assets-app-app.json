@@ -12575,5 +12575,250 @@
   "en": "Savings pot deposits and withdrawals are not expenses or income. Check the position with your bank before recording them.",
   "fr": "Les dépôts et retraits de cagnottes ne sont ni des dépenses ni des revenus. Vérifiez la position auprès de votre banque avant de les enregistrer.",
   "es": "Los depósitos y retiros de apartados de ahorro no son gastos ni ingresos. Comprueba la posición con tu banco antes de registrarlos."
+ },
+ {
+  "pt": "Cenário bruto: {0} em 30 dias · {1} em 1 ano",
+  "tipo": "padrao",
+  "en": "Gross scenario: {0} in 30 days · {1} in 1 year",
+  "fr": "Scénario brut : {0} dans 30 jours · {1} dans 1 an",
+  "es": "Escenario bruto: {0} en 30 días · {1} en 1 año"
+ },
+ {
+  "pt": "Cenário bruto desde o saldo informado em {0}",
+  "tipo": "padrao",
+  "en": "Gross scenario from the balance entered on {0}",
+  "fr": "Scénario brut à partir du solde saisi le {0}",
+  "es": "Escenario bruto desde el saldo indicado el {0}"
+ },
+ {
+  "pt": "Movimento de investimento",
+  "tipo": "exato",
+  "en": "Investment transaction",
+  "fr": "Opération d’investissement",
+  "es": "Movimiento de inversión"
+ },
+ {
+  "pt": "Conta deste extrato",
+  "tipo": "exato",
+  "en": "Account for this statement",
+  "fr": "Compte de ce relevé",
+  "es": "Cuenta de este extracto"
+ },
+ {
+  "pt": "Escolha a conta",
+  "tipo": "exato",
+  "en": "Choose an account",
+  "fr": "Choisir un compte",
+  "es": "Elige una cuenta"
+ },
+ {
+  "pt": "Importar extrato",
+  "tipo": "exato",
+  "en": "Import statement",
+  "fr": "Importer un relevé",
+  "es": "Importar extracto"
+ },
+ {
+  "pt": "Escolher PDF, CSV ou OFX",
+  "tipo": "exato",
+  "en": "Choose PDF, CSV or OFX",
+  "fr": "Choisir un PDF, CSV ou OFX",
+  "es": "Elegir PDF, CSV u OFX"
+ },
+ {
+  "pt": "Cartão de crédito · fora da importação",
+  "tipo": "exato",
+  "en": "Credit card · excluded from import",
+  "fr": "Carte de crédit · exclue de l’importation",
+  "es": "Tarjeta de crédito · excluida de la importación"
+ },
+ {
+  "pt": "Retorno de investimento · rendimento bruto recebido",
+  "tipo": "exato",
+  "en": "Investment return · gross amount received",
+  "fr": "Retour d’investissement · montant brut reçu",
+  "es": "Retorno de inversión · importe bruto recibido"
+ },
+ {
+  "pt": "Aplicação · saída da conta",
+  "tipo": "exato",
+  "en": "Investment deposit · money leaving the account",
+  "fr": "Placement · sortie du compte",
+  "es": "Inversión · salida de la cuenta"
+ },
+ {
+  "pt": "Saldo ou data: confira com o banco",
+  "tipo": "exato",
+  "en": "Balance or date: check with your bank",
+  "fr": "Solde ou date : vérifiez auprès de votre banque",
+  "es": "Saldo o fecha: compruébalo con tu banco"
+ },
+ {
+  "pt": "Entrada",
+  "tipo": "exato",
+  "en": "Money in",
+  "fr": "Entrée",
+  "es": "Entrada"
+ },
+ {
+  "pt": "Saída",
+  "tipo": "exato",
+  "en": "Money out",
+  "fr": "Sortie",
+  "es": "Salida"
+ },
+ {
+  "pt": "Selecionar movimento {0}",
+  "tipo": "padrao",
+  "en": "Select transaction {0}",
+  "fr": "Sélectionner l’opération {0}",
+  "es": "Seleccionar movimiento {0}"
+ },
+ {
+  "pt": "Pagamento",
+  "tipo": "exato",
+  "en": "Payment",
+  "fr": "Paiement",
+  "es": "Pago"
+ },
+ {
+  "pt": "Não identificado",
+  "tipo": "exato",
+  "en": "Not identified",
+  "fr": "Non identifié",
+  "es": "No identificado"
+ },
+ {
+  "pt": "{0} movimento(s) de cartão de crédito ficam fora do salvamento.",
+  "tipo": "padrao",
+  "en": "{0} credit card transaction(s) will not be saved.",
+  "fr": "{0} opération(s) de carte de crédit ne seront pas enregistrées.",
+  "es": "{0} movimiento(s) de tarjeta de crédito no se guardarán."
+ },
+ {
+  "pt": "Nenhum movimento neste filtro.",
+  "tipo": "exato",
+  "en": "No transactions in this filter.",
+  "fr": "Aucune opération dans ce filtre.",
+  "es": "No hay movimientos en este filtro."
+ },
+ {
+  "pt": "Revisar extrato",
+  "tipo": "exato",
+  "en": "Review statement",
+  "fr": "Vérifier le relevé",
+  "es": "Revisar extracto"
+ },
+ {
+  "pt": "{0} selecionados",
+  "tipo": "padrao",
+  "en": "{0} selected",
+  "fr": "{0} sélectionnés",
+  "es": "{0} seleccionados"
+ },
+ {
+  "pt": "Filtrar movimentos",
+  "tipo": "exato",
+  "en": "Filter transactions",
+  "fr": "Filtrer les opérations",
+  "es": "Filtrar movimientos"
+ },
+ {
+  "pt": "Selecionar tudo seguro",
+  "tipo": "exato",
+  "en": "Select all safe transactions",
+  "fr": "Sélectionner toutes les opérations sûres",
+  "es": "Seleccionar todos los movimientos seguros"
+ },
+ {
+  "pt": "Limpar seleção",
+  "tipo": "exato",
+  "en": "Clear selection",
+  "fr": "Effacer la sélection",
+  "es": "Borrar selección"
+ },
+ {
+  "pt": "Remover selecionados da prévia",
+  "tipo": "exato",
+  "en": "Remove selected from preview",
+  "fr": "Retirer la sélection de l’aperçu",
+  "es": "Quitar selección de la vista previa"
+ },
+ {
+  "pt": "{0} Remover da prévia",
+  "tipo": "padrao",
+  "en": "{0} Remove from preview",
+  "fr": "{0} Retirer de l’aperçu",
+  "es": "{0} Quitar de la vista previa"
+ },
+ {
+  "pt": "Salvar tudo · {0}",
+  "tipo": "padrao",
+  "en": "Save all · {0}",
+  "fr": "Tout enregistrer · {0}",
+  "es": "Guardar todo · {0}"
+ },
+ {
+  "pt": "Escolha uma conta em reais para este extrato.",
+  "tipo": "exato",
+  "en": "Choose a BRL account for this statement.",
+  "fr": "Choisissez un compte en reais pour ce relevé.",
+  "es": "Elige una cuenta en reales para este extracto."
+ },
+ {
+  "pt": "Selecione ao menos um movimento.",
+  "tipo": "exato",
+  "en": "Select at least one transaction.",
+  "fr": "Sélectionnez au moins une opération.",
+  "es": "Selecciona al menos un movimiento."
+ },
+ {
+  "pt": "Confira nome, data, categoria e pagamento dos movimentos selecionados.",
+  "tipo": "exato",
+  "en": "Check the name, date, category and payment method of selected transactions.",
+  "fr": "Vérifiez le nom, la date, la catégorie et le mode de paiement des opérations sélectionnées.",
+  "es": "Comprueba el nombre, la fecha, la categoría y el medio de pago de los movimientos seleccionados."
+ },
+ {
+  "pt": "Limite de lançamentos do mês atingido.",
+  "tipo": "exato",
+  "en": "Monthly transaction limit reached.",
+  "fr": "Limite mensuelle d’opérations atteinte.",
+  "es": "Se alcanzó el límite mensual de movimientos."
+ },
+ {
+  "pt": "Os movimentos selecionados já estão registrados.",
+  "tipo": "exato",
+  "en": "The selected transactions are already recorded.",
+  "fr": "Les opérations sélectionnées sont déjà enregistrées.",
+  "es": "Los movimientos seleccionados ya están registrados."
+ },
+ {
+  "pt": "{0} lançamentos salvos nas datas do extrato{1}{2}.",
+  "tipo": "padrao",
+  "en": "{0} transactions saved on their statement dates{1}{2}.",
+  "fr": "{0} opérations enregistrées aux dates du relevé{1}{2}.",
+  "es": "{0} movimientos guardados en las fechas del extracto{1}{2}."
+ },
+ {
+  "pt": ", {0} duplicados ignorados",
+  "tipo": "padrao",
+  "en": ", {0} duplicates skipped",
+  "fr": ", {0} doublons ignorés",
+  "es": ", {0} duplicados omitidos"
+ },
+ {
+  "pt": ", {0} fora pelo limite",
+  "tipo": "padrao",
+  "en": ", {0} excluded by plan limit",
+  "fr": ", {0} exclus par la limite du forfait",
+  "es": ", {0} excluidos por el límite del plan"
+ },
+ {
+  "pt": "Não consegui salvar a importação. Confira sua conexão e tente novamente.",
+  "tipo": "exato",
+  "en": "Could not save the import. Check your connection and try again.",
+  "fr": "Impossible d’enregistrer l’importation. Vérifiez votre connexion et réessayez.",
+  "es": "No se pudo guardar la importación. Comprueba tu conexión e inténtalo de nuevo."
  }
 ]

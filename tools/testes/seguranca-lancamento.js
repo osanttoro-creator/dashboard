@@ -41,7 +41,14 @@ exige(/RewriteRule \^ https:\/\//.test(ht), '.htaccess não força HTTPS');
 exige(!fs.existsSync(caminho('assets/js/importer.js')), 'o importador automático voltou a existir');
 const importador = ler('assets/app/coco-import.js');
 exige(/FileReader|readAsText|arrayBuffer/.test(importador), 'a leitura do extrato saiu do aparelho');
-exige(/data-action="review-import-row"/.test(ler('assets/app/app.js')), 'o extrato deixou de passar por revisão');
+const telaDoExtrato = ler('assets/app/app.js');
+exige(/data-action="import-all"/.test(telaDoExtrato)
+  && /data-import-edit="description"/.test(telaDoExtrato)
+  && /data-import-edit="date"/.test(telaDoExtrato)
+  && /data-import-edit="categoryId"/.test(telaDoExtrato)
+  && /data-action="import-select"/.test(telaDoExtrato)
+  && /!item.creditCard && importIsSelected/.test(telaDoExtrato),
+  'o extrato deixou de passar por revisão antes do salvamento');
 
 const assistant = ler('supabase/functions/oaze-assistant/index.ts');
 exige(/reservarRateLimit/.test(assistant), 'assistente sem limite por minuto/dia');

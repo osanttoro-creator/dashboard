@@ -31,10 +31,12 @@
   function row(date, description, signedCents, balanceCents) {
     if (!date || !description || !Number.isSafeInteger(signedCents) || !signedCents) return null;
     const cleanDescription = String(description).replace(/\s+/g, ' ').trim().slice(0, 120);
-    const investmentTransfer = /^(aplicacao|resgate) cofrinhos\b/.test(normalized(cleanDescription));
+    const descriptionKey = normalized(cleanDescription);
+    const investmentTransfer = /\b(aplicacao|resgate|investimento|tesouro direto|corretora|cofrinhos)\b/.test(descriptionKey);
+    const creditCard = /\b(cartao (de )?credito|compra (no )?credito|pagamento (de )?fatura|fatura (do )?cartao)\b/.test(descriptionKey);
     return { date, description: cleanDescription, cents: signedCents,
       balanceCents: Number.isSafeInteger(balanceCents) ? balanceCents : null,
-      investmentTransfer };
+      investmentTransfer, creditCard };
   }
   function result(format, rows, checks, warnings) {
     if (!rows.length || rows.length > MAX_ROWS) throw new Error('Não encontrei movimentos seguros para revisar neste arquivo.');
@@ -193,7 +195,11 @@
       const movement = parsed.filter((item) => item.date > ordered[i - 1].date && item.date <= ordered[i].date)
         .reduce((sum, item) => sum + item.cents, 0);
       if (ordered[i - 1].cents + movement === ordered[i].cents) checks.passed++;
-      else checks.failed++;
+      else {
+        checks.failed++;
+        parsed.filter((item) => item.date > ordered[i - 1].date && item.date <= ordered[i].date)
+          .forEach((item) => { item.balanceConcern = true; });
+      }
     }
     return result('PDF bancário com saldos diários', parsed, checks, warnings);
   }
