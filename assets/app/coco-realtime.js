@@ -338,7 +338,11 @@
             this.setState(this.mode === 'push' ? 'IDLE' : 'LISTENING');
           break;
         }
-        case 'error': this.cb.onError?.('A Coco não conseguiu continuar a conversa por voz.'); this.stop('ERROR'); break;
+        case 'error':
+          this.responding = false;
+          this.cb.onError?.('Não consegui concluir a consulta. Tente novamente.');
+          this.setState(this.idleState());
+          break;
       }
     }
     disconnect() {
