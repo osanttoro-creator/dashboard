@@ -85,6 +85,8 @@ const voice = new ctx.CocoRealtime({
   });
   assert.match(offerSent, /^v=0/);
   voice.handle({ type: 'session.started', session: { id: 'live_test' } });
+  voice.handle({ type: 'error', error: { type: 'invalid_request_error', code: 'invalid_event' } });
+  assert.equal(voice.active, true, 'erro de comando não encerra a sessão de voz');
   assert.equal(track.enabled, false, 'push-to-talk começa sem enviar áudio');
   voice.beginPush(); assert.equal(track.enabled, true);
   voice.endPush(); assert.equal(track.enabled, false);
