@@ -12820,5 +12820,96 @@
   "en": "Could not save the import. Check your connection and try again.",
   "fr": "Impossible d’enregistrer l’importation. Vérifiez votre connexion et réessayez.",
   "es": "No se pudo guardar la importación. Comprueba tu conexión e inténtalo de nuevo."
+ },
+ {
+  "pt": "Salvar selecionados · {0}",
+  "tipo": "padrao",
+  "en": "Save selected · {0}",
+  "fr": "Enregistrer la sélection · {0}",
+  "es": "Guardar seleccionados · {0}"
+ },
+ {
+  "pt": "Escolher extrato e salvar",
+  "tipo": "exato",
+  "en": "Choose statement and save",
+  "fr": "Choisir un relevé et enregistrer",
+  "es": "Elegir extracto y guardar"
+ },
+ {
+  "pt": "Movimentos do extrato",
+  "tipo": "exato",
+  "en": "Statement transactions",
+  "fr": "Opérations du relevé",
+  "es": "Movimientos del extracto"
+ },
+ {
+  "pt": "Selecionar tudo",
+  "tipo": "exato",
+  "en": "Select all",
+  "fr": "Tout sélectionner",
+  "es": "Seleccionar todo"
+ },
+ {
+  "pt": "Ler e salvar outro arquivo",
+  "tipo": "exato",
+  "en": "Read and save another file",
+  "fr": "Lire et enregistrer un autre fichier",
+  "es": "Leer y guardar otro archivo"
+ },
+ {
+  "pt": "Nenhum movimento pôde ser salvo automaticamente. Confira os itens pendentes.",
+  "tipo": "exato",
+  "en": "No transactions could be saved automatically. Check pending items.",
+  "fr": "Aucune opération n’a pu être enregistrée automatiquement. Vérifiez les éléments en attente.",
+  "es": "No se pudo guardar ningún movimiento automáticamente. Revisa los pendientes."
+ },
+ {
+  "pt": "Corrija os itens sem nome, data ou categoria antes de salvar.",
+  "tipo": "exato",
+  "en": "Fix items without a name, date, or category before saving.",
+  "fr": "Corrigez les éléments sans nom, date ou catégorie avant d’enregistrer.",
+  "es": "Corrige los movimientos sin nombre, fecha o categoría antes de guardar."
+ },
+ {
+  "pt": "Estes movimentos já estão registrados.",
+  "tipo": "exato",
+  "en": "These transactions are already recorded.",
+  "fr": "Ces opérations sont déjà enregistrées.",
+  "es": "Estos movimientos ya están registrados."
+ },
+ {
+  "pt": "{0} lançamentos salvos nas datas do extrato{1}{2}{3}{4}.",
+  "tipo": "padrao",
+  "en": "{0} entries saved on their statement dates{1}{2}{3}{4}.",
+  "fr": "{0} écritures enregistrées aux dates du relevé{1}{2}{3}{4}.",
+  "es": "{0} movimientos guardados en las fechas del extracto{1}{2}{3}{4}."
+ },
+ {
+  "pt": ", {0} pendentes por dados incompletos",
+  "tipo": "padrao",
+  "en": ", {0} pending due to incomplete details",
+  "fr": ", {0} en attente à cause de données incomplètes",
+  "es": ", {0} pendientes por datos incompletos"
+ },
+ {
+  "pt": ", {0} repetidos no arquivo para conferir",
+  "tipo": "padrao",
+  "en": ", {0} repeated in the file to check",
+  "fr": ", {0} doublons dans le fichier à vérifier",
+  "es": ", {0} repetidos en el archivo para revisar"
+ },
+ {
+  "pt": "Escolha a conta do extrato para salvar automaticamente.",
+  "tipo": "exato",
+  "en": "Choose the statement account to save automatically.",
+  "fr": "Choisissez le compte du relevé pour enregistrer automatiquement.",
+  "es": "Elige la cuenta del extracto para guardar automáticamente."
+ },
+ {
+  "pt": "Salvando movimentos legíveis…",
+  "tipo": "exato",
+  "en": "Saving readable transactions…",
+  "fr": "Enregistrement des opérations lisibles…",
+  "es": "Guardando movimientos legibles…"
  }
 ]
