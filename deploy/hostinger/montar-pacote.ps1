@@ -36,7 +36,7 @@ $arquivos = @(
   'index.html', 'recursos.html', 'precos.html',
   'entrar.html', 'cadastro.html', 'recuperar-senha.html',
   'redefinir-senha.html', 'confirmar-email.html', 'retorno-app.html',
-  'privacidade.html', 'termos.html', 'suporte.html',
+  'privacidade.html', 'termos.html', 'suporte.html', 'excluir-conta.html',
   # aplicativo
   'app-v3.html',
   # apoio

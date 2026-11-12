@@ -75,6 +75,9 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://oaze.site/excluir-conta</loc>
+  </url>
+  <url>
     <loc>https://oaze.site/en/</loc>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://oaze.site/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://oaze.site/en/"/>
