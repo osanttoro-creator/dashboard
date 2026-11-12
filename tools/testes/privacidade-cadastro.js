@@ -8,17 +8,16 @@ const ler = (...p) => fs.readFileSync(path.join(RAIZ, ...p), 'utf8');
 const falhas = [];
 const exigir = (ok, msg) => { if (!ok) falhas.push(msg); };
 
-const paginas = ['cadastro.html', 'en/cadastro.html', 'fr/cadastro.html', 'es/cadastro.html'];
-paginas.forEach((pagina) => {
-  const h = ler(pagina);
-  exigir(/id="aceite-privacidade"/.test(h), pagina + ' não mostra o aceite');
-  exigir(h.indexOf('id="aceite-privacidade"') < h.indexOf('id="social"'),
-    pagina + ' mostra os métodos de cadastro antes da privacidade');
-  exigir(/id="botao-cadastrar" disabled/.test(h), pagina + ' libera cadastro antes do aceite');
-  exigir(/aceiteObrigatorio\(\)/.test(h), pagina + ' não valida o aceite no envio');
-  exigir(/A\.novoAceite\(['"]cadastro_email['"]\)/.test(h), pagina + ' não envia a versão aceita');
-  exigir(/oauth_/.test(h) && /guardarAceitePendente/.test(h), pagina + ' deixa OAuth sem evidência pendente');
-});
+/* 12/11/2026: o site deixou de ter cadastro e entrada; a única conta
+   criada pelo site é a de /assinar, e ela também pede o aceite antes. */
+const assinar = ler('assinar.html');
+exigir(/id="aceite"/.test(assinar), 'assinar.html não mostra o aceite');
+exigir(assinar.indexOf('id="aceite"') < assinar.indexOf('id="btn-google"'),
+  'assinar.html mostra os métodos de conta antes da privacidade');
+exigir((assinar.match(/if \(!aceiteOk\(\)\) return;/g) || []).length >= 2,
+  'assinar.html deixa algum caminho passar sem o aceite');
+exigir(/A\.novoAceite\('assinar_email'\)/.test(assinar) && /A\.novoAceite\('assinar_google'\)/.test(assinar),
+  'assinar.html não envia a versão aceita');
 
 const auth = ler('assets', 'js', 'site-auth.js');
 /* O bloqueio do primeiro uso mudou de casa: era um modal trancado
@@ -53,16 +52,7 @@ exigir(/\[auth\.hook\.before_user_created\][\s\S]*?enabled\s*=\s*true/.test(conf
    as duas metades disso: a caixa existe e vem antes dos botões de
    entrada, e NENHUM dos caminhos (Google/Apple, link mágico, senha)
    passa sem consultá-la. */
-const entrar = ler('entrar.html');
-exigir(/id="aceite"/.test(entrar), 'entrar.html não mostra a autorização');
-exigir(entrar.indexOf('id="aceite"') < entrar.indexOf('id="social"'),
-  'entrar.html mostra os métodos de entrada antes da autorização');
-exigir((entrar.match(/if \(!autorizado\(\)\) return;/g) || []).length >= 3,
-  'entrar.html deixa algum caminho de entrada passar sem autorização');
-exigir(/toquePronto = true/.test(entrar) && /armarToqueUnico/.test(entrar),
-  'o toque único do Google entra sem passar pela autorização');
-exigir(/guardarAceitePendente\(A\.novoAceite\('entrar'\)\)/.test(entrar),
-  'entrar.html não deixa marca do aceite para o app gravar');
+/* entrar.html saiu com o painel web (12/11/2026). */
 exigir(/coco: true/.test(auth), 'o aceite não cobre a Coco, e ela voltaria a perguntar');
 exigir(/localStorage\.setItem\(CHAVE_ACEITE_PENDENTE/.test(auth),
   'o aceite não sobrevive à volta do link mágico, que abre outra aba');

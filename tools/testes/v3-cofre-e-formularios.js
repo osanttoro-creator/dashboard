@@ -11,8 +11,6 @@ const css = read('assets/app/app.css');
 const calendar = read('assets/app/calendar.css');
 const backend = read('assets/app/live-backend.js');
 const auth = read('assets/js/site-auth.js');
-const register = read('cadastro.html');
-const login = read('entrar.html');
 const sql = read('supabase/migrations/20261003090000_cofre_pin.sql');
 const edge = read('supabase/functions/oaze-cofre/index.ts');
 
@@ -28,8 +26,6 @@ assert.match(calendar, /grid-template-columns:\s*repeat\(7,/, 'semana deve mante
 
 assert.match(auth, /A\.cadastrar[\s\S]*?auth\.signInWithOtp/, 'cadastro novo deve usar confirmação por e-mail');
 assert.match(auth, /shouldCreateUser:\s*false/, 'login por link não pode criar conta sem aceite');
-assert.doesNotMatch(register, /name="senha"/, 'cadastro novo não deve pedir senha');
-assert.match(login, /id="form-magico"/, 'entrada deve oferecer link por e-mail');
 /* 01/11/2026: toda conta sem PIN cria o seu na entrada (não só a marcada). */
 assert.match(backend, /await requirePinSetup\(await cofrePromessa\)/, 'usuário novo deve configurar o PIN antes do painel');
 assert.match(backend, /if \(status\.configured\) \{ await oferecerBloqueioDoAparelho\(\); return; \}/, 'conta sem PIN não pode passar direto para o painel');

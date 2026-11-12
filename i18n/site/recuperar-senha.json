@@ -94,5 +94,17 @@
   "en": "Didn't get it? Check the address you typed and your spam folder.",
   "fr": "Rien reçu ? Vérifiez l'adresse saisie et votre dossier de spam.",
   "es": "¿No llegó? Revisa la dirección que escribiste y la carpeta de spam."
+ },
+ {
+  "pt": "Aplicativos",
+  "en": "Apps",
+  "fr": "Applications",
+  "es": "Aplicaciones"
+ },
+ {
+  "pt": "Lembrou a senha? É só entrar pelo app.",
+  "en": "Remembered your password? Just sign in through the app.",
+  "fr": "Vous vous souvenez du mot de passe ? Connectez-vous simplement depuis l’app.",
+  "es": "¿Recordaste la contraseña? Solo inicia sesión en la app."
  }
 ]

@@ -17,9 +17,10 @@ assert.match(html, /data-oaze-mode="live"/);
    V3 — enquanto os dois existiam; hoje é um só, e a lista explícita
    do script precisa continuar citando ele, senão o site sobe sem
    aplicativo e o erro só aparece para quem tentar entrar. */
-assert.match(packageScript, /'app-v3\.html',/);
+/* 12/11/2026: o painel web saiu do ar; o pacote não leva mais a V3. */
+assert.doesNotMatch(packageScript, /'app-v3\.html',/);
 assert.doesNotMatch(packageScript, /'app\.html'/);
-assert.match(workflow, /checar \/app-v3\.html\s+200/);
+assert.match(workflow, /checar \/app-v3\.html\s+301/);
 /* O endereço dos arquivos leva um carimbo de versão (?v=…) para o
    navegador não servir cópia velha depois de publicar. O que importa
    aqui é que o /app continue carregando ESTES dois arquivos; o

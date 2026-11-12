@@ -14,7 +14,7 @@
     (fragment.has('access_token') && fragment.has('refresh_token')) ||
     (query.has('error') && query.has('error_description')) ||
     (fragment.has('error') && fragment.has('error_description'));
-  if (retorno) location.replace('/app' + location.search + location.hash);
+  if (retorno) location.replace('/confirmar-email' + location.search + location.hash);
 })();
 </script>
 
@@ -315,7 +315,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 demandes à Coco par mois</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Jusqu’à 3 personnes dans le même espace</span></li>
           </ul>
-          <a class="btn btn-claro" href="#baixar">Voir la disponibilité</a>
+          <a class="btn btn-claro" href="/assinar">S’abonner à Oásis</a>
           <p class="preco-nota">Annulez quand vous voulez, directement dans les réglages.</p>
         </article>
       </div>
@@ -411,6 +411,7 @@
           <li><a href="#carteira">Portefeuille</a></li>
           <li><a href="#coco">Coco</a></li>
           <li><a href="#planos">Formules</a></li>
+          <li><a href="/assinar">S’abonner à Oásis</a></li>
         </ul>
       </div>
       <div>

@@ -40,10 +40,10 @@
       <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
       <p id="explica">One moment while we validate the link.</p>
       <p id="acoes" hidden>
-        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/onboarding">Continue</a>
+        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/en/#baixar">Download the app</a>
       </p>
       <p class="pe-do-painel" id="pe" hidden>
-        <a href="/en/entrar">Go to the sign-in page</a>
+        <a href="/en/">Back to home</a>
       </p>
     </div>
   </div>
@@ -64,10 +64,20 @@
 
   if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
 
+  /* Quem começou em /assinar volta para lá, já com a sessão aberta,
+     para concluir o pagamento. A marca vale duas horas. */
+  function assinaturaPendente() {
+    try {
+      var m = JSON.parse(localStorage.getItem('oaze.assinar') || 'null');
+      return !!(m && m.ate > Date.now());
+    } catch (e) { return false; }
+  }
+
   function pronto(u) {
+    if (assinaturaPendente()) { location.replace('/assinar'); return; }
     titulo.textContent = 'Email confirmed';
     explica.textContent = 'Your account ' + (u.email ? '(' + u.email + ') ' : '') +
-      'is active. Let\'s set up your dashboard in a few quick steps.';
+      'is active. Download OAZE on Android or Windows and sign in with this e-mail.';
     acoes.hidden = false;
   }
 
@@ -78,7 +88,7 @@
        cai aqui igual. O texto cobre os dois casos em vez de acusar
        um erro que pode não ter havido. */
     A.diz(recado, 'This link is no longer valid — either it expired or it ' +
-      'has already been used. If you confirmed before, just sign in as usual.', 'aviso');
+      'has already been used. If you confirmed before, just sign in through the app.', 'aviso');
     pe.hidden = false;
   }
 

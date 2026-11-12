@@ -112,5 +112,11 @@
   "en": "Password changed. Opening your dashboard…",
   "fr": "Mot de passe modifié. Ouverture de votre tableau de bord…",
   "es": "Contraseña cambiada. Abriendo tu panel…"
+ },
+ {
+  "pt": "Senha alterada. Agora é só entrar no app OAZE com a senha nova.",
+  "en": "Password changed. Now just sign in to the OAZE app with your new password.",
+  "fr": "Mot de passe modifié. Connectez-vous maintenant à l’app OAZE avec le nouveau mot de passe.",
+  "es": "Contraseña cambiada. Ahora solo inicia sesión en la app OAZE con la nueva contraseña."
  }
 ]

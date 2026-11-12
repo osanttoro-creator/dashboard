@@ -14,7 +14,7 @@
     (fragment.has('access_token') && fragment.has('refresh_token')) ||
     (query.has('error') && query.has('error_description')) ||
     (fragment.has('error') && fragment.has('error_description'));
-  if (retorno) location.replace('/app' + location.search + location.hash);
+  if (retorno) location.replace('/confirmar-email' + location.search + location.hash);
 })();
 </script>
 
@@ -315,7 +315,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 pedidos à Coco por mês</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Até 3 pessoas no mesmo espaço</span></li>
           </ul>
-          <a class="btn btn-claro" href="#baixar">Conhecer disponibilidade</a>
+          <a class="btn btn-claro" href="/assinar">Assinar o Oásis</a>
           <p class="preco-nota">Cancele quando quiser, direto nas configurações.</p>
         </article>
       </div>
@@ -411,6 +411,7 @@
           <li><a href="#carteira">Carteira</a></li>
           <li><a href="#coco">A Coco</a></li>
           <li><a href="#planos">Planos</a></li>
+          <li><a href="/assinar">Assinar o Oásis</a></li>
         </ul>
       </div>
       <div>

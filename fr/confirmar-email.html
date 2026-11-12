@@ -40,10 +40,10 @@
       <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
       <p id="explica">Un instant, nous vérifions le lien.</p>
       <p id="acoes" hidden>
-        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/onboarding">Continuer</a>
+        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/fr/#baixar">Télécharger l’app</a>
       </p>
       <p class="pe-do-painel" id="pe" hidden>
-        <a href="/fr/entrar">Aller à la page de connexion</a>
+        <a href="/fr/">Retour à l’accueil</a>
       </p>
     </div>
   </div>
@@ -64,10 +64,20 @@
 
   if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
 
+  /* Quem começou em /assinar volta para lá, já com a sessão aberta,
+     para concluir o pagamento. A marca vale duas horas. */
+  function assinaturaPendente() {
+    try {
+      var m = JSON.parse(localStorage.getItem('oaze.assinar') || 'null');
+      return !!(m && m.ate > Date.now());
+    } catch (e) { return false; }
+  }
+
   function pronto(u) {
+    if (assinaturaPendente()) { location.replace('/assinar'); return; }
     titulo.textContent = 'E-mail confirmé';
     explica.textContent = 'Votre compte ' + (u.email ? '(' + u.email + ') ' : '') +
-      'est active. Configurons votre tableau de bord en quelques étapes rapides.';
+      'est active. Téléchargez OAZE sur Android ou Windows et connectez-vous avec cet e-mail.';
     acoes.hidden = false;
   }
 
@@ -78,7 +88,7 @@
        cai aqui igual. O texto cobre os dois casos em vez de acusar
        um erro que pode não ter havido. */
     A.diz(recado, 'Ce lien n\'est plus valable — soit il a expiré, soit il ' +
-      'a déjà été utilisé. Si vous avez déjà confirmé, connectez-vous simplement.', 'aviso');
+      'a déjà été utilisé. Si vous avez déjà confirmé, connectez-vous simplement depuis l’app.', 'aviso');
     pe.hidden = false;
   }
 
