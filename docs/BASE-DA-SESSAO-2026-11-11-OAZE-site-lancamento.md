@@ -35,3 +35,9 @@ Jonatham pediu uma apresentação nova inspirada na estrutura direta da página 
 Jonatham aprovou a direção funcional do botão dentro do app e forneceu a imagem exata. Não houve aprovação visual explícita da nova página nesta sessão. Publicação e teste em produção devem ser registrados separadamente após a execução do deploy.
 
 Quando as fichas oficiais estiverem públicas, verificar os links exatos e preencher [lojas-oaze.js](../assets/js/lojas-oaze.js). Validar uma assinatura real em conta de teste, o ícone instalado no Android/Windows e a chegada de mensagens do formulário em `info@oaze.site`.
+
+## Publicação verificada
+
+Os commits `2bc251c` e `3a6b541` foram enviados à `main`. O [workflow Hostinger 176](https://github.com/osanttoro-creator/dashboard/actions/runs/43133552371) terminou com sucesso. A página inicial, `/precos`, `/app/planos`, o CSS e a imagem responderam HTTP 200 no domínio; o HTML servido continha a nova chamada, a referência à imagem e o link de assinatura. `/app/planos` entregou a tela do aplicativo. Isso confirma a rota pública, não a cobrança autenticada.
+
+O SHA-256 da imagem original recebida e do arquivo no repositório é igual (`2F4395416AA0FB2D981F9553A6E9E0FEBF800879B69A6DEB1FAC8BA6A33F42EE`). A resposta PNG da Hostinger teve bytes diferentes, embora a imagem inspecionada visualmente corresponda à enviada; o servidor pode ter recompactado o arquivo. Não foi executada comparação pixel a pixel.
