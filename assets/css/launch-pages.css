@@ -1,0 +1,13 @@
+/* Páginas de apoio do lançamento: mesma linguagem visual da apresentação. */
+body { --ouro:#5fa99b; --ouro-claro:#f0e5cf; --ancora:#0d1821; --poco:#0a151d; --noite:#0d1821; --petroleo:#142936; --raso:#203947; --tinta:#f0e5cf; --borda-ouro:rgba(95,169,155,.45); background:#0d1821; }
+.topo,.topo.rolou { background:rgba(13,24,33,.97); border-bottom:1px solid rgba(95,169,155,.28); }
+.topo .menu a:hover,.rodape a:hover { color:#5fa99b; }
+.btn-principal { background:#5fa99b; color:#0d1821; }
+.btn-principal:hover { background:#80bbaf; color:#0d1821; }
+.btn-fantasma:hover { border-color:#5fa99b; color:#5fa99b; }
+.cabeca-pagina { background:#0d1821; }
+.cabeca-pagina h1 em,.secao h2 em { color:#5fa99b; }
+.plano-destaque { border-color:#5fa99b; }
+.secao:nth-of-type(even) { background:#142936; }
+.rodape { background:#0a151d; }
+:focus-visible { outline-color:#5fa99b; }

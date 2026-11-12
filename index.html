@@ -27,7 +27,7 @@
      recuperar-senha, privacidade, termos, suporte, 404.
      ============================================================= -->
 <title>OAZE | Seu dinheiro por inteiro</title>
-<meta name="description" content="OAZE reúne contas, cartões, faturas e planos para você enxergar o mês por inteiro. Conheça a Coco e acompanhe a chegada dos aplicativos às lojas.">
+<meta name="description" content="OAZE reúne contas, cartões, faturas e planos para você enxergar o mês por inteiro. Conheça a assistente OAZE e acompanhe a chegada dos aplicativos às lojas.">
 <link rel="canonical" href="https://oaze.site/">
 <!-- idiomas: gerado por tools/gen-idiomas.js -->
 <link rel="alternate" hreflang="pt-BR" href="https://oaze.site/">
@@ -55,10 +55,10 @@
 <meta name="theme-color" content="#071822">
 <link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
-<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="apple-touch-icon" href="/assets/brand/oaze-mascote-app.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/v3.css">
-<link rel="stylesheet" href="/assets/css/landing-editorial.css">
+<link rel="stylesheet" href="/assets/css/launch-2026.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -95,7 +95,7 @@
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Android, Windows",
       "inLanguage": "pt-BR",
-      "description": "Controle financeiro pessoal com contas, cartões, gastos, orçamentos, metas e a Coco, a assistente do OAZE.",
+      "description": "Controle financeiro pessoal com contas, cartões, gastos, orçamentos, metas e a assistente OAZE.",
       "publisher": { "@id": "https://oaze.site/#organization" },
       "offers": [
         { "@type": "Offer", "name": "Semente", "price": "0.00",  "priceCurrency": "BRL" },
@@ -122,7 +122,7 @@
 
     <nav class="menu" id="menu" aria-label="Navegação principal">
       <a href="#recursos">O que faz</a>
-      <a href="#coco">A Coco</a>
+      <a href="#coco">Assistente OAZE</a>
       <a href="#seguranca">Segurança</a>
       <a href="#planos">Planos</a>
     </nav>
@@ -134,255 +134,31 @@
 </header>
 
 <main id="conteudo">
-  <section class="l2-hero" aria-labelledby="heroi-titulo">
-    <div class="env">
-      <div class="l2-hero-copy">
-        <p class="l2-eyebrow">OAZE / SEU ESPAÇO FINANCEIRO</p>
-        <h1 id="heroi-titulo">O mês fica mais leve quando <em>você enxerga o todo.</em></h1>
-        <p class="l2-lead">Contas, cartões, despesas e planos se encontram no OAZE. Você entende o que aconteceu, vê o que vem pela frente e escolhe o próximo passo com calma.</p>
-        <div class="l2-hero-actions">
-          <a class="btn l2-button-dark" href="#baixar">Ver aplicativos <span aria-hidden="true">↗</span></a>
-          <a class="l2-text-link" href="#recursos">Descobrir como funciona <span aria-hidden="true">↓</span></a>
-        </div>
+  <section class="launch-hero" aria-labelledby="heroi-titulo">
+    <div class="env launch-hero-grid">
+      <div class="launch-hero-copy">
+        <p class="launch-kicker">OAZE · ORGANIZAÇÃO FINANCEIRA</p>
+        <h1 id="heroi-titulo">O dinheiro faz mais sentido quando você vê <em>o mês inteiro.</em></h1>
+        <p>Contas, cartões, faturas e compromissos no mesmo lugar. OAZE mostra o que já aconteceu e o que ainda vem, sem misturar previsão com saldo.</p>
+        <div class="launch-actions"><a class="btn launch-primary" href="#baixar">Conhecer o aplicativo <span aria-hidden="true">↗</span></a><a class="launch-link" href="#recursos">Ver como funciona <span aria-hidden="true">↓</span></a></div>
+        <p class="launch-hero-note">Comece com o plano Semente, sem cartão de crédito.</p>
       </div>
-      <div class="l2-product-stage" role="img" aria-label="Visão geral do OAZE no computador, com dados de demonstração">
-        <div class="l2-stage-track" aria-hidden="true"><span></span><span></span><span></span></div>
-        <figure class="l2-stage-screen"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></figure>
-        <div class="l2-stage-note l2-stage-note-a" aria-hidden="true"><span>01 / AGORA</span><strong>O que entrou e saiu</strong></div>
-        <div class="l2-stage-note l2-stage-note-b" aria-hidden="true"><span>02 / ADIANTE</span><strong>O que ainda vem</strong></div>
-        <img class="l2-stage-coco" src="/assets/coco/rostinhos/02_feliz.png" alt="" width="240" height="240" loading="eager" decoding="async">
-      </div>
-      <p class="l2-stage-caption">Tela demonstrativa · dados de exemplo</p>
-    </div>
-  </section>
-
-  <section class="l2-transition" id="recursos" aria-labelledby="recursos-titulo">
-    <div class="env">
-      <p class="l2-eyebrow">MENOS ABAS. MAIS CONTEXTO.</p>
-      <h2 id="recursos-titulo">Tudo conversa. <em>Até os números.</em></h2>
-      <div class="l2-transition-grid">
-        <article><span>01</span><h3>Registre do seu jeito</h3><p>Você informa o que entrou ou saiu. Texto, voz e foto ajudam a tirar o registro da cabeça.</p></article>
-        <article><span>02</span><h3>Veja o mês inteiro</h3><p>Saldo, gastos, faturas e compromissos aparecem juntos, cada um no lugar certo.</p></article>
-        <article><span>03</span><h3>Decida com antecedência</h3><p>Planejamento e metas dão direção ao que sobra, sem confundir previsão com dinheiro disponível.</p></article>
-      </div>
-      <a class="l2-text-link" href="/recursos">Explorar todos os recursos <span aria-hidden="true">↗</span></a>
-    </div>
-  </section>
-
-  <section class="l2-story l2-story-wallet" id="carteira" aria-labelledby="carteira-titulo">
-    <div class="env l2-story-grid">
-      <div class="l2-story-copy">
-        <p class="l2-eyebrow">CARTEIRA / SEM PONTAS SOLTAS</p>
-        <h2 id="carteira-titulo">A compra passa. <em>O contexto fica.</em></h2>
-        <p>Crédito e débito têm caminhos diferentes. No OAZE, compras, parcelas e faturas aparecem no ciclo certo, com o que foi pago e o que ainda falta.</p>
-        <a class="l2-text-link" href="/recursos">Conhecer a carteira <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="l2-wallet-scene">
-        <div class="l2-wallet-disc" aria-hidden="true"></div>
-        <figure><img src="/assets/telas/celular-carteira.jpg" alt="Demonstração da carteira do OAZE no celular com cartão e saldo de exemplo" width="923" height="1944" loading="lazy" decoding="async"><figcaption>Tela real do app · dados de exemplo</figcaption></figure>
-        <div class="l2-wallet-label" aria-hidden="true">CADA CARTÃO.<br>NO SEU CICLO.</div>
+      <div class="launch-hero-visual">
+        <div class="launch-visual-head"><span>UM LUGAR PARA OLHAR O TODO</span><span aria-hidden="true">● ● ●</span></div>
+        <img src="/assets/telas/computador-inicio.jpg" alt="Tela demonstrativa da visão geral do OAZE, com dados de exemplo" width="1440" height="900" fetchpriority="high">
+        <span class="launch-visual-foot">TELA DEMONSTRATIVA · DADOS DE EXEMPLO</span>
       </div>
     </div>
   </section>
-
-  <section class="l2-coco" id="coco" aria-labelledby="coco-titulo">
-    <div class="env l2-coco-grid">
-      <div class="l2-coco-copy">
-        <p class="l2-eyebrow">CONHEÇA A COCO</p>
-        <h2 id="coco-titulo">Uma conversa que vira <em>clareza.</em></h2>
-        <p>Fale do seu dinheiro como você fala na vida real. A Coco ajuda a entender os números e prepara lançamentos para você revisar. A decisão final é sempre sua.</p>
-        <div class="l2-chat" aria-label="Exemplo ilustrativo de conversa com a Coco">
-          <p class="l2-chat-user">“Gastei R$ 45 no mercado hoje.”</p>
-          <p class="l2-chat-coco">Entendi. Quer registrar como alimentação?</p>
-          <small>Exemplo de conversa · nenhuma ação sem confirmação</small>
-        </div>
-        <a class="btn l2-button-dark" href="#baixar">Conhecer os aplicativos</a>
-      </div>
-      <div class="l2-coco-portrait"><span aria-hidden="true">COCO / OAZE</span><img src="/assets/coco/corpo-explicando.webp" alt="Coco, a axolote do OAZE, explicando com uma pata levantada" width="600" height="600" loading="lazy" decoding="async"></div>
-    </div>
-  </section>
-
-  <section class="l2-forward" id="agenda" aria-labelledby="agenda-titulo">
-    <div class="env l2-forward-grid">
-      <div class="l2-forward-visual" aria-label="Exemplo ilustrativo de agenda financeira com pagamentos previstos">
-        <div class="l2-forward-head"><span>AGENDA FINANCEIRA</span><strong>O que vem pela frente</strong></div>
-        <ol>
-          <li><time>08</time><span><strong>Contas do mês</strong><small>Organizadas por vencimento</small></span><b>↗</b></li>
-          <li><time>16</time><span><strong>Fatura do cartão</strong><small>No ciclo certo</small></span><b>↗</b></li>
-          <li><time>30</time><span><strong>Fechamento</strong><small>O que ainda está previsto</small></span><b>↗</b></li>
-        </ol>
-        <p>Exemplo ilustrativo · datas não representam sua conta</p>
-      </div>
-      <div class="l2-story-copy">
-        <p class="l2-eyebrow">ANTES QUE O MÊS ACABE</p>
-        <h2 id="agenda-titulo">Olhe para frente <em>sem adivinhar.</em></h2>
-        <p>Agenda e recorrências mostram o que já tem data para acontecer. Você planeja com o mês inteiro na mesa, não só com o saldo de hoje.</p>
-        <a class="l2-text-link" href="/recursos">Ver agenda e planejamento <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-control" id="seguranca" aria-labelledby="seguranca-titulo">
-    <div class="env">
-      <div class="l2-control-head"><p class="l2-eyebrow">VOCÊ NO COMANDO</p><h2 id="seguranca-titulo">Ajuda para decidir. <em>Controle para seguir.</em></h2></div>
-      <div class="l2-control-grid">
-        <article><span>01 / CONFIRMAÇÃO</span><h3>Nada se move sozinho</h3><p>Uma sugestão da Coco só entra na carteira depois da sua confirmação.</p></article>
-        <article><span>02 / CONTEXTO</span><h3>Previsto é previsto</h3><p>O que ainda vai acontecer fica separado do saldo que você tem agora.</p></article>
-        <article><span>03 / ESCOLHA</span><h3>Seus dados, suas regras</h3><p>Você pode rever o que a Coco aprende, pausar o aprendizado e apagar lembranças.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-stores lojas-oaze" id="baixar" aria-labelledby="baixar-titulo">
-    <div class="env l2-stores-grid">
-      <div class="l2-stores-copy"><p class="l2-eyebrow">OAZE NO SEU DISPOSITIVO</p><h2 id="baixar-titulo">Seu espaço financeiro, <em>onde você estiver.</em></h2><p>As páginas oficiais das lojas estão em preparação. Quando estiverem disponíveis, os botões daqui vão direto para o OAZE.</p></div>
-      <div class="lojas-opcoes" aria-label="Disponibilidade dos aplicativos">
-        <article class="loja-cartao"><div class="loja-icone" aria-hidden="true">▶</div><div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="play">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article>
-        <article class="loja-cartao"><div class="loja-icone windows" aria-hidden="true">⊞</div><div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="windows">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════ PLANOS ══════ -->
-  <section class="secao" id="planos" aria-labelledby="planos-titulo">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2 id="planos-titulo">o plano que acompanha você</h2>
-        <p>Comece grátis, sem cartão. O plano grátis não expira. Mude quando precisar.</p>
-      </div>
-
-      <div class="ciclo revela" role="group" aria-label="Ciclo de cobrança">
-        <button type="button" data-ciclo="mensal" aria-pressed="true">Mensal</button>
-        <button type="button" data-ciclo="anual" aria-pressed="false">Anual <span class="economia">−35%</span></button>
-      </div>
-
-      <!-- OS NÚMEROS AQUI SÃO OS DE assets/js/planos.js.
-           Eles vivem em dois lugares por um motivo: o buscador e o
-           link compartilhado leem o HTML, não o JavaScript. Quem
-           impede a divergência é tools/conferir-planos.js, que roda
-           dentro do deploy — mudou o preço lá, o build quebra aqui,
-           e não no extrato de alguém.
-
-           O selo do anual é o MENOR desconto entre os planos pagos,
-           arredondado para baixo: ele vale para os dois botões ao
-           mesmo tempo, e prometer o desconto do plano melhor seria
-           prometer a mais para quem escolhe o outro. -->
-      <div class="planos">
-        <article class="plano revela">
-          <div class="plano-cabeca"><h3>Semente</h3></div>
-          <span class="preco-valor dado">R$ 0</span>
-          <span class="preco-ciclo">para sempre, sem cartão de crédito</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 espaço financeiro, 2 contas e 3 cartões</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Até 100 lançamentos por mês</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 orçamento, 1 meta e 3 recorrências</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Histórico dos últimos 3 meses</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 pedidos à Coco por mês</span></li>
-          </ul>
-          <p class="plano-teto">Ao bater num limite, nada é apagado: o que para é a criação de itens novos daquele tipo.</p>
-          <a class="btn btn-linha" href="#baixar">Ver disponibilidade</a>
-        </article>
-
-        <article class="plano e-destaque revela">
-          <div class="plano-cabeca">
-            <h3>Oásis</h3>
-          </div>
-          <span class="preco-valor dado" data-mensal="R$ 35,90" data-anual="R$ 23,32">R$ 35,90</span>
-          <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado R$ 279,90 por ano — você economiza R$ 150,90">por mês, cobrado mensalmente</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span><strong>App para Windows incluso</strong></span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 espaço financeiro, 2 contas e 3 cartões</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Até 100 lançamentos por mês</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 orçamento, 1 meta e 3 recorrências</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Histórico dos últimos 3 meses</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 pedidos à Coco por mês</span></li>
-          </ul>
-          <p class="plano-teto">Ao bater num limite, nada é apagado: o que para é a criação de itens novos daquele tipo.</p>
-          <a class="btn btn-linha" href="#baixar">Ver disponibilidade</a>
-        </article>
-
-        <article class="plano e-destaque revela">
-          <div class="plano-cabeca">
-            <h3>Oásis</h3>
-          </div>
-          <span class="preco-valor dado" data-mensal="R$ 35,90" data-anual="R$ 23,32">R$ 35,90</span>
-          <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado R$ 279,90 por ano — você economiza R$ 150,90">por mês, cobrado mensalmente</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Até 5 espaços financeiros e 50 contas</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Cartões e lançamentos sem limite</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Histórico completo e comparação anual</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Coco com conversa, análises e propostas para revisar</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 pedidos à Coco por mês</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Até 3 pessoas no mesmo espaço</span></li>
-          </ul>
-          <a class="btn btn-claro" href="#baixar">Conhecer disponibilidade</a>
-          <p class="preco-nota">Cancele quando quiser, direto nas configurações.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ══════ PERGUNTAS ══════ -->
-  <section class="secao" aria-labelledby="duvidas-titulo">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2 id="duvidas-titulo">o que você precisa saber</h2>
-        <p>As perguntas que mais aparecem sobre o OAZE e sobre a Coco.</p>
-      </div>
-
-      <div class="perguntas revela">
-        <details class="pergunta">
-          <summary>A Coco pode mexer no meu dinheiro?</summary>
-          <p>Não. O OAZE não faz transferência, pagamento nem qualquer movimentação — ele organiza o registro do seu dinheiro. A Coco prepara lançamentos, sugere recorrências e propõe aportes; nada disso muda um saldo antes de você confirmar.</p>
-        </details>
-        <details class="pergunta">
-          <summary>O OAZE conecta no meu banco?</summary>
-          <p>Ainda não. Hoje os lançamentos entram por você ou pela Coco, a partir do que você conta para ela. A conexão automática com bancos está no plano, mas não está no produto — e enquanto não estiver, não vamos anunciar que está.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Preciso de conta para usar?</summary>
-          <p>Não. O app funciona neste aparelho sem conta nenhuma, com os dados guardados só aqui. A conta serve para ver os mesmos dados no computador e no celular, e para conversar com a Coco.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Como funcionam os pedidos à Coco?</summary>
-          <p>Pedidos enviados à IA usam a cota do plano: 10 por mês no Semente e 200 no Oásis. O contador aparece no app e renova a cada mês. Consultas simples calculadas pelo painel, revisão e desfazer lançamentos não consomem pedidos.</p>
-        </details>
-        <details class="pergunta">
-          <summary>O que acontece quando eu bato num limite do grátis?</summary>
-          <p>Nada é apagado e nada some da tela. O que para é a criação de itens novos daquele tipo — e o app diz qual limite foi, quanto você está usando e onde abrir espaço. Voltar para o grátis depois de assinar também não apaga nada.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Que dados meus vão para a inteligência artificial?</summary>
-          <p>Só um resumo agregado: totais, categorias consolidadas, metas e despesas previstas. Nunca a lista de lançamentos, nomes de conta ou cartão, seu e-mail ou identificadores. A tela de consentimento mostra exatamente o que segue antes do primeiro uso, e dá para revogar em Configurações.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Posso cancelar quando quiser?</summary>
-          <p>Sim, direto nas Configurações. A renovação para na hora e você continua com o plano até o fim do período que já pagou. Depois disso a conta volta para o grátis, com tudo o que você registrou no lugar.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-contact" id="contato" aria-labelledby="contato-titulo">
-    <div class="env l2-contact-grid">
-      <div class="l2-contact-copy">
-        <p class="l2-eyebrow">FALE COM O OAZE</p>
-        <h2 id="contato-titulo">Ficou alguma <em>pergunta?</em></h2>
-        <p>Escreva sua dúvida, sugestão ou mensagem. A gente lê e responde pelo e-mail que você informar.</p>
-        <a href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true">↗</span></a>
-      </div>
-      <form class="contato l2-contact-form" id="formContato" novalidate>
-        <div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div>
-        <div class="campo"><label for="contatoNome">Seu nome</label><input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required><p class="erro" id="contatoNomeErro" hidden>Diga como podemos te chamar.</p></div>
-        <div class="campo"><label for="contatoEmail">Seu e-mail</label><input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica"><p class="dica" id="contatoEmailDica">É para ele que respondemos.</p><p class="erro" id="contatoEmailErro" hidden>Confira o e-mail: é por ele que vamos responder.</p></div>
-        <div class="campo"><label for="contatoMensagem">Sua mensagem</label><textarea id="contatoMensagem" name="mensagem" rows="5" minlength="10" maxlength="5000" required></textarea><p class="erro" id="contatoMensagemErro" hidden>Escreva um pouco mais — pelo menos uma frase.</p></div>
-        <div class="contato-isca" aria-hidden="true"><label for="contatoSite">Deixe em branco</label><input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off"></div>
-        <button type="submit" class="btn l2-button-dark" id="contatoEnviar">Enviar mensagem</button>
-      </form>
-    </div>
-  </section>
-
+  <section class="launch-statement" id="recursos" aria-labelledby="recursos-titulo"><div class="env"><p class="launch-kicker">CLAREZA ANTES DA DECISÃO</p><h2 id="recursos-titulo">Seu mês não cabe <em>em um saldo.</em></h2><p>Um número isolado não conta a história toda. Veja o que entrou, o que saiu, o que foi pago e o que ainda tem data para acontecer.</p><a class="launch-link" href="/recursos">Explorar os recursos <span aria-hidden="true">↗</span></a></div></section>
+  <section class="launch-feature" id="carteira" aria-labelledby="carteira-titulo"><div class="env launch-feature-grid"><div class="launch-feature-copy"><p class="launch-kicker">CARTEIRA</p><h2 id="carteira-titulo">Cartões e contas, <em>cada um no seu ciclo.</em></h2><p>Compras, parcelas e faturas aparecem com o que foi pago e o que falta. Assim dá para entender o cartão sem perder de vista o restante do mês.</p><a class="launch-link" href="/recursos">Conhecer a carteira <span aria-hidden="true">↗</span></a></div><figure class="launch-phone"><img src="/assets/telas/celular-carteira.jpg" alt="Carteira do OAZE no celular, com valores de exemplo" width="923" height="1944" loading="lazy"><figcaption>Tela demonstrativa · dados de exemplo</figcaption></figure></div></section>
+  <section class="launch-feature launch-feature-reverse" id="agenda" aria-labelledby="agenda-titulo"><div class="env launch-feature-grid"><div class="launch-feature-copy"><p class="launch-kicker">AGENDA E PLANEJAMENTO</p><h2 id="agenda-titulo">Veja o que vem <em>antes de chegar.</em></h2><p>Vencimentos, recorrências e metas dão contexto para planejar. O que é previsto fica separado do dinheiro que já está disponível.</p><a class="launch-link" href="/recursos">Ver agenda e planejamento <span aria-hidden="true">↗</span></a></div><div class="launch-agenda" aria-label="Exemplo ilustrativo da agenda financeira"><div><small>AGENDA FINANCEIRA</small><strong>O que vem pela frente</strong></div><p><span>Conta do mês</span><span>Vencimento previsto</span></p><p><span>Fatura do cartão</span><span>Ciclo atual</span></p><p><span>Meta pessoal</span><span>Seu progresso</span></p><small>Exemplo ilustrativo</small></div></div></section>
+  <section class="launch-assistant" id="coco" aria-labelledby="oaze-assistente-titulo"><div class="env launch-assistant-grid"><div><p class="launch-kicker">CONVERSE COM A OAZE</p><h2 id="oaze-assistente-titulo">Pergunte sobre <em>o seu dinheiro.</em></h2><p>A assistente OAZE ajuda a entender seus números e pode preparar um lançamento para revisão. Você confere antes de salvar.</p><div class="launch-chat"><p>“Gastei R$ 45 no mercado hoje.”</p><p>“Quer registrar como alimentação?”</p><small>Conversa ilustrativa · salvar exige sua confirmação</small></div></div><div class="launch-assistant-art"><img src="/assets/brand/oaze-mascote-app.png" alt="Rostinho ilustrado da assistente OAZE" width="240" height="240" loading="lazy"><span>OAZE</span></div></div></section>
+  <section class="launch-trust" id="seguranca" aria-labelledby="seguranca-titulo"><div class="env"><p class="launch-kicker">CONTROLE NAS SUAS MÃOS</p><h2 id="seguranca-titulo">Você decide <em>o que fica.</em></h2><div class="launch-trust-grid"><article><h3>Confirme antes de salvar</h3><p>Uma sugestão da assistente só vira registro depois da sua revisão.</p></article><article><h3>Previsto tem seu lugar</h3><p>Compromissos futuros não são tratados como dinheiro já disponível.</p></article><article><h3>Revise as lembranças</h3><p>Você pode rever, pausar e apagar o que a assistente aprende.</p></article></div></div></section>
+  <section class="launch-pricing" id="planos" aria-labelledby="planos-titulo"><div class="env"><div class="launch-section-head"><div><p class="launch-kicker">PLANOS</p><h2 id="planos-titulo">Comece no seu ritmo.</h2></div><p>O Semente é grátis. O Oásis amplia os limites quando você precisar.</p></div><div class="ciclo" role="group" aria-label="Ciclo de cobrança"><button type="button" data-ciclo="mensal" aria-pressed="true">Mensal</button><button type="button" data-ciclo="anual" aria-pressed="false">Anual <span class="economia">−35%</span></button></div><div class="planos"><article class="plano"><h3>Semente</h3><span class="preco-valor dado">R$ 0</span><span class="preco-ciclo">para sempre</span><ul class="plano-lista"><li>1 espaço financeiro, 2 contas e 3 cartões</li><li>1 orçamento, 1 meta e 3 recorrências</li><li>Histórico dos últimos 3 meses</li><li>10 pedidos à assistente OAZE por mês</li></ul><a class="btn launch-secondary" href="#baixar">Conhecer o app</a></article><article class="plano e-destaque"><h3>Oásis</h3><span class="preco-valor dado" data-mensal="R$ 35,90" data-anual="R$ 23,32">R$ 35,90</span><span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado R$ 279,90 por ano — economia de R$ 150,90">por mês, cobrado mensalmente</span><ul class="plano-lista"><li>Até 5 espaços financeiros e 50 contas</li><li>Cartões e lançamentos sem limite do plano</li><li>Histórico completo e comparação anual</li><li>200 pedidos à assistente OAZE por mês</li></ul><a class="btn launch-primary" href="/app/planos">Assinar Oásis no aplicativo</a><p class="launch-plan-note">A assinatura abre no aplicativo e exige uma conta.</p></article></div><a class="launch-link" href="/precos">Comparar todos os limites <span aria-hidden="true">↗</span></a></div></section>
+  <section class="launch-stores lojas-oaze" id="baixar" aria-labelledby="baixar-titulo"><div class="env launch-section-head"><div><p class="launch-kicker">ONDE ENCONTRAR</p><h2 id="baixar-titulo">OAZE no seu dispositivo.</h2><p>Os links oficiais aparecem aqui assim que as páginas das lojas forem publicadas.</p></div><div class="lojas-opcoes" aria-label="Disponibilidade dos aplicativos"><article class="loja-cartao"><div class="loja-icone" aria-hidden="true">▶</div><div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="play">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article><article class="loja-cartao"><div class="loja-icone windows" aria-hidden="true">⊞</div><div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="windows">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article></div></div></section>
+  <section class="launch-faq" aria-labelledby="duvidas-titulo"><div class="env"><p class="launch-kicker">PERGUNTAS FREQUENTES</p><h2 id="duvidas-titulo">Antes de começar.</h2><div class="perguntas"><details class="pergunta"><summary>O OAZE conecta ao meu banco?</summary><p>Ainda não. Os lançamentos são informados por você ou preparados pela assistente para sua revisão.</p></details><details class="pergunta"><summary>A assistente OAZE movimenta meu dinheiro?</summary><p>Não. O aplicativo organiza registros e sugestões. Você confirma antes de salvar.</p></details><details class="pergunta"><summary>Como assino o Oásis?</summary><p>Abra os planos no aplicativo, entre na sua conta e escolha o ciclo de cobrança. O pagamento é concluído na página segura apresentada pelo aplicativo.</p></details><details class="pergunta"><summary>Posso cancelar?</summary><p>Sim. Você pode interromper a renovação nas configurações e mantém o acesso até o fim do período pago.</p></details></div></div></section>
+  <section class="launch-contact" id="contato" aria-labelledby="contato-titulo"><div class="env launch-contact-grid"><div><p class="launch-kicker">FALE COM A GENTE</p><h2 id="contato-titulo">Ficou alguma pergunta?</h2><p>Envie uma dúvida, sugestão ou mensagem. A resposta vai para o e-mail que você informar.</p><a class="launch-link" href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true">↗</span></a></div><form class="contato launch-contact-form" id="formContato" novalidate><div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div><div class="campo"><label for="contatoNome">Seu nome</label><input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required><p class="erro" id="contatoNomeErro" hidden>Diga como podemos te chamar.</p></div><div class="campo"><label for="contatoEmail">Seu e-mail</label><input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica"><p class="dica" id="contatoEmailDica">É para ele que respondemos.</p><p class="erro" id="contatoEmailErro" hidden>Confira o e-mail.</p></div><div class="campo"><label for="contatoMensagem">Sua mensagem</label><textarea id="contatoMensagem" name="mensagem" rows="5" minlength="10" maxlength="5000" required></textarea><p class="erro" id="contatoMensagemErro" hidden>Escreva pelo menos uma frase.</p></div><div class="contato-isca" aria-hidden="true"><label for="contatoSite">Deixe em branco</label><input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off"></div><button type="submit" class="btn launch-primary" id="contatoEnviar">Enviar mensagem</button></form></div></section>
 </main>
 
 <!-- ══════ CHAMADA FINAL ══════ -->
@@ -409,7 +185,7 @@
         <ul>
           <li><a href="#recursos">O que faz</a></li>
           <li><a href="#carteira">Carteira</a></li>
-          <li><a href="#coco">A Coco</a></li>
+          <li><a href="#coco">Assistente OAZE</a></li>
           <li><a href="#planos">Planos</a></li>
         </ul>
       </div>
@@ -430,7 +206,7 @@
       </div>
       <div>
         <h3>Fale com a gente</h3>
-        <p class="rodape-sobre">Respondemos em até 2 dias úteis.</p>
+        <p class="rodape-sobre">Dúvidas e sugestões.</p>
         <a class="rodape-fala" href="mailto:info@oaze.site">info@oaze.site
           <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>

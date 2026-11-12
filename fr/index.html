@@ -27,7 +27,7 @@
      recuperar-senha, privacidade, termos, suporte, 404.
      ============================================================= -->
 <title>OAZE | Une vue complète de votre argent</title>
-<meta name="description" content="OAZE réunit comptes, cartes, factures et projets pour vous donner une vue complète du mois. Découvrez Coco et suivez l’arrivée des applications dans les boutiques.">
+<meta name="description" content="OAZE réunit comptes, cartes, factures et projets pour voir le mois dans son ensemble. Découvrez l’assistante OAZE et suivez l’arrivée des applications dans les boutiques.">
 <link rel="canonical" href="https://oaze.site/fr/">
 <!-- idiomas: gerado por tools/gen-idiomas.js -->
 <link rel="alternate" hreflang="pt-BR" href="https://oaze.site/">
@@ -55,10 +55,10 @@
 <meta name="theme-color" content="#071822">
 <link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
-<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="apple-touch-icon" href="/assets/brand/oaze-mascote-app.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/css/v3.css">
-<link rel="stylesheet" href="/assets/css/landing-editorial.css">
+<link rel="stylesheet" href="/assets/css/launch-2026.css">
 
 <!-- Marca que HA JavaScript, ANTES da primeira pintura. So com esta
      classe o CSS esconde os blocos que serao revelados ao rolar. Sem
@@ -95,7 +95,7 @@
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Android, Windows",
       "inLanguage": "fr",
-      "description": "Finances personnelles avec comptes, cartes, dépenses, budgets, objectifs et Coco, l’assistante d’OAZE.",
+      "description": "Finances personnelles avec comptes, cartes, dépenses, budgets, objectifs et l’assistante OAZE.",
       "publisher": { "@id": "https://oaze.site/#organization" },
       "offers": [
         { "@type": "Offer", "name": "Semente", "price": "0.00",  "priceCurrency": "EUR" },
@@ -122,7 +122,7 @@
 
     <nav class="menu" id="menu" aria-label="Navigation principale">
       <a href="#recursos">Ce qu’elle fait</a>
-      <a href="#coco">Coco</a>
+      <a href="#coco">Assistante OAZE</a>
       <a href="#seguranca">Sécurité</a>
       <a href="#planos">Formules</a>
     </nav>
@@ -134,255 +134,31 @@
 </header>
 
 <main id="conteudo">
-  <section class="l2-hero" aria-labelledby="heroi-titulo">
-    <div class="env">
-      <div class="l2-hero-copy">
-        <p class="l2-eyebrow">OAZE / VOTRE ESPACE FINANCIER</p>
-        <h1 id="heroi-titulo">Le mois paraît plus léger quand <em>vous voyez l’ensemble.</em></h1>
-        <p class="l2-lead">Comptes, cartes, dépenses et projets se retrouvent dans OAZE. Comprenez ce qui s’est passé, voyez ce qui arrive et choisissez la suite sereinement.</p>
-        <div class="l2-hero-actions">
-          <a class="btn l2-button-dark" href="#baixar">Voir les applications <span aria-hidden="true">↗</span></a>
-          <a class="l2-text-link" href="#recursos">Découvrir comment ça marche <span aria-hidden="true">↓</span></a>
-        </div>
+  <section class="launch-hero" aria-labelledby="heroi-titulo">
+    <div class="env launch-hero-grid">
+      <div class="launch-hero-copy">
+        <p class="launch-kicker">OAZE · FINANCES PERSONNELLES</p>
+        <h1 id="heroi-titulo">L’argent devient plus clair quand vous voyez <em>le mois entier.</em></h1>
+        <p>Comptes, cartes, factures et échéances au même endroit. OAZE montre ce qui s’est passé et ce qui vient, sans confondre prévisions et solde.</p>
+        <div class="launch-actions"><a class="btn launch-primary" href="#baixar">Découvrir l’application <span aria-hidden="true">↗</span></a><a class="launch-link" href="#recursos">Voir comment ça marche <span aria-hidden="true">↓</span></a></div>
+        <p class="launch-hero-note">Commencez avec le forfait gratuit Semente, sans carte bancaire.</p>
       </div>
-      <div class="l2-product-stage" role="img" aria-label="Vue d’ensemble d’OAZE sur ordinateur, avec des données de démonstration">
-        <div class="l2-stage-track" aria-hidden="true"><span></span><span></span><span></span></div>
-        <figure class="l2-stage-screen"><img src="/assets/telas/computador-inicio.jpg" alt="" width="1440" height="900" fetchpriority="high" decoding="async"></figure>
-        <div class="l2-stage-note l2-stage-note-a" aria-hidden="true"><span>01 / MAINTENANT</span><strong>Entrées et sorties</strong></div>
-        <div class="l2-stage-note l2-stage-note-b" aria-hidden="true"><span>02 / À VENIR</span><strong>Ce qui vient ensuite</strong></div>
-        <img class="l2-stage-coco" src="/assets/coco/rostinhos/02_feliz.png" alt="" width="240" height="240" loading="eager" decoding="async">
-      </div>
-      <p class="l2-stage-caption">Écran de démonstration · données d’exemple</p>
-    </div>
-  </section>
-
-  <section class="l2-transition" id="recursos" aria-labelledby="recursos-titulo">
-    <div class="env">
-      <p class="l2-eyebrow">MOINS D’ONGLETS. PLUS DE CONTEXTE.</p>
-      <h2 id="recursos-titulo">Tout se rejoint. <em>Même les chiffres.</em></h2>
-      <div class="l2-transition-grid">
-        <article><span>01</span><h3>Enregistrez à votre façon</h3><p>Indiquez ce qui est entré ou sorti. Texte, voix et photos vous aident à libérer votre esprit des détails.</p></article>
-        <article><span>02</span><h3>Voyez le mois entier</h3><p>Soldes, dépenses, factures et engagements apparaissent ensemble, chacun à sa place.</p></article>
-        <article><span>03</span><h3>Décidez à l’avance</h3><p>Projets et objectifs donnent un cap à ce qui reste, sans confondre prévisions et argent disponible aujourd’hui.</p></article>
-      </div>
-      <a class="l2-text-link" href="/fr/recursos">Explorer toutes les fonctions <span aria-hidden="true">↗</span></a>
-    </div>
-  </section>
-
-  <section class="l2-story l2-story-wallet" id="carteira" aria-labelledby="carteira-titulo">
-    <div class="env l2-story-grid">
-      <div class="l2-story-copy">
-        <p class="l2-eyebrow">PORTEFEUILLE / TOUT EST À SA PLACE</p>
-        <h2 id="carteira-titulo">L’achat passe. <em>Le contexte reste.</em></h2>
-        <p>Crédit et débit suivent des chemins différents. Dans OAZE, achats, échéances et factures de carte apparaissent dans le bon cycle, avec ce qui est payé et ce qui reste dû.</p>
-        <a class="l2-text-link" href="/fr/recursos">Découvrir le portefeuille <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="l2-wallet-scene">
-        <div class="l2-wallet-disc" aria-hidden="true"></div>
-        <figure><img src="/assets/telas/celular-carteira.jpg" alt="Démonstration du portefeuille OAZE sur téléphone, avec une carte et un solde fictifs" width="923" height="1944" loading="lazy" decoding="async"><figcaption>Vraie capture de l’application · données d’exemple</figcaption></figure>
-        <div class="l2-wallet-label" aria-hidden="true">CHAQUE CARTE.<br>SON PROPRE CYCLE.</div>
+      <div class="launch-hero-visual">
+        <div class="launch-visual-head"><span>UNE VUE D’ENSEMBLE</span><span aria-hidden="true">● ● ●</span></div>
+        <img src="/assets/telas/computador-inicio.jpg" alt="Écran de démonstration OAZE avec des données fictives" width="1440" height="900" fetchpriority="high">
+        <span class="launch-visual-foot">ÉCRAN DE DÉMONSTRATION · DONNÉES FICTIVES</span>
       </div>
     </div>
   </section>
-
-  <section class="l2-coco" id="coco" aria-labelledby="coco-titulo">
-    <div class="env l2-coco-grid">
-      <div class="l2-coco-copy">
-        <p class="l2-eyebrow">DÉCOUVREZ COCO</p>
-        <h2 id="coco-titulo">Une conversation qui apporte <em>de la clarté.</em></h2>
-        <p>Parlez de votre argent comme dans la vie de tous les jours. Coco vous aide à comprendre les chiffres et prépare des opérations à vérifier. La décision finale vous appartient toujours.</p>
-        <div class="l2-chat" aria-label="Exemple illustratif d’une conversation avec Coco">
-          <p class="l2-chat-user">« J’ai dépensé 45 R$ au marché aujourd’hui. »</p>
-          <p class="l2-chat-coco">Compris. L’enregistrer dans alimentation ?</p>
-          <small>Conversation d’exemple · aucune action sans confirmation</small>
-        </div>
-        <a class="btn l2-button-dark" href="#baixar">Découvrir les applications</a>
-      </div>
-      <div class="l2-coco-portrait"><span aria-hidden="true">COCO / OAZE</span><img src="/assets/coco/corpo-explicando.webp" alt="Coco, l’axolotl d’OAZE, qui explique avec une patte levée" width="600" height="600" loading="lazy" decoding="async"></div>
-    </div>
-  </section>
-
-  <section class="l2-forward" id="agenda" aria-labelledby="agenda-titulo">
-    <div class="env l2-forward-grid">
-      <div class="l2-forward-visual" aria-label="Exemple illustratif d’un calendrier financier avec les paiements à venir">
-        <div class="l2-forward-head"><span>CALENDRIER FINANCIER</span><strong>Ce qui vient</strong></div>
-        <ol>
-          <li><time>08</time><span><strong>Factures du mois</strong><small>Organisées par échéance</small></span><b>↗</b></li>
-          <li><time>16</time><span><strong>Facture de carte</strong><small>Dans le bon cycle de facturation</small></span><b>↗</b></li>
-          <li><time>30</time><span><strong>Fin de mois</strong><small>Ce qui est encore prévu</small></span><b>↗</b></li>
-        </ol>
-        <p>Exemple illustratif · les dates ne représentent pas votre compte</p>
-      </div>
-      <div class="l2-story-copy">
-        <p class="l2-eyebrow">AVANT LA FIN DU MOIS</p>
-        <h2 id="agenda-titulo">Regardez devant <em>sans deviner.</em></h2>
-        <p>Le calendrier et les opérations récurrentes montrent ce qui a déjà une date. Préparez le mois entier, pas seulement le solde d’aujourd’hui.</p>
-        <a class="l2-text-link" href="/fr/recursos">Voir le calendrier et les projets <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-control" id="seguranca" aria-labelledby="seguranca-titulo">
-    <div class="env">
-      <div class="l2-control-head"><p class="l2-eyebrow">VOUS GARDEZ LA MAIN</p><h2 id="seguranca-titulo">De l’aide pour décider. <em>La main pour avancer.</em></h2></div>
-      <div class="l2-control-grid">
-        <article><span>01 / CONFIRMATION</span><h3>Rien ne bouge tout seul</h3><p>Une suggestion de Coco n’entre dans votre portefeuille qu’après votre confirmation.</p></article>
-        <article><span>02 / CONTEXTE</span><h3>Une prévision reste une prévision</h3><p>Les montants à venir restent séparés de l’argent dont vous disposez aujourd’hui.</p></article>
-        <article><span>03 / CHOIX</span><h3>Vos données, vos règles</h3><p>Vous pouvez revoir ce que Coco apprend, suspendre l'apprentissage et effacer ses souvenirs.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-stores lojas-oaze" id="baixar" aria-labelledby="baixar-titulo">
-    <div class="env l2-stores-grid">
-      <div class="l2-stores-copy"><p class="l2-eyebrow">OAZE SUR VOTRE APPAREIL</p><h2 id="baixar-titulo">Votre espace financier, <em>où que vous soyez.</em></h2><p>Les pages officielles des boutiques sont en préparation. Dès leur publication, ces boutons vous mèneront directement à OAZE.</p></div>
-      <div class="lojas-opcoes" aria-label="Disponibilité des applications">
-        <article class="loja-cartao"><div class="loja-icone" aria-hidden="true">▶</div><div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Page de la boutique en préparation</p></div><span class="loja-botao is-pending" data-loja="play">Bientôt</span><span class="sr-so loja-link-label">Ouvrir la boutique ↗</span><span class="sr-so loja-ready-copy">Disponible dans la boutique officielle</span></article>
-        <article class="loja-cartao"><div class="loja-icone windows" aria-hidden="true">⊞</div><div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Page de la boutique en préparation</p></div><span class="loja-botao is-pending" data-loja="windows">Bientôt</span><span class="sr-so loja-link-label">Ouvrir la boutique ↗</span><span class="sr-so loja-ready-copy">Disponible dans la boutique officielle</span></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════ PLANOS ══════ -->
-  <section class="secao" id="planos" aria-labelledby="planos-titulo">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2 id="planos-titulo">l'offre qui évolue avec vous</h2>
-        <p>Commencez gratuitement, sans carte. La formule gratuite n’expire pas. Changez quand vous en avez besoin.</p>
-      </div>
-
-      <div class="ciclo revela" role="group" aria-label="Cycle de facturation">
-        <button type="button" data-ciclo="mensal" aria-pressed="true">Mensuel</button>
-        <button type="button" data-ciclo="anual" aria-pressed="false">Annuel <span class="economia">−35%</span></button>
-      </div>
-
-      <!-- OS NÚMEROS AQUI SÃO OS DE assets/js/planos.js.
-           Eles vivem em dois lugares por um motivo: o buscador e o
-           link compartilhado leem o HTML, não o JavaScript. Quem
-           impede a divergência é tools/conferir-planos.js, que roda
-           dentro do deploy — mudou o preço lá, o build quebra aqui,
-           e não no extrato de alguém.
-
-           O selo do anual é o MENOR desconto entre os planos pagos,
-           arredondado para baixo: ele vale para os dois botões ao
-           mesmo tempo, e prometer o desconto do plano melhor seria
-           prometer a mais para quem escolhe o outro. -->
-      <div class="planos">
-        <article class="plano revela">
-          <div class="plano-cabeca"><h3>Semente</h3></div>
-          <span class="preco-valor dado">0 €</span>
-          <span class="preco-ciclo">pour toujours, sans carte bancaire</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 espace financier, 2 comptes et 3 cartes</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Jusqu’à 100 écritures par mois</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 budget, 1 objectif et 3 récurrences</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Les 3 derniers mois d’historique</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 demandes à Coco par mois</span></li>
-          </ul>
-          <p class="plano-teto">Quand vous atteignez une limite, rien n’est supprimé : ce qui s’arrête, c’est la création de nouveaux éléments de ce type.</p>
-          <a class="btn btn-linha" href="#baixar">Voir la disponibilité</a>
-        </article>
-
-        <article class="plano e-destaque revela">
-          <div class="plano-cabeca">
-            <h3>Oásis</h3>
-          </div>
-          <span class="preco-valor dado" data-mensal="7,99 €" data-anual="5,19 €">7,99 €</span>
-          <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado 62,30 € por ano — você economiza 33,58 €">par mois, facturé mensuellement</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span><strong>App Windows inclus</strong></span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 espace financier, 2 comptes et 3 cartes</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Jusqu’à 100 écritures par mois</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>1 budget, 1 objectif et 3 récurrences</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Les 3 derniers mois d’historique</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>10 demandes à Coco par mois</span></li>
-          </ul>
-          <p class="plano-teto">Quand vous atteignez une limite, rien n’est supprimé : ce qui s’arrête, c’est la création de nouveaux éléments de ce type.</p>
-          <a class="btn btn-linha" href="#baixar">Voir la disponibilité</a>
-        </article>
-
-        <article class="plano e-destaque revela">
-          <div class="plano-cabeca">
-            <h3>Oásis</h3>
-          </div>
-          <span class="preco-valor dado" data-mensal="7,99 €" data-anual="5,19 €">7,99 €</span>
-          <span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado 62,30 € por ano — você economiza 33,58 €">par mois, facturé mensuellement</span>
-          <ul class="plano-lista">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Jusqu’à 5 espaces financiers et 50 comptes</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Cartes et écritures sans limite</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Historique complet et comparaison annuelle</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Coco : conversation, analyses et propositions à valider</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>200 demandes à Coco par mois</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Jusqu’à 3 personnes dans le même espace</span></li>
-          </ul>
-          <a class="btn btn-claro" href="#baixar">Voir la disponibilité</a>
-          <p class="preco-nota">Annulez quand vous voulez, directement dans les réglages.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ══════ PERGUNTAS ══════ -->
-  <section class="secao" aria-labelledby="duvidas-titulo">
-    <div class="env">
-      <div class="secao-topo revela">
-        <h2 id="duvidas-titulo">ce qu'il faut savoir</h2>
-        <p>Les questions qui reviennent le plus sur OAZE et sur Coco.</p>
-      </div>
-
-      <div class="perguntas revela">
-        <details class="pergunta">
-          <summary>Coco peut-elle toucher à mon argent ?</summary>
-          <p>Non. OAZE ne fait ni virement, ni paiement, ni aucun mouvement — il organise le registre de votre argent. Coco prépare des écritures, propose des récurrences et des versements ; rien de tout cela ne change un solde avant votre confirmation.</p>
-        </details>
-        <details class="pergunta">
-          <summary>OAZE se connecte-t-il à ma banque ?</summary>
-          <p>Pas encore. Aujourd’hui les écritures viennent de vous ou de Coco, à partir de ce que vous lui dites. La connexion bancaire automatique est prévue, mais elle n’est pas dans le produit — et tant qu’elle n’y est pas, nous ne dirons pas le contraire.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Ai-je besoin d'un compte pour l'utiliser ?</summary>
-          <p>Non. L’application fonctionne sur cet appareil sans aucun compte, les données restant ici seulement. Le compte sert à voir les mêmes données sur ordinateur et sur téléphone, et à parler avec Coco.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Comment fonctionnent les demandes à Coco ?</summary>
-          <p>Les demandes envoyées à l'IA consomment le quota de la formule : 10 par mois sur Semente et 200 sur Oásis. Le compteur apparaît dans l'application et se réinitialise chaque mois. Les questions simples calculées par le tableau de bord, la révision et l'annulation d'écritures ne consomment pas de demandes.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Que se passe-t-il quand j’atteins une limite de la formule gratuite ?</summary>
-          <p>Rien n’est supprimé et rien ne disparaît de l’écran. Ce qui s’arrête, c’est la création de nouveaux éléments de ce type — et l’application vous dit quelle limite c’était, ce que vous utilisez et où faire de la place. Revenir au gratuit après un abonnement n’efface rien non plus.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Quelles données partent vers l’intelligence artificielle ?</summary>
-          <p>Seulement un résumé agrégé : totaux, catégories consolidées, objectifs et dépenses prévues. Jamais la liste des écritures, les noms de comptes ou de cartes, votre e-mail ou vos identifiants. L’écran de consentement montre exactement ce qui part avant la première utilisation, et vous pouvez révoquer dans les Réglages.</p>
-        </details>
-        <details class="pergunta">
-          <summary>Puis-je annuler quand je veux ?</summary>
-          <p>Oui, directement dans les Réglages. Le renouvellement s’arrête aussitôt et vous gardez la formule jusqu’à la fin de la période déjà payée. Ensuite le compte revient au gratuit, avec tout ce que vous avez enregistré à sa place.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section class="l2-contact" id="contato" aria-labelledby="contato-titulo">
-    <div class="env l2-contact-grid">
-      <div class="l2-contact-copy">
-        <p class="l2-eyebrow">CONTACTER OAZE</p>
-        <h2 id="contato-titulo">Une <em>question ?</em></h2>
-        <p>Envoyez-nous une question, une suggestion ou un message. Nous le lirons et répondrons à l’adresse e-mail indiquée.</p>
-        <a href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true">↗</span></a>
-      </div>
-      <form class="contato l2-contact-form" id="formContato" novalidate>
-        <div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div>
-        <div class="campo"><label for="contatoNome">Votre nom</label><input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required><p class="erro" id="contatoNomeErro" hidden>Indiquez-nous votre nom.</p></div>
-        <div class="campo"><label for="contatoEmail">Votre adresse e-mail</label><input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica"><p class="dica" id="contatoEmailDica">Nous répondrons à cette adresse.</p><p class="erro" id="contatoEmailErro" hidden>Vérifiez l’adresse e-mail pour que nous puissions répondre.</p></div>
-        <div class="campo"><label for="contatoMensagem">Votre message</label><textarea id="contatoMensagem" name="mensagem" rows="5" minlength="10" maxlength="5000" required></textarea><p class="erro" id="contatoMensagemErro" hidden>Écrivez un peu plus — au moins une phrase.</p></div>
-        <div class="contato-isca" aria-hidden="true"><label for="contatoSite">Laisser vide</label><input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off"></div>
-        <button type="submit" class="btn l2-button-dark" id="contatoEnviar">Envoyer le message</button>
-      </form>
-    </div>
-  </section>
-
+  <section class="launch-statement" id="recursos" aria-labelledby="recursos-titulo"><div class="env"><p class="launch-kicker">VOIR CLAIR AVANT DE DÉCIDER</p><h2 id="recursos-titulo">Votre mois ne se résume pas <em>à un solde.</em></h2><p>Un chiffre ne raconte pas tout. Voyez les entrées, les sorties, les paiements et les échéances à venir.</p><a class="launch-link" href="/fr/recursos">Découvrir les fonctions <span aria-hidden="true">↗</span></a></div></section>
+  <section class="launch-feature" id="carteira" aria-labelledby="carteira-titulo"><div class="env launch-feature-grid"><div class="launch-feature-copy"><p class="launch-kicker">PORTEFEUILLE</p><h2 id="carteira-titulo">Cartes et comptes, <em>chacun à son rythme.</em></h2><p>Achats, échéances et relevés montrent ce qui est payé et ce qui reste. Comprenez votre carte sans perdre de vue le reste du mois.</p><a class="launch-link" href="/fr/recursos">Découvrir le portefeuille <span aria-hidden="true">↗</span></a></div><figure class="launch-phone"><img src="/assets/telas/celular-carteira.jpg" alt="Portefeuille OAZE sur téléphone, avec des montants fictifs" width="923" height="1944" loading="lazy"><figcaption>Écran de démonstration · données d’exemple</figcaption></figure></div></section>
+  <section class="launch-feature launch-feature-reverse" id="agenda" aria-labelledby="agenda-titulo"><div class="env launch-feature-grid"><div class="launch-feature-copy"><p class="launch-kicker">AGENDA ET PLANIFICATION</p><h2 id="agenda-titulo">Voyez ce qui vient <em>avant l’échéance.</em></h2><p>Échéances, opérations récurrentes et objectifs vous aident à planifier. Les prévisions restent distinctes de l’argent disponible.</p><a class="launch-link" href="/fr/recursos">Voir le calendrier et les projets <span aria-hidden="true">↗</span></a></div><div class="launch-agenda" aria-label="Exemple illustratif d’agenda financier"><div><small>CALENDRIER FINANCIER</small><strong>Ce qui vient</strong></div><p><span>Facture du mois</span><span>Date prévue</span></p><p><span>Facture de carte</span><span>Cycle actuel</span></p><p><span>Objectif personnel</span><span>Votre progression</span></p><small>Exemple illustratif</small></div></div></section>
+  <section class="launch-assistant" id="coco" aria-labelledby="oaze-assistente-titulo"><div class="env launch-assistant-grid"><div><p class="launch-kicker">PARLEZ À OAZE</p><h2 id="oaze-assistente-titulo">Posez vos questions sur <em>votre argent.</em></h2><p>L’assistante OAZE vous aide à comprendre vos chiffres et peut préparer une opération à vérifier. Vous la contrôlez avant de l’enregistrer.</p><div class="launch-chat"><p>« J’ai dépensé 45 R$ au marché aujourd’hui. »</p><p>« Voulez-vous l’enregistrer en alimentation ? »</p><small>Conversation illustrative · enregistrement soumis à votre confirmation</small></div></div><div class="launch-assistant-art"><img src="/assets/brand/oaze-mascote-app.png" alt="Visage illustré de l’assistante OAZE" width="240" height="240" loading="lazy"><span>OAZE</span></div></div></section>
+  <section class="launch-trust" id="seguranca" aria-labelledby="seguranca-titulo"><div class="env"><p class="launch-kicker">VOUS GARDEZ LE CONTRÔLE</p><h2 id="seguranca-titulo">Vous décidez <em>ce qui reste.</em></h2><div class="launch-trust-grid"><article><h3>Confirmez avant d’enregistrer</h3><p>Une suggestion de l’assistante ne devient une opération qu’après votre vérification.</p></article><article><h3>Les prévisions ont leur place</h3><p>Les échéances futures ne sont pas considérées comme de l’argent déjà disponible.</p></article><article><h3>Revoyez ses souvenirs</h3><p>Vous pouvez revoir, suspendre et supprimer ce que l’assistante apprend.</p></article></div></div></section>
+  <section class="launch-pricing" id="planos" aria-labelledby="planos-titulo"><div class="env"><div class="launch-section-head"><div><p class="launch-kicker">FORFAITS</p><h2 id="planos-titulo">Commencez à votre rythme.</h2></div><p>Semente est gratuit. Oásis augmente les limites quand vous en avez besoin.</p></div><div class="ciclo" role="group" aria-label="Cycle de facturation"><button type="button" data-ciclo="mensal" aria-pressed="true">Mensuel</button><button type="button" data-ciclo="anual" aria-pressed="false">Annuel <span class="economia">−35%</span></button></div><div class="planos"><article class="plano"><h3>Semente</h3><span class="preco-valor dado">0 €</span><span class="preco-ciclo">pour toujours</span><ul class="plano-lista"><li>1 espace financier, 2 comptes et 3 cartes</li><li>1 budget, 1 objectif et 3 récurrences</li><li>Les 3 derniers mois d’historique</li><li>10 demandes à l’assistante OAZE par mois</li></ul><a class="btn launch-secondary" href="#baixar">Découvrir l’application</a></article><article class="plano e-destaque"><h3>Oásis</h3><span class="preco-valor dado" data-mensal="7,99 €" data-anual="5,19 €">7,99 €</span><span class="preco-ciclo" data-mensal="por mês, cobrado mensalmente" data-anual="por mês, cobrado 62,30 € por ano — economia de 33,58 €">par mois, facturé mensuellement</span><ul class="plano-lista"><li>Jusqu’à 5 espaces financiers et 50 comptes</li><li>Cartes et opérations sans plafond du forfait</li><li>Historique complet et comparaison annuelle</li><li>200 demandes à l’assistante OAZE par mois</li></ul><a class="btn launch-primary" href="/app/planos?moeda=eur">S’abonner à Oásis dans l’application</a><p class="launch-plan-note">L’abonnement s’ouvre dans l’application et nécessite un compte.</p></article></div><a class="launch-link" href="/fr/precos">Comparer toutes les limites <span aria-hidden="true">↗</span></a></div></section>
+  <section class="launch-stores lojas-oaze" id="baixar" aria-labelledby="baixar-titulo"><div class="env launch-section-head"><div><p class="launch-kicker">OÙ LE TROUVER</p><h2 id="baixar-titulo">OAZE sur votre appareil.</h2><p>Les liens officiels apparaîtront ici dès la publication des pages des boutiques.</p></div><div class="lojas-opcoes" aria-label="Disponibilité des applications"><article class="loja-cartao"><div class="loja-icone" aria-hidden="true">▶</div><div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Page de la boutique en préparation</p></div><span class="loja-botao is-pending" data-loja="play">Bientôt</span><span class="sr-so loja-link-label">Ouvrir la boutique ↗</span><span class="sr-so loja-ready-copy">Disponible dans la boutique officielle</span></article><article class="loja-cartao"><div class="loja-icone windows" aria-hidden="true">⊞</div><div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Page de la boutique en préparation</p></div><span class="loja-botao is-pending" data-loja="windows">Bientôt</span><span class="sr-so loja-link-label">Ouvrir la boutique ↗</span><span class="sr-so loja-ready-copy">Disponible dans la boutique officielle</span></article></div></div></section>
+  <section class="launch-faq" aria-labelledby="duvidas-titulo"><div class="env"><p class="launch-kicker">QUESTIONS FRÉQUENTES</p><h2 id="duvidas-titulo">Avant de commencer.</h2><div class="perguntas"><details class="pergunta"><summary>OAZE se connecte-t-il à ma banque ?</summary><p>Pas encore. Vous saisissez vos opérations ou demandez à l’assistante de les préparer pour vérification.</p></details><details class="pergunta"><summary>L’assistante OAZE peut-elle déplacer mon argent ?</summary><p>Non. L’application organise les opérations et les suggestions. Vous confirmez avant d’enregistrer.</p></details><details class="pergunta"><summary>Comment s’abonner à Oásis ?</summary><p>Ouvrez les forfaits dans l’application, connectez-vous et choisissez une période de facturation. Le paiement se termine sur la page sécurisée ouverte par l’application.</p></details><details class="pergunta"><summary>Puis-je résilier ?</summary><p>Oui. Vous pouvez arrêter le renouvellement dans les paramètres et conserver l’accès jusqu’à la fin de la période payée.</p></details></div></div></section>
+  <section class="launch-contact" id="contato" aria-labelledby="contato-titulo"><div class="env launch-contact-grid"><div><p class="launch-kicker">CONTACTEZ-NOUS</p><h2 id="contato-titulo">Une question ?</h2><p>Envoyez une question, une suggestion ou un message. Nous répondrons à l’adresse e-mail indiquée.</p><a class="launch-link" href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true">↗</span></a></div><form class="contato launch-contact-form" id="formContato" novalidate><div class="recado" id="contatoRecado" role="status" aria-live="polite" hidden></div><div class="campo"><label for="contatoNome">Votre nom</label><input type="text" id="contatoNome" name="nome" autocomplete="name" maxlength="100" required><p class="erro" id="contatoNomeErro" hidden>Indiquez-nous votre nom.</p></div><div class="campo"><label for="contatoEmail">Votre adresse e-mail</label><input type="email" id="contatoEmail" name="email" autocomplete="email" maxlength="200" required aria-describedby="contatoEmailDica"><p class="dica" id="contatoEmailDica">Nous répondrons à cette adresse.</p><p class="erro" id="contatoEmailErro" hidden>Vérifiez votre adresse e-mail.</p></div><div class="campo"><label for="contatoMensagem">Votre message</label><textarea id="contatoMensagem" name="mensagem" rows="5" minlength="10" maxlength="5000" required></textarea><p class="erro" id="contatoMensagemErro" hidden>Écrivez au moins une phrase.</p></div><div class="contato-isca" aria-hidden="true"><label for="contatoSite">Laisser vide</label><input type="text" id="contatoSite" name="site" tabindex="-1" autocomplete="off"></div><button type="submit" class="btn launch-primary" id="contatoEnviar">Envoyer le message</button></form></div></section>
 </main>
 
 <!-- ══════ CHAMADA FINAL ══════ -->
@@ -409,7 +185,7 @@
         <ul>
           <li><a href="#recursos">Ce qu’elle fait</a></li>
           <li><a href="#carteira">Portefeuille</a></li>
-          <li><a href="#coco">Coco</a></li>
+          <li><a href="#coco">Assistante OAZE</a></li>
           <li><a href="#planos">Formules</a></li>
         </ul>
       </div>
@@ -430,7 +206,7 @@
       </div>
       <div>
         <h3>Parlons-en</h3>
-        <p class="rodape-sobre">Nous répondons sous 2 jours ouvrables.</p>
+        <p class="rodape-sobre">Questions et suggestions.</p>
         <a class="rodape-fala" href="mailto:info@oaze.site">info@oaze.site <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </div>

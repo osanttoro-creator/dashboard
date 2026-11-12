@@ -1,7 +1,7 @@
 {
   "name": "OAZE — organize seu dinheiro",
   "short_name": "OAZE",
-  "description": "Controle financeiro pessoal com contas, cartões, calendário, investimentos, metas e a assistente Coco.",
+  "description": "Controle financeiro pessoal com contas, cartões, calendário, investimentos, metas e a assistente OAZE.",
   "lang": "pt-BR",
   "dir": "ltr",
 
@@ -11,11 +11,11 @@
 
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#071822",
-  "theme_color": "#071822",
+  "background_color": "#0D1821",
+  "theme_color": "#0D1821",
 
   "icons": [
-    { "src": "/assets/brand/oaze-favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/assets/brand/oaze-mascote-app.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" },
     { "src": "/assets/img/oaze-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/assets/img/oaze-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/assets/img/oaze-512-mascara.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }

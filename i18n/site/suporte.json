@@ -264,10 +264,10 @@
   "es": "Si <strong>tienes cuenta</strong>, los datos están en el servidor. Entra en la cuenta correcta (revisa el correo) y vuelven. Si aun así no aparecen, escribe a soporte antes de tocar cualquier otra cosa."
  },
  {
-  "pt": "A Coco parou de responder",
-  "en": "Coco stopped responding",
-  "fr": "Coco ne répond plus",
-  "es": "Coco dejó de responder"
+  "pt": "A assistente OAZE parou de responder",
+  "en": "The OAZE assistant stopped responding",
+  "fr": "L’assistante OAZE ne répond plus",
+  "es": "La asistente OAZE dejó de responder"
  },
  {
   "pt": "Cada plano tem um limite de consultas por mês: 10 no Semente e 200 no Oásis. Atingido o limite, ela volta no mês seguinte.",
@@ -294,10 +294,10 @@
   "es": "Producto"
  },
  {
-  "pt": "Coco",
-  "en": "Coco",
-  "fr": "Coco",
-  "es": "Coco"
+  "pt": "Assistente OAZE",
+  "en": "OAZE assistant",
+  "fr": "Assistante OAZE",
+  "es": "Asistente OAZE"
  },
  {
   "pt": "Conta",
