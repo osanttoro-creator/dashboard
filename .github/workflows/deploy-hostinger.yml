@@ -120,9 +120,13 @@ jobs:
           # vale conferir aqui.
           unzip -l "$ZIP_NOME" | grep -q '\.htaccess' \
             || { echo "::error::.htaccess ausente do zip"; exit 1; }
-          for file in app-v3.html assets/app/app.css assets/app/app.js assets/app/live-backend.js assets/app/coco-realtime.js; do
+          # 12/11/2026: o painel web saiu do ar; ele NAO pode ir no zip
+          if unzip -Z1 "$ZIP_NOME" | grep -Eq '^(app-v3\.html|entrar\.html|cadastro\.html|assets/app/)'; then
+            echo '::error::o painel web entrou no pacote'; exit 1
+          fi
+          for file in assinar.html pronto.html excluir-conta.html retorno-app.html; do
             unzip -p "$ZIP_NOME" "$file" > /dev/null \
-              || { echo "::error::app V3 ausente do zip: $file"; exit 1; }
+              || { echo "::error::pagina ausente do zip: $file"; exit 1; }
           done
           if unzip -Z1 "$ZIP_NOME" | grep -Eq '^(preview-v3/|tools/fixtures/)'; then
             echo '::error::demonstracao ou proposta antiga entrou no pacote'; exit 1
@@ -241,19 +245,18 @@ jobs:
           checar /                       200
           checar /precos                 200
           checar /assets/css/v3.css      200
-          checar /app-v3.html             200
-          checar /app                     200
+          checar /assinar                200
+          checar /pronto                 200
+          checar /excluir-conta          200
+          checar /retorno-app.html       200
+          checar /app-v3.html            301
+          checar /app                    301
+          checar /entrar                 301
           checar /preview-v3/           410
           checar /preview-v3/index.html 410
-          checar /assets/app/app.css     200
-          checar /assets/app/app.js      200
-          checar /assets/app/live-backend.js 200
+          checar /assets/app/app.js      410
           checar /naoexiste.css          404
           checar /assets/js/sumiu.js     404
-          v3_html=$(curl -fsS -A 'OAZE-Deploy-Check/1.0 (+https://oaze.site)' "https://$SITE_DOMAIN/app")
-          if ! grep -q 'data-oaze-mode="live"' <<< "$v3_html"; then
-            echo '::error::/app nao entregou a V3'; falhou=1
-          fi
           if [ "$falhou" != "0" ]; then
             echo "::error::o site respondeu diferente do esperado apos o deploy"
             exit 1

@@ -844,5 +844,23 @@
   "en": "Made in Brazil",
   "fr": "Fabriqué au Brésil",
   "es": "Hecho en Brasil"
+ },
+ {
+  "pt": "Assinar o Oásis",
+  "en": "Subscribe to Oásis",
+  "fr": "S’abonner à Oásis",
+  "es": "Suscribirse a Oásis"
+ },
+ {
+  "pt": "Você cria a conta e paga aqui. Depois é só entrar no app com o mesmo e-mail.",
+  "en": "You create your account and pay here. Then just sign in to the app with the same e-mail.",
+  "fr": "Vous créez votre compte et payez ici. Ensuite, connectez-vous à l’app avec le même e-mail.",
+  "es": "Creas la cuenta y pagas aquí. Después solo inicia sesión en la app con el mismo correo."
+ },
+ {
+  "pt": "Pela página <a href=\"/assinar\">Assinar o Oásis</a>: crie a conta, escolha mensal ou anual e pague com cartão pela Stripe. No Android, também dá para assinar pela Google Play dentro do app.",
+  "en": "On the <a href=\"/assinar\">Subscribe to Oásis</a> page: create your account, choose monthly or yearly and pay by card through Stripe. On Android, you can also subscribe through Google Play inside the app.",
+  "fr": "Sur la page <a href=\"/assinar\">S’abonner à Oásis</a> : créez votre compte, choisissez mensuel ou annuel et payez par carte via Stripe. Sur Android, vous pouvez aussi vous abonner via Google Play dans l’app.",
+  "es": "En la página <a href=\"/assinar\">Suscribirse a Oásis</a>: crea la cuenta, elige mensual o anual y paga con tarjeta mediante Stripe. En Android, también puedes suscribirte por Google Play dentro de la app."
  }
 ]

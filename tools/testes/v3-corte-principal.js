@@ -35,11 +35,13 @@ const css = read('assets/app/app.css');
 const landing = read('index.html');
 const siteAuth = read('assets/js/site-auth.js');
 
-/* A rota: /app e /onboarding entregam a V3, e só ela. */
-assert.ok(htaccess.includes('RewriteRule ^app(/.*)?$         /app-v3.html [L]'),
-  '/app precisa entregar a V3');
-assert.ok(htaccess.includes('RewriteRule ^onboarding(/.*)?$  /app-v3.html [L]'),
-  '/onboarding precisa entregar a V3');
+/* 12/11/2026: o painel web saiu do ar. /app e /onboarding levam à seção
+   de download, e o código do painel que sobrou no servidor responde 410.
+   A V3 continua no repositório porque é o mesmo código dos apps. */
+assert.ok(htaccess.includes('(?:app|onboarding)(?:/.*)?$  /#baixar [R=301,NE,L]'),
+  '/app e /onboarding precisam levar ao download');
+assert.ok(!htaccess.includes('/app-v3.html [L]'), 'nenhuma rota pode voltar a entregar o painel web');
+assert.ok(htaccess.includes('RewriteRule ^assets/app/ - [G,L]'), 'o código antigo do painel precisa responder 410');
 assert.doesNotMatch(htaccess, /classic=1/, 'a rota do painel anterior não pode voltar');
 assert.ok(!fs.existsSync(path.join(root, 'app.html')), 'o painel anterior foi apagado');
 assert.ok(!fs.existsSync(path.join(root, 'assets', 'js', 'pages')),
@@ -52,7 +54,7 @@ assert.ok(!fs.existsSync(path.join(root, 'assets', 'css', 'style.css')),
 assert.doesNotMatch(app, /classic/, 'nenhuma saída para o painel anterior na interface');
 
 assert.match(v3, /data-oaze-mode="live" data-cookies-no-aceite/);
-assert.match(workflow, /checar \/app\s+200/);
+assert.match(workflow, /checar \/app\s+301/);
 assert.match(v3, /class="v3-logo" href="\/app"/);
 
 /* O provedor pode usar a Site URL padrão / como fallback. Só callbacks
@@ -66,10 +68,10 @@ function callback(search = '', hash = '') {
   return target;
 }
 assert.equal(callback(), null, 'a landing normal continua pública');
-assert.equal(callback('?code=exemplo'), '/app?code=exemplo');
-assert.equal(callback('', '#access_token=a&refresh_token=b'), '/app#access_token=a&refresh_token=b');
+assert.equal(callback('?code=exemplo'), '/confirmar-email?code=exemplo');
+assert.equal(callback('', '#access_token=a&refresh_token=b'), '/confirmar-email#access_token=a&refresh_token=b');
 assert.equal(callback('?error=access_denied&error_description=cancelado'),
-  '/app?error=access_denied&error_description=cancelado');
+  '/confirmar-email?error=access_denied&error_description=cancelado');
 
 function loginDestination(search) {
   const window = { location: { search }, localStorage: { setItem() {} } };
@@ -92,4 +94,4 @@ assert.match(backend, /app_bloqueio/);
 assert.match(app, /const initialPaths = /);
 assert.match(app, /OazeCookies\.mostrar\(\)/);
 assert.match(css, /\.aviso-cookies\{/);
-console.log('OK — /app é a V3, sem rota nem link de volta; consentimento e cookies no lugar.');
+console.log('OK — /app leva ao download e o painel web não é servido; consentimento e cookies no lugar.');

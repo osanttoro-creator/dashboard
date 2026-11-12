@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Assinar o Oásis — OAZE</title>
+<meta name="description" content="Crie sua conta OAZE e assine o plano Oásis. Depois é só baixar o app no Android ou no Windows e entrar com o mesmo e-mail.">
+<link rel="canonical" href="https://oaze.site/assinar">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  .ciclo-escolha{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 6px}
+  .ciclo-escolha label{display:grid;gap:4px;padding:14px 16px;border-radius:var(--raio-campo);border:1px solid rgba(240,229,207,.16);cursor:pointer}
+  .ciclo-escolha input{position:absolute;opacity:0;pointer-events:none}
+  .ciclo-escolha label:has(input:checked){border-color:var(--teal,#5FA99B);background:rgba(95,169,155,.12)}
+  .ciclo-escolha label:has(input:focus-visible){outline:2px solid var(--teal,#5FA99B);outline-offset:2px}
+  .ciclo-escolha strong{font-size:1.05rem}
+  .ciclo-escolha small{opacity:.75}
+  .passo-conta{margin-top:10px;padding:12px 14px;border-radius:var(--raio-campo);background:rgba(240,229,207,.06)}
+  .passo-conta button{background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit}
+</style>
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+        <img src="/assets/brand/oaze-logo-escuro.svg" alt="" width="116" height="40" decoding="async">
+    </a>
+    <div class="acoes-topo" style="margin-left:auto">
+      <a class="btn btn-fantasma" href="/#baixar">Aplicativos</a>
+    </div>
+  </div>
+</header>
+
+<!-- /assinar — o único lugar do site que cobra.
+     O site não tem mais painel: aqui a pessoa cria a conta (link por
+     e-mail ou Google), escolhe mensal ou anual e paga na Stripe. A volta
+     da Stripe é /pronto, que manda baixar o app. A conta é a mesma do
+     Android e do Windows.
+
+     Por que o link de e-mail volta por /confirmar-email e não direto
+     para cá: esse endereço já está na lista de retorno do Supabase Auth.
+     A marca 'oaze.assinar' no aparelho faz /confirmar-email trazer a
+     pessoa de volta para esta página com a sessão aberta. -->
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta">
+      <h1>Assinar o Oásis</h1>
+      <p>Tudo do OAZE sem limites e sem anúncios, com o app para Windows incluso. Cancele quando quiser.</p>
+
+      <fieldset class="ciclo-escolha" aria-label="Ciclo de cobrança">
+        <label><input type="radio" name="ciclo" value="monthly" checked><strong id="preco-mensal">R$ 35,90</strong><small>por mês</small></label>
+        <label><input type="radio" name="ciclo" value="annual"><strong id="preco-anual">R$ 279,90</strong><small id="nota-anual">por ano</small></label>
+      </fieldset>
+
+      <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
+
+      <!-- 1 · sem sessão: criar a conta ou entrar -->
+      <div id="etapa-conta" hidden>
+        <div class="aceite-privacidade">
+          <label for="aceite">
+            <input type="checkbox" id="aceite" aria-describedby="aceite-erro">
+            <span>Li e aceito a <a href="/privacidade" target="_blank" rel="noopener">Política de privacidade</a>
+            e os <a href="/termos" target="_blank" rel="noopener">Termos de uso</a>.</span>
+          </label>
+          <p class="erro" id="aceite-erro" role="alert" hidden></p>
+        </div>
+
+        <button class="btn btn-largo btn-social btn-social-forte" type="button" id="btn-google" hidden>Continuar com Google</button>
+        <div class="separa" id="separa" hidden>ou</div>
+
+        <form id="form-email" novalidate>
+          <div class="campo">
+            <label for="email">Seu e-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required inputmode="email"
+                   placeholder="voce@exemplo.com" aria-describedby="email-dica email-erro">
+            <p class="dica" id="email-dica">Enviamos um link. Se você já tem conta OAZE, use o mesmo e-mail.</p>
+            <p class="erro" id="email-erro" hidden></p>
+          </div>
+          <button class="btn btn-principal btn-largo btn-grande" type="submit" id="botao-email">Enviar link de acesso</button>
+        </form>
+      </div>
+
+      <!-- 2 · com sessão: pagar -->
+      <div id="etapa-pagar" hidden>
+        <p class="passo-conta">Conta: <strong id="conta-email"></strong> · <button type="button" id="trocar">usar outra</button></p>
+        <button class="btn btn-principal btn-largo btn-grande" type="button" id="botao-pagar">Ir para o pagamento</button>
+        <p class="dica">O pagamento é feito pela Stripe, com cartão. O OAZE não vê o número do seu cartão.</p>
+      </div>
+
+      <p class="pe-do-painel">Prefere começar grátis? <a href="/#baixar">Baixe o app</a>: o plano Semente não pede cartão.</p>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script src="/assets/js/planos.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  var $ = function (id) { return document.getElementById(id); };
+  var recado = $('recado');
+  var MARCA = 'oaze.assinar';
+
+  /* preços do mesmo catálogo das páginas de preço */
+  try {
+    var pro = window.Planos.get('pro');
+    var mensal = window.Planos.preco(pro, 'monthly', 'BRL');
+    var anual = window.Planos.preco(pro, 'annual', 'BRL');
+    if (mensal) $('preco-mensal').textContent = window.Planos.moeda(mensal, 'BRL');
+    if (anual) {
+      $('preco-anual').textContent = window.Planos.moeda(anual, 'BRL');
+      $('nota-anual').textContent = 'por ano (' + window.Planos.moeda(Math.floor(anual / 12), 'BRL') + '/mês)';
+    }
+  } catch (e) { /* fica o texto do HTML */ }
+
+  var q = new URLSearchParams(location.search);
+  var marcado = null;
+  try { marcado = JSON.parse(localStorage.getItem(MARCA) || 'null'); } catch (e) {}
+  var cicloInicial = q.get('ciclo') === 'anual' || (marcado && marcado.ciclo === 'annual') ? 'annual' : 'monthly';
+  document.querySelector('input[name="ciclo"][value="' + cicloInicial + '"]').checked = true;
+  var ciclo = function () { return document.querySelector('input[name="ciclo"]:checked').value; };
+  var marcar = function () {
+    try { localStorage.setItem(MARCA, JSON.stringify({ ciclo: ciclo(), ate: Date.now() + 2 * 3600 * 1000 })); } catch (e) {}
+  };
+
+  if (q.get('pagamento') === 'cancelado') A.diz(recado, 'Pagamento cancelado. Nada foi cobrado.', 'aviso');
+  if (!A.cliente()) { A.semConfig(recado); return; }
+
+  function aceiteOk() {
+    var ok = $('aceite').checked;
+    $('aceite-erro').textContent = ok ? '' : 'Marque o aceite para continuar.';
+    $('aceite-erro').hidden = ok;
+    if (!ok) $('aceite').focus();
+    return ok;
+  }
+
+  function mostrarConta() {
+    $('etapa-conta').hidden = false;
+    A.provedores().then(function (p) {
+      if (!p || !p.google) return;
+      $('btn-google').hidden = false; $('separa').hidden = false;
+    }).catch(function () {});
+  }
+
+  $('btn-google').addEventListener('click', function () {
+    if (!aceiteOk()) return;
+    marcar();
+    A.entrarCom('google', '/confirmar-email', A.novoAceite('assinar_google')).then(function (r) {
+      if (r && r.error) throw r.error;
+    }).catch(function (err) { A.diz(recado, A.frase(err), 'erro'); });
+  });
+
+  $('form-email').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var email = $('email');
+    A.erroNoCampo(email, '');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) {
+      A.erroNoCampo(email, 'Informe um e-mail válido.'); email.focus(); return;
+    }
+    if (!aceiteOk()) return;
+    marcar();
+    A.ocupado($('botao-email'), true, 'Enviando…');
+    try {
+      var r = await A.cadastrar(email.value.trim(), '', '', A.novoAceite('assinar_email'));
+      if (r && r.error) throw r.error;
+      $('form-email').hidden = true; $('btn-google').hidden = true; $('separa').hidden = true;
+      A.diz(recado, 'Link enviado para ' + email.value.trim() + '. Abra o e-mail NESTE aparelho: o link traz você de volta para concluir o pagamento. Não chegou? Veja o spam.', 'ok');
+    } catch (err) {
+      A.ocupado($('botao-email'), false);
+      A.diz(recado, A.frase(err), 'erro');
+    }
+  });
+
+  function mostrarPagar(u) {
+    $('etapa-pagar').hidden = false;
+    $('conta-email').textContent = u.email || 'sua conta';
+  }
+
+  $('trocar').addEventListener('click', function () {
+    A.sair().then(function () { location.replace('/assinar'); });
+  });
+
+  $('botao-pagar').addEventListener('click', async function () {
+    var botao = $('botao-pagar');
+    A.diz(recado, '');
+    A.ocupado(botao, true, 'Abrindo pagamento…');
+    try {
+      var cfg = window.SupabaseConfig || {};
+      var sessao = (await A.cliente().auth.getSession()).data.session;
+      if (!sessao) { location.replace('/assinar'); return; }
+      var r = await fetch(String(cfg.url).replace(/\/+$/, '') + '/functions/v1/oaze-pagamento', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', apikey: cfg.publishableKey || cfg.anonKey,
+          authorization: 'Bearer ' + sessao.access_token },
+        body: JSON.stringify({ acao: 'assinar', plano: 'pro', ciclo: ciclo(), moeda: 'BRL', canal: 'site' })
+      });
+      var d = await r.json().catch(function () { return {}; });
+      if (r.ok && d.url && /^https:\/\/checkout\.stripe\.com\//.test(d.url)) {
+        try { localStorage.removeItem(MARCA); } catch (e) {}
+        location.href = d.url;
+        return;
+      }
+      A.ocupado(botao, false);
+      if (d.erro === 'ja_assina') {
+        A.diz(recado, 'Esta conta já tem o Oásis ativo. É só baixar o app e entrar com este e-mail.', 'ok');
+        botao.hidden = true;
+        return;
+      }
+      A.diz(recado, d.mensagem || 'Não foi possível abrir o pagamento agora. Nada foi cobrado.', 'erro');
+    } catch (err) {
+      A.ocupado(botao, false);
+      A.diz(recado, 'Não foi possível abrir o pagamento agora. Confira a conexão. Nada foi cobrado.', 'erro');
+    }
+  });
+
+  A.quemEsta().then(function (u) { u ? mostrarPagar(u) : mostrarConta(); });
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+</body>
+</html>

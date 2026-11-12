@@ -33,6 +33,10 @@
   # A demonstração pública foi retirada. Responder 410 também para
   # URLs antigas impede que propostas desatualizadas pareçam produto ativo.
   RewriteRule ^preview-v3(/.*)?$ - [G,L]
+  # 12/11/2026: o painel web saiu do ar. A extração do pacote não apaga
+  # arquivos antigos do servidor, então o código do painel que sobrou
+  # em assets/app responde 410 em vez de continuar servido.
+  RewriteRule ^assets/app/ - [G,L]
 
   # -----------------------------------------------------------
   # 2 · rotas públicas → documentos próprios
@@ -54,46 +58,36 @@
   # todo link já compartilhado. Estas regras vêm ANTES das rotas em
   # português — sem isso, /en/precos cairia no fallback do app.
   RewriteRule ^(en|fr|es)/?$                       /$1/index.html [L]
-  RewriteRule ^(en|fr|es)/(recursos|precos|entrar|cadastro|recuperar-senha|redefinir-senha|confirmar-email|privacidade|termos|suporte)/?$  /$1/$2.html [L]
+  RewriteRule ^(en|fr|es)/(recursos|precos|recuperar-senha|redefinir-senha|confirmar-email|privacidade|termos|suporte)/?$  /$1/$2.html [L]
 
   RewriteRule ^recursos/?$          /recursos.html        [L]
   RewriteRule ^precos/?$            /precos.html          [L]
-  RewriteRule ^entrar/?$            /entrar.html          [L]
-  RewriteRule ^cadastro/?$          /cadastro.html        [L]
   RewriteRule ^recuperar-senha/?$   /recuperar-senha.html [L]
   RewriteRule ^redefinir-senha/?$   /redefinir-senha.html [L]
   RewriteRule ^confirmar-email/?$   /confirmar-email.html [L]
   RewriteRule ^privacidade/?$       /privacidade.html     [L]
   RewriteRule ^termos/?$            /termos.html          [L]
   RewriteRule ^suporte/?$           /suporte.html         [L]
+  RewriteRule ^excluir-conta/?$     /excluir-conta.html   [L]
+  RewriteRule ^assinar/?$           /assinar.html         [L]
+  RewriteRule ^pronto/?$            /pronto.html          [L]
 
   # -----------------------------------------------------------
   # 3 · aplicativo
   # -----------------------------------------------------------
-  # /app e /onboarding são estados do aplicativo, não arquivos. Os
-  # dois entregam app-v3.html. A saída para o painel anterior existiu enquanto o
-  # painel anterior estava no código; ele foi apagado, e uma rota
-  # para um arquivo que não existe só produziria 404 silencioso.
-  # O Apache entrega HTML e o JavaScript decide o
-  # que mostrar — inclusive se a pessoa pode estar ali.
-  #
-  # ISTO NÃO É A PROTEÇÃO DA ROTA. Qualquer um pode pedir /app e
-  # receber este HTML; o que ele NÃO recebe é dado. A proteção de
-  # verdade é o RLS no banco, que devolve zero linhas para quem não
-  # tem sessão. Um guarda no servidor de arquivos estáticos seria
-  # teatro: não há sessão para ele consultar.
-  #
-  # A CONDIÇÃO DE EXTENSÃO NÃO É OPCIONAL. Sem ela,
-  # /app/assets/app/app.js casa com ^app(/.*)$ e recebe o HTML do
-  # aplicativo com status 200 — o navegador tenta executar HTML como
-  # JavaScript e o console enche de "Unexpected token '<'".
-  # (Aconteceu: 41 scripts, 41 erros. O app até funcionava, porque
-  # os caminhos são absolutos e havia um segundo pedido correto,
-  # mas cada arquivo era baixado duas vezes.)
-  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
-  RewriteRule ^app(/.*)?$         /app-v3.html [L]
-  RewriteCond %{REQUEST_URI} !\.(css|js|mjs|map|json|txt|xml|html|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|zip|webmanifest)$ [NC]
-  RewriteRule ^onboarding(/.*)?$  /app-v3.html [L]
+  # 12/11/2026: o painel web saiu do ar. O OAZE é app de Android e
+  # Windows; o site é institucional e só cobra em /assinar. Endereços
+  # antigos (/app, /onboarding, /entrar, /cadastro, /app-v3.html e as
+  # versões en/fr/es) levam à seção de download em vez de cair em 404.
+  # Exceção: /app/planos com ?pagamento= é a volta de um checkout antigo
+  # do site, e vai para /pronto ou /assinar conforme o resultado.
+  RewriteCond %{QUERY_STRING} (^|&)pagamento=sucesso(&|$)
+  RewriteRule ^app/planos/?$  /pronto? [R=302,L]
+  RewriteCond %{QUERY_STRING} (^|&)pagamento=cancelado(&|$)
+  RewriteRule ^app/planos/?$  /assinar?pagamento=cancelado [R=302,L]
+  RewriteRule ^(?:(?:en|fr|es)/)?(?:app|onboarding)(?:/.*)?$  /#baixar [R=301,NE,L]
+  RewriteRule ^(?:(?:en|fr|es)/)?(?:entrar|cadastro)(?:\.html)?/?$  /#baixar [R=301,NE,L]
+  RewriteRule ^app-v3\.html$  /#baixar [R=301,NE,L]
   # -----------------------------------------------------------
   # 4 · fallback da raiz
   # -----------------------------------------------------------

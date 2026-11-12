@@ -138,8 +138,8 @@
     try {
       var r = await A.trocarSenha(senha.value);
       if (r.error) throw r.error;
-      A.diz(recado, 'Senha alterada. Abrindo seu painel…', 'ok');
-      location.replace('/app');
+      A.diz(recado, 'Senha alterada. Agora é só entrar no app OAZE com a senha nova.', 'ok');
+      form.hidden = true;
     } catch (err) {
       A.ocupado(botao, false);
       A.diz(recado, A.frase(err), 'erro');

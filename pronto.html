@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Assinatura confirmada — OAZE</title>
+<meta name="description" content="Sua assinatura do OAZE Oásis foi recebida. Baixe o app no Android ou no Windows e entre com o mesmo e-mail.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#071822">
+<link rel="icon" href="/assets/brand/oaze-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/oaze-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/oaze-180.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+
+<div class="ceu" aria-hidden="true"></div>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" aria-label="OAZE, página inicial">
+        <img src="/assets/brand/oaze-logo-escuro.svg" alt="" width="116" height="40" decoding="async">
+    </a>
+  </div>
+</header>
+
+<!-- /pronto — volta da Stripe depois de pagar no site (canal 'site' da
+     função oaze-pagamento). Quem libera o plano é o webhook da Stripe,
+     não esta página: ela só orienta o próximo passo, que é baixar o app. -->
+<main id="conteudo" class="secao">
+  <div class="env">
+    <div class="painel-conta" style="text-align:center">
+      <h1>Assinatura recebida</h1>
+      <p id="explica">Obrigado! Em instantes o Oásis aparece na sua conta. Agora baixe o OAZE e entre com
+        <strong id="conta-email">o mesmo e-mail</strong> que você usou aqui.</p>
+    </div>
+
+    <div class="lojas-opcoes lojas-oaze" aria-label="Baixar o OAZE" style="max-width:720px;margin:28px auto 0">
+      <article class="loja-cartao"><div class="loja-icone" aria-hidden="true">▶</div><div><span class="loja-plataforma">ANDROID</span><h3>Google Play</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="play">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article>
+      <article class="loja-cartao"><div class="loja-icone windows" aria-hidden="true">⊞</div><div><span class="loja-plataforma">WINDOWS</span><h3>Microsoft Store</h3><p>Página da loja em preparação</p></div><span class="loja-botao is-pending" data-loja="windows">Em breve</span><span class="sr-so loja-link-label">Abrir loja ↗</span><span class="sr-so loja-ready-copy">Disponível na loja oficial</span></article>
+    </div>
+
+    <p class="pe-do-painel" style="text-align:center;margin-top:28px">Algum problema com a cobrança? <a href="/suporte#contato">Fale com a gente</a>.</p>
+  </div>
+</main>
+
+<script src="/assets/vendor/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/site-auth.js"></script>
+<script src="/assets/js/lojas-oaze.js"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.SiteAuth;
+  if (!A || !A.cliente()) return;
+  A.quemEsta().then(function (u) {
+    if (u && u.email) document.getElementById('conta-email').textContent = u.email;
+  }).catch(function () {});
+})();
+</script>
+<script src="/assets/js/cookies.js" defer></script>
+</body>
+</html>

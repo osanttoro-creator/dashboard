@@ -346,5 +346,17 @@
   "en": "Contact us",
   "fr": "Nous contacter",
   "es": "Habla con nosotros"
+ },
+ {
+  "pt": "Sem o app, por e-mail e o que fica guardado: <a href=\"/excluir-conta\">oaze.site/excluir-conta</a>.",
+  "en": "Without the app, by e-mail, and what is kept: <a href=\"/excluir-conta\">oaze.site/excluir-conta</a>.",
+  "fr": "Sans l’app, par e-mail, et ce qui est conservé : <a href=\"/excluir-conta\">oaze.site/excluir-conta</a>.",
+  "es": "Sin la app, por correo y lo que se conserva: <a href=\"/excluir-conta\">oaze.site/excluir-conta</a>."
+ },
+ {
+  "pt": "Assinar o Oásis",
+  "en": "Subscribe to Oásis",
+  "fr": "S’abonner à Oásis",
+  "es": "Suscribirse a Oásis"
  }
 ]

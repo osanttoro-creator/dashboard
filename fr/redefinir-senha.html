@@ -138,8 +138,8 @@
     try {
       var r = await A.trocarSenha(senha.value);
       if (r.error) throw r.error;
-      A.diz(recado, 'Mot de passe modifié. Ouverture de votre tableau de bord…', 'ok');
-      location.replace('/app');
+      A.diz(recado, 'Mot de passe modifié. Connectez-vous maintenant à l’app OAZE avec le nouveau mot de passe.', 'ok');
+      form.hidden = true;
     } catch (err) {
       A.ocupado(botao, false);
       A.diz(recado, A.frase(err), 'erro');

@@ -82,5 +82,29 @@
   "en": "has already been used. If you confirmed before, just sign in as usual.",
   "fr": "a déjà été utilisé. Si vous avez déjà confirmé, connectez-vous simplement.",
   "es": "ya se usó. Si ya confirmaste antes, solo inicia sesión como siempre."
+ },
+ {
+  "pt": "Baixar o app",
+  "en": "Download the app",
+  "fr": "Télécharger l’app",
+  "es": "Descargar la app"
+ },
+ {
+  "pt": "Voltar ao início",
+  "en": "Back to home",
+  "fr": "Retour à l’accueil",
+  "es": "Volver al inicio"
+ },
+ {
+  "pt": "está ativa. Baixe o OAZE no Android ou no Windows e entre com este e-mail.",
+  "en": "is active. Download OAZE on Android or Windows and sign in with this e-mail.",
+  "fr": "est active. Téléchargez OAZE sur Android ou Windows et connectez-vous avec cet e-mail.",
+  "es": "está activa. Descarga OAZE en Android o Windows e inicia sesión con este correo."
+ },
+ {
+  "pt": "já foi usado. Se você já confirmou antes, é só entrar pelo app.",
+  "en": "has already been used. If you confirmed before, just sign in through the app.",
+  "fr": "a déjà été utilisé. Si vous avez déjà confirmé, connectez-vous simplement depuis l’app.",
+  "es": "ya se usó. Si ya confirmaste antes, solo inicia sesión en la app."
  }
 ]

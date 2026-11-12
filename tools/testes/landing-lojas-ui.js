@@ -30,7 +30,7 @@ const base = process.env.OAZE_BASE_URL || (localFiles ? 'https://oaze.test' : 'h
       assert.equal(await page.locator('.lojas-opcoes a').count(), 0, 'não criar redirecionamento sem endereço oficial');
       assert.equal(await page.locator('#formContato').count(), 1, 'formulário de contato visível na landing');
       assert.equal(await page.locator('a[href="mailto:info@oaze.site"]').count(), 2, 'endereço oficial na seção e no rodapé');
-      assert.equal(await page.locator('main a[href="/app/planos"]').count(), 1, 'assinar abre os planos no app');
+      assert.equal(await page.locator('main a[href="/assinar"]').count(), 1, 'assinar abre a página de assinatura');
       assert.equal(await page.locator('main a[href^="/cadastro"], main a[href^="/entrar"]').count(), 0);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'sem rolagem horizontal');
       assert.equal(await page.locator('.launch-hero-visual img').evaluate(img => img.complete && img.naturalWidth > 0), true);

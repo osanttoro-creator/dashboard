@@ -34,11 +34,12 @@ $arquivos = @(
   # site público — um documento por rota, cada um com title,
   # description e canônica próprias
   'index.html', 'recursos.html', 'precos.html',
-  'entrar.html', 'cadastro.html', 'recuperar-senha.html',
+  'recuperar-senha.html',
   'redefinir-senha.html', 'confirmar-email.html', 'retorno-app.html',
-  'privacidade.html', 'termos.html', 'suporte.html',
-  # aplicativo
-  'app-v3.html',
+  'privacidade.html', 'termos.html', 'suporte.html', 'excluir-conta.html',
+  'assinar.html', 'pronto.html',
+  # 12/11/2026: o painel web saiu do ar (app-v3.html e assets/app ficam
+  # no repositório só para os testes; não são publicados)
   # apoio
   'robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', '404.html'
 )
@@ -68,6 +69,10 @@ foreach ($d in $pastas) {
   $o = Join-Path $raiz $d
   if (Test-Path $o) { Copy-Item $o -Destination $destino -Recurse }
 }
+
+# o painel web (assets/app) fica fora do pacote: o app e Android e Windows
+$painel = Join-Path $destino 'assets\app'
+if (Test-Path $painel) { Remove-Item $painel -Recurse -Force }
 
 Copy-Item (Join-Path $PSScriptRoot '.htaccess') -Destination $destino
 

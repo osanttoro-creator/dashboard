@@ -52,8 +52,6 @@ const PAGINAS = {
   'suporte.html': '/suporte',
   'termos.html': '/termos',
   'privacidade.html': '/privacidade',
-  'entrar.html': '/entrar',
-  'cadastro.html': '/cadastro',
   'recuperar-senha.html': '/recuperar-senha',
   'redefinir-senha.html': '/redefinir-senha',
   'confirmar-email.html': '/confirmar-email',

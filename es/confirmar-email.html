@@ -40,10 +40,10 @@
       <p class="recado" id="recado" role="status" aria-live="polite" hidden></p>
       <p id="explica">Un momento mientras validamos el enlace.</p>
       <p id="acoes" hidden>
-        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/onboarding">Continuar</a>
+        <a class="btn btn-principal btn-largo btn-grande" id="botao-ir" href="/es/#baixar">Descargar la app</a>
       </p>
       <p class="pe-do-painel" id="pe" hidden>
-        <a href="/es/entrar">Ir a la pantalla de inicio de sesión</a>
+        <a href="/es/">Volver al inicio</a>
       </p>
     </div>
   </div>
@@ -64,10 +64,20 @@
 
   if (!A.cliente()) { explica.textContent = ''; A.semConfig(recado); return; }
 
+  /* Quem começou em /assinar volta para lá, já com a sessão aberta,
+     para concluir o pagamento. A marca vale duas horas. */
+  function assinaturaPendente() {
+    try {
+      var m = JSON.parse(localStorage.getItem('oaze.assinar') || 'null');
+      return !!(m && m.ate > Date.now());
+    } catch (e) { return false; }
+  }
+
   function pronto(u) {
+    if (assinaturaPendente()) { location.replace('/assinar'); return; }
     titulo.textContent = 'Correo confirmado';
     explica.textContent = 'Tu cuenta ' + (u.email ? '(' + u.email + ') ' : '') +
-      'está activa. Vamos a armar tu panel en unos pocos pasos rápidos.';
+      'está activa. Descarga OAZE en Android o Windows e inicia sesión con este correo.';
     acoes.hidden = false;
   }
 
@@ -78,7 +88,7 @@
        cai aqui igual. O texto cobre os dois casos em vez de acusar
        um erro que pode não ter havido. */
     A.diz(recado, 'Este enlace ya no es válido: o venció o ' +
-      'ya se usó. Si ya confirmaste antes, solo inicia sesión como siempre.', 'aviso');
+      'ya se usó. Si ya confirmaste antes, solo inicia sesión en la app.', 'aviso');
     pe.hidden = false;
   }
 

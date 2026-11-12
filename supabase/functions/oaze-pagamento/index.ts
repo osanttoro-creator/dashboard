@@ -212,12 +212,26 @@ Deno.serve(async (req: Request) => {
      Windows vem da origem do Tauri; Android, da origem do Capacitor. */
   const canalOk = corpo.canal === undefined
     || (corpo.canal === 'windows' && ['http://tauri.localhost', 'tauri://localhost'].includes(origem || ''))
-    || (corpo.canal === 'android' && origem === 'https://localhost');
+    || (corpo.canal === 'android' && origem === 'https://localhost')
+    /* 12/11/2026: o site não tem mais painel. Quem assina em /assinar
+       volta para /pronto (baixar o app) ou /assinar (cancelou). */
+    || (corpo.canal === 'site' && !!origem && origem === retorno);
   if (!canalOk) {
     return json({ erro: 'canal', mensagem: 'Canal de retorno inválido.' }, 400, origem);
   }
   /* Nome mantido: vale para qualquer app instalado, não só o Windows. */
   const retornoWindows = acao === 'assinar' && (corpo.canal === 'windows' || corpo.canal === 'android');
+  const retornoSite = acao === 'assinar' && corpo.canal === 'site';
+  const urlSucesso = retornoWindows
+    ? retorno + '/retorno-app.html?resultado=sucesso'
+    : retornoSite
+      ? retorno + '/pronto?sessao={CHECKOUT_SESSION_ID}'
+      : retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}';
+  const urlCancelado = retornoWindows
+    ? retorno + '/retorno-app.html?resultado=cancelado'
+    : retornoSite
+      ? retorno + '/assinar?pagamento=cancelado'
+      : retorno + '/app/planos?pagamento=cancelado';
 
   const { data: atual } = await admin.from('subscriptions')
     .select('plan_id,status,current_period_end,cancel_at_period_end,stripe_subscription_id,asaas_subscription_id')
@@ -339,7 +353,7 @@ Deno.serve(async (req: Request) => {
       if (!cupom && !teste && recente && p.price_id === preco.id && p.checkout_session_id) {
         const sessao = await stripe('GET', '/checkout/sessions/' + encodeURIComponent(p.checkout_session_id));
         if (sessao?.status === 'open' && /^https:\/\/checkout\.stripe\.com\//.test(String(sessao.url || ''))
-            && String(sessao.success_url || '').includes('retorno-app.html') === retornoWindows) {
+            && String(sessao.success_url || '').split('?')[0] === urlSucesso.split('?')[0]) {
           return json({ ok: true, url: sessao.url }, 200, origem);
         }
       }
@@ -358,12 +372,8 @@ Deno.serve(async (req: Request) => {
     parametros.set('mode', 'subscription');
     parametros.set('client_reference_id', intencao.id);
     parametros.set('customer_email', usuario.email);
-    parametros.set('success_url', retornoWindows
-      ? retorno + '/retorno-app.html?resultado=sucesso'
-      : retorno + '/app/planos?pagamento=sucesso&sessao={CHECKOUT_SESSION_ID}');
-    parametros.set('cancel_url', retornoWindows
-      ? retorno + '/retorno-app.html?resultado=cancelado'
-      : retorno + '/app/planos?pagamento=cancelado');
+    parametros.set('success_url', urlSucesso);
+    parametros.set('cancel_url', urlCancelado);
     /* A página da Stripe em português para quem paga em real; para as
        outras moedas, 'auto' — ela lê o idioma do navegador, que é
        melhor palpite do que escolher inglês para um francês. */
